@@ -195,7 +195,7 @@ XKit.extensions.xcloud = new Object({
 				XKit.extensions.xcloud.working_off();
 
 				if (mdata.server_down === true) {
-					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 
@@ -252,7 +252,7 @@ XKit.extensions.xcloud = new Object({
 				XKit.extensions.xcloud.working_off();
 
 				if (mdata.server_down === true) {
-					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 
@@ -413,7 +413,7 @@ XKit.extensions.xcloud = new Object({
 
 			if (mdata.server_down === true) {
 				XKit.extensions.xcloud.hide_overlay();
-				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
@@ -586,7 +586,7 @@ XKit.extensions.xcloud = new Object({
 
 	process_error: function(txt) {
 
-		XKit.window.show("Could not restore","Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Could not restore","Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		return;
 
 	},
@@ -701,13 +701,13 @@ XKit.extensions.xcloud = new Object({
 
 		GM_xmlhttpRequest({
 			method: "POST",
-			url: "http://xcloud.puaga.com/upload/?ftch_id=" + XKit.tools.random_string(),
+			url: "https://xkitplus.com/upload/?ftch_id=" + XKit.tools.random_string(),
 			data: "username=" + m_username + "&password=" + m_password + "&data=" + to_send,
 			json: false,
 			onerror: function(response) {
 
 				XKit.extensions.xcloud.hide_overlay();
-				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 
 			},
@@ -717,7 +717,7 @@ XKit.extensions.xcloud = new Object({
 					var mdata = jQuery.parseJSON(response.responseText);
 				} catch(e) {
 					XKit.extensions.xcloud.hide_overlay();
-					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 				if (mdata.errors === "false") {
