@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4.3 **//
+//* VERSION 3.4.4 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -77,6 +77,18 @@ XKit.extensions.xkit_preferences = new Object({
 	hide_xcloud_if_not_installed: false,
 
 	showing_help_button: false,
+	
+	blacklist: [
+		"xkit_installer"
+	],
+	
+	preferences: {
+		"ignore_blacklist": {
+			text: "Show Hidden Extensions in the Extension Gallery",
+			default: false,
+			value: false
+		},
+	},
 
 	run: function() {
 
@@ -1077,6 +1089,10 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		if (XKit.installed.check(obj.name) === true) { return ""; }
+		
+		if (XKit.extensions.xkit_preferences.blacklist.indexOf(obj.name) !== -1 && !this.preferences.ignore_blacklist.value) {
+			return "";
+		}
 
 		var m_html = '<div class="xkit-gallery-extension" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
 					 '<div class="overlay">downloading</div>' +
