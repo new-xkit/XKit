@@ -37,7 +37,7 @@ XKit.extensions.quick_tags = new Object({
 			text: "Close the popup even if it has keyboard or mouse focus",
 			value: false,
 			default: false
-		}
+		},
 		"sep1": {
 			text: "My Tag Bundles",
 			type: "separator"
