@@ -210,7 +210,7 @@ XKit = {
 	},
 	servers: {
 		list: [
-			"https://www.xkitcs.com"
+			"https://xkitplus.com"
 		],
 		count: 11,
 		get: function() {
