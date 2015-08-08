@@ -280,6 +280,14 @@ XKit = {
 					XKit.download.github_fetch('page/themes.json', callback, fallback);
 					return;
 				}
+				if (page === 'paperboy/index.php') {
+					XKit.download.github_fetch('page/paperboy.json', callback, fallback);
+					return;
+				}
+				if (page === 'framework_version.php') {
+					XKit.download.github_fetch('page/framework_version.json', callback, fallback);
+					return;
+				}
 			}
 			// Downloads page from servers.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {

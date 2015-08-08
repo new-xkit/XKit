@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV I **//
+//* VERSION 1.3 **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -30,8 +30,8 @@ XKit.extensions.panaroma = new Object({
 
 		}
 
-		if (document.location.href.indexOf("://www.tumblr.com/ignore") !== -1 ||
-			document.location.href.indexOf("://www.tumblr.com/lookup") !== -1 ||
+		//removed "www.tumblr.com/ignore" references, no longer exists
+		if (document.location.href.indexOf("://www.tumblr.com/lookup") !== -1 ||
 			document.location.href.indexOf("://www.tumblr.com/spotlight") !== -1 ||
 			document.location.href.indexOf("://www.tumblr.com/following") !== -1) {
 			XKit.extensions.panaroma.do_directory_fixes();
@@ -42,13 +42,14 @@ XKit.extensions.panaroma = new Object({
 		XKit.extensions.panaroma.resized();
 	},
 
+	//added fixes for Spotlight a.k.a. "Staff Picks" page and removed obsolete fixes for Ignore page
 	do_directory_fixes: function() {
 
 		var m_css = " .l-content { padding-bottom: 30px!important; border-radius: 20px!important; background: white!important; } .content_top, .content_bottom { display: none!important; } #tabs { background: #eaeaea!important; } #tabs.tabs_3 .tab { width: 33%!important; } #tabs.tabs_3 .tab:last-child { width: 32%!important; } ";
 
-		if (document.location.href.indexOf("://www.tumblr.com/ignore") !== -1) {
-			m_css = m_css + " #left_column { width: 100%!important; } #content { padding-top: 30px!important;  } ";
-		}
+		if (document.location.href.indexOf("://www.tumblr.com/spotlight") !== -1) {
+			m_css = m_css + " .chrome_nav { width: 24%!important; min-width: 230px!important; } #cards { width: 75%!important; min-width: 650px!important; } #cards .card{ width:30%!important; min-width:190px!important; }#content { padding-top: 30px!important;  } ";
+	}
 
 		XKit.tools.add_css(m_css, "panaroma_directory");
 

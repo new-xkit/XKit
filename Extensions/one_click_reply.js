@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.0.4 **//
+//* VERSION 2.0.5 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -637,7 +637,6 @@ XKit.extensions.one_click_reply = new Object({
 				XKit.interface.post_window.add_tag(tags.split(","));
 			}
 			XKit.interface.post_window.set_content_html(m_sentence + "<br/>");
-
 			XKit.interface.post_window_listener.remove("one_click_reply_fill_post");
 			XKit.tools.set_setting("xkit_one_click_reply_data", "{}");
 		} catch(e) {
@@ -739,13 +738,13 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		if (m_post_type === "reblog" ||m_post_type === "reblog_text") {
-			user_name = $(obj).find("a.tumblelog:first-child").html();
-			user_url = $(obj).find("a.tumblelog:first-child").attr('href');
+			user_name = $(obj).data("tumblelog");
+			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
 		if (m_post_type === "like" || m_post_type === "reply" || m_post_type === "answer") {
-			user_name = $(obj).find("a.tumblelog").html();
-			user_url = $(obj).find("a.tumblelog").attr('href');
+			user_name = $(obj).data("tumblelog");
+			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
 		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {

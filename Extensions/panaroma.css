@@ -4,7 +4,7 @@ body {
 
 .l-container{
 	min-width: 900px; width: auto !important; margin: 0px !important;
-	padding: 0px !important;
+	padding: 70px 0px 0px 0px !important;
 }
 
 .l-content {
@@ -26,11 +26,6 @@ body {
 	margin-left:-266px;
 	position: absolute;
 }
-
-.l-header {
-	min-width: 900px; width: auto !important; padding: 0px !important;
-}
-
 
 .notification {
 	width: 100%;
@@ -60,6 +55,6 @@ body {
 	-moz-box-sizing: border-box; box-sizing: border-box;
 }
 
-#header #tabs_outter_container {
+#header #tabs_outer_container {
 	left: auto; right: 5px !important;
 }

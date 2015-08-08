@@ -26,4 +26,6 @@ the following:
 npm install --dev-dependencies
 ```
 At this point, if you want to build the extensions run `./build.sh all`. They
-will appear in the `build` directory.
+will appear in the `build` directory. If you want to run our automated tests,
+run `npm test`. To automatically run those tests whenever you edit files, run
+`grunt watch`.
