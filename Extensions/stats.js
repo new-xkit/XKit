@@ -1,5 +1,5 @@
 //* TITLE XStats **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3.3 **//
 //* DESCRIPTION The XKit Statistics Tool **//
 //* DETAILS This extension allows you to view statistics regarding your dashboard, such as the percentage of post types, top 4 posters, and more. In the future, it will allow you to view statistics regarding your and others blogs. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -10,7 +10,7 @@ XKit.extensions.stats = new Object({
 
 	running: false,
 
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 
 	preferences: {
 		"promote": {
@@ -26,7 +26,7 @@ XKit.extensions.stats = new Object({
 		if (XKit.interface.where().dashboard === false && XKit.interface.where().channel === false) { return; }
 
 		XKit.tools.init_css("stats");
-		
+
          if ($('#xstats_ul').length === 0) {
 		    var xf_html = 	'<ul class="controls_section" id="xstats_ul">' +
 			    		'<li class="section_header selected">XSTATS</li>' +

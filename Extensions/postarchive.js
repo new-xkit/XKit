@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.5.2 **//
+//* VERSION 0.5.3 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -13,7 +13,7 @@ XKit.extensions.postarchive = new Object({
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDQ5RTU4RTU3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDQ5RTU4RTY3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0NDlFNThFMzcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0NDlFNThFNDcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pu91pc8AAACgSURBVHjaYvz//z8D1QDIMGSMLo0Fz8Sln4mBimCEGMaCRawLiKXx6HEC4qVQ9lwg3ocvNm2A+A+OmETGh4GYGUUvjqRRQcCgVzDXE2MYCGzBY5grNp/hM0wIiB9iMagRV6IllAMsgfgnkkF7QeGE0zA0W7GBIqjccyCWwJYjkfUTMgwE1kGTBAM+wxjRDGEkp6ygSQ5gJOC9YZLRAQIMAENzviFg3gnxAAAAAElFTkSuQmCC",
 	button_on: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTU0NzMyOUU3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTU0NzMyOUY3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFNTQ3MzI5QzcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFNTQ3MzI5RDcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pn1307MAAAC0SURBVHjaYvz//z8DtQBj/hK88thsmgXE6TDOhGiEEiYGKoIRYhgLFrEuIJbGo8cJiJdC2XOBeB8+wzYB8QEgZsZhmAoUHwHig4S8CVJUQ8BHr4E4Aoj/EhNmHUC8FY9h0UD8lJQIiAPiR1jEm4B4N6mx+Q7qlV9IYvughuGMTeQsw4gmfxyIK4G4F4hfQL2HEk4FSxn/44tNdNAHxDZAPAVqIEnpDBsIGvAc8H94ZnSAAAMAwKElB0jQE0QAAAAASUVORK5CYII=",
 
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 
 	archived_posts: new Array,
 	categories: new Array,
@@ -333,11 +333,11 @@ XKit.extensions.postarchive = new Object({
 			});
 
 		}
-		
+
 		$("#xkit-postarchive-export").bind("click", function() {
-		    
+
 		    var m_data = {};
-		    
+
             m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
             m_data.categories = XKit.storage.get("postarchive", "categories","");
 
@@ -364,7 +364,7 @@ XKit.extensions.postarchive = new Object({
 			});
 
 		});
-		
+
 		$("#xkit-postarchive-import").bind("click", function() { //Import Function
 
 	    	XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
@@ -393,26 +393,26 @@ XKit.extensions.postarchive = new Object({
 	    			alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
 	    			return;
 	    		}
-	    		
+
 	    		m_posts = JSON.parse(m_obj.posts);
 	    		m_categories = JSON.parse(m_obj.categories);
-	    		
+
 	    		XKit.extensions.postarchive.load_posts();
-	    		
+
 	    		for (var n=0;n<m_categories.length;n++) {
 	    		    XKit.extensions.postarchive.categories.push(m_categories[n]);
 					console.log(XKit.extensions.postarchive.categories);
 					XKit.extensions.postarchive.save_posts();
 	    		}
-	    		
+
 	    		for (var i=0;i<m_posts.length;i++) {
 	    		    XKit.extensions.postarchive.archived_posts.push(m_posts[i]);
 					console.log(XKit.extensions.postarchive.archived_posts);
 					XKit.extensions.postarchive.save_posts();
 	    		}
-	    		
+
 	    		XKit.extensions.postarchive.update_sidebar();
-	    		
+
 	    		XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 	    		return;
 
@@ -1147,7 +1147,7 @@ var rows = [];
 
 		var m_post = XKit.interface.find_post(post_id);
 		var blog_url = m_post.owner;
-		
+
 		if (blog_url == undefined) {
 		    blog_url = window.location.href.split('%2F')[2].split('.')[0];
 		}

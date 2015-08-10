@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.3 REV C **//
+//* VERSION 1.3.3 **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -174,20 +174,20 @@ XKit.extensions.reblog_yourself = new Object({
 
 			if ($(this).hasClass("xreblogyourself_done") === true) { return; }
 
-	   		if ($(this).attr('id') === "new_post") { return; }
+	   	if ($(this).attr('id') === "new_post") { return; }
 			if ($(this).hasClass("note") === true) { return; }
 			if ($(this).hasClass("is_note") === true) { return; }
 			if ($(this).hasClass("is_mine") === false) { return; }
-	   		if ($(this).css('visibility') === "hidden") { return; } // tumblr savior hack.
-	   		if ($(this).css('display') === "none") { return; } // tumblr savior hack.
+	   	if ($(this).css('visibility') === "hidden") { return; } // tumblr savior hack.
+	   	if ($(this).css('display') === "none") { return; } // tumblr savior hack.
 
 			$(this).addClass("xreblogyourself_done");
 
-	   		if ($(this).find('.post_controls').html().search('href="/reblog/') !== -1) {
+	   	if ($(this).find('.post_controls').html().search('href="/reblog/') !== -1) {
 	   		   	// this user can reblog themselves?!
 				XKit.console.add("This user can reblog themselves, quitting.");
 	   		   	return false;
-	   		}
+	   	}
 
 			var post_id = $(this).attr('data-post-id');
 			var reblog_key = $(this).attr('data-reblog-key');

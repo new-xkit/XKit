@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.1 REV G **//
+//* VERSION 0.1.7 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER bit-shift **//
@@ -17,8 +17,6 @@ XKit.extensions.read_posts = new Object({
 			value: false
 		}
 	},
-
-	dashboard_regex: new RegExp("^https?://www.tumblr.com/dashboard(?:$|/)\\#?"),
 
 	last_undimmed: "",
 
@@ -89,7 +87,7 @@ XKit.extensions.read_posts = new Object({
 	},
 
 	process_posts: function() {
-		if (!(location.href.match(XKit.extensions.read_posts.dashboard_regex))) {
+		if (!XKit.interface.where().dashboard) {
 			return;  /* don't run on non-dashboard, since that can be in the background of a new post page */
 		}
 

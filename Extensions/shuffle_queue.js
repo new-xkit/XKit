@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0 REV F **//
+//* VERSION 2.0.7 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -12,25 +12,13 @@ XKit.extensions.shuffle_queue = new Object({
 
 	run: function() {
 
-		if (document.location.href.indexOf("/queue") === -1) {
+		if (!XKit.interface.where().queue) {
 			return;
 		}
 
 		XKit.tools.init_css("shuffle_queue");
 
 		this.running = true;
-
-		/*xf_html = '<ul class="controls_section" id="xshufflequeue_sidebar">' +
-			'<li class="">' +
-				'<a href="#" class="queue" id="xshufflequeue_button">' +
-					'<div class="hide_overflow">Shuffle</div>' +
-					'<div class="count">&nbsp;</div>' +
-				'</a>' +
-			'</li>' +
-			'</ul>';
-
-		$("ul.controls_section:eq(1)").before(xf_html);*/
-
 
 		var xf_html = 	'<ul class="controls_section" id="queue_plus_ul">' +
 					'<li class="section_header selected">Queue+</li>' +
@@ -117,7 +105,6 @@ XKit.extensions.shuffle_queue = new Object({
 
 			var hide_options = XKit.storage.get("shuffle_queue", "hide_options", "");
 			if (hide_options === "true" || hide_options === true) {
-				//$("#xqueueoptions_button").addClass("xkit-queue-option-button-on");
 				$("#xqueueoptions_button").trigger('click');
 			}
 
@@ -151,8 +138,7 @@ XKit.extensions.shuffle_queue = new Object({
 		XKit.extensions.shuffle_queue.delete_page++;
 
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
+		var m_url = XKit.interface.where().user_url;
 
 
 		GM_xmlhttpRequest({
@@ -237,12 +223,9 @@ XKit.extensions.shuffle_queue = new Object({
 
 		$("#xkit-shuffle-queue-progress").html("Deleting posts, please wait.. (post " + xin + " of " + XKit.extensions.shuffle_queue.posts_to_delete_count + ")");
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
-
 		var m_object = {};
 		m_object.post_id = post_id;
-		m_object.channel_id = m_url;
+		m_object.channel_id = XKit.interface.where().user_url;
 		m_object.form_key = XKit.interface.form_key();
 
 		GM_xmlhttpRequest({
@@ -294,8 +277,7 @@ XKit.extensions.shuffle_queue = new Object({
 		$("#xshufflequeue_button").addClass("disabled");
 		$("#xshufflequeue_button").find(".count").html("saving");
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
+		var m_url = XKit.interface.where().user_url;
 
 		var IDs = [];
 		$("#posts").find(".post").not("#next_post").each(function(){

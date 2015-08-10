@@ -11,7 +11,7 @@ XKit.extensions.timestamps = new Object({
 
 	running: false,
 	slow: true,
-	apiKey: XKit.api_key, //*"fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",**//
+	apiKey: XKit.api_key,
 
 	preferences: {
 		only_on_hover: {
@@ -66,7 +66,7 @@ XKit.extensions.timestamps = new Object({
 	run: function() {
 		XKit.tools.init_css("timestamps");
 
-		if (document.location.href.indexOf('/search/') !== -1) {
+		if (XKit.interface.where().search) {
 			this.in_search = true;
 			XKit.tools.add_css('.xtimestamp-in-search { position: absolute; top: 43px; color: white; font-size: 12px; left: 0; }', "timestamps_search");
 		}

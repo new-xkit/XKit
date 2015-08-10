@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension lets you find the blog that haven't been updated for over 30 days. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -9,7 +9,7 @@
 XKit.extensions.find_inactives = new Object({
 
 	running: false,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 
 	timeout_time: 300,
 

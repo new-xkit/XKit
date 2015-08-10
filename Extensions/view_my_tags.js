@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -8,7 +8,7 @@
 XKit.extensions.view_my_tags = new Object({
 
 	running: false,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 	url: "",
 
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEY5QzJBRTkzRTlGMTFFM0JFOUNFQjdCODYyOTc5RjMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEY5QzJBRUEzRTlGMTFFM0JFOUNFQjdCODYyOTc5RjMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4RjlDMkFFNzNFOUYxMUUzQkU5Q0VCN0I4NjI5NzlGMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4RjlDMkFFODNFOUYxMUUzQkU5Q0VCN0I4NjI5NzlGMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr7xRK4AAAFxSURBVHjarJQ7SwNBFIV3fTXughYWglYBQVCxsTadf8NebASxNYW92vgPtBZsBBs7A5pGC58gsUkRQsDga43ruXAGJpM7u1Ey8GXuZGZOzp07kzBN06CfbSDocxsyQRiGeVZjZNP6i8PvnLUX+NEo16KcIc/xTYYUPgRXHNvcgsjs0dAEt8EwmBJXiugd01cFtaK8YiJBXwM/yvwMKHvTVxzWwR44UdzZ3Ej6XTqW4Ke1OHHGPh4kfZ9gqweB1FOoWBNc55llbW5npB+7gtLO/unSVD/qvkdBMAE+wCU4Bu+gyu/ajH1Oj+ynV2S4CGbBCpgEG2AeXIMGWAbnvA3utUtsZ/LRBM+MG+wr7MVZiXGBjm13j2DEFdwFRcZj4IkbKyxYlU9z1BG7FzHtpTSd+IUvZk1OBUyDHbBvrROxOfDV8feV0eQIyizEILOoc04qu2DE3KeX1Q6slJc6ronzjHsVXAVbYBycgk1XzAj+CjAAVzNAhdtS9LcAAAAASUVORK5CYII=",
@@ -128,7 +128,7 @@ XKit.extensions.view_my_tags = new Object({
 			var m_html = "<div class=\"nano\" id=\"view-my-tags-window-outer\">" +
 				"<div class=\"content\" id=\"view-my-tags-window\">";
 
-			if (XKit.extensions.view_my_tags.preferences.sort_by_az.value === true) {
+			if (XKit.extensions.view_my_tags.preferences.sort_by_az.value) {
 
 				m_array.sort();
 
@@ -141,7 +141,7 @@ XKit.extensions.view_my_tags = new Object({
 				} else{
 					var extra_tags = "";
 					console.log(m_array[i] + "=" + XKit.interface.post_window.tag_exists(m_array[i]));
-					if (XKit.interface.post_window.tag_exists(m_array[i]) === true) { extra_tags = "xkit-view-tags-green"; }
+					if (XKit.interface.post_window.tag_exists(m_array[i])) { extra_tags = "xkit-view-tags-green"; }
 					m_html = m_html + "<div data-the-tag=\"" + m_array[i] + "\" class=\"xkit-view-my-tags-tag " + extra_tags + " xkit-with-ability-to-add-to-the-window-hoorray\">" + m_array[i] + "</div>";
 				}
 

@@ -1,13 +1,13 @@
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.6 **//
+//* VERSION     0.6.9 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
 //* BETA        false **//
 
-var retags = {
-	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
+XKit.extensions.retags = {
+	api_key: XKit.api_key,
 	selectors: '.reblog,.is_reblog,.notification_reblog',
 	blog_name: "",
 	observer: new MutationObserver(function(ms){

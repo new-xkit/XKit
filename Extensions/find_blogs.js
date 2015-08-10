@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -9,7 +9,7 @@ XKit.extensions.find_blogs = new Object({
 
 	running: false,
 
-	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
+	key: XKit.api_key,
 	form_key: "",
 
 	preferences: {

@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5 REV C **//
+//* VERSION 1.5.3 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -11,7 +11,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	running: false,
 	slow: true,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 
 	last_post_id: "",
 	last_post_notes: 0,
