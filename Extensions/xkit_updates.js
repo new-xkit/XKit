@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_updates = new Object({
@@ -33,7 +33,7 @@ XKit.extensions.xkit_updates = new Object({
 			var last_time = parseFloat(XKit.storage.get("xkit_updates", "last_update_check", "0"));
 			var difference = ms - last_time;
 			XKit.console.add("Updates: difference = " + difference);
-			if (isNaN(XKit.extensions.xkit_updates.preferences.check_interval.value) === true) {
+			if (isNaN(XKit.extensions.xkit_updates.preferences.check_interval.value)) {
 				XKit.console.add("Invalid check interval, reverting to default: not a number.");
 				XKit.extensions.xkit_updates.preferences.check_interval.value = XKit.extensions.xkit_updates.default_interval;
 			} else {
@@ -140,7 +140,7 @@ XKit.extensions.xkit_updates = new Object({
 
 		XKit.download.page("list.php", function(mdata) {
 
-			if (mdata.server_down === true) {
+			if (mdata.server_down) {
 
 				XKit.extensions.xkit_updates.show_update_failure();
 				return;
@@ -156,7 +156,7 @@ XKit.extensions.xkit_updates = new Object({
 				if (force_mode) {
 
 					var check_this = false;
-					if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+					if (XKit.installed.check(mdata.extensions[extension].name)) {
 
 						if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
 							check_this = true;
@@ -175,7 +175,7 @@ XKit.extensions.xkit_updates = new Object({
 				} else {
 
 					if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
-						if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+						if (XKit.installed.check(mdata.extensions[extension].name)) {
 							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
 						}
 					}
@@ -254,8 +254,8 @@ XKit.extensions.xkit_updates = new Object({
 
 		XKit.extensions.xkit_updates.update(XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index], function(mdata) {
 
-			if (mdata.errors === true) {
-				if (mdata.error_not_found === true) {
+			if (mdata.errors) {
+				if (mdata.error_not_found) {
 					// Probably removed.
 					XKit.console.add("Can not update " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index] + ": not found.");
 				}else{
@@ -292,7 +292,7 @@ XKit.extensions.xkit_updates = new Object({
 				try {
 					var mdata = JSON.parse(response.responseText);
 
-					if (mdata.malicious === true || mdata.malicious == "true") {
+					if (mdata.malicious || mdata.malicious == "true") {
 
 						XKit.installed.remove(mdata.id);
 						XKit.notifications.add("<b>Removed malicious extension " + mdata.title + "</b>. Please click here for more information.","warning",true, function() {
@@ -425,13 +425,13 @@ XKit.extensions.xkit_updates = new Object({
 		XKit.install(extension_id, function(mdata) {
 
 			if (mdata.errors) {
-				if (mdata.storage_error === true) {
+				if (mdata.storage_error) {
 					m_result.errors = true;
 					m_result.error = "Can't store data on browser";
 					callback(m_result);
 					return;
 				}
-				if (mdata.server_down === true) {
+				if (mdata.server_down) {
 					m_result.errors = true;
 					m_result.error = "Can't reach servers";
 					callback(m_result);

@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.11 **//
+//* VERSION 3.1.12 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -62,7 +62,7 @@ XKit.extensions.xkit_pack_launcher = new Object({
 								display_version = display_version.substring(0,19) + "..";
 							}
 
-							if (mdata.malicious === true || mdata.malicious == "true") {
+							if (mdata.malicious || mdata.malicious == "true") {
 
 								XKit.window.show("Malicious extension","XKit prevented the installation of this extension since it is a known malicious extension.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 								return;
@@ -125,7 +125,7 @@ XKit.extensions.xkit_pack_launcher = new Object({
 										},
 										onload: function(response) {
 
-// We are done!
+											// We are done!
 											try {
 
 												if ($(this).hasClass("disabled"))
@@ -209,7 +209,7 @@ XKit.extensions.xkit_pack_launcher = new Object({
 
 												var m_result = XKit.tools.set_setting("extension_" + mdata.id, JSON.stringify(m_object));
 
-												if (m_result.errors === false) {
+												if (!m_result.errors) {
 
 													var current_packs = XKit.tools.get_setting("installed_packs", "");
 													var current_packs_array = [];
@@ -479,7 +479,7 @@ XKit.tools.dump_config = function(){
 			return real_version;
 		}
 
-		if (to_return.chrome === true) {
+		if (to_return.chrome) {
 			// Get version.
 			to_return.name = "Google Chrome";
 			to_return.version = get_ua_version("chrome/");
@@ -515,7 +515,7 @@ XKit.tools.dump_config = function(){
 
 			XKit.retina = window.devicePixelRatio > 1;
 
-			if (XKit.retina === true) {
+			if (XKit.retina) {
 				// console.log("Retina screen mode.");
 			}
 
@@ -598,7 +598,7 @@ XKit.tools.dump_config = function(){
 
 		};
 
-		if (XKit.frame_mode === true) {
+		if (XKit.frame_mode) {
 
 			xkit_check_storage();
 
@@ -618,7 +618,7 @@ XKit.tools.dump_config = function(){
 		}
 
 		// Increasing storage for extensions from 50kb to 150kb.
-		if (XKit.storage.unlimited_storage === true) {
+		if (XKit.storage.unlimited_storage) {
 			// If we have unlimited storage, make it 10 mb.
 			XKit.storage.max_area_size = 10485760;
 		} else {
@@ -1473,10 +1473,10 @@ XKit.tools.dump_config = function(){
 
 				XKit.interface.kitty.get(function(kitty_data) {
 
-					if (kitty_data.errors === true) {
+					if (kitty_data.errors) {
 
 						// We fucked up. Let's try again.
-						if (retry_mode === false) {
+						if (!retry_mode) {
 							XKit.interface.edit(tumblr_object, func, true);
 						} else {
 
@@ -1558,7 +1558,7 @@ XKit.tools.dump_config = function(){
 
 				m_object.form_key = XKit.interface.form_key();
 
-				if (reblog_mode === true) {
+				if (reblog_mode) {
 					m_object.post_type = false; // Not sure why.
 					m_object.reblog_key = post_object.reblog_key;
 					m_object.reblog_id = post_object.id;
@@ -1660,7 +1660,7 @@ XKit.tools.dump_config = function(){
 				XKit.interface.added_icon_icon.push(icon);
 				XKit.interface.added_icon_text.push(text);
 
-				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
+				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr) {
 
 					XKit.tools.add_css("." + class_name + "{" +
 							" background-image: url('" + icon + "') !important;" +
@@ -1824,7 +1824,7 @@ XKit.tools.dump_config = function(){
 				m_return.animated = $(obj).hasClass("is_animated");
 				m_return.is_reblogged = $(obj).hasClass("is_reblog");
 				m_return.is_mine = $(obj).hasClass("is_mine");
-				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
+				m_return.is_following = ($(obj).attr('data-following-tumblelog'));
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 
 				if (m_return.is_reblogged) {
@@ -1973,7 +1973,7 @@ XKit.tools.dump_config = function(){
 					likes: false
 				};
 
-				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
+				if ($("body").hasClass("dashboard_messages_inbox") || $("body").hasClass("dashboard_messages_submissions")) {
 					m_return.inbox = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/inbox") !== -1) {
@@ -2048,9 +2048,9 @@ XKit.tools.dump_config = function(){
 					m_return.likes = true;
 				}
 
-				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
-				m_return.channel = $("body").hasClass("is_channel") === true;
-				m_return.endless = $("body").hasClass("without_auto_paginate") === false;
+				m_return.dashboard = $("body").hasClass("is_dashboard")
+				m_return.channel = $("body").hasClass("is_channel")
+				m_return.endless = !$("body").hasClass("without_auto_paginate")
 
 				return m_return;
 			},
@@ -2128,7 +2128,7 @@ XKit.tools.dump_config = function(){
 				}
 				post_count = $("#posts .post").length;
 			}
-			if (no_timeout === true) { post_count = -1; }
+			if (no_timeout) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
 			} else {
@@ -2137,7 +2137,7 @@ XKit.tools.dump_config = function(){
 					XKit.post_listener.run_callbacks();
 				}
 			}
-			if (no_timeout !== true) {
+			if (!no_timeout) {
 				setTimeout(XKit.post_listener.check, 1000);
 			}
 
@@ -2213,7 +2213,7 @@ XKit.tools.dump_config = function(){
 					}
 					$("#xkit_notification_" + m_notification_id).slideUp('slow');
 				});
-				if (sticky !== true) {
+				if (!sticky) {
 					setTimeout(function() {
 						$("#xkit_notification_" + m_notification_id).slideUp('slow');
 					}, 5000);

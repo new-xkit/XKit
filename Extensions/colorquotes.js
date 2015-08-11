@@ -1,5 +1,5 @@
 //* TITLE Color Quotes **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0.4 **//
 //* DESCRIPTION Colored quotes for the dash **//
 //* DETAILS Know those lines that appear when you reblog someone, when Tumblr quotes them? Sometimes, when a lot of people talk on the same post, it might be hard to keep track of those. This extension changes the color of each line (or their background, depending on your preferences) so you can read and differentiate them faster. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -75,7 +75,7 @@ XKit.extensions.colorquotes = new Object({
 			this.colors = ["e24545","acacac","e24545","acacac","e24545","acacac","e24545","acacac"];
 		}
 
-		if (XKit.extensions.colorquotes.preferences.increase_padding.value === true) {
+		if (XKit.extensions.colorquotes.preferences.increase_padding.value) {
 			XKit.tools.add_css("#posts .post_content blockquote { padding-top: 8px; padding-bottom: 8px; }", "colorquotes_padding");
 		}
 
@@ -101,7 +101,7 @@ XKit.extensions.colorquotes = new Object({
 
 			var count = 0;
 
-			if (XKit.extensions.colorquotes.preferences.dont_fade_if_less_than_two.value === true) {
+			if (XKit.extensions.colorquotes.preferences.dont_fade_if_less_than_two.value) {
 				if ($(this).find("blockquote").length === 1) { return; }
 			}
 
@@ -115,7 +115,7 @@ XKit.extensions.colorquotes = new Object({
 				$(this).attr('xkit-border-color', JSON.stringify(m_color));
 				$(this).addClass("xkit-colorquotes-border-item");
 
-				if (XKit.extensions.colorquotes.preferences.do_backgrounds.value === true) {
+				if (XKit.extensions.colorquotes.preferences.do_backgrounds.value) {
 					$(this).css("background", "rgba(" + m_color.r + "," + m_color.g + "," + m_color.b + ",0.1)");
 				}
 

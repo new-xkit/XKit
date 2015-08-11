@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.5.3 **//
+//* VERSION 0.5.4 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -52,7 +52,7 @@ XKit.extensions.postarchive = new Object({
 			post_id = document.location.href.substring(postid_start + 5, postid_end);
 		}
 
-		if (XKit.extensions.postarchive.is_post_in_archive(post_id) !== false) {
+		if (XKit.extensions.postarchive.is_post_in_archive(post_id)) {
 
 			$("#xkit_postarchive_inblog_button").addClass("xkit-post-archive-inblog-button-done");
 
@@ -79,7 +79,7 @@ XKit.extensions.postarchive = new Object({
 
 		XKit.extensions.postarchive.load_posts();
 
-		if (XKit.interface.where().inbox === true) { return; }
+		if (XKit.interface.where().inbox) { return; }
 
     if ($('#postarchive_ul').length === 0) {
       var xf_html = '<ul class="controls_section" id="postarchive_ul">' +
@@ -181,7 +181,7 @@ XKit.extensions.postarchive = new Object({
 
 		if (category_id === "") {
 			// we have a storage bug on chrome.
-			if (show === true) {
+			if (show) {
 				XKit.storage.set("postarchive","collapse_uncategorized", "false");
 			} else{
 				XKit.storage.set("postarchive","collapse_uncategorized", "true");
@@ -239,7 +239,7 @@ XKit.extensions.postarchive = new Object({
 
 				// alert(XKit.extensions.postarchive.categories[i].title + "\n" + XKit.extensions.postarchive.categories[i].collapsed);
 
-				if (XKit.extensions.postarchive.categories[i].collapsed === true) { m_collapse_class = ""; m_collapse_class_post = "xkit-postarchive-hidden-category-item"; }
+				if (XKit.extensions.postarchive.categories[i].collapsed) { m_collapse_class = ""; m_collapse_class_post = "xkit-postarchive-hidden-category-item"; }
 
 				m_post_list_html = m_post_list_html + "<div data-category=\"" + XKit.extensions.postarchive.categories[i].id + "\" class=\"xkit-postarchive-cat-separator " + m_collapse_class + "\"><div class=\"xkit-postarchive-cat-separator-title\">" + XKit.extensions.postarchive.categories[i].title + "</div></div>";
 
@@ -471,7 +471,7 @@ XKit.extensions.postarchive = new Object({
 		});
 
 		var collapse_uncat = XKit.storage.get("postarchive","collapse_uncategorized", "false");
-		if (collapse_uncat === "true" || collapse_uncat === true) {
+		if (collapse_uncat === "true" || collapse_uncat) {
 
 			// dirty coding.
 			$(".xkit-postarchive-cat-separator-uncategorized").trigger('click');
@@ -632,7 +632,7 @@ XKit.extensions.postarchive = new Object({
 
 			} else {
 
-var rows = [];
+				var rows = [];
 
 				for (var i=0;i<data.photoset_layout.length;i++) {
 					rows.push(data.photoset_layout[i]);
@@ -768,7 +768,7 @@ var rows = [];
 	render_post: function(post_id) {
 
 		var m_post = XKit.extensions.postarchive.get_from_archive(post_id);
-		if (m_post === false) { alert("Can not fetch post (error PAC-302)"); return; }
+		if (!m_post) { alert("Can not fetch post (error PAC-302)"); return; }
 
 		var post_obj = "";
 		if (m_post.post.substring(0, 11) === "XKIT-BTOA!!") {
@@ -1027,9 +1027,9 @@ var rows = [];
 
 		XKit.extensions.postarchive.load_posts();
 
-		if (XKit.interface.where().drafts === true) { XKit.window.show("Oops","Unfortunately, Post Archiver does not yet support archiving from the drafts, but I'm working on it. Thank you for your patience.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>"); return; }
+		if (XKit.interface.where().drafts) { XKit.window.show("Oops","Unfortunately, Post Archiver does not yet support archiving from the drafts, but I'm working on it. Thank you for your patience.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>"); return; }
 
-		if (XKit.extensions.postarchive.is_post_in_archive(post_id) !== false) {
+		if (XKit.extensions.postarchive.is_post_in_archive(post_id)) {
 
 			XKit.window.show("Already in archive.","Would you like to remove this post from the archive?", "question", "<div class=\"xkit-button default\" id=\"xkit-postarchive-remove-from-archive\">Yes, remove from archive</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
@@ -1318,7 +1318,7 @@ var rows = [];
 
 			var m_cat_obj = XKit.extensions.postarchive.get_category($(this).attr('data-id'));
 
-			if (m_cat_obj === false) { alert("Unknown error PAS-30"); return; }
+			if (!m_cat_obj) { alert("Unknown error PAS-30"); return; }
 
 			XKit.window.show("Edit category","<b>Category Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Recipes\" class=\"xkit-textbox\" id=\"xkit-postarchive-category-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this category, items saved in this category will be marked \"Uncategorized.\"","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-save-category\">Save Category</div><div class=\"xkit-button\" id=\"xkit-postarchive-delete-category\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 

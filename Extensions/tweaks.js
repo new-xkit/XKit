@@ -319,7 +319,7 @@ XKit.extensions.tweaks = new Object({
 						redirect_me = false;
 					}
 				}
-				if (redirect_me === true) {
+				if (redirect_me) {
 					document.location.href = "http://tumblr.com/tagged/" + m_tag + "/everything";
 				}
 			}

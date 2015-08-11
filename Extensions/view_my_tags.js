@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -77,7 +77,7 @@ XKit.extensions.view_my_tags = new Object({
 					'</a></li>' +
 				'</ul>';
 
-		if (XKit.extensions.view_my_tags.preferences.only_in_post_window.value === false) {
+		if (!XKit.extensions.view_my_tags.preferences.only_in_post_window.value) {
 
 			if ($("#xstats_ul").length > 0) {
 
@@ -127,7 +127,7 @@ XKit.extensions.view_my_tags = new Object({
 			var m_html = "<div class=\"nano\" id=\"view-my-tags-window-outer\">" +
 				"<div class=\"content\" id=\"view-my-tags-window\">";
 
-			if (XKit.extensions.view_my_tags.preferences.sort_by_az.value === true) {
+			if (XKit.extensions.view_my_tags.preferences.sort_by_az.value) {
 
 				m_array.sort();
 
@@ -140,7 +140,7 @@ XKit.extensions.view_my_tags = new Object({
 				} else{
 					var extra_tags = "";
 					console.log(m_array[i] + "=" + XKit.interface.post_window.tag_exists(m_array[i]));
-					if (XKit.interface.post_window.tag_exists(m_array[i]) === true) { extra_tags = "xkit-view-tags-green"; }
+					if (XKit.interface.post_window.tag_exists(m_array[i])) { extra_tags = "xkit-view-tags-green"; }
 					m_html = m_html + "<div data-the-tag=\"" + m_array[i] + "\" class=\"xkit-view-my-tags-tag " + extra_tags + " xkit-with-ability-to-add-to-the-window-hoorray\">" + m_array[i] + "</div>";
 				}
 

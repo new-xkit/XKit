@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5 REV C **//
+//* VERSION 1.5.4 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -61,25 +61,25 @@ XKit.extensions.notifications_plus = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.extensions.notifications_plus.preferences.only_replies.value === true) {
+		if (XKit.extensions.notifications_plus.preferences.only_replies.value) {
 			XKit.tools.add_css("ol#posts .notification { opacity: 0.29; } ol#posts .notification_answer, ol#posts .notification_reply, ol#posts .notification_photo_reply ol#posts .notification:hover { opacity: 1; } ", "notifications_plus_only_replies");
 		}
 
-		if (XKit.extensions.notifications_plus.preferences.dont_dim_on_reblogs.value === true) {
+		if (XKit.extensions.notifications_plus.preferences.dont_dim_on_reblogs.value) {
 			XKit.post_listener.add("notifications_plus", XKit.extensions.notifications_plus.dedim);
 			XKit.extensions.notifications_plus.dedim();
 		}
 
-		if (XKit.interface.where().dashboard === true ||XKit.interface.where().channel === true) {
+		if (XKit.interface.where().dashboard === true ||XKit.interface.where().channel) {
 
-			if (XKit.extensions.notifications_plus.preferences.follow_glow.value === true) {
+			if (XKit.extensions.notifications_plus.preferences.follow_glow.value) {
 				XKit.post_listener.add("notifications_plus_followglow", XKit.extensions.notifications_plus.follow_glow);
 				XKit.extensions.notifications_plus.follow_glow();
 			}
 
 		}
 
-		if (XKit.extensions.notifications_plus.preferences.show_notes.value === true) {
+		if (XKit.extensions.notifications_plus.preferences.show_notes.value) {
 			XKit.tools.init_css("notifications_plus");
 			XKit.extensions.notifications_plus.xpreview_init();
 		}
@@ -97,7 +97,7 @@ XKit.extensions.notifications_plus = new Object({
 
 				var u_obj = JSON.parse($(check_div).attr('data-tumblelog-popover'));
 
-				if (u_obj.following === true) {
+				if (u_obj.following) {
 
 					$(this).addClass("xkit-notifications-plus-follow-glow");
 					$(this).append("<div class=\"xkit-notifications-plus-follow-dot\">&nbsp;</div>");
@@ -136,7 +136,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	xpreview_init: function() {
 
-		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
+		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value) {
 			$("body").append("<div class=\"with-preview\" id=\"xpreview-container\"><img src=\"\" id=\"xpreview-image\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");
 		} else {
 			$("body").append("<div id=\"xpreview-container\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");
@@ -162,16 +162,16 @@ XKit.extensions.notifications_plus = new Object({
 
 		// get post URL.
 		var post_url = $(obj).find(".preview_frame").attr('href');
-		if ($(obj).hasClass("ui_note") === true) {
+		if ($(obj).hasClass("ui_note")) {
 			post_url = $(obj).find(".part_glass").attr('href');
 		}
 
-		if ($(obj).hasClass("is_follower") === true) { return; }
+		if ($(obj).hasClass("is_follower")) { return; }
 
 		var using_preview = false;
 
-		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
-			if ($(obj).hasClass("ui_note") === true) {
+		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value) {
+			if ($(obj).hasClass("ui_note")) {
 				if ($(obj).find(".ui_post_badge").hasClass("photo")) {
 					using_preview = true;
 					var m_preview = $(obj).find(".ui_post_badge").css("background-image");

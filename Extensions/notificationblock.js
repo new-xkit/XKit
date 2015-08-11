@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.3.2 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -33,7 +33,7 @@ XKit.extensions.notificationblock = new Object({
 
 		this.running = true;
 
-		if (XKit.interface.where().inbox === true) {
+		if (XKit.interface.where().inbox) {
 			return;
 		}
 
@@ -56,12 +56,12 @@ XKit.extensions.notificationblock = new Object({
 			XKit.extensions.notificationblock.do();
 		}
 
-		if (XKit.interface.where().activity === true) {
+		if (XKit.interface.where().activity) {
 			console.log("In activity, repeat block mode");
 			setInterval(function() { XKit.extensions.notificationblock.do() }, 1500);
 		}
 
-		if (this.preferences.on_notifications.value === true) {
+		if (this.preferences.on_notifications.value) {
 		$(document).on("mouseenter",".notification", XKit.extensions.notificationblock.enter_notification);
 			$(document).on("click",".xkit-notification-notification-block-button", function(e) {
 				var m_parent = $(this).parentsUntil(".notification").parent();
@@ -99,7 +99,7 @@ XKit.extensions.notificationblock = new Object({
 
 		}
 
-		if (XKit.extensions.notificationblock.preferences.ask.value === false) {
+		if (!XKit.extensions.notificationblock.preferences.ask.value) {
 
 			XKit.extensions.notificationblock.block(post_id);
 			return;
@@ -120,9 +120,9 @@ XKit.extensions.notificationblock = new Object({
 	enter_notification: function(event) {
 
 		var n_box = event.target;
-		if ($(n_box).hasClass("notification") === false || $(n_box).hasClass("notification_inner") === true) {
+		if (!$(n_box).hasClass("notification") || $(n_box).hasClass("notification_inner")) {
 			// Must be in a sub-div.
-			if ($(n_box).hasClass("notification_inner") === true) {
+			if ($(n_box).hasClass("notification_inner")) {
 				n_box = $(n_box).parent();
 			} else {
 				n_box = $(n_box).parentsUntil(".notification").parent();
@@ -161,7 +161,7 @@ XKit.extensions.notificationblock = new Object({
 				} else {
 					$(n_box).find(".xkit-notification-notification-block-button").css("top","12px");
 				}
-				if ($(n_box).hasClass("stretchy_kid_container") === true) {
+				if ($(n_box).hasClass("stretchy_kid_container")) {
 					if ($(n_box).find(".xkit-reply-button").length > 0) {
 						console.log("Has One-Click Reply button, pushing! 1");
 						$(n_box).find(".xkit-notification-notification-block-button").css("right",(8 + $(n_box).find(".xkit-reply-button").width() + 5) + "px");
@@ -192,7 +192,7 @@ XKit.extensions.notificationblock = new Object({
 				console.log("Has One-Click Reply button, pushing! 15");
 				m_right += $(n_box).find(".xkit-reply-button").width() + 8;
 			}
-			if (XKit.extensions.notificationblock.added_css !== true) {
+			if (!XKit.extensions.notificationblock.added_css) {
 				XKit.tools.add_css(".notification .block, .notification .ignore { right: " + m_right + "px !important; }", "notificationblock_notfix");
 				XKit.extensions.notificationblock.added_css = true;
 			}
@@ -231,7 +231,7 @@ XKit.extensions.notificationblock = new Object({
 		var obj = e.target || e.srcElement;
 		var parent = $(obj).parentsUntil("#posts");
 
-		if (XKit.extensions.notificationblock.preferences.ask.value === false) {
+		if (!XKit.extensions.notificationblock.preferences.ask.value) {
 
 			if ($(obj).hasClass("xkit-interface-completed")) {
 				XKit.extensions.notificationblock.unblock($(obj).attr('data-post-id'));

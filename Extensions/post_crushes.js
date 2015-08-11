@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -61,7 +61,7 @@ XKit.extensions.post_crushes = new Object({
 		$("#crushes").after('<div class="xkit-button xkit-wide-button" id="xkit_post_crushes" style="display: block; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 10px; border-radius: 4px; margin-top: 15px;">Post My Crushes</div>');
 
 		$("#xkit_post_crushes").click(function() {
-			if($(this).hasClass("xkit_button_gray") === true) { return; }
+			if($(this).hasClass("xkit_button_gray")) { return; }
 			XKit.extensions.post_crushes.post();
 		});
 
@@ -102,7 +102,7 @@ XKit.extensions.post_crushes = new Object({
 
 		for (i=0; i<=8; i++) {
 			var perc = '<small> (' + crush_val[i] + '%)</small>';
-			if (XKit.extensions.post_crushes.preferences.show_percentage.value === false) { perc = ""; }
+			if (!XKit.extensions.post_crushes.preferences.show_percentage.value) { perc = ""; }
 			send_txt = send_txt + '<li><a href="' + crush_url[i] + '">' + crush_name[i] + '</a>' + perc + '</li>';
 			m_tags = m_tags + "," + crush_name[i];
 		}
@@ -150,7 +150,7 @@ XKit.extensions.post_crushes = new Object({
 
 		blog_selector_html = blog_selector_html + "</select>";
 
-		if (XKit.extensions.post_crushes.preferences.tag_people.value === false) {
+		if (!XKit.extensions.post_crushes.preferences.tag_people.value) {
 			m_object["post[tags]"] = "";
 		}else {
 			m_object["post[tags]"] = m_tags;
@@ -207,7 +207,7 @@ XKit.extensions.post_crushes = new Object({
 
 		XKit.interface.kitty.get(function(kitty_data) {
 
-			if (kitty_data.errors === true) {
+			if (kitty_data.errors) {
 
 				XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Unable to authorize post transaction. Please try again later.");
 				return;
@@ -231,7 +231,7 @@ XKit.extensions.post_crushes = new Object({
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
 					var m_obj = jQuery.parseJSON(response.responseText);
 					console.log(m_obj);
-					if (m_obj.errors === false) {
+					if (!m_obj.errors) {
 						$("#xkit_post_crushes").html("Posted!");
 						XKit.window.close();
 						if (m_object["post[state]"] === "0") {

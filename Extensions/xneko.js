@@ -1,5 +1,5 @@
 //* TITLE XNeko **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION A cat for your dashboard! **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -89,7 +89,7 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.place($(window).width() / 2 - 16, $(window).height() / 2 - 16);
 
 		$(document).mousemove(function(e){
-			if (XKit.extensions.xneko.preferences.stay_away.value === true) {
+			if (XKit.extensions.xneko.preferences.stay_away.value) {
 				XKit.extensions.xneko.mouse_x = e.pageX - 15;
 				XKit.extensions.xneko.mouse_y = e.pageY - 15;
 			} else {
@@ -127,7 +127,7 @@ XKit.extensions.xneko = new Object({
 			cat.direction_x = -1;
 		}
 
-		if (XKit.extensions.xneko.preferences.stay_away.value === true) {
+		if (XKit.extensions.xneko.preferences.stay_away.value) {
 			if (mc_diff < 40) {
 				cat.direction_x = 0;
 			}
@@ -158,21 +158,21 @@ XKit.extensions.xneko = new Object({
 
 		if (cat.direction_x === 1) {
 			if (cat.direction_y === 1) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (12*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (12*32) + "px");
 				}
 			}
 			if (cat.direction_y === 0) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (13*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (13*32) + "px");
 				}
 			}
 			if (cat.direction_y === -1) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (14*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (14*32) + "px");
@@ -182,14 +182,14 @@ XKit.extensions.xneko = new Object({
 
 		if (cat.direction_x === 0) {
 			if (cat.direction_y === 1) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (11*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (11*32) + "px");
 				}
 			}
 			if (cat.direction_y === 0) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (3*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "0px -" + (3*32) + "px");
@@ -197,7 +197,7 @@ XKit.extensions.xneko = new Object({
 				m_cat_stopped = true;
 			}
 			if (cat.direction_y === -1) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (15*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (15*32) + "px");
@@ -207,21 +207,21 @@ XKit.extensions.xneko = new Object({
 
 		if (cat.direction_x === -1) {
 			if (cat.direction_y === 1) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (10*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (10*32) + "px");
 				}
 			}
 			if (cat.direction_y === 0) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (9*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (9*32) + "px");
 				}
 			}
 			if (cat.direction_y === -1) {
-				if (cat.alt_sprite === false) {
+				if (!cat.alt_sprite) {
 					$("#xneko").css("background-position", "0px -" + (8*32) + "px");
 				} else {
 					$("#xneko").css("background-position", "32px -" + (8*32) + "px");
@@ -234,7 +234,7 @@ XKit.extensions.xneko = new Object({
 
 		// Check energy.
 		var tmp_cat_health = cat.energy;
-		if (cat.sleeping === true) {
+		if (cat.sleeping) {
 			tmp_cat_health = 0;
 		}
 
@@ -245,7 +245,7 @@ XKit.extensions.xneko = new Object({
 			cat.energy = cat.energy + 30;
 
 			if (cat.energy >= 100) {
-				if (cat.stopped === false) {
+				if (!cat.stopped) {
 					cat.sleeping = false;
 				}
 				cat.energy = 100;
@@ -253,7 +253,7 @@ XKit.extensions.xneko = new Object({
 
 			cat.stand_count = 0;
 
-			if (cat.alt_sprite === true) {
+			if (cat.alt_sprite) {
 				$("#xneko").css("background-position", "0px -" + (1*32) + "px");
 			} else {
 				$("#xneko").css("background-position", "32px -" + (1*32) + "px");
@@ -263,9 +263,9 @@ XKit.extensions.xneko = new Object({
 
 		} else {
 
-			if (m_cat_stopped === false) {
+			if (!m_cat_stopped) {
 
-				if (cat.stopped === true) {
+				if (cat.stopped) {
 					cat.stopped = false;
 					// alert!
 					$("#xneko").css("background-position", "32px 0px");
@@ -281,7 +281,7 @@ XKit.extensions.xneko = new Object({
 
 			} else {
 
-				if (cat.stopped === true) {
+				if (cat.stopped) {
 					$("#xneko").css("background-position", "32px -" + (3*32) + "px");
 					cat.sleeping = true;
 				}

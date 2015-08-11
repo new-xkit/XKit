@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.3 **//
+//* VERSION 1.3.1 **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -24,7 +24,7 @@ XKit.extensions.panaroma = new Object({
 		this.running = true;
 		XKit.tools.init_css("panaroma");
 
-		if (XKit.extensions.panaroma.preferences.stretch_images.value === true) {
+		if (XKit.extensions.panaroma.preferences.stretch_images.value) {
 
 			XKit.tools.add_css("#posts .post .image_thumbnail.enlarged { width: 100% !important; height: auto !important; } #posts .post .flipcard, #posts .post .flipcard_front, #posts .post_content .image { width: 100% !important; height: auto !important; }", "panaroma_str");
 

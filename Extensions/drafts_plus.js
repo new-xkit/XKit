@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -12,7 +12,7 @@ XKit.extensions.drafts_plus = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.interface.where().drafts !== true) {return; }
+		if (!XKit.interface.where().drafts) {return; }
 
 		XKit.tools.init_css("drafts_plus");
 
@@ -304,7 +304,7 @@ XKit.extensions.drafts_plus = new Object({
 
 		}
 
-		if (XKit.extensions.drafts_plus.scroller_working === true) { return; }
+		if (XKit.extensions.drafts_plus.scroller_working) { return; }
 
 		XKit.extensions.drafts_plus.scroller_working = true;
 		XKit.extensions.drafts_plus.current_page++;

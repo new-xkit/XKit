@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9 REV C **//
+//* VERSION 6.9.4 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
@@ -59,11 +59,11 @@ XKit.extensions.xkit_installer = new Object({
 		XKit.install(to_install, function(mdata) {
 
 			if (mdata.errors) {
-				if (mdata.storage_error === true) {
+				if (mdata.storage_error) {
 					show_error_installation("[Code: 631] Can't store data on browser");
 					return;
 				}
-				if (mdata.server_down === true) {
+				if (mdata.server_down) {
 					show_error_installation("[Code: 101] Can't reach XKit servers");
 				} else {
 					if (mdata.file === "not_found") {

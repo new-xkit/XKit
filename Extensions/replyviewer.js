@@ -1,5 +1,5 @@
 //* TITLE ReplyViewer **//
-//* VERSION 0.2 REV G **//
+//* VERSION 0.2.8 **//
 //* DESCRIPTION View post replies easily **//
 //* DETAILS The close relative of TagViewer, this extension allows you to see what replies, answers and additional content added to it while reblogging on any post. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -246,7 +246,7 @@ XKit.extensions.replyviewer = new Object({
 				"<div class=\"replyviewer-tag-tags\">";
 
 
-		if (only_text === true) {
+		if (only_text) {
 			m_html = m_html + "<span class=\"replyviewer-tag-tag replyviewer-reply\">" + tags + "</span>";
 		} else {
 			m_html = m_html + "<a href=\"" + link + "\" class=\"replyviewer-tag-tag replyviewer-reblog\">" + tags + "</a>";
@@ -280,7 +280,7 @@ XKit.extensions.replyviewer = new Object({
 			if (m_post.note_count === 0) { return; }
 
 			// Don't add button if we are in inbox.
-			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
+			if ($(this).hasClass("is_note") && XKit.interface.where().inbox) { return; }
 			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
 			XKit.interface.add_control_button(this, "xkit-replyviewer", "data-xkit-replyviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-replyviewer-tumblelog-name=\"" + m_post.owner + "\"");

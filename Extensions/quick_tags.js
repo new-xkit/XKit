@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.5.3 **//
+//* VERSION 0.5.4 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -88,7 +88,7 @@ XKit.extensions.quick_tags = new Object({
 
 		// Are we in post window?
 		if ($(button).attr('data-in-window') === "true") {
-			if (XKit.extensions.quick_tags.preferences.append_not_replace.value !== true) {
+			if (!XKit.extensions.quick_tags.preferences.append_not_replace.value) {
 				XKit.interface.post_window.remove_all_tags();
 			}
 			XKit.interface.post_window.add_tag(tags.split(","));
@@ -112,7 +112,7 @@ XKit.extensions.quick_tags = new Object({
 					m_tags = "";
 				}
 
-				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === true) {
+				if (XKit.extensions.quick_tags.preferences.append_not_replace.value) {
 					m_tags = m_tags + "," + tags;
 				} else {
 					m_tags = tags;
@@ -146,14 +146,14 @@ XKit.extensions.quick_tags = new Object({
 
 					XKit.interface.switch_control_button($(m_button), false);
 
-					if (data.error === false && data.data.errors === false) {
+					if (!data.error && !data.data.errors) {
 
 						XKit.interface.switch_control_button($(m_button), false);
 						XKit.interface.update_view.tags(m_post, m_tags);
 
 					} else {
 						// Oops?
-						if (data.error === true) {
+						if (data.error) {
 							XKit.window.show("Unable to edit post","Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01B" + data.status + "<br/>" + data.message,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						} else {
 							XKit.window.show("Unable to edit post","Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01A" + data.status + "<br/>" + data.data.errors,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -166,7 +166,7 @@ XKit.extensions.quick_tags = new Object({
 		} else {
 			XKit.window.show("Unable to edit post","Something went wrong, my apologies.<br/>Please try again later or file a bug report with the error code:<br/>QT02","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		}
-		
+
 		XKit.extensions.quick_tags.user_on_box = false;
 		XKit.extensions.quick_tags.close_window();
 	},
@@ -185,7 +185,7 @@ XKit.extensions.quick_tags = new Object({
 
 		var obj = $(e.target);
 
-		if ($(obj).hasClass("xkit-tag") === false) {
+		if (!$(obj).hasClass("xkit-tag")) {
 			obj = $(obj).parent();
 		}
 
@@ -198,7 +198,7 @@ XKit.extensions.quick_tags = new Object({
 		if (m_one_click !== "true") {
 			XKit.extensions.quick_tags.submit(m_tags, XKit.extensions.quick_tags.current_button);
 		} else {
-			if (XKit.extensions.quick_tags.preferences.append_not_replace_one_click.value !== true) {
+			if (!XKit.extensions.quick_tags.preferences.append_not_replace_one_click.value) {
 				$("#x1cpostage_tags").val(m_tags);
 			} else {
 				if ($("#x1cpostage_tags").val() === "") {
@@ -219,7 +219,7 @@ XKit.extensions.quick_tags = new Object({
 	current_button: "",
 
 	close_window: function() {
-		if (XKit.extensions.quick_tags.user_on_box === false) {
+		if (!XKit.extensions.quick_tags.user_on_box) {
 			$("#xkit-quick-tags-window").fadeOut('fast');
 		}
 	},
@@ -257,12 +257,12 @@ XKit.extensions.quick_tags = new Object({
 				var m_tags = user_tag_array[tag].tags;
 
 				var add_data = "";
-				if (for_one_click === true) {
+				if (for_one_click) {
 					add_data = "data-one-click-postage=\"true\"";
 				}
 
 				m_user_tags = m_user_tags + "<div " + add_data + " data-tags=\"" + m_tags + "\" class=\"xkit-tag user\"><div class=\"xkit-tag-name\">" + m_title + "</div>";
-				if (for_one_click !== true) {
+				if (!for_one_click) {
 					m_user_tags = m_user_tags + "<div class=\"xkit-tag-data\">" + m_tags + "</div>";
 				}
 				m_user_tags = m_user_tags + "</div>";
@@ -279,7 +279,7 @@ XKit.extensions.quick_tags = new Object({
 
 		var obj = $(e.target);
 
-		if ($(obj).hasClass("xkit-interface-working") === true) { return; }
+		if ($(obj).hasClass("xkit-interface-working")) { return; }
 
 		var user_tag_array = XKit.extensions.quick_tags.load_tag_prefs();
 		var m_user_tags = XKit.extensions.quick_tags.render_tags_from_array(user_tag_array);

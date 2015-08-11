@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -31,7 +31,7 @@ XKit.extensions.find_blogs = new Object({
 
 		XKit.extensions.find_blogs.is_in_iframe = true;
 
-		if (XKit.extensions.find_blogs.preferences.run_on_iframe.value !== true) { return; }
+		if (!XKit.extensions.find_blogs.preferences.run_on_iframe.value) { return; }
 
 		XKit.tools.init_css("find_blogs");
 
@@ -65,12 +65,12 @@ XKit.extensions.find_blogs = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.interface.where().queue === true) { return; }
+		if (XKit.interface.where().queue) { return; }
 
 		XKit.tools.init_css("find_blogs");
 		XKit.extensions.find_blogs.form_key = XKit.interface.form_key();
 
-		if (XKit.interface.where().queue === true) { return; }
+		if (XKit.interface.where().queue) { return; }
 
 
 		if (typeof XKit.extensions.show_more === "undefined") {
@@ -79,7 +79,7 @@ XKit.extensions.find_blogs = new Object({
 		}
 
 		XKit.installed.when_running("show_more", function() {
-			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
+			if (XKit.extensions.show_more.preferences.use_classic_menu.value) {
 				XKit.extensions.show_more.add_custom_menu("find_blogs", function(data) {
 					var user_url = data.name;
 
@@ -197,7 +197,7 @@ XKit.extensions.find_blogs = new Object({
 			onload: function(response) {
 				try {
 					data = JSON.parse(response.responseText);
-					if (data.following === true) { return callback(true, m_url); } else { return callback(false, m_url); }
+					if (data.following) { return callback(true, m_url); } else { return callback(false, m_url); }
 				} catch(e) {
 					return callback(false, m_url);
 				}
@@ -261,7 +261,7 @@ XKit.extensions.find_blogs = new Object({
 			$("#xkit-find-blogs-text").html("Thinking even more...");
 			XKit.extensions.find_blogs.already_following = 0;
 
-			if (XKit.extensions.find_blogs.preferences.strip_following.value === true) {
+			if (XKit.extensions.find_blogs.preferences.strip_following.value) {
 				XKit.extensions.find_blogs.strip_following(m_url, compiled_array, 0, [], m_window_id);
 			} else {
 				XKit.extensions.find_blogs.show_results(m_url, compiled_array, m_window_id);
@@ -419,7 +419,7 @@ XKit.extensions.find_blogs = new Object({
 
 			XKit.window.close();
 
-			if (XKit.extensions.find_blogs.is_in_iframe === true) {
+			if (XKit.extensions.find_blogs.is_in_iframe) {
 				XKit.iframe.restore();
 			}
 

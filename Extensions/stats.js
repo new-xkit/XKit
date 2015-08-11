@@ -1,5 +1,5 @@
 //* TITLE XStats **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3.4 **//
 //* DESCRIPTION The XKit Statistics Tool **//
 //* DETAILS This extension allows you to view statistics regarding your dashboard, such as the percentage of post types, top 4 posters, and more. In the future, it will allow you to view statistics regarding your and others blogs. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -23,7 +23,7 @@ XKit.extensions.stats = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.interface.where().dashboard === false && XKit.interface.where().channel === false) { return; }
+		if (!XKit.interface.where().dashboard && !XKit.interface.where().channel) { return; }
 
 		XKit.tools.init_css("stats");
 
@@ -117,7 +117,7 @@ XKit.extensions.stats = new Object({
 
 			if (current.type === "note") { current.type = "regular"; }
 
-			if (isNaN(types[current.type]) === true) { types[current.type] = 0; }
+			if (isNaN(types[current.type])) { types[current.type] = 0; }
 			types[current.type]++;
 
 			if (typeof current.reblogged_from_name !== "undefined") {
@@ -126,11 +126,11 @@ XKit.extensions.stats = new Object({
 				types.original++;
 			}
 
-			if (current.liked === true) {
+			if (current.liked) {
 				types.liked++;
 			}
 
-			if (current.animated === true) {
+			if (current.animated) {
 				types.animated++;
 			}
 
@@ -307,20 +307,20 @@ XKit.extensions.stats = new Object({
 
 			if (current.type === "note") { current.type = "regular"; }
 
-			if (isNaN(types[current.type]) === true) { types[current.type] = 0; }
+			if (isNaN(types[current.type])) { types[current.type] = 0; }
 			types[current.type]++;
 
-			if (current.is_reblogged === true) {
+			if (current.is_reblogged) {
 				types.reblogged++;
 			} else {
 				types.original++;
 			}
 
-			if (current.liked === true) {
+			if (current.liked) {
 				types.liked++;
 			}
 
-			if (current.animated === true) {
+			if (current.animated) {
 				types.animated++;
 			}
 
@@ -351,7 +351,7 @@ XKit.extensions.stats = new Object({
 		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
 
 		var m_html = "";
-		if (blog_mode !== true) {
+		if (!blog_mode) {
 			m_html = "<div class=\"m_window_title\">Results for your dashboard</div>" +
 					"<div class=\"xkit-stats-separator\"><div>Top 4 blogs</div></div>" +
 					"<div class=\"xkit-stats-blog-list\">";
@@ -401,7 +401,7 @@ XKit.extensions.stats = new Object({
 
 		m_html = m_html + "</div>";
 
-		if (blog_mode !== true) {
+		if (!blog_mode) {
 			m_html = m_html + "</div>" +
 				"<div class=\"xkit-stats-separator\"><div>Post Stats</div></div>" +
 				"<div class=\"xkit-stats-post-types\">";
@@ -414,7 +414,7 @@ XKit.extensions.stats = new Object({
 		m_html = m_html + XKit.extensions.stats.return_post_type_box("original",types, posts.length);
 		m_html = m_html + XKit.extensions.stats.return_post_type_box("reblogged",types, posts.length);
 
-		if (blog_mode !== true) {
+		if (!blog_mode) {
 			m_html = m_html + XKit.extensions.stats.return_post_type_box("liked",types, posts.length);
 			m_html = m_html + XKit.extensions.stats.return_post_type_box("animated",types, posts.length);
 		}
@@ -473,7 +473,7 @@ XKit.extensions.stats = new Object({
 		m_object["post[state]"] = "0";
 		m_object["post[type]"] = "regular";
 
-		if (blog_mode !== true) {
+		if (!blog_mode) {
 			m_object["post[one]"] = "XStats Dashboard Results";
 		} else {
 			m_object["post[one]"] = "XStats Results for " + blog_url;
@@ -518,7 +518,7 @@ XKit.extensions.stats = new Object({
 
 		m_text = m_text + "</ul>";
 
-		if (XKit.extensions.stats.preferences.promote.value === true) {
+		if (XKit.extensions.stats.preferences.promote.value) {
 			m_text = m_text + "<p><small>Generated using XStats on <a href=\"http://www.xkit.info/\">XKit</a>.</small></p>";
 		}
 
@@ -531,7 +531,7 @@ XKit.extensions.stats = new Object({
 
 		XKit.interface.kitty.get(function(kitty_data) {
 
-			if (kitty_data.errors === true) {
+			if (kitty_data.errors) {
 
 				XKit.extensions.stats.post_error("Can't post stats", "Can't authenticate post. Please check your internet connection and try again later.");
 				return;
@@ -555,7 +555,7 @@ XKit.extensions.stats = new Object({
 					var m_obj = jQuery.parseJSON(response.responseText);
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
 					XKit.window.close();
-					if (m_obj.errors === false) {
+					if (!m_obj.errors) {
 						$("#xkit_post_crushes").html("Posted!");
 						XKit.notifications.add("Your stats have been posted to the current blog.", "ok");
 					} else {

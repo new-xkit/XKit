@@ -1,5 +1,5 @@
 //* TITLE Scroll To Bottom **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Scroll to the bottom of long lists, like the post queue. **//
 //* DEVELOPER jeratt **//
 //* FRAME false **//
@@ -11,7 +11,7 @@ XKit.extensions.scroll_to_bottom = new Object({
   activated: false,
 
   post_listener: function() {
-    if (XKit.extensions.scroll_to_bottom.activated === true) {
+    if (XKit.extensions.scroll_to_bottom.activated) {
       $("body, html").scrollTop($(".l-container").height());
     }
   },

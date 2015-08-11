@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -77,7 +77,7 @@ XKit.extensions.profiler = new Object({
 
 			var m_post = XKit.interface.post($(this));
 
-			if (XKit.interface.where().inbox !== true) {
+			if (!XKit.interface.where().inbox) {
 				if (m_post.is_mine === true) { return; }
 			}
 
@@ -85,7 +85,7 @@ XKit.extensions.profiler = new Object({
 
 			var post_owner = m_post.owner;
 
-			if (m_post.type === "note" && XKit.interface.where().inbox === true) {
+			if (m_post.type === "note" && XKit.interface.where().inbox) {
 				var m_json_info = $(this).find(".post_avatar_link").attr('data-tumblelog-popover');
 				try {
 					var m_json_obj = JSON.parse(m_json_info);
@@ -135,7 +135,7 @@ XKit.extensions.profiler = new Object({
 		XKit.tools.init_css("profiler");
 		//XKit.extensions.profiler.show("xenixlet");
 
-		if (XKit.extensions.profiler.preferences.show_nicknames.value === true) {
+		if (XKit.extensions.profiler.preferences.show_nicknames.value) {
 
 			XKit.post_listener.add("profiler", XKit.extensions.profiler.add_nicks);
 			XKit.extensions.profiler.add_nicks();
@@ -143,7 +143,7 @@ XKit.extensions.profiler = new Object({
 		}
 
 		XKit.installed.when_running("show_more", function() {
-			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
+			if (XKit.extensions.show_more.preferences.use_classic_menu.value) {
 				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
 					var user_url = data.name;
 
@@ -298,7 +298,7 @@ XKit.extensions.profiler = new Object({
 			$("body").css("overflow","auto");
 			XKit.window.close();
 
-			if (XKit.extensions.profiler.is_inframe === true) {
+			if (XKit.extensions.profiler.is_inframe) {
 				setTimeout(function() { XKit.iframe.restore();	}, 300);
 			}
 
@@ -381,13 +381,13 @@ XKit.extensions.profiler = new Object({
 				}
 				$("#xkit-profiler-custom-domain").removeClass("loading-up").html(m_custom_val);
 
-				if (data.blog.is_nsfw === true) {
+				if (data.blog.is_nsfw) {
 						$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
 				} else {
 					$("#xkit-profiler-nsfw").removeClass("loading-up").html("No");
 				}
 
-				if (data.blog.share_likes === true) {
+				if (data.blog.share_likes) {
 					$("#xkit-profiler-is-sharing-likes").removeClass("loading-up").html("Yes (" + data.blog.likes + " posts)");
 				} else {
 					$("#xkit-profiler-is-sharing-likes").removeClass("loading-up").html("No");

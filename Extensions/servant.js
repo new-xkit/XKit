@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5 REV F **//
+//* VERSION 0.5.7 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -190,7 +190,7 @@ XKit.extensions.servant = new Object({
 				if (typeof m_post === "undefined") {
 					m_object.run = false;
 				} else {
-					if (m_post.is_reblogged === false) {
+					if (!m_post.is_reblogged) {
 						m_object.run = true;
 					}
 				}
@@ -220,7 +220,7 @@ XKit.extensions.servant = new Object({
 				if (typeof m_post === "undefined") {
 					m_object.run = false;
 				} else {
-					if (m_post.is_reblogged === true) {
+					if (m_post.is_reblogged) {
 						m_object.run = true;
 					}
 				}
@@ -292,7 +292,7 @@ XKit.extensions.servant = new Object({
 				if (typeof m_post === "undefined") {
 					m_object.run = false;
 				} else {
-					if (m_post.is_mine === true) {
+					if (m_post.is_mine) {
 						m_object.run = true;
 					}
 				}
@@ -322,7 +322,7 @@ XKit.extensions.servant = new Object({
 				if (typeof m_post === "undefined") {
 					m_object.run = false;
 				} else {
-					if (m_post.liked === true) {
+					if (m_post.liked) {
 						m_object.run = true;
 					}
 				}
@@ -1040,8 +1040,8 @@ XKit.extensions.servant = new Object({
 
 				try {
 
-					if (XKit.installed.check(parameter) === true) {
-						if (XKit.installed.enabled(parameter) === false) {
+					if (XKit.installed.check(parameter)) {
+						if (!XKit.installed.enabled(parameter)) {
 
 							try {
 								if (typeof XKit.extensions[parameter].preferences !== "undefined") {
@@ -1084,8 +1084,8 @@ XKit.extensions.servant = new Object({
 
 				try {
 
-					if (XKit.installed.check(parameter) === true) {
-						if (XKit.installed.enabled(parameter) === true) {
+					if (XKit.installed.check(parameter)) {
+						if (XKit.installed.enabled(parameter)) {
 							XKit.installed.disable(parameter);
 							XKit.extensions[parameter].destroy();
 							XKit.notifications.add("Disabled '" + parameter + "'", "ok");
@@ -1294,7 +1294,7 @@ XKit.extensions.servant = new Object({
 
 		var m_object;
 
-		if (has_runs_on === true && does_run_on === "post") {
+		if (has_runs_on && does_run_on === "post") {
 
 			if (!post_mode) {
 
@@ -1338,7 +1338,7 @@ XKit.extensions.servant = new Object({
 
 			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
 
-			if (m_result.run === false) {
+			if (!m_result.run) {
 				do_run = 0;
 			} else {
 				do_run = 1;
@@ -1355,12 +1355,12 @@ XKit.extensions.servant = new Object({
 
 			var m_result = XKit.extensions.servant.actions[action.id].run(action.value, returns, to_pass, compatibility, obj);
 
-			if (XKit.extensions.servant.actions[action.id].stop === true) {
+			if (XKit.extensions.servant.actions[action.id].stop) {
 
 				// This is a flow thingy, where we must wait for it to return a value
 				// so we can go on.
 
-				if (m_result === false) {
+				if (!m_result) {
 					// We should stop.
 					return;
 				}
@@ -1509,7 +1509,7 @@ XKit.extensions.servant = new Object({
 		var when = [];
 		var action = [];
 
-		if (XKit.extensions.servant.check_if_empty_value() === true) {
+		if (XKit.extensions.servant.check_if_empty_value()) {
 
 			alert("Please fill all the values.");
 			return;
@@ -1859,13 +1859,13 @@ XKit.extensions.servant = new Object({
 
 		});
 
-		if (XKit.extensions.servant.check_js() === true) {
+		if (XKit.extensions.servant.check_js()) {
 			$(".xkit-servant-javascript-warning").css("display","block");
 		} else {
 			$(".xkit-servant-javascript-warning").css("display","none");
 		}
 
-		if (XKit.extensions.servant.check_compatibility() === true) {
+		if (XKit.extensions.servant.check_compatibility()) {
 			$(".xkit-servant-compatibility-error").css("display","block");
 			$("#xkit-servant-add").addClass("disabled");
 		} else {

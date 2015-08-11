@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle the setting to let it shorten the photo posts too. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
@@ -73,14 +73,14 @@ XKit.extensions.shorten_posts = new Object({
 
 			if ($(this).hasClass("xblacklist_blacklisted_post")) { return; }
 
-			if (XKit.extensions.shorten_posts.preferences.only_text.value === true) {
+			if (XKit.extensions.shorten_posts.preferences.only_text.value) {
 				if ($(this).hasClass("is_regular") === false) {
 					return;
 				}
 			} else {
-				if ($(this).hasClass("is_regular") === false && $(this).hasClass("is_photo") === false
-					&& $(this).hasClass("is_photoset") === false && $(this).hasClass("is_link") === false
-					&& $(this).hasClass("is_quote") === false && $(this).hasClass("is_conversation") === false) {
+				if (!$(this).hasClass("is_regular") && !$(this).hasClass("is_photo")
+					&& !$(this).hasClass("is_photoset") && !$(this).hasClass("is_link")
+					&& !$(this).hasClass("is_quote") && !$(this).hasClass("is_conversation")) {
 					return;
 				}
 			}
@@ -107,7 +107,7 @@ XKit.extensions.shorten_posts = new Object({
 
 		var obj = e.target;
 
-		if ($(obj).hasClass("image_thumbnail") === true) {
+		if ($(obj).hasClass("image_thumbnail")) {
 			obj = $(obj).parentsUntil(".post").parent().find(".xkit-shorten-posts-embiggen");
 		}
 
@@ -143,11 +143,11 @@ XKit.extensions.shorten_posts = new Object({
 
 		$(obj).append("<div class=\"xkit-shorten-posts-embiggen xkit-shorten-posts-embiggen-for-post-" + post_id + "\" data-post-id=\"" + post_id + "\" data-old-height=\"" + m_height + "\">This post has been shortened. Click here to show the full post</div>");
 
-		if (XKit.extensions.shorten_posts.preferences.display_tags.value === true) {
+		if (XKit.extensions.shorten_posts.preferences.display_tags.value) {
 			$(obj).addClass("xkit-shorten-posts-shortened-show-tags");
 		}
 
-		if (XKit.extensions.shorten_posts.preferences.embiggen_on_click.value === true) {
+		if (XKit.extensions.shorten_posts.preferences.embiggen_on_click.value) {
 			$(obj).find(".image_thumbnail").on("click", XKit.extensions.shorten_posts.embiggen);
 		}
 
@@ -182,7 +182,7 @@ XKit.extensions.shorten_posts = new Object({
 
 	cpanel_check_height: function() {
 
-		if (isNaN(XKit.extensions.shorten_posts.preferences.height.value) === true) {
+		if (isNaN(XKit.extensions.shorten_posts.preferences.height.value)) {
 			XKit.console.add("Invalid post height check interval, reverting to default: not a number.");
 			XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
 			return true;

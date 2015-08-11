@@ -1,5 +1,5 @@
 //* TITLE Highlighter **//
-//* VERSION 0.1.1 **//
+//* VERSION 0.1.2 **//
 //* DESCRIPTION Don't miss things **//
 //* DETAILS The cousin of Blacklister, this extension highlights posts depending on the words you decide. When a word you add is found on a post, the post will get a yellow-ish background. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -164,13 +164,13 @@ XKit.extensions.highlighter = new Object({
 
 	highlight_post: function(obj, word) {
 
-		if (XKit.extensions.highlighter.preferences.dont_highlight_me.value === true) {
+		if (XKit.extensions.highlighter.preferences.dont_highlight_me.value) {
 			if ($(obj).hasClass("is_mine") === true) {
 				return;
 			}
 		}
 
-		if (XKit.extensions.highlighter.preferences.check_for_blocking.value === true) {
+		if (XKit.extensions.highlighter.preferences.check_for_blocking.value) {
 			if ($(obj).hasClass("xblacklist_hidden_post") === true ||$(obj).hasClass("xblacklist_blacklisted_post")) {
 				return;
 			}
@@ -214,7 +214,7 @@ XKit.extensions.highlighter = new Object({
 					// We've found the word!
 					return m_word;
 				} else {
-					if (XKit.extensions.highlighter.preferences.use_improved.value === true) {
+					if (XKit.extensions.highlighter.preferences.use_improved.value) {
 						// This will use some CPU...
 						if (post_content.indexOf(m_word) !== -1) {
 							for (var m=0;m<p_words.length;m++) {
@@ -412,7 +412,7 @@ XKit.extensions.highlighter = new Object({
 					return;
 				}
 
-				if (XKit.extensions.highlighter.check_if_exists(m_to_add) === true) {
+				if (XKit.extensions.highlighter.check_if_exists(m_to_add)) {
 					alert("This word is already in the highlight list.");
 					return;
 				}
