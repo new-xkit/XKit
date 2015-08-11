@@ -2048,9 +2048,9 @@ XKit.tools.dump_config = function(){
 					m_return.likes = true;
 				}
 
-				m_return.dashboard = $("body").hasClass("is_dashboard")
-				m_return.channel = $("body").hasClass("is_channel")
-				m_return.endless = !$("body").hasClass("without_auto_paginate")
+				m_return.dashboard = $("body").hasClass("is_dashboard");
+				m_return.channel = $("body").hasClass("is_channel");
+				m_return.endless = !$("body").hasClass("without_auto_paginate");
 
 				return m_return;
 			},
