@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.4.0 **//
+//* VERSION 3.4.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -229,36 +229,6 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		/*"hide_customize": {
-			text: "Hide Customize button on sidebar",
-			default: false,
-			value: false
-		},
-		"hide_activity": {
-			text: "Hide the Activity button on sidebar",
-			default: false,
-			value: false
-		},
-		"hide_url": {
-			text: "Hide my URL",
-			default: false,
-			value: false
-		},
-		"hide_follower_count": {
-			text: "Hide my follower count",
-			default: false,
-			value: false
-		},
-		"hide_post_count": {
-			text: "Hide my post count",
-			default: false,
-			value: false
-		},
-		"hide_draft_count": {
-			text: "Hide my drafted posts count",
-			default: false,
-			value: false
-		}, */
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
 			default: false,
@@ -358,15 +328,6 @@ XKit.extensions.tweaks = new Object({
 
 			}
 
-		}
-
-
-		if (XKit.extensions.tweaks.preferences.hide_customize.value) {
-			$("#right_column").find(".customize").parent().css("display","none");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_activity.value) {
-			$("a.activity").parent().css("display","none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
@@ -495,22 +456,6 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value) {
 			XKit.extensions.tweaks.add_css("#posts .post .post_control.move_to_top { display: inline-block !important; } ", "always_show_move_to_top");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_url.value) {
-			XKit.extensions.tweaks.add_css(".currently_selected_blog.blog_title { display: none !important; } .open_blog.with_subtitle { height: 39px; } .open_blog.with_subtitle small .hide_overflow { line-height: 37px !important; }", "xtweaks-hide_url_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_follower_count.value) {
-			XKit.extensions.tweaks.add_css(".right_column .followers .count { display: none !important; } ", "xtweaks-hide_follower_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_post_count.value) {
-			XKit.extensions.tweaks.add_css(".right_column .posts .count { display: none !important; } ", "xtweaks-hide_post_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_draft_count.value) {
-			XKit.extensions.tweaks.add_css(".right_column .drafts .count { display: none !important; } ", "xtweaks-hide_drafts_count");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_sidebar.value) {
