@@ -142,7 +142,7 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	frame_run: function() {
-		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr) {
+		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 			XKit.extensions.auto_tagger.run();
 		}
 	},
