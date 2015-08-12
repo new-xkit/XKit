@@ -21,21 +21,14 @@ finding something going wrong. There's a long list of known issues
 Check out [the wiki page](https://github.com/new-xkit/XKit/wiki/Writing-a-New-Extension)!
 
 ## Develop XKit
-Download [Node.js](https://nodejs.org/download/) for your platform.
+Review the project prerequisites and learn how to build XKit from source [over on the wiki](https://github.com/new-xkit/XKit/wiki/Build-XKit).
 
+### Quickstart
 In your clone of this repository run:
 
 ```sh
 npm install
 ```
-
-and then:
-
-```sh
-gulp watch
-```
-
-to automatically run the project tests whenever files are edited.
 
 To build XKit from source, run:
 
@@ -43,12 +36,6 @@ To build XKit from source, run:
 gulp build
 ```
 
-or
-
-```sh
-gulp build:<platform>
-```
-
-where `<platform>` is one of: `chrome`, `firefox`.
-
 Builds can be found in the `build/` directory.
+
+For a list of available build tasks, see [the documentation](https://github.com/new-xkit/XKit/wiki/Build-XKit#gulp-tasks).

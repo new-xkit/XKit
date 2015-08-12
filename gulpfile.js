@@ -15,6 +15,7 @@ var connect = require('connect'),
 	jshint = require('gulp-jshint'),
 	jscs = require('gulp-jscs'),
 	merge = require('merge-stream'),
+	path = require('path'),
 	stylish = require('jshint-stylish'),
 	zip = require('gulp-zip');
 
@@ -130,7 +131,7 @@ gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
 
 gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 	// `jpm xpi` executable must be expressed relative to `exec({cwd})`
-	exec('../../node_modules/.bin/jpm xpi',
+	exec(path.relative('build/firefox', 'node_modules/.bin/jpm xpi'),
 		 // `jpm xpi` must be executed from the extension
 		 // directory containing a `package.json`.
 		 {cwd: 'build/firefox'},
