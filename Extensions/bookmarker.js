@@ -273,7 +273,7 @@ XKit.extensions.bookmarker = new Object({
 
 		XKit.extensions.bookmarker.load_bookmarks();
 
-		if (XKit.extensions.bookmarker.retrieve_bookmark_object(post_id)) {
+		if (XKit.extensions.bookmarker.retrieve_bookmark_object(post_id) !== false) {
 			// Already bookmarked.
 			return;
 		}
