@@ -12,7 +12,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 	run: function() {
 
-		if (document.location.href.indexOf("/queue") === -1) {
+		if (!XKit.interface.where().queue) {
 			return;
 		}
 
@@ -151,8 +151,7 @@ XKit.extensions.shuffle_queue = new Object({
 		XKit.extensions.shuffle_queue.delete_page++;
 
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
+		var m_url = XKit.interface.where().user_url;
 
 
 		GM_xmlhttpRequest({
@@ -237,12 +236,9 @@ XKit.extensions.shuffle_queue = new Object({
 
 		$("#xkit-shuffle-queue-progress").html("Deleting posts, please wait.. (post " + xin + " of " + XKit.extensions.shuffle_queue.posts_to_delete_count + ")");
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
-
 		var m_object = {};
 		m_object.post_id = post_id;
-		m_object.channel_id = m_url;
+		m_object.channel_id = XKit.interface.where().user_url;
 		var form_key = XKit.interface.form_key();
 
 		GM_xmlhttpRequest({
@@ -294,8 +290,7 @@ XKit.extensions.shuffle_queue = new Object({
 		$("#xshufflequeue_button").addClass("disabled");
 		$("#xshufflequeue_button").find(".count").html("saving");
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
+		var m_url = XKit.interface.where().user_url;
 
 		var IDs = [];
 		$("#posts").find(".post").not("#next_post").each(function(){

@@ -18,8 +18,6 @@ XKit.extensions.read_posts = new Object({
 		}
 	},
 
-	dashboard_regex: new RegExp("^https?://www.tumblr.com/dashboard(?:$|/)\\#?"),
-
 	undimmed_post: null,
 	currently_undimming: false,
 
@@ -86,7 +84,7 @@ XKit.extensions.read_posts = new Object({
 	},
 
 	process_posts: function() {
-		if (!(location.href.match(XKit.extensions.read_posts.dashboard_regex))) {
+		if (!XKit.interface.where().dashboard) {
 			return;  /* don't run on non-dashboard, since that can be in the background of a new post page */
 		}
 

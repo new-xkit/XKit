@@ -36,7 +36,7 @@ XKit.extensions.soft_refresh = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("soft_refresh");
-		if (document.location.href.indexOf("://www.tumblr.com/dashboard") === -1) {
+		if (!XKit.interface.where().dashboard) {
 			// Not in dashboard, quit.
 			return;
 		}

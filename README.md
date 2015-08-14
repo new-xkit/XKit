@@ -1,14 +1,16 @@
 # XKit
 
-
-[![Build Status](https://travis-ci.org/new-xkit/XKit.svg?branch=master)](https://travis-ci.org/new-xkit/XKit) [![Join the chat at https://gitter.im/new-xkit/XKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/new-xkit/XKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/new-xkit/XKit.svg?branch=master)](https://travis-ci.org/new-xkit/XKit) 
 
 XKit is a small extension framework that powers tweaks for Tumblr.
 
 ## Get a release build
-If you want an official XKit release, those are provided by the [official
-download page](http://www.xkit.info/download). For this unofficial fork of
-XKit, look [here](https://github.com/new-xkit/XKit/releases).
+Currently we support [Firefox](https://addons.mozilla.org/en-US/firefox/addon/new-xkit/) and [Chrome](https://chrome.google.com/webstore/detail/new-xkit/inobiceghmpkaklcknpniboilbjmlald) officially. 
+We support Opera unofficially using the same file as the Chrome extension, [which you can download here](https://github.com/new-xkit/XKit/releases).
+
+## Support [![Join the chat at https://gitter.im/new-xkit/support](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/new-xkit/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+First, [check the list of issues](https://github.com/new-xkit/XKit/issues), and see if there's something there that looks like the problem you're having. Otherwise, [file a new issue](https://github.com/new-xkit/XKit/issues) or come join [our support chat](https://gitter.im/new-xkit/support). We don't bite!
 
 ## Contribute
 XKit needs all the help it can get! If you want to help out, the first step is
@@ -17,10 +19,12 @@ finding something going wrong. There's a long list of known issues
 [on the original issues page](https://github.com/atesh/XKit/issues). The next step is to
 [fix the bug](https://github.com/new-xkit/XKit/wiki/Fixing-a-bug).
 
-## Writing a New Extension
+Come join us in [the XKit repo chat](https://gitter.im/new-xkit/XKit) if you get stuck, or want some advice! There's normally a few people lurking in there any time of day.
+
+### Writing a New Extension
 Check out [the wiki page](https://github.com/new-xkit/XKit/wiki/Writing-a-New-Extension)!
 
-## Develop XKit
+### Develop XKit
 Review the project prerequisites and learn how to build XKit from source [over on the wiki](https://github.com/new-xkit/XKit/wiki/Build-XKit).
 
 ### Quickstart
