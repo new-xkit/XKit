@@ -1,5 +1,5 @@
 //* TITLE Go-To-Dash **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION View a post on a blog on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds a 'view' button on peoples blogs that allows you to go back to that post on your dashboard. This feature only works on the blogs you follow. If the post was made before you followed them, you might not see them on your dashboard when you click the view button. **//
@@ -34,7 +34,7 @@ XKit.extensions.go_to_dash = new Object({
 
 		post_id = parseInt(post_id) + 1;
 
-		var go_back_html = '<a href="/dashboard/2/' + post_id + '" class="btn" target="_top" id="xkit_gotodash">View</a>';
+		var go_back_html = '<a href="/dashboard/2/' + post_id + '" class="btn" target="_top" id="xkit_gotodash" title="View on dashboard">View</a>';
 
 		// Remove the text from the dashboard button because otherwise the iframe
 		// overflows

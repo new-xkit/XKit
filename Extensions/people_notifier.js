@@ -409,6 +409,8 @@ XKit.extensions.people_notifier = new Object({
 				}
 			}
 
+			// Rerender the blog list
+			XKit.extensions.people_notifier.list_blogs();
 		});
 
 		$("#xkit-people-notifier-new-btn").click(function() {

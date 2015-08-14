@@ -37,7 +37,7 @@ XKit.extensions.postarchive = new Object({
 
 		XKit.tools.add_css(m_css, "post_archive_in_blog");
 
-		var m_html = "<a id=\"xkit_postarchive_inblog_button\" onclick=\"return false\" class=\"btn icon no_label\">Post Archiver</a>";
+		var m_html = "<a id=\"xkit_postarchive_inblog_button\" onclick=\"return false\" class=\"btn icon no_label\" title=\"Archive this post\">Post Archiver</a>";
 
 		$(".btn.dashboard").before(m_html);
 

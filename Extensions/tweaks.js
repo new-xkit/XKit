@@ -169,6 +169,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"hide_explore_buttons": {
+			text: "Hide the explore link at the top of the page and in the sidebar",
+			default: false,
+			value: false
+		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
 			default: false,
@@ -436,6 +441,10 @@ XKit.extensions.tweaks = new Object({
 
         if (XKit.extensions.tweaks.preferences.hide_explore.value) {
 			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer { display: none; } ", "xkit_tweaks_hide_explore");
+		}
+
+		if (XKit.extensions.tweaks.preferences.hide_explore_buttons.value) {
+			XKit.extensions.tweaks.add_css("#discover_button, a[href=\"/explore\"] { display: none; } ", "xkit_tweaks_hide_explore_buttons");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_notes.value) {

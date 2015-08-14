@@ -26,19 +26,11 @@ XKit.extensions.open_in_new_tabs = new Object({
 			text: "Open in new tab instead of blog sidebar",
 			default: false,
 			value: false
-		},
-		"dash_only": {
-			text: "Apply only to links on dashboard",
-			default: true,
-			value: true
 		}
 	},
 
 	run: function() {
 		this.running = true;
-
-		if (!XKit.interface.where().dashboard && XKit.extensions.open_in_new_tabs.preferences.dash_only.value)
-			return;
 
 		if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
 			$("#content area").attr('target','_blank');
@@ -60,11 +52,12 @@ XKit.extensions.open_in_new_tabs = new Object({
 		//XKit.window.show("do_open!", JSON.stringify(e.target), "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		//return;
 
-
 		var m_box = e.target;
 
 		var m_url = $(m_box).attr('href');
 
+		if ($(m_box).closest('.fan_mail').length && $(m_box).hasClass('reply'))
+			return;
 
 		if (typeof m_url === "undefined") {
 			m_url = $(m_box).parent().attr('href');

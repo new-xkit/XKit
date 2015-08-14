@@ -1,0 +1,15 @@
+#xkit-hideavatars-custom-panel-toolbar {
+	background: rgb(245,245,245);
+	padding: 3px 15px;
+	border-bottom: 1px solid rgb(190,190,190);
+}
+
+.xkit-hideavatars-cp-item {
+	padding: 10px 16px 10px 16px;
+	border-bottom: 1px dotted rgb(190,190,190);
+	cursor: pointer;
+}
+
+.xkit-hideavatars-cp-item:hover {
+	background: rgb(240,240,240);
+}

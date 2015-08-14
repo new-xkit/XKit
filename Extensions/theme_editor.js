@@ -14,6 +14,10 @@ XKit.extensions.theme_editor = new Object({
 	run: function() {
 		this.running = true;
 
+		if (!XKit.interface.is_tumblr_page()) {
+			return;
+		}
+
 		XKit.tools.init_css("theme_editor");
 
 		if (typeof XKit.extensions.themes !== "undefined") {

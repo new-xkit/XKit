@@ -11,7 +11,7 @@ var connect = require('connect'),
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
-	http = require('http'),
+	https = require('https'),
 	jshint = require('gulp-jshint'),
 	jscs = require('gulp-jscs'),
 	merge = require('merge-stream'),
@@ -171,7 +171,11 @@ gulp.task('server', ['build:extensions'], function(callback) {
 	gulp.watch('Extensions/**/*.js', ['build:extensions']);
 	gulp.watch('Extensions/**/*.css', ['build:extensions']);
 
-	var devServer = http.createServer(devApp).listen(31337);
+	var devServer = https.createServer({
+				key: fs.readFileSync('./dev/certs/key.pem'),
+				cert: fs.readFileSync('./dev/certs/cert.pem')
+			}, devApp)
+		.listen(31337);
 
 	devServer.on('error', function(error) {
 		log(colors.underline(colors.red('ERROR'))+' Unable to start server!');
@@ -185,9 +189,12 @@ gulp.task('server', ['build:extensions'], function(callback) {
 		    devAddress.address === '::') {
 			devHost = 'localhost';
 		}
-		var url = 'http://' + devHost + ':' + devAddress.port;
+		var url = 'https://' + devHost + ':' + devAddress.port;
 
 		log('Started dev server at ' + colors.magenta(url));
+		log(colors.yellow('Remember to add a security exception by visiting ' + colors.magenta(url) + ','));
+		log(colors.yellow('otherwise the connection will be blocked by the browser.'));
+
 		callback(); // we're done with this task for now
 	});
 });
