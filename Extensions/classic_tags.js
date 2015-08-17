@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.5.0 **//
+//* VERSION 1.5.1 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -99,7 +99,7 @@ XKit.extensions.classic_tags = new Object({
 
 		});
 		if (XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
-			if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value !== true) {
+			if (total_tag_count >= 21 && !XKit.extensions.classic_tags.preferences.turn_off_warning.value) {
 
 				m_html = "<div class=\"classic-tags-too-much-tags-error\"><b>Too Many Tracked Tags:</b><br> After around 20 tags, Tumblr stops updating the status of all your tracked tags until you untrack some. Please track less than 20 tags for this extension to work.</div>";
 				m_html = '<ul class="controls_section" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
@@ -109,8 +109,8 @@ XKit.extensions.classic_tags = new Object({
 					$("#right_column").append(m_html);
 
 				} else {
-					
-					if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
+
+					if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value) {
 						$("#right_column").prepend(m_html);
 					} else if ($("ul.controls_section:eq(1)").length > 0) {
 						if ($("#xim_small_links").length > 0) {
@@ -128,18 +128,18 @@ XKit.extensions.classic_tags = new Object({
 
 			}
 		}
-		
-		if (XKit.extensions.classic_tags.preferences.show_new_notification.value === true && $(".result_sub_title").length !== 0) {
+
+		if (XKit.extensions.classic_tags.preferences.show_new_notification.value && $(".result_sub_title").length !== 0) {
 			$("#search_query").attr("placeholder", "Search [new]");
 		}
-		
+
 		$(".tracked_tag").each(function() {
 
 			if (parseInt($(this).find(".count").html()) > 0) {
 				show_this_tag = true;
 			} else {
-				if (XKit.extensions.classic_tags.preferences.only_new_tags.value === true) {
-					if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value === true) {
+				if (XKit.extensions.classic_tags.preferences.only_new_tags.value) {
+					if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value) {
 						// Show everything!
 					} else {
 						return;
@@ -170,7 +170,7 @@ XKit.extensions.classic_tags = new Object({
 			if (document.location.href.indexOf('/tagged/') !== -1) {
 
 				$("#right_column").children(".tag_controls").after(m_html);
-			} else if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
+			} else if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value) {
 			    $("#right_column").prepend(m_html);
 			} else if ($("#xim_small_links").length > 0) {
 				$("#xim_small_links").after(m_html);
@@ -184,7 +184,7 @@ XKit.extensions.classic_tags = new Object({
 			});
 
 		}
-		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value === true) {
+		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
 			var target = document.querySelector('#popover_search');
 			XKit.extensions.classic_tags.observer.observe(target, {
 				attributes: true

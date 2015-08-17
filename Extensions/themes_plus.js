@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.6 **//
+//* VERSION 0.2.7 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -810,7 +810,7 @@ XKit.extensions.themes_plus = new Object({
 			if (opt.type === "checkbox") {
 				var to_return_css = opt.on_true;
 				if (opt.on_true.indexOf("#content") !== -1) {
-					if (render_container !== true) {
+					if (!render_container) {
 						to_return_css = to_return_css.replace("#content","#__content__");
 					}
 				}
@@ -826,7 +826,7 @@ XKit.extensions.themes_plus = new Object({
 				for (var i=0;i<opt.of.length;i++) {
 					var x_class = opt.attr[i];
 					if (opt.of[i] === "#content") {
-						if (render_container !== true) {
+						if (!render_container) {
 							continue;
 						}
 					}

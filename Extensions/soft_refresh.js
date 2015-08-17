@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.5.4 **//
+//* VERSION 0.5.5 **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -82,7 +82,7 @@ XKit.extensions.soft_refresh = new Object({
 	load_posts: function() {
 
 		if (typeof XKit.extensions.filter_by_type !== "undefined") {
-			if (XKit.extensions.filter_by_type.running === true) {
+			if (XKit.extensions.filter_by_type.running) {
 				if (XKit.extensions.filter_by_type.current_filter !== "0") {
 					location.reload(true);
 					return;
@@ -90,7 +90,7 @@ XKit.extensions.soft_refresh = new Object({
 			}
 		}
 
-		if (this.loading === true) { return; }
+		if (this.loading) { return; }
 		this.loading = true;
 
 		$("#new_post").after("<div id=\"xkit_soft_refresh\">Checking for new posts</div>");
@@ -157,13 +157,13 @@ XKit.extensions.soft_refresh = new Object({
 				XKit.extensions.soft_refresh.do_post_ids();
 
 				if (m_count === 0) {
-					if (XKit.extensions.soft_refresh.preferences.show_notifications.value === true) {
+					if (XKit.extensions.soft_refresh.preferences.show_notifications.value) {
 						XKit.notifications.add("No new posts found.","info");
 					}
 				} else {
 					XKit.tools.add_function(soft_refresh_hit_triggers, true, "");
 					XKit.extensions.soft_refresh.check_embeds();
-					if (XKit.extensions.soft_refresh.preferences.show_notifications.value === true) {
+					if (XKit.extensions.soft_refresh.preferences.show_notifications.value) {
 						XKit.notifications.add("Added " + m_count + " new posts.","ok");
 					}
 				}

@@ -40,7 +40,7 @@ XKit.extensions.read_posts = new Object({
 		}
 		var m_obj = $(XKit.extensions.read_posts.undimmed_post)[0];
 		$(m_obj).addClass("read_posts_read");
-		if (XKit.extensions.read_posts.preferences.dim_avatars_only.value === true) {
+		if (XKit.extensions.read_posts.preferences.dim_avatars_only.value) {
 			$(m_obj).addClass('read_posts_avatar_only');
 		}
 		XKit.extensions.read_posts.undimmed_post = null;
@@ -93,7 +93,7 @@ XKit.extensions.read_posts = new Object({
 
 			if (XKit.extensions.read_posts.post_is_read(post_id)) {
 				$(this).addClass('read_posts_read');
-				if (XKit.extensions.read_posts.preferences.dim_avatars_only.value === true) {
+				if (XKit.extensions.read_posts.preferences.dim_avatars_only.value) {
 					$(this).addClass('read_posts_avatar_only');
 				}
 			} else {

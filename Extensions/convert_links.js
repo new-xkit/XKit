@@ -1,5 +1,5 @@
 //* TITLE Convert Links **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1.3 **//
 //* DESCRIPTION Clickable links on asks **//
 //* DETAILS This extension allows you to turn the 'encrypted' links that people can send you using asks to clickable ones. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -15,7 +15,7 @@ XKit.extensions.convert_links = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.interface.where().inbox !== true) { return; }
+		if (!XKit.interface.where().inbox) { return; }
 
 		$(document).on('click','.xkit-convert-links-button', XKit.extensions.convert_links.on_click);
 		XKit.interface.create_control_button("xkit-convert-links-button", this.button_icon, "Convert Links", "");

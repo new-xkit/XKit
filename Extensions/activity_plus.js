@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3.4 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -67,16 +67,16 @@ XKit.extensions.activity_plus = new Object({
 
 		try {
 
-		if (this.preferences.hide_graphs.value === true) {
+		if (this.preferences.hide_graphs.value) {
 			m_css = m_css + " #user_graphs, .ui_stats { display: none; }";
 		}
 
-		if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
+		if (this.preferences.show_timestamps.value || this.preferences.condensed_notes.value) {
 			// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
 			new_note_check_interval = setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
 		}
 
-		if (this.preferences.notes_filter.value === true) {
+		if (this.preferences.notes_filter.value) {
 			var m_html = "<div id=\"xkit-activity-plus-note-filter\">" +
 						"<div data-type=\"\" class=\"xkit-note-filter-all selected\" title=\"All Notifications\">all</div>" +
 						"<div data-type=\"is_reblog\" class=\"xkit-note-filter-reblog\" title=\"Reblogs\">reblogs</div>" +
@@ -145,7 +145,7 @@ XKit.extensions.activity_plus = new Object({
 
 		}
 
-		if (this.preferences.quick_switch.value === true) {
+		if (this.preferences.quick_switch.value) {
 
 			$("#popover_blogs").find(".blog_title").each(function() {
 				$(this).attr('href', $(this).attr('href').replace('/blog/', '/activity/'));
@@ -153,7 +153,7 @@ XKit.extensions.activity_plus = new Object({
 
 		}
 
-		if (this.preferences.condensed_notes.value === true) {
+		if (this.preferences.condensed_notes.value) {
 			XKit.extensions.activity_plus.do_condensed();
 		}
 
@@ -286,14 +286,15 @@ XKit.extensions.activity_plus = new Object({
 
 	do_on_new: function() {
 
-		if (XKit.extensions.activity_plus.preferences.show_timestamps.value === true) {
+		if (XKit.extensions.activity_plus.preferences.show_timestamps.value) {
 			XKit.extensions.activity_plus.do_timestamps();
 		}
 
-		if (XKit.extensions.activity_plus.in_type_filter === true && XKit.extensions.activity_plus.preferences.condensed_notes.value === true) {
+		if (XKit.extensions.activity_plus.in_type_filter &&
+			XKit.extensions.activity_plus.preferences.condensed_notes.value) {
 			XKit.extensions.activity_plus.undo_condense();
 		} else {
-			if (XKit.extensions.activity_plus.preferences.condensed_notes.value === true) {
+			if (XKit.extensions.activity_plus.preferences.condensed_notes.value) {
 				XKit.extensions.activity_plus.do_condensed();
 			}
 		}

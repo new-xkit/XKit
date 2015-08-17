@@ -37,7 +37,7 @@ XKit.extensions.people_notifier = new Object({
 
 		XKit.extensions.people_notifier.load_blogs();
 
-		if (XKit.extensions.people_notifier.check_if_in_list(username) !== true) {console.log("|-- not in person track list."); return; }
+		if (!XKit.extensions.people_notifier.check_if_in_list(username)) {console.log("|-- not in person track list."); return; }
 
 		for (var person in XKit.extensions.people_notifier.blogs) {
 			if (XKit.extensions.people_notifier.blogs[person].url === username) {
@@ -109,7 +109,7 @@ XKit.extensions.people_notifier = new Object({
 
 			var m_post = XKit.interface.post($(this));
 
-			if (XKit.extensions.people_notifier.check_if_in_list(m_post.owner) !== true) {
+			if (!XKit.extensions.people_notifier.check_if_in_list(m_post.owner)) {
 				return;
 			}
 
@@ -433,12 +433,12 @@ XKit.extensions.people_notifier = new Object({
 					return;
 				}
 
-				if (/^[a-zA-Z0-9\-]+$/.test(to_add) === false) {
+				if (!/^[a-zA-Z0-9\-]+$/.test(to_add)) {
 					XKit.extensions.people_notifier.show_error("Invalid username","Please enter the url only (ie: xkit-extension)");
 					return;
 				}
 
-				if (XKit.extensions.people_notifier.check_if_in_list(to_add) !== false) {
+				if (XKit.extensions.people_notifier.check_if_in_list(to_add)) {
 					XKit.extensions.people_notifier.show_error("Already on the list","This user is already on your buddy list.");
 					return;
 				}

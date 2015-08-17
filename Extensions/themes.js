@@ -1,5 +1,5 @@
 //* TITLE Themes **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.1.3 **//
 //* DESCRIPTION Themes for your dashboard **//
 //* DETAILS This extension allows you to install themes from the XKit Theme Gallery onto your dashboard. New themes are added regularly, and if you are good with CSS, send an ask to xkit-dev.tumblr.com to get your theme added here! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -32,7 +32,7 @@ XKit.extensions.themes = new Object({
 
 		if(this.current_theme !== "") {
 			if (typeof XKit.extensions.yahoo !== "undefined") {
-				if (XKit.extensions.yahoo.running === true) {
+				if (XKit.extensions.yahoo.running) {
 					return;
 				}
 			}
@@ -111,7 +111,7 @@ XKit.extensions.themes = new Object({
 	cpanel: function(obj) {
 
 		if (typeof XKit.extensions.yahoo !== "undefined") {
-			if (XKit.extensions.yahoo.running === true) {
+			if (XKit.extensions.yahoo.running) {
 				var yahoo_html = "<div id=\"xkit-themes-loading\"><b>Yoohoo is on</b><br/><small>Please disable the \"Yoohoo!\" before running this extension.</small></div>";
 				$(obj).html(yahoo_html);
 				return;
@@ -126,7 +126,7 @@ XKit.extensions.themes = new Object({
 
 		XKit.download.page("themes/index.php", function(mdata) {
 
-			if (mdata.server_down === true) {
+			if (mdata.server_down) {
 
 				$("#xkit-themes-loading").html("<b>Server unreachable</b><br/><small>Please try again later.</small>");
 				return;

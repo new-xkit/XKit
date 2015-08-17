@@ -1,5 +1,5 @@
 //* TITLE XWidgets **//
-//* VERSION 0.3 REV A **//
+//* VERSION 0.3.2 **//
 //* DESCRIPTION Widgets for your dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -723,10 +723,10 @@ XKit.extensions.xwidgets = new Object({
 				var show_error = false;
 				$(obj).addClass("xcloud-widget");
 
-				if (XKit.installed.check("xcloud") === false) {
+				if (!XKit.installed.check("xcloud")) {
 					show_error = true;
 				} else {
-					if (XKit.extensions.xcloud.running === false) {
+					if (!XKit.extensions.xcloud.running) {
 						show_error = true;
 					} else {
 						if (XKit.storage.get("xcloud","username","") === "") {
@@ -879,7 +879,7 @@ XKit.extensions.xwidgets = new Object({
 					this_widget.show_error(obj);
 					return;
 				} else {
-					if (XKit.extensions.audio_plus.running !== true) {
+					if (!XKit.extensions.audio_plus.running) {
 						this_widget.show_error(obj);
 						return;
 					}
@@ -924,7 +924,7 @@ XKit.extensions.xwidgets = new Object({
 					this_widget.show_error(obj);
 					return;
 				} else {
-					if (XKit.extensions.audio_plus.running !== true) {
+					if (!XKit.extensions.audio_plus.running) {
 						this_widget.show_error(obj);
 						return;
 					}
@@ -944,7 +944,7 @@ XKit.extensions.xwidgets = new Object({
 
 				if ($(obj).find(".xkit-audio-plus-artist").length > 0) {
 
-					if (m_player.playing === true) {
+					if (m_player.playing) {
 						$(obj).addClass("song-actually-playing");
 					} else {
 						$(obj).removeClass("song-actually-playing");
@@ -967,7 +967,7 @@ XKit.extensions.xwidgets = new Object({
 
 				}
 
-				if (m_player.playing === true) {
+				if (m_player.playing) {
 					$(obj).addClass("song-actually-playing");
 				} else {
 					$(obj).removeClass("song-actually-playing");
@@ -1156,11 +1156,11 @@ XKit.extensions.xwidgets = new Object({
 
 		XKit.tools.init_css("xwidgets");
 
-		if (this.preferences.no_opener.value === true) {
+		if (this.preferences.no_opener.value) {
 			XKit.tools.add_css("#xwidgets-opener { display: none; } ", "xwidgets-no-opener");
 		}
 
-		if (this.preferences.enable_keyboard_shortcuts.value === true) {
+		if (this.preferences.enable_keyboard_shortcuts.value) {
 			$(document).on('keydown', XKit.extensions.xwidgets.key_down);
 		}
 
@@ -1333,7 +1333,7 @@ XKit.extensions.xwidgets = new Object({
 	},
 
 	key_down: function(e) {
-		if (e.altKey === true && e.which === 87) {
+		if (e.altKey && e.which === 87) {
 			$("#xwidgets-opener").trigger("click");
 		}
 

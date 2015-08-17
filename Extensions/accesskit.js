@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1 REV D **//
+//* VERSION 1.1.5 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER STUDIOXENIX **//

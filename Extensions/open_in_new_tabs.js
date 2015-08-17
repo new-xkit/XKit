@@ -11,7 +11,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 
 	running: false,
 	slow: true,
-	
+
 	preferences: {
 		"sep-0": {
 			text: "Options",
@@ -36,11 +36,11 @@ XKit.extensions.open_in_new_tabs = new Object({
 			$("#content area").attr('target','_blank');
 			$(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
 		}
-		
+
 		if (document.location.href.indexOf('/mega-editor/') != -1)
 			return;
 
-		if (XKit.extensions.open_in_new_tabs.preferences.no_sidebar.value === true) {
+		if (XKit.extensions.open_in_new_tabs.preferences.no_sidebar.value) {
 			XKit.post_listener.add("open_in_new_tabs", XKit.extensions.open_in_new_tabs.do);
 			XKit.extensions.open_in_new_tabs.do();
 		}
@@ -48,17 +48,17 @@ XKit.extensions.open_in_new_tabs = new Object({
 	},
 
 	do_open: function(e) {
-		
+
 		//XKit.window.show("do_open!", JSON.stringify(e.target), "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		//return;
 
 		var m_box = e.target;
 
 		var m_url = $(m_box).attr('href');
-		
+
 		if ($(m_box).closest('.fan_mail').length && $(m_box).hasClass('reply'))
 			return;
-		
+
 		if (typeof m_url === "undefined") {
 			m_url = $(m_box).parent().attr('href');
 		}
@@ -66,7 +66,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 		if (m_url === "#") { return; }
 		if (typeof $(m_box).attr('onclick') !== "undefined" || typeof $(m_box).parent().attr('onclick') !== "undefined") { return; }
 		if (typeof m_url === "undefined") { return; }
-		if ($(m_box).hasClass("photoset_photo") === true) { alert("no3"); return; }
+		if ($(m_box).hasClass("photoset_photo")) { alert("no3"); return; }
 
 		try {
 			var open_new_tab = false;
@@ -75,22 +75,22 @@ XKit.extensions.open_in_new_tabs = new Object({
 			} else {
 				if($(m_box).attr('target').toLowerCase() !== "_blank") {
 					open_new_tab = true;
-					
+
 				}
 			}
-			if ($(m_box).attr('title').toLowerCase() == "dashboard" && XKit.interface.where().dashboard === true) {
+			if ($(m_box).attr('title').toLowerCase() == "dashboard" && XKit.interface.where().dashboard) {
 				open_new_tab = false;
 			}
-			
-			if ($(m_box).attr('title').toLowerCase() == "inbox" && XKit.interface.where().inbox === true) {
+
+			if ($(m_box).attr('title').toLowerCase() == "inbox" && XKit.interface.where().inbox) {
 				open_new_tab = false;
 			}
-			
+
 			if ($(m_box).attr('title').toLowerCase() == "activity" || $(m_box).attr('title').toLowerCase() == "edit" ) {
 				open_new_tab = false;
 			}
 
-			if(open_new_tab === true) {
+			if(open_new_tab) {
 				e.preventDefault();
 				window.open(m_url, "_blank");
 			}
@@ -102,7 +102,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 		}
 
 	},
-	
+
 		do: function() {
 
 		$("a").off("click", XKit.extensions.open_in_new_tabs.click);

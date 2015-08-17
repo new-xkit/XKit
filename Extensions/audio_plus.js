@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.3.2 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -14,7 +14,7 @@ XKit.extensions.audio_plus = {
 	run: function() {
 		this.running = true;
 
-		if (XKit.interface.where().inbox === true) {
+		if (XKit.interface.where().inbox) {
 			return;
 		}
 

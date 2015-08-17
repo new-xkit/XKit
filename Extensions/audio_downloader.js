@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -94,7 +94,7 @@ XKit.extensions.audio_downloader = new Object({
 
 					var m_title = m_titles[m_index];
 
-					if (XKit.browser().firefox === true || XKit.browser().safari === true) {
+					if (XKit.browser().firefox || XKit.browser().safari) {
 						XKit.window.show(m_title, "<b>This functionality is provided in good faith.</b><br/>Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, hit Cancel now.", "warning", "<a href=\"http://www.xkit.info/seven/helpers/audioget.php?fln=" + m_url + "&id=" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 					} else {
 						m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
@@ -157,8 +157,8 @@ XKit.extensions.audio_downloader = new Object({
 
 			if (m_post.type !== "audio") { return; }
 
-			if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
-				if (m_post.reblogged === false) { return; }
+			if (XKit.interface.where().queue || XKit.interface.where().drafts) {
+				if (!m_post.reblogged) { return; }
 			}
 
 			XKit.interface.add_control_button(this, "xkit-audio-downloader", "data-xkit-audio-downloader-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-audio-downloader-tumblelog-name=\"" + m_post.owner + "\"");

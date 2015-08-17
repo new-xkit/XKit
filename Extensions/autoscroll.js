@@ -1,5 +1,5 @@
 //* TITLE Auto Scroll **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Scrolls the page at a variable pace. **//
 //* DETAILS Automatically scrolls the dashboard. Scrolling stops upon clicking outside the control.  **//
 //* DEVELOPER Fr33dan **//
@@ -81,7 +81,7 @@ XKit.extensions.autoscroll = new Object({
 			isScrolling = true;
 			// Function must be started after isScrolling is set
 			// to prevent possible race condition.
-			if(wasScrolling === false)
+			if(!wasScrolling)
 			{
 				XKit.console.add("Scrolling Started");
 				setTimeout(scrollFunction,50);
@@ -92,7 +92,7 @@ XKit.extensions.autoscroll = new Object({
 		});
 
 		$(document).on("click", null, function(event){
-			if(isScrolling === true)
+			if(isScrolling)
 			{
 				isScrolling = false;
 				controlSteps.removeAttr("selected");

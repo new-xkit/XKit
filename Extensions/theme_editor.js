@@ -21,13 +21,13 @@ XKit.extensions.theme_editor = new Object({
 		XKit.tools.init_css("theme_editor");
 
 		if (typeof XKit.extensions.themes !== "undefined") {
-			if (XKit.extensions.themes.running === true) {
+			if (XKit.extensions.themes.running) {
 				XKit.extensions.themes.destroy();
 			}
 		}
 
 		if (typeof XKit.extensions.yahoo !== "undefined") {
-			if (XKit.extensions.yahoo.running === true) {
+			if (XKit.extensions.yahoo.running) {
 				XKit.extensions.yahoo.destroy();
 			}
 		}

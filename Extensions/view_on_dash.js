@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.3 **//
+//* VERSION 0.7.4 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -26,7 +26,7 @@ XKit.extensions.view_on_dash = new Object({
 
 	key_down: function(e) {
 
-		if (e.altKey === true) {
+		if (e.altKey) {
 			if (e.which === 86) {
 				XKit.extensions.view_on_dash.show_open();
 			}
@@ -38,15 +38,15 @@ XKit.extensions.view_on_dash = new Object({
 		this.running = true;
 		XKit.tools.init_css("view_on_dash");
 
-		if (XKit.interface.where().queue === true) { return; }
+		if (XKit.interface.where().queue) { return; }
 
-		if (this.preferences.shortcut.value === true) {
+		if (this.preferences.shortcut.value) {
 
 			$(document).on('keydown', XKit.extensions.view_on_dash.key_down);
 
 		}
 
-		if (this.preferences.show_sidebar_button.value === true) {
+		if (this.preferences.show_sidebar_button.value) {
 
 			var xf_html = '<ul class="controls_section" id="view_on_dash_ul">' +
 				'<li class="section_header selected">VIEW BLOGS</li>' +
@@ -105,7 +105,7 @@ XKit.extensions.view_on_dash = new Object({
 				return;
 			}
 
-			if (/^[a-zA-Z0-9\-]+$/.test(to_add) === false) {
+			if (!/^[a-zA-Z0-9\-]+$/.test(to_add)) {
 				alert("Invalid username");
 				return;
 			}

@@ -1,5 +1,5 @@
 //* TITLE Glowing Follow **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0.4 **//
 //* DESCRIPTION Glowing plusses on blogs **//
 //* DETAILS Makes the Follow button on people's blogs glow if they are following you and you are not following them. Before proceeding, please keep in mind that sometimes, ignorance is bliss. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -20,7 +20,7 @@ XKit.extensions.glowing_follow = new Object({
 			var follow_button = $(".follow");
 
 			// Are we already following this person?
-			if (follow_button.hasClass("hidden") === true) {
+			if (follow_button.hasClass("hidden")) {
 				// Yeah. No need for this.
 				return;
 			}

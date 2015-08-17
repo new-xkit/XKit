@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.1 **//
+//* VERSION 2.3.2 **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -317,7 +317,7 @@ XKit.extensions.mute = new Object({
 
 		// console.log(" checking, type = " + type + " || username = " + username);
 
-		if (XKit.interface.where().inbox === true) { return false; }
+		if (XKit.interface.where().inbox) { return false; }
 
 		for (var i=0;i<XKit.extensions.mute.muted.length;i++) {
 
@@ -327,31 +327,31 @@ XKit.extensions.mute = new Object({
 				continue;
 			}
 
-			if (type === "note" && XKit.extensions.mute.muted[i].asks === true) {
+			if (type === "note" && XKit.extensions.mute.muted[i].asks) {
 				return true;
 			}
 
-			if (type === "photoset" && XKit.extensions.mute.muted[i].photo === true) {
+			if (type === "photoset" && XKit.extensions.mute.muted[i].photo) {
 				return true;
 			}
 
-			if (type === "conversation" && XKit.extensions.mute.muted[i].chat === true) {
+			if (type === "conversation" && XKit.extensions.mute.muted[i].chat) {
 				return true;
 			}
 
 			if (typeof XKit.extensions.mute.muted[i].reblogs !== "undefined") {
-				if (XKit.extensions.mute.muted[i].reblogs === true && reblogged_post === true) {
+				if (XKit.extensions.mute.muted[i].reblogs && reblogged_post) {
 					return true;
 				}
 			}
 
 			if (typeof XKit.extensions.mute.muted[i].originals !== "undefined") {
-				if (XKit.extensions.mute.muted[i].originals === true && original_post === true) {
+				if (XKit.extensions.mute.muted[i].originals && original_post) {
 					return true;
 				}
 			}
 
-			if (XKit.extensions.mute.muted[i][type] === true) {
+			if (XKit.extensions.mute.muted[i][type]) {
 				return true;
 			}
 
@@ -370,7 +370,7 @@ XKit.extensions.mute = new Object({
 
 		var m_posts = ".post.is_regular, .post.is_note";
 
-		if (rethink === true) {
+		if (rethink) {
 
 			$(".xmute-muted").each(function() {
 				$(this).attr('class', $(this).attr("data-xkit-mute-old-classes"));
@@ -387,16 +387,16 @@ XKit.extensions.mute = new Object({
 			$(this).addClass("xmute-done");
 
 			var m_post = XKit.interface.post($(this));
-			if (m_post.is_mine === true) { return; }
+			if (m_post.is_mine) { return; }
 
 			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
-			if (XKit.extensions.mute.should_be_removed(m_post.type, m_post.owner, m_post.is_reblogged, !m_post.is_reblogged) === true) {
+			if (XKit.extensions.mute.should_be_removed(m_post.type, m_post.owner, m_post.is_reblogged, !m_post.is_reblogged)) {
 				update_rects = true;
 				$(this).attr("data-xkit-mute-old-classes", $(this).attr("class"));
 				$(this).attr("class", "xmute-muted xmute-done");
 			} else {
-				if (rethink === true) {
+				if (rethink) {
 					$(this).attr('class', $(this).attr("data-xkit-mute-old-classes"));
 					$(this).removeClass("xmute-muted");
 					update_rects = true;
@@ -405,7 +405,7 @@ XKit.extensions.mute = new Object({
 
 		});
 
-		if (update_rects === true) {
+		if (update_rects) {
 			XKit.tools.add_function(function() {
 				Tumblr.Events.trigger("DOMEventor:updateRect");
 			}, true, "");
@@ -580,19 +580,19 @@ XKit.extensions.mute = new Object({
 		var user_object = XKit.extensions.mute.return_user_object(ud);
 
 		if (user_object !== -1) {
-			if (user_object.regular === true) { m_regular_class = "selected"; }
-			if (user_object.photo === true) { m_photo_class = "selected"; }
-			if (user_object.quote === true) { m_quote_class = "selected"; }
-			if (user_object.link === true) { m_link_class = "selected"; }
-			if (user_object.chat === true) { m_chat_class = "selected"; }
-			if (user_object.audio === true) { m_audio_class = "selected"; }
-			if (user_object.video === true) { m_video_class = "selected"; }
-			if (user_object.asks === true) { m_asks_class = "selected"; }
+			if (user_object.regular) { m_regular_class = "selected"; }
+			if (user_object.photo) { m_photo_class = "selected"; }
+			if (user_object.quote) { m_quote_class = "selected"; }
+			if (user_object.link) { m_link_class = "selected"; }
+			if (user_object.chat) { m_chat_class = "selected"; }
+			if (user_object.audio) { m_audio_class = "selected"; }
+			if (user_object.video) { m_video_class = "selected"; }
+			if (user_object.asks) { m_asks_class = "selected"; }
 			if (typeof user_object.reblogs !== "undefined") {
-				if (user_object.reblogs === true) { m_reblogs_class = "selected"; }
+				if (user_object.reblogs) { m_reblogs_class = "selected"; }
 			}
 			if (typeof user_object.originals !== "undefined") {
-				if (user_object.originals === true) { m_originals_class = "selected"; }
+				if (user_object.originals) { m_originals_class = "selected"; }
 			}
 		}
 

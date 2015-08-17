@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -157,7 +157,7 @@ XKit.extensions.tag_replacer = new Object({
 
 			console.log(data);
 
-			if (data.error === true) {
+			if (data.error) {
 				XKit.extensions.tag_replacer.show_error("<b>Unable to fetch post object.</b><br/>Please try again later.<br/><br/>Error Code: TGR-935");
 				return;
 			}
@@ -171,7 +171,7 @@ XKit.extensions.tag_replacer = new Object({
 
 			var found_tag = false;
 
-			if (XKit.extensions.tag_replacer.append_mode === false) {
+			if (!XKit.extensions.tag_replacer.append_mode) {
 
 				for (var i=0;i<m_tags.length;i++) {
 					if (encodeURIComponent(m_tags[i]) === XKit.extensions.tag_replacer.t_replace) {
@@ -189,7 +189,7 @@ XKit.extensions.tag_replacer = new Object({
 
 			}
 
-			if (found_tag === false) {
+			if (!found_tag) {
 				var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
 				XKit.progress.value("tag-replacer-pb", perc);
 				XKit.extensions.tag_replacer.p_array_index++;
@@ -208,7 +208,7 @@ XKit.extensions.tag_replacer = new Object({
 				var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
 				XKit.progress.value("tag-replacer-pb", perc);
 
-				if (data.error === false && data.data.errors === false) {
+				if (!data.error && !data.data.errors) {
 
 					console.log("Post " + m_post + " updated successfully.");
 

@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.3 **//
+//* VERSION 2.3.4 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -52,7 +52,7 @@ XKit.extensions.bookmarker = new Object({
 			XKit.extensions.bookmarker.preferences.format.value = "MMM Do, h:mm a";
 		}
 
-		if (XKit.interface.where().dashboard === true) {
+		if (XKit.interface.where().dashboard) {
 			XKit.tools.init_css("bookmarker");
 			XKit.extensions.bookmarker.load_bookmarks();
 			XKit.extensions.bookmarker.init();
@@ -61,7 +61,7 @@ XKit.extensions.bookmarker = new Object({
 			XKit.extensions.bookmarker.check_bookmark();
 
 			// Check for new body layout.
-			if ($("body").hasClass("posts_v2") === true) {
+			if ($("body").hasClass("posts_v2")) {
 				XKit.tools.add_css("#xkit-bookmarker-not-found-inner { padding: 20px 20px 20px 60px; margin-bottom: 10px; }","bookmarker_new_layout");
 			}
 		}
@@ -125,7 +125,7 @@ XKit.extensions.bookmarker = new Object({
 		if (document.location.href.indexOf("?bookmark=true") !== -1) {
 			$("#right_column").prepend(m_html);
 		} else {
-			if (XKit.extensions.bookmarker.preferences.display_on_top.value === true) {
+			if (XKit.extensions.bookmarker.preferences.display_on_top.value) {
 				$("ul.controls_section:first").after(m_html);
 			} else{
 				if ($("#tumblr_radar").length > 0) {
@@ -166,7 +166,7 @@ XKit.extensions.bookmarker = new Object({
 		$(document).on("click", ".xkit_bookmarker_button", function(event){
 
 			var post_id = $(this).attr('data-xkit-bookmarker-post-id');
-			if ($(this).hasClass("on") === true) {
+			if ($(this).hasClass("on")) {
 				$(this).removeClass("on");
 				XKit.extensions.bookmarker.remove_bookmark(post_id);
 
@@ -218,7 +218,7 @@ XKit.extensions.bookmarker = new Object({
 			} else {
 				// Go to the post!
 				post_id = parseInt(post_id);
-				if (XKit.extensions.bookmarker.preferences.new_tab.value === true) {
+				if (XKit.extensions.bookmarker.preferences.new_tab.value) {
 					window.open("/dashboard/100/" + (post_id + 1) + "/?bookmark=true");
 				} else {
 					document.location.href = "/dashboard/100/" + (post_id + 1) + "/?bookmark=true";
@@ -255,7 +255,7 @@ XKit.extensions.bookmarker = new Object({
 
 			var dt = moment(current_bookmark.date);
 
-			if (XKit.extensions.bookmarker.preferences.display_non_relative.value === true) {
+			if (XKit.extensions.bookmarker.preferences.display_non_relative.value) {
 				bookmark_caption = dt.format(XKit.extensions.bookmarker.preferences.format.value);
 			} else {
 				bookmark_caption = dt.from(nowdatem);

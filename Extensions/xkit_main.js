@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.3 REV B **//
+//* VERSION 1.3.3 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function(){
@@ -23,7 +23,7 @@ XKit.extensions.xkit_main = new Object({
 
 		}
 
-		if (XKit.extensions.xkit_main.running === true) {
+		if (XKit.extensions.xkit_main.running) {
 			return;
 		}
 		this.running = true;
@@ -31,10 +31,10 @@ XKit.extensions.xkit_main = new Object({
 		XKit.console.add("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
 		// Run XKit Patches first.
-		if (XKit.flags.do_not_load_xkit_patches !== true) {
+		if (!XKit.flags.do_not_load_xkit_patches) {
 
 			var m_result = XKit.extensions.xkit_main.run_extension("xkit_patches", true, true);
-			if (m_result === false) {
+			if (!m_result) {
 				XKit.console.add("Can not run xkit_patches! (version " + XKit.installed.version('xkit_patches') +")");
 			} else {
 				XKit.console.add("Running xkit_patches (version " + XKit.installed.version('xkit_patches') + ")");
@@ -49,7 +49,7 @@ XKit.extensions.xkit_main = new Object({
 		// Get currently running extensions.
 		XKit.extensions.xkit_main.to_run = XKit.installed.list();
 
-		if (XKit.extensions.xkit_main.should_slow_down() === true) {
+		if (XKit.extensions.xkit_main.should_slow_down()) {
 			XKit.console.add("XKit Main: Slow-boot mode");
 			$(document).ready(function() {
 				setTimeout(function() { XKit.extensions.xkit_main.run_next_extension(); }, 300);
@@ -96,15 +96,15 @@ XKit.extensions.xkit_main = new Object({
 		if (extension_id === "xkit_main") { XKit.extensions.xkit_main.run_next_extension(); return; }
 
 		// Just in case..
-		if (extension_id === "xkit_installer" && force !== true) { XKit.extensions.xkit_main.run_next_extension(); return; }
+		if (extension_id === "xkit_installer" && !force) { XKit.extensions.xkit_main.run_next_extension(); return; }
 
 		// We'll be running patches first.
-		if (extension_id === "xkit_patches" && force !== true) { XKit.extensions.xkit_main.run_next_extension(); return; }
+		if (extension_id === "xkit_patches" && !force) { XKit.extensions.xkit_main.run_next_extension(); return; }
 
 		var xkit_main = XKit.installed.get(extension_id);
 
 		// Check if in Frame Mode.
-		if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
+		if (XKit.frame_mode && extension_id !== "xkit_patches") {
 			// This is ugly: I don't want to eval script.
 			/* jshint evil: true */
 			eval(xkit_main.script);
@@ -117,7 +117,7 @@ XKit.extensions.xkit_main = new Object({
 			if (frame_script !== "" && typeof frame_script !== "undefined") {
 				// This is a hybrid extension!
 				// Run it!
-				if (XKit.installed.enabled(extension_id) === true) {
+				if (XKit.installed.enabled(extension_id)) {
 					try {
 						if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
 							XKit.extensions.xkit_main.load_extension_preferences(extension_id);
@@ -133,7 +133,7 @@ XKit.extensions.xkit_main = new Object({
 				}
 				return;
 			}
-			if (xkit_main.frame !== true) {
+			if (!xkit_main.frame) {
 				// not a frame extension, quit.
 				if (XKit.extensions.xkit_main.disabled_extensions === "") {
 					XKit.extensions.xkit_main.disabled_extensions = extension_id + "(in frame)";
@@ -146,7 +146,7 @@ XKit.extensions.xkit_main = new Object({
 				return;
 			}
 		} else {
-			if (xkit_main.frame === true) {
+			if (xkit_main.frame) {
 				// is a frame extension, quit.
 				try {
 					eval(xkit_main.script);
@@ -167,7 +167,7 @@ XKit.extensions.xkit_main = new Object({
 
 		try {
 			eval(xkit_main.script);
-			if (XKit.installed.enabled(extension_id) === true) {
+			if (XKit.installed.enabled(extension_id)) {
 				if (XKit.extensions.xkit_main.enabled_extensions === "") {
 					XKit.extensions.xkit_main.enabled_extensions = extension_id;
 				} else {

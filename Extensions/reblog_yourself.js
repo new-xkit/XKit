@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.3.2 **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -34,12 +34,12 @@ XKit.extensions.reblog_yourself = {
 
 		if ($(".posts .post").length > 0) {
 			$(document).on("click", ".post_control.reblog", function() {
-				if ($(this).parentsUntil(".post").parent().hasClass("is_mine") === true) {
+				if ($(this).parentsUntil(".post").parent().hasClass("is_mine")) {
 					XKit.extensions.reblog_yourself.fix_page();
 				}
 			});
 		}
-		if(XKit.extensions.reblog_yourself.preferences.dashboard.value === true)
+		if(XKit.extensions.reblog_yourself.preferences.dashboard.value)
 		{
 			XKit.post_listener.add("reblog_yourself", XKit.extensions.reblog_yourself.fix_dashboard);
 			XKit.extensions.reblog_yourself.fix_dashboard();
@@ -49,7 +49,7 @@ XKit.extensions.reblog_yourself = {
 
 	frame_run: function() {
 
-		if(XKit.extensions.reblog_yourself.preferences.postpages.value === false)
+		if(!XKit.extensions.reblog_yourself.preferences.postpages.value)
 			return;
 		// This gets run on frame.
 		// Port of ugly code from XKit 6 but at least it works.
@@ -153,7 +153,7 @@ XKit.extensions.reblog_yourself = {
 
 	fix_dashboard: function() {
 
-		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
+		if (XKit.interface.where().queue || XKit.interface.where().drafts) {
 			return false;
 		}
 
@@ -175,9 +175,9 @@ XKit.extensions.reblog_yourself = {
 			if ($(this).hasClass("xreblogyourself_done") === true) { return; }
 
 			if ($(this).attr('id') === "new_post") { return; }
-			if ($(this).hasClass("note") === true) { return; }
-			if ($(this).hasClass("is_note") === true) { return; }
-			if ($(this).hasClass("is_mine") === false) { return; }
+			if ($(this).hasClass("note")) { return; }
+			if ($(this).hasClass("is_note")) { return; }
+			if (!$(this).hasClass("is_mine")) { return; }
 			if ($(this).css('visibility') === "hidden") { return; } // tumblr savior hack.
 			if ($(this).css('display') === "none") { return; } // tumblr savior hack.
 

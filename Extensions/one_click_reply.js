@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.0.5 **//
+//* VERSION 2.0.6 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -107,7 +107,7 @@ XKit.extensions.one_click_reply = new Object({
 
 			XKit.tools.init_css("one_click_reply");
 
-			if (this.preferences.mention_people.value === true) {
+			if (this.preferences.mention_people.value) {
 
 				// This is a terrible way of doing this isn't it?
 
@@ -124,7 +124,7 @@ XKit.extensions.one_click_reply = new Object({
 				// XKit.extensions.one_click_reply.fill_post();
 			}
 
-			if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value === true) {
+			if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value) {
 				var m_html = "<div id=\"xkit-one-click-reply-quick-reply-window-shadow\"></div>" +
 						"<div id=\"xkit-one-click-reply-quick-reply-window\">" +
 							"<div id=\"xkit-one-click-reply-quick-reply-close\">&nbsp;</div>" +
@@ -201,7 +201,7 @@ XKit.extensions.one_click_reply = new Object({
 		reply = reply.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 		// This is a terrible hack.
-		if (XKit.extensions.one_click_reply.preferences.mention_people.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.mention_people.value) {
 
 			var sentence_obj = $("<div>" + sentence + "</div>");
 
@@ -246,8 +246,8 @@ XKit.extensions.one_click_reply = new Object({
 
 		try {
 
-			if (XKit.extensions.tweaks.running === true) {
-				if (XKit.extensions.tweaks.preferences.photo_replies.value === true) {
+			if (XKit.extensions.tweaks.running) {
+				if (XKit.extensions.tweaks.preferences.photo_replies.value) {
 					m_object.allow_photo_replies = "on";
 				}
 			}
@@ -260,10 +260,10 @@ XKit.extensions.one_click_reply = new Object({
 
 		XKit.interface.kitty.get(function(kitty_data) {
 
-			if (kitty_data.errors === true) {
+			if (kitty_data.errors) {
 
 				// We fucked up for some reason.
-				if (retry_mode !== true) {
+				if (!retry_mode) {
 					XKit.extensions.one_click_reply.quick_reply_post(sentence, tags, reply, blog, true);
 				} else{
 					XKit.extensions.one_click_reply.quick_reply_error("101");
@@ -284,7 +284,7 @@ XKit.extensions.one_click_reply = new Object({
 				},
 				onerror: function(response) {
 					XKit.interface.kitty.set("");
-					if (retry_mode !== true) {
+					if (!retry_mode) {
 						XKit.extensions.one_click_reply.quick_reply_post(sentence, tags, reply, blog, true);
 					} else{
 						XKit.extensions.one_click_reply.quick_reply_error("101");
@@ -299,7 +299,7 @@ XKit.extensions.one_click_reply = new Object({
 					} catch(e) {
 						XKit.extensions.one_click_reply.quick_reply_error("106");
 					}
-					if (mdata.errors === false) {
+					if (!mdata.errors) {
 						XKit.extensions.one_click_reply.quick_reply_close();
 					} else {
 						XKit.extensions.one_click_reply.quick_reply_error("103");
@@ -373,13 +373,13 @@ XKit.extensions.one_click_reply = new Object({
 		var m_blog = XKit.tools.get_current_blog();
 
 		var initial_tags = "";
-		if (XKit.extensions.one_click_reply.preferences.tag_people.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.tag_people.value) {
 			initial_tags = default_tags;
-			if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
+			if (XKit.extensions.one_click_reply.preferences.auto_tag.value && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
 				initial_tags += "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
 			}
 		} else {
-			if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
+			if (XKit.extensions.one_click_reply.preferences.auto_tag.value && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
 				initial_tags += "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
 			}
 		}
@@ -428,13 +428,13 @@ XKit.extensions.one_click_reply = new Object({
 			}
 
 
-			if (XKit.extensions.one_click_reply.preferences.tag_people.value === true) {
+			if (XKit.extensions.one_click_reply.preferences.tag_people.value) {
 				m_url = m_url + "?tags=" + tags;
-				if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
+				if (XKit.extensions.one_click_reply.preferences.auto_tag.value && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
 					m_url = m_url + "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
 				}
 			} else {
-				if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
+				if (XKit.extensions.one_click_reply.preferences.auto_tag.value && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
 					m_url = m_url + "?tags=" + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
 				}
 			}
@@ -457,9 +457,9 @@ XKit.extensions.one_click_reply = new Object({
 
 		var n_box = event.target;
 
-		if ($(n_box).hasClass("note") === false || $(n_box).hasClass("action") === true) {
+		if (!$(n_box).hasClass("note") || $(n_box).hasClass("action")) {
 			// Must be in a sub-div.
-			if ($(n_box).hasClass("action") === true) {
+			if ($(n_box).hasClass("action")) {
 				n_box = $(n_box).parent();
 			} else {
 				n_box = $(n_box).parentsUntil(".note").parent();
@@ -489,9 +489,9 @@ XKit.extensions.one_click_reply = new Object({
 
 		} else {
 
-			if ($(n_box).hasClass("note") === false || $(n_box).hasClass("action") === true) {
+			if (!$(n_box).hasClass("note") || $(n_box).hasClass("action")) {
 				// Must be in a sub-div.
-				if ($(n_box).hasClass("action") === true) {
+				if ($(n_box).hasClass("action")) {
 					n_box = $(n_box).parent();
 				} else {
 					n_box = $(n_box).parentsUntil(".note").parent();
@@ -550,7 +550,7 @@ XKit.extensions.one_click_reply = new Object({
 				XKit.extensions.one_click_reply.added_css_pn = true;
 			}*/
 
-			if (XKit.extensions.one_click_reply.added_css_pn_new !== true) {
+			if (!XKit.extensions.one_click_reply.added_css_pn_new) {
 				XKit.tools.add_css(".ui_notes .ui_note .part_ignore { right: " + m_new_right + "px !important; }", "one_click_reply");
 				XKit.extensions.one_click_reply.added_css_pn_new = true;
 			}
@@ -565,9 +565,9 @@ XKit.extensions.one_click_reply = new Object({
 	enter: function(event) {
 
 		var n_box = event.target;
-		if ($(n_box).hasClass("notification") === false || $(n_box).hasClass("notification_inner") === true) {
+		if (!$(n_box).hasClass("notification") || $(n_box).hasClass("notification_inner")) {
 			// Must be in a sub-div.
-			if ($(n_box).hasClass("notification_inner") === true) {
+			if ($(n_box).hasClass("notification_inner")) {
 				n_box = $(n_box).parent();
 			} else {
 				n_box = $(n_box).parentsUntil(".notification").parent();
@@ -597,7 +597,7 @@ XKit.extensions.one_click_reply = new Object({
 				}
 			}
 			var m_right = 45 + $(n_box).find(".xkit-reply-button").width();
-			if (XKit.extensions.one_click_reply.added_css !== true) {
+			if (!XKit.extensions.one_click_reply.added_css) {
 				XKit.tools.add_css(".notification .block, .notification .ignore { right: " + m_right + "px !important; }", "one_click_reply");
 				XKit.extensions.one_click_reply.added_css = true;
 			}
@@ -648,9 +648,9 @@ XKit.extensions.one_click_reply = new Object({
 
 		obj = $(obj).parent();
 
-		if ($(obj).hasClass("note") === false || $(obj).hasClass("action") === true) {
+		if (!$(obj).hasClass("note") || $(obj).hasClass("action")) {
 			// Must be in a sub-div.
-			if ($(obj).hasClass("action") === true) {
+			if ($(obj).hasClass("action")) {
 				n_box = $(obj).parent();
 			} else {
 				n_box = $(obj).parentsUntil(".note").parent();
@@ -666,14 +666,14 @@ XKit.extensions.one_click_reply = new Object({
 		var m_post_type = "";
 		var m_sentence = "";
 
-		if ($(obj).hasClass("is_reply") === true ||$(obj).hasClass("reply") === true) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply; }
+		if ($(obj).hasClass("is_reply") ||$(obj).hasClass("reply")) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply; }
 		if ($(obj).find(".photo_reply_image_container").length > 0) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply_photo; }
-		if ($(obj).hasClass("is_like") === true || $(obj).hasClass("like") === true) { m_post_type = "like"; m_sentence = XKit.extensions.one_click_reply.sentences.like;  }
-		if ($(obj).hasClass("is_answer") === true || $(obj).hasClass("answer") === true) { m_post_type = "answer"; m_sentence = XKit.extensions.one_click_reply.sentences.answer;  }
-		if ($(obj).hasClass("is_reblog") === true || $(obj).hasClass("reblog") === true) {
+		if ($(obj).hasClass("is_like") || $(obj).hasClass("like")) { m_post_type = "like"; m_sentence = XKit.extensions.one_click_reply.sentences.like;  }
+		if ($(obj).hasClass("is_answer") || $(obj).hasClass("answer")) { m_post_type = "answer"; m_sentence = XKit.extensions.one_click_reply.sentences.answer;  }
+		if ($(obj).hasClass("is_reblog") || $(obj).hasClass("reblog")) {
 			m_post_type = "reblog";
 			m_sentence = XKit.extensions.one_click_reply.sentences.reblog;
-			if ($(obj).hasClass("with_commentary") === true) {
+			if ($(obj).hasClass("with_commentary")) {
 				m_post_type = "reblog_text";
 				m_sentence = XKit.extensions.one_click_reply.sentences.reblog_with_comments;
 			}
@@ -747,7 +747,7 @@ XKit.extensions.one_click_reply = new Object({
 			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
-		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value) {
 			try {
 				user_name = user_name.replace(/-/g, ' ');
 			} catch(e) {
@@ -777,16 +777,16 @@ XKit.extensions.one_click_reply = new Object({
 				m_sentence = XKit.extensions.one_click_reply.sentences.nt_answer;
 			}
 
-			if ($(obj).hasClass("reblog") === true) {
+			if ($(obj).hasClass("reblog")) {
 				m_sentence = XKit.extensions.one_click_reply.sentences.nt_reblog;
-				if ($(obj).hasClass("with_commentary") === true) {
+				if ($(obj).hasClass("with_commentary")) {
 					m_sentence = XKit.extensions.one_click_reply.sentences.nt_reblog_with_comments;
 				}
 			}
 
 		}
 
-		if (XKit.extensions.one_click_reply.preferences.mention_people.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.mention_people.value) {
 			m_sentence = m_sentence.replace("%l", user_url + "\" class=\"tumblelog\"");
 		} else {
 			m_sentence = m_sentence.replace("%l", user_url);
@@ -798,7 +798,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		m_sentence = XKit.extensions.one_click_reply.strip_sentence(m_sentence);
 
-		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.show_avatars.value) {
 			// Fetch the avatar, slugify it to sentence.
 			var avatar_url = $(obj).find(".avatar_frame").find(".avatar").attr('src');
 			// This is ugly but it works:
@@ -822,15 +822,15 @@ XKit.extensions.one_click_reply = new Object({
 
 		var m_tags_to_return = "";
 
-		if (this.preferences.tag_people.value === true) {
+		if (this.preferences.tag_people.value) {
 			m_url = m_url + "?tags=" + user_name;
 			m_tags_to_return = user_name;
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+			if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 				m_url = m_url + "," + this.preferences.auto_tag_text.value;
 				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
 			}
 		} else {
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+			if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 				m_url = m_url + "?tags=" + this.preferences.auto_tag_text.value;
 				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
 			}
@@ -841,12 +841,12 @@ XKit.extensions.one_click_reply = new Object({
 			tags: m_tags_to_return
 		};
 
-		if (silent_mode === true) {
+		if (silent_mode) {
 			return data;
 		} else {
 			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-			if (this.preferences.open_in_new_tab.value === true) {
+			if (this.preferences.open_in_new_tab.value) {
 				window.open(m_url,'_BLANK');
 			} else {
 				document.location.href = m_url;
@@ -860,7 +860,7 @@ XKit.extensions.one_click_reply = new Object({
 
 	make_post: function(obj, pn_mode, event, silent_mode) {
 
-		if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value === true && silent_mode !== true) {
+		if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value && !silent_mode) {
 			if (!event.altKey && !pn_mode) {
 				// Do not open window if pressing alt key to select items.
 				if ($(".xkit-reply-selected").length <= 0 && $(".xkit-reply-selected-pn").length <= 0) {
@@ -873,7 +873,7 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 
-		if (XKit.extensions.one_click_reply.preferences.multi_reply.value === true && silent_mode !== true) {
+		if (XKit.extensions.one_click_reply.preferences.multi_reply.value && !silent_mode) {
 			if (event.altKey) {
 				var alt_obj = $(obj);
 				if (pn_mode === true) {
@@ -886,10 +886,10 @@ XKit.extensions.one_click_reply = new Object({
 			} else {
 				if ($(".xkit-reply-selected").length > 0 || $(".xkit-reply-selected-pn").length > 0) {
 					// There are selected posts!
-					if ($(obj).hasClass("xkit-reply-selected") === false && $(obj).hasClass("xkit-reply-selected-pn") === false) {
+					if (!$(obj).hasClass("xkit-reply-selected") && !$(obj).hasClass("xkit-reply-selected-pn")) {
 						// Add this too.
 						var m_obj = $(obj);
-						if (pn_mode === true) {
+						if (pn_mode) {
 							m_obj = $(obj).parent();
 							$(m_obj).addClass("xkit-reply-selected-pn");
 						} else {
@@ -904,7 +904,7 @@ XKit.extensions.one_click_reply = new Object({
 
 						// Cycle thru all the posts and gather information.
 
-						if ($(this).hasClass("xkit-reply-selected-pn") === true) {
+						if ($(this).hasClass("xkit-reply-selected-pn")) {
 							var pn_post = XKit.extensions.one_click_reply.make_post_pn($(this).find(".xkit-reply-button-pn"), true);
 							m_tags = m_tags + "," + pn_post.tags;
 							m_text = m_text + pn_post.sentence + "<p></p>";
@@ -938,13 +938,13 @@ XKit.extensions.one_click_reply = new Object({
 						m_url = m_url.substring(0, m_url.indexOf('?'));
 					}
 
-					if (this.preferences.tag_people.value === true) {
+					if (this.preferences.tag_people.value) {
 						m_url = m_url + "?tags=" + m_tags;
-						if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+						if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 							m_url = m_url + "," + this.preferences.auto_tag_text.value;
 						}
 					} else {
-						if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+						if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 							m_url = m_url + "?tags=" + this.preferences.auto_tag_text.value;
 						}
 					}
@@ -952,7 +952,7 @@ XKit.extensions.one_click_reply = new Object({
 					$(".xkit-reply-selected").removeClass("xkit-reply-selected");
 					$(".xkit-reply-selected-pn").removeClass("xkit-reply-selected-pn");
 
-					if (this.preferences.open_in_new_tab.value === true) {
+					if (this.preferences.open_in_new_tab.value) {
 						window.open(m_url,'_BLANK');
 					} else {
 						document.location.href = m_url;
@@ -964,7 +964,7 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 
-		if (pn_mode === true) {
+		if (pn_mode) {
 			XKit.extensions.one_click_reply.make_post_pn(obj);
 			return;
 		}
@@ -983,7 +983,7 @@ XKit.extensions.one_click_reply = new Object({
 		var username = $(obj).find(".username").html();
 		var real_username = username;
 
-		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value) {
 			try {
 				username = username.replace(/-/g, ' ');
 			} catch(e) {
@@ -1044,7 +1044,7 @@ XKit.extensions.one_click_reply = new Object({
 			avatar_url = "https://31." + avatar_url.substring(avatar_url_start + 1);
 		}
 
-		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.show_avatars.value) {
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
@@ -1061,15 +1061,15 @@ XKit.extensions.one_click_reply = new Object({
 
 		var m_tags_to_return = "";
 
-		if (this.preferences.tag_people.value === true) {
+		if (this.preferences.tag_people.value) {
 			m_url = m_url + "?tags=" + username;
 			m_tags_to_return = username;
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+			if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 				m_url = m_url + "," + this.preferences.auto_tag_text.value;
 				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
 			}
 		} else {
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+			if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 				m_url = m_url + "?tags=" + this.preferences.auto_tag_text.value;
 				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
 			}
@@ -1080,14 +1080,14 @@ XKit.extensions.one_click_reply = new Object({
 			tags: m_tags_to_return
 		};
 
-		if (silent_mode === true) {
+		if (silent_mode) {
 			data.avatar = avatar_url;
 			data.username = real_username;
 			return data;
 		} else {
 			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-			if (this.preferences.open_in_new_tab.value === true) {
+			if (this.preferences.open_in_new_tab.value) {
 				window.open(m_url,'_BLANK');
 			} else {
 				document.location.href = m_url;
@@ -1135,7 +1135,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		m_sentence = XKit.extensions.one_click_reply.strip_sentence(m_sentence);
 
-		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
+		if (XKit.extensions.one_click_reply.preferences.show_avatars.value) {
 			// Fetch the avatar, slugify it to sentence.
 			var m_obj = $(obj);
 
@@ -1173,15 +1173,15 @@ XKit.extensions.one_click_reply = new Object({
 
 		var m_tags_to_return = "";
 
-		if (this.preferences.tag_people.value === true) {
+		if (this.preferences.tag_people.value) {
 			m_url = m_url + "?tags=" + username;
 			m_tags_to_return = username;
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+			if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 				m_url = m_url + "," + this.preferences.auto_tag_text.value;
 				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
 			}
 		} else {
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+			if (this.preferences.auto_tag.value && this.preferences.auto_tag_text.value !== "") {
 				m_url = m_url + "?tags=" + this.preferences.auto_tag_text.value;
 				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
 			}
@@ -1196,7 +1196,7 @@ XKit.extensions.one_click_reply = new Object({
 		} else {
 			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-			if (this.preferences.open_in_new_tab.value === true) {
+			if (this.preferences.open_in_new_tab.value) {
 				window.open(m_url,'_BLANK');
 			} else {
 				document.location.href = m_url;

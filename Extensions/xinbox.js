@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.1 **//
+//* VERSION 1.9.2 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -142,7 +142,7 @@ XKit.extensions.xinbox = new Object({
 
 	slimify_outgoing: function() {
 
-		if (XKit.extensions.xinbox.preferences.slim_outgoing_fan_mail.value === true) {
+		if (XKit.extensions.xinbox.preferences.slim_outgoing_fan_mail.value) {
 
 			XKit.tools.add_css("#fan_mail { background-image: url('http://xkit.info/seven/extension_assets/paper.png'); }#fan_mail #message{ overflow-y: scroll; font-size: 15px !important; line-height: 22px !important; }", "xinbox_slim_outgoing_fan_mail");
 
@@ -165,7 +165,7 @@ XKit.extensions.xinbox = new Object({
 
 		var m_value = parseInt($("#inbox_button").find(".tab_notice_value").html());
 
-		if (first === true) {
+		if (first) {
 			XKit.extensions.xinbox.last_check = m_value;
 			return;
 		}
@@ -190,7 +190,7 @@ XKit.extensions.xinbox = new Object({
 			XKit.extensions.xinbox.check_for_new(true);
 		}
 
-		if (XKit.interface.where().inbox !== true) {
+		if (!XKit.interface.where().inbox) {
 			return;
 		}
 
@@ -280,7 +280,7 @@ XKit.extensions.xinbox = new Object({
 
 	show_reply_button: function() {
 
-		if (XKit.installed.check("show_more") !== true || XKit.installed.enabled("show_more") !== true){ return; }
+		if (!XKit.installed.check("show_more") || !XKit.installed.enabled("show_more")){ return; }
 
 		$(".post.is_private_answer").not(".xinbox-done-reply-button-on-pas").each(function() {
 
@@ -514,7 +514,7 @@ XKit.extensions.xinbox = new Object({
 
 	init_mass_editor: function() {
 
-		if (XKit.interface.where().inbox !== true) {
+		if (!XKit.interface.where().inbox) {
 			return;
 		}
 
@@ -600,7 +600,7 @@ XKit.extensions.xinbox = new Object({
 
 		$("#xkit_delete_selected").click(function() {
 
-			if ($(this).hasClass("disabled") === true) {
+			if ($(this).hasClass("disabled")) {
 				return;
 			}
 
@@ -626,9 +626,9 @@ XKit.extensions.xinbox = new Object({
 		});
 
 		$(document).on("click", ".post", function(event) {
-			if (XKit.extensions.xinbox.mass_editor_working === true) { return; }
+			if (XKit.extensions.xinbox.mass_editor_working) { return; }
 			event.preventDefault();
-			if ($(this).hasClass("xpost-selected") === true) {
+			if ($(this).hasClass("xpost-selected")) {
 				XKit.extensions.xinbox.selected_post_count = XKit.extensions.xinbox.selected_post_count - 1;
 			} else {
 				XKit.extensions.xinbox.selected_post_count++;
@@ -734,7 +734,7 @@ XKit.extensions.xinbox = new Object({
 				var post_id = $(m_parent).attr('id').replace("post_","");
 
 				// Make it longer?
-				if(XKit.extensions.xinbox.preferences.bigger_answer_boxes.value === true) {
+				if(XKit.extensions.xinbox.preferences.bigger_answer_boxes.value) {
 					XKit.extensions.xinbox.resize_text_area(post_id);
 				}
 
@@ -852,11 +852,11 @@ XKit.extensions.xinbox = new Object({
 						m_tags = $("#" + m_box_id).val();
 					}
 
-					if (XKit.extensions.xinbox.preferences.tag_usernames_replace_hyphens.value === true) {
+					if (XKit.extensions.xinbox.preferences.tag_usernames_replace_hyphens.value) {
 						asker = asker.replace(/-/g, ' ');
 					}
 
-					if(XKit.extensions.xinbox.preferences.tag_usernames.value === true) {
+					if(XKit.extensions.xinbox.preferences.tag_usernames.value) {
 						if (m_tags === "") {
 							m_tags = asker;
 						} else {
@@ -864,7 +864,7 @@ XKit.extensions.xinbox = new Object({
 						}
 					}
 
-					if(XKit.extensions.xinbox.preferences.tag_custom.value === true) {
+					if(XKit.extensions.xinbox.preferences.tag_custom.value) {
 						if (XKit.extensions.xinbox.preferences.custom_tag.value !== "") {
 							if (m_tags === "") {
 								m_tags = XKit.extensions.xinbox.preferences.custom_tag.value;
@@ -890,7 +890,7 @@ XKit.extensions.xinbox = new Object({
 
 				// Does the user want the tag box?
 
-				if (XKit.extensions.xinbox.preferences.show_tag_box.value === true) {
+				if (XKit.extensions.xinbox.preferences.show_tag_box.value) {
 
 					// Calculate tag box width.
 					$(m_parent).find(".ask_cancel_button").parent().css("padding-top","0");
@@ -921,7 +921,7 @@ XKit.extensions.xinbox = new Object({
 
 		var answer = $('#ask_answer_field_' + post_id).val();
 
-		if (answer === "" && XKit.extensions.xinbox.preferences.check_for_blanks.value === true) {
+		if (answer === "" && XKit.extensions.xinbox.preferences.check_for_blanks.value) {
 			// Check if the user really wants to post this.
 			if (!confirm("XInbox is curious:\nYou didn't enter an answer. Send it anyway?")){
 				return;
@@ -964,7 +964,7 @@ XKit.extensions.xinbox = new Object({
 					XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 					return;
 				}
-				if (mdata.errors === false) {
+				if (!mdata.errors) {
 					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state);
 				} else {
 					XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
@@ -1011,10 +1011,10 @@ XKit.extensions.xinbox = new Object({
 
 		XKit.interface.kitty.get(function(kitty_data) {
 
-			if (kitty_data.errors === true) {
+			if (kitty_data.errors) {
 
 				// We fucked up. Let's try again.
-				if (retry_mode === false) {
+				if (!retry_mode) {
 					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state, true);
 				} else {
 					XKit.extensions.xinbox.show_error("Could not authorize post request.");
@@ -1047,7 +1047,7 @@ XKit.extensions.xinbox = new Object({
 						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 						return;
 					}
-					if (mdata.errors === false) {
+					if (!mdata.errors) {
 						$(post_div).fadeOut('slow', function() {
 							$(post_div).parent().remove();
 							XKit.tools.add_function(function() {

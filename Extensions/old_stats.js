@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION  **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -57,7 +57,7 @@ XKit.extensions.old_stats = new Object({
 		var drafts_show	= " ";
 		var queue_show = " ";
 
-		if (XKit.interface.where().inbox === true) { return; }
+		if (XKit.interface.where().inbox) { return; }
 
 		if (m_user.posts === 0) {
 			posts_show = " count_0 ";

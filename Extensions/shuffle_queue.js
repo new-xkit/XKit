@@ -111,12 +111,12 @@ XKit.extensions.shuffle_queue = new Object({
 			});
 
 			var shrink_posts = XKit.storage.get("shuffle_queue", "shrink_posts", "false");
-			if (shrink_posts === "true" || shrink_posts === true) {
+			if (shrink_posts === "true" || shrink_posts) {
 				$("#xshrinkposts_button").trigger('click');
 			}
 
 			var hide_options = XKit.storage.get("shuffle_queue", "hide_options", "");
-			if (hide_options === "true" || hide_options === true) {
+			if (hide_options === "true" || hide_options) {
 				//$("#xqueueoptions_button").addClass("xkit-queue-option-button-on");
 				$("#xqueueoptions_button").trigger('click');
 			}
@@ -275,7 +275,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 	shuffle: function() {
 
-		if ($("#xshufflequeue_button").hasClass("disabled") === true) {
+		if ($("#xshufflequeue_button").hasClass("disabled")) {
 			return;
 		}
 
@@ -321,7 +321,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 		multi_mode = false;
 
-		if (multi_mode !== true) {
+		if (!multi_mode) {
 
 			var to_send_single = encodeURIComponent(IDs.join(","));
 

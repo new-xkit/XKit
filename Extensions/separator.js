@@ -1,5 +1,5 @@
 //* TITLE Separator **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Where were we again? **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS A simple extension that puts a divider showing where you left off on your dashboard. **//
@@ -31,21 +31,21 @@ XKit.extensions.separator = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.interface.where().dashboard !== true) {return; }
+		if (!XKit.interface.where().dashboard) {return; }
 
 		XKit.tools.init_css("separator");
 
-		if (XKit.extensions.separator.preferences.bold_line.value === true) {
+		if (XKit.extensions.separator.preferences.bold_line.value) {
 
 			XKit.tools.add_css(" #xkit-post-separator { border-top: 3px solid rgba(255,255,255,0.33) !important; border-bottom: 0 !important; } ", "separator-thick");
 
 		}
 
-		if (XKit.extensions.separator.preferences.jump_to.value === true) {
+		if (XKit.extensions.separator.preferences.jump_to.value) {
 
 			do_continue = false;
 			if (typeof XKit.interface.where().endless !== "undefined") {
-				if (XKit.interface.where().endless === false) {
+				if (!XKit.interface.where().endless) {
 					do_continue = true;
 				}
 			}
@@ -93,12 +93,12 @@ XKit.extensions.separator = new Object({
 			} else {
 
 				// Is it deleted?
-				if (XKit.extensions.separator.check_if_passed() === true) {
+				if (XKit.extensions.separator.check_if_passed()) {
 
 					var find_closest = true;
 
 					if (typeof XKit.interface.where().endless !== "undefined") {
-						if (XKit.interface.where().endless === false) {
+						if (!XKit.interface.where().endless) {
 							find_closest = false;
 						}
 					}
