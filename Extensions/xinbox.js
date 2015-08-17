@@ -261,7 +261,7 @@ XKit.extensions.xinbox = new Object({
 	inbox_search_term: "",
 
 	on_click_to_pa_reply: function(e) {
-
+		/* global add_tag */
 		var m_post_id = $(e.target).attr('data-post-id');
 
 		XKit.tools.add_function(function() {
@@ -518,7 +518,7 @@ XKit.extensions.xinbox = new Object({
 			return;
 		}
 
-		xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
+		var xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
 			'<li class="" id="xinbox_mass_edit_li" style="height: 36px;">' +
 				'<a href="#" class="customize" id="xinbox_mass_edit_button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
@@ -666,7 +666,7 @@ XKit.extensions.xinbox = new Object({
 		var button_default = "No messages selected";
 
 		if (current_msg > msg_count) {
-			selected_post_count = 0;
+			XKit.extensions.xinbox.selected_post_count = 0;
 			XKit.window.show("Done!","All messages deleted successfully.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			$("#xkit_delete_selected").html(button_default);
 			$("#xkit_delete_selected").addClass("disabled");
@@ -1074,7 +1074,7 @@ XKit.extensions.xinbox = new Object({
 	},
 
 	poke_tinymce: function(post_id) {
-		source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
+		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
 						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
 						" } ";
 
@@ -1089,11 +1089,11 @@ XKit.extensions.xinbox = new Object({
 	},
 
 	do_post_colors: function(){
-		colors = XKit.extensions.xinbox.get_blog_colors();
+		var colors = XKit.extensions.xinbox.get_blog_colors();
 		$(".posts .post[data-tumblelog]").not(":has(.xinbox-color-strip)").each(function(j,i){
-			blog = i.dataset.tumblelog;
+			var blog = i.dataset.tumblelog;
 
-			n = '<div class="xinbox-color-strip" ' +
+			var n = '<div class="xinbox-color-strip" ' +
 				 'style="position: absolute; right: 0; top: 0; '+
 				 'border-top: 30px solid '+colors[blog]+'; border-left: 30px solid transparent;"'+
 				 'title="Submitted to '+blog+'"></div>';
