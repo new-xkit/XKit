@@ -1,7 +1,8 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.0.3 **//
-//* DESCRIPTION SATSUKI (This extension was merely meant to be a joke and does not serve a bigger purpose) **//
+//* VERSION 1.0.4 **//
+//* DESCRIPTION Turns anon icons into Satsuki **//
 //* DEVELOPER new-xkit **//
+//* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
 //* FRAME false **//
 //* BETA false **//
 
@@ -16,7 +17,7 @@ XKit.extensions.satsukimous = new Object({
 			value: true
 		}
 	},
-	
+
 	satsuki: function() {
 		$( "img" ).filter(function( index ) {
 			return $( this ).attr( "src" ).indexOf( "anonymous_avatar" ) !== -1;
