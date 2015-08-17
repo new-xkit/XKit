@@ -1680,8 +1680,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var has_css = m_extension.css !== "";
 			var has_icon = m_extension.icon !== "";
-			var is_beta = m_extension.beta;
-			var is_frame = m_extension.frame;
+			var is_beta = m_extension.beta === true;
+			var is_frame = m_extension.frame === true;
 			var extension_size = JSON.stringify(m_extension).length;
 			var extension_size_kb = Math.round(extension_size / 1024);
 			var storage_size = XKit.storage.size(XKit.extensions.xkit_preferences.current_open_extension_panel);

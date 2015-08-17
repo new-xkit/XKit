@@ -292,7 +292,7 @@ XKit.extensions.xkit_updates = new Object({
 				try {
 					var mdata = JSON.parse(response.responseText);
 
-					if (mdata.malicious || mdata.malicious == "true") {
+					if (mdata.malicious === true || mdata.malicious == "true") {
 
 						XKit.installed.remove(mdata.id);
 						XKit.notifications.add("<b>Removed malicious extension " + mdata.title + "</b>. Please click here for more information.","warning",true, function() {
