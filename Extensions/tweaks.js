@@ -487,7 +487,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value) {
-			XKit.extensions.tweaks.add_css("#posts .post_content blockquote { border-left: solid 3px #dcdcdc; padding-left: 8px; margin-left: 6px; }", "xkit_tweaks_fix_blockquotes");
+			XKit.extensions.tweaks.add_css("#posts .post_content blockquote { border-left: solid 2px #e7e7e7; padding-left: 8px; margin-left: 0px; }", "xkit_tweaks_fix_blockquotes");
 		}
 
 		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value) {
