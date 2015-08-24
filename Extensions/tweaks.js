@@ -428,10 +428,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
-			$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","none");
-			XKit.post_listener.add("tweaks_hide_recommended", function() {
-				$(".is_recommended, .recommended-unit-container").css("display","none");
-			});
+			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .recommended-unit-container { display: !important none; } ", "xkit_tweaks_hide_recommended");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share.value) {
@@ -742,7 +739,6 @@ XKit.extensions.tweaks = new Object({
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
-		XKit.post_listener.remove("tweaks_hide_recommended");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		XKit.post_listener.remove("tweaks_split_gear");
