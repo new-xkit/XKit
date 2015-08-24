@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.4.3 **//
+//* VERSION 3.4.5 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -428,7 +428,10 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
-			$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended").css("display","none");
+			$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","none");
+			XKit.post_listener.add("tweaks_hide_recommended", function() {
+				$(".is_recommended, .recommended-unit-container").css("display","none");
+			});
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share.value) {
@@ -739,6 +742,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
+		XKit.post_listener.remove("tweaks_hide_recommended");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		XKit.post_listener.remove("tweaks_split_gear");
