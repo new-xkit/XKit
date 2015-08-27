@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 4.0.2 **//
+//* VERSION 4.0.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -459,7 +459,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
-			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .recommended-unit-container { display: !important none; }", "xkit_tweaks_hide_recommended");
+			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .is_recommended, .recommended-unit-container { display: !important none; }", "xkit_tweaks_hide_recommended");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share.value) {
@@ -789,6 +789,7 @@ XKit.extensions.tweaks = new Object({
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
+		$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended").css("display", "block");
 		$("a.activity").parent().css("display","block");
 		$(".radar_header").parent().css("display","block");
 		$(".customize").parent().css("display","block");
