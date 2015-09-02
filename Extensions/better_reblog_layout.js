@@ -10,10 +10,10 @@ XKit.extensions.better_reblog_layout = new Object({
 	running: false,
 	
 	preferences: {
-	    'sep0': {
-	      text: 'Options',
-	      type: 'separator'
-	    },
+    	'sep0': {
+          text: 'Options',
+          type: 'separator'
+        },
 	    "normal": {
 			text: "Move reblog content to the right (under the username, not avatar)",
 			default: true,
@@ -34,7 +34,7 @@ XKit.extensions.better_reblog_layout = new Object({
 		this.running = true;
 		
 		if (XKit.extensions.better_reblog_layout.preferences.normal.value === true) {
-	       XKit.tools.add_css(" .reblog-content {margin-left:35px;border-left: 1px solid #E7E7E7;padding-left: 10px;", "better_reblog_layout_normal");
+	       XKit.tools.add_css(" .reblog-content {margin-left:35px;", "better_reblog_layout_normal");
 	    }
 	    
 	    if (XKit.extensions.better_reblog_layout.preferences.add_border.value === true) {
