@@ -1,5 +1,5 @@
-//* TITLE Better New Reblog layout **//
-//* VERSION 1.0 REV A **//
+//* TITLE Better Reblog Layout **//
+//* VERSION 1.1 **//
 //* DESCRIPTION	Adds much needed spacing to reblogs on your dashboard. **//
 //* DEVELOPER macleodsawyer **//
 //* FRAME false **//
