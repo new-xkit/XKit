@@ -10,23 +10,20 @@ XKit.extensions.better_reblog_layout = new Object({
 	running: false,
 	
 	preferences: {
-    	'sep0': {
-          text: 'Options',
-          type: 'separator'
-        },
-        
+	    'sep0': {
+	      text: 'Options',
+	      type: 'separator'
+	    },
 	    "normal": {
 			text: "Move reblog content to the right (under the username, not avatar)",
 			default: true,
 			value: true
 		}, 
-		
 		"add_border": {
 			text: "Add border to the left",
 			default: false,
 			value: false
 		},
-		
 		"made_by": {
 			text: "Created by Macleod Sawyer (mxcleod on tumblr)",
 			type: "separator"
