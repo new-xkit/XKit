@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 4.0.3 **//
+//* VERSION 4.0.4 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -37,6 +37,16 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false,
 			desktop_only: true
+		},
+		"slim_new_reblog": {
+			text: "Slim the new reblog spacing",
+			default: false,
+			value: false
+		},
+		"new_reblog_margin": {
+			text: "Add a left margin to reblogged posts",
+			default: false,
+			value: false
 		},
 		"fix_blockquotes": {
 			text: "Slim block quotes for easier reading",
@@ -521,6 +531,17 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css("#posts .post_content blockquote { border-left: solid 2px #e7e7e7; padding-left: 8px; margin-left: 0px; }", "xkit_tweaks_fix_blockquotes");
 		}
 
+		if (XKit.extensions.tweaks.preferences.slim_new_reblog.value) {
+			XKit.extensions.tweaks.add_css(".reblog-list-item {padding: 10px 20px 5px !important;}", "xkit_tweaks_slim_new_reblog");
+		}
+		if (XKit.extensions.tweaks.preferences.new_reblog_margin.value) {
+			XKit.extensions.tweaks.add_css(".reblog-list-item .reblog-header .reblog-avatar.sub-icon-reblog:after {bottom: 2px; right: -6px;}"+
+										   ".reblog-list-item .reblog-header .reblog-avatar { padding-top: 7px; height: 37px;}"+
+										   ".reblog-list-item .reblog-header .reblog-avatar.sub-icon-reblog:before { bottom: 1px; right: -7px; }"+
+										   ".reblog-list-item .reblog-content { margin-left: 35px !important; }",
+										   "xkit_tweaks_new_reblog_margin");
+		}
+
 		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value) {
 			XKit.extensions.tweaks.add_css("#posts .post.is_liked { display: none !important; }", "xkit_tweaks_dont_show_liked");
 			XKit.post_listener.add("tweaks_dont_show_liked", XKit.extensions.tweaks.check_for_liked_posts);
@@ -528,7 +549,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.old_chat_posts.value) {
-			XKit.extensions.tweaks.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_fix_blockquotes");
+			XKit.extensions.tweaks.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_old_chat_posts");
 		}
 
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
