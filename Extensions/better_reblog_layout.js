@@ -11,10 +11,9 @@ XKit.extensions.better_reblog_layout = new Object({
 	
 	preferences: {
     	'sep0': {
-          text: 'Options',
-          type: 'separator'
+            text: 'Options',
+            type: 'separator'
         },
-        
 	    "normal": {
 			text: "Move reblog content to the right (under the username, not avatar)",
 			default: true,
@@ -30,9 +29,10 @@ XKit.extensions.better_reblog_layout = new Object({
 			default: false,
 			value: false
 		},
-		"made_by": {
-			text: "Created by Macleod Sawyer (mxcleod on tumblr)",
-			type: "separator"
+		"remove_avatars": {
+			text: "Remove avatars",
+			default: false,
+			value: false
 		},
 	},
 
@@ -51,6 +51,9 @@ XKit.extensions.better_reblog_layout = new Object({
 	       XKit.tools.add_css(" .reblog-tumblelog-name {display:none;} .reblog-list-item .reblog-header {margin-bottom: 0;} .reblog-content {margin-left:35px;}", "better_reblog_layout_remove_user_names");
 	    }
 	    
+	    if (XKit.extensions.better_reblog_layout.preferences.remove_avatars.value === true) {
+	       XKit.tools.add_css(" .reblog-avatar {display:none !important;} .reblog-header {padding-left: 0px !important;}", "better_reblog_layout_remove_avatars");
+	    }
 		
 	},
 	
@@ -61,6 +64,7 @@ XKit.extensions.better_reblog_layout = new Object({
 		XKit.tools.remove_css("better_reblog_layout_normal");
 		XKit.tools.remove_css("better_reblog_layout_add_border");
 		XKit.tools.remove_css("better_reblog_layout_remove_user_names");
+		XKit.tools.remove_css("better_reblog_layout_remove_avatars");
 	}
 
 });
