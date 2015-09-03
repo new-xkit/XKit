@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION  **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -9,55 +9,20 @@ XKit.extensions.old_stats = new Object({
 
 	running: false,
 
-	/*
-	old_stats_draw: function() {
-        var canvas = document.getElementById('xkit-activity-canvas');
-        if (canvas.getContext){
-            var ctx = canvas.getContext('2d');
-
-
-            var activity_sparkline = XKit.interface.user().activity.slice(1,-1).split(",");
-            // Convert each string to int in array
-            for (var i=0; i<activity_sparkline.length; i++) {
-                activity_sparkline[i] = parseInt(activity_sparkline[i], 10);
-            }
-
-            var activity_max = getMaxOfArray(activity_sparkline);
-            var activity_min = getMinOfArray(activity_sparkline);
-
-            var path=new Path2D();
-
-            path.moveTo(0, Math.round(15 - (activity_sparkline[0]-activity_min)/(activity_max-activity_min)*15));
-
-            for (var n=1; n<activity_sparkline.length; n++) {
-                activity_sparkline[n] = Math.round(15 - (activity_sparkline[n]-activity_min)/(activity_max-activity_min)*15);
-                path.lineTo(n*3, activity_sparkline[n]);
-                path.moveTo(n*3, activity_sparkline[n]);
-            }
-
-            var path=new Path2D();
-            path.moveTo(0,7);
-            path.lineTo(36,15);
-            path.lineTo(3,0);
-            //ctx.fill(path);
-
-            ctx.stroke(path);
-        }
-	}, */
-
 	run: function() {
 		this.running = true;
-
-		//XKit.tools.init_css("old_stats");
-
 		var m_user = XKit.interface.user();
-
 		var posts_show = " ";
 		var followers_show = " ";
 		var drafts_show	= " ";
 		var queue_show = " ";
 
-		if (XKit.interface.where().inbox === true) { return; }
+		if (XKit.interface.where().inbox) { 
+			return;
+		}
+		if (XKit.interface.where().likes) { 
+			return; 
+		}
 
 		if (m_user.posts === 0) {
 			posts_show = " count_0 ";
@@ -74,14 +39,6 @@ XKit.extensions.old_stats = new Object({
 		if (m_user.queue === 0) {
 			queue_show = " count_0 ";
 		}
-
-		/*var m_account = $("#account_button");
-		m_account.click();
-		var activity_graph = document.getElementsByClassName("popover--account-popover")[0];
-		window.setTimeout(function() {
-			m_account.click();
-		}, 1000); */
-
 
 		var xf_html = '<ul data-blog-name="' + m_user.name + '" id="dashboard_controls_open_blog" class="controls_section">' +
 					'<li class="no_push selected_blog">' +
@@ -144,47 +101,8 @@ XKit.extensions.old_stats = new Object({
 
 		$(".recommended_tumblelogs").before(xf_html);
 
-	//	$("#old_stats_activity").after(activity_graph.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[1]);
-
-		/*
-		var canvas = $('#xkit-activity-canvas');
-        if (canvas.getContext){
-            var ctx = canvas.getContext('2d');
-
-
-            var activity_sparkline = XKit.interface.user().activity.slice(1,-1).split(",");
-            // Convert each string to int in array
-            for (var i=0; i<activity_sparkline.length; i++) {
-                activity_sparkline[i] = parseInt(activity_sparkline[i], 10);
-            }
-
-            var activity_max = getMaxOfArray(activity_sparkline);
-            var activity_min = getMinOfArray(activity_sparkline);
-
-            var path=new Path2D();
-
-            path.moveTo(0, Math.round(15 - (activity_sparkline[0]-activity_min)/(activity_max-activity_min)*15));
-
-            for (var n=1; n<activity_sparkline.length; n++) {
-                activity_sparkline[n] = Math.round(15 - (activity_sparkline[n]-activity_min)/(activity_max-activity_min)*15);
-                path.lineTo(n*3, activity_sparkline[n]);
-                path.moveTo(n*3, activity_sparkline[n]);
-            }
-
-            var path=new Path2D();
-            path.moveTo(0,7);
-            path.lineTo(36,15);
-            path.lineTo(3,0);
-            ctx.fill(path);
-
-            //ctx.stroke(path);
-        }*/
-
 	},
-
-
 	destroy: function() {
 		this.running = false;
 	}
-
 });

@@ -1,0 +1,58 @@
+/* NAME XBlack **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION A minimalistic black theme **/
+/* DEVELOPER STUDIOENIX **/
+
+body {
+	background: black;
+}
+
+#content {
+	background: black !important;
+}
+
+#right_column {
+	background: none !important;
+	color: black;
+}
+
+.notification,
+.controls_section,
+.controls_section li {
+	background-color: black;
+	box-shadow: none;
+	border: 0;
+}
+
+.controls_section * {
+	box-shadow: none !important;
+}
+
+.controls_section li:hover {
+	background-color: rgb(40, 40, 40);
+}
+
+.controls_section li {
+	border: 0;
+}
+
+.selection_nipple {
+	display: none !important;
+}
+
+#right_column:after {
+	display: none !important;
+}
+
+.notification .notification_right .preview_frame {
+	border: 1px solid rgb(50, 50, 50);
+}
+
+#header *,
+#content * {
+	border-radius: 0px;
+}
+
+.xoldeheader-item {
+	border-radius: 7px !important;
+}

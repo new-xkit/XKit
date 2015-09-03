@@ -1,0 +1,50 @@
+/* NAME Purple **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION Takeover-inspired theme **/
+/* DEVELOPER STUDIOXENIX **/
+
+body, #content {
+	background: rgb(245, 245, 245);
+}
+
+#content {
+	margin-top: 85px;
+}
+
+#posts .post_avatar,
+#posts .post {
+	border-radius: 0 !important;
+	box-shadow: 0 0 1px 1px rgb(190, 190, 190);
+	box-sizing: border-box;
+}
+
+#right_column:after,
+.right_column {
+	background: transparent !important;
+}
+
+#header {
+	background: #3f1c59;
+	border-radius: 0 0 12px 12px;
+}
+
+.small_links a {
+	color: #3f1c59 !important;
+}
+
+.notification,
+.controls_section {
+	background: #3f1c59
+}
+
+#header_container {
+	background: #3f1c59;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.selection_nipple {
+	display: none !important;
+}

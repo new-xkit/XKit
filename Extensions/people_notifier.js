@@ -1,8 +1,8 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
-//* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
+//* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -25,7 +25,7 @@ XKit.extensions.people_notifier = new Object({
 
 	},
 
-	max_tracks: 10,
+	max_tracks: 30,
 	check_interval: 600000,
 
 	frame_run: function() {
@@ -79,7 +79,22 @@ XKit.extensions.people_notifier = new Object({
 
 	},
 
+	should_render: function() {
+		var pages_where_we_shouldnt_render = [
+			"www.tumblr.com/docs/",
+			"www.tumblr.com/policy/",
+			"api.tumblr.com/console/"
+		];
+		return pages_where_we_shouldnt_render.every(function(page){
+			return document.location.href.indexOf(page) === -1;
+		});
+	},
+
 	run: function() {
+		if (!this.should_render()) {
+			return;
+		}
+
 		this.running = true;
 
 		XKit.tools.init_css("people_notifier");
@@ -218,8 +233,6 @@ XKit.extensions.people_notifier = new Object({
 							obj.last_20_posts = [];
 						}
 
-						var add_this = true;
-
 						if (typeof obj.last_post_id != "undefined" && typeof data.posts[lad_count].id != "undefined") {
 							if (obj.last_post_id == data.posts[lad_count].id && obj.last_post_id !== 0) {
 								console.log("people-notifier ----> Skipping, the last post seen. [" + obj.last_post_id + "]");
@@ -227,7 +240,7 @@ XKit.extensions.people_notifier = new Object({
 							}
 						}
 
-						if (data.posts[lad_count] && add_this) {
+						if (data.posts[lad_count]) {
 							if ((data.posts[lad_count].timestamp * 1000) >= obj.last_check) {
 								console.log("\-- Found post = " + data.posts[lad_count].id);
 								found_count++;
@@ -309,7 +322,7 @@ XKit.extensions.people_notifier = new Object({
 
 				if (difference <= -1 ||difference >= XKit.extensions.people_notifier.check_interval) {
 					m_html = m_html + "<div class=\"count\">loading</div>";
-					this.check_blog(this.blogs[i].url, this.blogs[i]);
+					setTimeout(this.check_blog, 250 * (i + 1), this.blogs[i].url, this.blogs[i]);
 				} else {
 					if (this.blogs[i].count === 0) {
 						m_html = m_html + "<div class=\"count\"></div>";
@@ -412,7 +425,8 @@ XKit.extensions.people_notifier = new Object({
 
 			var remaining = XKit.extensions.people_notifier.max_tracks - XKit.extensions.people_notifier.blogs.length;
 
-			XKit.window.show("Add a person to track list", "<b>Please enter the URL of the person to track:</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: xkit-extension\" class=\"xkit-textbox\" id=\"xkit-people-notifier-add-url\">You have <b>" + remaining + "</b> track slots left.<div style=\"margin-top: 10px; font-size: 12px; color: rgb(120,120,120);\">To remove a person from list afterwards, hold the ALT key while clicking their username or click on the ✖ when hovering the mouse over their name on the sidebar.</div>", "question", "<div class=\"xkit-button default\" id=\"xkit-people-notifier-create\">Track URL</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			var div_info_style = "margin-top: 10px; font-size: 12px; color: rgb(120,120,120);";
+			XKit.window.show("Add a person to track list", "<b>Please enter the URL of the person to track:</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: xkit-extension\" class=\"xkit-textbox\" id=\"xkit-people-notifier-add-url\">You have <b>" + remaining + "</b> track slots left.<div style=\"" + div_info_style + "\">To remove a person from list afterwards, hold the ALT key while clicking their username or click on the ✖ when hovering the mouse over their name on the sidebar.</div><div style=\"" + div_info_style + "\">Please be aware that the more blogs you add, the longer it will take to track them all.</div>", "question", "<div class=\"xkit-button default\" id=\"xkit-people-notifier-create\">Track URL</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-people-notifier-create").click(function() {
 

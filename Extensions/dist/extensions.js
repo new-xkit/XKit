@@ -1,52 +1,52 @@
-/* jshint esnext: true */
+/* jshint node:true */
+'use strict';
 
-var fs = require('fs');
-var path = require('path');
+var fs = require('fs'),
+	glob = require('glob'),
+	path = require('path');
+
+var resourceBuilder = require('./resources');
 
 /**
- * Build the extensions in `extensionPath`, writing the distribution json files
- * into `distributionPath`.
+ * Build the extensions in `extensionPath`, writing the distribution
+ * json files into `distributionPath`.
  * @param {String} extensionPath
  * @param {String} distributionPath
  * @exported
  */
 function build(extensionPath, distributionPath) {
-	var builder = new ExtensionBuilder(extensionPath, distributionPath);
-	builder.processExtensions();
+	extensionBuilder
+		.create(extensionPath, distributionPath)
+		.processExtensions();
 }
 exports.build = build;
 
 /**
  * @constructor
- * @param {String} extensionPath - Path from which to read extension files
- * @param {String} distributionPath - Path in whichw to write extension distribution files
+ * @param {String} resourcePath Path from which to read extension files
+ * @param {String} distributionPath Path in which to write extension file
  */
-function ExtensionBuilder(extensionPath, distributionPath) {
-	this.extensionPath = extensionPath;
-	this.distributionPath = distributionPath;
-}
+var extensionBuilder = Object.create(resourceBuilder);
+extensionBuilder.create = function(resourcePath, distributionPath) {
+	return resourceBuilder.create.call(this, resourcePath, distributionPath);
+};
 
 /**
- * Process all extensions found in `extensionPath`
+ * Process all extensions found in `resourcePath`
  */
-ExtensionBuilder.prototype.processExtensions = function() {
-	var extensionFiles = fs.readdirSync(this.extensionPath);
+extensionBuilder.processExtensions = function() {
+	var extensionFiles = glob.sync(
+		'*.js',
+		{
+			cwd: this.resourcePath,
+			nodir: true,
+			ignore: '*.icon.js'
+		}
+	);
 	var extensions = [];
 
-	extensionFiles.forEach(function(fileName) {
-		// Look only for files for the form [a-z_]+.js, which exclues icon and css
-		// files
-		var fileNameParts = fileName.split('.');
-		if (fileNameParts.length !== 2) {
-			return;
-		}
-		var fileType = fileNameParts[1];
-		if (fileType !== 'js') {
-			return;
-		}
-		var extensionId = fileNameParts[0];
-
-		extensions.push(this.processExtension(extensionId));
+	extensionFiles.forEach(function(extensionPath) {
+		extensions.push(this.processExtension(extensionPath));
 	}.bind(this));
 
 	this.writeGalleryFile(extensions);
@@ -54,116 +54,63 @@ ExtensionBuilder.prototype.processExtensions = function() {
 };
 
 /**
- * Read a file in the extensions directory
- * @param {String} path - Relative path of file in directory
- * @return {String} content in file
- */
-ExtensionBuilder.prototype.readExtensionFile = function(relPath) {
-	return fs.readFileSync(path.join(this.extensionPath, relPath), {
-		encoding: 'utf8'
-	});
-};
-
-/**
- * Write a file in the distribution directory
- * @param {String} relPath - Relative path of file in directory
- * @param {String} content - content in file
- */
-ExtensionBuilder.prototype.writeDistributionFile = function(relPath, content) {
-	fs.writeFileSync(path.join(this.distributionPath, relPath), content);
-};
-
-/**
- * Write a file in the page directory, a child of the distribution directory
- * @param {String} relPath - Relative path of file in directory
- * @param {String} content - content in file
- */
-ExtensionBuilder.prototype.writePageFile = function(relPath, content) {
-	this.writeDistributionFile(path.join('page', relPath), content);
-};
-
-/**
- * @param {String} relPath - Relative path of extension file in directory
- * @return {Boolean} Whether the extension file exists
- */
-ExtensionBuilder.prototype.existsExtensionFile = function(relPath) {
-	return fs.existsSync(path.join(this.extensionPath,  relPath));
-};
-
-/**
- * @param {String} script - contents of extension main script file (extension_id.js)
- * @param {String} attribute - attribute to attempt to read from the script
- * @return {String?} value of attribute
- */
-function getScriptAttribute(script, attribute) {
-	attribute = attribute.toUpperCase();
-	// Match the attribute followed by its value wrapped in /*	**/
-	var regex = new RegExp('/\\*\\s*' + attribute + '\\s*(.+?)\\s*\\*\\*?/');
-	var match = script.match(regex);
-	if (!match) {
-		return null;
-	}
-	return match[1];
-}
-
-/**
  * Process a single extension
- * @param {String} extensionId - ID of the extension (`extension_id.js`)
+ * @param {String} extensionPath Path to the extension relative to resourcePath
  */
-ExtensionBuilder.prototype.processExtension = function(extensionId) {
-	// Each extension has the following fields
-	// {string} script - source of the js file
-	// {string} id - file name sans .js
-	// {string} icon - source of the `id`.icon.js file
-	// {string} css - source of the `id`.css file
-	// {string} title - value of the TITLE field in `script`
-	// {string} version - value of the VERSION field in `script`
-	// {string} description - value of the DESCRIPTION field in `script`
-	// {string} details - value of the DETAILS field in `script`
-	// {string} developer - value of the DEVELOPER field in `script`
-	// {boolean} frame - value of the FRAME field in `script`
-	// {boolean} beta - value of the optional BETA field in `script`
-	// {boolean} slow - value of the optional SLOW field in `script`
-	var extension = {
-		id: extensionId
-	};
-	extension.script = this.readExtensionFile(extensionId + '.js');
-	if (this.existsExtensionFile(extensionId + '.icon.js')) {
-		extension.icon = this.readExtensionFile(extensionId + '.icon.js');
+extensionBuilder.processExtension = function(extensionPath) {
+	// Each extension has the following fields:
+	// {String} script Contents of the js file
+	// {String} id File name without .js
+	// {String} icon Contents of the `id`.icon.js file
+	// {String} css Contents of the `id`.css file
+	// {String} title Value of the TITLE field in `script`
+	// {String} version Value of the VERSION field in `script`
+	// {String} description Value of the DESCRIPTION field in `script`
+	// {String} details Value of the DETAILS field in `script`
+	// {String} developer Value of the DEVELOPER field in `script`
+	// {Boolean} frame Value of the FRAME field in `script`
+	// {Boolean} beta Value of the optional BETA field in `script`
+	// {Boolean} slow Value of the optional SLOW field in `script`
+	var extension = {};
+	extension.id = path.basename(extensionPath, '.js');
+	extension.script = this.readResourceFile(extensionPath);
+
+	if(this.existsResourceFile(extension.id + '.icon.js')) {
+		extension.icon = this.readResourceFile(extension.id + '.icon.js');
 	}
-	if (this.existsExtensionFile(extensionId + '.css')) {
-		extension.css = this.readExtensionFile(extensionId + '.css');
+	if(this.existsResourceFile(extension.id + '.css')) {
+		extension.css = this.readResourceFile(extension.id + '.css');
 	}
 
-	var attributes = ['title', 'description', 'developer', 'version', 'frame',
-	                  'beta', 'slow', 'details'];
+	var attributes = ['title', 'description', 'developer', 'version',
+					  'frame', 'beta', 'slow', 'details'];
 	attributes.forEach(function(attribute) {
-		var value = getScriptAttribute(extension.script, attribute);
-		if (value !== null) {
+		var value = this.getAttribute(extension.script, attribute);
+		if(value !== null) {
 			extension[attribute] = value;
 		}
-	});
+	}.bind(this));
 
 	extension.file = 'found';
 	extension.server = 'up';
 	extension.errors = false;
 
 	['frame', 'beta', 'slow'].forEach(function(falseDefault) {
-		if (!extension.hasOwnProperty(falseDefault)) {
+		if(!extension.hasOwnProperty(falseDefault)) {
 			extension[falseDefault] = 'false';
 		}
 	});
 
-	this.writeDistributionFile(extensionId + '.json', JSON.stringify(extension));
+	this.writeDistributionFile(extension.id + '.json', JSON.stringify(extension));
 
 	return extension;
 };
 
 /**
  * Generate and write the gallery.json file
- * @param {Array<Object>} extensions - Extensions to include in the gallery
+ * @param {Array<Object>} extensions Extensions to include in the gallery
  */
-ExtensionBuilder.prototype.writeGalleryFile = function(extensions) {
+extensionBuilder.writeGalleryFile = function(extensions) {
 	var gallery = {server: 'up', extensions: []};
 	extensions.forEach(function(extension) {
 		var galleryExtension = {
@@ -172,38 +119,24 @@ ExtensionBuilder.prototype.writeGalleryFile = function(extensions) {
 			version: extension.version,
 			description: extension.description
 		};
-		if (extension.icon) {
+		if(extension.icon) {
 			galleryExtension.icon = extension.icon;
 		}
 		gallery.extensions.push(galleryExtension);
 	});
 
-	// The gallery should display in sorted order because otherwise it is
-	// bothersome
-	gallery.extensions.sort(function(exA, exB) {
-		if (exA.title > exB.title) {
-			return 1;
-		}
-		if (exA.title < exB.title) {
-			return -1;
-		}
-		return 0;
-	});
+	// The gallery should display in sorted order because otherwise it
+	// is difficult to find extensions.
+	gallery.extensions = this.alphaSort(gallery.extensions, 'title');
 
-	// WIP: Print out a gallery for embedding purposes
-	// gallery.extensions.forEach(function(item) {
-	//   console.log('<h2>' + item.title + ' v' + item.version + '</h2>');
-	//   console.log('<small>' + item.description + '</small>');
-	//   console.log('<h3>Known Issues</h3>');
-	// });
 	this.writePageFile('gallery.json', JSON.stringify(gallery));
 };
 
 /**
  * Generate and write the list.json file
- * @param {Array<Object>} extensions - Extensions to include in the list
+ * @param {Array<Object>} extensions Extensions to include in the list
  */
-ExtensionBuilder.prototype.writeListFile = function(extensions) {
+extensionBuilder.writeListFile = function(extensions) {
 	var list = {server: 'up', extensions: []};
 	extensions.forEach(function(extension) {
 		list.extensions.push({

@@ -1,0 +1,199 @@
+/* NAME Mega Rainbows **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION Extremely colorful sidebars **/
+/* DEVELOPER dahlkzer **/
+
+body {
+	background: repeating-linear-gradient(tobottom, red, orange, yellow, green, blue, purple, red);
+}
+
+.search_results_container {
+	border-radius: 6px;
+	background: linear-gradient(tobottomright, red, orange, yellow, green, blue, purple);
+}
+
+#search_query {
+	color: #000;
+}
+
+#logo a {
+	background: url('https://new-xkit.github.io/XKit/Themes/mega_rainbows/logo-alt.png');
+}
+
+#content {
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.blog_menu .selected_blog #open_blog_link {
+	color: rgba(255, 255, 255, .69)!important;
+}
+
+ul.controls_section li:nth-child(2),
+ul.controls_section li:nth-child(14),
+ul.controls_section li:nth-child(27) {
+	background: #f80!important;
+}
+
+ul.controls_section li:nth-child(3),
+ul.controls_section li:nth-child(15),
+ul.controls_section li:nth-child(28) {
+	background: #ff0!important;
+}
+
+ul.controls_section li:nth-child(4),
+ul.controls_section li:nth-child(16),
+ul.controls_section li:nth-child(29) {
+	background: #8f0!important;
+}
+
+ul.controls_section li:nth-child(5),
+ul.controls_section li:nth-child(17),
+ul.controls_section li:nth-child(30) {
+	background: #0f0!important;
+}
+
+ul.controls_section li:nth-child(6),
+ul.controls_section li:nth-child(18),
+ul.controls_section li:nth-child(31) {
+	background: #0f8!important;
+}
+
+ul.controls_section li:nth-child(7),
+ul.controls_section li:nth-child(19),
+ul.controls_section li:nth-child(32) {
+	background: #0ff!important;
+}
+
+ul.controls_section li:nth-child(9),
+ul.controls_section li:nth-child(22),
+ul.controls_section li:nth-child(35) {
+	background: #00f!important;
+}
+
+ul.controls_section li:nth-child(10),
+ul.controls_section li:nth-child(23),
+ul.controls_section li:nth-child(36) {
+	background: #80f!important;
+}
+
+ul.controls_section li:nth-child(11),
+ul.controls_section li:nth-child(24),
+ul.controls_section li:nth-child(37) {
+	background: #f0f!important;
+}
+
+ul.controls_section li:nth-child(12),
+ul.controls_section li:nth-child(25),
+ul.controls_section li:nth-child(38) {
+	background: #f08!important;
+}
+
+ul.controls_section {
+	border: none!important;
+}
+
+.controls_section li a {
+	color: rgba(0, 0, 0, 0.6667);
+}
+
+.selection_nipple {
+	border-bottom: 12px solid rgba(0, 0, 0, 0.5)!important;
+}
+
+.post_permalink {
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GGA4RI4O5UOkAAAAdaVRYdENvbW1lbnQAAAAAAENyZWF0ZWQgd2l0aCBHSU1QZC5lBwAAALtJREFUSMftlTtSxDAQRF97BUR7AMxl4OS+ANewtDnRflCTUi6wZm0XJO5MyXulnikJ9vx19P3g6hG5gAomG7KoBTTy6dMl1fykhxKFp4mqxwIZJGQwHaLCQTzeOs6+EhWkH+6ymSD9UtYmgjQzjdWC1Bj3KkEK7NNiQQoubFMALIQHBJFaCvC8SBCA51n4jCAC/1haURMu6c32ALzeKwjH9uBoqke7vjdfxakAOAJ9cw4mq9PL/sn8f74AOSOrjN8ufMgAAAAASUVORK5CYII=)!important;
+}
+
+.post .post_content blockquote {
+	border-left: 3px solid red;
+}
+
+.post .post_content blockquote blockquote {
+	border-left: 3px solid #f80;
+}
+
+.post .post_content blockquote blockquote blockquote {
+	border-left: 3px solid #ff0;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #8f0;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #0f8;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #0ff;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #08f;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #00f;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #80f;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #f0f;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid rgba(0, 0, 0, 0.75);
+}
+
+.tab_notice,
+.xim_message_title,
+.search_form_row {
+	background: repeating-linear-gradient(toright, red, orange, yellow, green, blue, purple)!important;
+}
+
+.pill.notice {
+	background: repeating-linear-gradient(tobottomright, red, orange, yellow, green, blue, purple)!important;
+}
+
+.search_form_row {
+	box-shadow: 0 0 8px #000;
+}
+
+.tab_notice_nipple {
+	background: rgba(255, 255, 255, 0)!important;
+}
+
+.tab_notice_value,
+.pill.notice {
+	color: #fff;
+	text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+#right_column,
+#right_column:after {
+	background: rgba(0, 0, 0, 0);
+}
+
+li#popover_button_blogs,
+ul.controls_section li:first-child,
+ul.controls_section li:nth-child(13),
+ul.controls_section li:nth-child(26) {
+	background: red!important;
+}
+
+ul.controls_section li:nth-child(8),
+ul.controls_section li:nth-child(20),
+ul.controls_section li:nth-child(33),
+ul.controls_section li:nth-child(8),
+ul.controls_section li:nth-child(21),
+ul.controls_section li:nth-child(34) {
+	background: #08f!important;
+}
+
+.post .post_content blockquote blockquote blockquote blockquote blockquote,
+.post .post_content blockquote blockquote blockquote blockquote blockquote blockquote {
+	border-left: 3px solid #0f0;
+}
