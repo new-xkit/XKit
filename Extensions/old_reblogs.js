@@ -1,9 +1,9 @@
 //* TITLE Restore Old Reblogs **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION	Restores the old reblogging style on the Dashboard **//
 //* DEVELOPER eli <eli@csh.rit.edu> (forked from Editable Reblogs by dlmarquis) **//
 //* FRAME false **//
-//* BETA true **//
+//* BETA false **//
 
 XKit.extensions.old_reblogs = new Object({
 
