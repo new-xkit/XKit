@@ -1,5 +1,5 @@
 //* TITLE Restore Old Reblogs **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION	Restores the old reblogging style on the Dashboard **//
 //* DEVELOPER eli <eli@csh.rit.edu> (forked from Editable Reblogs by dlmarquis) **//
 //* FRAME false **//
