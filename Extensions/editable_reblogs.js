@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -13,7 +13,7 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = true;
 
 		XKit.interface.post_window_listener.add("editable_reblogs", XKit.extensions.editable_reblogs.post_window);
-		XKit.tools.add_css(".control-reblog-tree {display: none; }", "editable_reblogs_remove_content_tree");
+		XKit.tools.add_css(".post-form--header .reblog-title {margin: 10px;} .", "editable_reblogs_remove_content_tree");
 	},
 
 	post_window: function() {
@@ -35,6 +35,8 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 		reblog_tree.addClass(processed_class);
 
+		var title = reblog_tree.find('.reblog-title');
+		$('.post-form--header').append(title);
 		reblog_tree.find( ".reblog-list-item" ).each(function( index ) {
 			var reblog_data = {
 				reblog_content: $(this).find('.reblog-content').html(),
