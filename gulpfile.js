@@ -29,7 +29,8 @@ var paths = {
 	},
 	css: {
 		core: ['xkit.css'],
-		extensions: ['Extensions/**/*.css']
+		extensions: ['Extensions/**/*.css'],
+		themes: ['Themes/**/*.css']
 	},
 	vendor: [
 		'jquery.js',
@@ -63,6 +64,10 @@ gulp.task('clean:extensions', function(cb) {
 	     'Extensions/dist/page/list.json'], cb);
 });
 
+gulp.task('clean:themes', function(cb) {
+	del(['Extenstions/dist/page/themes.json'], cb);
+});
+
 gulp.task('lint:scripts', function() {
 	var src = [].concat(
 		paths.scripts.dev,
@@ -83,7 +88,8 @@ gulp.task('lint:scripts', function() {
 gulp.task('lint:css', function() {
 	var src = [].concat(
 		paths.css.core,
-		paths.css.extensions
+		paths.css.extensions,
+		paths.css.themes
 	);
 
 	return gulp.src(src)
@@ -154,6 +160,12 @@ gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function(cal
 	callback();
 });
 
+gulp.task('build:themes', ['clean:themes'], function(cb) {
+	var themeBuilder = require('./Extensions/dist/themes.js');
+	themeBuilder.build('./Themes', './Extensions/dist');
+	cb();
+});
+
 gulp.task('build', ['build:chrome', 'build:firefox']);
 
 gulp.task('watch', function() {
@@ -162,7 +174,7 @@ gulp.task('watch', function() {
 });
 
 // Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
-gulp.task('server', ['build:extensions'], function(callback) {
+gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 	var log = gutil.log;
 	var colors = gutil.colors;
 
@@ -173,6 +185,9 @@ gulp.task('server', ['build:extensions'], function(callback) {
 	// Automatically rebuild Extensions on script changes
 	gulp.watch('Extensions/**/*.js', ['build:extensions']);
 	gulp.watch('Extensions/**/*.css', ['build:extensions']);
+
+	//Automatically rebuild Themes on change
+	gulp.watch('Themes/**/*.css', ['build:themes']);
 
 	var devServer = https.createServer({
 				key: fs.readFileSync('./dev/certs/key.pem'),

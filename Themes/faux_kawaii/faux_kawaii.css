@@ -1,0 +1,30 @@
+/* NAME Faux Kawaii **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION For your cuteness needs **/
+/* DEVELOPER STUDIOXENIX **/
+
+body {
+	background: #ff96c0 url('https://new-xkit.github.io/XKit/Themes/faux_kawaii/body-background.jpg');
+}
+
+#content {
+	background: rgba(255, 255, 255, 0.32) !important;
+}
+
+#right_column {
+	background: none !important;
+	color: black;
+}
+
+.notification,
+.controls_section {
+	background: #c8477a !important;
+}
+
+.selection_nipple {
+	display: none !important;
+}
+
+#right_column:after {
+	display: none !important;
+}

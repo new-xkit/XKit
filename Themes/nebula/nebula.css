@@ -1,0 +1,161 @@
+/* NAME Nebula **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION A modern, translucent dashboard theme with nebula background **/
+/* DEVELOPER internet-tears **/
+
+body,
+.send_fan_mail,
+.chrome.blue,
+.chrome.clear {
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.plexi.show.color {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.chrome.blue {
+    border: none;
+}
+
+.controls_section .with_subtitle small {
+    color: rgba(255, 255, 255, .69);
+}
+
+.dashboard_options_form,
+.tag_psa,
+.grey_note {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.dashboard_options_form .dashboard_options_form_disclaimer a,
+.crushes_subhead,
+.chrome.clear {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.split button.chrome:active:not([disabled]),
+.split.active .chrome.options,
+.split .chrome.blue[disabled],
+.split .chrome.blue[disabled]:active,
+.split .chrome.blue.ui_disabled,
+.split .chrome.blue.ui_disabled:active {
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed;
+    border: 1px rgba(255, 255, 255, 0.4);
+}
+
+#content * {
+    -webkit-border-radius: 0!important;
+    -moz-border-radius: 0!important;
+    border-radius: 0!important;
+}
+
+.xim_contact .xim-avatar {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.xim_contact .count.xim-status {
+    margin-top: -7px;
+}
+
+.xim-no-contacts-placeholder {
+    text-shadow: none;
+    padding: 6px 0 0 6px !important;
+}
+
+#xim_avatar,
+#xim_avatar .online,
+.notification .notification_right .preview_frame,
+.notification .avatar_frame,
+.ui_avatar .frame,
+.xim_message_title .xim-avatar {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.xim_message_title {
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+#xim-add-person {
+    background: transparent!important;
+}
+
+li#xim-contacts-online,
+li#xim-contacts-offline {
+    background: transparent!important;
+    color: rgba(234, 244, 255, 0.4);
+}
+
+li#xim-no-contacts-found-online,
+li#xim-no-contacts-found-offline,
+.pill.notice,
+.footer_links a,
+.dashboard_options_form .dashboard_options_form_disclaimer,
+.grey_note a,
+.split button.chrome:active:not([disabled]),
+.split.active .chrome.options {
+    color: rgba(234, 244, 255, 0.4);
+}
+
+#content {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+}
+
+#header .selection_nipple {
+    border-bottom: 12px solid #FFF;
+}
+
+.notification,
+.notification.first_notification {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+#right_column:after {
+    background: none!important;
+    content: none;
+}
+
+.controls_section {
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+#new_post,
+.post {
+    background: rgba(255, 255, 255, 1.0);
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.post_content,
+#right_column {
+    background: transparent!important;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}

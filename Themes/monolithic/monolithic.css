@@ -1,0 +1,55 @@
+/* NAME Monolithic **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION A simple gray theme with no space between posts **/
+/* DEVELOPER STUDIOXENIX **/
+
+body {
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGUlEQVQIW2PcunXrfwYgYFy9evV/Li4uBgBDawY/V75q0gAAAABJRU5ErkJggg==)
+}
+
+.notification {
+	background: #e6e6e6!important;
+	border-radius: 0!important;
+	color: #000!important;
+	border: 0!important;
+	margin: 0 0 1px!important
+}
+
+#posts.posts>.post_container {
+	margin-bottom: 1px!important
+}
+
+.notification * {
+	border-radius: 0;
+	color: #969696!important;
+	border: 0
+}
+
+#content {
+	background: rgba(0, 0, 0, 0.11)
+}
+
+#posts.posts_v2>.post_container {
+	margin: 0 0 1px
+}
+
+.post {
+	background: #FFF;
+	border-radius: 0;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+	margin-top: 0
+}
+
+.post_content {
+	background: transparent!important
+}
+
+#right_column,
+#right_column:after {
+	background: none!important
+}
+
+.controls_section li * {
+	background: transparent;
+	color: #646464
+}
