@@ -48,7 +48,7 @@ XKit.extensions.better_reblog_layout = new Object({
 	    }
 	    
 	    if (XKit.extensions.better_reblog_layout.preferences.remove_user_names.value === true) {
-	       XKit.tools.add_css(" .reblog-tumblelog-name {display:none;} .reblog-list-item .reblog-header {margin-bottom: 0;} .reblog-content {margin-left:35px;}", "better_reblog_layout_remove_user_names");
+	       XKit.tools.add_css(" .reblog-tumblelog-name {display:none;} .reblog-list-item .reblog-header {margin-bottom: 0;} .reblog-content {margin-left:35px;} .reblog-title {margin-top:25px;}", "better_reblog_layout_remove_user_names");
 	    }
 	    
 	    if (XKit.extensions.better_reblog_layout.preferences.remove_avatars.value === true) {
