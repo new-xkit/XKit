@@ -28,10 +28,12 @@ XKit.extensions.old_reblogs = new Object({
 
 		$(posts).each(function() {
 			// get the reblog-list for the post
-			var reblog_chain = $(this).find("div.reblog-list");
+			var reblog_chain = $(this).find('div.reblog-list');
 			// get the text that the user added to the post (might not exist but it's
 			// sanity checked later)
-			var reblog_text = $(this).find("div.contributed-content > div.reblog-content");
+			var reblog_text = $(this).find('div.contributed-content > div.reblog-content').html();
+			// get the title of the post (only necessary if it was reblogged)
+			var title_text = $(this).find('div.reblog-title').html();
 
 			// Guard against double evaluation by marking the tree as processed
 			var processed_class = 'xkit-old-reblogs-done';
@@ -43,26 +45,34 @@ XKit.extensions.old_reblogs = new Object({
 			var users_chain = reblog_chain.find('a.reblog-tumblelog-name');
 			var content_chain = reblog_chain.find('div.reblog-content');
 
-			// reconstitute the text post
-			var reblog_content = '<div class="reblog-list-item xkit-old-reblogs-new"><div class="reblog-content">';
+			// the tag we will insert the new post content into
+			post_entrypoint = $(this).find('.post_content_inner');
 
+			if (typeof(title_text) !== 'undefined') {
+				// append the title of the post
+				post_entrypoint.append(
+					$(document.createElement('div')).addClass('post_title xkit-old-reblogs-new').html(title_text)
+				);
+			}
+
+			// (re)construct the post, starting from the list of usernames in the reblog list and working backwards
+			post_body = $(document.createElement('div')).addClass('post_body xkit-old-reblogs-new');
+			body_content = "";
 			$(users_chain.get().reverse()).each(function() {
-				reblog_content += '<p><a class="tumblr_blog" href="' + $(this).attr('href') + '">' + $(this).html() + '</a>:<blockquote>';
+				body_content += '<p><a class="tumblr_blog" href="' + $(this).attr('href') + '">' + $(this).html() + '</a>:<blockquote>';
 			});
 			content_chain.each(function() {
-				reblog_content += $(this).html();
-				reblog_content += '</blockquote></p>';
+				body_content += $(this).html();
+				body_content += '</blockquote></p>';
 			});
-			if (typeof(reblog_text.html()) !== "undefined") {
+			if (typeof(reblog_text) !== "undefined") {
 				// add the user's reblog text to the bottom
-				reblog_content += '<p>';
-				reblog_content += reblog_text.html();
-				reblog_content += '</p>';
+				body_content += '<p>';
+				body_content += reblog_text;
+				body_content += '</p>';
 			}
-			reblog_content += '</div></div>';
 
-			// add the newly formatted text to the post body
-			$(this).find('.post_content_inner').append(reblog_content);
+			post_entrypoint.append(post_body.html(body_content));
 		});
 	},
 
