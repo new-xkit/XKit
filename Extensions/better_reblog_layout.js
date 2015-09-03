@@ -44,7 +44,7 @@ XKit.extensions.better_reblog_layout = new Object({
 	    }
 	    
 	    if (XKit.extensions.better_reblog_layout.preferences.add_border.value === true) {
-	       XKit.tools.add_css(" .reblog-list-item .reblog-content {border-left: 1px solid #E7E7E7;padding-left: 10px;}", "better_reblog_layout_add_border");
+	       XKit.tools.add_css(" .reblog-list-item .reblog-content {border-left: 1px solid #E7E7E7;padding-left: 10px;} .post.is_regular .tmblr-full > img, .post.is_text .tmblr-full > img, .post.is_note .tmblr-full > img, .post.is_photo .tmblr-full > img, .post.is_photoset .tmblr-full > img, .post.is_link .tmblr-full > img, .post.is_audio .tmblr-full > img, .post.is_video .tmblr-full > img, .post.is_quote .tmblr-full > img, .post.is_answer .tmblr-full > img {padding: 0 20px}", "better_reblog_layout_add_border");
 	    }
 	    
 	    if (XKit.extensions.better_reblog_layout.preferences.remove_user_names.value === true) {
