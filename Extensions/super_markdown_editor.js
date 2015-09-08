@@ -228,7 +228,6 @@ var superMarkdownEditor = function(xkitApi) {
 			// code, but we don't get that luxury. Instead, we just find all the embed
 			// <figure>s and insert the appropriate code ourselves.
 			var loadedEmbeds = newPreview.find('figure.tmblr-embed').map(function(i, e) {
-				console.log(i);
 				return getEmbed(embeds[i].getAttribute('data-url')).then(function(res) {
 					e.innerHTML = res.embed_code;
 				});
@@ -282,11 +281,11 @@ var superMarkdownEditor = function(xkitApi) {
 			if (!res.service) return;
 			var editor = ace();
 			var $figure = $('<figure>').attr({
-				class: 'tmblr-embed tmblr-full',
+				class: 'tmblr-embed tmblr-full xkit-json-embed',
 				'data-provider': res.service,
 				'data-orig-width': res.width_orig, 'data-orig-height': res.height_orig,
 				'data-url': res.url
-			});
+			}).html('`' + btoa(JSON.stringify({embed_code: res.embed_code})) + '`');
 			var html = $figure.wrap('<div>').parent().html();
 			editor.insert(html);
 			editor.focus();
