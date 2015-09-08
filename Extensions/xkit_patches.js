@@ -314,14 +314,6 @@ XKit.extensions.xkit_patches = new Object({
 
 	},
 
-	patch_embeds: function() {
-		$('figure.tmblr-embed').each(function(i, e) {
-			var $e = $(e);
-			var $maybeBox = $e.next().next();
-			$maybeBox.has('img[src$="inline_placeholder.png"]').remove();
-		});
-	},
-
 	check_user_agent: function() {
 
 		var from_framework = XKit.browser().name;
@@ -542,7 +534,6 @@ XKit.tools.dump_config = function(){
 
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
 		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
-		setTimeout(function() { XKit.extensions.xkit_patches.patch_embeds(); }, 1000);
 
 		setTimeout(function() {
 
