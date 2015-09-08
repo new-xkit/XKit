@@ -5,51 +5,6 @@
 //* FRAME false **//
 //* BETA false **//
 
-// First, we need to access JS libraries loaded on the Tumblr page. In Firefox
-// this is easy (just use unsafeWindow), but in Chrome that doesn't work. The
-// portable way is to run our own JS using a <script> tag, which is injected
-// into the page. However, when you do this, you lose access *back* to the
-// original context - these first three functions handle communication between
-// the contexts.
-
-// Takes the full dot-path to the name of an XKit method - for example,
-// "window.show" - and then any number of arguments, and instructs XKit to call
-// that method. This function is available to code running in the unsafe_eval
-// context, so that it can still control XKit.
-var callXKit = function(cmd, args /* ... */) {
-	args = [].slice.apply(arguments);
-	window.postMessage({xkit_cmd: {path: args[0], params: args.slice(1)}}, '*');
-};
-
-// Listen for requests from the callXKit function - when one arrives, call the
-// appropriate XKit method.
-window.addEventListener('message', function(event) {
-	var msg, path, namespace;
-	if (!(msg = event.data.xkit_cmd)) return;
-
-	namespace = XKit;
-	path = msg.path.split('.');
-	while (path.length > 1) namespace = namespace[path.shift()];
-	namespace[path[0]].apply(namespace, msg.params);
-});
-
-// Evaluate a function in the page's JavaScript context instead of in the
-// extension sandbox. The function is passed through as a string, so it must
-// not be a closure - it will however be passed a reference to the callXKit
-// function defined above, so it can call back into XKit code.
-XKit.tools.unsafe_eval = function(f) {
-	if (typeof f !== 'function') throw new Error('Invalid argument to XKit.tools.unsafe_eval(): ' + f);
-	var statement = '(' + f.toString() + ')(' + callXKit.toString() + ');';
-
-	// Evaluate the string generated above on the main 'window' by putting a
-	// new <script> element in the DOM for it.
-	var script = document.createElement('script');
-	script.setAttribute("type", "application/javascript");
-	script.textContent = statement;
-	document.body.appendChild(script);
-	document.body.removeChild(script);
-};
-
 // The majority of the work done by the extension is inside this function,
 // which will be evaluated in page context using unsafe_eval().
 var superMarkdownEditor = function(xkitApi) {
