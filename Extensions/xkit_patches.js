@@ -315,10 +315,10 @@ XKit.extensions.xkit_patches = new Object({
 	},
 
 	patch_embeds: function() {
-		$('figure.tmblr-embed').has('code').each(function(i, e) {
+		$('figure.tmblr-embed').each(function(i, e) {
 			var $e = $(e);
-			var embed_info = JSON.parse(atob($e.find('code').html()));
-			$e.html(embed_info.embed_code);
+			var $maybeBox = $e.next().next();
+			$maybeBox.has('img[src$="inline_placeholder.png"]').remove();
 		});
 	},
 
