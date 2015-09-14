@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.0.0 **//
+//* VERSION 5.0.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -30,6 +30,7 @@ XKit.extensions.lang_english.xkit_preferences = new Object({
 		"console": "Console",
 		"xkit_editor": "XKit Editor",
 		"show_internals": "Internals",
+		"fetch_locally": "Fetch Extensions Locally",
 		"flags": "Flags"
 	},
 
@@ -2044,6 +2045,7 @@ XKit.extensions.xkit_preferences = new Object({
 						'<div data-pname="console" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.console") +  "</div>" +
 						'<div data-pname="editor" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.xkit_editor") +  "</div>" +
 						'<div data-pname="internal" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.show_internals") +  "</div>" +
+						'<div data-pname="fetch" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.fetch_locally") +  "</div>" +
 						'<div data-pname="flags" class="xkit-extension text-only" style="display: none;">' + XKit.lang.get("xkit_preferences.other.flags") + "</div>" +
 					"</div>" +
 				"</div>" +
@@ -2092,6 +2094,9 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 			if ($this.attr('data-pname') === "internal") {
 				XKit.extensions.xkit_preferences.show_others_panel_show_internals();
+			}
+			if ($this.attr('data-pname') === "fetch") {
+				XKit.extensions.xkit_preferences.show_others_panel_fetch_locally();
 			}
 			if ($this.attr('data-pname') === "storage") {
 				XKit.extensions.xkit_preferences.show_others_panel_show_storage();
@@ -2268,6 +2273,40 @@ XKit.extensions.xkit_preferences = new Object({
 			} else {
 				$("#xkit-panel-enable-internal-extensions").removeClass("selected");
 				XKit.tools.set_setting("xkit_show_internals","false");
+			}
+
+		});
+
+	},
+
+	show_others_panel_fetch_locally: function() {
+
+		var m_html =
+				'<div class="xkit-others-panel">' +
+				'<div class="title">Fetch Extensions Locally</div>' +
+				'<div class="description">' +
+					'For developer use only. Checking this box makes XKit fetch extensions served by gulp server.' +
+				"</div>" +
+				'<div class="bottom-part">' +
+					'<div id="xkit-panel-enable-fetch-locally" class="xkit-checkbox"><b>&nbsp;</b>Fetch Extensions Locally</div>' +
+				"</div>" +
+				"</div>";
+
+		$("#xkit-extensions-panel-right-inner").html(m_html);
+		$("#xkit-extensions-panel-right").nanoScroller();
+
+		if (XKit.tools.get_setting("xkit_fetch_locally","false") === "true") {
+			$("#xkit-panel-enable-fetch-locally").addClass("selected");
+		}
+
+		$("#xkit-panel-enable-fetch-locally").click(function() {
+
+			if (XKit.tools.get_setting("xkit_fetch_locally","false") === "false") {
+				$("#xkit-panel-enable-fetch-locally").addClass("selected");
+				XKit.tools.set_setting("xkit_fetch_locally","true");
+			} else {
+				$("#xkit-panel-enable-fetch-locally").removeClass("selected");
+				XKit.tools.set_setting("xkit_fetch_locally","false");
 			}
 
 		});
