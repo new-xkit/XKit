@@ -912,6 +912,89 @@ XKit = {
 			document.body.appendChild(script); } catch(e) { alert(e.message); }
 		}
 	},
+	// Adding Sideview Listener
+	sideview_listener : {
+		visible : null,
+		observer : null,
+		init : function() {
+			//console.log("sideview_listener --> init");
+			if(XKit.sideview_listener.observer !== null) {
+				//console.log("sideview_listener --> already initialized");
+				return;
+			}
+
+			//init visible property
+			if (XKit.sideview_listener.visible === null){
+				if($(".ui_peepr_glass") === null) XKit.sideview_listener.visible = true;
+				else XKit.sideview_listener.visible = false;
+
+				//console.log("sideview_listener --> visible init to " + XKit.sideview_listener.visible);
+			}
+
+			//init observer
+			XKit.sideview_listener.observer = new MutationObserver(function(mutations) {
+				//console.log(mutations);
+
+				mutations.forEach(function(mutation) {
+					XKit.sideview_listener.check(mutation);
+				});
+			});
+
+			XKit.sideview_listener.start();
+		},
+		check : function(mutation) {
+			if (!mutation  || mutation.type != 'childList') {
+				console.log("sideview_listener --> check: invalid mutation - ");
+				console.log(mutation);
+				return;
+			}
+
+			// if sideview wasn't visible and nodes added to DOM, check if node is sideview
+			if(XKit.sideview_listener.visible === false && mutation.addedNodes && mutation.addedNodes.length > 0){
+				for(var i=0; i < mutation.addedNodes.length; i++){
+					//console.log(mutation.addedNodes[i]);
+					if(mutation.addedNodes[i].className == "ui_peepr_glass"){
+						console.log("sideview_listener --> sideview VISIBLE");
+
+						XKit.sideview_listener.visible = true;
+
+						return;	//don't need to check removedNodes if sideview was just added
+					}
+				}
+			}
+
+			// if sideview was visible and nodes removed from DOM, check if removed node was sideview
+			if(XKit.sideview_listener.visible === true && mutation.removedNodes && mutation.removedNodes.length > 0){
+				for(var j=0; j < mutation.removedNodes.length; j++){
+					//console.log(mutation.removedNodes[j]);
+					if(mutation.removedNodes[j].className == "ui_peepr_glass"){
+						console.log("sideview_listener --> sideview NOT VISIBLE");
+
+						XKit.sideview_listener.visible = false;
+						//XKit.post_listener.check();
+
+						return;	//if sideview was removed, return early
+					}
+				}
+			}
+			return;	//sideview object not found
+		},
+		start : function() {
+			if(XKit.sideview_listener.observer === null) return;
+
+			XKit.sideview_listener.observer.observe(
+				document.body, {
+				'childList' : true,
+				'attributes' : true,
+				'attributeFilter' : ["classList", "className"]
+			});
+			console.log("sideview_listener --> observing");
+		},
+		stop : function() {
+			if(XKit.sideview_listener.observer === null) return;
+			XKit.sideview_listener.observer.disconnect();
+		}
+	},
 	post_listener: {
 		callbacks: [],
 		callback_ids: [],
