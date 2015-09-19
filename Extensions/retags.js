@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.0.0 **//
+//* VERSION     1.0.1 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -9,7 +9,7 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
-	selectors: '.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
+	selectors: '.type_2,.type_8,.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
 
 	run: function(){
@@ -25,17 +25,29 @@ XKit.extensions.retags = {
 
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){
-			XKit.extensions.retags.tag($(m.addedNodes).filter(XKit.extensions.retags.selectors));
+			if ($(m.addedNodes).find('.note').length > 0) {
+				XKit.extensions.retags.tag($(m.addedNodes).find('.note').filter(XKit.extensions.retags.selectors));
+			} else {
+				XKit.extensions.retags.tag($(m.addedNodes).filter(XKit.extensions.retags.selectors));
+			}
 		});
 	}),
 
 	add_toggle: function(){
 		var toggle = 'retags_toggle_'+this.blog_name;
-		this.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
+		if (XKit.browser().mobile) {
+			this.html_toggle.appendTo('.primary-nav');
+			XKit.tools.add_css('label.retags .binary_switch_label {font-size:15px; color:white; padding-bottom:15px; }','retags_mobile_label');
+		} else {
+			this.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
+		}
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
 				localStorage.setItem(toggle,'true');
 				XKit.extensions.retags.css_toggle.appendTo('head');
+				if (XKit.browser().mobile) {
+					XKit.extensions.retags.mobile_toggle.appendTo('head');
+				}
 			} else {
 				localStorage.setItem(toggle,'false');
 				XKit.extensions.retags.css_toggle.detach();
@@ -66,9 +78,14 @@ XKit.extensions.retags = {
 				$c = $t.find('.stage');
 				url = $c.find('.part_glass').attr('href');
 			// dashboard
-			} else if ($t.hasClass('notification')) {
+			} else if ($t.hasClass('notification') && !XKit.browser().mobile) {
 				$c = $t.find('.notification_sentence');
 				url = $c.find('.notification_target').attr('href');
+			// mobile
+			} else if ($t.hasClass('notification') && XKit.browser().mobile) {
+				cls = 'is_retags';
+				$c = $t.find('.notification-wrapper');
+				url = $c.find('a').not('.notification-username').attr('href');
 			}
 			//we don't need to put tags on a reply, but we also don't need to hide it
 			if ($t.hasClass('is_reply') || $t.hasClass('is_answer')) {
@@ -121,6 +138,13 @@ XKit.extensions.retags = {
 		'.ui_note { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
 	'</style>'),
+	
+
+	mobile_toggle:
+	$('<style class="retags">' +
+		'.note, .mh_post.post.post_type_notification.notification { display: none; } ' +
+		'.note.with_commentary, .mh_post.post.post_type_notification.notification.is_retags { display: block; }' +
+	'</style>'),
 
 	html_toggle:
 	$('<label class="retags binary_switch">'+
@@ -133,8 +157,10 @@ XKit.extensions.retags = {
 	destroy: function(){
 		this.running = false;
 		XKit.tools.remove_css("retags");
+		XKit.tools.remove_css('retags_mobile');
 		this.css_toggle.detach();
 		this.html_toggle.detach();
+		this.mobile_toggle.detach();
 		this.observer.disconnect();
 		$('.retags').remove();
 		$('body').off('.retags');
