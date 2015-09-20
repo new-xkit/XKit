@@ -4,3 +4,8 @@
 	background-repeat: no-repeat !important;
 	background-position: center !important;
 }
+
+.is_reblog .post_wrapper .post-source-footer,
+.is_reblog .post_wrapper .chat_line {
+	background: transparent !important;
+}

@@ -1,5 +1,5 @@
 //* TITLE Edible Reblogs **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION We are serious developers... **//
 //* DETAILS ...with our priorities in order. Puts bread in the background of each post. **//
 //* DEVELOPER new-xkit **//
@@ -9,7 +9,7 @@
 XKit.extensions.edible_reblogs = new Object({
 
 	running: false,
-	
+
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("edible_reblogs");
