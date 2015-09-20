@@ -1442,9 +1442,12 @@ XKit.tools.dump_config = function(){
 					selector = ".post.is_mine";
 				}
 
+				if (XKit.interface.where().activity){
+					selector = ".indash_blog .posts .post";	//ignores Top Post on Activity Page
+				}
 				var selection = $(selector);
 
-				var exclusions = [".radar", ".new_post_buttons"];
+				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
 
 				if (typeof without_tag !== "undefined") {
 					exclusions.push("." + without_tag);
@@ -1847,17 +1850,106 @@ XKit.tools.dump_config = function(){
 			}
 		};
 
-		// New Post Listener for Posts_v2
-		XKit.post_listener.check = function(no_timeout) {
-			var post_count = -1;
-			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
-				post_count = $(".post").length;
-			} else {
-				if ($("#posts").length === 0) {
+		// Adding Sideview Listener
+		XKit.sideview_listener = {
+			visible : null,
+			observer : null,
+			init : function() {
+				if(XKit.sideview_listener.observer !== null) {
+					//console.log("sideview_listener --> already initialized");
 					return;
 				}
-				post_count = $("#posts .post").length;
+				//init visible property
+				if (XKit.sideview_listener.visible === null){
+					if($(".peepr-drawer-container").length > 0) XKit.sideview_listener.visible = true;
+					else XKit.sideview_listener.visible = false;
+					//console.log("sideview_listener --> visible init to " + XKit.sideview_listener.visible);
+				}
+				//init observer
+				XKit.sideview_listener.observer = new MutationObserver(function(mutations) {
+					var vis = XKit.sideview_listener.visible;
+					mutations.forEach(function(mutation) {
+						XKit.sideview_listener.check(mutation);
+					});
+					if(XKit.sideview_listener.visible === true && vis === false){	//sideview now visible, look for post
+						//Set Timeout for Sideview Post to Load
+						setTimeout(function sideviewPostIsLoaded() {
+							if ($(".indash_blog .posts .post")) {
+								XKit.post_listener.run_callbacks();
+							} else {
+								console.log("[ERROR] sideview_listener --> timeout - post not found");
+							}
+						}, 1000);
+					} else if(XKit.sideview_listener.visible === true){	//sideview visible, more posts loaded
+						XKit.post_listener.check();
+					}
+				});
+				XKit.sideview_listener.start();
+			},
+			check : function(mutation) {
+				if (!mutation  || mutation.type != 'childList') {
+					console.log("sideview_listener --> check: invalid mutation - ");
+					console.log(mutation);
+					return;
+				}
+
+				// if sideview wasn't visible and nodes added to DOM, check if node is sideview
+				if(XKit.sideview_listener.visible === false && mutation.addedNodes && mutation.addedNodes.length > 0){
+					for(var i=0; i < mutation.addedNodes.length; i++){
+						//console.log(mutation.addedNodes[i]);
+						if(mutation.addedNodes[i].classList.contains("peepr-drawer-container")){
+							console.log("sideview_listener --> sideview VISIBLE");
+
+							XKit.sideview_listener.visible = true;
+							//XKit.page.peepr = true;
+
+							return;	//don't need to check removedNodes if sideview was just added
+						}
+					}
+				}
+
+				// if sideview was visible and nodes removed from DOM, check if removed node was sideview
+				if(XKit.sideview_listener.visible === true && mutation.removedNodes && mutation.removedNodes.length > 0){
+					for(var j=0; j < mutation.removedNodes.length; j++){
+						//console.log(mutation.removedNodes[j]);
+						if(mutation.removedNodes[j].className == "ui_peepr_glass"){
+							console.log("sideview_listener --> sideview NOT VISIBLE");
+
+							XKit.sideview_listener.visible = false;
+							//XKit.page.peepr = false;
+
+							return;	//if sideview was removed, return early
+						}
+					}
+				}
+				return;	//sideview object not found
+			},
+			start : function() {
+				if(XKit.sideview_listener.observer === null) return;
+
+				XKit.sideview_listener.observer.observe(
+					document.body, {
+						'childList' : true,
+						'attributes' : true,
+						'attributeFilter' : ["classList"]
+					});
+				console.log("sideview_listener --> observing");
+			},
+			stop : function() {
+				if(XKit.sideview_listener.observer === null) return;
+				XKit.sideview_listener.observer.disconnect();
 			}
+		};
+
+		// New Post Listener for Posts_v2
+		XKit.post_listener.check = function(no_timeout) {
+			if($(".posts").length === 0) {
+				console.log("post_listener --> no posts");
+				return;
+			}
+
+			var post_count = $(".posts .post").length;
+
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
@@ -1870,7 +1962,6 @@ XKit.tools.dump_config = function(){
 			if (no_timeout !== true) {
 				setTimeout(XKit.post_listener.check, 1000);
 			}
-
 		};
 
 		XKit.post_listener.run_callbacks = function() {

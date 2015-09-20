@@ -19,14 +19,13 @@ XKit.extensions.replyviewer = new Object({
 
 		this.running = true;
 
-		if ($(".posts .post").length > 0) {
-			XKit.tools.init_css("replyviewer");
-			XKit.interface.create_control_button("xkit-replyviewer", this.button_icon, "ReplyViewer", "");
-			XKit.extensions.replyviewer.init();
-			XKit.post_listener.add("replyviewer", XKit.extensions.replyviewer.do);
-			XKit.extensions.replyviewer.do();
-		}
+		XKit.sideview_listener.init();
 
+		XKit.tools.init_css("replyviewer");
+		XKit.interface.create_control_button("xkit-replyviewer", this.button_icon, "ReplyViewer", "");
+		XKit.extensions.replyviewer.init();
+		XKit.post_listener.add("replyviewer", XKit.extensions.replyviewer.do);
+		XKit.extensions.replyviewer.do();
 	},
 
 	frame_run: function() {

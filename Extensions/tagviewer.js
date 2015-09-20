@@ -27,14 +27,13 @@ XKit.extensions.tagviewer = new Object({
 
 		this.running = true;
 
-		if ($(".posts .post").length > 0) {
-			XKit.tools.init_css("tagviewer");
-			XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
-			XKit.extensions.tagviewer.init();
-			XKit.post_listener.add("tagviewer", XKit.extensions.tagviewer.do);
-			XKit.extensions.tagviewer.do();
-		}
+		XKit.sideview_listener.init();
 
+		XKit.tools.init_css("tagviewer");
+		XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
+		XKit.extensions.tagviewer.init();
+		XKit.post_listener.add("tagviewer", XKit.extensions.tagviewer.do);
+		XKit.extensions.tagviewer.do();
 	},
 
 	init: function() {
