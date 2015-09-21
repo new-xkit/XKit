@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.1 **//
+//* VERSION 5.3.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1582,7 +1582,10 @@ XKit.tools.dump_config = function(){
 					var to_return = "";
 					$(obj).find(".post_tags").find(".post_tag").each(function() {
 						if ($(this).hasClass("post_ask_me_link") === true) { return; }
-						var m_tag = $(this).html().substring(1);
+						var m_tag = $(this).text();
+						if (m_tag[0] === "#") {
+							m_tag = m_tag.substring(1);
+						}
 						if (to_return === "") {
 							to_return = m_tag;
 						} else {
