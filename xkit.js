@@ -885,14 +885,24 @@ XKit = {
 		},
 		get_setting: function(setting_name, default_value) {
 			try {
-				return GM_getValue(setting_name, default_value);
+				var storage_raw = GM_getValue(setting_name, default_value);
+				var storage = JSON.parse(storage_raw);
+				if (storage.storage_version === 2) {
+					return JSON.parse(storage.value);
+				} else {
+					return storage_raw;
+				}
 			} catch(e) {
-				return "";
+				return default_value;
 			}
 		},
 		set_setting: function(setting_name, new_value) {
 			try {
-				GM_setValue(setting_name, new_value);
+				var value_object = {
+					storage_version: 2,
+					value: JSON.stringify(new_value)
+				};
+				GM_setValue(setting_name, JSON.stringify(value_object));
 				return {errors: false};
 			} catch(e) {
 				XKit.console.add("Can not save " + setting_name + ": " + e.message);
