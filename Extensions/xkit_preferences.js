@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.5.2 **//
+//* VERSION 7.6.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -68,7 +68,41 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
 		}
 
-		$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
+		$("#new-xkit-control").click(function(event) {
+			XKit.extensions.xkit_preferences.open();
+			return false;
+		});
+
+		// Check and deliver initial messages.
+		if (XKit.storage.get("xkit_preferences","initial_mail_sent","0") === "0") {
+			var initial_mail = {
+				id: "WelcomeMail.virtual",
+				title: "Welcome to XKit!",
+				message: "<h1>Welcome, and thanks for installing XKit 7!</h1> In this panel, you will receive news and updates on XKit 7. "+
+					"These include, but not limited to, new features, bug fixes and things you should do if you experience problems with your XKit."+
+					"<h2>Learn XKit</h2> Clicking on the My XKit tab will give you a list of all the extensions you have installed. "+
+					"You can read their descriptions, and click on <strong>more information</strong> link below their description (if available) "+
+					"to learn even more about them and how to use them."+
+					"<h2>Customize XKit</h2> Nearly all extensions of XKit has settings that you can customize: from appearance to custom tags, "+
+					"you can toggle and change their settings from the My XKit tab."+
+					"<h2>Expand XKit</h2> XKit automatically installs some default extensions, but if you want more, you can check the extension "+
+					"gallery for more. To do that, just click on the <strong>Get Extensions</strong> tab on the bottom of this window."+
+					"<h2>Help XKit</h2> XKit is free of charge, and we're not making any money off it in any way. "+
+					"You can also help by sharing XKit with your followers and friends, and spreading the word. "+
+					"If you know your way around JavaScript and CSS, you can support us developing XKit through <a target='_BLANK' href='https://github.com/new-xkit/XKit'>our GitHub</a> "+
+					"or get in contact with us through <a target='_BLANK' href='https://gitter.im/new-xkit/XKit'>our Gitter Channel</a>."+
+					"<h2>Need help?</h2> The New XKit team always has an open ear if you got problems. You can reach us at <a target='_BLANK' href='http://new-xkit-extension.tumblr.com/'>on our blog</a> "+
+					"or in our <a target='_BLANK' href='http://new-xkit-support.tumblr.com/support'>realtime live support chat</a>!"+
+					"<h2>Thanks for reading!</h2> Again, thanks for installing XKit, and we hope you enjoy using it!<br><br>"+
+					"<em>Yours faithfully,<br>The New XKit Team</em>",
+				channels: {
+					type: "welcome_msg"
+				},
+				version: 1
+			};
+			XKit.extensions.xkit_preferences.news.create(initial_mail);
+			XKit.storage.set("xkit_preferences","initial_mail_sent","1");
+		}
 
 		var unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
 		if (unread_mail_count > 0) {
@@ -228,7 +262,6 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 
 			XKit.download.page("paperboy/index.php", function(mdata) {
-
 				if (mdata.server_down === true) {
 					XKit.window.show("Can't connect to server",
 						'XKit was unable to contact the servers in order to download XKit News. ' +
@@ -237,15 +270,8 @@ XKit.extensions.xkit_preferences = new Object({
 						"error", '<div id="xkit-close-message" class="xkit-button default">OK</div>');
 					return;
 				}
-
-				for (var news_item in mdata.news) {
-					// (id, title, message, date)
-					mdata.news[news_item].message = XKit.tools.replace_all(mdata.news[news_item].message, "\\\\'", "'");
-					mdata.news[news_item].message = XKit.tools.replace_all(mdata.news[news_item].message, "\\\\\"", "\"");
-					mdata.news[news_item].title = XKit.tools.replace_all(mdata.news[news_item].title, "\\\\'", "'");
-					mdata.news[news_item].title = XKit.tools.replace_all(mdata.news[news_item].title, "\\\\\"", "\"");
-					XKit.extensions.xkit_preferences.news.create(mdata.news[news_item].id,
-						mdata.news[news_item].title, mdata.news[news_item].message, undefined, mdata.news[news_item].important);
+				for(var news_item in mdata.news) {
+					XKit.extensions.xkit_preferences.news.create(mdata.news[news_item]);
 				}
 
 			});
@@ -306,10 +332,30 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 		},
 
-		unread_count: function() {
+		hide_news_entry: function(news_item) {
+			var show_information = JSON.parse(XKit.tools.get_setting("xkit_show_information", "true"));
+			var show_extension_updates = JSON.parse(XKit.tools.get_setting("xkit_show_extension_updates", "true"));
+			var show_weekly_news = JSON.parse(XKit.tools.get_setting("xkit_show_weekly_news", "true"));
+			var show_developer_news = JSON.parse(XKit.tools.get_setting("xkit_show_developers", "true"));
+			var show_firefox = JSON.parse(XKit.tools.get_setting("xkit_show_firefox_news", XKit.browser().firefox));
+			var show_chrome = JSON.parse(XKit.tools.get_setting("xkit_show_firefox_news", XKit.browser().chrome));
+			var show_safari = JSON.parse(XKit.tools.get_setting("xkit_show_firefox_news", XKit.browser().safari));
+			if (news_item.deleted) { return true; }
+			if (news_item.channels) {
+				if (news_item.channels.browsers.chrome && !show_chrome) { return true; }
+				if (news_item.channels.browsers.firefox && !show_firefox) { return true; }
+				if (news_item.channels.browsers.safari && !show_safari) { return true; }
+				if (news_item.channels.type === "information" && !show_information) { return true; }
+				if (news_item.channels.type === "extension_updates" && !show_extension_updates) { return true; }
+				if (news_item.channels.type === "weekly_news" && !show_weekly_news) { return true; }
+				if (news_item.channels.type === "developers" && !show_developer_news) { return true; }
+			}
+			return false;
+		},
 
-			var prev_objects_str = XKit.storage.get("xkit_preferences", "news", "");
-			var prev_objects;
+		unread_count: function() {
+			var prev_objects_str = XKit.storage.get("xkit_preferences","news","");
+			var prev_objects = [];
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch (e) {
@@ -318,26 +364,24 @@ XKit.extensions.xkit_preferences = new Object({
 				XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
 				return 0;
 			}
-
-			var show_all = XKit.tools.get_setting("xkit_show_feature_updates", "true") === "true";
-
-			var m_return = 0;
-			for (var i = 0; i < prev_objects.length; i++) {
-				if (prev_objects[i].read === false) {
-					if (typeof prev_objects[i].important !== "undefined") {
-						if (show_all === false && prev_objects[i].important !== "1") {
-							continue;
-						}
-					}
-					m_return++;
-				}
-			}
-
-			return m_return;
-
+			return prev_objects.filter(function (item) {
+				return (!item.read && !XKit.extensions.xkit_preferences.news.hide_news_entry(item));
+			}).length;
 		},
 
-		check: function(id) {
+		/**
+		 * Check storage if a news item is already saved, is out of date or does not
+		 * exist at all. Returns different values depending on this condition
+		 *
+		 * @param {string} id				- ID of the News Item
+		 * @param {number} version			- Version of the News Item
+		 *
+		 * @returns {number}
+		 *		0	-	The news item with the specified ID does not exist in storage
+		 *		1	-	The news item with the specified ID does exist in storage and is up to date
+		 *		2	-	The news item with the specified ID does exist in storage but is out of date
+		 */
+		check_for_news_existing: function(id, version) {
 
 			var prev_objects_str = XKit.storage.get("xkit_preferences", "news", "");
 			var prev_objects;
@@ -350,49 +394,65 @@ XKit.extensions.xkit_preferences = new Object({
 			for (var i = 0; i < prev_objects.length; i++) {
 
 				if (prev_objects[i].id === id) {
-					return true;
+					if(prev_objects[i].version >= version) {
+						return 1;
+					} else {
+						return 2;
+					}
 				}
 
 			}
 
-			return false;
+			return 0;
 
 		},
 
-		create: function(id, title, message, date, important) {
-
-			if (XKit.extensions.xkit_preferences.news.check(id) === true) {
-				console.log("News " + id + " could not be pushed: already exists.");
+		/**
+		 * Read a news object from the server, check if it exists in storage or
+		 * requires updating and does so accordingly
+		 *
+		 * @param {Object<news_item>} news_object - The news object to store
+		 */
+		create: function(news_object) {
+			if (typeof(news_object.version) === "undefined") { news_object.version = 1; }
+			var news_already_existing = XKit.extensions.xkit_preferences.news.check_for_news_existing(news_object.id, news_object.version);
+			if (news_already_existing === 1) {
+				XKit.console.add("News " + news_object.id + " could not be pushed: already exists.");
 				return;
 			}
 
-			if (!date) {
+			if (!news_object.date) {
 				var foo = new Date(); // Generic JS date object
 				var unixtime_ms = foo.getTime(); // Returns milliseconds since the epoch
-				date = parseInt(unixtime_ms / 1000);
+				news_object.date = parseInt(unixtime_ms / 1000);
 			}
 
-			var news_object = {};
-			news_object.id = id;
-			news_object.title = title;
-			news_object.message = message;
-			news_object.date = date;
-			news_object.important = important;
 			news_object.read = false;
+			if (typeof(news_object.deleted) === "undefined") { news_object.deleted = false; }
+			if (typeof(news_object.channels) === "undefined") { news_object.channels = {}; }
+			if (typeof(news_object.channels.browsers) === "undefined") { news_object.channels.browsers = {}; }
 
 			var prev_objects_str = XKit.storage.get("xkit_preferences", "news", "");
 			var prev_objects;
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
-			} catch (e) {
+				if (news_already_existing === 2) {
+					for (i=0;i<prev_objects.length;i++) {
+						if (prev_objects[i].id === news_object.id) {
+							prev_objects.splice(i, 1);
+							break;
+						}
+					}
+				}
+			} catch(e) {
 				prev_objects = [];
 			}
 
 			prev_objects.push(news_object);
 
 			var m_result = XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
-			if (m_result === true) {
-				console.log("News " + id + " pushed successfully.");
+			if (m_result) {
+				XKit.console.add("News " + news_object.id + " pushed successfully.");
 			} else {
 				console.error("Can not push news_object. Storage might be full.");
 			}
@@ -415,15 +475,16 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var i = prev_objects.length;
 			var m_return = "";
-
-			while (i--) {
-
+			while(i--) {
+				if (XKit.extensions.xkit_preferences.news.hide_news_entry(prev_objects[i])) { continue; }
 				var read_class = "unread";
-				if (prev_objects[i].read === true) { read_class = "read"; }
+				if (prev_objects[i].read) { read_class = "read"; }
 				m_return = m_return + '<div data-news-id="' + prev_objects[i].id +
-					'" class="xkit-news-item xkit-extension ' + read_class + ' text-only">' +
-					'<div class="xkit-mail-icon-' + read_class + '">&nbsp;</div>' + prev_objects[i].title + '</div>';
+					'" class="xkit-news-item xkit-extension ' + read_class + ' text-only">'+
+					'<div class="xkit-mail-icon-' + read_class + '">&nbsp;</div>' + prev_objects[i].title + '<div class="delete-news-item">✖</div></div>';
 			}
+
+			if (m_return !== "") { m_return = '<div id="mark-all-read" class="xkit-extension text-only" style="background-color: lightgray;">Mark all as read</div>' + m_return; }
 
 			return m_return;
 
@@ -460,8 +521,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_object;
 
-			for (var i = 0; i < prev_objects.length; i++) {
-				if (parseInt(prev_objects[i].id) === parseInt(id)) {
+			for (i=0;i<prev_objects.length;i++) {
+				if (prev_objects[i].id === id) {
 					m_object = prev_objects[i];
 					prev_objects[i].read = true;
 					break;
@@ -473,10 +534,9 @@ XKit.extensions.xkit_preferences = new Object({
 				return;
 			}
 
-			var m_html = '<div class="xkit-message-info">' +
-				"Received on " + XKit.extensions.xkit_preferences.convert_time(m_object.date) +
-				"</div>" +
-				'<div class="xkit-message-display">' + m_object.message + "</div>";
+			var m_html = '<div class="xkit-message-info"> Received on ' + XKit.extensions.xkit_preferences.convert_time(m_object.date);
+			if (typeof(m_object.author) !== "undefined") { m_html = m_html + "<br>Written by Mod " + m_object.author }
+			m_html = m_html + '</div><div class="xkit-message-display">' + m_object.message + "</div>";
 
 			$("#xkit-extensions-panel-right-inner").html(m_html);
 			$("#xkit-extensions-panel-right").removeClass("xkit-no-message");
@@ -489,14 +549,29 @@ XKit.extensions.xkit_preferences = new Object({
 			} else {
 				console.error("Can not save news_object with read flag. Storage might be full.");
 			}
-			var unread_news_count = XKit.extensions.xkit_preferences.news.unread_count();
-			if (unread_news_count === 0) {
-				$(".xkit_notice_container").removeClass("tab-notice--active");
-				setTimeout(function() { $(".xkit_notice_container > .tab_notice_value").html("0"); }, 300);
-			} else {
-				$(".xkit_notice_container > .tab_notice_value").html(unread_news_count);
+
+		},
+
+		delete: function(id) {
+			var prev_objects_str = XKit.storage.get("xkit_preferences","news","");
+			var prev_objects;
+			try {
+				prev_objects = JSON.parse(prev_objects_str);
+			} catch(e) {
+				prev_objects = [];
 			}
 
+			var m_object;
+
+			for (i=0;i<prev_objects.length;i++) {
+				if (prev_objects[i].id === id) {
+					prev_objects[i].deleted = true;
+					break;
+				}
+			}
+
+			XKit.storage.set("xkit_preferences","news",JSON.stringify(prev_objects));
+			console.log("Marked all news as read.");
 		},
 
 	},
@@ -753,20 +828,46 @@ XKit.extensions.xkit_preferences = new Object({
 			return;
 		} else {
 			$("#xkit-extensions-panel-left-inner").html(list_html);
+			$("#mark-all-read").click(function() {
+				XKit.extensions.xkit_preferences.news.mark_all_as_read();
+				$("#xkit-extensions-panel-left-inner").html(XKit.extensions.xkit_preferences.news.list());
+				$("#xkit-extensions-panel-left .xkit-news-item").click(function() {
+					var clicked_item = $(this);
+
+					$("#xkit-extensions-panel-left .xkit-news-item").not(this).removeClass("selected");
+					clicked_item.addClass("selected");
+					clicked_item.find(".xkit-mail-icon-unread").addClass("xkit-mail-icon-read");
+					clicked_item.find(".xkit-mail-icon-unread").removeClass("xkit-mail-icon-unread");
+					XKit.extensions.xkit_preferences.news.open(clicked_item.attr('data-news-id'));
+
+				});
+				$("#xkit-extensions-panel-left .xkit-news-item .delete-news-item").click(function() {
+					var clicked_item = $(this);
+					var news_id = clicked_item.parent().attr("data-news-id");
+					XKit.extensions.xkit_preferences.news.delete(news_id);
+					clicked_item.parent().remove();
+				});
+			});
 		}
 
 		$("#xkit-extensions-panel-left").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller();
 
 		$("#xkit-extensions-panel-left .xkit-news-item").click(function() {
-			var $this = $(this);
+			var clicked_item = $(this);
 
 			$("#xkit-extensions-panel-left .xkit-news-item").not(this).removeClass("selected");
-			$this.addClass("selected");
-			$this.find(".xkit-mail-icon-unread").addClass("xkit-mail-icon-read");
-			$this.find(".xkit-mail-icon-unread").removeClass("xkit-mail-icon-unread");
-			XKit.extensions.xkit_preferences.news.open($this.attr('data-news-id'));
+			clicked_item.addClass("selected");
+			clicked_item.find(".xkit-mail-icon-unread").addClass("xkit-mail-icon-read");
+			clicked_item.find(".xkit-mail-icon-unread").removeClass("xkit-mail-icon-unread");
+			XKit.extensions.xkit_preferences.news.open(clicked_item.attr('data-news-id'));
 
+		});
+		$("#xkit-extensions-panel-left .xkit-news-item .delete-news-item").click(function() {
+			var clicked_item = $(this);
+			var news_id = clicked_item.parent().attr("data-news-id");
+			XKit.extensions.xkit_preferences.news.delete(news_id);
+			clicked_item.parent().remove();
 		});
 
 	},
@@ -1255,14 +1356,14 @@ XKit.extensions.xkit_preferences = new Object({
 
 		} else if (XKit.installed.enabled(extension_id) === false) {
 
-			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>'; 
-			
+			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>';
+
 		} else if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-			
+
 			m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-				
+
 		} else {
-			
+
 			m_html = m_html + '<div id="xkit-extension-panel-settings"></div>';
 		}
 		$("#xkit-extensions-panel-right-inner").html(m_html);
@@ -1943,44 +2044,78 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	show_others_panel_news: function() {
-
+		function toggle_setting_click_handler(setting) {
+			return function () {
+				if (XKit.tools.get_setting(setting, "true") === "true") {
+					$(this).removeClass("selected");
+					XKit.tools.set_setting(setting, "false");
+				} else {
+					$(this).addClass("selected");
+					XKit.tools.set_setting(setting, "true");
+				}
+			};
+		}
 		var m_html = '<div class="xkit-others-panel">' +
 				'<div class="title">News Notifications</div>' +
 				'<div class="description">' +
-					'News section keeps you up to date with the latest on "What\'s going on?". ' +
-					'I periodically write news items for that section to let you know when there is a new extension, ' +
-					'a new feature, or when something goes wrong, such as when Tumblr changes things and breaks XKit.<br><br>' +
-					'News items are divided into two: <b>Feature Updates</b>, which alert you on bug fixes and new features/extensions ' +
-					'and <b>Important Updates</b>, sent only when there is something bad going on with XKit, ' +
-					'such as a Tumblr change or a bug that might cause annoyance or big problems.<br/><br/>' +
-					'You can turn off Feature Updates if you are not interested in them. You will continue receiving Important Updates ' +
+					'News section keeps you up to date with the latest on "What\'s going on?". '+
+					'We periodically write news items for that section to let you know when there is a new extension, '+
+					'a new feature, or when something goes wrong, such as when Tumblr changes things and breaks XKit.<br><br>'+
+					'News items are divided into two: <b>Feature Updates</b>, which alert you on bug fixes and new features/extensions '+
+					'and <b>Important Updates</b>, sent only when there is something bad going on with XKit, '+
+					'such as a Tumblr change or a bug that might cause annoyance or big problems.<br/><br/>'+
+					'You can turn off Feature Updates if you are not interested in them. You will continue receiving Important Updates '+
 					'if you do, since they usually have tips on how to make XKit work again if it goes berserk.' +
 				'</div>' +
 				'<div class="bottom-part">' +
-					'<div id="xkit-panel-enable-feature-updates" class="xkit-checkbox"><b>&nbsp;</b>Bring me Feature Updates</div>' +
+					'<div id="xkit-panel-browser-dependant-news">Show me Browser related news: </div><br>' +
+					'<ul id="xkit-panel-browser-dependant" class="news-panel">' +
+						'<li><div id="xkit-panel-enable-firefox-news" class="xkit-checkbox"><b>&nbsp;</b>Mozilla Firefox</div></li>' +
+						'<li><div id="xkit-panel-enable-chrome-news" class="xkit-checkbox"><b>&nbsp;</b>Google Chrome</div></li>' +
+						'<li><div id="xkit-panel-enable-safari-news" class="xkit-checkbox"><b>&nbsp;</b>Safari</div></li>' +
+					'</ul>' +
+					'<div id="xkit-panel-enable-type-dependant-news">Types of news: </div><br>' +
+					'<ul id="xkit-panel-type-dependant" class="news-panel">' +
+						'<li><div id="xkit-panel-enable-information" class="xkit-checkbox"><b>&nbsp;</b>Information</div></li>' +
+						'<li><div id="xkit-panel-enable-extension-updates" class="xkit-checkbox"><b>&nbsp;</b>Extension Updates</div></li>' +
+						'<li><div id="xkit-panel-enable-weekly" class="xkit-checkbox"><b>&nbsp;</b>Weekly reports</div></li>' +
+						'<li><div id="xkit-panel-enable-developers" class="xkit-checkbox"><b>&nbsp;</b>News for developers</div></li>' +
+					'</ul>' +
 				'</div>' +
 				'</div>';
 
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		$("#xkit-extensions-panel-right").nanoScroller();
 
-		if (XKit.tools.get_setting("xkit_show_feature_updates", "true") === "true") {
-			$("#xkit-panel-enable-feature-updates").addClass("selected");
+		if (XKit.tools.get_setting("xkit_show_firefox_news", XKit.browser().firefox.toString()) === "true") {
+			$("#xkit-panel-enable-firefox-news").addClass("selected");
+		}
+		if (XKit.tools.get_setting("xkit_show_chrome_news", XKit.browser().chrome.toString()) === "true") {
+			$("#xkit-panel-enable-chrome-news").addClass("selected");
+		}
+		if (XKit.tools.get_setting("xkit_show_safari_news", XKit.browser().safari.toString()) === "true") {
+			$("#xkit-panel-enable-safari-news").addClass("selected");
+		}
+		if (XKit.tools.get_setting("xkit_show_information","true") === "true") {
+			$("#xkit-panel-enable-information").addClass("selected");
+		}
+		if (XKit.tools.get_setting("xkit_show_extension_updates","true") === "true") {
+			$("#xkit-panel-enable-extension-updates").addClass("selected");
+		}
+		if (XKit.tools.get_setting("xkit_show_weekly_news","true") === "true") {
+			$("#xkit-panel-enable-weekly").addClass("selected");
+		}
+		if (XKit.tools.get_setting("xkit_show_developers","false") === "true") {
+			$("#xkit-panel-enable-developers").addClass("selected");
 		}
 
-		$("#xkit-panel-enable-feature-updates").click(function() {
-
-			if (XKit.tools.get_setting("xkit_show_feature_updates", "true") === "true") {
-				$("#xkit-panel-enable-feature-updates").removeClass("selected");
-				XKit.extensions.xkit_preferences.news.mark_all_as_read();
-				XKit.tools.set_setting("xkit_show_feature_updates", "false");
-			} else {
-				$("#xkit-panel-enable-feature-updates").addClass("selected");
-				XKit.tools.set_setting("xkit_show_feature_updates", "true");
-			}
-
-		});
-
+		$("#xkit-panel-enable-firefox-news").click(toggle_setting_click_handler("xkit_show_firefox_news"));
+		$("#xkit-panel-enable-chrome-news").click(toggle_setting_click_handler("xkit_show_chrome_news"));
+		$("#xkit-panel-enable-safari-news").click(toggle_setting_click_handler("xkit_show_safari_news"));
+		$("#xkit-panel-enable-information").click(toggle_setting_click_handler("xkit_show_information"));
+		$("#xkit-panel-enable-extension-updates").click(toggle_setting_click_handler("xkit_show_extension_updates"));
+		$("#xkit-panel-enable-weekly").click(toggle_setting_click_handler("xkit_show_weekly_news"));
+		$("#xkit-panel-enable-developers").click(toggle_setting_click_handler("xkit_show_developers"));
 	},
 
 	show_others_panel_show_storage: function() {
