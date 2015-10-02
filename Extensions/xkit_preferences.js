@@ -1893,14 +1893,14 @@ XKit.extensions.xkit_preferences = new Object({
 
 				for (var i=0;i<XKit.extensions[extension_id].preferences[pref].values.length;i++) {
 
-					var extra_classes = "";
-
+					var option = document.createElement("option");
+					option.setAttribute("value", XKit.extensions[extension_id].preferences[pref].values[i + 1]);
+					option.innerText = XKit.extensions[extension_id].preferences[pref].values[i];
 					if (XKit.extensions[extension_id].preferences[pref].values[i + 1] === XKit.extensions[extension_id].preferences[pref].value) {
-						extra_classes = 'selected="true"';
+						option.setAttribute("selected", "true");
 					}
 
-					m_return = m_return + "<option " + extra_classes +
-					' value="' + XKit.extensions[extension_id].preferences[pref].values[i + 1] + '">' + XKit.extensions[extension_id].preferences[pref].values[i] + "</option>";
+					m_return = m_return + option.outerHTML;
 
 					i++;
 
