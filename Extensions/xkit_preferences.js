@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.2.0 **//
+//* VERSION 5.2.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -90,12 +90,12 @@ XKit.extensions.xkit_preferences = new Object({
 
 		XKit.tools.init_css("xkit_preferences");
 		// $("#help_button, .tab_help").css("display","none");
-		
+
 		var holiday_class = ""; var tmp_date = new Date();
 		if (tmp_date.getDate() === 31 && tmp_date.getMonth() === 9) {
 			holiday_class = " halloween";
 		}
-		
+
 		var m_html = '<div class="tab iconic' + holiday_class + '" id="new-xkit-control">' +
 			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#" onclick="return false">XKit Control Panel</a>' +
 			'</div>';
@@ -1958,10 +1958,14 @@ XKit.extensions.xkit_preferences = new Object({
 					m_placeholder = XKit.extensions[extension_id].preferences[pref].placeholder;
 				}
 
-				m_return = m_return + '<input data-extension-id="' + extension_id + '" data-setting-id="'+ pref + '" class="xkit-textbox" placeholder="' + m_placeholder + '" value="' + XKit.extensions[extension_id].preferences[pref].value + '">';
+				var textInput = document.createElement("input");
+				textInput.setAttribute("class", "xkit-textbox");
+				textInput.setAttribute("data-extension-id", extension_id);
+				textInput.setAttribute("data-setting-id", pref);
+				textInput.setAttribute("placeholder", m_placeholder);
+				textInput.setAttribute("value", XKit.extensions[extension_id].preferences[pref].value);
 
-				m_return = m_return + "</div>";
-
+				m_return = m_return + textInput.outerHTML + "</div>";
 
 			}
 
