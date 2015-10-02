@@ -89,7 +89,6 @@ XKit.extensions.xkit_preferences = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("xkit_preferences");
-		// $("#help_button, .tab_help").css("display","none");
 
 		var holiday_class = ""; var tmp_date = new Date();
 		if (tmp_date.getDate() === 31 && tmp_date.getMonth() === 9) {
@@ -109,8 +108,6 @@ XKit.extensions.xkit_preferences = new Object({
 		$(".l-header").find("#account_button").before(m_html);
 		$(".no-js").removeClass("no-js"); // possibly unnecessary // mobile stuff
 		$(".mobile-logo").html(mobile_html); // mobile stuff
-
-		//$("#new-xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
 
 		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
@@ -246,10 +243,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 		XKit.extensions.xkit_preferences.spring_cleaning();
 
-		/*if (shown_notification_notification === "0") {
-			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
-			XKit.storage.set("xkit_preferences","shown_notification_notification","1");
-		}*/
 	},
 
 	spring_cleaning_m_list_html: "",
@@ -466,10 +459,6 @@ XKit.extensions.xkit_preferences = new Object({
 		},
 
 		create: function(id, title, message, date, important) {
-
-			/*if (important !== "1" && XKit.tools.get_setting("xkit_show_feature_updates","true") !== "true") {
-				return;
-			}*/
 
 			if (XKit.extensions.xkit_preferences.news.check(id) === true) {
 				XKit.console.add("News " + id + " could not be pushed: already exists.");
@@ -869,7 +858,6 @@ XKit.extensions.xkit_preferences = new Object({
 	close: function() {
 
 		$("body").css("overflow","auto");
-		//$('#container').foggy(false);
 		$(".l-container").css("opacity","1");
 		$("#xkit-control-panel-shadow").fadeOut(400);
 		$("#xkit-control-panel").animate({ marginTop: '-50px', opacity: 0}, 600, function() {
@@ -1673,9 +1661,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		});
 
-		//if ($("#xkit-extensions-panel-right-inner .xkit-extension-setting").length >= 4) {
 		$("#xkit-extensions-panel-right-inner .xkit-extension-setting:last-child").css("background","0").css("border-bottom","0");
-		//}
 
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
