@@ -1825,13 +1825,14 @@ XKit.extensions.xkit_preferences = new Object({
 
 					if (m_blogs[i] === "") { continue; }
 
-					var extra_classes = "";
-
+					var option = document.createElement("option");
+					option.setAttribute("value", m_blogs[i]);
+					option.innerText = m_blogs[i];
 					if (m_blogs[i] === XKit.extensions[extension_id].preferences[pref].value) {
-						extra_classes = 'selected="true"';
+						option.setAttribute("selected", "true");
 					}
 
-					m_return = m_return + "<option " + extra_classes + ' value="' + m_blogs[i] + '">' + m_blogs[i] + '</option>';
+					m_return = m_return + option.outerHTML;
 
 				}
 
