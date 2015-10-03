@@ -103,7 +103,6 @@ XKit.extensions.outbox = new Object({
 
 		if (wait === true) {
 			if (!get_fanmail_send_button()) {
-				XKit.console.add("Waiting for fan-mail window to pop up..");
 				setTimeout(function() { XKit.extensions.outbox.run_fan_mail(true); }, 200);
 				return;
 			}
