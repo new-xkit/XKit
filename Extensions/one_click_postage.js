@@ -747,14 +747,12 @@ XKit.extensions.one_click_postage = new Object({
 		});
 
 		$(document).on("mouseover",".reblog_button,.post_control.reblog", function(event) {
-			if ($(this).hasClass("radar_button") === true) {return; }
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
 			XKit.extensions.one_click_postage.open_menu($(this));
 		});
 
 		$(document).on("mouseout mouseleave",".reblog_button,.post_control.reblog", function() {
-			if ($(this).hasClass("radar_button") === true) {return; }
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
