@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.1.0 **//
+//* VERSION 5.1.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -266,7 +266,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	spring_cleaning: function() {
 
-		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo"];
+		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "satsukimous"];
 
 		var removed_list = [];
 
