@@ -10,13 +10,13 @@ if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "
   cd XKit &&\
   git checkout gh-pages &&\
   git merge master -m "[Travis (BUILD $TRAVIS_BUILD_NUMBER)]Merge master" &&\
-  npm install -g gulp &&\
-  npm install &&\
+  npm install -g gulp
+  npm install
   gulp build:extensions &&\
   gulp build:themes &&\
   git add Extensions &&\
   git commit -m "[Travis (BUILD $TRAVIS_BUILD_NUMBER)]Rebuild distribution" &&\
   git push -fq origin gh-pages > /dev/null &&\
 
-  echo -e "Rebuilt extension dist.\n"
+  echo -e "Rebuilt extension dist.\n" &&\
 fi
