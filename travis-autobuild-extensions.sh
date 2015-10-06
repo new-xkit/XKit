@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "true" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo -e "Rebuilding extension dist...\n"
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
-  git clone --quiet https://"$GH_TOKEN"@github.com/NewXKitBot/XKit > /dev/null
+  git clone https://"$GH_TOKEN"@github.com/NewXKitBot/XKit
   git checkout gh-pages &&\
   git merge master -m "[Travis (BUILD $TRAVIS_BUILD_NUMBER)]Merge master" &&\
   gulp build:extensions &&\
