@@ -1,7 +1,6 @@
 #!/bin/bash
 
 if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-
   echo -e "Rebuilding extension dist...\n"
 
   cd $HOME
@@ -19,5 +18,4 @@ if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "
   git checkout master
 
   echo -e "Rebuild extension dist.\n"
-  
 fi
