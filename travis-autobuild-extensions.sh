@@ -6,16 +6,14 @@ if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
-  git checkout master &&\
-  git pull &&\
+  git clone --quiet https://"$GH_TOKEN"@github.com/NewXKitBot/XKit > /dev/null
   git checkout gh-pages &&\
   git merge master -m "[Travis (BUILD $TRAVIS_BUILD_NUMBER)]Merge master" &&\
   gulp build:extensions &&\
   gulp build:themes &&\
   git add Extensions &&\
   git commit -m "[Travis (BUILD $TRAVIS_BUILD_NUMBER)]Rebuild distribution" &&\
-  git push &&\
-  git checkout master
+  git push -fq origin gh-pages > /dev/null
 
-  echo -e "Rebuild extension dist.\n"
+  echo -e "Rebuilt extension dist.\n"
 fi
