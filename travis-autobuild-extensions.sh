@@ -7,6 +7,7 @@ if [ "$TRAVIS_REPO_SLUG" == "NewXKitBot/XKit" ] && [ "$TRAVIS_PULL_REQUEST" == "
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
   git clone https://"$GH_TOKEN"@github.com/NewXKitBot/XKit &&\
+  cd XKit
   git checkout gh-pages &&\
   git merge master -m "[Travis (BUILD $TRAVIS_BUILD_NUMBER)]Merge master" &&\
   gulp build:extensions &&\
