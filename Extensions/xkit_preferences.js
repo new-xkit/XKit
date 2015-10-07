@@ -251,7 +251,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	spring_cleaning: function() {
 
-		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo"];
+		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "satsukimous"];
 
 		var removed_list = [];
 
