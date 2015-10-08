@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.7 **//
+//* VERSION 4.0.8 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -156,6 +156,7 @@ XKit.extensions.one_click_postage = new Object({
 
 	auto_tagger: false,
 	auto_tagger_preferences: "",
+	auto_tagger_done: false,
 
 	quick_tags: false,
 
@@ -783,7 +784,7 @@ XKit.extensions.one_click_postage = new Object({
 		};
 
 		$(document).on("mouseover","#x1cpostage_box", cancel_menu_close);
-		$(document).on("mouseout","#x1cpostage_box", function() { console.log("1221"); menu_close(); });
+		$(document).on("mouseout","#x1cpostage_box", menu_close);
 
 		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
 			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value
@@ -1116,7 +1117,12 @@ XKit.extensions.one_click_postage = new Object({
 		// Call Auto Tagger for tags. Will be "" if auto_tagger is disabled
 		var post_obj = XKit.interface.post($(parent_box));
 		var state = 0; // reblog
-		$("#x1cpostage_tags").val(this.get_auto_tagger_tags(post_obj, state, false));
+		var tags = $("#x1cpostage_tags").val();
+		if (!XKit.extensions.one_click_postage.auto_tagger_done) {
+			XKit.extensions.one_click_postage.auto_tagger_done = true;
+			tags = tags + (tags?", ":"") + this.get_auto_tagger_tags(post_obj, state, false);
+		}
+		$("#x1cpostage_tags").val(tags);
 
 		// Quick Tags?
 		$("#x1cpostage_quick_tags").remove();
@@ -1182,6 +1188,7 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_tags").val("");
 		$("#x1cpostage_tags").blur();
 		$("#x1cpostage_caption").blur();
+		XKit.extensions.one_click_postage.auto_tagger_done = false;
 	},
 	close_menu: function(obj, force) {
 
