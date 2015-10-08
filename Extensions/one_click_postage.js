@@ -1072,7 +1072,7 @@ XKit.extensions.one_click_postage = new Object({
 		// Get the box ID.
 		var parent_box = $(obj).parentsUntil(".post").parent();
 		var box_id = JSON.parse($(parent_box).attr("data-json")).id;
-		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('id');
+		var previous_id = JSON.parse($(XKit.extensions.one_click_postage.last_object).attr("data-json") || "{}").id;
 
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
