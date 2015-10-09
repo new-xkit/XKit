@@ -586,7 +586,7 @@ XKit.extensions.postarchive = {
 
 			var last_width = 0;
 			for (var obj in data.player) {
-				if (data.player[obj].width > last_width && data.player[obj].width <= 500) {
+				if (data.player[obj].width > last_width && data.player[obj].width <= 540) {
 					m_post_inner_html = data.player[obj].embed_code;
 					last_width = data.player[obj].width;
 				}
