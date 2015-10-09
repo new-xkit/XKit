@@ -591,7 +591,9 @@ XKit.extensions.postarchive = {
 					last_width = data.player[obj].width;
 				}
 			}
-			m_post_inner_html = m_post_inner_html.slice(0,8) + ' controls' + m_post_inner_html.slice(8);
+			if (m_post_inner_html.indexOf("<video") !== -1) {
+				m_post_inner_html = m_post_inner_html.slice(0,8) + ' controls ' + m_post_inner_html.slice(8);
+			}
 
 			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
 
