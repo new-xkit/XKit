@@ -335,25 +335,18 @@ XKit.extensions.postarchive = {
 			m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
 			m_data.categories = XKit.storage.get("postarchive", "categories","");
 
-			var m_html = "<div id=\"xkit-postarchive-share-code\" class=\"nano\">" +
+			var m_html = "<div id=\"xkit-postarchive-share-code\">" +
 					"<div class=\"content\">" +
-						"<pre id=\"xkit-postarchive-share-code-inner\">" +
-							$('<div/>').text(JSON.stringify(m_data)).html() +
-						"</pre>" +
+						"<textarea readonly id=\"xkit-postarchive-share-code-inner\">" +
+						"</textarea>" +
 					"</div>" +
 				"</div>";
 
 			XKit.window.show("Export Archive","Copy and paste the following into a file:" + m_html,"info","<div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div>");
-
-			$("#xkit-postarchive-share-code").nanoScroller();
-			$("#xkit-postarchive-share-code").nanoScroller({ scroll: 'top' });
+			$('#xkit-postarchive-share-code-inner').val(JSON.stringify(m_data));
 
 			$("#xkit-postarchive-share-code-inner").click(function() {
-				var range = document.createRange();
-				var selection = window.getSelection();
-			    range.selectNodeContents(this);
-			    selection.removeAllRanges();
-			    selection.addRange(range);
+				$(this)[0].select();
 			});
 
 			$("#xkit-postarchive-export-confirm").click(function() {
