@@ -731,7 +731,7 @@ XKit.extensions.postarchive = {
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
-								"<img src=\"http://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/24\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
+								"<img src=\"http://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/48\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
 							"</div>" +
 							source_div +
 						"</div>" +
@@ -1089,7 +1089,7 @@ XKit.extensions.postarchive = {
 
 			} else if ($(dpostobj).find('.reblog-list').length > 0) {
 
-				m_title = $(dpostobj).find('.reblog-list-item:first .reblog-content:first-child').text();
+				m_title = $(dpostobj).find('.reblog-list-item:first .reblog-content').text();
 
 			}
 
