@@ -618,7 +618,7 @@ XKit = {
 	},
 	console: {
 		add: function(text) {
-			console.warn("[DEPRECATED] XKit.console", text);
+			console.log("[DEPRECATED XKit.console call]", text);
 		}
 	},
 	window: {
