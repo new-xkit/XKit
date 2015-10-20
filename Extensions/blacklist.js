@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.6 **//
+//* VERSION 2.7.7 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -210,9 +210,7 @@ XKit.extensions.blacklist = new Object({
 			text = document.selection.createRange().text;
 		}
 
-		} catch(err) {
-			// console.log("ho");
-		}
+		} catch(err) { }
 
 		if (text === "" ||typeof text === "undefined"){
 			return;
@@ -564,12 +562,7 @@ XKit.extensions.blacklist = new Object({
 					//$(this).css("background","green");
 				}
 
-			} catch(e) {
-
-				// XKit.console.add("Can't parse post: " + e.message);
-				// $(this).css("background","red");
-
-			}
+			} catch(e) {}
 
 		});
 
@@ -583,17 +576,13 @@ XKit.extensions.blacklist = new Object({
 
 							try {
 								Tumblr.Events.trigger("DOMEventor:updateRect");
-							} catch(e) {
-								// console.log("!!! XKit blacklist ---> " + e.message);
-							}
+							} catch(e) {}
 
 						}, 1000);
 					}else {
 						Tumblr.Events.trigger("DOMEventor:updateRect");
 					}
-				} catch(e) {
-					// console.log("!!! XKit blacklist ---> " + e.message);
-				}
+				} catch(e) {}
 			}, true, "");
 
 			}, 300);
@@ -634,9 +623,7 @@ XKit.extensions.blacklist = new Object({
 		if ($(m_div).hasClass("disable-gifs-checked")) {
 			try {
 				XKit.extensions.disable_gifs.redraw_canvases($(m_div));
-			} catch(err) {
-				// console.log("Unable to redraw canvases for Disable Gifs: " + e.message);
-			}
+			} catch(err) {}
 		}
 
 	},
@@ -738,13 +725,10 @@ XKit.extensions.blacklist = new Object({
 
 		}*/
 
-		//// console.log(tags);
 
 		// $(obj).css("background","blue"); return;
 
 		if (XKit.extensions.blacklist.check_for_whitelist(new_array, post_content, tags) !== "") {
-			// $(obj).css("background","cyan");
-			// // console.log("Skipping because of " + XKit.extensions.blacklist.check_for_whitelist(new_array, post_content, tags));
 			return "";
 		}
 
@@ -763,8 +747,6 @@ XKit.extensions.blacklist = new Object({
 			var m_word = to_use[i].toLowerCase();
 			if ($.trim(m_word) === "") { continue; }
 
-			// console.log("blacklist -> current word is \"" + m_word + "\"");
-
 			var m_word_wildcard = false;
 
 			if (m_word.substring(m_word.length - 1) === "*") {
@@ -781,16 +763,13 @@ XKit.extensions.blacklist = new Object({
 			var tag_search_mode = false;
 
 			if (m_word.substring(0,1) === "#") {
-				// console.log("blacklist -> checking tags only...");
 				if (tags.length === 0) { continue; }
 				m_word = m_word.substring(1);
 				tag_search_mode = true;
 				m_p_words = tags;
 			} else {
-				// console.log("blacklist -> checking tags + content...");
 				m_p_words = p_words;
 				m_p_words = m_p_words.concat(tags);
-				// console.log(m_p_words);
 			}
 
 			var m_post_content = post_content;
@@ -818,14 +797,12 @@ XKit.extensions.blacklist = new Object({
 					if (XKit.extensions.blacklist.preferences.use_improved.value === true) {
 						// This will use some CPU...
 						if (m_post_content.indexOf(m_word) !== -1) {
-							// // console.log('%c  found on m_post_content.', 'background: #a5edae; color: black');
 							for (var m=0;m<m_p_words.length;m++) {
 								if (m_p_words[m].indexOf(m_word) !== -1) {
 									mp_word = m_p_words[m].replace(/\./g, '');
 									mp_word = mp_word.replace(/\,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
 									mp_word = mp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ");
-									//// console.log('%c  mp_word = ' + mp_word, 'background: #a5edae; color: black');
 									if (m_word === mp_word) {
 										if (tag_search_mode) {
 											return "#" + m_word;
@@ -883,8 +860,6 @@ XKit.extensions.blacklist = new Object({
 
 							tmp_word = tmp_word.replace(/\,/g, '').replace(/\u2026/g, '');
 							tmp_word = tmp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ");
-
-							// // console.log("--------- " + tmp_word);
 
 							if (tmp_word.indexOf(m_word) !== -1) {
 								if (tag_search_mode) {
