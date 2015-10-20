@@ -180,7 +180,7 @@ XKit.extensions.mass_plus = new Object({
 	},
 	search_next_page: function(tag) {
 		var search_url = this.search_url + "&offset=" + (this.search_page * this.api_page_length);
-		XKit.console.add("Fetching " + search_url);
+		console.log("Fetching " + search_url);
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: search_url,

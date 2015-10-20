@@ -252,7 +252,7 @@ XKit.extensions.timestamps = new Object({
 				method: "GET",
 				url: api_url,
 				onerror: function() {
-					XKit.console.add('Unable to load timestamp for post ' + post_id);
+					console.log('Unable to load timestamp for post ' + post_id);
 					self.show_failed(date_element);
 				},
 				onload: function(response) {
@@ -264,13 +264,13 @@ XKit.extensions.timestamps = new Object({
 						date_element.removeClass("xtimestamp_loading");
 						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
 					} catch(e) {
-						XKit.console.add('Unable to load timestamp for post ' + post_id);
+						console.log('Unable to load timestamp for post ' + post_id);
 						self.show_failed(date_element);
 					}
 				}
 			});
 		} catch(e) {
-			XKit.console.add('Unable to load timestamp for post ' + post_id);
+			console.log('Unable to load timestamp for post ' + post_id);
 			XKit.extensions.timestamps.show_failed(date_element);
 		}
 	},

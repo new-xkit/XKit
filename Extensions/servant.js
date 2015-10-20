@@ -1051,7 +1051,7 @@ XKit.extensions.servant = new Object({
 								XKit.installed.enable(parameter);
 								XKit.notifications.add("Enabled '" + parameter + "'", "ok");
 							} catch(e) {
-								XKit.console.add("Can not run " + extension_id + ": " + e.message);
+								console.log("Can not run " + extension_id + ": " + e.message);
 							}
 
 						}

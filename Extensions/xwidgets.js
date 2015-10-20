@@ -1263,10 +1263,10 @@ XKit.extensions.xwidgets = new Object({
 			if (XKit.extensions.xwidgets.user_widgets[i] !== "" || typeof XKit.extensions.xwidgets.user_widgets[i] !== "undefined") {
 
 				try {
-					XKit.console.add("---> " + [XKit.extensions.xwidgets.user_widgets[i]]);
+					console.log("---> " + [XKit.extensions.xwidgets.user_widgets[i]]);
 					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[i]].init($("#xwidgets-box-" + i), XKit.extensions.xwidgets.widget_data[i]);
 				} catch(e) {
-					XKit.console.add("Can't load slot #" + i + ": " + e.message);
+					console.log("Can't load slot #" + i + ": " + e.message);
 					XKit.extensions.xwidgets.widgets.blank.init($("#xwidgets-box-" + i), XKit.extensions.xwidgets.widget_data[i]);
 				}
 

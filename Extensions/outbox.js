@@ -35,7 +35,7 @@ XKit.extensions.outbox = new Object({
 
 	frame_run: function() {
 
-		XKit.console.add("Outbox working on Frame mode...");
+		console.log("Outbox working on Frame mode...");
 		this.run_fan_mail(true);
 		if (document.location.href.indexOf('/ask_form') !== -1) {
 			this.run_ask_frame();
@@ -103,14 +103,14 @@ XKit.extensions.outbox = new Object({
 
 		if (wait === true) {
 			if (!get_fanmail_send_button()) {
-				XKit.console.add("Waiting for fan-mail window to pop up..");
+				console.log("Waiting for fan-mail window to pop up..");
 				setTimeout(function() { XKit.extensions.outbox.run_fan_mail(true); }, 200);
 				return;
 			}
 			get_fanmail_send_button().onclick = XKit.extensions.outbox.save_fan_mail;
 		}
 
-		XKit.console.add("Activating run_fan_mail on outbox...");
+		console.log("Activating run_fan_mail on outbox...");
 		XKit.extensions.outbox.fan_mail_form_key = $('meta[name=tumblr-form-key]').attr("content");
 
 	},
@@ -126,10 +126,10 @@ XKit.extensions.outbox = new Object({
 		var check_status = $("#checkmark").css("display") !== "none";
 
 		if ($("#to_input").attr('type') === "hidden") {
-			XKit.console.add("outbox: to field hidden, validating.");
+			console.log("outbox: to field hidden, validating.");
 			check_status = true;
 		} else {
-			XKit.console.add("outbox: to field text box, might not make it.");
+			console.log("outbox: to field text box, might not make it.");
 		}
 
 		if ($.trim(m_msg) === "" || !check_status) {
@@ -226,7 +226,7 @@ XKit.extensions.outbox = new Object({
 		XKit.extensions.outbox.check_indash_asks();
 
 		if (XKit.interface.where().inbox !== true && document.location.href.indexOf('://www.tumblr.com/send') == -1) {
-			XKit.console.add("Outbox -> Quitting, not in inbox");
+			console.log("Outbox -> Quitting, not in inbox");
 			return;
 		}
 

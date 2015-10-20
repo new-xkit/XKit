@@ -452,7 +452,7 @@ XKit.extensions.show_more = new Object({
 			} catch(err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
-				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);
+				console.log("show_more -> Can't parse popup_data:" + e.message);
 			}
 
 		} else {
@@ -473,7 +473,7 @@ XKit.extensions.show_more = new Object({
 					console.log("show_more: Could not fetch data.");
 					XKit.extensions.show_more.popup_data = {};
 					XKit.extensions.show_more.popup_data.error = true;
-					XKit.console.add("show_more -> Can't parse popup_data - not defined.");
+					console.log("show_more -> Can't parse popup_data - not defined.");
 				},
 				onload: function(response) {
 
@@ -506,7 +506,7 @@ XKit.extensions.show_more = new Object({
 		try {
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
 		} catch(err) {
-			XKit.console.add("show_more -> Can't parse popup_data");
+			console.log("show_more -> Can't parse popup_data");
 			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
 		}
@@ -678,7 +678,7 @@ XKit.extensions.show_more = new Object({
 							if ($("#ask_anonymously", data).length > 0) {
 								XKit.extensions.show_more.anon_available[username] = true;
 							} else {
-								XKit.console.add("No anon messages for " + username);
+								console.log("No anon messages for " + username);
 							}
 						}
 					});

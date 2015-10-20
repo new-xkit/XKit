@@ -540,7 +540,7 @@ XKit.extensions.mute = new Object({
 		try {
 			XKit.extensions.show_more.remove_custom_menu("mute");
 		} catch(e){
-			XKit.console.add("Can't remove custom menu, " + e.message);
+			console.log("Can't remove custom menu, " + e.message);
 		}
 
 	},

@@ -26,18 +26,18 @@ XKit.extensions.reblog_as_text = new Object({
 	fix_page: function() {
 
 		if ($("#tumblelog_choices").length === 0 ||$(".mceEditor").length === 0) {
-			XKit.console.add("Reblog window Not active yet, delaying..");
+			console.log("Reblog window Not active yet, delaying..");
 			setTimeout(function() { XKit.extensions.reblog_as_text.fix_page(); }, 100);
 			return;
 		}
 
 		if ($("#reblog_as").length === 0) {
 			// Already probably reblogging as a text.
-			XKit.console.add("\"Reblog As\" div not found, quitting.");
+			console.log("\"Reblog As\" div not found, quitting.");
 			return;
 		}
 
-		XKit.console.add("Switching to reblog as text mode.");
+		console.log("Switching to reblog as text mode.");
 		var do_this = false;
 		if ($("#reblog_select").find(".option:first-child").attr('data-option-value') === "text") {
 			do_this = true;

@@ -75,7 +75,7 @@ XKit.extensions.classic_tags = new Object({
 
 		} catch(e) {
 
-			XKit.console.add("Can't run Classic Tags:" + e.message);
+			console.log("Can't run Classic Tags:" + e.message);
 
 		}
 	},

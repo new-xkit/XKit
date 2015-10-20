@@ -74,7 +74,7 @@ XKit.extensions.autoscroll = new Object({
 			controlSteps.removeAttr("selected");
 			$(event.target).attr("selected","true");
 			currentStep = $(event.target).attr("number");
-			XKit.console.add("Scroll index: " + currentStep);
+			console.log("Scroll index: " + currentStep);
 
 			// Start scrolling
 			var wasScrolling = isScrolling;
@@ -83,7 +83,7 @@ XKit.extensions.autoscroll = new Object({
 			// to prevent possible race condition.
 			if(wasScrolling === false)
 			{
-				XKit.console.add("Scrolling Started");
+				console.log("Scrolling Started");
 				setTimeout(scrollFunction,50);
 			}
 
@@ -96,7 +96,7 @@ XKit.extensions.autoscroll = new Object({
 			{
 				isScrolling = false;
 				controlSteps.removeAttr("selected");
-				XKit.console.add("Scrolling stopped");
+				console.log("Scrolling stopped");
 			}
 		});
 	},

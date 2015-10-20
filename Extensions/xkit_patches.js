@@ -107,7 +107,7 @@ XKit.tools.get_current_blog = function() {
 			return image.attr("alt");
 		}
 	}
-	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
+	console.log('XKit.tools.get_current_blog: Warning, fell back to main blog');
 	return XKit.tools.get_blogs()[0];
 };
 
@@ -637,7 +637,7 @@ XKit.tools.dump_config = function(){
 					if (typeof additional == "undefined") {additional = ""; }
 
 					if (XKit.interface.post_window.added_icon.indexOf(class_name) === -1) {
-						// XKit.console.add("Interface -> Can't add icon, button not created, use create_control_button.");
+						// console.log("Interface -> Can't add icon, button not created, use create_control_button.");
 						return;
 					}
 
@@ -692,7 +692,7 @@ XKit.tools.dump_config = function(){
 					if ($(".html-field").css("display") === "none") {
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
-							XKit.console.add('ERROR: unable to set content html');
+							console.log('ERROR: unable to set content html');
 							return;
 						}
 						content_editor.focus();
@@ -907,7 +907,7 @@ XKit.tools.dump_config = function(){
 						return XKit.interface.post_window_listener.set_listen();
 					}
 
-					// XKit.console.add("interface -> Post Window found, running attached functions. [" + XKit.interface.post_window_listener_window_id + "]");
+					// console.log("interface -> Post Window found, running attached functions. [" + XKit.interface.post_window_listener_window_id + "]");
 
 					for (var i=0;i<XKit.interface.post_window_listener_id.length;i++) {
 
@@ -916,7 +916,7 @@ XKit.tools.dump_config = function(){
 							try {
 								XKit.interface.post_window_listener_func[i].call();
 							}catch(e) {
-								// XKit.console.add("interface -> post_window_listener -> can't run \"" + XKit.interface.post_window_listener_id[i] + "\": " + e.message);
+								// console.log("interface -> post_window_listener -> can't run \"" + XKit.interface.post_window_listener_id[i] + "\": " + e.message);
 							}
 						}
 
@@ -1032,7 +1032,7 @@ XKit.tools.dump_config = function(){
 					tumblr_object = {};
 					tumblr_object.error = true;
 					tumblr_object.message = "Wrong/corrupt tumblr object, post object not found.";
-					// XKit.console.add(tumblr_object.message);
+					// console.log(tumblr_object.message);
 					return tumblr_object;
 				}
 
@@ -1418,7 +1418,7 @@ XKit.tools.dump_config = function(){
 				if (typeof additional == "undefined") {additional = ""; }
 
 				if (XKit.interface.added_icon.indexOf(class_name) === -1) {
-					// XKit.console.add("Interface -> Can't add icon, button not created, use create_control_button.");
+					// console.log("Interface -> Can't add icon, button not created, use create_control_button.");
 					return;
 				}
 
@@ -1842,7 +1842,6 @@ XKit.tools.dump_config = function(){
 
 			// Check page then return control to init_extension.
 			if (document.location.href.indexOf('http://www.tumblr.com/xkit_reset') !== -1 ||
-				document.location.href.indexOf('http://www.tumblr.com/xkit_log') !== -1 ||
 				document.location.href.indexOf('http://www.tumblr.com/xkit_editor') !== -1 ||
 				document.location.href.indexOf('http://www.tumblr.com/xkit_update=') !== -1) {
 				XKit.page.xkit = true;
@@ -1854,7 +1853,7 @@ XKit.tools.dump_config = function(){
 				XKit.page.standard = true;
 				XKit.init_extension();
 			} else {
-				// XKit.console.add("In IFRAME, location: " + document.location.href);
+				// console.log("In IFRAME, location: " + document.location.href);
 				if (document.location.href.indexOf("http://www.tumblr.com/send") === -1) {
 					XKit.page.standard = true;
 				}
@@ -1952,7 +1951,7 @@ XKit.tools.dump_config = function(){
 
 				$("#xkit-notifications").append(m_html);
 
-				// XKit.console.add(" Notification > " + message);
+				// console.log(" Notification > " + message);
 
 				var m_notification_id = XKit.notifications.count;
 				setTimeout(function() {

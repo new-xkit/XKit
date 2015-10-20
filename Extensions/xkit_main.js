@@ -28,21 +28,21 @@ XKit.extensions.xkit_main = new Object({
 		}
 		this.running = true;
 
-		XKit.console.add("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
+		console.log("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
 		// Run XKit Patches first.
 		if (XKit.flags.do_not_load_xkit_patches !== true) {
 
 			var m_result = XKit.extensions.xkit_main.run_extension("xkit_patches", true, true);
 			if (m_result === false) {
-				XKit.console.add("Can not run xkit_patches! (version " + XKit.installed.version('xkit_patches') +")");
+				console.log("Can not run xkit_patches! (version " + XKit.installed.version('xkit_patches') +")");
 			} else {
-				XKit.console.add("Running xkit_patches (version " + XKit.installed.version('xkit_patches') + ")");
+				console.log("Running xkit_patches (version " + XKit.installed.version('xkit_patches') + ")");
 			}
 
 		} else {
 
-			XKit.console.add("Skipping xkit_patches (flag on)");
+			console.log("Skipping xkit_patches (flag on)");
 
 		}
 
@@ -50,12 +50,12 @@ XKit.extensions.xkit_main = new Object({
 		XKit.extensions.xkit_main.to_run = XKit.installed.list();
 
 		if (XKit.extensions.xkit_main.should_slow_down() === true) {
-			XKit.console.add("XKit Main: Slow-boot mode");
+			console.log("XKit Main: Slow-boot mode");
 			$(document).ready(function() {
 				setTimeout(function() { XKit.extensions.xkit_main.run_next_extension(); }, 300);
 			});
 		} else {
-			XKit.console.add("XKit Main: Fast-boot mode");
+			console.log("XKit Main: Fast-boot mode");
 			setTimeout(function() { XKit.extensions.xkit_main.run_next_extension(); }, 1);
 		}
 
@@ -80,12 +80,12 @@ XKit.extensions.xkit_main = new Object({
 		if (XKit.extensions.xkit_main.to_run_count < XKit.extensions.xkit_main.to_run.length) {
 			XKit.extensions.xkit_main.run_extension(XKit.extensions.xkit_main.to_run[XKit.extensions.xkit_main.to_run_count]);
 		} else {
-			XKit.console.add("Enabled extensions: " + XKit.extensions.xkit_main.enabled_extensions);
-			XKit.console.add("Disabled extensions: " + XKit.extensions.xkit_main.disabled_extensions);
+			console.log("Enabled extensions: " + XKit.extensions.xkit_main.enabled_extensions);
+			console.log("Disabled extensions: " + XKit.extensions.xkit_main.disabled_extensions);
 			XKit.post_listener.check();
 			setTimeout(function() {
 				var diff = new Date().getTime() - start;
-				XKit.console.add("Booted XKit up in " + diff + " milliseconds.");
+				console.log("Booted XKit up in " + diff + " milliseconds.");
 			}, 1);
 		}
 	},
@@ -112,7 +112,7 @@ XKit.extensions.xkit_main = new Object({
 			try {
 				frame_script = XKit.extensions[extension_id].frame_run;
 			} catch(e) {
-				XKit.console.add("No frame_run on " + extension_id);
+				console.log("No frame_run on " + extension_id);
 			}
 			if (frame_script !== "" && typeof frame_script !== "undefined") {
 				// This is a hybrid extension!
@@ -124,7 +124,7 @@ XKit.extensions.xkit_main = new Object({
 						}
 						XKit.extensions[extension_id].frame_run();
 					} catch(e) {
-						XKit.console.add("Can not run " + extension_id + ": " + e.message);
+						console.log("Can not run " + extension_id + ": " + e.message);
 						XKit.extensions.xkit_main.run_next_extension(); return;
 					}
 				}
@@ -151,7 +151,7 @@ XKit.extensions.xkit_main = new Object({
 				try {
 					eval(xkit_main.script + "\n//# sourceURL=xkit/"+extension_id+".js");
 				} catch(e) {
-					XKit.console.add("Can't eval " + extension_id);
+					console.log("Can't eval " + extension_id);
 				}
 				if (XKit.extensions.xkit_main.disabled_extensions === "") {
 					XKit.extensions.xkit_main.disabled_extensions = extension_id + "(not in frame)";
@@ -181,7 +181,7 @@ XKit.extensions.xkit_main = new Object({
 					}
 					XKit.extensions[extension_id].run();
 				} catch(e) {
-					XKit.console.add("Can not run " + extension_id + ": " + e.message);
+					console.log("Can not run " + extension_id + ": " + e.message);
 					XKit.extensions.xkit_main.run_next_extension(); return;
 				}
 				if (!dont_run_next) {
