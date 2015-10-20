@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.1.2 **//
+//* VERSION 6.1.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -51,8 +51,6 @@ XKit.extensions.xkit_patches = new Object({
 			m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
 		}
 
-		//// console.log("->" + $(m_parent).html());
-
 		if ($(m_parent).find(".ask").attr('data-tumblelog-name') === "xkit-extension") {
 
 			$(m_parent).find(".ask").html("XKit Support");
@@ -96,7 +94,7 @@ XKit.tools.get_current_blog = function() {
 			return image.attr("alt");
 		}
 	}
-	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
+	console.log('XKit.tools.get_current_blog: Warning, fell back to main blog');
 	return XKit.tools.get_blogs()[0];
 };
 
@@ -290,18 +288,8 @@ XKit.tools.dump_config = function(){
 	};
 
 		try {
-
 			XKit.retina = window.devicePixelRatio > 1;
-
-			if (XKit.retina === true) {
-				// console.log("Retina screen mode.");
-			}
-
-		} catch(e) {
-
-			// console.log("!!!!!!" + e.message);
-
-		}
+		} catch(e) {}
 
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
 		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
@@ -366,7 +354,6 @@ XKit.tools.dump_config = function(){
 
 			xkit_check_storage();
 
-			// console.log("XKit Patches determined that it's in frame mode, resizing stuff!");
 
 			$("#iframe_controls,#dashboard_iframe").css("width","auto");
 
@@ -472,7 +459,6 @@ XKit.tools.dump_config = function(){
 				set: function(kitty) {
 
 					if (typeof kitty === "undefined") { kitty = ""; }
-					//// console.log("XKitty: Setting kitty to \"" + kitty + "\"");
 					XKit.interface.kitty.stored = kitty;
 
 				},
@@ -488,16 +474,13 @@ XKit.tools.dump_config = function(){
 
 					if (XKit.interface.kitty.stored !== "") {
 						if (kitty_diff >= XKit.interface.kitty.expire_time || kitty_diff < 0) {
-							//// console.log("XKitty: Kitty expired? Let's try again.");
 						} else {
-							//// console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
 							m_object.kitten = XKit.interface.kitty.stored;
 							callback(m_object);
 							return;
 						}
 					}
 
-					//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
 
 					$.ajax({
 						type: "POST",
@@ -506,14 +489,12 @@ XKit.tools.dump_config = function(){
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
 						success: function (data, status, res) {
-							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
 							XKit.interface.kitty.stored = res.getResponseHeader("X-tumblr-secure-form-key");
 							m_object.kitten = XKit.interface.kitty.stored;
 							callback(m_object);
 						},
 						error: function(data, status, res) {
-							//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
 							m_object.errors = true;
 							m_object.kitten = "";
 							XKit.interface.kitty.stored = "";
@@ -553,11 +534,6 @@ XKit.tools.dump_config = function(){
 				add_control_button: function(class_name, additional) {
 
 					if (typeof additional == "undefined") {additional = ""; }
-
-					if (XKit.interface.post_window.added_icon.indexOf(class_name) === -1) {
-						// XKit.console.add("Interface -> Can't add icon, button not created, use create_control_button.");
-						return;
-					}
 
 					var m_text = XKit.interface.post_window.added_icon_text[XKit.interface.post_window.added_icon.indexOf(class_name)];
 					var m_html = "<div title=\"" + m_text + "\" class=\"xkit-interface-control-button " + class_name + "\" " + additional + "></div>";
@@ -610,7 +586,7 @@ XKit.tools.dump_config = function(){
 					if ($(".html-field").css("display") === "none") {
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
-							XKit.console.add('ERROR: unable to set content html');
+							console.log('ERROR: unable to set content html');
 							return;
 						}
 						content_editor.focus();
@@ -825,17 +801,13 @@ XKit.tools.dump_config = function(){
 						return XKit.interface.post_window_listener.set_listen();
 					}
 
-					// XKit.console.add("interface -> Post Window found, running attached functions. [" + XKit.interface.post_window_listener_window_id + "]");
-
 					for (var i=0;i<XKit.interface.post_window_listener_id.length;i++) {
 
 						if (typeof XKit.interface.post_window_listener_func[i] === "function") {
 
 							try {
 								XKit.interface.post_window_listener_func[i].call();
-							}catch(e) {
-								// XKit.console.add("interface -> post_window_listener -> can't run \"" + XKit.interface.post_window_listener_id[i] + "\": " + e.message);
-							}
+							} catch(e) {}
 						}
 
 					}
@@ -950,7 +922,6 @@ XKit.tools.dump_config = function(){
 					tumblr_object = {};
 					tumblr_object.error = true;
 					tumblr_object.message = "Wrong/corrupt tumblr object, post object not found.";
-					// XKit.console.add(tumblr_object.message);
 					return tumblr_object;
 				}
 
@@ -1336,7 +1307,6 @@ XKit.tools.dump_config = function(){
 				if (typeof additional == "undefined") {additional = ""; }
 
 				if (XKit.interface.added_icon.indexOf(class_name) === -1) {
-					// XKit.console.add("Interface -> Can't add icon, button not created, use create_control_button.");
 					return;
 				}
 
@@ -1540,10 +1510,8 @@ XKit.tools.dump_config = function(){
 				var to_return = $('meta[name=tumblr-form-key]').attr("content");
 
 				if (typeof to_return === "undefined" ||to_return === "") {
-					// console.log(" --- XKit Interface: Form Key could not be fetched, using stored one.");
 					to_return = window.atob(XKit.storage.get("xkit_patches", "last_stored_form_key", ""));
 				} else {
-					// console.log(" --- XKit Interface: Got form key, storing that one.");
 					XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(to_return));
 				}
 				return to_return;
@@ -1765,7 +1733,6 @@ XKit.tools.dump_config = function(){
 
 			// Check page then return control to init_extension.
 			if (document.location.href.indexOf('http://www.tumblr.com/xkit_reset') !== -1 ||
-				document.location.href.indexOf('http://www.tumblr.com/xkit_log') !== -1 ||
 				document.location.href.indexOf('http://www.tumblr.com/xkit_editor') !== -1 ||
 				document.location.href.indexOf('http://www.tumblr.com/xkit_update=') !== -1) {
 				XKit.page.xkit = true;
@@ -1777,7 +1744,6 @@ XKit.tools.dump_config = function(){
 				XKit.page.standard = true;
 				XKit.init_extension();
 			} else {
-				// XKit.console.add("In IFRAME, location: " + document.location.href);
 				if (document.location.href.indexOf("http://www.tumblr.com/send") === -1) {
 					XKit.page.standard = true;
 				}
@@ -1834,12 +1800,10 @@ XKit.tools.dump_config = function(){
 					XKit.post_listener.callbacks[i]();
 					successful_count++;
 				} catch(e) {
-					// console.log("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
 					fail_count++;
 				}
 
 			}
-			// console.log("[Post Listener] Ran " + XKit.post_listener.callbacks.length + " callbacks, " + successful_count + " successful, " + fail_count + " failed.");
 		};
 
 		if ($(".search_control.post_layout").length > 0) {
@@ -1876,8 +1840,6 @@ XKit.tools.dump_config = function(){
 
 				$("#xkit-notifications").append(m_html);
 
-				// XKit.console.add(" Notification > " + message);
-
 				var m_notification_id = XKit.notifications.count;
 				setTimeout(function() {
 					$("#xkit_notification_" + m_notification_id).slideDown('slow');
@@ -1902,7 +1864,6 @@ XKit.tools.dump_config = function(){
 	},
 
 	destroy: function() {
-		// console.log = XKit.log_back;
 		XKit.tools.remove_css("xkit_patches");
 		this.running = false;
 	}

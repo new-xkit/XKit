@@ -485,7 +485,7 @@ XKit.extensions.xinbox = new Object({
 		try {
 			$(".fan_mail_read_more").trigger('click');
 		} catch(e) {
-			XKit.console.add("auto_expand_fan_mail: " + e.message);
+			console.log("auto_expand_fan_mail: " + e.message);
 		}
 
 	},
@@ -776,14 +776,14 @@ XKit.extensions.xinbox = new Object({
 								asker = avatar_json.name;
 							}
 						}catch(e) {
-							XKit.console.add("Can't tag ask ---->" + e.message);
+							console.log("Can't tag ask ---->" + e.message);
 						}
 					} else {
-						XKit.console.add("xinbox tagger -> data-tumblelog-popover data missing");
+						console.log("xinbox tagger -> data-tumblelog-popover data missing");
 					}
 
 				} else {
-					XKit.console.add("xinbox tagger -> post_avatar_link missing");
+					console.log("xinbox tagger -> post_avatar_link missing");
 				}*/
 
 				// return alert("asker = " + asker);

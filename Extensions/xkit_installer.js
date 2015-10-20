@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9.4 **//
+//* VERSION 6.9.5 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
@@ -53,7 +53,7 @@ XKit.extensions.xkit_installer = new Object({
 		XKit.progress.value("installation", percentage);
 
 		var to_install = XKit.extensions.xkit_installer.to_install[XKit.extensions.xkit_installer.installed];
-		XKit.console.add("Will be installing " + to_install);
+		console.log("Will be installing " + to_install);
 		$("#xkit-install-process").html("Installing package " + to_install + "...");
 
 		XKit.install(to_install, function(mdata) {
