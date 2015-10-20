@@ -1,7 +1,7 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.4 **//
+//* VERSION 2.5.5 **//
 //* DESCRIPTION More options on the user menu **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
 //* FRAME false **//
 //* BETA false **//
@@ -843,25 +843,10 @@ XKit.extensions.show_more = new Object({
 			var args = JSON.parse(add_tag);
 			var config = jQuery("<div data-tumblelog-name='" + args.recipient + "' />");
 			config.data("anonymous_ask", args.anonymous_asks);
-			Tumblr.DashboardAsk.open_ask(config);
-
-			// For some reason, option to send anonymous ask isn't available
-			// so we have to add it ourselves
-			if (args.anonymous_asks === "1") {
-				setTimeout(function(){
-					var ask_button_div = jQuery("#ask_button").parent();
-					var ask_anonymously_html = "" +
-						"<div class='control right'>" +
-							"<div class='post-forms--ask-anonymous'>" +
-								"<label class='binary_switch'>" +
-									"<input type='checkbox' name='anonymous' value='1' id='ask_anonymously'>" +
-									"<span class='binary_switch_track'></span> <span class='binary_switch_button'></span>" +
-								"</label><label id='ask_anonymously_label' for='ask_anonymously'>Ask anonymously</label>" +
-							"</div>" +
-						"</div>";
-					ask_button_div.before(ask_anonymously_html);
-				}, 500);
-			}
+			Tumblr.Events.trigger("ask:form:open", {
+                recipient: args.recipient,
+                allow_anonymous: args.anonymous_asks === "1" ? true : false
+            });
 		}, true, JSON.stringify({
 			recipient: this.getAttribute("data-tumblelog-name"),
 			anonymous_asks: this.getAttribute("data-anonymous-ask")

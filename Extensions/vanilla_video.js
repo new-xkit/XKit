@@ -1,5 +1,5 @@
 //* TITLE Vanilla Videos **//
-//* VERSION 0.0.1 **//
+//* VERSION 0.0.2 **//
 //* DESCRIPTION Make the video player unexciting **//
 //* DETAILS Use the browser-default video player that won't follow you, loop, or autoplay. Only works on Tumblr's player. **//
 //* DEVELOPER new-xkit **//

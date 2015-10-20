@@ -1,4 +1,4 @@
-var framework_version = '7.7.0';
+var framework_version = '7.7.1';
 var Tumblr = unsafeWindow.Tumblr;
 
 function getBridgeError() {

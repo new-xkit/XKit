@@ -1,5 +1,5 @@
 /* NAME White **/
-/* VERSION 1.0.1 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION A basic white dashboard **/
 /* DEVELOPER period-doritos **/
 
@@ -10,12 +10,17 @@ body.layout_standard,
 	border: none;
 }
 
-#content,
-.search_results #content {
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--flex .l-content,
+.l-container.l-container--two-column .right_column,
+.l-container.l-container--two-column-dashboard .right_column,
+.l-container.l-container--two-column .left_column,
+.l-container.l-container--two-column-dashboard .left_column {
 	background-color: #ffffff;
 }
 
-#header .selection_nipple {
+.l-header .selection_nipple {
 	border-bottom: 12px solid #000000;
 }
 
@@ -23,7 +28,7 @@ body.layout_standard,
 .radar .radar_post,
 .dashboard_options_form,
 .tag_psa,
-.post_avatar,
+.post_avatar_wrapper,
 .notification.single_notification,
 .controls_section .recessed,
 .controls_section .recessed:hover {
@@ -49,13 +54,15 @@ body.layout_standard,
 }
 
 .controls_section li a,
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+#tumblr_radar,
 #right_column #popover_button_blogs .link_arrow,
 #blog_url_arrow,
 #right_column .small_links,
 .sidebar_link,
-.return_to_top .return_to_top_icon,
+.elevator-wrapper .elevator,
 #return_to_bottom .return_to_bottom_icon,
-#header .tab.iconic a,
+.l-header .tab.iconic a,
 .popover_blogs span,
 .radar .radar_button i,
 .radar .radar_tumblelog_label,
@@ -64,23 +71,24 @@ body.layout_standard,
 .xtag,
 #fan_mail_controls div,
 .no_posts_found,
-#logo a,
-#xim_avatar {
+.svg-logo {
 	-webkit-filter: invert(1);
+	filter: invert(1);
 }
 
 .controls_section a .count,
 .xbookmark a::after {
 	-webkit-filter: grayscale(1);
+	filter: grayscale(1);
 }
 
 #dashboard_controls a,
 #dashboard_controls .control,
 .notification .report,
 .notification .block,
-a.xkit-reply-button,
-.xim-contacts-separator {
+a.xkit-reply-button {
 	-webkit-filter: invert(1) grayscale(1);
+	filter: invert(1) grayscale(1);
 	text-shadow: none;
 }
 
@@ -123,11 +131,11 @@ a.xkit-reply-button {
 	max-width: 380px;
 }
 
-#dashboard_tumblelog_settings #content {
+#dashboard_tumblelog_settings .l-content {
 	background-color: #ffffff;
 }
 
-#dashboard_tumblelog_settings #header .selection_nipple {
+#dashboard_tumblelog_settings .l-header .selection_nipple {
 	border: none;
 }
 
@@ -137,8 +145,7 @@ a#xshufflequeue_button {
 .xhighlighter_highlightered_post {
 	box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.45);
 }
-.post_full .post_body,
-#source_editor {
+.post_full .post_body {
 	padding: 0;
 }
 
@@ -147,9 +154,26 @@ a#xshufflequeue_button {
 }
 
 .post_full .post_permalink {
-	background: #ffffff url('https://new-xkit.github.io/XKit/Themes/white/pagination.png');
-	width: 25px;
-	height: 25px;
-	top: -10px;
-	right: -10px;
+	border-color: #fff #fff transparent transparent;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #000);
+	border-right: 5px solid #000;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #c3b39d);
+	border-right: 5px solid #c3b39d;
+}
+
+.identity .controls_section .item:hover .follow:hover {
+	color: black;
+	background-color: #ad6133;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
 }

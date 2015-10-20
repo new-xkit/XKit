@@ -57,6 +57,10 @@ gulp.task('clean:firefox', function(cb) {
 	del([BUILD_DIR + '/firefox'], cb);
 });
 
+gulp.task('clean:safari', function(cb) {
+	del([BUILD_DIR + '/safari.safariextension'], cb);
+});
+
 gulp.task('clean:extensions', function(cb) {
 	del(['Extensions/dist/*.json',
 	     'Extensions/dist/page/gallery.json',
@@ -73,7 +77,8 @@ gulp.task('lint:scripts', function() {
 		paths.scripts.core,
 		paths.scripts.extensions,
 		['Chrome/**/*.js',
-		'Firefox/**/*.js']
+		 'Firefox/**/*.js',
+		 'Safari/**/*.js']
 	);
 
 	return gulp.src(src)
@@ -149,9 +154,24 @@ gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 		});
 });
 
+gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
+	var src = [].concat(
+		paths.scripts.core,
+		paths.css.core,
+		paths.vendor,
+		['Safari/**/*']
+	);
+
+	return gulp.src(src)
+		.pipe(gulp.dest(BUILD_DIR + '/safari.safariextension'));
+
+});
+
 gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
+
+gulp.task('build:safari', ['copy:safari']);
 
 gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
 	var extensionBuilder = require('./dev/builders/extension');
@@ -172,7 +192,7 @@ gulp.task('build:themes', ['clean:themes'], function(cb) {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:chrome', 'build:firefox']);
+gulp.task('build', ['build:chrome', 'build:firefox', 'build:safari']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);

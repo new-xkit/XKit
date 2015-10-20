@@ -234,6 +234,10 @@
 
 }
 
+.xkit-unable-to-load-extension-gallery {
+	display: none;
+}
+
 .xkit-gallery-extension .xkit-button {
 
 	position: absolute;
@@ -243,8 +247,16 @@
 	padding: 4px 0px;
 	margin-left: -40px;
 	border-radius: 40px;
+	background: rgba(60,190,47,0.8);
+	color: white;
 	display: block;
+	text-shadow: 0px 1px 2px rgba(0,0,0,0.44);
 
+}
+
+.xkit-installed-extension {
+	background: #F3F3F3;
+	font-style: oblique;
 }
 
 .xkit-gallery-extension .xkit-button:active {
@@ -396,15 +408,8 @@
 }
 
 #new-xkit-control > a {
-	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjIzRjc0RThBODUzMTFFMkFDMDJFMzk3N0RDMDc2NDQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjIzRjc0RTlBODUzMTFFMkFDMDJFMzk3N0RDMDc2NDQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MjNGNzRFNkE4NTMxMUUyQUMwMkUzOTc3REMwNzY0NCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2MjNGNzRFN0E4NTMxMUUyQUMwMkUzOTc3REMwNzY0NCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pi+mD5AAAAIoSURBVHjarNVdSBRRGMbxXbXSqMgsMAVNEworWDBKupCCkkIJzD7ooogQoSgUIfowCC9K8EqUICQIEnHBShDECyECxdSLiKJIvAgRCTIESQw/4vQ/8AxM00y7tfvC72Z3zjNn3nPOTNgYE/pLZeMkShBBKpbxHq/Rj9nA0TbcRwG6THz1GLl+OX7Bl7Bk/q0WcTpWeItJrBqDwmtNcuqckxnWghbhA9aGEq8F7MaMM+sXJrn1xJn5Lu7yyXXnmyjGBQyjDxU4gk5MohTjyMNljCCKQtTjJ/LtrG957lqOHLzBBHaiDHPoRRaKUYSofj+KHWhy5Vyx4QOe8BHt2wP4iudYh6tY0GTsuLNYQT1S8VDXOxW1F0369KwbGdpBy7iHdHRgHlV6uuvYiAZd564xGz7lE76KB5pRmw5VNdZjCNNqjf3/fMChe5eid4W3wkhDOm7gJdq1ZWu0YI+wQeNTfDJ++PXcqM+ZOIM9mqV9wlFswinN1rYpDXfUf+PteZPnx3HkoUQ7oVULeFwL1qH+38Z3uyuwRr/PunIa7KCIJ/wEttsF0WIfRCG24K4Wzu6QrejBNxzW1rzvyimwfX2LQRxTrw7hIvZjDJXYiy/qr12POmzGKrLQrMO2TRnP8Nk5/pEkHv0lPcVvb8XGJIVfC3qfP00wuD3Wl+h/nsAeurp4PnMhvVdexRk8oDX7Iycc4+u/D1XaSRl6FX/UB2FQu2IiaPAvAQYAWSfDpPYmp04AAAAASUVORK5CYII=') 50% 50% no-repeat !important;
-	background-size: auto auto !important;
-}
-
-#new-xkit-control.retina > a {
-
 	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTY2RjAyMDMzQUQ1MTFFMzhFNDJGQTVEOUI1OTNBQTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTY2RjAyMDQzQUQ1MTFFMzhFNDJGQTVEOUI1OTNBQTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNEVGRjI5QzNBQkYxMUUzOEU0MkZBNUQ5QjU5M0FBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1NjZGMDIwMjNBRDUxMUUzOEU0MkZBNUQ5QjU5M0FBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvBNtJ4AAAORSURBVHja5FpNaBNREE7SSCsGWpsGjFik9SRRkCoGkYJS9NY0IkUxUIv0Jl56EU96ab0JkqsgPeRQ7KHxoCdpaU8VLFKxoIhBjVgr0fhTbdLSdQZmw3S62bzdNs2uDnw0u9+8fV83s/Nm58WraZpnkxYGRAHHARFAG2APoIn4PGABkAG8BDwFzAA+bWZSr03hKCpGOA1otjj+K2AC8JCQr7bwIOAyIAHo8GyNzQJSgBFATnkUCldEL2BKq55N0RxKelScQoA7gBWt+rZCc4U2KzwCGNe238ZpblvCjwImtdrZJGmwJDxSY9FcfERVeKhG4WEWNhti3meQaG4AejzOsR7SZJoOe7cpe9jJNr3l7jguLtcAfo/zzE/agvoJLhxXxE6Pc62TNK4T3kTLuNMtoRdvuvDYFtYe1bQO0rpOuJFNYSFG8FFpWnquAQ2MvyTG9jEuQKVsmJ07a+LvpesbWUzPKmFArszTvArwsaf5jOD7GYeVZoFxWZGxmsXxG+a7BqhjXNQkw6DWMDrFK6SigpgwKfhTjAsKbr7MyvxM+LUyrlUhPcbRcVjBcd7kbqG1MK5bcENi7IDgE4zzKeb1YXROKzrfZhP4KYx0WxIhNSrGHmNcCzv/WPxT3xW1pNF5zsIKFmWTtAluVojICj7AuEHACxHXjyzomMMBixaX311ssn7BXWdcneB+0ANsFPMXLGpYxEFFi4OWhAB5pw4zbp/gJgxEt9uoXYp2hGv0VfPJP5uExVWTFIr4Yle41VApigcRUU+5uPRVim9l2iT97bchfNFHzRor1ghYE+cKomQIAdKiQPrJjt+zKvQd4KJFDQtyGa9kJwF/6PMBwFvWsXoOuMV8uwHn2PFuca2P7PMolReqllFdgNDuiTy+TOfzImxmxLi9jDsouBExdtnKAhRXcMxWWLJ3Cv6XeHupZ9yQGNsl6h0Vi1cqsvQCiIu6KfjzBikuIHxeC/6V4Jst1CqlIgsxZuLYwC56RHD3TfoyJ4RvUvC/xc3hWeiKiZ4x3p7oK+N0ly64w0D0MoWAn/5+oPqlnfy9BiE1QByuqocElwE00o1Cn29lNKHWUrcWM8MTF7wFYWe3C9vSPtZ8T7ng1S2l99L5Wz72p6cdLHqaNG5oT2BTPQlYdaDoVdKWMxKO9oAcnGZJ0ma6I+GKpuc/1WZ2dWPf1Vsprt68cux2oWs3aP+bLXHH/AjhrwADAHBeGsxHEVqqAAAAAElFTkSuQmCC') 50% 50% no-repeat !important;
 	background-size: 23px 23px !important;
-
 }
 
 #xkit-about-window-links {
@@ -1268,6 +1273,29 @@
 	top: auto !important;
 }
 
+.xkit-gallery-extension .xkit-button:hover {
+	background: rgba(60,190,47,0.8);
+	color: white;
+	text-shadow: 0px 1px 2px rgba(0,0,0,0.44);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.53);
+}
+
+.xkit-installed-extension .xkit-install-extension {
+	box-shadow: none;
+	cursor: default;
+	background: rgb(240, 240, 240)/* #66a820 */;
+	color: rgb(100, 100, 100);
+	text-shadow: none;
+}
+
+.xkit-installed-extension:hover .xkit-install-extension, .xkit-installed-extension .xkit-install-extension:active {
+	box-shadow: none;
+	cursor: default;
+	background: rgb(240, 240, 240)/* #66a820 */;
+	color: black;
+	text-shadow: none;
+}
+
 .xkit-checkbox { padding-left: 1px; }
 
 .xkit-checkbox b, .xkit-checkbox strong {
@@ -1284,6 +1312,12 @@
 .xkit-checkbox.selected:hover b, .xkit-checkbox.selected:hover strong {
 	border: 1px solid rgba(0,0,0,0.22);
 	background-color: #cedff4;
+}
+
+#xkit-panel-hide-installed-extensions-from-gallery {
+	position: absolute;
+	top: 6px;
+	right: 13px;
 }
 
 .xkit-button {

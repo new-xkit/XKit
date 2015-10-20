@@ -1,7 +1,7 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.0.0 **//
+//* VERSION 5.1.3 **//
 //* DESCRIPTION Lets you customize XKit **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 
 XKit.extensions.lang_english.xkit_preferences = new Object({
 
@@ -39,7 +39,8 @@ XKit.extensions.lang_english.xkit_preferences = new Object({
 		"error": "<strong>Unable to load extension gallery.<br>Sorry about that.</strong><br><br>"+
 		"XKit servers might be experiencing some problems. Please try again, and if you cant't reach "+
 		"the servers for more than a few days, please"+'<a href="https://github.com/hobinjk/XKit/issues">report a problem</a>.',
-		"search": "Search the gallery"
+		"search": "Search the gallery",
+		"hide_installed": "Hide installed extensions"
 	},
 
 	extension: {
@@ -106,7 +107,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		//$("#new-xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
 
-		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true") {
+		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
 		}
 
@@ -239,21 +240,6 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		XKit.extensions.xkit_preferences.spring_cleaning();
-
-		var shown_safari = XKit.storage.get("xkit_preferences","shown_safari","0");
-		if (shown_safari == "0" && XKit.browser().safari) {
-			XKit.notifications.add("<strong>Safari no longer supported.</strong>"+
-			"<br>Unfortunately, I've been forced to discontinue all Safari support for XKit. "+
-			"Please click here to learn more, and dismiss this message.", "warning", true,
-			function() {
-				XKit.window.show("Safari Support Ended.","<strong>Unfortunately, due to various reasons, "+
-					"XKit is no longer supported on Safari.</strong><br><br>I'm terribly sorry about this. "+
-					'Please see <a href="http://xkit-extension.tumblr.com/post/84236134977/a-few-changes-for-the-summer" target="_BLANK">this post</a> '+
-					"to learn why it was discontinued and what you can do. This warning notification will not show up again after you click OK.",
-					"warning", '<div class="xkit-button default" id="xkit-close-message">OK</div>');
-				XKit.storage.set("xkit_preferences","shown_safari","yass");
-			});
-		}
 
 		/*if (shown_notification_notification === "0") {
 			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
@@ -968,21 +954,41 @@ XKit.extensions.xkit_preferences = new Object({
 
 			}
 
-			m_html = '<div id="xkit-gallery-toolbar"><input type="text" id="xkit-gallery-search" '+
-				'placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '"></div>' + m_html;
+			m_html =
+					'<div id="xkit-gallery-toolbar">' +
+						'<input type="text" id="xkit-gallery-search" placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '">' +
+						'<div id="xkit-panel-hide-installed-extensions-from-gallery" class="xkit-checkbox ' + (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true" ? "selected" : "") + '">' +
+						'<b>&nbsp;</b>' + XKit.lang.get("xkit_preferences.gallery.hide_installed") + '</div>' +
+					'</div>' + m_html + '<div class="xkit-unable-to-load-extension-gallery"><b>No new extensions</b><br/><br/>'+
+										"It looks like you've installed all the currently available extensions.<br/>Come back later!</div>";
 
 			$("#xkit-extensions-panel-right-inner").html(m_html + '<div class="xkit-gallery-clearer">&nbsp;</div>');
+
+			if (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true") {
+				XKit.tools.add_css(".xkit-installed-extension { display: none; }", "xkit_hide_installed_extensions");
+				if($("#xkit-extensions-panel-right-inner .xkit-gallery-extension").length === $("#xkit-extensions-panel-right-inner .xkit-installed-extension").length) {
+					XKit.tools.add_css(".xkit-unable-to-load-extension-gallery { display: block; }", "xkit_hide_installed_extensions");
+				}
+			}
+
 			$("#xkit-extensions-panel-right").nanoScroller();
 			$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
-			if ($("#xkit-extensions-panel-right-inner .xkit-gallery-extension").length === 0) {
-
-				$("#xkit-extensions-panel-right-inner").html(
-					'<div class="xkit-unable-to-load-extension-gallery"><b>No new extensions</b><br/><br/>'+
-					"It looks like you've installed all the currently available extensions.<br/>Come back later!</div>");
-				return;
-
-			}
+			$("#xkit-panel-hide-installed-extensions-from-gallery").click(function () {
+				if ($(this).hasClass("selected")) {
+					$(this).removeClass("selected");
+					XKit.tools.set_setting("xkit_hide_installed_extensions","false");
+					XKit.tools.remove_css("xkit_hide_installed_extensions");
+					$(".xkit-unable-to-load-extension-gallery").css("display", "none");
+				} else {
+					$(this).addClass("selected");
+					XKit.tools.set_setting("xkit_hide_installed_extensions","true");
+					XKit.tools.add_css(".xkit-installed-extension { display: none }", "xkit_hide_installed_extensions");
+					if ($("#xkit-extensions-panel-right-inner .xkit-gallery-extension").length === $("#xkit-extensions-panel-right-inner .xkit-installed-extension").length) {
+						$(".xkit-unable-to-load-extension-gallery").css("display", "block");
+					}
+				}
+			});
 
 			$("#xkit-gallery-search").keyup(function() {
 
@@ -1032,6 +1038,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$(".xkit-gallery-extension .xkit-install-extension").click(function() {
 
+				if ($(this).parent().hasClass("xkit-installed-extension")) { return; }
+
 				$(this).parent().addClass("overlayed");
 
 				XKit.install($(this).attr('data-extension-id'), function(mdata) {
@@ -1056,7 +1064,7 @@ XKit.extensions.xkit_preferences = new Object({
 					}
 
 					$("#xkit-gallery-extension-" + mdata.id).find(".overlay").addClass("green");
-					$("#xkit-gallery-extension-" + mdata.id).find(".overlay").html("installed!");
+					$("#xkit-gallery-extension-" + mdata.id).find(".overlay").html("Installed!");
 
 					try {
 						/* jshint evil: true */
@@ -1080,11 +1088,19 @@ XKit.extensions.xkit_preferences = new Object({
 			obj.icon = XKit.extensions.xkit_preferences.default_extension_icon;
 		}
 
-		if (XKit.installed.check(obj.name) === true) { return ""; }
-		if (obj.name.startsWith("xkit_")) { return ""; }
+		if (obj.name.startsWith("xkit_") && XKit.tools.get_setting("xkit_show_internals","false") === "false") { return ""; }
 
-		var m_html = '<div class="xkit-gallery-extension" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
-			'<div class="overlay">downloading</div>' +
+		var blacklisted_extensions = ["xkit_installer"];
+
+		if (blacklisted_extensions.indexOf(obj.name.toLowerCase()) !== -1) {
+			return "";
+		}
+
+		var installed_extension_class = "";
+		if(XKit.installed.check(obj.name)) { installed_extension_class = "xkit-installed-extension"; }
+
+		var m_html = '<div class="xkit-gallery-extension ' + installed_extension_class + '" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
+			'<div class="overlay">Downloading</div>' +
 			'<div class="title">' + obj.title + '</div>' +
 			'<div class="description">' + obj.description + '</div>';
 
@@ -1092,9 +1108,13 @@ XKit.extensions.xkit_preferences = new Object({
 			m_html = m_html + '<div class="more-info" data-more-info="' + obj.details + '">more info</div>';
 		}
 
+
+		var install_button_text = "Install";
+		if(XKit.installed.check(obj.name)) { install_button_text = "Installed"; }
+
 		m_html = m_html +
 				'<div class="icon"><img src="' + obj.icon + '"></div>' +
-					'<div class="xkit-button xkit-install-extension" data-extension-id="' + obj.name + '">Install</div>' +
+					'<div class="xkit-button xkit-install-extension" data-extension-id="' + obj.name + '">' + install_button_text + '</div>' +
 				'</div>';
 
 		return m_html;

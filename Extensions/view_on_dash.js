@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.4 **//
+//* VERSION 0.7.5 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -64,7 +64,7 @@ XKit.extensions.view_on_dash = new Object({
 		}
 
 		XKit.installed.when_running("show_more", function() {
-      var show_more = XKit.extensions.show_more;
+			var show_more = XKit.extensions.show_more;
 			if (show_more.preferences.use_classic_menu.value) {
 				show_more.add_custom_menu("view_on_dash", function(data) {
 					console.log(data);
@@ -179,9 +179,11 @@ XKit.extensions.view_on_dash = new Object({
 
 	},
 
-	parse_item: function(data, username) {
+	parse_item: function(data, username, tumblelog_key) {
 
-		console.log(data);
+		if(tumblelog_key === null){
+			tumblelog_key = "";
+		}
 
 		var m_html = "<li class=\"post_container\">";
 		var post_class = "";
@@ -396,7 +398,7 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
-		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root_id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
+		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root_id='" + data.id + "' data-tumblelog-key='" + tumblelog_key + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
@@ -537,8 +539,18 @@ XKit.extensions.view_on_dash = new Object({
 		});
 
 	},
-
 	view: function(username, offset, page, type) {
+
+		var tumblelog_key = null;
+
+		$.ajax({
+			method:"GET",
+			url: "https://www.tumblr.com/svc/indash_blog/posts?tumblelog_name_or_id=" + username + "&limit=1&offset=0",
+			success: function(data) {
+				tumblelog_key = data.response.posts[0].tumblelog_key;
+			},
+			datatype: "json"
+		});
 
 		//$("#view-on-dash-background,#view-on-dash-content").remove();
 
@@ -581,7 +593,6 @@ XKit.extensions.view_on_dash = new Object({
 				return;
 			},
 			onload: function(response) {
-
 				try {
 
 					data = JSON.parse(response.responseText);
@@ -665,7 +676,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					for (var i=0;i<data.response.posts.length;i++) {
 
-						$(".xkit-view-on-dash-ol").append(XKit.extensions.view_on_dash.parse_item(data.response.posts[i], username));
+						$(".xkit-view-on-dash-ol").append(XKit.extensions.view_on_dash.parse_item(data.response.posts[i], username, tumblelog_key));
 
 					}
 

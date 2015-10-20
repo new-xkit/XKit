@@ -92,7 +92,8 @@ var buildGalleryFile= function(filename) {
 		name:        'name',
 		version:     'version',
 		description: 'description',
-		developer:   'developer'
+		developer:   'developer',
+		contents:    'contents'
 	};
 
 	return resourceUtil.galleryBuilder(filename, gallery, attributeMapping, 'themes', 'name');

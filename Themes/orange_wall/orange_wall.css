@@ -1,0 +1,121 @@
+/* NAME Orange Wall **/
+/* VERSION 1.0.4 **/
+/* DESCRIPTION That is one orange wallpaper you got there **/
+/* DEVELOPER STUDIOXENIX **/
+
+.identity {
+	background: #f49a00 url('https://new-xkit.github.io/XKit/Themes/orange_wall/body-background.jpg');
+}
+
+.selection_nipple,
+.permalink {
+	visibility: hidden !important;
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--two-column-dashboard .left_column,
+#right_column {
+    background: transparent;
+}
+
+.recessed {
+	background: rgba(0, 0, 0, 0.25) !important;
+	opacity: 0.8 !important;
+	transition: 0.3s ease-in;
+}
+
+.controls_section {
+	box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.09) !important;
+	border: 1px solid rgba(0, 0, 0, 0.25) !important;
+	background: rgba(20, 40, 70, 0.25) !important;
+	opacity: 1 !important;
+}
+
+.l-header {
+	opacity: 0.8 !important;
+	transition: 0.4s ease-in;
+}
+
+.logo {
+	opacity: 0.5 !important;
+	transition: 0.4s ease-in;
+}
+
+.l-header:hover,
+.logo:hover {
+	opacity: 1 !important;
+	transition: 0.4s ease-in;
+}
+
+a {
+	transition: 0.4s ease-in;
+}
+
+ul.controls_section li {
+	text-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.12) !important;
+	transition: 0.3s ease-in;
+}
+
+ul.controls_section li:hover {
+	background: rgba(20, 40, 70, 0.35) !important;
+	transition: 0.3s ease-in;
+}
+
+li.post {
+	box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.22) !important;
+	opacity: 0.99 !important;
+	transition: 0.3s ease-in;
+}
+
+li.post:hover {
+	opacity: 1 !important;
+	transition: 0.5s ease-in;
+}
+
+.l-content {
+	background: transparent !important;
+	margin-top: 8px !important;
+	padding-top: 0 !important;
+}
+
+#right_column:after {
+	display: none !important;
+}
+
+.l-header *,
+.l-content * {
+	border-radius: 0px;
+}
+
+.xoldeheader-item {
+	border-radius: 7px !important;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background: linear-gradient(to right, rgba(189, 126, 17, 0), #bd7e11);
+	border-right: 5px solid #bd7e11;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+.l-header-container--refresh,
+.l-content,
+.post_avatar,
+.post_avatar .post_avatar_link {
+    background-color: transparent !important;
+}
+
+.plus-follow-button {
+    color: #a84e00;
+}
+
+.identity .controls_section .item:hover .follow:hover,
+.plus-follow-button:hover {
+	background-color: #ffb41a;
+}
+
+.post_full .post_permalink {
+	border-color: #f49a00 #f49a00 transparent transparent;
+}

@@ -1,11 +1,11 @@
-.is_reblog {
+.is_reblog:not(.ui_note) {
 	background-image: url("http://pngimg.com/upload/bread_PNG2281.png") !important;
 	background-size: 100% auto !important;
 	background-repeat: no-repeat !important;
 	background-position: center !important;
 }
 
-.is_reblog .post_wrapper .post-source-footer,
-.is_reblog .post_wrapper .chat_line {
+.is_reblog:not(.ui_note) .post_wrapper .post-source-footer,
+.is_reblog:not(.ui_note) .post_wrapper .chat_line {
 	background: transparent !important;
 }
