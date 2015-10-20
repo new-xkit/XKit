@@ -1,5 +1,5 @@
 //* TITLE XWidgets **//
-//* VERSION 0.3 REV A **//
+//* VERSION 0.3.1 **//
 //* DESCRIPTION Widgets for your dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

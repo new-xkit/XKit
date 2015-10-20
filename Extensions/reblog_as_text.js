@@ -1,5 +1,5 @@
 //* TITLE Reblog As Text **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Text posts remain text **//
 //* DETAILS This post allows you to always reblog text posts as text posts, and not as links. **//
 //* DEVELOPER STUDIOXENIX **//

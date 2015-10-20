@@ -1,5 +1,5 @@
 //* TITLE Auto Scroll **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Scrolls the page at a variable pace. **//
 //* DETAILS Automatically scrolls the dashboard. Scrolling stops upon clicking outside the control.  **//
 //* DEVELOPER Fr33dan **//
