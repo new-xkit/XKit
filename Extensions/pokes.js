@@ -16,7 +16,7 @@ XKit.extensions.pokes = {
 	},
 
 	checkEligibility: function() {
-		$(".post_avatar").not(".poked").not("unpokable").each(function() {
+		$(".post_avatar:not(.poked):not(.unpokable)").each(function() {
 			if (XKit.extensions.pokes.chanceGen()) {
 				$(this).addClass("poked");
 			} else {
@@ -24,7 +24,7 @@ XKit.extensions.pokes = {
 			}
 		});
 
-		$(".poked").not(".poke_spawned").each(function() {
+		$(".poked:not(.poke_spawned)").each(function() {
 			pokeNr = XKit.extensions.pokes.pokeGen();
 			poke_html = XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
 			$(this).addClass("poke_spawned");
@@ -36,7 +36,7 @@ XKit.extensions.pokes = {
 		poke_html = "";
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://pokeapi.co/api/v1/pokemon/" + db_nr,
+			url: "https://pokeapi.hosted-secure.com/?query=" + db_nr,
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Skipping instance.");
