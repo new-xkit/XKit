@@ -52,7 +52,7 @@ XKit.extensions.pokes = {
 					poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
 								'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
 								'</div>';
-					pokedThing.append(poke_html);
+					pokedThing.after(poke_html);
 				} catch(e) {
 					console.log("Poke data received was not valid JSON. Skipping instance.");
 				}
