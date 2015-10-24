@@ -50,19 +50,19 @@ XKit.extensions.pokes = {
 					poke_name = mdata.name;
 					poke_sprite = "http://pokeapi.co/media/img/" + poke_nid + ".png";
 
-					male_ratio = parseFloat(mdata.male_female_ratio);
-					var rnd_nr = Math.floor(Math.random() * 100);
-					var poke_gender = "";
+					//male_ratio = parseFloat(mdata.male_female_ratio);
+					//var rnd_nr = Math.floor(Math.random() * 100);
+					//var poke_gender = "";
 
-					if (isNaN(male_ratio)) {
-						poke_gender = "genderless";
-					} else if (rnd_nr <= male_ratio) {
-						poke_gender = "male";
-					} else {
-						poke_gender = "female";
-					}
+					//if (isNaN(male_ratio)) {
+					//	poke_gender = "genderless";
+					//} else if (rnd_nr <= male_ratio) {
+					//	poke_gender = "male";
+					//} else {
+					//	poke_gender = "female";
+					//}
 
-					poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
+					poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+ //data-pokegender="'+poke_gender+'">'+
 								'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
 								'</div>';
 					pokedThing.after(poke_html);
