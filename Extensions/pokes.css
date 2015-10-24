@@ -1,5 +1,3 @@
-.pokes {
-	position: absolute !important;
-	top: 0px !important;
-	right: 646px !important;
+.poke {
+	padding-left:625px;
 }
