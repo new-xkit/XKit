@@ -11,6 +11,7 @@ XKit.extensions.pokes = {
 	running: false,
 	run: function() {
 		this.running = true;
+		XKit.tools.init_css('pokes');
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
 	},
