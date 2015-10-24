@@ -11,6 +11,7 @@ XKit.extensions.pokes = {
 	running: false,
 	run: function() {
 		this.running = true;
+		XKit.tools.init_css('pokes');
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
 	},
@@ -51,7 +52,7 @@ XKit.extensions.pokes = {
 					poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
 								'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
 								'</div>';
-					pokedThing.append(poke_html);
+					pokedThing.after(poke_html);
 				} catch(e) {
 					console.log("Poke data received was not valid JSON. Skipping instance.");
 				}
