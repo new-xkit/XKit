@@ -36,7 +36,7 @@ XKit.extensions.pokes = {
 		poke_html = "";
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://pokeapi.co/api/v1/pokemon/" + db_nr,
+			url: "https://pokeapi.hosted-secure.com/?query=" + db_nr,
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Skipping instance.");
