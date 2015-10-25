@@ -1,7 +1,7 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.5.6 **//
-//* DESCRIPTION Quickly add tags to posts **//
-//* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
+//* VERSION 0.6.0 **//
+//* DESCRIPTION Quickly edit the tags of posts **//
+//* DETAILS Allows you to create tag bundles and edit the tags of posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -18,10 +18,10 @@ XKit.extensions.quick_tags = new Object({
 			text: "Options",
 			type: "separator"
 		},
-		"append_not_replace": {
-			text: "Append, do not replace tags when adding them",
-			value: true,
-			default: true
+		"append_not_edit": {
+			text: "Only append existing tags, without being able to also edit them",
+			value: false,
+			default: false
 		},
 		"show_in_new_post": {
 			text: "Enable Quick Tags in new post popup",
@@ -34,7 +34,7 @@ XKit.extensions.quick_tags = new Object({
 			default: true
 		},
 		"append_not_replace_one_click": {
-			text: "Also append and do not replace tags when adding them using One-Click Postage",
+			text: "Append rather than replace tags when adding them in One-Click Postage",
 			value: false,
 			default: false
 		},
@@ -99,7 +99,7 @@ XKit.extensions.quick_tags = new Object({
 
 		// Are we in post window?
 		if ($(button).attr('data-in-window') === "true") {
-			if (XKit.extensions.quick_tags.preferences.append_not_replace.value !== true) {
+			if (XKit.extensions.quick_tags.preferences.append_not_edit.value !== true) {
 				XKit.interface.post_window.remove_all_tags();
 			}
 			XKit.interface.post_window.add_tag(tags.split(","));
@@ -123,7 +123,7 @@ XKit.extensions.quick_tags = new Object({
 					m_tags = "";
 				}
 
-				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === true) {
+				if (XKit.extensions.quick_tags.preferences.append_not_edit.value === true) {
 					m_tags = m_tags + "," + tags;
 				} else {
 					m_tags = tags;
@@ -300,34 +300,109 @@ XKit.extensions.quick_tags = new Object({
 	move_window: function(e) {
 
 		var obj = $(e.target);
-
+		
 		if ($(obj).hasClass("xkit-interface-working") === true) { return; }
-
+		
 		var user_tag_array = XKit.extensions.quick_tags.load_tag_prefs();
 		var m_user_tags = XKit.extensions.quick_tags.render_tags_from_array(user_tag_array);
 		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button(user_tag_array);
-
+		
 		var add_class = "nano";
 		var add_class_2 = "content";
 		if (user_tag_array.length <= 3) {
 			add_class = "no-scroll-needed";
 			add_class_2 = "";
 		}
-
+		
 		// Let's create our popup first.
 		var m_html = "<div id=\"xkit-quick-tags-window\">" +
-					"<div id=\"xkit-quick-tags-user-tags\" class=\"" + add_class + "\">" +
-						"<div class=\"" + add_class_2 + "\">" + m_user_tags + m_add_button + "</div>" +
-					"</div>" +
-					"<div class=\"xkit-tag-other\">" +
-						"<div class=\"xkit-tag-name\">Other: <span style=\"font-weight: normal\">type and press enter</span></div>" +
-						"<input id=\"xkit-tag-input\" placeholder=\"comma separated tags\" type=\"text\">" +
-					"</div>" +
-				"</div>";
+						"<div id=\"xkit-quick-tags-user-tags\" class=\"" + add_class + "\">" +
+							"<div class=\"" + add_class_2 + "\">" + m_user_tags + m_add_button + "</div>" +
+						"</div>" +
+						"<div class=\"xkit-tag-other\">" +
+							"<div class=\"xkit-tag-name\">Other: <span style=\"font-weight: normal\">type and press enter</span></div>" +
+							"<input id=\"xkit-tag-input\" placeholder=\"comma separated tags\" type=\"text\">" +
+						"</div>" +
+					"</div>";
 
 		$("#xkit-quick-tags-window").remove();
+		
+		// FIXME: Should these from the end of the function be added up here too..?¿?
+		// XKit.extensions.quick_tags.user_on_box = true;
+		// XKit.extensions.quick_tags.current_button = $(obj);
+		//			^
+		// With this one copied up here, hovering over the quick-tags icon
+		// gets a spinning "loading" animation rather than nothing, so.. progress ??
+		XKit.extensions.quick_tags.current_button = $(obj);
+		
+		// Should we copy the existing tags into the text box?
+		if(XKit.extensions.quick_tags.preferences.append_not_edit.value !== true) {
+			
+			// If so...
+			// Find the post object.
+			XKit.interface.switch_control_button($(XKit.extensions.quick_tags.current_button), true);
+			// XKit.window.show("Oops", "Test point ONE<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			
+			var m_button = Xkit.extensions.quick_tags.current_button;
+			// FIXME: This test point window never appears. Why does initializing m_button freeze up the extension?
+			XKit.window.show("Oops", "Test point TWO<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			
+			var m_post = XKit.interface.find_post($(m_button).attr('data-post-id'));
+			// XKit.window.show("Oops", "Test point THREE<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			
+			// Fetch info about it!
+			if (!m_post.error) {
+				// XKit.window.show("Oops", "Test point FOUR<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				
+				XKit.interface.fetch(m_post, function(data) {
+					
+					// Use Interface to get the post's tags:
+					var m_tags = data.data.post.tags;
+					// XKit.window.show("Oops", "Test point FIVE<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					
+					// Format the tags:
+					if (m_tags === "undefined" || typeof m_tags === "undefined" || m_tags == "null") {
+						m_tags = "";
+					}
+					
+					if (m_tags.indexOf(",") != -1) {
+						
+						var split_tags = m_tags.split(",");
+						var new_data = "";
+						
+						for (var i=0;i<split_tags.length;i++) {
+							
+							if (split_tags[i]) {
+								if (new_data === "") {
+									new_data = split_tags[i];
+								} else {
+									new_data = new_data + "," + split_tags[i];
+								}
+							}
+							
+						}
+						// XKit.window.show("Oops", "Test point SIX<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						
+						m_tags = new_data;
+						
+					}
+					// XKit.window.show("Oops", "Test point SEVEN<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					
+					// Done formatting, place existing tags in the quicktags pop-up's text box:
+					m_html = m_html.replace("separated tags\" ", "separated tags\" value=\"" + m_tags + "\" ")
+					// XKit.window.show("Oops", "Test point EIGHT<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					
+				}, false);
+				// XKit.window.show("Oops", "Test point NINE<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				
+			}
+			// XKit.window.show("Oops", "Test point TEN<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			
+		}
+		
+		// Place the pop-up on the web-page
 		$("body").append(m_html);
-
+		
 		$("#xkit-tag-input").bind("keydown", function(event) {
 			if (event.which == 13) {
 				XKit.extensions.quick_tags.custom_tag();
@@ -335,7 +410,7 @@ XKit.extensions.quick_tags = new Object({
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		});
-
+		
 		if ($(obj).attr('data-in-window') === "true") {
 			$("#xkit-quick-tags-window, #xkit-quick-tags-user-tags").addClass("no-other-section");
 			$(".xkit-tag-other").css("display","none");
@@ -343,30 +418,30 @@ XKit.extensions.quick_tags = new Object({
 			$("#xkit-quick-tags-window, #xkit-quick-tags-user-tags").removeClass("no-other-section");
 			$(".xkit-tag-other").css("display","block");
 		}
-
+		
 		clearTimeout(XKit.extensions.quick_tags.menu_closer_int);
-
+		
 		if (user_tag_array.length >= 4) {
 			setTimeout(function() {
 				$("#xkit-quick-tags-user-tags").nanoScroller();
 				$("#xkit-quick-tags-user-tags").nanoScroller({ scroll: 'top' });
 			}, 100);
 		}
-
+		
 		var offset = $(obj).offset();
-
+		
 		var box_left = offset.left - ($("#xkit-quick-tags-window").width() / 2) + 10;
 		var box_top = offset.top - ($("#xkit-quick-tags-window").height() + 7);
-
+		
 		XKit.extensions.quick_tags.user_on_box = true;
 		XKit.extensions.quick_tags.current_button = $(obj);
-
+		
 		$("#xkit-quick-tags-window").css("top", box_top + "px");
 		$("#xkit-quick-tags-window").css("left", box_left + "px");
 		$("#xkit-quick-tags-window").fadeIn('fast');
-
+		
 	},
-
+	
 	show: function(button, post) {
 
 		// if (m_post.error == true) { return; }
