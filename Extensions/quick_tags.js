@@ -389,7 +389,7 @@ XKit.extensions.quick_tags = new Object({
 					// XKit.window.show("Oops", "Test point SEVEN<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					
 					// Done formatting, place existing tags in the quicktags pop-up's text box:
-					m_html = m_html.replace("separated tags\" ", "separated tags\" value=\"" + m_tags + "\" ")
+					m_html = m_html.replace("separated tags\" ", "separated tags\" value=\"" + m_tags + "\" ");
 					// XKit.window.show("Oops", "Test point EIGHT<br/>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					
 				}, false);
