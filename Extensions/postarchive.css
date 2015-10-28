@@ -18,14 +18,6 @@
 	margin-bottom: 3px;
 }
 
-.xkit-postarchive-post-not-supported {
-	border: 1px dashed rgb(200,200,200);
-	text-align: center;
-	color: rgb(140,140,140);
-	height: 200px;
-	line-height: 200px;
-}
-
 #postarchive_view:after {
 	background: no-repeat 0px 45% url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEM3MzRFNUY3Mjg2MTFFMzkxNjc4NTlFOTA5MTY1RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEM3MzRFNjA3Mjg2MTFFMzkxNjc4NTlFOTA5MTY1RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4QzczNEU1RDcyODYxMUUzOTE2Nzg1OUU5MDkxNjVGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4QzczNEU1RTcyODYxMUUzOTE2Nzg1OUU5MDkxNjVGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnWNT5cAAADASURBVHjaYmRAA////0fmZjNggqtAfADGYWRkhEswMVARjBDDGLFEgBWQ4oZy1bDo+QjEL6Hs68AIeAKTYMGi+D4QB2KzCAr4ofg5ED8l5E2QohMEfPQdiHeCPEJMmJ0D4od4DNsNxF9JiYA9QPwZi/hpIH5Mamz+AOJdQPwXSewJ1DDssQmMPeQsMxWLGgMgtgbib0C8EkpjzXIsRCSfC0AsCcSXsRiEAliITI/b6Z4DWHD5f5hldLSSlSIAEGAAoNcs9y8b6dQAAAAASUVORK5CYII=) !important;
 	content: "\54";
@@ -206,44 +198,6 @@
 	-moz-box-sizing: border-box;
 	border-radius: 6px;
 	background: white;
-
-}
-
-#xkit-postarchive-import-words {
-	font-family: "Courier New", Courier, monospace;
-	font-size: 14px;
-	width: 100%;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	border: 1px solid rgb(190,190,190);
-	border-radius: 3px;
-	margin: 7px 0px;
-	padding: 5px 10px;
-	font-size: 13px;
-}
-
-#xkit-postarchive-share-code {
-
-	height: 203px;
-	border: 1px solid rgb(190,190,190);
-	margin-top: 10px;
-	background: rgb(244,244,244);
-
-}
-
-#xkit-postarchive-share-code-inner {
-
-	font-family: "Courier New", Courier, monospace;
-	font-size: 14px;
-	background: rgb(244,244,244);
-	padding: 0;
-	word-wrap: break-word;
-	-moz-user-select: text !important;
-	-webkit-user-select: text !important;
-	user-select: text !important;
-	height: 203px;
-	width: 100%;
 
 }
 

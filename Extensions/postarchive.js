@@ -335,19 +335,12 @@ XKit.extensions.postarchive = {
 			m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
 			m_data.categories = XKit.storage.get("postarchive", "categories","");
 
-			var m_html = "<div id=\"xkit-postarchive-share-code\">" +
-					"<div class=\"content\">" +
-						"<textarea readonly id=\"xkit-postarchive-share-code-inner\">" +
-						"</textarea>" +
-					"</div>" +
-				"</div>";
+			var blob = new Blob([JSON.stringify(m_data)], {type: 'text/plain'});
 
-			XKit.window.show("Export Archive","Copy and paste the following into a file:" + m_html,"info","<div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div>");
-			$('#xkit-postarchive-share-code-inner').val(JSON.stringify(m_data));
-
-			$("#xkit-postarchive-share-code-inner").click(function() {
-				$(this)[0].select();
-			});
+			XKit.window.show("Export Archive","Click OK to download a file with the contents of your Archive.","info","<a id='xkit-postarchive-download-export'><div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div></a>");
+			var a = $('#xkit-postarchive-download-export')[0];
+			a.href = window.URL.createObjectURL(blob);
+			a.download = 'PostArchive export - ' + Date() + '.txt';
 
 			$("#xkit-postarchive-export-confirm").click(function() {
 
@@ -360,7 +353,7 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-import").on("click", function() { //Import Function
 
-			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and paste the text below to import your archived posts.<br/><textarea placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\"></textarea>","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and select the file here (or drag and drop it).<br/><input type='file' accept='text/plain' id=\"xkit-postarchive-import-file\" />","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-postarchive-replace-on-import").click(function() {
 				$(this).toggleClass("selected");
@@ -368,46 +361,49 @@ XKit.extensions.postarchive = {
 
 			$("#xkit-postarchive-add-words").click(function() {
 
-				var m_to_add = $("#xkit-postarchive-import-words").val();
+				var file = $("#xkit-postarchive-import-file")[0].files[0];
+				// TODO: check if import will push XKit over browser storage limit
 
-					if (m_to_add === "" ||$.trim(m_to_add) === "") {
-						XKit.window.close();
-						XKit.extensions.postarchive.show_error("m_to_add is being weird?? " + m_to_add);
+				var f_reader = new FileReader();
+
+				var progress_bar = XKit.progress.add('postarchive-import-progress');
+
+				$('.xkit-window-msg').append(progress_bar);
+				$('.xkit-window-title').text('Importing...');
+
+				f_reader.onload = function(event) {
+					var m_data = event.target.result;
+
+					var m_obj = null;
+					try {
+						m_obj = JSON.parse(m_data);
+					} catch (e) {
+						XKit.extensions.postarchive.show_error("Invalid/Corrupt JSON object found.\nImport can not continue.");
 						return;
 					}
 
-				var m_obj = null;
-				try {
+					m_posts = JSON.parse(m_obj.posts);
+					m_categories = JSON.parse(m_obj.categories);
 
-					m_obj = JSON.parse(m_to_add);
-					//XKit.window.show("m_obj:", JSON.stringify(m_obj),"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-					//return;
+					XKit.extensions.postarchive.load_posts();
 
-				} catch(e) {
-					XKit.extensions.postarchive.show_error("Invalid/Corrupt JSON object found.\nImport can not continue.");
+					Array.prototype.push.apply(XKit.extensions.postarchive.categories, m_categories);
+					Array.prototype.push.apply(XKit.extensions.postarchive.archived_posts, m_posts);
+					XKit.extensions.postarchive.save_posts();
+
+					XKit.extensions.postarchive.update_sidebar();
+
+					XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.extensions.postarchive.view();
 					return;
-				}
 
-				m_posts = JSON.parse(m_obj.posts);
-				m_categories = JSON.parse(m_obj.categories);
+				};
 
-				XKit.extensions.postarchive.load_posts();
+				f_reader.onprogress = function(event) {
+					XKit.progress.value('postarchive-import-progress', 100*event.loaded/file.size);
+				};
 
-				for (var n=0;n<m_categories.length;n++) {
-					XKit.extensions.postarchive.categories.push(m_categories[n]);
-					XKit.extensions.postarchive.save_posts();
-				}
-
-				for (var i=0;i<m_posts.length;i++) {
-					XKit.extensions.postarchive.archived_posts.push(m_posts[i]);
-					XKit.extensions.postarchive.save_posts();
-				}
-
-				XKit.extensions.postarchive.update_sidebar();
-
-				XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-				XKit.extensions.postarchive.view();
-				return;
+				f_reader.readAsText(file);
 
 			});
 
