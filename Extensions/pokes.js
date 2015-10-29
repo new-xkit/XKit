@@ -30,6 +30,32 @@ XKit.extensions.pokes = {
 			XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
 			$(this).addClass("poke_spawned");
 		});
+
+		$(".poke").click(function(event) {
+			if (XKit.storage.size() === 0) {
+				XKit.storage.set("pokes","pokemon_storage","[]");
+			}
+
+			try {
+				var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+				if (storage_array !== "") {
+					var poke_id = $(this).data(pokeid);
+					var old_amount = 0;
+					for (var i = 0; i < storage_array.length; i++) {
+						if (storage_array[i].id === poke_id) {
+							old_amount = storage_array[i].amount;
+						}
+					}
+					storage_array.push({id: $(this).data(pokeid), gender: $(this).data(pokegender), amount: old_amount + 1});
+					XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
+					$(this).css("display","hidden");
+				} else {
+					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				}
+			} catch(e) {
+				XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			}
+		});
 	},
 
 	parse_pokemon: function(mdata, db_nr, pokedThing) {
