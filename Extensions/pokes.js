@@ -31,29 +31,30 @@ XKit.extensions.pokes = {
 			$(this).addClass("poke_spawned");
 		});
 
+		$(".poke").unbind("click");
 		$(".poke").click(function(event) {
-			if (XKit.storage.size() === 0) {
+			if (XKit.storage.get("pokes","pokemon_storage","") === "") {
 				XKit.storage.set("pokes","pokemon_storage","[]");
 			}
 
 			try {
 				var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
 				if (storage_array !== "") {
-					var poke_id = $(this).data(pokeid);
+					var poke_id = event.target.data(pokeid);
 					var old_amount = 0;
 					for (var i = 0; i < storage_array.length; i++) {
 						if (storage_array[i].id === poke_id) {
 							old_amount = storage_array[i].amount;
 						}
 					}
-					storage_array.push({id: $(this).data(pokeid), gender: $(this).data(pokegender), amount: old_amount + 1});
+					storage_array.push({id: poke_id, gender: $(this).data(pokegender), amount: old_amount + 1});
 					XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
-					$(this).css("display","hidden");
+					event.target.hide();
 				} else {
-					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				}
 			} catch(e) {
-				XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-002","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			}
 		});
 	},
