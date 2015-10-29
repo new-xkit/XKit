@@ -32,6 +32,23 @@ XKit.extensions.pokes = {
 		});
 	},
 
+	parse_pokemon: function(mdata, db_nr, pokedThing) {
+		var poke_name = mdata[db_nr].name;
+		var poke_sprite = mdata[db_nr].sprite;
+		var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
+		var rarity = parseInt(mdata[db_nr].rarity);
+		
+		var rarityPicker = Math.floor(Math.random() * 255);
+		if (rarityPicker >= 0 && rarityPicker <= rarity) {
+			var poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
+			'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
+			'</div>';
+			pokedThing.after(poke_html);
+		} else {
+			XKit.extensions.pokes.parse_pokemon(mdata, XKit.extensions.pokes.pokeGen(), pokedThing);
+		}
+	},
+	
 	fetchPoke: function(db_nr, pokedThing) {
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -44,20 +61,7 @@ XKit.extensions.pokes = {
 				var mdata = {};
 				try {
 					mdata = JSON.parse(response.responseText);
-					var poke_name = mdata[db_nr].name;
-					var poke_sprite = mdata[db_nr].sprite;
-					var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
-					var rarity = parseInt(mdata[db_nr].rarity);
-					
-					var rarityPicker = Math.floor(Math.random() * 255);
-					if (rarityPicker >= 0 && rarityPicker <= rarity) {
-						poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
-									'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
-									'</div>';
-						pokedThing.after(poke_html);
-					} else {
-						fetchPoke(XKit.extensions.pokes.pokeGen(), pokedThing);
-					}
+					XKit.extensions.pokes.parse_pokemon(mdata, db_nr, pokedThing);
 				} catch(e) {
 					console.log("Poke data received was not valid JSON. Skipping instance.");
 				}
