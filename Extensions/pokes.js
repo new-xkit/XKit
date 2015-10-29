@@ -26,12 +26,42 @@ XKit.extensions.pokes = {
 		});
 
 		$(".poked:not(.poke_spawned)").each(function() {
-			pokeNr = XKit.extensions.pokes.pokeGen();
-			poke_html = XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
+			var pokeNr = XKit.extensions.pokes.pokeGen();
+			XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
 			$(this).addClass("poke_spawned");
 		});
 	},
 
+	parse_pokemon: function(mdata, db_nr, pokedThing) {
+		var poke_name = mdata[db_nr].name;
+		var poke_sprite = mdata[db_nr].sprite;
+		var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
+		var rarity = parseInt(mdata[db_nr].rarity);
+		
+		var poke_gender = "undefined";
+		if (m_f_ratio === -1) {
+			poke_gender = "genderless";
+		} else {
+			var rnd_nr = Math.random();
+			var male_ratio = (m_f_ratio / 8);
+			if (rnd_nr <= male_ratio) {
+				poke_gender = "female";
+			} else {
+				poke_gender = "male";
+			}
+		}
+		
+		var rarityPicker = Math.floor(Math.random() * 255);
+		if (rarityPicker >= 0 && rarityPicker <= rarity) {
+			var poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
+				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
+			'</div>';
+			pokedThing.after(poke_html);
+		} else {
+			XKit.extensions.pokes.parse_pokemon(mdata, XKit.extensions.pokes.pokeGen(), pokedThing);
+		}
+	},
+	
 	fetchPoke: function(db_nr, pokedThing) {
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -44,20 +74,7 @@ XKit.extensions.pokes = {
 				var mdata = {};
 				try {
 					mdata = JSON.parse(response.responseText);
-					poke_name = mdata[db_nr].name;
-					poke_sprite = mdata[db_nr].sprite;
-					m_f_ratio = parseInt(mdata[db_nr].gender_rate);
-					rarity = parseInt(mdata[db_nr].rarity);
-
-					var rarityPicker = Math.floor(Math.random() * 255);
-					if (rarityPicker >= 0 && rarityPicker <= rarity) {
-						poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
-									'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
-									'</div>';
-						pokedThing.after(poke_html);
-					} else {
-						fetchPoke(XKit.extensions.pokes.pokeGen(), pokedThing);
-					}
+					XKit.extensions.pokes.parse_pokemon(mdata, db_nr, pokedThing);
 				} catch(e) {
 					console.log("Poke data received was not valid JSON. Skipping instance.");
 				}
@@ -76,8 +93,8 @@ XKit.extensions.pokes = {
 	},
 
 	pokeGen: function() {
-		lowID = 0;
-		highID = 888;
+		var lowID = 0;
+		var highID = 888;
 		return Math.floor(Math.random() * (highID - lowID + 1)) + lowID;
 	},
 
