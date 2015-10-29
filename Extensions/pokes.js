@@ -26,8 +26,8 @@ XKit.extensions.pokes = {
 		});
 
 		$(".poked:not(.poke_spawned)").each(function() {
-			pokeNr = XKit.extensions.pokes.pokeGen();
-			poke_html = XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
+			var pokeNr = XKit.extensions.pokes.pokeGen();
+			XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
 			$(this).addClass("poke_spawned");
 		});
 	},
@@ -44,11 +44,11 @@ XKit.extensions.pokes = {
 				var mdata = {};
 				try {
 					mdata = JSON.parse(response.responseText);
-					poke_name = mdata[db_nr].name;
-					poke_sprite = mdata[db_nr].sprite;
-					m_f_ratio = parseInt(mdata[db_nr].gender_rate);
-					rarity = parseInt(mdata[db_nr].rarity);
-
+					var poke_name = mdata[db_nr].name;
+					var poke_sprite = mdata[db_nr].sprite;
+					var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
+					var rarity = parseInt(mdata[db_nr].rarity);
+					
 					var rarityPicker = Math.floor(Math.random() * 255);
 					if (rarityPicker >= 0 && rarityPicker <= rarity) {
 						poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
@@ -76,8 +76,8 @@ XKit.extensions.pokes = {
 	},
 
 	pokeGen: function() {
-		lowID = 0;
-		highID = 888;
+		var lowID = 0;
+		var highID = 888;
 		return Math.floor(Math.random() * (highID - lowID + 1)) + lowID;
 	},
 
