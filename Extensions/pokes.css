@@ -1,4 +1,33 @@
 .poke {
 	position: absolute;
-	right: -150px;
+	right: -126px;
+}
+
+.poke img {
+	width: 100px;
+	image-rendering: pixelated;
+}
+
+.poke[data-pokegender="male"]::after,
+.poke[data-pokegender="female"]::after,
+.poke[data-pokegender="genderless"]::after {
+	font-size:26px;
+	font-weight: bold;
+	position: relative;
+	left: -26px;
+}
+
+.poke[data-pokegender="male"]::after {
+	content: "\2642";
+	color: #6CA0DC;
+}
+
+.poke[data-pokegender="female"]::after {
+	content: "\2640";
+	color: #FF69B4;
+}
+
+.poke[data-pokegender="genderless"]::after {
+	content: "\26AA";
+	color: #9370DB;
 }
