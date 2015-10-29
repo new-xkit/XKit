@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>New XKit Team</string>
 	<key>Builder Version</key>
-	<string>10601.1.56.2</string>
+	<string>11601.2.7.2</string>
 	<key>CFBundleDisplayName</key>
 	<string>New XKit</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.7.0</string>
+	<string>7.7.1</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>Chrome</key>
@@ -68,5 +68,7 @@
 			<string>Some</string>
 		</dict>
 	</dict>
+	<key>Update Manifest URL</key>
+	<string>http://new-xkit.github.io/XKit/Safari/Update.plist</string>
 </dict>
 </plist>
