@@ -38,10 +38,23 @@ XKit.extensions.pokes = {
 		var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
 		var rarity = parseInt(mdata[db_nr].rarity);
 		
+		var poke_gender = "undefined";
+		if (m_f_ratio === -1) {
+			poke_gender = "genderless";
+		} else {
+			var rnd_nr = Math.random();
+			var male_ratio = (m_f_ratio / 8);
+			if (rnd_nr <= male_ratio) {
+				poke_gender = "female";
+			} else {
+				poke_gender = "male";
+			}
+		}
+		
 		var rarityPicker = Math.floor(Math.random() * 255);
 		if (rarityPicker >= 0 && rarityPicker <= rarity) {
-			var poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
-			'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
+			var poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
+				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
 			'</div>';
 			pokedThing.after(poke_html);
 		} else {
