@@ -33,11 +33,9 @@ XKit.extensions.pokes = {
 	},
 
 	fetchPoke: function(db_nr, pokedThing) {
-		poke_nid = ""; poke_name = ""; poke_sprite = "";
-		poke_html = "";
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "https://pokeapi.hosted-secure.com/?query=" + db_nr,
+			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/b4b472adb3839bd510389bdbcc19484af3b7c8f9/pokedex.json",
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Skipping instance.");
@@ -46,26 +44,20 @@ XKit.extensions.pokes = {
 				var mdata = {};
 				try {
 					mdata = JSON.parse(response.responseText);
-					poke_nid = mdata.national_id;
-					poke_name = mdata.name;
-					poke_sprite = "http://pokeapi.co/media/img/" + poke_nid + ".png";
+					poke_name = mdata[db_nr].name;
+					poke_sprite = mdata[db_nr].sprite;
+					m_f_ratio = parseInt(mdata[db_nr].gender_rate);
+					rarity = parseInt(mdata[db_nr].rarity);
 
-					//male_ratio = parseFloat(mdata.male_female_ratio);
-					//var rnd_nr = Math.floor(Math.random() * 100);
-					//var poke_gender = "";
-
-					//if (isNaN(male_ratio)) {
-					//	poke_gender = "genderless";
-					//} else if (rnd_nr <= male_ratio) {
-					//	poke_gender = "male";
-					//} else {
-					//	poke_gender = "female";
-					//}
-
-					poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+ //data-pokegender="'+poke_gender+'">'+
-								'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
-								'</div>';
-					pokedThing.after(poke_html);
+					var rarityPicker = Math.floor(Math.random() * 255);
+					if (rarityPicker >= 0 && rarityPicker <= rarity) {
+						poke_html = '<div class="poke" data-pokenr="'+poke_nid+'" data-pokename="'+poke_name+'">'+
+									'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
+									'</div>';
+						pokedThing.after(poke_html);
+					} else {
+						fetchPoke(XKit.extensions.pokes.pokeGen(), pokedThing);
+					}
 				} catch(e) {
 					console.log("Poke data received was not valid JSON. Skipping instance.");
 				}
@@ -84,8 +76,8 @@ XKit.extensions.pokes = {
 	},
 
 	pokeGen: function() {
-		lowID = 1;
-		highID = 718;
+		lowID = 0;
+		highID = 888;
 		return Math.floor(Math.random() * (highID - lowID + 1)) + lowID;
 	},
 
