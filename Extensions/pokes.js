@@ -52,7 +52,7 @@ XKit.extensions.pokes = {
 					}
 					storage_array.push({id: poke_id, gender: poke_gender, amount: old_amount + 1});
 					XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
-					XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!");
+					XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes");
 					$(this).hide();
 				} else {
 					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
