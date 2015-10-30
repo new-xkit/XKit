@@ -96,7 +96,7 @@ XKit.extensions.pokes = {
 	fetchPoke: function(db_nr, pokedThing) {
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/b4b472adb3839bd510389bdbcc19484af3b7c8f9/pokedex.json",
+			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/9170fe6899c3a1f805a0d9c976d71cbbe6d473a8/pokedex.json",
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Skipping instance.");
