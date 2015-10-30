@@ -124,9 +124,7 @@ XKit.extensions.pokes = {
 	},
 
 	pokeGen: function() {
-		var lowID = 0;
-		var highID = 888;
-		return Math.floor(Math.random() * (highID - lowID + 1)) + lowID;
+		return Math.floor(Math.random() * 889);
 	},
 
 	destroy: function() {
