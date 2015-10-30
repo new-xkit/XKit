@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.4.1 **//
+//* VERSION 5.4.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1941,6 +1941,7 @@ XKit.tools.dump_config = function(){
 				if (type === "ok") { m_class = "notification-ok"; }
 				if (type === "error") { m_class = "notification-error"; }
 				if (type === "warning") { m_class = "notification-warning"; }
+				if (type === "pokes") { m_class = "notification-pokes"; }
 
 				if (sticky === true) {
 					m_class = m_class + " sticky";
