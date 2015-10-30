@@ -1,0 +1,98 @@
+/* NAME Red Carpet **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION A simple red theme **/
+/* DEVELOPER STUDIOXENIX **/
+
+.identity {
+	background: #a41414 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAHCAYAAAArkDztAAAAHElEQVQImWNggABjHDRxEsZE6zDGJYFBY1NpDACF0QTJXkXSyAAAAABJRU5ErkJggg==');
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--two-column-dashboard .left_column {
+	background: rgba(0, 0, 0, 0.19);
+}
+
+#right_column {
+	background: none !important;
+	margin-top: 0;
+}
+
+.notification,
+.controls_section,
+.controls_section li {
+	box-shadow: none;
+	border: 0;
+}
+
+.controls_section * {
+	box-shadow: none !important;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog::before,
+.radar .radar_footer .radar_avatar::before {
+	background-image: linear-gradient(to right, rgba(21, 39, 21, 0), #851010);
+	border-right: 5px solid #851010;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog::before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #ac5c5c);
+	border-right: 5px solid #ac5c5c;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+.controls_section li:hover {
+	background-color: rgba(255, 255, 255, 0.32);
+}
+
+.controls_section li {
+	border: 0;
+}
+
+.selection_nipple {
+	display: none !important;
+}
+
+#right_column:after {
+	display: none !important;
+}
+
+.notification .notification_right .preview_frame {
+	border: 1px solid rgb(50, 50, 50);
+}
+
+.l-header *,
+.l-content * {
+	border-radius: 0;
+}
+
+.xoldeheader-item {
+	border-radius: 7px !important;
+}
+
+.post.post_full {
+	box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.22);
+	border-top: 8px solid #952b2b;
+}
+
+.post_full .post_permalink {
+	border-color: #952b2b #952b2b transparent transparent;
+}
+
+#new_post {
+	border-top: 0 !important;
+}
+
+.plus-follow-button {
+	color: #690000;
+}
+
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+	background-color: #df8f8f;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

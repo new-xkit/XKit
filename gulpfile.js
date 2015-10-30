@@ -1,5 +1,4 @@
-/* global require */
-/* jshint node:true */
+/* jshint node: true */
 'use strict';
 
 var cache = require('gulp-cached'),
@@ -29,7 +28,8 @@ var paths = {
 	},
 	css: {
 		core: ['xkit.css'],
-		extensions: ['Extensions/**/*.css']
+		extensions: ['Extensions/**/*.css'],
+		themes: ['Themes/**/*.css']
 	},
 	vendor: [
 		'jquery.js',
@@ -57,10 +57,18 @@ gulp.task('clean:firefox', function(cb) {
 	del([BUILD_DIR + '/firefox'], cb);
 });
 
+gulp.task('clean:safari', function(cb) {
+	del([BUILD_DIR + '/safari.safariextension'], cb);
+});
+
 gulp.task('clean:extensions', function(cb) {
 	del(['Extensions/dist/*.json',
 	     'Extensions/dist/page/gallery.json',
 	     'Extensions/dist/page/list.json'], cb);
+});
+
+gulp.task('clean:themes', function(cb) {
+	del(['Extenstions/dist/page/themes.json'], cb);
 });
 
 gulp.task('lint:scripts', function() {
@@ -69,7 +77,8 @@ gulp.task('lint:scripts', function() {
 		paths.scripts.core,
 		paths.scripts.extensions,
 		['Chrome/**/*.js',
-		'Firefox/**/*.js']
+		 'Firefox/**/*.js',
+		 'Safari/**/*.js']
 	);
 
 	return gulp.src(src)
@@ -83,7 +92,8 @@ gulp.task('lint:scripts', function() {
 gulp.task('lint:css', function() {
 	var src = [].concat(
 		paths.css.core,
-		paths.css.extensions
+		paths.css.extensions,
+		paths.css.themes
 	);
 
 	return gulp.src(src)
@@ -144,17 +154,45 @@ gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 		});
 });
 
+gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
+	var src = [].concat(
+		paths.scripts.core,
+		paths.css.core,
+		paths.vendor,
+		['Safari/**/*']
+	);
+
+	return gulp.src(src)
+		.pipe(gulp.dest(BUILD_DIR + '/safari.safariextension'));
+
+});
+
 gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
-gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function(callback) {
-	var extBuilder = require('./Extensions/dist/extensions.js');
-	extBuilder.build('./Extensions', './Extensions/dist');
-	callback();
+gulp.task('build:safari', ['copy:safari']);
+
+gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
+	var extensionBuilder = require('./dev/builders/extension');
+	return gulp.src(paths.scripts.extensions)
+		.pipe(extensionBuilder())
+		.pipe(gulp.dest('Extensions/dist'))
+		.pipe(extensionBuilder.galleryBuilder('gallery.json'))
+		.pipe(gulp.dest('Extensions/dist/page'))
+		.pipe(extensionBuilder.listBuilder('list.json'))
+		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:chrome', 'build:firefox']);
+gulp.task('build:themes', ['clean:themes'], function(cb) {
+	var themeBuilder = require('./dev/builders/theme');
+	return gulp.src(paths.css.themes)
+		.pipe(themeBuilder())
+		.pipe(themeBuilder.galleryBuilder('themes.json'))
+		.pipe(gulp.dest('Extensions/dist/page'));
+});
+
+gulp.task('build', ['build:chrome', 'build:firefox', 'build:safari']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);
@@ -162,7 +200,7 @@ gulp.task('watch', function() {
 });
 
 // Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
-gulp.task('server', ['build:extensions'], function(callback) {
+gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 	var log = gutil.log;
 	var colors = gutil.colors;
 
@@ -173,6 +211,9 @@ gulp.task('server', ['build:extensions'], function(callback) {
 	// Automatically rebuild Extensions on script changes
 	gulp.watch('Extensions/**/*.js', ['build:extensions']);
 	gulp.watch('Extensions/**/*.css', ['build:extensions']);
+
+	//Automatically rebuild Themes on change
+	gulp.watch('Themes/**/*.css', ['build:themes']);
 
 	var devServer = https.createServer({
 				key: fs.readFileSync('./dev/certs/key.pem'),

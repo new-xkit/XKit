@@ -1,0 +1,103 @@
+/* NAME Monolithic **/
+/* VERSION 1.1.1 **/
+/* DESCRIPTION A simple gray theme with no space between posts **/
+/* DEVELOPER STUDIOXENIX **/
+
+.identity,
+.post_full .post_permalink {
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGUlEQVQIW2PcunXrfwYgYFy9evV/Li4uBgBDawY/V75q0gAAAABJRU5ErkJggg==);
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--two-column-dashboard .left_column {
+	background: transparent;
+}
+
+.notification {
+	background: #e6e6e6!important;
+	border-radius: 0!important;
+	color: #000!important;
+	border: 0!important;
+	margin: 0 0 1px!important;
+}
+
+#posts>.post_container {
+	margin-bottom: 1px!important;
+}
+
+.notification * {
+	border-radius: 0;
+	color: #969696!important;
+	border: 0;
+}
+
+.l-content {
+	background: rgba(0, 0, 0, 0.11);
+}
+
+.post {
+	border-radius: 0 !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+	margin-top: 0;
+}
+
+.post_full .post_permalink {
+	border-color: transparent transparent #ccc #ccc;
+}
+
+#right_column,
+#right_column:after,
+.post_content,
+.controls_section {
+	background: transparent !important;
+}
+
+.controls_section li * {
+	background: transparent;
+	color: #646464
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog::before,
+.radar .radar_footer .radar_avatar::before {
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #b5b5b5);
+	border-right: 5px solid #b5b5b5;
+}
+
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog::before {
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #c2c2c2);
+	border-right: 5px solid #c2c2c2;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+	background-color: #c2c2c2;
+}
+
+.l-header-container.l-header-container--refresh {
+    background-color: #ababab;
+}
+
+.tab_notice,
+.selected .tab_notice,
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: #e8e8e8;
+}
+
+.tab_notice .tab_notice_value {
+	color: #aaa;
+}
+
+.compose-button {
+    fill: #e8e8e8;
+}
+
+.tab-notice--outlined {
+	border-color: #888;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

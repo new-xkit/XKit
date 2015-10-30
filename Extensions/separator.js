@@ -1,5 +1,5 @@
 //* TITLE Separator **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Where were we again? **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS A simple extension that puts a divider showing where you left off on your dashboard. **//
@@ -210,9 +210,9 @@ XKit.extensions.separator = new Object({
 	destroy: function() {
 		this.running = false;
 		$("#xkit-post-separator").remove();
+		$("#separator_ul").remove();
 		XKit.post_listener.remove("separator");
 		XKit.tools.remove_css("separator");
 		XKit.tools.remove_css("separator-thick");
 	}
-
 });

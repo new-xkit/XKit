@@ -1,5 +1,5 @@
 //* TITLE Themes **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.1.3 **//
 //* DESCRIPTION Themes for your dashboard **//
 //* DETAILS This extension allows you to install themes from the XKit Theme Gallery onto your dashboard. New themes are added regularly, and if you are good with CSS, send an ask to xkit-dev.tumblr.com to get your theme added here! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -30,9 +30,9 @@ XKit.extensions.themes = new Object({
 
 		XKit.tools.init_css("themes");
 
-		if(this.current_theme !== "") {
+		if (this.current_theme !== "") {
 			if (typeof XKit.extensions.yahoo !== "undefined") {
-				if (XKit.extensions.yahoo.running === true) {
+				if (XKit.extensions.yahoo.running) {
 					return;
 				}
 			}
@@ -95,7 +95,7 @@ XKit.extensions.themes = new Object({
 		var m_index = XKit.extensions.themes.gallery_themes_file.indexOf(theme_name);
 		if (m_index === -1) {
 			XKit.storage.set("themes","my_theme","");
-			alert("Unable to load theme.");
+			XKit.window.show("Error","Unable to load theme.","error",'<div class="xkit-button" id="xkit-close-message">Okay</div>');
 			return;
 		}
 
@@ -103,7 +103,6 @@ XKit.extensions.themes = new Object({
 
 		// Voila!
 		XKit.storage.set("themes","my_theme_contents",XKit.extensions.themes.gallery_themes_contents[m_index]);
-		//$("body").append("<style id=\"xkit-themes-user-theme\">" + XKit.extensions.themes.gallery_themes_contents[m_index] + "</style>");
 		XKit.extensions.themes.load_theme();
 
 	},
@@ -137,12 +136,13 @@ XKit.extensions.themes = new Object({
 			$(obj).html("<div id=\"xkit-themes-theme-list\"></div>");
 
 			// Create default theme object:
-			var def_theme = {};
-			def_theme.name = "Tumblr Default";
-			def_theme.version = "1";
-			def_theme.developer = "Tumblr, Inc.";
-			def_theme.file = "";
-			def_theme.description = "The standard Tumblr theme";
+			var def_theme = {
+				"name": "Tumblr Default",
+				"version": "1",
+				"developer": "Tumblr, Inc.",
+				"file": "",
+				"description": "The standard Tumblr theme"
+			};
 			XKit.extensions.themes.cpanel_add(def_theme);
 
 			for(var theme in mdata.themes) {

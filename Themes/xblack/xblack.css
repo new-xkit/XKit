@@ -1,0 +1,92 @@
+/* NAME XBlack **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION A minimalistic black theme **/
+/* DEVELOPER STUDIOENIX **/
+
+.identity {
+	background: black;
+}
+
+.l-content,
+.left_column {
+	background: black !important;
+}
+
+#right_column {
+	background: none !important;
+	color: black;
+}
+
+.notification,
+.controls_section,
+.controls_section li {
+	background-color: black;
+	box-shadow: none;
+	border: 0;
+}
+
+.controls_section * {
+	box-shadow: none !important;
+}
+
+.controls_section li:hover {
+	background-color: rgb(40, 40, 40);
+}
+
+.controls_section li {
+	border: 0;
+}
+
+.selection_nipple {
+	display: none !important;
+}
+
+#right_column:after {
+	display: none !important;
+}
+
+.notification .notification_right .preview_frame {
+	border: 1px solid rgb(50, 50, 50);
+}
+
+.l-header *,
+.l-content * {
+	border-radius: 0px;
+}
+
+.xoldeheader-item {
+	border-radius: 7px !important;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #000);
+	border-right: 5px solid #000;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog::before {
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #666);
+	border-right: 5px solid #666;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+    background-color: #666;
+}
+
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: #aaa;
+}
+
+.plus-follow-button {
+    color: #111;
+}
+
+.post_full .post_permalink {
+	border-color: #000 #000 transparent transparent;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

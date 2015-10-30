@@ -79,11 +79,12 @@ XKit = {
 				return;
 			}
 
-			if (XKit.tools.get_setting("xkit_disable_conflicts", "false") !== "true") {
-				if (XKit.conflicts.check().count > 0) {
-					XKit.conflicts.show(XKit.conflicts.check());
+			var conflicts_check_results = XKit.conflicts.check();
+			if (conflicts_check_results.count > 0) {
+				if (XKit.tools.get_setting("xkit_disable_conflicts", "false") !== "true") {
+					XKit.conflicts.show(conflicts_check_results);
 				}
-				if (XKit.conflicts.check().fatal === true) {
+				if (conflicts_check_results.fatal === true) {
 					return;
 				}
 			}
@@ -605,6 +606,13 @@ XKit = {
 			to_return.firefox = true;
 			to_return.version = get_real_version("firefox/");
 		}
+		// Is it Safari?
+		else if (navigator.userAgent.toLowerCase().indexOf('safari') > -1) {
+			to_return.name = "Apple Safari";
+			to_return.safari = true;
+			//Safari's actual version is actually after the version tag
+			to_return.version = get_real_version("version/");
+		}
 
 		// Check if there is spoofing!
 		// A lot of people now switch to IE.
@@ -756,6 +764,11 @@ XKit = {
 
 			if ($("#missinge_button").length > 0) {
 				m_return.html =	m_return.html + "<li>Missing E found (removal optional)</li>";
+				m_return.count++;
+			}
+
+			if ($("archive_btn").length > 0) {
+				m_return.html = m_return.html + "<li>Archive Poster found (removal optional)</li>";
 				m_return.count++;
 			}
 
@@ -1103,7 +1116,7 @@ function xkit_init_special() {
 				XKit.window.show("Can't launch XKit Editor","<p>" + e.message + "</p>","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			}
 		}
-		if (XKit.browser().firefox === true) {
+		if (XKit.browser().firefox === true || XKit.browser().safari === true) {
 			XKit.extensions.xkit_editor.run();
 		}
 	}

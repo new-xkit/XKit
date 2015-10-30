@@ -1,0 +1,71 @@
+/* NAME Simplicity **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION A simple black and grey theme **/
+/* DEVELOPER longislandicedb **/
+
+.identity {
+	background-image: url('https://new-xkit.github.io/XKit/Themes/simplicity/body-background.jpg');
+	background-repeat: repeat;
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content {
+	background-color: #363636;
+}
+
+.l-container.l-container--two-column-dashboard .left_column,
+#right_column {
+	background: transparent;
+	margin-top: 0;
+}
+
+.post {
+	background-color: #656565;
+	border-radius: 20px;
+}
+
+.post_content,
+.post-container {
+	background: transparent !important;
+}
+
+#right_column:after {
+	background: none !important;
+}
+
+.controls_section li {
+	background: black;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #000);
+	border-right: 5px solid #000;
+}
+
+.radar .radar_footer .radar_avatar:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #363636);
+	border-right: 5px solid #363636;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #767676);
+	border-right: 5px solid #767676;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+    background-color: #767676;
+}
+
+.post_full .post_permalink {
+	border-color: #363636 #363636 transparent transparent;
+}
+
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: #aaa;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

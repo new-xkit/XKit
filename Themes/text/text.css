@@ -1,0 +1,113 @@
+/* NAME Text **/
+/* VERSION 1.0.4 **/
+/* DESCRIPTION Slightly modified Default theme **/
+/* DEVELOPER STUDIOXENIX **/
+
+.identity {
+	background: #3c5a76 url('https://new-xkit.github.io/XKit/Themes/text/body-background.png') no-repeat center top !important;
+}
+
+.selection_nipple,
+.permalink {
+	visibility: hidden !important;
+}
+
+.recessed {
+	background: rgba(0, 0, 0, 0.25) !important;
+	opacity: 0.8 !important;
+	-webkit-transition: 0.3s ease-in;
+	-moz-transition: 0.3s ease-in;
+	-o-transition: 0.3s ease-in;
+	transition: 0.3s ease-in;
+}
+
+.controls_section:not(.controls_section.follow_list.recommended_tumblelogs) {
+	box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.09) !important;
+	border: 1px solid rgba(0, 0, 0, 0.25) !important;
+	background: rgba(20, 40, 70, 0.25) !important;
+	opacity: 1 !important;
+}
+
+.l-header {
+	opacity: 0.8 !important;
+	-webkit-transition: 0.4s ease-in;
+	-moz-transition: 0.4s ease-in;
+	-o-transition: 0.4s ease-in;
+	transition: 0.4s ease-in;
+}
+
+.svg-logo {
+	opacity: 0.5 !important;
+	-webkit-transition: 0.4s ease-in;
+	-moz-transition: 0.4s ease-in;
+	-o-transition: 0.4s ease-in;
+	transition: 0.4s ease-in;
+}
+
+.l-header:hover,
+.svg-logo:hover {
+	opacity: 1 !important;
+	-webkit-transition: 0.4s ease-in;
+	-moz-transition: 0.4s ease-in;
+	-o-transition: 0.4s ease-in;
+	transition: 0.4s ease-in;
+}
+
+a {
+	-webkit-transition: 0.4s ease-in;
+	-moz-transition: 0.4s ease-in;
+	-o-transition: 0.4s ease-in;
+	transition: 0.4s ease-in;
+}
+
+ul.controls_section li {
+	text-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.12) !important;
+	-webkit-transition: 0.3s ease-in;
+	-moz-transition: 0.3s ease-in;
+	-o-transition: 0.3s ease-in;
+	transition: 0.3s ease-in;
+}
+
+ul.controls_section li:hover {
+	backgrjound: rgba(20, 40, 70, 0.35) !important;
+	-webkit-transition: 0.3s ease-in;
+	-moz-transition: 0.3s ease-in;
+	-o-transition: 0.3s ease-in;
+	transition: 0.3s ease-in;
+}
+
+li.post {
+	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.22) !important;
+	opacity: 0.99 !important;
+	-webkit-transition: 0.3s ease-in;
+	-moz-transition: 0.3s ease-in;
+	-o-transition: 0.3s ease-in;
+	transition: 0.3s ease-in;
+}
+
+li.post:hover {
+	opacity: 1 !important;
+	-webkit-transition: 0.5s ease-in;
+	-moz-transition: 0.5s ease-in;
+	-o-transition: 0.5s ease-in;
+	transition: 0.5s ease-in;
+}
+
+.l-content {
+	background: transparent !important;
+	margin-top: 8px !important;
+	padding-top: 0 !important;
+}
+
+.l-container.l-container--two-column-dashboard .left_column {
+	background: transparent;
+}
+
+#right_column:after {
+	display: none !important;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

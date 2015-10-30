@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.5 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -81,27 +81,33 @@ XKit.extensions.shuffle_queue = new Object({
 			});
 
 			$("#xshrinkposts_button").click(function() {
+				//Check if Shorten Posts is enabled
+				if (!XKit.installed.is_running("shorten_posts")) {
+					//Shorten Posts is not enabled, no issues there
+					$(this).toggleClass("xkit-queue-option-button-on");
 
-				$(this).toggleClass("xkit-queue-option-button-on");
+					if ($(this).hasClass("xkit-queue-option-button-on")) {
 
-				if ($(this).hasClass("xkit-queue-option-button-on")) {
+						$(this).find(".count").html("on");
 
-					$(this).find(".count").html("on");
+						XKit.storage.set("shuffle_queue", "shrink_posts", "true");
 
-					XKit.storage.set("shuffle_queue", "shrink_posts", "true");
+						XKit.tools.add_css(" .post_header { display: none; }  .post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; } .post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); } ", "shuffle_queue_mini_posts");
 
-					XKit.tools.add_css(" .post_header { display: none; }  .post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; } .post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); } ", "shuffle_queue_mini_posts");
+					} else {
 
+						$(this).find(".count").html("off");
+
+						XKit.storage.set("shuffle_queue", "shrink_posts", "false");
+
+						XKit.tools.remove_css("shuffle_queue_mini_posts");
+
+					}
 				} else {
-
-					$(this).find(".count").html("off");
-
-					XKit.storage.set("shuffle_queue", "shrink_posts", "false");
-
-					XKit.tools.remove_css("shuffle_queue_mini_posts");
-
+					//Shorten Posts IS enabled, use that to shrink posts rather than Enhanced Queue.
+					//If the two of them were to be combined, strange things would happen.
+					XKit.window.show("Unable to turn on Shrink Posts", "Using the Shrink Posts option and Shorten Posts together creates a small mess that no one really wants to see. If you still want to use the Shrink Posts functionality of Enhanced Queue, disable the Shorten Posts extension first.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				}
-
 			});
 
 			$("#xdeletequeue_button").click(function() {

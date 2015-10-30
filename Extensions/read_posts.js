@@ -1,8 +1,8 @@
 //* TITLE Read Posts **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
-//* DEVELOPER bit-shift **//
+//* DEVELOPER jesskay **//
 //* FRAME false **//
 //* BETA true **//
 

@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -18,14 +18,16 @@ XKit.extensions.drafts_plus = new Object({
 
 		xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
 			'<li class="section_header selected">DRAFTS TOOLS</li>' +
-			'<li class="" id="drafts_plus_mass_edit_li" style="height: 36px;">' +
+			'<li class="" id="drafts_plus_mass_edit_li"">' +
 				'<a href="#" class="customize" id="drafts_plus_mass_edit_button">' +
-					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
+					'<div class="hide_overflow">Mass Edit Mode</div>' +
 				'</a>' +
 			'</li>' +
-			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xshrinkposts_button">' +
-				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shrink Posts <div class="count" style="padding-top: 8px;">off</div> </div>' +
-			'</a></li>' +
+			'<li class="no_push">' +
+				'<a href="#" onclick="return false;" id="xshrinkposts_button">' +
+					'<div class="hide_overflow">Shrink Posts <div class="count" style="padding-top: 8px;">off</div></div>' +
+				'</a>' +
+			'</li>' +
 			'</ul>';
 
 		$("ul.controls_section:eq(1)").before(xf_html);
@@ -184,7 +186,7 @@ XKit.extensions.drafts_plus = new Object({
 				data: "id=" + m_object.post_id + "&form_key=" + m_object.form_key + "&queue=queue",
 				json: false,
 				onerror: function(response) {
-					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested action. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				},
 				onload: function(response) {
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });

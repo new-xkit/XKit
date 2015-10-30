@@ -1,8 +1,8 @@
 //* TITLE PostBlock **//
-//* VERSION 0.2 REV B **//
+//* VERSION 0.2.4 **//
 //* DESCRIPTION Block the posts you don't like **//
 //* DETAILS This is an experimental extension that blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* SLOW true **//
 //* BETA false **//
@@ -41,15 +41,15 @@ XKit.extensions.postblock = new Object({
 	on_click: function(e) {
 
 		var obj = e.target || e.srcElement;
-		var parent = $(obj).parentsUntil("#posts");
+		var parent = $(obj).parentsUntil("#search_posts, #posts");
 
 		if (e.altKey) {
 			$(parent).fadeOut('slow', function() {
 				$(parent).remove();
 				XKit.extensions.postblock.call_tumblr_resize();
 			});
-			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root-id')) === -1) {
-				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root-id'));
+			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
+				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
 				XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
 			}
 			return;
@@ -64,8 +64,8 @@ XKit.extensions.postblock = new Object({
 				$(parent).remove();
 				XKit.extensions.postblock.call_tumblr_resize();
 			});
-			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root-id')) === -1) {
-				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root-id'));
+			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
+				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
 				XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
 			}
 
@@ -104,7 +104,7 @@ XKit.extensions.postblock = new Object({
 			}
 
 			var this_id = m_post.root_id;
-			XKit.interface.add_control_button(this, "xpostblockbutton", "data-root-id=\"" + this_id + "\"");
+			XKit.interface.add_control_button(this, "xpostblockbutton", "data-root_id=\"" + this_id + "\"");
 
 		});
 

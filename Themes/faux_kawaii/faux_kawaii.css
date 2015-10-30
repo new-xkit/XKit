@@ -1,0 +1,87 @@
+/* NAME Faux Kawaii **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION For your cuteness needs **/
+/* DEVELOPER STUDIOXENIX **/
+
+.identity {
+	background: #ff96c0 url('https://new-xkit.github.io/XKit/Themes/faux_kawaii/body-background.jpg');
+}
+
+#right_column,
+.l-container.l-container--two-column-dashboard .left_column,
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}
+
+.l-content {
+	background: rgba(255, 255, 255, 0.32) !important;
+}
+
+.notification,
+.l-header-container.l-header-container--refresh {
+	background: #c8477a;
+}
+
+.identity .controls_section li.section_header,
+.identity .controls_section.user_list li .follow_list_item_blog .tumblelog_title,
+.identity .controls_section.user_list li .follow_list_item_blog .tumblelog_name,
+.avatar_align,
+#view_on_dash_button div.hide_overflow,
+.identity .right_column .small_links a,
+.radar .radar_tumblelog_label .name,
+.radar .radar_tumblelog_label .subheading,
+.no_push,
+.sidebar_link {
+	color: #444;
+}
+
+.identity .right_column>.controls_section:first-child {
+	margin: 18px 0 0;
+}
+
+.tab-notice--outlined {
+	border-color: #951447;
+}
+
+.selection_nipple {
+	display: none !important;
+}
+
+#right_column:after {
+	display: none !important;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background: transparent;
+	border-right: 5px solid transparent;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), rgba(255, 255, 255, 0.32));
+	border-right: 5px solid rgba(255, 255, 255, 0.32);
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+    background-color: transparent;
+}
+
+.tab_notice,
+.selected .tab_notice,
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: #ff96c0;
+}
+
+.compose-button {
+    fill: #ff96c0;
+}
+
+.plus-follow-button {
+    color: #c8477a;
+}
+
+.tab_notice .tab_notice_value {
+	color: #951447;
+}

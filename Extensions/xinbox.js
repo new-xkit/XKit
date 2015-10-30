@@ -1,7 +1,7 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.1 **//
+//* VERSION 1.9.4 **//
 //* DESCRIPTION Enhances your Inbox experience **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
 //* FRAME false **//
 //* BETA false **//
@@ -245,7 +245,9 @@ XKit.extensions.xinbox = new Object({
 			var e_target = jQuery("#xinbox-reply-button-" + add_tag);
 
 			try {
-				Tumblr.DashboardAsk.open_ask(e_target);
+				Tumblr.Events.trigger("ask:form:open", {
+					recipient: e_target.attr("data-tumblelog-name")
+				});
 			} catch(e){
 				console.log("Error: " + e.message);
 			}
@@ -591,12 +593,7 @@ XKit.extensions.xinbox = new Object({
 			XKit.extensions.xinbox.delete_msg_index = 0;
 			XKit.extensions.xinbox.mass_editor_working = true;
 
-			var m_html = $("body").html();
-			var m_key_start = m_html.indexOf("key = '", m_html.indexOf("deny_post(")) + 7;
-			var m_key_end = m_html.indexOf("';", m_key_start);
-			var m_key = m_html.substring(m_key_start, m_key_end);
-
-			XKit.extensions.xinbox.delete_key = m_key;
+			XKit.extensions.xinbox.delete_key = $("input[name='form_key']").attr('value');
 			XKit.extensions.xinbox.mass_editor_delete();
 
 		});
@@ -654,16 +651,18 @@ XKit.extensions.xinbox = new Object({
 		$("#xkit_delete_selected").html(button_working.replace("%m", msg_count).replace("%s", current_msg));
 
 		$(".xpost-selected:eq(0)").addClass("xpost-working");
+
+		var channel_id = $(".xpost-selected:eq(0) .post_info_link").text() || XKit.tools.get_blogs()[0];
 		var m_id = $(".xpost-selected:eq(0)").attr('id').replace("post_","");
 
 		setTimeout(function() {
 
 		GM_xmlhttpRequest({
 			method: "POST",
-			url: "http://www.tumblr.com/deny_submission/",
-			data: "form_key=" + m_key + "&pid=" + m_id,
+			url: "http://www.tumblr.com/svc/post/delete",
+			data: "channel_id=" + channel_id + "&post_id=" + m_id,
 			headers: {
-					"Content-Type": "application/x-www-form-urlencoded"
+					"x-tumblr-form-key": m_key
 			},
 			onerror: function(response) {
 				alert("XInbox can not fetch the required page:\n\n" +

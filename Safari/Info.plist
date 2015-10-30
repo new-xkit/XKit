@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>Author</key>
-	<string>STUDIOXENIX</string>
+	<string>New XKit Team</string>
 	<key>Builder Version</key>
-	<string>10600.1.25</string>
+	<string>10601.1.56.2</string>
 	<key>CFBundleDisplayName</key>
-	<string>XKit</string>
+	<string>New XKit</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.studioxenix.xkit</string>
+	<string>com.new-xkit.xkit</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.5.2</string>
+	<string>7.7.0</string>
 	<key>CFBundleVersion</key>
-	<string>1002</string>
+	<string>1</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Database Quota</key>
-		<real>104857600</real>
+		<real>52428800</real>
 		<key>Global Page</key>
 		<string>global.html</string>
 	</dict>
@@ -37,33 +37,36 @@
 			<array>
 				<string>jquery.js</string>
 				<string>moment.js</string>
-				<string>nano.js</string>
 				<string>tiptip.js</string>
+				<string>nano.js</string>
 			</array>
 		</dict>
-		<key>Whitelist</key>
+		<key>Stylesheets</key>
 		<array>
-			<string>http://www.tumblr.com/*</string>
-			<string>https://www.tumblr.com/*</string>
+			<string>xkit.css</string>
 		</array>
 	</dict>
-	<key>Description</key>
-	<string>The extension framework for Tumblr.</string>
 	<key>DeveloperIdentifier</key>
-	<string>C85A6M27H4</string>
+	<string>JTRG49NC7Z</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
 	<dict>
 		<key>Website Access</key>
 		<dict>
+			<key>Allowed Domains</key>
+			<array>
+				<string>*.tumblr.com</string>
+				<string>*.txmblr.com</string>
+				<string>*.xkit.info</string>
+				<string>new-xkit.github.io</string>
+				<string>*.xkitcs.com</string>
+			</array>
 			<key>Include Secure Pages</key>
 			<true/>
 			<key>Level</key>
-			<string>All</string>
+			<string>Some</string>
 		</dict>
 	</dict>
-	<key>Website</key>
-	<string>http://www.xkit.info/</string>
 </dict>
 </plist>

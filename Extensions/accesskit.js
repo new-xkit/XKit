@@ -1,8 +1,8 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1.5 **//
+//* VERSION 1.1.7 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -107,14 +107,14 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.font.value === "sans-serif") {
 
-			m_css = m_css + " .post.post_full, .post .post_body, .post .post_content { font-family: \"Palatino Linotype\", \"Book Antiqua\", Palatino, serif; } ";
+			m_css = m_css + ".post_wrapper * { font-family: \"Palatino Linotype\", \"Book Antiqua\", Palatino, serif; } ";
 
 		}
 
 		if (this.preferences.font.value === "opendyslexic") {
 
 			m_css = m_css + " @font-face { font-family: open-dyslexic; src: url('http://puaga.com/seven/accesskit/OpenDyslexic-Regular.ttf'); }" +
-					" .post.post_full { font-family: open-dyslexic; } ";
+					" .post_wrapper *{ font-family: open-dyslexic; } ";
 
 		}
 
@@ -153,7 +153,7 @@ XKit.extensions.accesskit = new Object({
 		}
 
 		if (this.preferences.make_links_blue.value === true) {
-			m_css = m_css + " .post .post_body a { color: #2449c1 !important; font-weight: bold !important; } ";
+			m_css = m_css + " .post .post_body a, .reblog-content a { color: #2449c1 !important; font-weight: bold !important; } ";
 		}
 
 		if (this.preferences.contrast_sidebar.value === true) {
@@ -222,7 +222,7 @@ XKit.extensions.accesskit = new Object({
 		if (this.preferences.increase_font_size.value === true) {
 
 			m_css = m_css + " .post_full .post_notes_label, .post_container { font-size: 15px !important; } " +
-					" .post_body * { font-size: 15px !important; } " +
+					" .post_body *, .reblog-list-item .reblog-header, .reblog-list-item .reblog-content { font-size: 15px !important; } " +
 					" .xtimestamp { font-size: 13px; } " +
 					" .post_full .post_header { font-size: 14px; } " +
 					" .notification .notification_sentence > * { font-size: 14px; } " +

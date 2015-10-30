@@ -1,8 +1,8 @@
 //* TITLE Servant **//
-//* VERSION 0.5.7 **//
+//* VERSION 0.5.9 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* SLOW true **//
 //* BETA false **//
@@ -1338,7 +1338,7 @@ XKit.extensions.servant = new Object({
 
 			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
 
-			if (m_result.run === false) {
+			if (m_result.run === false || do_run === 0) {
 				do_run = 0;
 			} else {
 				do_run = 1;
@@ -1675,6 +1675,7 @@ XKit.extensions.servant = new Object({
 		m_html = m_html + "<option value=\"photo\">Photo / Photoset</option>";
 		m_html = m_html + "<option value=\"quote\">Quote</option>";
 		m_html = m_html + "<option value=\"link\">Link</option>";
+		m_html = m_html + "<option value=\"chat\">Chat</option>";
 		m_html = m_html + "<option value=\"audio\">Audio</option>";
 		m_html = m_html + "<option value=\"video\">Video</option>";
 

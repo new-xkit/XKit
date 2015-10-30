@@ -1,0 +1,127 @@
+/* NAME Blur **/
+/* VERSION 1.0.1 **/
+/* DESCRIPTION A simple, clean Tumblr dash theme with a soft, blurred background. **/
+/* DEVELOPER HeyItsJono - http://kaywhatever.tumblr.com/ **/
+
+body {
+	background: url('https://new-xkit.github.io/XKit/Themes/blur/body-background.png') center #000000 repeat fixed !important;
+	background-size: cover;
+}
+
+.l-header-container--refresh {
+    background-color: rgba(50,53,60,0.67);
+}
+
+.selected .tab_notice {
+    background: rgb(193,33,91);
+}
+
+.tab-bar-container .tab_notice {
+    background: rgb(193,33,91);
+}
+
+.tab-notice--outlined {
+    border-color: rgb(193,33,91);
+}
+
+.tab_notice .tab_notice_value {
+    color: rgb(65, 66, 68);
+}
+
+.compose-button {
+    fill: rgba(200, 203, 208, 0.7);
+}
+
+.l-container.l-container--two-column .right_column, .l-container.l-container--two-column-dashboard .right_column {
+    background-color: rgba(1,1,1,0);
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+    background-color: rgba(50,53,60,0.15);
+}
+
+.identity-refresh .controls_section.user_list li .follow_list_item_blog:before {
+    background: rgba(0, 0, 0, 0);
+    border-right: none;
+}
+
+.identity-refresh .controls_section.user_list li:hover .follow_list_item_blog:before {
+    background: none;
+    border-right: none;
+}
+
+.plus-follow-button {
+    color: #414244;
+}
+
+.plus-follow-button:hover {
+    background: #C12C5B;
+}
+.identity .controls_section .item:hover .follow:hover {
+    background: #C12C5B;
+}
+
+.identity-refresh .radar .radar_footer .radar_avatar:before {
+    background: rgba(0, 0, 0, 0);
+}
+
+.radar .radar_footer .radar_avatar:before {
+    background: rgba(0, 0, 0, 0);
+}
+
+.l-container.l-container--two-column-dashboard .left_column {
+    background-color: rgba(1,1,1,0);
+}
+
+.l-container.l-container--two-column .l-content, .l-container.l-container--two-column-dashboard .l-content {
+    background-color: rgba(1,1,1,0);
+}
+
+/*
+.post {
+	background: blue;
+	border-radius: 20px;
+}
+
+.post-container {
+    background: transparent;
+}
+*/
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}
+
+.post_content {
+	background: transparent !important;
+}
+
+#right_column:after {
+	background: none !important;
+}
+
+.controls_section li {
+	background: rgba(1,1,1,0);
+}
+
+.chrome {
+    border-width: 0px;
+    background: rgba(200, 203, 208, 0.20);
+}
+
+.chrome:active {
+    background: rgba(200,203,208,0.40);
+}
+
+.chrome.blue {
+    background: rgba(255,255,255,0.35);
+}
+
+.chrome.blue:active {
+    background: #C12C5B;
+}
+
+.rapid-recs-container .rapid-recs {
+    background-image: linear-gradient(to bottom,rgba(68, 76, 88, 0)0%,rgba(44, 47, 51, 0.18) 15%,rgba(44, 47, 51, 0.18) 85%,rgba(68, 76, 88, 0)100%);
+}

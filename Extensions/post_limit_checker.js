@@ -1,8 +1,8 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.3.0 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -39,7 +39,7 @@ XKit.extensions.post_limit_checker = new Object({
 		var m_html = "<div id=\"xkit-plc-list\" class=\"nano\"><div id=\"xkit-plc-list-content\" class=\"content\">" +
 					"<div class=\"xkit-warning-plc-text\"><b>Deleted posts</b><br/>Deleted posts are count by Tumblr, but this tool can't count them. For example, if you've made 250 posts since the last reset but then deleted 50 of them, this tool will tell you that you have 50 more posts to go, but in reality you've already hit your post limit.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>Original photo posts</b><br/>There is a separate, 75 uploads per day limit for photo posts. This extension does not check for that.</div>" +
-					"<div class=\"xkit-warning-plc-text\"><b>No Guarantee</b><br/>The XKit Guy is not making any guarantees about the reliability of this tool.</div>" +
+					"<div class=\"xkit-warning-plc-text\"><b>No Guarantee</b><br/>The New XKit Team is not making any guarantees about the reliability of this tool.</div>" +
 				"</div></div>";
 
 		XKit.window.show("Important!","Before beginning, please read the following carefully." + m_html,"warning","<div class=\"xkit-button default\" id=\"xkit-plc-continue\">Continue</div><div class=\"xkit-button default\" id=\"xkit-close-message\">Cancel</div>");
@@ -164,8 +164,16 @@ XKit.extensions.post_limit_checker = new Object({
 			url: api_url,
 			json: true,
 			onerror: function(response) {
-				console.log("Error getting page.");
-				XKit.extensions.post_limit_checker.display_error(m_window_id, "501");
+				if (this.status === 404) {
+					console.log("Probably tried to query a private blog");
+					if (index < blogs.length - 1) {
+						index++;
+						setTimeout(function() { XKit.extensions.post_limit_checker.next(0, posts, m_window_id, blogs, index);}, 400);
+					}
+				} else {
+					console.log("Error getting page.");
+					XKit.extensions.post_limit_checker.display_error(m_window_id, "501");
+				}
 				return;
 			},
 			onload: function(response) {

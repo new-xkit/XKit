@@ -39,6 +39,10 @@
 	cursor:pointer;
 }
 
+#view-on-dash-content .post_full .post_permalink {
+    border-color: #0b0f13 #0b0f13 transparent transparent;
+}
+
 .view-on-dash-post-type {
 	opacity: 0.55;
 	width: 22px; height: 20px;

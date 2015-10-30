@@ -1,8 +1,8 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.5 **//
+//* VERSION 2.7.6 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 //* SLOW true **//
@@ -537,6 +537,12 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".caption").html();
 				}
 
+				if ($(this).find(".reblog-list-item").length > 0) {
+					m_content = $(this).find(".reblog-list-item").map(function() {
+					    return $(this).html();
+					}).get().join(" ");
+				}
+
 				m_content = m_content + " " + m_title;
 
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
@@ -547,7 +553,7 @@ XKit.extensions.blacklist = new Object({
 				m_content = m_content.toLowerCase();
 
 				// Strip HTML tags.
-				m_content = m_content.replace(/<(?:.|\n)*?>/gm, '');
+				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
 
 				var m_result = XKit.extensions.blacklist.do_post($(this), m_content, tag_array);
 				if (m_result !== "") {

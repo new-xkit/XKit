@@ -1,0 +1,179 @@
+/* NAME White **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION A basic white dashboard **/
+/* DEVELOPER period-doritos **/
+
+body.layout_standard,
+#pagination a,
+#auto_pagination_loader {
+	background: #ffffff;
+	border: none;
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--flex .l-content,
+.l-container.l-container--two-column .right_column,
+.l-container.l-container--two-column-dashboard .right_column,
+.l-container.l-container--two-column .left_column,
+.l-container.l-container--two-column-dashboard .left_column {
+	background-color: #ffffff;
+}
+
+.l-header .selection_nipple {
+	border-bottom: 12px solid #000000;
+}
+
+.controls_section,
+.radar .radar_post,
+.dashboard_options_form,
+.tag_psa,
+.post_avatar_wrapper,
+.notification.single_notification,
+.controls_section .recessed,
+.controls_section .recessed:hover {
+	background: #ffffff;
+	border: 1px solid rgba(0, 0, 0, .18);
+}
+
+.post_full .post_body,
+.post_full .post_body a,
+.post .post_tags a {
+	font-size: 12px !important;
+	line-height: auto;
+}
+
+.post_full .post_body big {
+	font-size: larger;
+	line-height: auto;
+}
+
+.post_full .post_body small {
+	font-size: smaller;
+	line-height: auto;
+}
+
+.controls_section li a,
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+#tumblr_radar,
+#right_column #popover_button_blogs .link_arrow,
+#blog_url_arrow,
+#right_column .small_links,
+.sidebar_link,
+.elevator-wrapper .elevator,
+#return_to_bottom .return_to_bottom_icon,
+.l-header .tab.iconic a,
+.popover_blogs span,
+.radar .radar_button i,
+.radar .radar_tumblelog_label,
+.notification .notification_sentence,
+.xtag .result,
+.xtag,
+#fan_mail_controls div,
+.no_posts_found,
+.svg-logo {
+	-webkit-filter: invert(1);
+	filter: invert(1);
+}
+
+.controls_section a .count,
+.xbookmark a::after {
+	-webkit-filter: grayscale(1);
+	filter: grayscale(1);
+}
+
+#dashboard_controls a,
+#dashboard_controls .control,
+.notification .report,
+.notification .block,
+a.xkit-reply-button {
+	-webkit-filter: invert(1) grayscale(1);
+	filter: invert(1) grayscale(1);
+	text-shadow: none;
+}
+
+#right_column:after {
+	background: transparent;
+}
+
+.dashboard_options_form,
+.tag_psa,
+.footer_links a:hover,
+#pagination a,
+.post_full .post_avatar .queue .publish_info.time {
+	color: rgba(0, 0, 0, .7);
+}
+
+.dashboard_options_form .dashboard_options_form_disclaimer,
+.dashboard_options_form .dashboard_options_form_disclaimer a,
+.footer_links a,
+#pagination a:hover,
+.post_full .post_avatar .queue .publish_info.day {
+	color: rgba(0, 0, 0, .4);
+}
+
+.blog_menu .selected_blog #open_blog_link,
+.controls_section li .blog small {
+	color: rgba(255, 255, 255, .4);
+}
+
+.notification .report,
+.notification .block,
+a.xkit-reply-button {
+	color: #000000 !important;
+}
+
+.notification .notification_sentence {
+	max-width: 460px;
+}
+
+.notification.can_ignore:hover .notification_sentence .hide_overflow {
+	max-width: 380px;
+}
+
+#dashboard_tumblelog_settings .l-content {
+	background-color: #ffffff;
+}
+
+#dashboard_tumblelog_settings .l-header .selection_nipple {
+	border: none;
+}
+
+a#xshufflequeue_button {
+	background-position: 10px 25% !important;
+}
+.xhighlighter_highlightered_post {
+	box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.45);
+}
+.post_full .post_body {
+	padding: 0;
+}
+
+.bluthSkin table.mceLayout tr.mceLast td {
+	height: 12px;
+}
+
+.post_full .post_permalink {
+	border-color: #fff #fff transparent transparent;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #000);
+	border-right: 5px solid #000;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #c3b39d);
+	border-right: 5px solid #c3b39d;
+}
+
+.identity .controls_section .item:hover .follow:hover {
+	color: black;
+	background-color: #ad6133;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

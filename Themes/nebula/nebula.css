@@ -1,0 +1,196 @@
+/* NAME Nebula **/
+/* VERSION 2.0.1 **/
+/* DESCRIPTION A modern, translucent dashboard theme with nebula background **/
+/* DEVELOPER internet-tears **/
+
+.identity,
+.chrome.blue,
+.chrome.clear,
+.flat-button.post-form--close {
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed !important;
+    background-size: cover;
+    border-radius: 0;
+}
+
+.plexi.show.color {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.chrome.blue {
+    border: none;
+}
+
+.controls_section .with_subtitle small {
+    color: rgba(255, 255, 255, .69);
+}
+
+.dashboard_options_form,
+.tag_psa,
+.grey_note {
+    border-radius: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.dashboard_options_form .dashboard_options_form_disclaimer a,
+.crushes_subhead,
+.chrome.clear {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.split button.chrome:active:not([disabled]),
+.split.active .chrome.options,
+.split .chrome.blue[disabled],
+.split .chrome.blue[disabled]:active,
+.split .chrome.blue.ui_disabled,
+.split .chrome.blue.ui_disabled:active {
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed !important;
+    border: 1px rgba(255, 255, 255, 0.4);
+}
+
+.post-form--controls .controls-container .post-form--save-button>.chrome {
+    width: initial;
+}
+
+.l-content * {
+    border-radius: 0!important;
+}
+
+.notification .notification_right .preview_frame,
+.notification .avatar_frame,
+.ui_avatar .frame {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.tab-bar-container .tab_notice,
+.plus-follow-button,
+.pill.notice,
+.footer_links a,
+.dashboard_options_form .dashboard_options_form_disclaimer,
+.grey_note a,
+.split button.chrome:active:not([disabled]),
+.split.active .chrome.options {
+    color: rgba(234, 244, 255, 0.4);
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+}
+
+#header .selection_nipple {
+    border-bottom: 12px solid #FFF;
+}
+
+.notification,
+.notification.first_notification {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+}
+
+#right_column:after {
+    background: none!important;
+    content: none;
+}
+
+.controls_section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0;
+}
+
+#new_post,
+.post {
+    background: rgba(255, 255, 255, 1.0);
+    border-radius: 0;
+}
+
+.post_content,
+#right_column,
+.l-container.l-container--two-column-dashboard .left_column {
+    background: transparent!important;
+    border-radius: 0;
+}
+
+#right_column {
+    margin: 0;
+}
+
+.identity .controls_section.follow_list.recommended_tumblelogs,
+.identity .controls_section.follow_list.trending_tumblelogs {
+    padding-right: 20px;
+}
+
+.post_full .post_permalink {
+	border-color: transparent transparent #ccc #ccc;
+    background: transparent;
+}
+
+.identity .right_column>.controls_section:first-child {
+    margin: 0;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background: transparent;
+	border-right: transparent;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before {
+	background: transparent;
+	border-right: transparent;
+}
+
+.l-header-container--refresh,
+.l-content,
+.post_avatar,
+.post_avatar .post_avatar_link {
+    background-color: transparent !important;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+.tab_notice,
+.selected .tab_notice,
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.tab_notice  {
+    background-clip: initial;
+}
+
+.tab_notice .tab_notice_value {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tab-notice--outlined {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.compose-button {
+    fill: rgba(255, 255, 255, 0.4);
+}
+
+.flat-button.blue,
+.flat-button,
+.flat-button.blue[disabled],
+.flat-button.blue.disable,
+.flat-button.blue[disabled]:active,
+.flat-button.blue.disabled.active,
+.flat-button[disabled],
+.flat-button.disable,
+.flat-button[disabled]:active,
+.flat-button.disabled.active {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.flat-button.blue:active,
+.flat-button.blue:focus,
+.flat-button:active,
+.flat-button:focus {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.4);
+}

@@ -1,7 +1,7 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.6 **//
+//* VERSION 4.0.7 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -242,7 +242,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		var post_type = "";
 		var channel_id = $("#tumblelog_name").attr('data-tumblelog-name');
-		var root_id = $(XKit.extensions.one_click_postage.last_object).attr('data-root-id');
+		var root_id = $(XKit.extensions.one_click_postage.last_object).attr('data-root_id');
 		var m_object = {};
 		var m_blogs = XKit.tools.get_blogs();
 		var blog_id = "";
@@ -937,7 +937,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		$(".post").not(".xkit_already_reblogged_check").each(function() {
 
-			var post_id = $(this).attr('data-root-id');
+			var post_id = $(this).attr('data-root_id');
 			$(this).addClass("xkit_already_reblogged_check");
 
 			if (XKit.extensions.one_click_postage.is_alreadyreblogged(post_id)) {

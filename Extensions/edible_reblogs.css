@@ -1,0 +1,20 @@
+.is_reblog:not(.ui_note),
+.bread {
+    background: url("http://pngimg.com/upload/bread_PNG2281.png")!important;
+    background-size: 100% auto!important;
+    background-position: center!important;
+}
+
+/*
+	The torturous bread needs to remove all background colors
+	in order to make everything bread.
+*/
+
+.bread {
+	background-color: none!important;
+}
+
+.is_reblog:not(.ui_note) .post_wrapper .post-source-footer,
+.is_reblog:not(.ui_note) .post_wrapper .chat_line {
+	background: transparent !important;
+}

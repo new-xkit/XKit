@@ -1,7 +1,7 @@
 //* TITLE XKit Updates **//
-//* VERSION 1.2 REV B **//
+//* VERSION 2.0.1 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
 
 	running: false,
@@ -46,7 +46,6 @@ XKit.extensions.xkit_updates = new Object({
 			if (difference <= -1 ||difference >= XKit.extensions.xkit_updates.preferences.check_interval.value) {
 				XKit.console.add("Starting update checking..");
 				XKit.extensions.xkit_updates.get_list();
-				XKit.extensions.xkit_updates.update_packs();
 			} else {
 				XKit.console.add("Skipping update checking.");
 			}
@@ -59,78 +58,6 @@ XKit.extensions.xkit_updates = new Object({
 	to_update_index: 0,
 	updated_list: "",
 	updated_list_versions: "",
-
-	pack_to_update: "",
-	pack_to_update_index: 0,
-
-	update_packs: function() {
-
-		XKit.extensions.xkit_updates.pack_to_update_index = 0;
-		XKit.extensions.xkit_updates.pack_to_update = [];
-
-		try {
-
-			var list = XKit.installed.list();
-
-			for (var i=0;i<list.length;i++) {
-
-				var ext_object = XKit.installed.get(list[i]);
-
-				try {
-
-					if (ext_object.pack) {
-
-						XKit.extensions.xkit_updates.pack_to_update.push(ext_object);
-
-					}
-
-				} catch(e) {
-
-					console.log("Can't read " + list[i] + " for update procedure.");
-
-				}
-
-			}
-
-			if (XKit.extensions.xkit_updates.pack_to_update.length > 0) {
-
-				console.log("Going to update " + XKit.extensions.xkit_updates.pack_to_update.length + " packs.");
-				XKit.extensions.xkit_updates.update_next_pack();
-
-			} else {
-				console.log("No packs found to update.");
-			}
-
-		} catch(e) {
-
-			// Eh.
-
-		}
-
-	},
-
-	update_next_pack: function() {
-
-		if (XKit.extensions.xkit_updates.pack_to_update_index >= XKit.extensions.xkit_updates.pack_to_update.length) {
-			return;
-		}
-
-		var to_update = XKit.extensions.xkit_updates.pack_to_update[XKit.extensions.xkit_updates.pack_to_update_index];
-
-		XKit.extensions.xkit_updates.update_pack(to_update.id, function(data) {
-
-			if (data.errors) {
-				console.log("Can't update the pack " + to_update.id + "..");
-			} else {
-				console.log("Successfully updated the pack " + to_update.id + "..");
-			}
-
-			XKit.extensions.xkit_updates.pack_to_update_index++;
-			XKit.extensions.xkit_updates.update_next_pack();
-
-		});
-
-	},
 
 	get_list: function(force_mode) {
 
@@ -156,9 +83,9 @@ XKit.extensions.xkit_updates = new Object({
 				if (force_mode) {
 
 					var check_this = false;
-					if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+					if (XKit.installed.check(mdata.extensions[extension].name)) {
 
-						if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
+						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.tools.parse_version(XKit.installed.get(mdata.extensions[extension].name).version), XKit.tools.parse_version(mdata.extensions[extension].version))) {
 							check_this = true;
 						}
 
@@ -174,8 +101,8 @@ XKit.extensions.xkit_updates = new Object({
 
 				} else {
 
-					if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
-						if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+					if (XKit.installed.check(mdata.extensions[extension].name)) {
+						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.tools.parse_version(XKit.installed.get(mdata.extensions[extension].name).version), XKit.tools.parse_version(mdata.extensions[extension].version))) {
 							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
 						}
 					}
@@ -274,149 +201,6 @@ XKit.extensions.xkit_updates = new Object({
 
 	},
 
-	update_pack: function(extension_id, callback) {
-
-		var m_result = {};
-
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://xds1.puaga.com/xpacks/" + extension_id + "/app.js?ftch_id=" + XKit.tools.random_string(),
-			onerror: function(response) {
-				m_result.errors = true;
-				m_result.error_not_found = true;
-				m_result.error = "Pack can't be found: It might've been removed from XCloud. Please try again later or contact the developer.";
-				callback(m_result);
-			},
-			onload: function(response) {
-				// We are done!
-				try {
-					var mdata = JSON.parse(response.responseText);
-
-					if (mdata.malicious === true || mdata.malicious == "true") {
-
-						XKit.installed.remove(mdata.id);
-						XKit.notifications.add("<b>Removed malicious extension " + mdata.title + "</b>. Please click here for more information.","warning",true, function() {
-
-								XKit.window.show("Malicious extension removed.", "One of the extensions you were using with the title \"" + mdata.title + "\" was found to be malicious, so XKit removed it from your computer. Please refresh this page for changes to take effect.<br/><br/><b>It is highly recommended</b> that you change your Tumblr password. Please be more careful in the future when selecting which Packs to install and which developers to trust.","warning","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-
-							});
-						return;
-
-					}
-
-					GM_xmlhttpRequest({
-						method: "GET",
-						url: "http://xds1.puaga.com/xpacks/" + extension_id + "/icon.js?ftch_id=" + XKit.tools.random_string(),
-						onerror: function(response) {
-							m_result.errors = true;
-							m_result.error_not_found = true;
-							m_result.error = "Pack can't be found: It might've been removed from XCloud. Please try again later or contact the developer.";
-							callback(m_result);
-						},
-						onload: function(response) {
-							// We are done!
-							try {
-
-								var m_object = {};
-								m_object.script = atob(mdata.script);
-								m_object.id = mdata.id;
-								m_object.support_blog = mdata.support_blog;
-								m_object.icon = "data:image/png;base64," + response.responseText;
-
-								if (typeof mdata.css !== "undefined") {
-									m_object.css = atob(mdata.css);
-								} else {
-									m_object.css = "";
-								}
-
-								if (typeof mdata.title !== "undefined") {
-									m_object.title = mdata.title;
-								} else {
-									m_object.title = mdata.id;
-								}
-
-								if (typeof mdata.description !== "undefined") {
-									m_object.description = mdata.description;
-								} else {
-									m_object.description = "";
-								}
-
-								if (typeof mdata.owner !== "undefined") {
-									m_object.developer = mdata.owner;
-								} else {
-									m_object.developer = "";
-								}
-
-								if (typeof mdata.version !== "undefined") {
-									m_object.version = mdata.version;
-								} else {
-									m_object.version = "";
-								}
-
-								if (typeof mdata.frame !== "undefined") {
-									if (mdata.frame === "true" || mdata.frame === " true") {
-										m_object.frame = true;
-									} else {
-										m_object.frame = false;
-									}
-								} else {
-									m_object.frame = false;
-								}
-
-								if (typeof mdata.beta !== "undefined") {
-									if (mdata.beta === "true" || mdata.beta === " true") {
-										m_object.beta = true;
-									} else {
-										m_object.beta = false;
-									}
-								} else {
-									m_object.beta = false;
-								}
-
-								if (typeof mdata.slow !== "undefined") {
-									if (mdata.slow === "true" || mdata.slow === " true") {
-										m_object.slow = true;
-									} else {
-										m_object.slow = false;
-									}
-								} else {
-									m_object.slow = false;
-								}
-
-								if (typeof mdata.details !== "undefined") {
-									m_object.details = mdata.details;
-								} else {
-									m_object.details = "";
-								}
-
-								m_object.pack = true;
-
-								v_result = XKit.tools.set_setting("extension_" + mdata.id, JSON.stringify(m_object));
-
-								m_result.errors = false;
-								m_result.error = "";
-								callback(m_result);
-
-							} catch(e) {
-								m_result.errors = true;
-								m_result.error_not_found = true;
-								m_result.error = "Pack can't be installed: " + e.message;
-								callback(m_result);
-							}
-						}
-					});
-
-				} catch(e) {
-					m_result.errors = true;
-					m_result.error_not_found = true;
-					m_result.error = "Pack can't be installed: " + e.message;
-					callback(m_result);
-				}
-			}
-		});
-
-	},
-
 	update: function(extension_id, callback) {
 
 		var m_result = {};
@@ -468,6 +252,19 @@ XKit.extensions.xkit_updates = new Object({
 
 	},
 
+	shouldUpdate: function(versionCurrent, versionRemote) {
+		if (versionRemote.major > versionCurrent.major) {
+			return true;
+		}
+		if ((versionRemote.minor > versionCurrent.minor) && (versionRemote.major >= versionCurrent.major)) {
+			return true;
+		}
+		if ((versionRemote.patch > versionCurrent.patch) && (versionRemote.major >= versionCurrent.major) && (versionRemote.minor >= versionCurrent.minor)) {
+			return true;
+		}
+		return false;
+	},
+	
 	destroy: function() {
 		this.running = false;
 	}

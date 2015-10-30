@@ -1,0 +1,68 @@
+/* NAME Crocodile Green **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION Crocodile skin background with green trim **/
+/* DEVELOPER crocodilesinbusinesssuits **/
+
+.identity {
+    background: #041705;
+    background-image: url('https://new-xkit.github.io/XKit/Themes/crocodile_green/body-background.jpg');
+    margin: 0;
+}
+
+.l-content {
+    background: #1b331b;
+}
+
+.post {
+    background: #152715;
+    border-radius: 10px;
+}
+
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--two-column-dashboard .left_column,
+#right_column,
+#right_column::after,
+.post_content {
+    background: transparent!important;
+}
+
+.controls_section li,
+.l-header-container--refresh {
+    background: #152715;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog::before,
+.radar .radar_footer .radar_avatar::before {
+	background-image: linear-gradient(to right, rgba(21, 39, 21, 0), #152715);
+	border-right: 5px solid #152715;
+}
+
+.identity .controls_section.user_list li:hover .follow_list_item_blog::before {
+	background-image: linear-gradient(to right, rgba(27, 45, 26, 0), #1b2d1a);
+	border-right: 5px solid #1b2d1a;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+    background-color: #152715;
+}
+
+.tab_notice,
+.selected .tab_notice,
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: #94a694;
+}
+
+.compose-button {
+    fill: #94a694;
+}
+
+.tab_notice .tab_notice_value,
+.plus-follow-button {
+    color: #152715;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}

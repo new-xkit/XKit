@@ -1,7 +1,7 @@
 //* TITLE XKit Patches **//
-//* VERSION 4.0.5 **//
+//* VERSION 5.4.1 **//
 //* DESCRIPTION Patches framework **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 
 XKit.extensions.lang_english = {
 
@@ -15,246 +15,6 @@ XKit.extensions.lang_english = {
 };
 
 XKit.api_key = "Ux4LGODTVuvFBSRAelySTNT1Mucd4xQcVNXLxbpMraEFVFmlVK";
-
-XKit.extensions.xkit_pack_launcher = new Object({
-
-	run: function() {
-
-		XKit.console.add("XKit Pack Launcher working.");
-
-		if (document.location.href.indexOf("tumblr.com/xkit_install_pack=") != -1) {
-
-			$("body").empty();
-			document.title = "XKit - Install Pack";
-			setInterval(function() { document.title = "XKit - Install Pack"; }, 100);
-			var extName = document.location.href;
-			extName = extName.substring(document.location.href.indexOf("tumblr.com/xkit_install_pack=") + 29);
-			extName = extName.replace("#","");
-
-			setTimeout(function() {
-
-				XKit.window.show("One second please","Gathering Pack information..","info");
-
-				GM_xmlhttpRequest({
-					method: "GET",
-					url: "http://xds1.puaga.com/xpacks/" + extName + "/app.js?ftch_id=" + XKit.tools.random_string(),
-					onerror: function(response) {
-						XKit.window.show("Can't install Pack","This pack might've deleted or moved.<br>Please try again later or contact the developer.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					},
-					onload: function(response) {
-						// We are done!
-						try {
-
-							var mdata = jQuery.parseJSON(response.responseText);
-
-							var display_title = mdata.title.replace(/<(?:.|\n)*?>/gm, '');
-							if (display_title.length >= 20) {
-								display_title = display_title.substring(0,19) + "..";
-							}
-
-							var display_owner = mdata.owner.replace(/<(?:.|\n)*?>/gm, '');
-							if (display_owner.length >= 20) {
-								display_owner = display_owner.substring(0,19) + "..";
-							}
-
-							var display_version = mdata.version.replace(/<(?:.|\n)*?>/gm, '');
-							if (display_version.length >= 20) {
-								display_version = display_version.substring(0,19) + "..";
-							}
-
-							if (mdata.malicious === true || mdata.malicious == "true") {
-
-								XKit.window.show("Malicious extension","XKit prevented the installation of this extension since it is a known malicious extension.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-								return;
-
-							}
-
-							var m_html = "<div id=\"xkit-pack-info\">" +
-										"<img src=\"http://puaga.com/xpacks/get_icon.php?id=" + mdata.sid + "&owner=" + mdata.owner + "\">" +
-										"<div class=\"title\">" + display_title + "</div>" +
-										"<div class=\"developer\">by <a style=\"color: rgb(95,95,95);\" target=\"_BLANK\" href=\"http://xkit.info/xcloud/webaccess/profile.php?uid=" + mdata.owner + "\">" + mdata.owner + "</a></div>" +
-										"<div class=\"version\">Version " + mdata.version + "</div>" +
-									"</div>" +
-									"<div id=\"xkit-pack-warn\">You are about to install an extension <b>not verified by the XKit Guy.</b> The XKit Guy takes no responsibility for this extension.</div>";
-
-							XKit.window.show("Install This Pack?", m_html, "question", "<div class=\"xkit-button default\" id=\"xkit-install-pack\">Install Pack</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
-
-							$("#xkit-install-pack").click(function() {
-
-								var m_html2 = "<b style=\"text-transform: uppercase;\">This is not a verified extension!</b><br/><b>It might, along other things:</b>" +
-											"<ul>" +
-											"<li>Steal and sell your data/personal information</li>" +
-											"<li>Disable access to your Tumblr account</li>" +
-											"<li>Display ads on your dashboard</li>" +
-											"<li>Turn your blog into a spambot</li>" +
-											"<li>Cause your browser to hang/crash</li>" +
-											"<li>Render your XKit unusuable</li>" +
-											"<li>Cause problems with other extensions</li>" +
-											"</ul>" +
-											"The XKit Guy takes <b>absolutely no responsibility, nor provides support</b> for this extension. You are on your own: if you do not trust this developer 100%, hit the Cancel button now.";
-								XKit.window.show("WARNING: Very Important!", m_html2, "warning", "<div class=\"xkit-button default disabled\" id=\"xkit-install-pack-proceed\" style=\"width: 140px; text-align: center;\">Proceed Anyways (10)</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
-
-								var count = 10;
-								var vint = setInterval(function() {
-
-									if (count >= 2) {
-										count = count - 1;
-										$("#xkit-install-pack-proceed").html("Proceed Anyways (" + count + ")");
-									} else {
-										$("#xkit-install-pack-proceed").html("Proceed Anyways").removeClass("disabled");
-										clearInterval(vint);
-									}
-
-
-								}, 1200);
-
-								$("#xkit-install-pack-proceed").click(function() {
-
-									if ($(this).hasClass("disabled"))
-										return;
-
-									XKit.window.show("Installing","One second, please..","info");
-
-
-									GM_xmlhttpRequest({
-										method: "GET",
-										url: "http://xds1.puaga.com/xpacks/" + extName + "/icon.js?ftch_id=" + XKit.tools.random_string(),
-										onerror: function(response) {
-											XKit.window.show("Can't install Pack","This pack might've deleted or moved.<br>Please try again later or contact the developer.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-											return;
-										},
-										onload: function(response) {
-
-// We are done!
-											try {
-
-												if ($(this).hasClass("disabled"))
-													return;
-
-												var m_object = {};
-												m_object.script = atob(mdata.script);
-												m_object.id = mdata.id;
-												m_object.support_blog = mdata.support_blog;
-												m_object.icon = "data:image/png;base64," + response.responseText;
-
-												if (typeof mdata.css !== "undefined") {
-													m_object.css = atob(mdata.css);
-												} else {
-													m_object.css = "";
-												}
-
-												if (typeof mdata.title !== "undefined") {
-													m_object.title = mdata.title;
-												} else {
-													m_object.title = mdata.id;
-												}
-
-												if (typeof mdata.description !== "undefined") {
-													m_object.description = mdata.description;
-												} else {
-													m_object.description = "";
-												}
-
-												if (typeof mdata.owner !== "undefined") {
-													m_object.developer = mdata.owner;
-												} else {
-													m_object.developer = "";
-												}
-
-												if (typeof mdata.version !== "undefined") {
-													m_object.version = mdata.version;
-												} else {
-													m_object.version = "";
-												}
-
-												if (typeof mdata.frame !== "undefined") {
-													if (mdata.frame === "true" || mdata.frame === " true") {
-														m_object.frame = true;
-													} else {
-														m_object.frame = false;
-													}
-												} else {
-													m_object.frame = false;
-												}
-
-												if (typeof mdata.beta !== "undefined") {
-													if (mdata.beta === "true" || mdata.beta === " true") {
-														m_object.beta = true;
-													} else {
-														m_object.beta = false;
-													}
-												} else {
-													m_object.beta = false;
-												}
-
-												if (typeof mdata.slow !== "undefined") {
-													if (mdata.slow === "true" || mdata.slow === " true") {
-														m_object.slow = true;
-													} else {
-														m_object.slow = false;
-													}
-												} else {
-													m_object.slow = false;
-												}
-
-												if (typeof mdata.details !== "undefined") {
-													m_object.details = mdata.details;
-												} else {
-													m_object.details = "";
-												}
-
-												m_object.pack = true;
-
-												console.log(m_object);
-
-												var m_result = XKit.tools.set_setting("extension_" + mdata.id, JSON.stringify(m_object));
-
-												if (m_result.errors === false) {
-
-													var current_packs = XKit.tools.get_setting("installed_packs", "");
-													var current_packs_array = [];
-													try {
-														current_packs_array = JSON.parse(current_packs);
-													} catch(e) {
-														current_packs_array = [];
-													}
-
-													if (current_packs_array.indexOf(mdata.id) == -1) {
-														current_packs_array.push(mdata.id);
-														XKit.tools.set_setting("installed_packs", JSON.stringify(current_packs_array));
-													}
-													XKit.installed.add(mdata.id);
-													XKit.window.show("Installed Pack","Installation was successful.<br/>Please refresh the XKit tabs to start using this extension.","info","<a href=\"http://www.tumblr.com/dashboard/\" class=\"xkit-button default\" id=\"xkit-close-message\">OK</a>");
-
-												} else {
-
-													XKit.window.show("Can't install Pack","Installation failed.<br>Please try again later or contact the developer.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
-												}
-
-											} catch(e) {
-
-											}
-
-										}
-									});
-
-								});
-
-							});
-
-						} catch(e) {
-							XKit.window.show("Can't install Pack","This pack might've deleted or moved.<br>Please try again later or contact the developer.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-						}
-					}
-				});
-
-			}, 100);
-
-		}
-	}
-
-});
 
 XKit.extensions.xkit_patches = new Object({
 
@@ -339,8 +99,6 @@ XKit.extensions.xkit_patches = new Object({
 
 		this.check_user_agent();
 
-		XKit.extensions.xkit_pack_launcher.run();
-
 XKit.tools.get_current_blog = function() {
 	var avatar = $("#post_controls_avatar");
 	if (avatar.length > 0) {
@@ -351,6 +109,30 @@ XKit.tools.get_current_blog = function() {
 	}
 	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
 	return XKit.tools.get_blogs()[0];
+};
+
+XKit.tools.parse_version = function(versionString) {
+	if (typeof(versionString) === "undefined" || versionString === "") {
+		return {major: 0, minor: 0, patch: 0};
+	}
+	var version = {};
+	var versionSplit = versionString.split(".");
+	if (versionSplit.length < 3) {
+		var revisionString = versionSplit[1].toLowerCase().split("rev");
+		version.major = parseInt(versionSplit[0]);
+		version.minor = parseInt(revisionString[0].trim());
+		if (typeof(revisionString[1]) === "undefined") {
+			version.patch = 0;
+		} else {
+			// No need for toLowerCase here since we already do that when we split versionSplit above
+			version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
+		}
+	} else {
+		version.major = parseInt(versionSplit[0]);
+		version.minor = parseInt(versionSplit[1]);
+		version.patch = parseInt(versionSplit[2]);
+	}
+	return version;
 };
 
 XKit.tools.get_blogs = function() {
@@ -879,12 +661,27 @@ XKit.tools.dump_config = function(){
 				 * @param {String} new_content
 				 */
 				get_content_html: function() {
-					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
-					if (content_editor.length === 0) {
-						XKit.console.add('ERROR: unable to set content html');
-						return '';
+					if ($(".html-field").css("display") === "none") {
+						//rich text editor
+						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+						if (content_editor.length === 0) {
+							console.error('ERROR: unable to get content html');
+							return '';
+						}
+						return content_editor.html();
+					} else if ($('.chat-field').length > 0 && $('.chat-field').css("display") !== "none") {
+						//chat post editor
+						return $('editor-plaintext').html();
+					} else {
+						var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
+						if (html_or_markdown === 'HTML') {
+							var text = $('.ace_editor .ace_text-layer').text();
+							// replace nonebreaking spaces with normal ones
+							text = text.replace(/\xa0/g, ' ');
+							return text;
+						}
+						throw "Invalid editor type.";
 					}
-					return content_editor.html();
 				},
 
 				/**
@@ -998,6 +795,20 @@ XKit.tools.dump_config = function(){
 
 					return to_return;
 
+				},
+
+				post_type: function() {
+					var post_form = $(".post-form");
+					return {
+						text: post_form.hasClass("post-form--text"),
+						photo: post_form.hasClass("post-form--photo"),
+						video: post_form.hasClass("post-form--video"),
+						chat: post_form.hasClass("post-form--chat"),
+						note: post_form.hasClass("post-form--note"),		// Tumblr calls published answers notes
+						quote: post_form.hasClass("post-form--quote"),
+						audio: post_form.hasClass("post-form--audio"),
+						link: post_form.hasClass("post-form--link")
+					};
 				},
 
 				blog: function() {
@@ -1651,7 +1462,7 @@ XKit.tools.dump_config = function(){
 
 				var selection = $(selector);
 
-				var exclusions = [".radar", ".new_post_buttons"];
+				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
 
 				if (typeof without_tag !== "undefined") {
 					exclusions.push("." + without_tag);
@@ -1729,7 +1540,7 @@ XKit.tools.dump_config = function(){
 				m_return.error = false;
 
 				m_return.id = $(obj).attr('data-post-id');
-				m_return.root_id = $(obj).attr('data-root-id');
+				m_return.root_id = $(obj).attr('data-root_id');
 				m_return.reblog_key = $(obj).attr('data-reblog-key');
 				m_return.owner = $(obj).attr('data-tumblelog-name');
 				m_return.tumblelog_key = $(obj).attr('data-tumblelog-key');
@@ -1789,7 +1600,10 @@ XKit.tools.dump_config = function(){
 					var to_return = "";
 					$(obj).find(".post_tags").find(".post_tag").each(function() {
 						if ($(this).hasClass("post_ask_me_link") === true) { return; }
-						var m_tag = $(this).html().substring(1);
+						var m_tag = $(this).text();
+						if (m_tag[0] === "#") {
+							m_tag = m_tag.substring(1);
+						}
 						if (to_return === "") {
 							to_return = m_tag;
 						} else {
@@ -2060,14 +1874,20 @@ XKit.tools.dump_config = function(){
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
-				if ($("#posts").length === 0) {
-					return;
+				if ($(".posts").length > 0){
+					post_count = $(".posts .post").length;
+				} else if ($("#posts").length > 0) {
+					post_count = $("#posts .post").length;
+				} else {
+					post_count = 0;
 				}
-				post_count = $("#posts .post").length;
 			}
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
+				if(XKit.post_listener.count > 0){
+					XKit.post_listener.run_callbacks();
+				}
 			} else {
 				if (post_count != XKit.post_listener.count) {
 					XKit.post_listener.count = post_count;
@@ -2077,12 +1897,10 @@ XKit.tools.dump_config = function(){
 			if (no_timeout !== true) {
 				setTimeout(XKit.post_listener.check, 1000);
 			}
-
 		};
 
 		XKit.post_listener.run_callbacks = function() {
 			if (XKit.post_listener.callbacks.length === 0) {
-				// console.log("[Post Listener] No callbacks, quitting.");
 				return;
 			}
 			var successful_count = 0;

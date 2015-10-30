@@ -1,0 +1,99 @@
+/* NAME Purple **/
+/* VERSION 1.0.3 **/
+/* DESCRIPTION Takeover-inspired theme **/
+/* DEVELOPER STUDIOXENIX **/
+
+.identity,
+.l-content {
+	background: rgb(245, 245, 245);
+}
+
+.l-content {
+	margin-top: 85px;
+	width: 897px;
+}
+
+#posts .post_avatar_wrapper,
+#posts .post {
+	border-radius: 0 !important;
+	box-shadow: 0 0 1px 1px rgb(190, 190, 190);
+	box-sizing: border-box;
+}
+
+#right_column:after,
+.right_column {
+	background: transparent !important;
+}
+
+.l-header {
+	background: #3f1c59;
+	border-radius: 0 0 12px 12px;
+}
+
+.small_links a {
+	color: #3f1c59 !important;
+}
+
+.notification,
+.controls_section {
+	background: #3f1c59
+}
+
+.l-container.l-container--two-column .l-content,
+.l-container.l-container--two-column-dashboard .l-content,
+.l-container.l-container--two-column-dashboard .left_column {
+	background: #3f1c59;
+}
+
+.l-header-container {
+	background: #3f1c59;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.selection_nipple {
+	display: none !important;
+}
+
+.identity .controls_section.user_list li .follow_list_item_blog:before,
+.identity .controls_section.user_list li:hover .follow_list_item_blog:before,
+.radar .radar_footer .radar_avatar:before {
+	background-image: linear-gradient(to right, rgba(63, 28, 89, 0), #3f1c59);
+	border-right: 5px solid #3f1c59;
+}
+
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+.post_avatar,
+.post_avatar .post_avatar_link {
+    background-color: transparent !important;
+}
+
+.identity .right_column>.controls_section:first-child {
+	margin-top: 0;
+	padding-right: 20px;
+	border-top-right-radius: 25px;
+}
+
+#right_column {
+	margin-top: 0;
+	margin-right: 13px;
+}
+
+.compose-button {
+    fill: rgba(255, 255, 255, 0.4);
+}
+
+.plus-follow-button:hover,
+.identity .controls_section .item:hover .follow:hover {
+    background-color: #be9bd8;
+}
+
+.plus-follow-button {
+    color: #260340;
+}
+
+.post_full .post_permalink {
+	border-color: #3f1c59 #3f1c59 transparent transparent;
+}

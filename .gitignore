@@ -1,5 +1,7 @@
 # Do not commit this
-build
+
+# Only ignore build/ in project root
+/build
 
 .DS_Store
 
@@ -10,6 +12,7 @@ Extensions/dist/*.json
 
 Extensions/dist/page/gallery.json
 Extensions/dist/page/list.json
+Extensions/dist/page/themes.json
 
 *.swp
 
