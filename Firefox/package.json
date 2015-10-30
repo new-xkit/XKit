@@ -11,5 +11,6 @@
     "fennec": ">=35.0"
   },
   "license": "GPL",
-  "icon": "icon.png"
+  "icon": "icon.png",
+  "updateURL": "http://new-xkit.github.io/XKit/Firefox/update.rdf"
 }
