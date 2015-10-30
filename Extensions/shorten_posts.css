@@ -19,7 +19,7 @@
 	cursor: pointer;
 	border-radius: 0px 0px 5px 5px;
 	border-top: 1px solid rgba(0,0,0,0.33);
-	z-index: 89;
+	z-index: 79;
 }
 
 .xkit-shorten-posts-embiggen:hover {

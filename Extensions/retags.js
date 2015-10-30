@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.0.2 **//
+//* VERSION     1.0.3 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -24,11 +24,14 @@ XKit.extensions.retags = {
 	},
 
 	observer: new MutationObserver(function(ms){
+		var inner, $el;
 		ms.forEach(function(m){
-			if ($(m.addedNodes).find('.note').length > 0) {
-				XKit.extensions.retags.tag($(m.addedNodes).find('.note').filter(XKit.extensions.retags.selectors));
+			$el = $(m.addedNodes);
+			inner = $el.find('.note:not(.ui_post_badge)');
+			if (inner.length > 0) {
+				XKit.extensions.retags.tag(inner.filter(XKit.extensions.retags.selectors));
 			} else {
-				XKit.extensions.retags.tag($(m.addedNodes).filter(XKit.extensions.retags.selectors));
+				XKit.extensions.retags.tag($el.filter(XKit.extensions.retags.selectors));
 			}
 		});
 	}),

@@ -296,7 +296,7 @@
 
 .xkit-gallery-extension .description {
 
-	max-height: 55px; overflow: hidden;
+	max-height: 90px; overflow: hidden;
 	text-overflow: ellipsis;
 
 }

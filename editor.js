@@ -1,7 +1,7 @@
 /*
 
 	Extension Editor for XKit 7
-	Version 1.1.0
+	Version 1.2.0
 
 	(c) 2011 - 2014 STUDIOXENIX
 	(c) 2015 New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
@@ -23,6 +23,7 @@ XKit.extensions.xkit_editor = new Object({
 }());
 
 var script_editor, icon_editor, css_editor, object_editor;
+var json_changed, extension_changed;
 
 function extension_editor_run() {
 	
@@ -144,7 +145,18 @@ function extension_editor_finish_run() {
 		$("#xkit-editor-textarea-css").css("display","block");
 		$("#xkit-editor-textarea-icon").css("display","none");
 	});
-
+	
+	extension_changed = false;
+	json_changed = false;
+	
+	$("#xkit-editor-textarea-css, #xkit-editor-textarea-icon, #xkit-editor-textarea").on("change", function(event) {
+		if (!extension_changed) { extension_changed = true; }
+	});
+	
+	$("#xkit-editor-textarea-object").on("change", function(event) {
+		if (!json_changed) { json_changed = true; }
+	});
+	
 	$("#xkit-editor-switch-to-script").trigger('click');
 
 	$("#xkit-editor-new").click(function() {
@@ -328,12 +340,29 @@ function extension_editor_load_extension(extension_id) {
 }
 
 function extension_editor_update_object(m_object) {
-
+	var is_json_tab = $("#xkit-editor-switch-to-object").hasClass("selected");
+	
+	if (is_json_tab && extension_changed) {
+		if(!confirm("You are currently on the JSON tab but you modified either Script, Stylesheet or Icon. Saving now would override these changes.\n\nDo you want to save regardless?")) {
+			return;
+		}
+	} else if (!is_json_tab && json_changed) {
+		if(!confirm("You have modified the JSON object but you are not in the JSON editor. Saving now would override these changes.\n\nDo you want to save regardless?")) {
+			return;
+		}
+	}else if (extension_changed && json_changed) {
+		if(!confirm("You have modified the JSON object and the Script, Stylesheet or Icon. Saving now would override some of these changes.\n\nDo you want to save regardless?")) {
+			return;
+		}
+	}
 	// Check for title, description, developer, version etc. data
 	// here and update the object if neccessary.
-
-	m_object.script = script_editor.getValue();
-
+	if (is_json_tab) {
+		m_object.script = JSON.parse(object_editor.getValue()).script;
+	} else {
+		m_object.script = script_editor.getValue();
+	}
+		
 	var version = extension_editor_legacy_get_attribute(m_object.script, "version");
 	if (version === "") {
 		XKit.window.show("Can't save file","Required VERSION attribute not found.<br/>Consult XKit Developer Documentation.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -356,17 +385,31 @@ function extension_editor_update_object(m_object) {
 		m_object.beta = false;
 	}
 	m_object.details = extension_editor_legacy_get_attribute(m_object.script, "details");
-
-	m_object.icon = icon_editor.getValue();
-	m_object.css = css_editor.getValue();
+	
+	if (is_json_tab) {
+		m_object.icon = JSON.parse(object_editor.getValue()).icon;
+		m_object.css = JSON.parse(object_editor.getValue()).css;
+	} else {
+		m_object.icon = icon_editor.getValue();
+		m_object.css = css_editor.getValue();
+	}
 
 	m_object.errors = false;
-
+	
 	// Update this area too.
-	object_editor.setValue(JSON.stringify(m_object));
+	if (is_json_tab) {
+		script_editor.setValue(JSON.parse(object_editor.getValue()).script);
+		icon_editor.setValue(JSON.parse(object_editor.getValue()).icon);
+		css_editor.setValue(JSON.parse(object_editor.getValue()).css);
+	} else {
+		object_editor.setValue(JSON.stringify(m_object));
+	}
 
 	XKit.installed.update(XKit.extensions.xkit_editor.filename, m_object);
 	XKit.notifications.add("Extension " + XKit.extensions.xkit_editor.filename + " saved successfully.");
+	
+	json_changed = false;
+	extension_changed = false;
 
 }
 

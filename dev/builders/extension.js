@@ -1,4 +1,4 @@
-/* jshint node: true, strict: global */
+/* jshint node: true */
 
 /**
  * Extension builder module.

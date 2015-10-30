@@ -12,7 +12,7 @@
       "128": "icon.png"
    },
    "manifest_version": 2,
-   "minimum_chrome_version": "27.0",
+   "minimum_chrome_version": "44.0",
    "name": "New XKit",
    "permissions": ["*://*/*", "*://*/", "unlimitedStorage", "storage", "http://*.tumblr.com/", "https://*.tumblr.com/" ],
    "version": "7.7.1",

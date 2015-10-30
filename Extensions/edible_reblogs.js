@@ -1,5 +1,5 @@
 //* TITLE Edible Reblogs **//
-//* VERSION 1.0.3 **//
+//* VERSION 1.0.4 **//
 //* DESCRIPTION We are serious developers... **//
 //* DETAILS ...with our priorities in order. Puts bread in literally everything. **//
 //* DEVELOPER new-xkit **//
@@ -24,7 +24,7 @@ XKit.extensions.edible_reblogs = new Object({
 
 		// "Dear god :fearful:"
 		if (XKit.extensions.edible_reblogs.preferences.bread_hell.value) {
-			XKit.post_listener.add("my_extension", XKit.extensions.edible_reblogs.breadify);
+			XKit.post_listener.add("bread_listener", XKit.extensions.edible_reblogs.breadify);
 			XKit.extensions.edible_reblogs.breadify();
 		}
 	},
@@ -35,6 +35,7 @@ XKit.extensions.edible_reblogs = new Object({
 
 	destroy: function() {
 		XKit.tools.remove_css("edible_reblogs");
+		XKit.post_listener.remove("bread_listener");
 		this.running = false;
 		$("*").removeClass("bread");
 	}

@@ -463,7 +463,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
-			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer { display: none; } ", "xkit_tweaks_hide_explore");
+			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer, .post .recommendation-reason-footer { display: none; } ", "xkit_tweaks_hide_explore");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore_buttons.value) {

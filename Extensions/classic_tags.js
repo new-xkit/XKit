@@ -1,7 +1,7 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.5.1 **//
+//* VERSION 1.6.1 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -9,9 +9,6 @@ XKit.extensions.classic_tags = new Object({
 
 	running: false,
 	slow: true,
-	observer: new MutationObserver(function(mutations) {
-		$(".result_link").each(function() { $(this).attr("target", "_BLANK"); });
-	}),
 
 	preferences: {
 		"sep-1": {
@@ -20,6 +17,11 @@ XKit.extensions.classic_tags = new Object({
 		},
 		"show_new_notification": {
 			text: "Show a [new] indicator in the tag search bar",
+			default: true,
+			value: true
+		},
+		"redirect_to_tagged": {
+			text: "Redirect the followed tags to /tagged/ instead of /search/",
 			default: true,
 			value: true
 		},
@@ -57,6 +59,19 @@ XKit.extensions.classic_tags = new Object({
 			value: false
 		}
 	},
+	
+	observer: new MutationObserver(function(mutations) {
+		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
+			$(".result_link").each(function() { $(this).attr("target", "_BLANK"); });
+		} else {
+			$(".result_link").each(function() { $(this).attr("target", ""); });
+		}
+		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
+			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/search/", "/tagged/")); });
+		} else {
+			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/tagged/", "/search/")); });
+		}
+	}),
 
 	run: function() {
 
@@ -184,16 +199,20 @@ XKit.extensions.classic_tags = new Object({
 			});
 
 		}
-		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value === true) {
-			var target = document.querySelector('#popover_search');
-			XKit.extensions.classic_tags.observer.observe(target, {
-				attributes: true
-			});
+		var target = document.querySelector('#popover_search');
+		XKit.extensions.classic_tags.observer.observe(target, {
+			attributes: true
+		});
+		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
 			$(".result_link").each(function() { $(this).attr("target", "_BLANK"); });
 		} else {
 			$(".result_link").each(function() { $(this).attr("target", ""); });
 		}
-
+		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
+			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/search/", "/tagged/")); });
+		} else {
+			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/tagged/", "/search/")); });
+		}
 	},
 
 	destroy: function() {

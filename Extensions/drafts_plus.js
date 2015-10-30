@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -26,16 +26,6 @@ XKit.extensions.drafts_plus = new Object({
 			'<li class="no_push">' +
 				'<a href="#" onclick="return false;" id="xshrinkposts_button">' +
 					'<div class="hide_overflow">Shrink Posts <div class="count" style="padding-top: 8px;">off</div></div>' +
-				'</a>' +
-			'</li>' +
-			'<li class="no_push">' +
-				'<a href="#" id="xkit-mass-deleter-100">' +
-					'<div class="hide_overflow">Delete 100 posts</div>' +
-				'</a>' +
-			'</li>' +
-			'<li class="no_push">' +
-				'<a href="#" id="xkit-mass-deleter-1000">' +
-					'<div class="hide_overflow">Delete 1000 posts</div>' +
 				'</a>' +
 			'</li>' +
 			'</ul>';
