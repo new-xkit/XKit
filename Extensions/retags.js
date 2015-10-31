@@ -147,7 +147,7 @@ XKit.extensions.retags = {
 		var settingKeys = [], postIds = [];
 		Object.keys(cache).forEach(function(key) {
 			var m;
-			if (m = key.match(/^post_([0-9]+)$/)) {
+			if ((m = key.match(/^post_([0-9]+)$/))) {
 				postIds.push(parseInt(m[1], 10));
 			} else {
 				settingKeys.push(key);
