@@ -5,7 +5,7 @@
 //* FRAME false **//
 //* BETA false **//
 
-XKit.extensions.old_sidebar = new Object({
+XKit.extensions.estufars_sidebar_fix = new Object({
 	
 	running: false,
 	
@@ -18,15 +18,15 @@ XKit.extensions.old_sidebar = new Object({
 	},
 	
 	run: function() {
-		XKit.tools.init_css("old_sidebar");
+		XKit.tools.init_css("estufars_sidebar_fix");
 		this.running = true;
 		
-		if (XKit.extensions.old_sidebar.preferences.dashonly.value) {
+		if (XKit.extensions.estufars_sidebar_fix.preferences.dashonly.value) {
 			if (document.location.href.indexOf('://www.tumblr.com/dashboard') === -1) {
 				return;
 			}
 		} else {
-			var disallowedurls = ["://www.tumblr.com/explore", "://www.tumblr.com/search"];
+			var disallowedurls = ["://www.tumblr.com/explore", "://www.tumblr.com/search", "/reblog"];
 			for (var i = 0; i < disallowedurls.length; i++) {
 				if (document.location.href.indexOf(disallowedurls[i]) !== -1) {
 					return;
@@ -38,7 +38,7 @@ XKit.extensions.old_sidebar = new Object({
 		account.click();
 		var popover = document.getElementsByClassName("popover--account-popover")[0];
 		var sidebar = document.getElementById("right_column");
-		popover.childNodes[0].classList.add("old_sidebar");
+		popover.childNodes[0].classList.add("estufars_sidebar_fix");
 		sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
 		account.style.display = "none";
 		// this needs to be delayed a second for some reason
@@ -48,11 +48,11 @@ XKit.extensions.old_sidebar = new Object({
 	},
 	
 	destroy: function() {
-		XKit.tools.remove_css("old_sidebar");
+		XKit.tools.remove_css("estufars_sidebar_fix");
 		this.running = false;
 		
 		var account = document.getElementById("account_button");
-		var sidebar = document.getElementsByClassName("old_sidebar")[0];
+		var sidebar = document.getElementsByClassName("estufars_sidebar_fix")[0];
 		account.style.display = "inline-block";
 		var popover = document.getElementsByClassName("popover--account-popover")[0];
 		popover.insertBefore(sidebar, popover.firstChild);
