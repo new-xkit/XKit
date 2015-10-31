@@ -67,11 +67,20 @@ XKit.extensions.classic_tags = new Object({
 			$(".result_link").each(function() { $(this).attr("target", ""); });
 		}
 		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
-			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/search/", "/tagged/")); });
-		} else {
-			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/tagged/", "/search/")); });
+			$(".result_link").each(XKit.extensions.classic_tags.redirect_to_tagged);
 		}
 	}),
+
+	redirect_to_tagged: function() {
+		// Extract tag from the data-tag-result attribute. May break if
+		// Tumblr removes this. Will not break if tumblr changes the
+		// link format.
+		var tag = $(this).attr("data-tag-result");
+
+		// Construct a URL for the tag, replacing all spaces with "-"
+		var newHref = "/tagged/" + tag.replace(/ /g, "-");
+		$(this).attr("href", newHref);
+	},
 
 	run: function() {
 
@@ -209,9 +218,7 @@ XKit.extensions.classic_tags = new Object({
 			$(".result_link").each(function() { $(this).attr("target", ""); });
 		}
 		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
-			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/search/", "/tagged/")); });
-		} else {
-			$(".result_link").each(function() { $(this).attr("href", $(this).attr("href").replace("/tagged/", "/search/")); });
+			$(".result_link").each(XKit.extensions.classic_tags.redirect_to_tagged);
 		}
 	},
 
