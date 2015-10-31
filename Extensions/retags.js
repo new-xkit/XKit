@@ -37,7 +37,7 @@ XKit.extensions.retags = {
 	}),
 
 	add_toggle: function(){
-		var toggle = 'retags_toggle_'+this.blog_name;
+		var toggle = 'toggle_' + this.blog_name;
 		if (XKit.browser().mobile) {
 			this.html_toggle.appendTo('.primary-nav');
 			XKit.tools.add_css('label.retags .binary_switch_label {font-size:15px; color:white; padding-bottom:15px; }','retags_mobile_label');
@@ -46,17 +46,17 @@ XKit.extensions.retags = {
 		}
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
-				localStorage.setItem(toggle,'true');
+				XKit.storage.set('retags', toggle, 'true');
 				XKit.extensions.retags.css_toggle.appendTo('head');
 				if (XKit.browser().mobile) {
 					XKit.extensions.retags.mobile_toggle.appendTo('head');
 				}
 			} else {
-				localStorage.setItem(toggle,'false');
+				XKit.storage.set('retags', toggle, 'false');
 				XKit.extensions.retags.css_toggle.detach();
 			}
 		});
-		if (localStorage.getItem(toggle) === 'true') {
+		if (XKit.storage.get('retags', toggle) === 'true') {
 			$('#retags-toggle').click();
 		}
 	},
@@ -96,9 +96,9 @@ XKit.extensions.retags = {
 			}
 			if (url) {
 				url = url.split('/');
-				var host = url[2], id = url[4], cache = 'retags_'+id;
-				if (localStorage.getItem(cache) !== null) {
-					XKit.extensions.retags.append($t,cls,$c,JSON.parse(localStorage.getItem(cache)));
+				var host = url[2], id = url[4], cache = 'post_'+id;
+				if (XKit.storage.get('retags', cache, null) !== null) {
+					XKit.extensions.retags.append($t, cls, $c, XKit.storage.get('retags', cache));
 				} else {
 					XKit.extensions.retags.request($t,cls,$c,cache,'https://api.tumblr.com/v2/blog/'+host+'/posts/info?id='+id+'&api_key='+XKit.extensions.retags.api_key);
 				}
@@ -112,12 +112,61 @@ XKit.extensions.retags = {
 			url: url,
 			onload: function(data){
 				var tags = JSON.parse(data.responseText).response.posts[0].tags;
-				localStorage.setItem(cache,JSON.stringify(tags));
+				if (XKit.extensions.retags.count_cached_posts() > XKit.extensions.retags.POST_CACHE_CLEAR_THRESHOLD || XKit.storage.quota('retags') < 100) {
+					XKit.extensions.retags.clear_old_posts();
+				}
+				XKit.storage.set('retags', cache, tags);
 				XKit.extensions.retags.append($t,cls,$c,tags);
 			},
 			onerror: function(data){
 				XKit.extensions.retags.append($t,cls,$c,'ERROR: '+data.status);
 			}
+		});
+	},
+
+	// The number of old posts that will be kept in the cache when it's cleared.
+	POST_CACHE_CLEAR_PRESERVED: 100,
+	// The number of posts that are allowed to be cached before the cache is cleared.
+	POST_CACHE_CLEAR_THRESHOLD: 1000,
+
+	count_cached_posts: function() {
+		var cache = XKit.storage.get_all('retags');
+		return Object.keys(cache).filter(function(key) {
+			return key.match(/^post_[0-9]+$/);
+		}).length;
+	},
+
+	clear_old_posts: function() {
+		// There's no API call to delete specific keys from the storage, so we'll
+		// clear all of them and then restore the ones we want to keep.
+		var cache = XKit.storage.get_all('retags');
+		XKit.storage.clear('retags');
+
+		// We always want to keep every setting key, but we only want to keep
+		// some of the cached posts, so we need to partition the keys like so.
+		var settingKeys = [], postIds = [];
+		Object.keys(cache).forEach(function(key) {
+			var m;
+			if (m = key.match(/^post_([0-9]+)$/)) {
+				postIds.push(parseInt(m[1], 10));
+			} else {
+				settingKeys.push(key);
+			}
+		});
+
+		// Now sort the post IDs in descending order and take only the first
+		// few, so we only keep the newest posts.
+		postIds.sort(function(a, b) { return b - a; });
+		if (postIds.length > XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED) {
+			postIds.length = XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED;
+		}
+		postIds.forEach(function(id) {
+			settingKeys.push('post_' + id);
+		});
+
+		// And finally write back to storage!
+		settingKeys.forEach(function(key) {
+			XKit.storage.set('retags', key, cache[key]);
 		});
 	},
 
