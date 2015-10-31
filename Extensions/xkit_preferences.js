@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.1.3 **//
+//* VERSION 5.2.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -90,8 +90,13 @@ XKit.extensions.xkit_preferences = new Object({
 
 		XKit.tools.init_css("xkit_preferences");
 		// $("#help_button, .tab_help").css("display","none");
-
-		var m_html = '<div class="tab iconic" id="new-xkit-control">' +
+		
+		var holiday_class = ""; var tmp_date = new Date();
+		if (tmp_date.getDate() === 31 && tmp_date.getMonth() === 9) {
+			holiday_class = " halloween";
+		}
+		
+		var m_html = '<div class="tab iconic' + holiday_class + '" id="new-xkit-control">' +
 			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#" onclick="return false">XKit Control Panel</a>' +
 			'</div>';
 
