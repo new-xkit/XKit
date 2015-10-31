@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.3.1 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension lets you find the blog that haven't been updated for over 30 days. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -106,7 +106,6 @@ XKit.extensions.find_inactives = new Object({
 			json: false,
 			onerror: function(response) {
 				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
-				return;
 			},
 			onload: function(response) {
 
@@ -147,7 +146,6 @@ XKit.extensions.find_inactives = new Object({
 
 				} catch(e) {
 					XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-230<br/>" + e.message);
-					return;
 				}
 
 			}
@@ -266,7 +264,7 @@ XKit.extensions.find_inactives = new Object({
 			"<div class=\"days\">" + XKit.extensions.find_inactives.retired_people_list[i].days + "</div>" +
 			"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +
 				'</div>'+
-			'<div style="float:right">' + XKit.extensions.find_inactives.retired_people_list[i].controls +'</div>' +
+			'<div style="float:right; margin-top: 10px; margin-right: 6px;">' + XKit.extensions.find_inactives.retired_people_list[i].controls +'</div>' +
 			"</div>";
 
 		}
@@ -285,6 +283,22 @@ XKit.extensions.find_inactives = new Object({
 			XKit.window.close();
 
 		});
+
+		$(".unfollow_button").bind("click", function() {
+			console.log(this);
+			var unfollowButton = $(this);
+			var name = $(this).attr("data-name");
+			var key = $(this).attr("data-formkey");
+			$.ajax({
+				type: "POST",
+				url: "/svc/unfollow",
+				data: "form_key=" + key + "&data[tumblelog]=" + name + "&data[source]=UNFOLLOW_SOURCE_FOLLOWING_PAGE",
+				dataType: "text"
+			}).done(function() {
+				unfollowButton.hide();
+			});
+		});
+
 
 
 		if ($(".find-inactives-blog").length > 4) {
