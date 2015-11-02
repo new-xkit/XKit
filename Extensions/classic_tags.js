@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.1 **//
+//* VERSION 1.6.2 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -9,6 +9,7 @@ XKit.extensions.classic_tags = new Object({
 
 	running: false,
 	slow: true,
+	apiKey: XKit.api_key, //*"fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",**//
 
 	preferences: {
 		"sep-1": {
@@ -82,6 +83,97 @@ XKit.extensions.classic_tags = new Object({
 		$(this).attr("href", newHref);
 	},
 
+	get_post_timestamp: function(blog_name, post_id) {
+		var self = this;
+		var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + self.apiKey + "&id=" + post_id;
+		var promise = $.Deferred();
+
+		function fail() {
+			XKit.console.add('Unable to fetch timestamp for post ' + post_id);
+			promise.reject();
+		}
+
+		try {
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: api_url,
+				onerror: fail,
+				onload: function(response) {
+					try {
+						var data = JSON.parse(response.responseText);
+						var post = data.response.posts[0];
+						promise.resolve(post.timestamp);
+					} catch (e) {
+						fail();
+					}
+				}
+			});
+		} catch (e) {
+			fail();
+		}
+
+		return promise;
+	},
+
+	get_unread_post_count_for_tag: function(tag_name) {
+		var self = this;
+		var api_url = "https://api.tumblr.com/v2/tagged?limit=5&tag=" + tag_name + "&api_key=" + self.apiKey;
+		var promise = $.Deferred();
+
+		function fail() {
+			XKit.console.add("Unable to load unread tag counts for" + tag_name);
+			promise.reject();
+		}
+
+		try {
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: api_url,
+				onerror: fail,
+				onload: function(response) {
+					try {
+						var data = JSON.parse(response.responseText);
+						var newest_post_seen = XKit.storage.get("classic_tags", "lastseen#" + tag_name);
+						if (!newest_post_seen) {
+							promise.resolve(data.response.length);
+							return;
+						}
+						
+						var newer_posts_count = data.response.map(function (post) {
+							return post.timestamp;
+						}).filter(function (timestamp) {
+							return timestamp > newest_post_seen;
+						}).length;
+						
+						promise.resolve(newer_posts_count);
+					} catch(e) {
+						fail();
+					}
+				}
+			});
+		} catch(e) {
+			fail();
+		}
+
+		return promise;
+	},
+
+	update_tag_timestamp: function () {
+		try {
+			var current_tag = $(".tag_controls .tag").text().trim();
+			var newest_post = $(".posts .post[data-id]").first();
+			var post_id = newest_post.attr("data-id");
+			var post_data = newest_post.attr("data-json");
+			var blog_url = JSON.parse(post_data)["tumblelog-data"].uuid;
+			return XKit.extensions.classic_tags.get_post_timestamp(blog_url, post_id).then(function (timestamp) {
+				XKit.storage.set("classic_tags", "lastseen#" + current_tag, timestamp);
+			});
+		} catch (e) {
+			XKit.console.add("Couldn't update tag timestamp for " + current_tag);
+			return $.Deferred().resolve();
+		}
+	},
+
 	run: function() {
 
 		try {
@@ -93,7 +185,11 @@ XKit.extensions.classic_tags = new Object({
 				}
 			}
 
-			if ($(".tracked_tags").length > 0) {
+			if (XKit.interface.where().tagged && XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
+				XKit.extensions.classic_tags.update_tag_timestamp().then(function () {
+					XKit.extensions.classic_tags.show();
+				});
+			} else {
 				XKit.extensions.classic_tags.show();
 			}
 
@@ -105,23 +201,21 @@ XKit.extensions.classic_tags = new Object({
 	},
 
 	show: function() {
+		if ($(".tracked_tags").length === 0) {
+			return;
+		}
+
 		if ($("#dashboard_index").length === 0) {
 			if (document.location.href.indexOf('/tagged') === -1) {
 				return;
 			}
 		}
 
-		var show_this_tag = false;
+		var self = this;
 		var extra_classes = "";
 		var m_html = "";
+		var total_tag_count = $(".tracked_tag").length;
 
-		var total_tag_count = 0;
-
-		$(".tracked_tag").each(function() {
-
-			total_tag_count++;
-
-		});
 		if (XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
 			if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value !== true) {
 
@@ -157,19 +251,8 @@ XKit.extensions.classic_tags = new Object({
 			$("#search_query").attr("placeholder", "Search [new]");
 		}
 		
-		$(".tracked_tag").each(function() {
 
-			if (parseInt($(this).find(".count").html()) > 0) {
-				show_this_tag = true;
-			} else {
-				if (XKit.extensions.classic_tags.preferences.only_new_tags.value === true) {
-					if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value === true) {
-						// Show everything!
-					} else {
-						return;
-					}
-				}
-			}
+		$(".tracked_tag").each(function() {
 			var result = $(this).find(".result_link");
 			var tag = result.attr('data-tag-result');
 			var href = result.attr('href');
@@ -178,6 +261,10 @@ XKit.extensions.classic_tags = new Object({
 				extra_classes = "selected";
 			} else {
 				extra_classes = "";
+			}
+
+			if (XKit.extensions.classic_tags.preferences.only_new_tags.value) {
+				extra_classes += " hidden";
 			}
 
 			var m_title = $(this);
@@ -204,7 +291,16 @@ XKit.extensions.classic_tags = new Object({
 			}
 
 			$(".xtag").each(function() {
-				$(this).find(".count").html(parseInt($(this).find(".count").html()));
+				var li = $(this);
+				var anchor = li.find(".result_link");
+				var tag_name = anchor.attr("data-tag-result");
+				self.get_unread_post_count_for_tag(tag_name).then(function (count) {
+					if (!count) { return; }
+					if (count === 5) { count = "5+"; }
+
+					li.removeClass("hidden");
+					anchor.find(".result_title").removeClass("no_count").after("<span class='count'>" + count + "</span>");
+				});
 			});
 
 		}
