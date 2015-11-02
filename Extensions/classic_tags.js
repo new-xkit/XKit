@@ -89,7 +89,7 @@ XKit.extensions.classic_tags = new Object({
 		var promise = $.Deferred();
 
 		function fail() {
-			XKit.notifications.add("XKit TagTracker+ Error: Unable to fetch post", "warning", false);
+			console.log("XKit TagTracker+ Error: Unable to fetch post timestamp for " + post_id);
 			promise.reject();
 		}
 
@@ -121,7 +121,7 @@ XKit.extensions.classic_tags = new Object({
 		var promise = $.Deferred();
 
 		function fail() {
-			XKit.notifications.add("XKit TagTracker+ Error: Unable to fetch unread tag counts", "error", false);
+			console.log("XKit TagTracker+ Error: Unable to fetch unread tag counts for " + tag_name);
 			promise.reject();
 		}
 
@@ -169,7 +169,7 @@ XKit.extensions.classic_tags = new Object({
 				XKit.storage.set("classic_tags", "lastseen#" + current_tag, timestamp);
 			});
 		} catch (e) {
-			XKit.notifications.add("XKit TagTracker+ Error: Couldn't find newest post timestamp", "warning", false);
+			console.log("XKit TagTracker+ Error: Couldn't find newest post timestamp on /tagged");
 			return $.Deferred().resolve();
 		}
 	},
