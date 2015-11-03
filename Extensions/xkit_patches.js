@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.4.1 **//
+//* VERSION 5.4.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
