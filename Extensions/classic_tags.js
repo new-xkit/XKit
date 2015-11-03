@@ -185,7 +185,7 @@ XKit.extensions.classic_tags = new Object({
 				}
 			}
 
-			if (XKit.interface.where().tagged && XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
+			if (XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value && XKit.interface.where().tagged && !location.href.match(/before=[0-9]+/i)) {
 				XKit.extensions.classic_tags.update_tag_timestamp().then(function () {
 					XKit.extensions.classic_tags.show();
 				});
