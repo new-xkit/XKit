@@ -166,7 +166,7 @@ XKit.extensions.retags = {
 
 		// And finally write back to storage!
 		settingKeys.forEach(function(key) {
-			XKit.storage.set('retags', key, cache[key]);
+			XKit.storage.set('retags', key, cache[key].value);
 		});
 	},
 
