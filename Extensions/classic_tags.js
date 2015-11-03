@@ -275,8 +275,8 @@ XKit.extensions.classic_tags = new Object({
 
 		});
 		if (m_html !== "" && XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
-
-			m_html = '<ul class="controls_section" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
+			var extra_class = XKit.extensions.classic_tags.preferences.only_new_tags.value ? "hidden": "";
+			m_html = '<ul class="controls_section ' + extra_class + '" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
 
 			if (document.location.href.indexOf('/tagged/') !== -1) {
 
@@ -290,6 +290,7 @@ XKit.extensions.classic_tags = new Object({
 				$(".controls_section_radar").before(m_html);
 			}
 
+			var list = $("#xtags");
 			$(".xtag").each(function() {
 				var li = $(this);
 				var anchor = li.find(".result_link");
@@ -298,6 +299,7 @@ XKit.extensions.classic_tags = new Object({
 					if (!count) { return; }
 					if (count === 5) { count = "5+"; }
 
+					list.removeClass("hidden");
 					li.removeClass("hidden");
 					anchor.find(".result_title").removeClass("no_count").after("<span class='count'>" + count + "</span>");
 				});
