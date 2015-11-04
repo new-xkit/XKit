@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.1.2 **//
+//* VERSION 1.1.3 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -245,7 +245,9 @@ XKit.extensions.better_reblogs = new Object({
                 '.posts .reblog-list-item.contributed-content '+
                     '{display: none!important;} '+
                 '.posts .post_full.post .post_content_inner .post_media '+
-                '~ .xkit-better-reblogs-old {margin-top: 13px;}',
+                '~ .xkit-better-reblogs-old {margin-top: 13px;} ' +
+                '.xkit-better-reblogs-old p.reblog-user {margin-bottom: 10px} '+
+                '.xkit-better-reblogs-old blockquote.reblog-quote {margin-top: 10px}',
             'better_reblogs');
         XKit.extensions.better_reblogs.do_nested();
         XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_nested);
@@ -311,18 +313,13 @@ XKit.extensions.better_reblogs = new Object({
             }
 
             var cc = $this.find('.contributed-content');
-            if (cc.length) {
-                cc.after('<div class="xkit-better-reblogs-old post_body"></div>');
-                cc.after(title);
-            } else {
-                reblog_tree.after('<div class="xkit-better-reblogs-old post_body"></div>');
-                reblog_tree.after(title);
-            }
+            reblog_tree.after('<div class="xkit-better-reblogs-old post_body"></div>');
+            reblog_tree.after(title);
             title.removeClass("reblog-title");
             title.addClass("post_title xkit-better-reblogs-title");
 
             var all_quotes = [];
-            reblog_tree.find(".reblog-list-item").each(function() {
+            reblog_tree.find(".reblog-list-item:not(.contributed-content)").each(function() {
                 var $this = $(this);
                 var content = $this.find('.reblog-content');
                 var author = $this.find('.reblog-tumblelog-name');
@@ -338,9 +335,9 @@ XKit.extensions.better_reblogs = new Object({
             all_quotes.forEach(function(data, index, all) {
                 var reblog_content = data.reblog_content;
                 all_quotes_text = 
-                    "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" +
+                    '<p class="reblog-user">'+"<a class='tumblr_blog' href='" + data.reblog_url + "'>" +
                         data.reblog_author + "</a>:</p>" +
-                    "<blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
+                    '<blockquote class="reblog-quote">' + all_quotes_text + reblog_content + "</blockquote>";
             });
 
             $this.find(".xkit-better-reblogs-old").append(all_quotes_text);
