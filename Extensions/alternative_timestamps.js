@@ -1,6 +1,7 @@
 //* TITLE Alternative Timestamps **//
 //* VERSION 1.1.1 **//
-//* DESCRIPTION Adds timestamps to dashboard posts using a parsing method instead of AJAX calls. English tumblr interface only for now. **//
+//* DESCRIPTION Adds timestamps to dashboard posts using a parsing method **//
+//* DETAILS This version of Timestamps uses parsing methods to display the timestamp instead of AJAX calls. Currently only in English. **//
 //* DEVELOPER jesskay **//
 //* FRAME false **//
 //* BETA true **//

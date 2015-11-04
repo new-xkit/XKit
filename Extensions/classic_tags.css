@@ -14,6 +14,10 @@
 	font-weight: 700;
 }
 
+.identity .controls_section .xtag a .count {
+	top: 8px;
+}
+
 .result_sub_title {
 	font-weight: 700 !important;
 	padding: 9px 0;
