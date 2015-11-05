@@ -137,6 +137,11 @@ XKit.extensions.tweaks = new Object({
 			experimental: true,
 			desktop_only: true
 		},
+		"border_asks": {
+			text: "Show border around ask posts and answers",
+			default: false,
+			value: false
+		},
 		"sep2": {
 			text: "Dashboard tweaks",
 			type: "separator",
@@ -363,6 +368,10 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
+		}
+
+		if (XKit.extensions.tweaks.preferences.border_asks.value) {
+			XKit.extensions.tweaks.add_css(".post-composer_note-post .note_item, .post_full.is_note .post-body .note_item, .post_full.is_note .post_body .note_item, .post_brick.is_note .note_item { border-color: #ccc } .post_full.is_note .nipple, .post-composer_note-post .nipple, .post_brick.is_note .nipple { border-left: 8px solid #ccc } .post_full.is_note .nipple::after, .post-composer_note-post .nipple::after, .post_brick.is_note .nipple::after { display: inline; position: absolute; content: ''; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 8px solid #f2f2f2; right: 1px; top: -8px }", "xkit_tweaks_border_asks");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
