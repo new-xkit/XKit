@@ -73,9 +73,11 @@ XKit.extensions.editable_reblogs = new Object({
 				'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 			return;
 		}
+		var nodes = $(all_quotes_text + old_content);
+		if (nodes.length === 0) return;
+
 		// add 'tumblr_blog' class to all tumblr.com links,
 		// assuming that they're part of a reblog-structure that's not being parsed properly
-		var nodes = $(all_quotes_text + old_content);
 		nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
 		var nodes_text = $('<div>').append($(nodes).clone()).html();
 		XKit.interface.post_window.set_content_html(nodes_text);
