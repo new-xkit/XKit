@@ -1,9 +1,9 @@
 //* TITLE Super Markdown Editor **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Add live previews and other functionality to the Markdown post editor **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
-//* BETA false **//
+//* BETA true **//
 
 // A couple of utilities first. This is just standard HTML entity escaping.
 var escapeHtml = function(s) {
