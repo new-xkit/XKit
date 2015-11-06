@@ -1,5 +1,5 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.4 **//
+//* VERSION 0.1.5 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
@@ -77,7 +77,7 @@ XKit.extensions.hideavatars = new Object({
 				XKit.extensions.hideavatars.blognames = JSON.parse(m_storage);
 			} catch(e) {
 				XKit.extensions.hideavatars.blognames = [];
-				XKit.console.add("Failed to parse m_storage in XKit.extensions.hideavatars.load_blogs");
+				console.log("Failed to parse m_storage in XKit.extensions.hideavatars.load_blogs");
 			}
 		} else {
 			XKit.extensions.hideavatars.blognames = [];

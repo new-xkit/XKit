@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -32,22 +32,22 @@ XKit.extensions.xkit_updates = new Object({
 			var ms = d.getTime();
 			var last_time = parseFloat(XKit.storage.get("xkit_updates", "last_update_check", "0"));
 			var difference = ms - last_time;
-			XKit.console.add("Updates: difference = " + difference);
+			console.log("Updates: difference = " + difference);
 			if (isNaN(XKit.extensions.xkit_updates.preferences.check_interval.value) === true) {
-				XKit.console.add("Invalid check interval, reverting to default: not a number.");
+				console.log("Invalid check interval, reverting to default: not a number.");
 				XKit.extensions.xkit_updates.preferences.check_interval.value = XKit.extensions.xkit_updates.default_interval;
 			} else {
 				var m_interval = XKit.extensions.xkit_updates.preferences.check_interval.value;
 				if (m_interval > XKit.extensions.xkit_updates.max_interval || m_interval < XKit.extensions.xkit_updates.min_interval) {
 					XKit.extensions.xkit_updates.preferences.check_interval.value = XKit.extensions.xkit_updates.default_interval;
-					XKit.console.add("Invalid check interval, reverting to default: too small or big.");
+					console.log("Invalid check interval, reverting to default: too small or big.");
 				}
 			}
 			if (difference <= -1 ||difference >= XKit.extensions.xkit_updates.preferences.check_interval.value) {
-				XKit.console.add("Starting update checking..");
+				console.log("Starting update checking..");
 				XKit.extensions.xkit_updates.get_list();
 			} else {
-				XKit.console.add("Skipping update checking.");
+				console.log("Skipping update checking.");
 			}
 		} catch(e) {
 			XKit.extensions.xkit_updates.show_update_failure();
@@ -121,7 +121,7 @@ XKit.extensions.xkit_updates = new Object({
 				var d = new Date();
 				var ms = d.getTime();
 				XKit.storage.set("xkit_updates", "last_update_check", ms);
-				XKit.console.add("Update complete: no new extensions");
+				console.log("Update complete: no new extensions");
 			}
 
 		});
@@ -184,7 +184,7 @@ XKit.extensions.xkit_updates = new Object({
 			if (mdata.errors === true) {
 				if (mdata.error_not_found === true) {
 					// Probably removed.
-					XKit.console.add("Can not update " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index] + ": not found.");
+					console.log("Can not update " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index] + ": not found.");
 				}else{
 					XKit.extensions.xkit_updates.show_update_failure();
 					return;
@@ -193,7 +193,7 @@ XKit.extensions.xkit_updates = new Object({
 
 			XKit.extensions.xkit_updates.updated_list.push(mdata.title);
 			XKit.extensions.xkit_updates.updated_list_versions.push(mdata.version);
-			XKit.console.add("Updated " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index]);
+			console.log("Updated " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index]);
 			XKit.extensions.xkit_updates.to_update_index++;
 			XKit.extensions.xkit_updates.update_next(force_mode);
 
@@ -264,7 +264,7 @@ XKit.extensions.xkit_updates = new Object({
 		}
 		return false;
 	},
-	
+
 	destroy: function() {
 		this.running = false;
 	}

@@ -562,7 +562,7 @@ XKit.extensions.one_click_postage = new Object({
 					// Not booted up yet?
 					setTimeout(function() { XKit.extensions.one_click_postage.get_autotagger(); }, 100);
 				} else {
-					XKit.console.add("Auto tagger installed and found");
+					console.log("Auto tagger installed and found");
 					XKit.extensions.one_click_postage.auto_tagger = true;
 					XKit.extensions.one_click_postage.auto_tagger_preferences = XKit.extensions.auto_tagger.preferences;
 				}
@@ -583,7 +583,7 @@ XKit.extensions.one_click_postage = new Object({
 					// Not booted up yet?
 					setTimeout(function() { XKit.extensions.one_click_postage.get_quicktags(); }, 100);
 				} else {
-					XKit.console.add("Quick Tags installed and found");
+					console.log("Quick Tags installed and found");
 					XKit.extensions.one_click_postage.quick_tags = true;
 				}
 			} else {
