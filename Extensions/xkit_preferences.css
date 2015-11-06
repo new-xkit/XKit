@@ -8,32 +8,6 @@
 
 }
 
-#xkit-festivus {
-
-	z-index: 1000;
-	width: 100%;
-	position: absolute;
-	top: -1px;
-	left: 0px;
-	height: 33px;
-	background-position: 0px 0px;
-	display: none;
-
-}
-
-#xkit-festivus-toggle {
-	float: right !important;
-	border-right: 0 !important;
-	font-size: 11px !important;
-	padding: 0px 14px !important;
-	opacity: 0.8;
-}
-
-#xkit-festivus-toggle:hover {
-	background: transparent !important;
-	opacity: 1; text-decoration: underline;
-}
-
 #xkit-spring-cleaning-list {
 
 	margin-top: 10px;

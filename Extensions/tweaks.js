@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 5.0.2 **//
+//* VERSION 5.0.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -136,6 +136,11 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			experimental: true,
 			desktop_only: true
+		},
+		"border_asks": {
+			text: "Show border around ask posts and answers",
+			default: false,
+			value: false
 		},
 		"sep2": {
 			text: "Dashboard tweaks",
@@ -365,6 +370,10 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.split_gear();
 		}
 
+		if (XKit.extensions.tweaks.preferences.border_asks.value) {
+			XKit.extensions.tweaks.add_css(".post-composer_note-post .note_item, .post_full.is_note .post-body .note_item, .post_full.is_note .post_body .note_item, .post_brick.is_note .note_item { border-color: #ccc } .post_full.is_note .nipple, .post-composer_note-post .nipple, .post_brick.is_note .nipple { border-left: 8px solid #ccc } .post_full.is_note .nipple::after, .post-composer_note-post .nipple::after, .post_brick.is_note .nipple::after { display: inline; position: absolute; content: ''; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 8px solid #f2f2f2; right: 1px; top: -8px }", "xkit_tweaks_border_asks");
+		}
+
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
 			$("#tumblr_radar").css("display","none");
 			$(".radar_header").parent().css("display","none");
@@ -524,7 +533,7 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
 				XKit.interface.is_tumblr_page()) {
 			XKit.extensions.tweaks.add_css(".post .tags { width: 100% !important; display: block !important; overflow:visible; height:auto; white-space: normal; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
-			XKit.extensions.tweaks.add_css("#posts .post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
+			XKit.extensions.tweaks.add_css(".post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
 			$(document).on('mouseup mousemove mouseover mousedown mouseout', '.post_tags_inner', function(e) {
 				$(this).parent().removeClass("draggable");
 				$(this).removeClass("post_tags_inner");

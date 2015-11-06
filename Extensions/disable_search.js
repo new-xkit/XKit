@@ -1,12 +1,12 @@
 //* TITLE Classic Search **//
-//* VERSION 1.0.4 **//
+//* VERSION 1.0.5 **//
 //* DESCRIPTION Get the old search back **//
 //* DETAILS This is a very simple extension that simply redirects your search requests to the old Tumblr tag search pages. Note that features of the new search page, such as multiple tag search will not work when this extension is enabled. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
-XKit.extensions.disable_search = new Object({
+XKit.extensions.disable_search = {
 
 	running: false,
 
@@ -26,43 +26,39 @@ XKit.extensions.disable_search = new Object({
 	run: function() {
 
 		this.running = true;
+		if (!XKit.interface.is_tumblr_page()) {
+			return;
+		}
 		$('#search_form').on('submit', XKit.extensions.disable_search.do);
-		$('#search_query').on('keyup keydown', XKit.extensions.disable_search.do_suggestions);
-
-	},
-
-	do_suggestions: function(e, stop) {
-
-		$(".popover_menu_item .result a").each(function() {
-
-			var new_link = $(this).attr('href').replace('/search/', '/tagged/');
-			console.log(new_link);
-			$(this).attr('href', new_link);
-
-		});
-
-		$(".search_typeahead").unbind("click");
-		$(".search_typeahead").bind("click", function(ev) {
-
-			ev.preventDefault();
-			ev.stopPropagation();
-
-			var new_link = $(this).attr('href').replace('/search/', '/tagged/');
-
-			if (XKit.extensions.disable_search.preferences.open_in_new_tab.value === true) {
-				window.open(new_link);
+		var search_result_click_handler = function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			if (XKit.extensions.disable_search.preferences.open_in_new_tab.value) {
+				window.open(e.currentTarget.href);
 			} else {
-				document.location = new_link;
+				document.location = e.currentTarget.href;
 			}
-
+		};
+		var mo = new MutationObserver(function(mutations) {
+			mutations.forEach(function(mutation) {
+				if (mutation.target.className === 'scrollable_container'
+					&& mutation.addedNodes.length > 0) {
+					for (var i = 0; i<mutation.addedNodes.length; i++) {
+						var links_to_change = $(mutation.addedNodes[i]).find('.search_typeahead');
+						for (var j = 0; j<links_to_change.length; j++) {
+							$(links_to_change[j]).off('click');
+							$(links_to_change[j]).on('click', search_result_click_handler);
+							$(links_to_change[j]).attr('href', $(links_to_change[j]).attr('href')
+								.replace('/search/', '/tagged/'));
+							if (XKit.extensions.disable_search.preferences.open_in_new_tab.value) {
+								$(links_to_change[j]).attr('target', '_blank');
+							}
+						}
+					}
+				}
+			});
 		});
-
-		if (stop) { return; }
-
-		// This is so fucking terrible but oh well.
-		// Will do something better in the future.
-		setTimeout(function() { XKit.extensions.disable_search.do_suggestions(true, true) }, 500);
-		setTimeout(function() { XKit.extensions.disable_search.do_suggestions(true, true) }, 1500);
+		mo.observe($('#search_results_container')[0], {childList: true, subtree: true});
 
 	},
 
@@ -74,7 +70,7 @@ XKit.extensions.disable_search = new Object({
 
 		var url = "http://www.tumblr.com/tagged/" + query;
 
-		if (XKit.extensions.disable_search.preferences.open_in_new_tab.value === true) {
+		if (XKit.extensions.disable_search.preferences.open_in_new_tab.value) {
 			window.open(url);
 		} else {
 			document.location = url;
@@ -87,4 +83,4 @@ XKit.extensions.disable_search = new Object({
 		$('#search_form').off('submit', XKit.extensions.disable_search.do);
 	}
 
-});
+};
