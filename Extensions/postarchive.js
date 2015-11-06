@@ -353,7 +353,7 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-import").on("click", function() { //Import Function
 
-			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and select the file here (or drag and drop it).<br/><input type='file' accept='text/plain' id=\"xkit-postarchive-import-file\" />","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and select the file here (or drag and drop it).<br/><br/>If you need to import your archive from old XKit, click <a href='http://new-xkit-extension.tumblr.com/postarchive-migration'>here for the PostArchive migration guide.</a><br/><br/><input type='file' accept='text/plain' id=\"xkit-postarchive-import-file\" />","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-postarchive-replace-on-import").click(function() {
 				$(this).toggleClass("selected");
