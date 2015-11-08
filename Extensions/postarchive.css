@@ -10,22 +10,12 @@
 }
 
 .xkit-post-archive-avatar {
-	width: 12px;
-	height: 12px;
 	/* margin-left: 8px; */
 	margin-right: 7px;
 	vertical-align: middle;
 	border-radius: 3px;
 	display: inline-block;
 	margin-bottom: 3px;
-}
-
-.xkit-postarchive-post-not-supported {
-	border: 1px dashed rgb(200,200,200);
-	text-align: center;
-	color: rgb(140,140,140);
-	height: 200px;
-	line-height: 200px;
 }
 
 #postarchive_view:after {
@@ -48,12 +38,6 @@
 	text-shadow: 0px 1px 0px white;
 	position: relative;
 	cursor: pointer;
-}
-
-.xkit-postarchive-hidden-category-item {
-
-	display: none;
-
 }
 
 .xkit-postarchive-cat-separator.xkit-pac-opened {
@@ -113,10 +97,6 @@
 	padding: 3px 15px;
 	border-bottom: 1px solid rgb(190,190,190);
 }
-
-#xkit-postarchive-rename-this.hidden,
-#xkit-postarchive-remove-this.hidden,
-#xkit-postarchive-recategorize-this.hidden { display: none; }
 
 #xkit-postarchive-remove-this {
 	position: absolute;
@@ -221,28 +201,6 @@
 
 }
 
-#xkit-postarchive-share-code {
-
-	height: 203px;
-	border: 1px solid rgb(190,190,190);
-	margin-top: 10px;
-	background: rgb(244,244,244);
-
-}
-
-#xkit-postarchive-share-code-inner {
-
-	font-family: "Courier New", Courier, monospace;
-	font-size: 14px;
-	background: rgb(244,244,244);
-	padding: 15px;
-	word-wrap: break-word;
-	-moz-user-select: text !important;
-	-webkit-user-select: text !important;
-	user-select: text !important;
-
-}
-
 #xkit-postarchive-sidebar {
 
 	width: 230px;
@@ -298,7 +256,13 @@
 
 #xkit-postarchive-sidebar .xkit-postarchive-post.xkit-this-post-is-pretty-hidden,
 .xkit-postarchive-cat-separator.xkit-this-post-is-pretty-hidden,
-.xkit-postarchive-no-posts-index.xkit-this-post-is-pretty-hidden { display: none; }
+.xkit-postarchive-no-posts-index.xkit-this-post-is-pretty-hidden,
+.xkit-postarchive-hidden-category-item,
+#xkit-postarchive-rename-this.hidden,
+#xkit-postarchive-remove-this.hidden,
+#xkit-postarchive-recategorize-this.hidden {
+	display: none;
+}
 
 #xkit-postarchive-sidebar .xkit-postarchive-post {
 
@@ -313,8 +277,6 @@
 	overflow: hidden;
 
 }
-
-
 
 #xkit-postarchive-sidebar .xkit-postarchive-post:hover {
 
@@ -333,4 +295,13 @@
 
 #postarchive_view {
   color: rgba(255, 255, 255, 0.5);
+}
+
+#xkit-postarchive-content .post_full.is_photoset .photoset .photoset_row,
+#xkit-postarchive-content .post_full.is_photo .photoset .photoset_row {
+	width: 540px;
+}
+
+#xkit-postarchive-content .post_tags {
+	margin-bottom: 15px;
 }

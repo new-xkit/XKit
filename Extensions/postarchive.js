@@ -1,12 +1,12 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.5.6 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
-XKit.extensions.postarchive = new Object({
+XKit.extensions.postarchive = {
 
 	running: false,
 
@@ -81,17 +81,16 @@ XKit.extensions.postarchive = new Object({
 
 		if (XKit.interface.where().inbox === true) { return; }
 
-    if ($('#postarchive_ul').length === 0) {
-      var xf_html = '<ul class="controls_section" id="postarchive_ul">' +
-            '<li class="section_header selected">Post Archive</li>' +
-            '<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="postarchive_view">' +
-              '<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 8px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
-            '</a></li>' +
-          '</ul>';
+		if ($('#postarchive_ul').length === 0) {
+			var xf_html = '<ul class="controls_section" id="postarchive_ul">' +
+				'<li class="section_header selected">Post Archive</li>' +
+					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="postarchive_view">' +
+						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 8px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
+					'</a></li>' +
+				'</ul>';
 
-      //$("ul.controls_section:first").before(xf_html);
-      $(".controls_section_radar").before(xf_html);
-    }
+			$(".controls_section_radar").before(xf_html);
+		}
 
 		$("#postarchive_view").click(function() {
 
@@ -183,7 +182,7 @@ XKit.extensions.postarchive = new Object({
 			// we have a storage bug on chrome.
 			if (show === true) {
 				XKit.storage.set("postarchive","collapse_uncategorized", "false");
-			} else{
+			} else {
 				XKit.storage.set("postarchive","collapse_uncategorized", "true");
 			}
 			return;
@@ -218,11 +217,8 @@ XKit.extensions.postarchive = new Object({
 		if (XKit.extensions.postarchive.archived_posts.length === 0) {
 
 			XKit.window.show("No posts yet.","<b>You have no archived posts yet.</b><br/>If you've archived them on another computer, you might need to sync them using XCloud.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			//return;
 
 		}
-
-		console.log(XKit.extensions.postarchive.archived_posts);
 
 		var m_post_list_html = "";
 
@@ -236,8 +232,6 @@ XKit.extensions.postarchive = new Object({
 
 				var m_collapse_class = "xkit-pac-opened";
 				var m_collapse_class_post = "";
-
-				// alert(XKit.extensions.postarchive.categories[i].title + "\n" + XKit.extensions.postarchive.categories[i].collapsed);
 
 				if (XKit.extensions.postarchive.categories[i].collapsed === true) { m_collapse_class = ""; m_collapse_class_post = "xkit-postarchive-hidden-category-item"; }
 
@@ -334,27 +328,19 @@ XKit.extensions.postarchive = new Object({
 
 		}
 
-		$("#xkit-postarchive-export").bind("click", function() {
+		$("#xkit-postarchive-export").on("click", function() {
 
 			var m_data = {};
 
 			m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
 			m_data.categories = XKit.storage.get("postarchive", "categories","");
 
-			var m_html = "<div id=\"xkit-postarchive-share-code\" class=\"nano\">" +
-					"<div class=\"content\">" +
-						"<div id=\"xkit-postarchive-share-code-inner\">" +
-							JSON.stringify(m_data) +
-						"</div>" +
-					"</div>" +
-				"</div>";
+			var blob = new Blob([JSON.stringify(m_data)], {type: 'text/plain'});
 
-			XKit.window.show("Export Archive","Copy and paste the following into a file:" + m_html,"info","<div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div>");
-
-			$("#xkit-postarchive-share-code").nanoScroller();
-			$("#xkit-postarchive-share-code").nanoScroller({ scroll: 'top' });
-
-			$("#xkit-postarchive-share-code").click(function() { $(this).selectText();});
+			XKit.window.show("Export Archive","Click OK to download a file with the contents of your Archive.","info","<a id='xkit-postarchive-download-export'><div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div></a>");
+			var a = $('#xkit-postarchive-download-export')[0];
+			a.href = window.URL.createObjectURL(blob);
+			a.download = 'PostArchive export - ' + Date() + '.txt';
 
 			$("#xkit-postarchive-export-confirm").click(function() {
 
@@ -365,9 +351,9 @@ XKit.extensions.postarchive = new Object({
 
 		});
 
-		$("#xkit-postarchive-import").bind("click", function() { //Import Function
+		$("#xkit-postarchive-import").on("click", function() { //Import Function
 
-			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and select the file here (or drag and drop it).<br/><br/>If you need to import your archive from old XKit, click <a href='http://new-xkit-extension.tumblr.com/postarchive-migration'>here for the PostArchive migration guide.</a><br/><br/><input type='file' accept='text/plain' id=\"xkit-postarchive-import-file\" />","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-postarchive-replace-on-import").click(function() {
 				$(this).toggleClass("selected");
@@ -375,47 +361,49 @@ XKit.extensions.postarchive = new Object({
 
 			$("#xkit-postarchive-add-words").click(function() {
 
-			var m_to_add = $("#xkit-postarchive-import-words").val();
+				var file = $("#xkit-postarchive-import-file")[0].files[0];
+				// TODO: check if import will push XKit over browser storage limit
 
-				if (m_to_add === "" ||$.trim(m_to_add) === "") {
-					XKit.window.close();
-					XKit.window.show("Noodlebops!", "m_to_add is being weird?? " + m_to_add,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-					return;
-				}
+				var f_reader = new FileReader();
 
-				var m_obj = null;
-				try {
+				var progress_bar = XKit.progress.add('postarchive-import-progress');
 
-					m_obj = JSON.parse(m_to_add);
-					//XKit.window.show("m_obj:", JSON.stringify(m_obj),"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-					//return;
+				$('.xkit-window-msg').append(progress_bar);
+				$('.xkit-window-title').text('Importing...');
 
-				} catch(e) {
-					alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
-					return;
-				}
+				f_reader.onload = function(event) {
+					var m_data = event.target.result;
 
-				m_posts = JSON.parse(m_obj.posts);
-				m_categories = JSON.parse(m_obj.categories);
+					var m_obj = null;
+					try {
+						m_obj = JSON.parse(m_data);
+					} catch (e) {
+						XKit.extensions.postarchive.show_error("Invalid/Corrupt JSON object found.\nImport can not continue.");
+						return;
+					}
 
-				XKit.extensions.postarchive.load_posts();
+					m_posts = JSON.parse(m_obj.posts);
+					m_categories = JSON.parse(m_obj.categories);
 
-				for (var n=0;n<m_categories.length;n++) {
-					XKit.extensions.postarchive.categories.push(m_categories[n]);
-					console.log(XKit.extensions.postarchive.categories);
+					XKit.extensions.postarchive.load_posts();
+
+					Array.prototype.push.apply(XKit.extensions.postarchive.categories, m_categories);
+					Array.prototype.push.apply(XKit.extensions.postarchive.archived_posts, m_posts);
 					XKit.extensions.postarchive.save_posts();
-				}
 
-				for (var i=0;i<m_posts.length;i++) {
-					XKit.extensions.postarchive.archived_posts.push(m_posts[i]);
-					console.log(XKit.extensions.postarchive.archived_posts);
-					XKit.extensions.postarchive.save_posts();
-				}
+					XKit.extensions.postarchive.update_sidebar();
 
-				XKit.extensions.postarchive.update_sidebar();
+					XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.extensions.postarchive.view();
+					return;
 
-				XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-				return;
+				};
+
+				f_reader.onprogress = function(event) {
+					XKit.progress.value('postarchive-import-progress', 100*event.loaded/file.size);
+				};
+
+				f_reader.readAsText(file);
 
 			});
 
@@ -506,8 +494,6 @@ XKit.extensions.postarchive = new Object({
 
 	parse_item: function(data, username) {
 
-		console.log(data);
-
 		var m_html = "<li class=\"post_container\">";
 		var post_class = "";
 		var additional_classes_for_post = "";
@@ -585,16 +571,20 @@ XKit.extensions.postarchive = new Object({
 
 			post_class = "is_video";
 
-			var m_post_inner_html = ""; // data.player[2].embed_code; // '<div class="view-on-dash-not-supported">' + data.type + ' posts are not currently supported.</div>';
+			var m_post_inner_html = "";
 
 			var last_width = 0;
 			for (var obj in data.player) {
-				if (data.player[obj].width > last_width && data.player[obj].width <= 500) {
+				if (data.player[obj].width > last_width && data.player[obj].width <= 540) {
 					m_post_inner_html = data.player[obj].embed_code;
 					last_width = data.player[obj].width;
 				}
 			}
-
+			if (m_post_inner_html.indexOf("<video") !== -1) {
+				m_post_inner_html = m_post_inner_html.slice(0,8) + ' controls ' + m_post_inner_html.slice(8);
+			} else {
+				m_post_inner_html = m_post_inner_html.replace('width="500"','width="540"');
+			}
 
 			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
 
@@ -620,19 +610,17 @@ XKit.extensions.postarchive = new Object({
 
 			post_class = "is_photo";
 
-			//var photo_post_inner_html = '<img class="image" width="500" alt="" src="' + data["photo-url-500"] + '" data-thumbnail="' + data["photo-url-100"] + '">';
-
-			if (data.photos.length === 1) { post_class = "is_photo"; }else {post_class = "is_photoset"; }
+			if (data.photos.length === 1) { post_class = "is_photo"; } else { post_class = "is_photoset"; }
 
 			var photo_post_inner_html = "";
 
 			if (data.photos.length === 1) {
 
-				photo_post_inner_html = '<img class="image" width="500" alt="" src="' + XKit.extensions.postarchive.get_photo(data, 0, "500") + '" data-thumbnail="' + XKit.extensions.postarchive.get_photo(data, 0, "100") + '">';
+				photo_post_inner_html = '<img class="image" width="540" alt="" src="' + XKit.extensions.postarchive.get_photo(data, 0, "540") + '" data-thumbnail="' + XKit.extensions.postarchive.get_photo(data, 0, "100") + '">';
 
 			} else {
 
-var rows = [];
+				var rows = [];
 
 				for (var i=0;i<data.photoset_layout.length;i++) {
 					rows.push(data.photoset_layout[i]);
@@ -644,7 +632,10 @@ var rows = [];
 
 				rows.forEach(function(row) {
 					var shortest = 0;
-					var m_width = 500 / row;
+					var m_width = 540 / row;
+					if (row > 1) {
+						m_width -= row;
+					}
 
 					// Calculate the shortest!
 					var m_temp_photo = current_photo;
@@ -655,7 +646,7 @@ var rows = [];
 
 							var scaled_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, m_temp_photo, "500")) / 500;
 
-							if (scaled_height <= shortest ||shortest === 0) {
+							if (scaled_height <= shortest || shortest === 0) {
 								shortest = scaled_height;
 							}
 
@@ -676,8 +667,6 @@ var rows = [];
 						var m_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, current_photo, "500")) / 500;
 						var margin_top = 0;
 
-						console.log("m_height = " + m_height + "\nshortest = " + shortest);
-
 						if (m_height > shortest) {
 							margin_top = (m_height - shortest) / 2;
 						}
@@ -695,8 +684,6 @@ var rows = [];
 				});
 
 				photo_post_inner_html = photo_post_inner_html + "</div>";
-
-				// photo_post_inner_html = '<div class="view-on-dash-not-supported">Photosets are not currently supported.</div>';
 
 			}
 
@@ -740,7 +727,7 @@ var rows = [];
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
-								"<img src=\"http://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/24\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
+								"<img src=\"http://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/48\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
 							"</div>" +
 							source_div +
 						"</div>" +
@@ -751,14 +738,11 @@ var rows = [];
 								"</div>" +
 							"</div>" +
 						"</div>" +
-						post_tags +
-					"</div>";
+					post_tags +
+				"</div>" +
+			"</div>" +
+		"</li>";
 
-		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
-		m_html = m_html + "</div>";
-		m_html = m_html + "</li>";
-
-		//console.log(m_html);
 		return m_html;
 
 	},
@@ -784,9 +768,6 @@ var rows = [];
 			}
 		}
 
-
-		console.log(post_obj);
-
 		XKit.extensions.postarchive.current_post_id = post_id;
 
 		$("#xkit-postarchive-content").removeClass("xkit-postarchive-no-post-selected").html(XKit.extensions.postarchive.parse_item(post_obj, "xenix"));
@@ -795,8 +776,8 @@ var rows = [];
 		$("#xkit-postarchive-recategorize-this").removeClass("hidden");
 		$("#xkit-postarchive-rename-this").removeClass("hidden");
 
-		$("#xkit-postarchive-remove-this").unbind("click");
-		$("#xkit-postarchive-remove-this").bind("click", function() {
+		$("#xkit-postarchive-remove-this").off("click");
+		$("#xkit-postarchive-remove-this").on("click", function() {
 
 			XKit.window.show("Remove","You sure you want to remove this?","warning","<div class=\"xkit-button default\" id=\"xkit-postarchive-remove-item-confirm\">Remove</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
@@ -810,8 +791,8 @@ var rows = [];
 
 		});
 
-		$("#xkit-postarchive-rename-this").unbind("click");
-		$("#xkit-postarchive-rename-this").bind("click", function() {
+		$("#xkit-postarchive-rename-this").off("click");
+		$("#xkit-postarchive-rename-this").on("click", function() {
 
 			XKit.window.show("Rename This Post", "<b>Title:</b><input type=\"text\" value=\"" + m_post.title + "\"maxlength=\"150\" placeholder=\"Enter a title (example: 'hotline phone list')\" class=\"xkit-textbox\" id=\"xkit-postarchive-title\">", "question", "<div class=\"xkit-button default\" id=\"xkit-postarchive-save-new-name\">Save</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
@@ -839,8 +820,8 @@ var rows = [];
 
 		});
 
-		$("#xkit-postarchive-recategorize-this").unbind("click");
-		$("#xkit-postarchive-recategorize-this").bind("click", function() {
+		$("#xkit-postarchive-recategorize-this").off("click");
+		$("#xkit-postarchive-recategorize-this").on("click", function() {
 
 			if (XKit.extensions.postarchive.categories.length === 0) {
 
@@ -895,11 +876,7 @@ var rows = [];
 
 	load_posts: function() {
 
-		//console.log("Post Archiver: Loading posts...");
-
 		var m_storage = XKit.storage.get("postarchive", "archived_posts","");
-
-		//console.log("Post Archiver storage result:\n\n" + m_storage + "\n\n");
 
 		if (m_storage !== "") {
 			try {
@@ -927,21 +904,15 @@ var rows = [];
 			XKit.extensions.postarchive.categories = [];
 		}
 
-		//console.log("Load result:");
-		//console.log(XKit.extensions.postarchive.archived_posts);
-
 	},
 
 	save_posts: function() {
 
 		try {
-			console.log("Trying to save " + XKit.extensions.postarchive.archived_posts.length + " posts..");
-			console.log(JSON.stringify(XKit.extensions.postarchive.archived_posts));
 			XKit.storage.set("postarchive", "archived_posts", JSON.stringify(XKit.extensions.postarchive.archived_posts));
 			XKit.storage.set("postarchive", "categories", JSON.stringify(XKit.extensions.postarchive.categories));
 		} catch(e) {
 			XKit.window.show("Unable to save data","Post Archiver could not save data<br/><br/>Error:<br/>" + e.message, "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			alert("Can't save data:\n" + e.message);
 		}
 	},
 
@@ -1084,25 +1055,37 @@ var rows = [];
 
 			var dpostobj = $("#post_" + post_id);
 
-			if ($(dpostobj).find(".post_title").length > 0) {
+			if ($(dpostobj).find(".post-title").length > 0) {
+
+				m_title = $(dpostobj).find(".post-title").text();
+
+			} else if ($(dpostobj).find(".post_title").length > 0) {
 
 				m_title = $(dpostobj).find(".post_title").text();
 
-			} else {
+			} else if ($(dpostobj).find(".title").length > 0) {
 
-				if ($(dpostobj).find(".post_body").length > 0) {
+				m_title = $(dpostobj).find(".title").text();
 
-					m_title = $(dpostobj).find(".post_body").text();
+			} else if ($(dpostobj).find(".reblog-title").length > 0) {
 
-				} else {
+				m_title = $(dpostobj).find(".reblog-title").text();
 
-					if ($(dpostobj).find(".track_name").length > 0) {
+			} else if ($(dpostobj).find(".post_body").length > 0) {
 
-						m_title = $(dpostobj).find(".track_name").text();
+				m_title = $(dpostobj).find(".post_body").text();
 
-					}
+			} else if ($(dpostobj).find(".track_name").length > 0) {
 
-				}
+				m_title = $(dpostobj).find(".track_name").text();
+
+			} else if ($(dpostobj).find(".chat_line").length > 0) {
+
+				m_title = $(dpostobj).find(".chat_line:first").text();
+
+			} else if ($(dpostobj).find('.reblog-list').length > 0) {
+
+				m_title = $(dpostobj).find('.reblog-list-item:first .reblog-content').text();
 
 			}
 
@@ -1429,4 +1412,4 @@ var rows = [];
 
 	}
 
-});
+};
