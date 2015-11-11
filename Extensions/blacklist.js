@@ -553,7 +553,7 @@ XKit.extensions.blacklist = new Object({
 				m_content = m_content.toLowerCase();
 				
 			    // Preserve href links.
-			    m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)">/gm, "$1" + ' ');
+			    m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, "$1" + ' ');
 				// Strip HTML tags.
 				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
 
