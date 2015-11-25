@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.3 **//
+//* VERSION 3.0.4 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -8,6 +8,17 @@
 XKit.extensions.editable_reblogs = new Object({
 
 	running: false,
+	post_types: {
+		PUBLISH: 0,
+		QUEUE: 1,
+		DRAFT: 2,
+		PRIVATE: 3,
+		SCHEDULE: 4
+	},
+	selected_post_type: "PUBLISH",
+	scheduled_date: "Next Tuesday, 10am",
+	post_date_metadata: null,
+	post_slug_metadata: null,
 
 	run: function() {
 		this.running = true;
@@ -30,15 +41,19 @@ XKit.extensions.editable_reblogs = new Object({
 				}
 			});
 		}
-		$('body').on('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
-		$('body').on('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
-		$('body').on('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
+		$("body").on("click", ".create_post_button", XKit.extensions.editable_reblogs.make_post);
+		// DOM nodes containing options disappear before a handler can be run
+		$("body").on("click", XKit.extensions.editable_reblogs.record_post_settings);
+		$('body').on("keyup", '#customUrl_input', function() {
+			XKit.extensions.editable_reblogs.post_slug_metadata = $(this).val();
+		});
+		$('body').on("keyup", '#postDate_input', function() {
+			XKit.extensions.editable_reblogs.post_date_metadata = $(this).val();
+		});
 	},
 	post_window: function() {
-		//if we don't have a reblog tree to edit, gtfo
-		//this also applies to new posts
-		//which saves us from worrying about things like photo replies
-		if ($(".post-form .reblog-list").length === 0) {
+		var self = XKit.extensions.editable_reblogs;
+		if (!self.reblog_tree_exists()) {
 			return;
 		}
 		//also just let chat, link, and quote posts do what they do
@@ -46,9 +61,38 @@ XKit.extensions.editable_reblogs = new Object({
 		if (post_type.chat || post_type.quote) {
 			return;
 		}
-		//set up new buttons
-		XKit.extensions.editable_reblogs.add_button_controls();
-		XKit.extensions.editable_reblogs.process_existing_content();
+		var xkit_button = $('.post-form--save-button');
+		// Prevent Tumblr's event handler from acting on the save button
+		xkit_button.find("[data-js-clickablesave]").removeAttr("data-js-clickablesave");
+		self.initialize_selected_post_type();
+		self.scheduled_date = "Next Tuesday, 10am";
+		self.load_initial_metadata();
+		self.process_existing_content();
+	},
+	load_initial_metadata: function() {
+		//if this is an edit, we need to load the custom date and slug metadata if there is any
+		//so we can maintain it if they don't change anything
+		var self = XKit.extensions.editable_reblogs;
+		self.post_date_metadata = "";
+		self.post_slug_metadata = "";
+		var location_path = window.location.pathname;
+		var location_items = location_path.split("/");
+		location_items.shift();
+		if (location_items[0] != "edit") {
+			return;
+		}
+		var post_fetch_request = {
+			id: parseInt(location_items[1]),
+			form_key: XKit.interface.form_key(),
+			post_type: false
+		};
+		XKit.interface.fetch(post_fetch_request, function(response) {
+			self.post_date_metadata = response.data.post.date;
+			self.post_slug_metadata = response.data.post.slug;
+			if (response.data.post.is_private === 1) {
+				self.selected_post_type = "PRIVATE";
+			}
+		});
 	},
 	process_existing_content: function() {
 		var reblog_tree = $(".post-form .reblog-list");
@@ -70,8 +114,8 @@ XKit.extensions.editable_reblogs = new Object({
 				var reblog_data = {
 					reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
 					reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
-					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href') 
-						? $(this).find('.reblog-tumblelog-name').attr('href') 
+					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href')
+						? $(this).find('.reblog-tumblelog-name').attr('href')
 						: 'http://' + $(this).find('.reblog-tumblelog-name').text() + '.tumblr.com'
 				};
 				all_quotes.push(reblog_data);
@@ -105,16 +149,67 @@ XKit.extensions.editable_reblogs = new Object({
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
 	},
-	add_button_controls: function() {
-		var xkit_button = $('.post-form--save-button');
-		$('.post-form--save-button').empty();
-		var new_button_content = "<div class='control right xkit-editable-reblogs-control'>"
-			+ '<div class="post-form--save-button" data-subview="savePostButton">'
-			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-post">Post</button>'
-			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-queue">Queue</button>'
-			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-draft">Draft</button>'
-			+ '</div></div>';
-		$('.post-form--controls .controls-container').append(new_button_content);
+	reblog_tree_exists: function() {
+		//if we don't have a reblog tree to edit, gtfo
+		//this also applies to new posts
+		//which saves us from worrying about things like photo replies
+		return $(".post-form .reblog-list").length !== 0;
+	},
+	initialize_selected_post_type: function() {
+		var where = XKit.interface.where();
+		if (where.dashboard) {
+			XKit.extensions.editable_reblogs.selected_post_type = "PUBLISH";
+		} else if (where.drafts) {
+			XKit.extensions.editable_reblogs.selected_post_type = "DRAFT";
+		} else if (where.queue) {
+			XKit.extensions.editable_reblogs.selected_post_type = "QUEUE";
+		}
+	},
+	record_post_settings: function(e) {
+		var post_dropdown_exists = $(e.target).parents(".popover--save-post-dropdown").length > 0;
+		if (post_dropdown_exists) {
+			var clicked_li = e.target.tagName !== "LI" ? e.target.parentNode : e.target;
+			for (var i = 0; i < clicked_li.attributes.length; i++) {
+				// looking for attribute like "data-js-publish" and "data-js-draft"
+				var attribute = clicked_li.attributes[i].name;
+				if (attribute.startsWith("data-js-") && !attribute.endsWith("preview")) {
+					var type = attribute.substring(8).toUpperCase();
+					XKit.extensions.editable_reblogs.selected_post_type = type;
+
+					if (type === "SCHEDULE") {
+						$("[data-js-scheduletext]").off("blur");
+						$("[data-js-scheduletext]").on("blur", XKit.extensions.editable_reblogs.update_scheduled_date);
+					}
+					return;
+				}
+			}
+		}
+	},
+	update_scheduled_date: function(e) {
+		XKit.extensions.editable_reblogs.scheduled_date = e.target.value;
+	},
+	make_post: function(e) {
+		if (!XKit.extensions.editable_reblogs.reblog_tree_exists()) {
+			return;
+		}
+		var post_types = XKit.extensions.editable_reblogs.post_types;
+		switch (post_types[XKit.extensions.editable_reblogs.selected_post_type]) {
+			case post_types.PUBLISH:
+				XKit.extensions.editable_reblogs.send_post_request(e);
+				break;
+			case post_types.QUEUE:
+				XKit.extensions.editable_reblogs.send_queue_request(e);
+				break;
+			case post_types.DRAFT:
+				XKit.extensions.editable_reblogs.send_draft_request(e);
+				break;
+			case post_types.PRIVATE:
+				XKit.extensions.editable_reblogs.send_private_request(e);
+				break;
+			case post_types.SCHEDULE:
+				XKit.extensions.editable_reblogs.send_schedule_request(e);
+				break;
+		}
 	},
 	send_post_request: function(e) {
 		e.preventDefault();
@@ -132,6 +227,19 @@ XKit.extensions.editable_reblogs = new Object({
 		e.preventDefault();
 		var request = XKit.extensions.editable_reblogs.build_svc_request();
 		request["post[state]"] = "1";
+		XKit.extensions.editable_reblogs.send_request(request);
+	},
+	send_private_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+		request["post[state]"] = "private";
+		XKit.extensions.editable_reblogs.send_request(request);
+	},
+	send_schedule_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+		request["post[state]"] = "on.2";
+		request["post[publish_on]"] = XKit.extensions.editable_reblogs.scheduled_date;
 		XKit.extensions.editable_reblogs.send_request(request);
 	},
 	build_svc_request: function() {
@@ -192,9 +300,9 @@ XKit.extensions.editable_reblogs = new Object({
 		request["is_rich_text[one]"] = "0";
 		request["is_rich_text[two]"] = "1";
 		request["is_rich_text[three]"] = "0";
-		request["post[slug]"] = "";
+		request["post[slug]"] = XKit.extensions.editable_reblogs.post_slug_metadata;
 		request["post[draft_status]"] = "";
-		request["post[date]"] = "";
+		request["post[date]"] = XKit.extensions.editable_reblogs.post_date_metadata;
 		request["post[tags]"] = $.map($('.post-form--footer .tag-label'), function(element, index) {
 			return $(element).text();
 		}).join(",");
@@ -243,6 +351,7 @@ XKit.extensions.editable_reblogs = new Object({
 						"Error: XER-SR.<br /><br />There was an error reblogging your post. Please try again shortly. If you continue to receive this, please contact XKit staff.",
 						"error",
 						"<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the New XKit Blog</a>");
+					console.log("editable_reblogs.send_request:\n", response);
 				},
 				onload: function(response) {
 					// We are done!
@@ -258,9 +367,8 @@ XKit.extensions.editable_reblogs = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("editable_reblogs_remove_content_tree");
-		$('body').off('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
-		$('body').off('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
-		$('body').off('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
+		$("body").off("click", ".create_post_button", XKit.extensions.editable_reblogs.send_post_request);
+		$("body").off("click", XKit.extensions.editable_reblogs.record_post_settings);
 		XKit.interface.post_window_listener.remove("editable_reblogs");
 	}
 });

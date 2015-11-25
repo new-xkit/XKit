@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 6.0.2 **//
+//* VERSION 6.0.3 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1736,7 +1736,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 					var option = document.createElement("option");
 					option.setAttribute("value", m_blogs[i]);
-					option.innerText = m_blogs[i];
+					option.textContent = m_blogs[i];
 					if (m_blogs[i] === XKit.extensions[extension_id].preferences[pref].value) {
 						option.setAttribute("selected", "true");
 					}
@@ -1804,7 +1804,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 					var option = document.createElement("option");
 					option.setAttribute("value", XKit.extensions[extension_id].preferences[pref].values[i + 1]);
-					option.innerText = XKit.extensions[extension_id].preferences[pref].values[i];
+					option.textContent = XKit.extensions[extension_id].preferences[pref].values[i];
 					if (XKit.extensions[extension_id].preferences[pref].values[i + 1] === XKit.extensions[extension_id].preferences[pref].value) {
 						option.setAttribute("selected", "true");
 					}

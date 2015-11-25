@@ -1,5 +1,5 @@
 //* TITLE PostBlock **//
-//* VERSION 0.2.4 **//
+//* VERSION 0.2.5 **//
 //* DESCRIPTION Block the posts you don't like **//
 //* DETAILS This is an experimental extension that blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it. **//
 //* DEVELOPER new-xkit **//
@@ -55,7 +55,7 @@ XKit.extensions.postblock = new Object({
 			return;
 		}
 
-		XKit.window.show("Block this post?","This post (including reblogs) will be blocked from your dashboard forever, without any indication that is was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-post-block-ok\">Block Post</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Block this post?","This post (including reblogs) will be blocked from your dashboard forever, without any indication that it was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-post-block-ok\">Block Post</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-post-block-ok").click(function() {
 
