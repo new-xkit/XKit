@@ -127,5 +127,46 @@ XKit.extensions.pokes = {
 
 	destroy: function() {
 		this.running = false;
+	},
+	
+	cpanel: function(m_div) {
+		if ($("#xkit-pokes-custom-panel").length > 0) {
+			// Panel already exists, probably in refresh mode.
+			// Remove it first.
+			$("#xkit-pokes-custom-panel").remove();
+		}
+		
+		m_div.html('<div id="xkit-loading_pokemon">Loading Pokemon, please wait...</div>');
+		
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/73da44a7295f99c3cd7e29cd8012bbbe341a78d8/pokedex.json",
+			json: true,
+			onerror: function(response) {
+				console.log("Poke data could not be retrieved. Not showing Pokemon.");
+				$(m_div).html("<div id='xkit-pokes-custom-panel'>Failed to load Pokemon Data!<br>Please refresh the page or try again later!</div>");
+			},
+			onload: function(response) {
+				var mdata = {};
+				try {
+					mdata = JSON.parse(response.responseText);
+					var m_html = "<table id=\"xkit-pokes-custom-panel\" class='pokemon_display'>";
+					var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
+					$.each(caught, function(index, value) {
+						m_html = m_html + "<tr class='caught' data-pokegender='" + value.gender + "'><td class='poke_sprite'><div><img src='" + mdata[value.id].sprite + "'></div></td><td class='poke_stats'><div>Name: " + mdata[value.id].name + "</div></td></tr>"
+					});
+					m_html = m_html + "</table>";
+
+					$(m_div).html(m_html);
+				} catch(e) {
+					console.log("Poke data received was not valid JSON. Not showing Pokemon.");
+					$(m_div).html("<div id='xkit-pokes-custom-panel'>Failed to load Pokemon Data!<br>Please refresh the page or try again later!</div>");
+				}
+			}
+		});
+
+		$("#xkit-extensions-panel-right").nanoScroller();
+		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
+
 	}
 };
