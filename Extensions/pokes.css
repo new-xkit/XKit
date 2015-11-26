@@ -1,0 +1,68 @@
+.poke {
+	position: absolute;
+	right: -126px;
+}
+
+.poke img {
+	width: 100px;
+	image-rendering: pixelated;
+}
+
+.caught img {
+	width: 55px;
+	image-rendering: pixelated;
+}
+
+.poke::after {
+	font-size:26px;
+	font-weight: bold;
+	position: relative;
+	left: -26px;
+}
+
+.caught .poke_gender div::after {
+ 	font-size:26px;
+	font-weight:bold;
+	position:relative;
+	top:-20px;
+}
+
+.poke[data-pokegender="male"]::after,
+.caught[data-pokegender="male"] .poke_gender div::after {
+	content: "\2642";
+	color: #6CA0DC;
+}
+
+.poke[data-pokegender="female"]::after,
+.caught[data-pokegender="female"] .poke_gender div::after {
+	content: "\2640";
+	color: #FF69B4;
+}
+
+.poke[data-pokegender="genderless"]::after,
+.caught[data-pokegender="genderless"] .poke_gender div::after {
+	content: "\26AA";
+	color: #9370DB;
+}
+
+.caught {
+	border-bottom: 1px solid rgb(190,190,190);
+}
+
+.caught .poke_sprite{
+	width: 65px;
+}
+
+.caught .poke_stats {
+	vertical-align: middle;
+}
+
+#xkit-pokes-custom-panel {
+	width: 100%
+}
+
+#xkit-loading_pokemon {
+	text-align: center;
+	position: relative;
+	top: 50px;
+}
