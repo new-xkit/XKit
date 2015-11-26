@@ -30,37 +30,6 @@ XKit.extensions.pokes = {
 			XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
 			$(this).addClass("poke_spawned");
 		});
-
-		$(".poke").unbind("click");
-		$(".poke").click(function(event) {
-			if (XKit.storage.get("pokes","pokemon_storage","") === "") {
-				XKit.storage.set("pokes","pokemon_storage","[]");
-			}
-
-			try {
-				var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
-				if (storage_array !== "") {
-					var poke_id = $(this).data("pokeid");
-					var poke_gender = $(this).data("pokegender");
-					var poke_name = $(this).data("pokename");
-					var old_amount = 0;
-					for (var i = 0; i < storage_array.length; i++) {
-						if (storage_array[i].id === poke_id && storage_array[i].gender === poke_gender) {
-							old_amount = storage_array[i].amount;
-							storage_array.splice(i, 1);
-						}
-					}
-					storage_array.push({id: poke_id, gender: poke_gender, amount: old_amount + 1});
-					XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
-					XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes");
-					$(this).hide();
-				} else {
-					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-				}
-			} catch(e) {
-				XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-002","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			}
-		});
 	},
 
 	parse_pokemon: function(mdata, db_nr, pokedThing) {
@@ -88,6 +57,35 @@ XKit.extensions.pokes = {
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
 			'</div>';
 			pokedThing.after(poke_html);
+			pokedThing.parent().find(".poke").click(function(event) {
+				if (XKit.storage.get("pokes","pokemon_storage","") === "") {
+					XKit.storage.set("pokes","pokemon_storage","[]");
+				}
+
+				try {
+					var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+					if (storage_array !== "") {
+						var poke_id = $(this).data("pokeid");
+						var poke_gender = $(this).data("pokegender");
+						var poke_name = $(this).data("pokename");
+						var old_amount = 0;
+						for (var i = 0; i < storage_array.length; i++) {
+							if (storage_array[i].id === poke_id && storage_array[i].gender === poke_gender) {
+								old_amount = storage_array[i].amount;
+								storage_array.splice(i, 1);
+							}
+						}
+						storage_array.push({id: poke_id, gender: poke_gender, amount: old_amount + 1});
+						XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
+						XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes");
+						$(this).hide();
+					} else {
+						XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					}
+				} catch(e) {
+					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-002","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				}
+			});
 		} else {
 			XKit.extensions.pokes.parse_pokemon(mdata, XKit.extensions.pokes.pokeGen(), pokedThing);
 		}
