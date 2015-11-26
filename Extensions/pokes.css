@@ -3,33 +3,44 @@
 	right: -126px;
 }
 
-.poke img, .caught img {
+.poke img {
 	width: 100px;
 	image-rendering: pixelated;
 }
 
-.poke::after,
-.caught .poke_sprite div::after {
+.caught img {
+	width: 55px;
+	image-rendering: pixelated;
+}
+
+.poke::after {
 	font-size:26px;
 	font-weight: bold;
 	position: relative;
 	left: -26px;
 }
 
+.caught .poke_gender div::after {
+ 	font-size:26px;
+	font-weight:bold;
+	position:relative;
+	top:-20px;
+}
+
 .poke[data-pokegender="male"]::after,
-.caught[data-pokegender="male"] .poke_sprite div::after {
+.caught[data-pokegender="male"] .poke_gender div::after {
 	content: "\2642";
 	color: #6CA0DC;
 }
 
 .poke[data-pokegender="female"]::after,
-.caught[data-pokegender="female"] .poke_sprite div::after {
+.caught[data-pokegender="female"] .poke_gender div::after {
 	content: "\2640";
 	color: #FF69B4;
 }
 
 .poke[data-pokegender="genderless"]::after,
-.caught[data-pokegender="genderless"] .poke_sprite div::after {
+.caught[data-pokegender="genderless"] .poke_gender div::after {
 	content: "\26AA";
 	color: #9370DB;
 }
@@ -39,7 +50,7 @@
 }
 
 .caught .poke_sprite{
-	width: 130px;
+	width: 65px;
 }
 
 .caught .poke_stats {
