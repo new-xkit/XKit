@@ -1,5 +1,5 @@
 //* TITLE XNeko **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2.1 REV A **//
 //* DESCRIPTION A cat for your dashboard! **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

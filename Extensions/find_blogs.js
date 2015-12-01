@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
