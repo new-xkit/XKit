@@ -14,7 +14,7 @@ XKit.extensions.colorquotes = new Object({
         "sep-0": {
             text: "Color Quotes has been moved to Better Reblog Options",
             type: "separator"
-        },
+        }
     },
 
     run: function() {

@@ -67,7 +67,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -108,7 +108,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -136,7 +136,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -168,7 +168,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -198,7 +198,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -228,7 +228,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -270,7 +270,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -300,7 +300,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -330,7 +330,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -355,7 +355,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -387,7 +387,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -412,7 +412,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -437,7 +437,7 @@ XKit.extensions.servant = new Object({
 				m_object.pass = $(obj);
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -464,7 +464,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -484,7 +484,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -504,7 +504,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -524,7 +524,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -544,7 +544,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -564,7 +564,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -589,7 +589,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -624,7 +624,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -651,7 +651,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -678,7 +678,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -705,7 +705,7 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
 		},
 
@@ -764,9 +764,9 @@ XKit.extensions.servant = new Object({
 
 				return m_object;
 
-			},
+			}
 
-		},
+		}
 
 	},
 
@@ -1169,7 +1169,7 @@ XKit.extensions.servant = new Object({
 
 			}
 
-		},
+		}
 
 	},
 

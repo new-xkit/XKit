@@ -1007,7 +1007,7 @@ XKit.extensions.xinbox = new Object({
 				json: true,
 				headers: {
 					"X-tumblr-puppies": kitty_data.kitten,
-					"X-tumblr-form-key": XKit.interface.form_key(),
+					"X-tumblr-form-key": XKit.interface.form_key()
 				},
 				onerror: function(response) {
 					XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");

@@ -30,7 +30,7 @@ XKit.extensions.outbox = new Object({
 			text: "Use Shared Storage (turn on if outbox messages are disappearing)",
 			default: true,
 			value: true
-		},
+		}
 	},
 
 	frame_run: function() {

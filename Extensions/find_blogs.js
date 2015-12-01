@@ -22,7 +22,7 @@ XKit.extensions.find_blogs = new Object({
 			text: "Show the button when I visit a blog",
 			default: true,
 			value: true
-		},
+		}
 	},
 
 	is_in_iframe: false,

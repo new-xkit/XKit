@@ -26,7 +26,7 @@ XKit.extensions.xneko = new Object({
 				"Pink Neko", "pink",
 				"Santa Neko", "santa",
 				"Xenixlet Neko", "xenixlet",
-			],
+			]
 		},
 		"cat_name": {
 			text: "Your cat's name",

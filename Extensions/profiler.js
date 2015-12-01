@@ -338,7 +338,7 @@ XKit.extensions.profiler = new Object({
 			type: "POST",
 			url: "/svc/tumblelog/followed_by",
 			data: "tumblelog=" + blog_id + "&query=" + user_url,
-			dataType: "text",
+			dataType: "text"
 		}).done(function( msg ) {
 			if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 			try {

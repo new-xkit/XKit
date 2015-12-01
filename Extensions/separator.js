@@ -24,7 +24,7 @@ XKit.extensions.separator = new Object({
 			text: "Show the \"Jump to Separator\" button (only works when endless scrolling is off)",
 			default: false,
 			value: false
-		},
+		}
 
 	},
 

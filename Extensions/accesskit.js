@@ -24,7 +24,7 @@ XKit.extensions.accesskit = new Object({
 				"Default Font", "default",
 				"OpenDyslexic (might take a while to load)", "opendyslexic",
 				"Serif", "sans-serif"
-			],
+			]
 		},
 		"sep-2": {
 			text: "Dashboard Adjustments",

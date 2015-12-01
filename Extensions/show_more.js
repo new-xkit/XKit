@@ -19,7 +19,7 @@ XKit.extensions.show_more = new Object({
 	preferences: {
 		"sep0": {
 			text: "XKit Classic User Menu",
-			type: "separator",
+			type: "separator"
 		},
 		"use_classic_menu": {
 			text: "Enable XKit's Classic User Menu",
@@ -29,7 +29,7 @@ XKit.extensions.show_more = new Object({
 		},
 		"sep1": {
 			text: "User Menu Options",
-			type: "separator",
+			type: "separator"
 		},
 		"show_magnetizer": {
 			text: "Show Magnifier button to see a bigger version of their avatars",
@@ -53,7 +53,7 @@ XKit.extensions.show_more = new Object({
 		},
 		"sep2": {
 			text: "In-Dashboard Asks",
-			type: "separator",
+			type: "separator"
 		},
 		"enable_anon": {
 			text: "Enable sending anonymous messages from the dashboard",
@@ -466,7 +466,7 @@ XKit.extensions.show_more = new Object({
 				url: "http://www.tumblr.com/svc/tumblelog_popover/" + real_username + "?is_user_mention=false",
 				json: false,
 				headers: {
-					"X-tumblr-form-key": XKit.interface.form_key(),
+					"X-tumblr-form-key": XKit.interface.form_key()
 				},
 				onerror: function(response) {
 					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Could not fetch data, also ID mismatch."); return; }

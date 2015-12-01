@@ -18,7 +18,7 @@ XKit.extensions.tweaks = new Object({
 
 		"sep0": {
 			text: "Popular tweaks",
-			type: "separator",
+			type: "separator"
 		},
 		"no_mobile_banner": {
 			text: "Remove the mobile app banner",
@@ -67,7 +67,7 @@ XKit.extensions.tweaks = new Object({
 		},
 		"sep001": {
 			text: "Post / Post Editor tweaks",
-			type: "separator",
+			type: "separator"
 		},
 		"classic_post_titles": {
 			text: "Use 'Classic' (bold and smaller) post titles / headings",
@@ -96,7 +96,7 @@ XKit.extensions.tweaks = new Object({
 		},
 		"sep1": {
 			text: "User Interface tweaks",
-			type: "separator",
+			type: "separator"
 		},
 		"old_photo_margins": {
 			text: "Use the old 500/245/160px photo dimensions on posts",
@@ -148,7 +148,7 @@ XKit.extensions.tweaks = new Object({
 		},
 		"sep2": {
 			text: "Dashboard tweaks",
-			type: "separator",
+			type: "separator"
 		},
 		"hide_like_animation": {
 			text: "Hide the like/unlike heart animation",
@@ -231,7 +231,7 @@ XKit.extensions.tweaks = new Object({
 		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
-			type: "separator",
+			type: "separator"
 		},
 		"redirect_to_everything": {
 			text: "On popular tags, always show all posts, not just the popular ones",
@@ -247,7 +247,7 @@ XKit.extensions.tweaks = new Object({
 		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
-			desktop_only: true,
+			desktop_only: true
 		},
 		"slim_sidebar": {
 			text: "Slim sidebar buttons",

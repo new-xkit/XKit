@@ -29,7 +29,7 @@ XKit.extensions.autoscroll = new Object({
 			text: "Number of times to scroll the page per second:",
 			type: "text",
 			default: "50",
-			value: "50",
+			value: "50"
 		}
 	},
 	imageCode: '<img alt="" class = "auto_scroll_control_label" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAA8CAYAAABvnTosAAAABmJLR0QALABGAGGz0NnGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QYNBS4cBpMfpAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAABR0lEQVRIx+2XP0sEMRDFf7sWouUJcpBOCHLFQcDG1i8hVnf4p9TuPoqlFoqF+jksbA6CoCcG7LKNYKkoeGcT9Fh3kyyKXJHX7WzeI29mGDIQgDa26/ufB8gt4EYb26s7k3nIc0ABLLvQkpLiOeoG2liAsykywJU2Nou10Ae2SrEO0Ata0MZ2gNsae2OgraR4qryBNnYRGHpykwPXPgtDYCFQ2RVt7P4PC9rYI2CXeAglRZE58iZwQTM8AKuZNrYN3AHvpQNvFaT50vfA10iTckxJkTVq5RgkgSSQBGZFIGEWkKZyEkgCSeBrHvzJM+83D83cTZpL4LihwIaS4jsHSoo94D6SfKCkKKqSuAa8BsiPSorDyiooKV6cyKSGPAbWvWVUUoyA7RqBneltxdcHJ8B5KTYCTv9n7XNWPtymBtCvIkchtPp+Ahg0ZGEfAWuKAAAAAElFTkSuQmCC" />',
