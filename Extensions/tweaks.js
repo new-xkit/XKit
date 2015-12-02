@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.3.0 **//
+//* VERSION 5.2.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -226,11 +226,6 @@ XKit.extensions.tweaks = new Object({
 		},
 		"responsive_dash": {
 			text: "Make the dashboard resize with the window.",
-			default: false,
-			value: false
-		},
-		"alternating_reblogs": {
-			text: "Lightly highlight reblogs in alternating gray and new comments in blue",
 			default: false,
 			value: false
 		},
@@ -462,10 +457,6 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.responsive_dash.value) {
 			XKit.extensions.tweaks.add_css(".l-container--two-column-dashboard {padding-left: 0px!important;padding-right: 0px!important;}@media screen and (max-width: 899px) {.right_column {visibility: hidden;display: none;width: 0px!important;}#sidebar_footer_nav {visibility: hidden;}.l-content {width: 625px;}.l-container--two-column-dashboard {width: 645px!important;}}@media screen and (min-width: 644px) {html, body {overflow-x: hidden;}}");
-		}
-
-		if (XKit.extensions.tweaks.preferences.alternating_reblogs.value) {
-			XKit.extensions.tweaks.add_css(".reblog-list-item:nth-child(odd){background-color: rgb(245,245,245);padding-bottom: 15px;}.reblog-list-item:nth-child(even){background-color: rgb(250,250,250);}.original-reblog-content {background-color: #fff !important;padding-bottom: 15px;}.contributed-content {background-color: #F0F5FA !important;padding-bottom:15px !important;border-top: 1px solid #D9E2EA;}", "xkit_tweaks_alternating_reblogs");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_popups.value) {

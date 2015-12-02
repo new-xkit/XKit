@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.4.0 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -59,6 +59,11 @@ XKit.extensions.messaging_tweaks = new Object({
 			text: "Enable Emojis in the chat",
 			default: true,
 			value: true
+		},
+		"remove_message_headers": {
+			text: "Remove usernames from messages",
+			default: false,
+			value: false
 		},
 		
 		"sep2": {
@@ -318,6 +323,9 @@ XKit.extensions.messaging_tweaks = new Object({
 			XKit.tools.add_css(".xkit-others_messaging_icon { position: absolute; right: 0px; margin-right: 0px !important; }", "messaging_tweaks");
 			XKit.tools.add_css(".xkit-others_messaging_message .message-bubble { margin-left: 0px !important; margin-right: 40px; }", "messaging_tweaks");
 			XKit.tools.add_css(".xkit-others_messaging_message .message-container { justify-content: flex-end !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.remove_message_headers.value) {
+			XKit.tools.add_css(".conversation-message-text .message-bubble-header a {display:none;}", "messaging_tweaks");
 		}
 		
 		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
