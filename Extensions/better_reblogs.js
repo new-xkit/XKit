@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -73,6 +73,12 @@ XKit.extensions.better_reblogs = new Object({
             default: false,
             value: false,
             style: "flat",
+        },
+        "alternating_reblogs": {
+			text: "Lightly highlight reblogs in alternating gray and new comments in blue",
+			default: false,
+			value: false,
+			style: "flat"
         },
         "color_quotes": {
             text: "Enable Color Quotes",
@@ -223,6 +229,11 @@ XKit.extensions.better_reblogs = new Object({
 
         if (this.preferences.remove_avatars.value) {
             XKit.tools.add_css(".reblog-avatar {display:none !important;} .reblog-header {padding-left: 0px !important;}",
+                "better_reblogs");
+        }
+
+        if (this.preferences.alternating_reblogs.value) {
+            XKit.tools.add_css(".reblog-list-item:nth-child(odd){background-color: rgb(245,245,245);padding-bottom: 15px;}.reblog-list-item:nth-child(even){background-color: rgb(250,250,250);}.original-reblog-content {background-color: #fff !important;padding-bottom: 15px;}.contributed-content {background-color: #F0F5FA !important;padding-bottom:15px !important;border-top: 1px solid #D9E2EA;}",
                 "better_reblogs");
         }
 
