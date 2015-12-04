@@ -272,7 +272,7 @@ if (!String.prototype.startsWith) {
 
 				XBridge.dispatchMessage("delete_storage", {id: callbackObject.id});
 			}
-		},
+		}
 	};
 	XBridge.init();
 }());

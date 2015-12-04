@@ -1,5 +1,5 @@
 //* TITLE XNeko **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION A cat for your dashboard! **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -26,7 +26,7 @@ XKit.extensions.xneko = new Object({
 				"Pink Neko", "pink",
 				"Santa Neko", "santa",
 				"Xenixlet Neko", "xenixlet",
-			],
+			]
 		},
 		"cat_name": {
 			text: "Your cat's name",

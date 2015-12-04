@@ -1,5 +1,5 @@
 //* TITLE Color Quotes **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Color Quotes has moved to Reblog Display Options **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -14,7 +14,7 @@ XKit.extensions.colorquotes = new Object({
         "sep-0": {
             text: "Color Quotes has been moved to Better Reblog Options",
             type: "separator"
-        },
+        }
     },
 
     run: function() {

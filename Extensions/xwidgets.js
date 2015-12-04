@@ -1,5 +1,5 @@
 //* TITLE XWidgets **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.3.2 **//
 //* DESCRIPTION Widgets for your dashboard **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -12,7 +12,7 @@ XKit.extensions.xwidgets = new Object({
 	preferences: {
 		"sep_0": {
 			text: "Shortcuts",
-			type: "separator",
+			type: "separator"
 		},
 		"enable_keyboard_shortcuts": {
 			text: "Use ALT + W to open/close the widget drawer",
@@ -21,7 +21,7 @@ XKit.extensions.xwidgets = new Object({
 		},
 		"sep_1": {
 			text: "Appearance",
-			type: "separator",
+			type: "separator"
 		},
 		"no_opener": {
 			text: "Do not show the widget drawer opener",
@@ -1023,7 +1023,7 @@ XKit.extensions.xwidgets = new Object({
 						"#   ## #  #  #### ## #   ",
 						"#   # ##       #  ### # #",
 						"####  ### #   ## #   # ##",
-						"   # #       ###   #    #",
+						"   # #       ###   #    #"
 				];
 
 				var m_puzzle = Math.floor(Math.random() * puzzles.length);

@@ -1,5 +1,5 @@
 //* TITLE Separator **//
-//* VERSION 1.1.2 **//
+//* VERSION 1.1.3 **//
 //* DESCRIPTION Where were we again? **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS A simple extension that puts a divider showing where you left off on your dashboard. **//
@@ -24,7 +24,7 @@ XKit.extensions.separator = new Object({
 			text: "Show the \"Jump to Separator\" button (only works when endless scrolling is off)",
 			default: false,
 			value: false
-		},
+		}
 
 	},
 
