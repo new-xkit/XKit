@@ -155,6 +155,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+        "use_old_icons": {
+			text: "Display the classic icons below posts",
+			default: false,
+			value: false
+		},
 		"pin_avatars": {
 			text: "Stop avatars from scrolling along with the post",
 			default: false,
@@ -647,6 +652,16 @@ XKit.extensions.tweaks = new Object({
 				}
 			}
 		}
+        
+        if(XKit.extensions.tweaks.preferences.use_old_icons.value){ //WORKING: TODO REMVE
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.post_control_menu:before{content:""}'); //Settings icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.like:before{content:""}'); //Like icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.reblog:before{content:""}'); //Reblog icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.messaging:before{content:""}'); //Send icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.message-controls:before,.flag--dashboard-icon-revolution .post_controls .post_control.share:before{content:""}'); //Share menu icon
+            
+        }
+            
 
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 
