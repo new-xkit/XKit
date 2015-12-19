@@ -653,7 +653,7 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
         
-        if(XKit.extensions.tweaks.preferences.use_old_icons.value){ //WORKING: TODO REMVE
+        if(XKit.extensions.tweaks.preferences.use_old_icons.value){
             XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.post_control_menu:before{content:""}'); //Settings icon
             XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.like:before{content:""}'); //Like icon
             XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.reblog:before{content:""}'); //Reblog icon
