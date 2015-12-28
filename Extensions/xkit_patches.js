@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.1.2 **//
+//* VERSION 6.1.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 

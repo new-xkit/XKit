@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.5.1 **//
+//* VERSION 1.5.2 **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//

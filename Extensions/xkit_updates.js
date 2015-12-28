@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -154,11 +154,11 @@ XKit.extensions.xkit_updates = new Object({
 
 				if (to_show === "true") {
 					var suffix = "";
-					
+
 					if(XKit.extensions.xkit_updates.updated_list.length !== 1){
 						suffix = "s";
 					}
-					
+
 					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension" + suffix + ". Click here to view them.", "ok", true, function() {
 						var m_result = "";
 						for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
@@ -269,7 +269,7 @@ XKit.extensions.xkit_updates = new Object({
 		}
 		return false;
 	},
-	
+
 	destroy: function() {
 		this.running = false;
 	}

@@ -230,21 +230,20 @@
 }
 
 #x1cpostage_blog {
-	width: 100%;
-	-webkit-appearance: none;
-	margin: 0; padding: 5px 10px;
-	border-radius: 0;
-	box-sizing:border-box;
-	-moz-box-sizing:border-box; /* Firefox */
-	-webkit-box-sizing:border-box; /* Safari */
-
 	border: 0;
+	border-radius: 0;
 	width: 200px;
 	padding: 5px 10px;
 	resize: none;
 	border-bottom: 0;
 	margin: 1px 0px 0px 0px;
 	background: white;
+
+	-moz-box-sizing:border-box; /* Firefox */
+	-webkit-box-sizing:border-box; /* Safari */
+	box-sizing:border-box;
+	-webkit-appearance: none;
+	-moz-appearance: none;
 }
 
 #x1cpostage_draft {

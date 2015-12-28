@@ -1,5 +1,5 @@
 //* TITLE XCloud **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Sync XKit data on clouds **//
 //* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatable with STUDIOXENIX servers.**//
 //* DEVELOPER new-xkit **//

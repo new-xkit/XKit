@@ -5,6 +5,7 @@
 	line-height: 22px;
 	text-align: center;
 }
+
 .xkit-blacklist-post-type {
 	display: inline-block;
 	width: 25px;
@@ -59,16 +60,13 @@
 
 
 #xkit-blacklist-share-code {
-
 	height: 203px;
 	border: 1px solid rgb(190,190,190);
 	margin-top: 10px;
 	background: rgb(244,244,244);
-
 }
 
 #xkit-blacklist-share-code-inner {
-
 	font-family: "Courier New", Courier, monospace;
 	font-size: 14px;
 	background: rgb(244,244,244);
@@ -77,7 +75,6 @@
 	-moz-user-select: text !important;
 	-webkit-user-select: text !important;
 	user-select: text !important;
-
 }
 
 .xblacklist_blacklisted_post {

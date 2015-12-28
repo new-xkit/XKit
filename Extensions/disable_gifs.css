@@ -4,6 +4,7 @@
 }
 
 .post.post_full.is_photo { visibility: hidden !important; }
+
 .post.disable-gifs-checked.post_full.is_photo { visibility: visible !important; }
 
 .post.disable-gifs-checked.post_full.is_photo.xkit-disable-gifs-completely { display: none !important; }

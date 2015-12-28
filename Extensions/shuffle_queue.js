@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0.5 **//
+//* VERSION 2.0.6 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//

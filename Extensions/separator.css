@@ -1,12 +1,10 @@
 #xkit-post-separator {
-
 	border-top: 1px dotted rgba(0,0,0,0.33);
 	border-bottom: 1px dotted rgba(255,255,255,0.23);
 	height: 0px;
 	overflow: hidden;
 	margin-top: 10px;
 	margin-bottom: 20px;
-
 }
 
 #separator_button:after {

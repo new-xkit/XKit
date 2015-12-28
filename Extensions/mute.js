@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.1 **//
+//* VERSION 2.3.2 **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//

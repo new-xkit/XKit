@@ -1,5 +1,5 @@
 //* TITLE ReplyViewer **//
-//* VERSION 0.2.7 **//
+//* VERSION 0.2.8 **//
 //* DESCRIPTION View post replies easily **//
 //* DETAILS The close relative of TagViewer, this extension allows you to see what replies, answers and additional content added to it while reblogging on any post. **//
 //* DEVELOPER STUDIOXENIX **//

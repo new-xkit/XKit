@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.3 **//
+//* VERSION 1.6.4 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -219,7 +219,7 @@ XKit.extensions.classic_tags = new Object({
 						list.removeClass("hidden");
 						list_hidden = false;
 					}
-					
+
 					li.removeClass("hidden");
 					var existing_count = anchor.find(".count");
 					if (existing_count.length) {
@@ -306,7 +306,7 @@ XKit.extensions.classic_tags = new Object({
 					$("#right_column").append(m_html);
 
 				} else {
-					
+
 					if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
 						$("#right_column").prepend(m_html);
 					} else if ($("ul.controls_section:eq(1)").length > 0) {

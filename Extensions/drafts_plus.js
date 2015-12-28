@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.3 **//
+//* VERSION 0.2.4 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

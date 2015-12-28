@@ -1,5 +1,5 @@
 //* TITLE Alternative Timestamps **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Adds timestamps to dashboard posts using a parsing method **//
 //* DETAILS This version of Timestamps uses parsing methods to display the timestamp instead of AJAX calls. Currently only in English. **//
 //* DEVELOPER jesskay **//

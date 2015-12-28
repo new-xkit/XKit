@@ -1,5 +1,4 @@
 .xkit-notification-notification-block-button {
-
 	position: absolute;
 	right: 35px; top: 7px;
 	background: rgba(255,255,255,.38) !important;
@@ -11,14 +10,10 @@
 	text-decoration: none;
 	text-transform: uppercase !important;
 	line-height: 12px !important; height: 12px !important;
-
-
 }
 
 .notification:hover .xkit-notification-notification-block-button {
-
 	display: block;
-
 }
 
 .xkit-notification-notification-block-button:hover {
