@@ -219,7 +219,7 @@ XKit.extensions.classic_tags = new Object({
 						list.removeClass("hidden");
 						list_hidden = false;
 					}
-					
+
 					li.removeClass("hidden");
 					var existing_count = anchor.find(".count");
 					if (existing_count.length) {
@@ -324,10 +324,6 @@ XKit.extensions.classic_tags = new Object({
 				return;
 
 			}
-		}
-
-		if (XKit.extensions.classic_tags.preferences.show_new_notification.value === true && $(".result_sub_title").length !== 0) {
-			$("#search_query").attr("placeholder", "Search [new]");
 		}
 
 		$(".tracked_tag").each(function() {

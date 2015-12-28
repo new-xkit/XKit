@@ -962,12 +962,6 @@ XKit = {
 };
 }());
 
-
-function xerror(message) {
-	console.log(message);
-	alert("XKit Error:\n" + message + "\n\nPlease refresh the page and try again or file a bug report at xkit.info.");
-}
-
 var centerIt = function (el /* (jQuery element) Element to center */) {
 		if (!el) {
 			return;
