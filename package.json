@@ -46,6 +46,7 @@
     "merge-stream": "^0.1.8",
     "morgan": "^1.6.1",
     "serve-static": "^1.10.0",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "gulp-cfx-xpi": "0.0.4"
   }
 }

@@ -17,6 +17,7 @@ var cache = require('gulp-cached'),
 	merge = require('merge-stream'),
 	path = require('path'),
 	stylish = require('jshint-stylish'),
+	xpi = require('gulp-cfx-xpi'),
 	zip = require('gulp-zip');
 
 var BUILD_DIR = 'build';
@@ -55,6 +56,10 @@ gulp.task('clean:chrome', function(cb) {
 
 gulp.task('clean:firefox', function(cb) {
 	del([BUILD_DIR + '/firefox'], cb);
+});
+
+gulp.task('clean:palemoon', function(cb) {
+	del([BUILD_DIR + '/palemoon'], cb);
 });
 
 gulp.task('clean:safari', function(cb) {
@@ -154,6 +159,39 @@ gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 		});
 });
 
+gulp.task('copy:palemoon', ['clean:palemoon', 'lint'], function() {
+	var src = [].concat(
+		paths.scripts.core,
+		paths.css.core,
+		paths.vendor
+	);
+	
+	var firefox = ['Firefox/**/*'];
+
+	var extension = gulp.src(firefox)
+		.pipe(gulp.dest(BUILD_DIR + '/palemoon'));
+	
+	var content = gulp.src(src)
+		.pipe(gulp.dest(BUILD_DIR + '/palemoon/data/xkit'));
+
+	return merge(extension, content);
+});
+
+gulp.task('compress:palemoon', ['copy:palemoon'], function(cb) {
+	var packageJSON = JSON.parse(fs.readFileSync(BUILD_DIR + '/palemoon/package.json'));
+	packageJSON.id = "new-xkit";
+	delete packageJSON.updateURL;
+	delete packageJSON.engines;
+	fs.writeFileSync(BUILD_DIR + '/palemoon/package.json', JSON.stringify(packageJSON));
+	
+	var mainFile = gulp.src(BUILD_DIR + '/palemoon/index.js')
+		.pipe(gulp.dest(BUILD_DIR + '/palemoon/lib'));
+		del(BUILD_DIR + '/palemoon/index.js');
+	return gulp.src(BUILD_DIR + '/palemoon/package.json')
+		.pipe(xpi())
+		.pipe(gulp.dest(BUILD_DIR + '/palemoon'));
+});
+
 gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 	var src = [].concat(
 		paths.scripts.core,
@@ -170,6 +208,8 @@ gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
+
+gulp.task('build:palemoon', ['compress:palemoon']);
 
 gulp.task('build:safari', ['copy:safari']);
 
@@ -192,6 +232,8 @@ gulp.task('build:themes', ['clean:themes'], function(cb) {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
+// Not adding build:palemoon here because it relies on Python and not everyone building might have it.
+// It also screws up the current directory , breaking compress:chrome in the process.
 gulp.task('build', ['build:chrome', 'build:firefox', 'build:safari']);
 
 gulp.task('watch', function() {
