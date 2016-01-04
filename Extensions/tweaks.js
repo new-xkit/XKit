@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.2.0 **//
+//* VERSION 5.2.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -152,6 +152,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_like_animation": {
 			text: "Hide the like/unlike heart animation",
+			default: false,
+			value: false
+		},
+        "use_old_icons": {
+			text: "Display the classic icons below posts",
 			default: false,
 			value: false
 		},
@@ -647,6 +652,16 @@ XKit.extensions.tweaks = new Object({
 				}
 			}
 		}
+        
+        if(XKit.extensions.tweaks.preferences.use_old_icons.value){
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.post_control_menu:before{content:""}'); //Settings icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.like:before{content:""}'); //Like icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.reblog:before{content:""}'); //Reblog icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.messaging:before{content:""}'); //Send icon
+            XKit.extensions.tweaks.add_css('.flag--dashboard-icon-revolution .post_controls .post_control.message-controls:before,.flag--dashboard-icon-revolution .post_controls .post_control.share:before{content:""}'); //Share menu icon
+            
+        }
+            
 
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 
