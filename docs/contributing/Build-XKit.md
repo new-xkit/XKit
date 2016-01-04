@@ -59,6 +59,10 @@ Cleans the `build/chrome/` directory, deleting the previous build for Chrome.
 
 Cleans the `build/firefox/` directory, deleting the previous build for Firefox.
 
+#### `gulp clean:palemoon`
+
+Cleans the `build/palemoon/` directory, deleting the previous build for Pale Moon.
+
 #### `gulp clean:safari`
 
 Cleans the `build/safari.safariextension/` directory, deleting the previous build for Safari.
@@ -79,7 +83,7 @@ Lints CSS files using CSSLint and reports the output.
 
 #### `gulp build`
 
-Top-level build task.
+Top-level build task. Does not run [`gulp build:palemoon`](#gulp-buildpalemoon).
 
 See also: [`gulp build:chrome`](#gulp-buildchrome), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp build:safari`](#gulp-buildsafari).
 
@@ -116,6 +120,28 @@ See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox
 Creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, from an existing Firefox source build and outputs it to `build/firefox/`.
 
 See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
+
+#### `gulp build:palemoon`
+
+Builds the Pale Moon browser extension from source and outputs it to `build/palemoon/`.  Also creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `new-xkit.xpi`, and outputs it to `build/palemoon/`.
+
+See also: [`gulp compress:palemoon`](#gulp-compresspalemoon), [`gulp copy:palemoon`](#gulp-copypalemoon).
+
+This tasks requires Python 2.7 to be installed on the Computer and available in the path.
+
+#### `gulp copy:palemoon`
+
+Builds the Pale Moon browser extension from source and outputs it to `build/palemoon/`.
+
+See also: [`gulp build`](#gulp-build), [`gulp build:palemoon`](#gulp-buildpalemoon), [`gulp compress:palemoon`](#gulp-compresspalemoon).
+
+#### `gulp compress:palemoon`
+
+Creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `new-xkit.xpi`, from an existing Firefox source build and outputs it to `build/palemoon/`.
+
+See also: [`gulp build`](#gulp-build), [`gulp build:palemoon`](#gulp-buildpalemoon), [`gulp copy:palemoon`](#gulp-copypalemoon).
+
+This tasks requires Python 2.7 to be installed on the Computer and available in the path.
 
 #### `gulp build:safari`
 
