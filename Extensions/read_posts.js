@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER jesskay **//

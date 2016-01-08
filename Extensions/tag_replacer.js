@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER STUDIOXENIX **//

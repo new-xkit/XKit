@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.2 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//

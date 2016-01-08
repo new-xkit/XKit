@@ -1,5 +1,5 @@
 //* TITLE Iconified Notifications **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0.3 **//
 //* DESCRIPTION Differentiate Notifications **//
 //* DETAILS This extension replaces words like 'reblogged your post' with an icon, making notifications easier to notice and frees up space for the post summary. **//
 //* DEVELOPER STUDIOXENIX **//

@@ -1,5 +1,4 @@
 #xkit-quick-tags-window {
-
 	width: 210px;
 	badckground: rgba(222,224,230,0.47);
 	position: absolute;
@@ -9,11 +8,12 @@
 	border-radius: 6px;
 	display: none;
 	border: 1px solid #abafbc;
-
 }
 
-.xkit-quick-tags-cp-tag:first-child .xkit-quick-tags-cp-up { display: none; }
-.xkit-quick-tags-cp-tag:last-child .xkit-quick-tags-cp-down { display: none; }
+.xkit-quick-tags-cp-tag:first-child .xkit-quick-tags-cp-up,
+.xkit-quick-tags-cp-tag:last-child .xkit-quick-tags-cp-down {
+	display: none;
+}
 
 .xkit-quick-tags-cp-up {
 	position: absolute;
@@ -39,9 +39,7 @@
 
 .xkit-quick-tags-cp-up:hover,
 .xkit-quick-tags-cp-down:hover {
-
 	opacity: 1;
-
 }
 
 .xkit-quick-tags-cp-tag {
@@ -95,45 +93,37 @@
 }
 
 #xkit-quick-tags-window .xkit-no-tags {
-
 	background: rgba(228,232,238,1);
 	color: #7a7f8e;
 	border-bottom: 1px solid #abafbc;
 	padding: 10px;
 	text-align: center;
 	font-size: 13px;
-
 }
 
 #xkit-quick-tags-window.no-other-section .xkit-no-tags {
-
 	border-bottom: 0;
-
 }
 
 #xkit-quick-tags-window .xkit-tag-other,
 #xkit-quick-tags-window .xkit-tag,
 #xkit-quick-tags-window .xkit-tag-add {
-
 	background: rgb(228,232,238);
 	color: #7a7f8e;
 	font-size: 13px;
 	padding: 5px 9px 5px 9px;
 	border-bottom: 1px solid #abafbc;
 	cursor: pointer;
-
 }
 
 #x1cpostage_quick_tags .xkit-tag,
 #x1cpostage_quick_tags .xkit-tag-add {
-
 	background: rgba(255,255,255,0.86);
 	color: #7a7f8e;
 	font-size: 12px;
 	padding: 5px 9px 5px 9px;
 	margin-top: 1px;
 	cursor: pointer;
-
 }
 
 #x1cpostage_quick_tags .xkit-tag-add,
@@ -143,24 +133,19 @@
 
 #x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-tag,
 #x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-tag-add {
-
 	border-top: 0;
 	border-bottom: 1px solid #abafbc;
-
 }
 
 #x1cpostage_quick_tags .xkit-tag:hover,
 #x1cpostage_quick_tags .xkit-tag-add:hover,
 #xkit-quick-tags-window .xkit-tag:hover,
 #xkit-quick-tags-window .xkit-tag-add:hover {
-
 	background-color: rgba(234,239,246,1);
 	color: #696d7a;
-
 }
 
 #xkit-quick-tags-window .xkit-tag-other {
-
 	background-color: #c8ced7 !important;
 	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.11);
 	background-image: none;
@@ -169,11 +154,9 @@
 	font-size: 12px;
 	color: #696d7a !important;
 	border-bottom: 0;
-
 }
 
 #xkit-tag-input {
-
 	width: 100%;
 	border: 1px solid rgb(180,180,180);
 	padding: 5px 7px;
@@ -181,11 +164,9 @@
 	font-size: 13px;
 	margin-top: 4px;
 	box-shadow: 0px 1px 0px rgba(255,255,255,0.44);
-
 }
 
 #xkit-quick-tags-window .xkit-tag-data {
-
 	font-size: 11px;
 	color: #9fa3af;
 	width: 100%;
@@ -194,26 +175,19 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-
 }
 
 /*#xkit-quick-tags-window.no-other-section .xkit-tag:nth-last-child(2) {
-
 	border-bottom: 0 !important;
-
 }*/
 
 #xkit-quick-tags-window .xkit-tag:last-child {
-
 	border: 0;
-
 }
 
 #xkit-quick-tags-window .xkit-tag-other .xkit-tag-name,
 #xkit-quick-tags-window .xkit-tag .xkit-tag-name {
-
 	font-weight: bold;
-
 }
 
 #xkit-quick-tags-window *{

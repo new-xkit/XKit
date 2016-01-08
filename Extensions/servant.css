@@ -6,16 +6,15 @@
 }
 
 .xkit-servant-dimmed { opacity: 0.33; }
+
 .xkit-servant-dimmed.xkit-servant-dimmed-but-active { opacity: 1; }
 
 .xkit-servant-rubber-band {
-
 	position: absolute;
 	top: 0; left: 0;
 	width: 100%; height: 6px;
 	z-index: 9;
 	border-radius: 3px 3px 0px 0px;
-
 }
 
 .post_full .post_permalink { z-index: 10; }
@@ -33,29 +32,25 @@
 }
 
 .xkit-servant-list-item .m-title { font-weight: bold; }
-.xkit-servant-list-item .m-description {
 
+.xkit-servant-list-item .m-description {
 	color: rgb(120,120,120); font-size: 12px;
 	max-width: 490px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-
 }
 
 #servant-list-no-servants {
-
 	text-align: center;
 	padding-top: 42px;
 	font-size: 13px;
 	color: rgb(130,130,130);
-
 }
 
 .xkit-servant-list-item:last-child { border-bottom: 0; }
 
 .xkit-servant-list-item {
-
 	height: 35px;
 	line-height: 18px;
 	padding-left: 27px;
@@ -65,11 +60,9 @@
 	position: relative;
 	padding-top: 10px;
 	padding-bottom: 10px;
-
 }
 
 .xkit-servant-item-delete {
-
 	position: absolute;
 	left: 7px;
 	top: 15px;
@@ -79,32 +72,26 @@
 	opacity: 0.45;
 	cursor: pointer;
 	z-index: 100;
-
 }
 
 .xkit-servant-item-delete:hover { opacity: 0.8; }
 
 .xkit-servant-add-division {
-
 	position: relative;
 	border-top: 1px solid rgb(200,200,200);
 	padding: 5px;
 	padding-left: 100px;
 	margin-top: 5px;
-
 }
 
 .xkit-servant-silent-division {
-
 	margin-top: 5px;
 	margin-bottom: 10px;
 	border-top: 1px solid rgb(200,200,200);
 	height: 0;
-
 }
 
 .xkit-servant-help-for-line {
-
 	position: absolute;
 	left: -25px;
 	background: no-repeat 50% 50% url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOElEQVQYV2NkwAT/oUKMyFIoHKgE0QqxWMLAgG4izDSQYrxWE60QZBLRbqSeQmT3YQQhss/wKgQA9VMJCzEArKMAAAAASUVORK5CYII=');
@@ -114,17 +101,13 @@
 	border-radius: 3px;
 	opacity: 0.40;
 	cursor: pointer;
-
 }
 
 .xkit-servant-help-for-line:hover {
-
 	opacity: 0.55;
-
 }
 
 .xkit-servant-add-delete-line {
-
 	position: absolute;
 	left: -43px;
 	background: red no-repeat 50% 50% url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVQIW2NkwAMYKZP8DwToJjCCAGXG4tINALm2BAjkSSkMAAAAAElFTkSuQmCC');
@@ -134,23 +117,18 @@
 	border-radius: 60px;
 	opacity: 0.40;
 	cursor: pointer;
-
 }
 
 .xkit-servant-option-listbox {
-
 	margin-top: 0px !important;
 	margin-bottom: 0px;
 	height: 25px;
 	font-size: 13px;
 	width: 100%;
-
 }
 
 .xkit-servant-add-delete-line:hover {
-
 	opacity: 0.55;
-
 }
 
 .xkit-servant-option-action-line-0 .xkit-servant-add-delete-line,
@@ -166,6 +144,7 @@
 	line-height: 17px;
 	display: none;
 }
+
 .xkit-servant-compatibility-error {
 	background: rgb(250,190,190);
 	padding: 5px 10px;
@@ -178,57 +157,44 @@
 }
 
 .xkit-servant-option-textareabox {
-
 	height: 57px;
 	width: 288px;
 	resize: none;
 	font: normal 11px courier, monospace;
-
 }
 
 .xkit-servant-option-line {
-
 	position: relative;
 	margin-top: 5px;
 	min-height: 25px;
-
 }
 
 .xkit-servant-option-line.servant-contains-textarea {
-
 	height: 74px;
-
 }
 
 .xkit-servant-division-title {
-
 	position: absolute;
 	top: 12px;
 	color: rgb(100,100,100);
 	font-weight: bold;
 	left: 0px;
-
 }
 
 .xkit-servant-add-option-settings {
-
 	position: absolute;
 	left: 161px;
 	top: 1px;
 	width: 303px;
 	display: none;
 	height: 26px;
-
 }
 
 .xkit-servant-add-option-settings.xkit-servant-return-values-shown .xkit-servant-option-textbox {
-
 	padding-right: 30px !important;
-
 }
 
 .xkit-servant-add-option-returns {
-
 	top: 2px; right: 0px;
 	height: 23px;
 	width: 23px;
@@ -239,7 +205,6 @@
 	opacity: 0.45;
 	cursor: pointer;
 	display: none;
-
 }
 
 .xkit-servant-option-line.xkit-servant-return-values-shown .xkit-servant-add-option-returns {
@@ -251,59 +216,44 @@
 }
 
 .xkit-servant-option-line.xkit-servant-return-values-shown .xkit-servant-add-option {
-
 	width: 428px;
-
 }
 
 .xkit-servant-add-option-returns:hover {
-
 	opacity: 0.7;
-
 }
 
 .xkit-servant-add-option-returns:active {
-
 	opacity: 1;
 	top: 3px;
 	height: 22px;
-
 }
 
 .xkit-servant-option-textbox {
-
 	margin-top: 0px !important;
 	margin-bottom: 0px;
 	height: 25px;
 	font-size: 13px;
 	width: 153px;
-
 }
 
 .xkit-servant-add-option-settings.xkit-servant-options-shown {
-
 	display: block;
-
 }
 
 .xkit-servant-add-option {
-
 	position: absolute;
 	top: 1px;
 	left: 1px;
 	width: 464px;
 	height: 25px;
-
 }
 
 .xkit-servant-add-option.xkit-servant-half-option {
-
 	width: 153px !important;
-
 }
 
 .xkit-servant-add-more {
-
 	background: no-repeat 5px 50% url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAJElEQVQIW2NkQID/QCYjjAtnAAUwJEAC6IARrw6Yapx2oBgHAMKOBQfOt/0mAAAAAElFTkSuQmCC');
 	padding: 1px 10px 1px 14px;
 	color: black;
@@ -312,11 +262,8 @@
 	opacity: 0.54;
 	display: inline-block;
 	margin-top: 6px;
-
 }
 
 .xkit-servant-add-more:hover {
-
 	opacity: 0.77;
-
 }

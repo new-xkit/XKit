@@ -7,24 +7,18 @@
 }
 
 #xkit-plc-list {
-
 	border: 1px solid rgb(190,190,190);
 	height: 188px;
 	margin-top: 15px;
-
 }
 
 #xkit-plc-list .xkit-warning-plc-text {
-
 	padding: 9px 19px 9px 14px;
 	border-bottom: 1px solid rgb(190,190,190);
-
 }
 
 #xkit-plc-list .xkit-warning-plc-text:last-child {
-
 	border-bottom: 0;
-
 }
 
 .xkit-plc-division:first-child {

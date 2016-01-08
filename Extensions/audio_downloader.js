@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

@@ -90,14 +90,12 @@ body.xkit-widgets-opened {
 }
 
 #xwidgets-opener.opened {
-
 	top: 192px;
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAAZCAYAAAB+Sg0DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NEQxNjE0MjcxMUEwMTFFMzgwNUJGM0E4Q0FBOUE5QkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NEQxNjE0MjgxMUEwMTFFMzgwNUJGM0E4Q0FBOUE5QkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0RDE2MTQyNTExQTAxMUUzODA1QkYzQThDQUE5QTlCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0RDE2MTQyNjExQTAxMUUzODA1QkYzQThDQUE5QTlCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmpKJeAAAAG9SURBVHjaYvz//z8DIyOjEAMDw0qGoQvuAXEB0C/fWZAEfzEMAzDqoaHkoT+0skRISIjl3bt3f+jhISYk9m9aYBUVFZazZ8+6cHJy/qWVHbg89IcWuL+/X1dBQUGor69Pk1Z24PLQX2pjd3d3AS8vLw2Q4YmJifpaWloctLAHl4eoDiZMmGDNxMTECGKzs7OzTps2zZyeeYiqoLKyUkVDQ0MCWcze3l4lLCxMYsh5SFhYmLW0tBRrbHR1dVmzsrIyDikPTZ482VBQUJAbm5y8vLxwXV2d+pDxkLm5OV9oaKgePjXZ2dnGoFikpYc+U8vAqVOnWrGwsOANKFDsgWKRiv4A1UXfkVsKIIF3oEqdElOBxbQw0LFc9+7de0NIrYmJiaSsrCz748ePf1LBQy9gDEZo9wHEjgBixyHahNsGxBtBfkFOGjuA+OcQ9MxXIN6DrVD4AMSLhphn/gHxfKinMJIcDOgDcTwQcw9yz3wC4nlAfB0mAPYLFg+BACcQ2wKxNhDzA7HkIPHEU6hHLgLxMfQsAvcQHsABjSlBIGYdBB4CeeALlP4FLZ1RWtuEPDTkABPDMAOjHhrsACDAAMhF857s/vtKAAAAAElFTkSuQmCC);
 	-webkit-transition: top 0.35s ease-in-out;
 	-moz-transition: top 0.35s ease-in-out;
 	-o-transition: top 0.35s ease-in-out;
 	transition: top 0.35s ease-in-out;
-
 }
 
 #xwidgets-opener:hover {
@@ -234,14 +232,19 @@ body.xkit-widgets-opened {
 }
 
 #xwidgets-drawer-inner .xwidgets-box.xkit-widgets-blog-information .line {
-	height: 25px; border-bottom: 1px solid rgba(0,0,0,0.33);
-	line-height: 25px; padding: 0px;
-	position: relative; font-weight: bold;
-	margin-left: 6px; margin-right: 6px;
+	height: 25px;
+	border-bottom: 1px solid rgba(0,0,0,0.33);
+	line-height: 25px;
+	padding: 0px;
+	position: relative;
+	font-weight: bold;
+	margin-left: 6px;
+	margin-right: 6px;
 }
 
 #xwidgets-drawer-inner .xwidgets-box.xkit-widgets-blog-information .line.title {
-	margin-top: 5px; text-align: center;
+	margin-top: 5px;
+	text-align: center;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -341,7 +344,6 @@ body.xkit-widgets-opened {
 	width: 119px;
 	margin-top: 10px;
 	font-size: 13px;
-
 }
 
 #xwidgets-drawer-inner .xwidgets-box.lights_out {
@@ -377,7 +379,7 @@ body.xkit-widgets-opened {
 
 #xwidgets-drawer-inner .xwidgets-box.lights_out .box.on {
 	background: #5ec8fc;
-	box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.43), inset 1px 1px 1px rgba(255,255,255,0.42), inset 0px 1px 1px rgba(255,255,255,0.42), 0px 1px 3px rgba(0,0,0,0.33)
+	box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.43), inset 1px 1px 1px rgba(255,255,255,0.42), inset 0px 1px 1px rgba(255,255,255,0.42), 0px 1px 3px rgba(0,0,0,0.33);
    	-webkit-transition: background 0.14s ease-in;
    	-moz-transition: background  0.14s ease-in;
    	-o-transition: background 0.14s ease-in;
@@ -416,15 +418,12 @@ body.xkit-widgets-opened {
 }
 
 #xwidgets-drawer-inner .xwidgets-box.audio_plus_controller {
-
 	background: rgba(140,30,80,0.77);
 	padding: 10px;
 	text-align: center;
-
 }
 
 #xwidgets-drawer-inner .xwidgets-box.audio_plus_controller .xkit-audio-plus-button {
-
 	width: 32px; height: 32px;
 	position: absolute;
 	bottom: 17px;
@@ -434,7 +433,6 @@ body.xkit-widgets-opened {
 	box-shadow: inset 0px 1px 0px white, 0px 1px 2px rgba(0,0,0,0.33);
 	border-radius: 555px;
 	opacity: 0.75; cursor: pointer;
-
 }
 
 #xwidgets-drawer-inner .xwidgets-box.audio_plus_controller.xkit-no-song-playing {

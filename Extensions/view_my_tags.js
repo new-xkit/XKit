@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

@@ -50,11 +50,8 @@
 }
 
 #xkit-activity-plus-note-filter.center-me-up {
-
 	right: 50%;
 	margin-right: -78px;
-
-
 }
 
 #xkit-activity-plus-note-filter div {
@@ -75,11 +72,9 @@
 
 #xkit-activity-plus-note-filter div.selected:hover,
 #xkit-activity-plus-note-filter div.selected {
-
 	background-color: rgb(233,233,233);
 	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.11);
 	cursor: default;
-
 }
 
 #xkit-activity-plus-note-filter div.xkit-note-filter-reblog {
