@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -67,7 +67,7 @@ XKit.extensions.tagviewer = new Object({
 		XKit.extensions.tagviewer.notes_url_from = "";
 		XKit.extensions.tagviewer.notes_url = "http://www.tumblr.com/dashboard/notes/" + post_id + "/" + tumblelog_key + "/" + tumblelog_name;
 
-		XKit.console.add("tagviewer -> init_id is " + XKit.extensions.tagviewer.init_id);
+		console.log("tagviewer -> init_id is " + XKit.extensions.tagviewer.init_id);
 
 		// Create our window.
 		var m_html = "<div class=\"nano\" id=\"tagviewer-window-outer\">" +
@@ -110,7 +110,7 @@ XKit.extensions.tagviewer = new Object({
 		}).done(function(data, textStatus, jqXHR) {
 
 			if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
-				XKit.console.add("tagviewer -> quitting, wrong post_id or init_id");
+				console.log("tagviewer -> quitting, wrong post_id or init_id");
 				return;
 			}
 
@@ -135,12 +135,12 @@ XKit.extensions.tagviewer = new Object({
 					url: api_url,
 					json: true,
 					onerror: function(response) {
-						XKit.console.add("tagviewer -> Can't fetch page " + api_url);
+						console.log("tagviewer -> Can't fetch page " + api_url);
 					},
 					onload: function(response) {
 
 						if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
-							XKit.console.add("tagviewer -> quitting, wrong post_id or init_id");
+							console.log("tagviewer -> quitting, wrong post_id or init_id");
 							return;
 						}
 
@@ -157,7 +157,7 @@ XKit.extensions.tagviewer = new Object({
 							}
 
 						} catch(e) {
-							XKit.console.add("tagviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
+							console.log("tagviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
 						}
 
 					}
@@ -167,9 +167,9 @@ XKit.extensions.tagviewer = new Object({
 
 			if (next_note > 0) {
 				XKit.extensions.tagviewer.notes_url_from = next_note;
-				XKit.console.add("Another page found.");
+				console.log("Another page found.");
 				if (XKit.extensions.tagviewer.found_count <= 7) {
-					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
+					console.log(" -- Not enough posts loaded, auto-loading..");
 					setTimeout(function() {
 						XKit.extensions.tagviewer.load_tags();
 					}, 1400);
@@ -177,7 +177,7 @@ XKit.extensions.tagviewer = new Object({
 				} else {
 					XKit.extensions.tagviewer.hide_loader();
 					XKit.extensions.tagviewer.loading_more = false;
-					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
+					console.log(" -- Enough loaded, waiting for user to scroll down.");
 					XKit.extensions.tagviewer.activate_endless_scroll();
 				}
 			} else {
@@ -185,7 +185,7 @@ XKit.extensions.tagviewer = new Object({
 					$("#tagviewer-loading").html("No posts with tags found.");
 				}
 				XKit.extensions.tagviewer.last_page = true;
-				XKit.console.add("Last page, quitting.");
+				console.log("Last page, quitting.");
 				XKit.extensions.tagviewer.hide_loader();
 			}
 

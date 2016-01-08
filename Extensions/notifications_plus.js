@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5 REV C **//
+//* VERSION 1.5.4 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -206,7 +206,7 @@ XKit.extensions.notifications_plus = new Object({
 			}
 		}
 
-		XKit.console.add("Notifications+: Post URL is " + post_url);
+		console.log("Notifications+: Post URL is " + post_url);
 
 		// Break it down.
 		post_url = post_url.replace('http://','');
@@ -232,7 +232,7 @@ XKit.extensions.notifications_plus = new Object({
 		$("#xpreview-container").addClass("loading");
 		$("#xpreview-notes").html("loading");
 
-		XKit.console.add("Notifications+: Post ID is " + post_id + " | blog_id = " + blog_id);
+		console.log("Notifications+: Post ID is " + post_id + " | blog_id = " + blog_id);
 
 		XKit.extensions.notifications_plus.xpreview_load(post_id, blog_id);
 
@@ -249,7 +249,7 @@ XKit.extensions.notifications_plus = new Object({
 		}
 
 		if (blog_id === "") {
-			XKit.console.add("Can't do XPreview, no blog_id");
+			console.log("Can't do XPreview, no blog_id");
 			$("#xpreview-container").css("display","none");
 			$("#xpreview-container").removeClass("loading");
 			return;
@@ -262,7 +262,7 @@ XKit.extensions.notifications_plus = new Object({
 			url: api_url,
 			json: true,
 			onerror: function() {
-				XKit.console.add("Can not load page to load notes.");
+				console.log("Can not load page to load notes.");
 			},
 			onload: function(response) {
 				try {
@@ -272,7 +272,7 @@ XKit.extensions.notifications_plus = new Object({
 					XKit.extensions.notifications_plus.last_post = post_id;
 					XKit.extensions.notifications_plus.last_post_notes = data.posts[0].note_count;
 				} catch(e) {
-					XKit.console.add(e.message);
+					console.log(e.message);
 				}
 
 			}

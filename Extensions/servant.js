@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5.9 **//
+//* VERSION 0.5.10 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -1051,7 +1051,7 @@ XKit.extensions.servant = new Object({
 								XKit.installed.enable(parameter);
 								XKit.notifications.add("Enabled '" + parameter + "'", "ok");
 							} catch(e) {
-								XKit.console.add("Can not run " + extension_id + ": " + e.message);
+								console.log("Can not run " + extension_id + ": " + e.message);
 							}
 
 						}

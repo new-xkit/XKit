@@ -1,5 +1,5 @@
 //* TITLE ReplyViewer **//
-//* VERSION 0.2.7 **//
+//* VERSION 0.2.8 **//
 //* DESCRIPTION View post replies easily **//
 //* DETAILS The close relative of TagViewer, this extension allows you to see what replies, answers and additional content added to it while reblogging on any post. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -67,7 +67,7 @@ XKit.extensions.replyviewer = new Object({
 		XKit.extensions.replyviewer.notes_url_from = "";
 		XKit.extensions.replyviewer.notes_url = "http://www.tumblr.com/dashboard/notes/" + post_id + "/" + tumblelog_key + "/" + tumblelog_name;
 
-		XKit.console.add("replyviewer -> init_id is " + XKit.extensions.replyviewer.init_id);
+		console.log("replyviewer -> init_id is " + XKit.extensions.replyviewer.init_id);
 
 		// Create our window.
 		var m_html = "<div class=\"nano\" id=\"replyviewer-window-outer\">" +
@@ -118,7 +118,7 @@ XKit.extensions.replyviewer = new Object({
 		}).done(function(data, textStatus, jqXHR) {
 
 			if (m_post_id !== XKit.extensions.replyviewer.post_id || m_init_id !== XKit.extensions.replyviewer.init_id) {
-				XKit.console.add("replyviewer -> quitting, wrong post_id or init_id");
+				console.log("replyviewer -> quitting, wrong post_id or init_id");
 				return;
 			}
 
@@ -153,9 +153,9 @@ XKit.extensions.replyviewer = new Object({
 
 			if (next_note > 0) {
 				XKit.extensions.replyviewer.notes_url_from = next_note;
-				XKit.console.add("Another page found.");
+				console.log("Another page found.");
 				if (XKit.extensions.replyviewer.found_count <= 7) {
-					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
+					console.log(" -- Not enough posts loaded, auto-loading..");
 					setTimeout(function() {
 						XKit.extensions.replyviewer.load_tags();
 					}, 1400);
@@ -163,7 +163,7 @@ XKit.extensions.replyviewer = new Object({
 				} else {
 					XKit.extensions.replyviewer.hide_loader();
 					XKit.extensions.replyviewer.loading_more = false;
-					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
+					console.log(" -- Enough loaded, waiting for user to scroll down.");
 					XKit.extensions.replyviewer.activate_endless_scroll();
 				}
 			} else {
@@ -171,7 +171,7 @@ XKit.extensions.replyviewer = new Object({
 					$("#replyviewer-loading").html("No posts with replies found.");
 				}
 				XKit.extensions.replyviewer.last_page = true;
-				XKit.console.add("Last page, quitting.");
+				console.log("Last page, quitting.");
 				XKit.extensions.replyviewer.hide_loader();
 			}
 

@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.3.2 **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -94,13 +94,13 @@ XKit.extensions.reblog_yourself = {
 	fix_page: function() {
 
 		if ($("#tumblelog_choices").length === 0) {
-			XKit.console.add("Can't run Reblog Yourself, delaying..");
+			console.log("Can't run Reblog Yourself, delaying..");
 			setTimeout(function() { XKit.extensions.reblog_yourself.fix_page(); }, 300);
 			return;
 		}
 
 		if ($("#popover_blogs").length === 0) {
-			XKit.console.add("Can't run Reblog Yourself, popover_blogs not found.");
+			console.log("Can't run Reblog Yourself, popover_blogs not found.");
 			return;
 		}
 
@@ -128,7 +128,7 @@ XKit.extensions.reblog_yourself = {
 						m_blog_avatar = m_blog_avatar.replace("_40.gif","_64.gif");
 						m_blog_avatar = m_blog_avatar.replace("_40.jpg","_64.jpg");
 					} catch(e) {
-						XKit.console.add("reblog_yourself: " + e.message);
+						console.log("reblog_yourself: " + e.message);
 					}
 				} else {
 					// console.log("Found for " + m_blogs[i]);
@@ -142,7 +142,7 @@ XKit.extensions.reblog_yourself = {
 		try {
 			post_avatar = m_blog_avatar;
 		} catch(e) {
-			XKit.console.add("reblog_yourself: " + e.message);
+			console.log("reblog_yourself: " + e.message);
 		}
 
 		var m_html = '<div class="option" data-facebook-on="false" data-twitter-on="false" data-facebook="false" data-twitter="false" data-is-password-protected="false" data-use-sub-avatar="" data-use-channel-avatar="0" data-blog-url="http://' + m_blog_url + '.tumblr.com/" data-avatar-url="' + post_avatar +'" data-user-avatar-url="' + post_avatar +'" data-option-value="'+ m_blog_url +'" title="'+ m_blog_title +'">' + m_blog_url + '</div>';
@@ -185,7 +185,7 @@ XKit.extensions.reblog_yourself = {
 
 			if ($(this).find('.post_controls').html().search('href="/reblog/') !== -1) {
 				// this user can reblog themselves?!
-				XKit.console.add("This user can reblog themselves, quitting.");
+				console.log("This user can reblog themselves, quitting.");
 				return false;
 			}
 

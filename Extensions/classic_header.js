@@ -213,7 +213,7 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		} catch(e) {
-			XKit.console.add(e.message);
+			console.log(e.message);
 		}
 
 	},
