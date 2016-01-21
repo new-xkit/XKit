@@ -20,7 +20,7 @@ XKit.extensions.postarchive = {
 
 	frame_run: function() {
 
-		if ($(".tx-button.like-button").length === 0 && $(".tx-button.edit-button").length === 0) { return; }
+		if (!(XKit.iframe.like_button() || XKit.iframe.edit_button())) { return; }
 
 		XKit.tools.init_css("postarchive");
 
@@ -40,26 +40,19 @@ XKit.extensions.postarchive = {
 
 		XKit.tools.add_css(m_css, "post_archive_in_blog");
 
-		var blog_url = 'http://' + XKit.iframe.get_tumblelog() + '.tumblr.com';
+		var blog_url = document.referrer;
 		window.top.postMessage({
 			xkit: true,
 			expand_in_blog_control_iframe: true
 		}, blog_url);
 
-		var m_html = "<a id=\"xkit_postarchive_inblog_button\" onclick=\"return false\" class=\"tx-button tx-button--with-icon\" title=\"Archive this post\">Post Archiver</a>";
+		var m_html = '<a id="xkit_postarchive_inblog_button" onclick="return false" class="tx-button tx-button--with-icon" title="Archive this post">Post Archiver</a>';
 
 		$(".dashboard-button").before(m_html);
 
 		var post_id = XKit.iframe.single_post_id();
 
-		if (!post_id) {
-			var postid_start = document.location.href.search("&pid=");
-			if (postid_start === -1) { return; }
-			var postid_end =  document.location.href.indexOf("&", postid_start + 2);
-			post_id = document.location.href.substring(postid_start + 5, postid_end);
-		}
-
-		if (XKit.extensions.postarchive.is_post_in_archive(post_id) !== false) {
+		if (XKit.extensions.postarchive.is_post_in_archive(post_id)) {
 
 			$("#xkit_postarchive_inblog_button").addClass("xkit-post-archive-inblog-button-done");
 
@@ -67,15 +60,18 @@ XKit.extensions.postarchive = {
 
 		window.addEventListener('message', function(e) {
 			if (e.origin !== blog_url && !e.data.xkit) { return; }
-			if (e.data.jquery_function) {
-				$('#xkit_postarchive_inblog_button')[e.data.jquery_function](e.data.args[0]);
+			if (e.data.add_class) {
+				$('#xkit_postarchive_inblog_button').addClass(e.data.args[0]);
+			}
+			if (e.data.remove_class) {
+				$('#xkit_postarchive_inblog_button').removeClass(e.data.args[0]);
 			}
 		});
 
 		$("#xkit_postarchive_inblog_button").click(function() {
 
 			window.top.postMessage({
-				extension_method: "archive",
+				archive_post: true,
 				args: [post_id, null, true],
 				xkit: true
 			}, blog_url);
@@ -90,8 +86,8 @@ XKit.extensions.postarchive = {
 
 		window.addEventListener("message", function(e) {
 			if (e.origin !== "https://www.tumblr.com" && !e.data.xkit) { return; }
-			if (e.data.extension_method) {
-				XKit.extensions.postarchive[e.data.extension_method].apply(null, e.data.args);
+			if (e.data.archive_post) {
+				XKit.extensions.postarchive.archive.apply(null, e.data.args);
 			}
 			if (e.data.expand_in_blog_control_iframe) {
 				$('.tmblr-iframe--desktop-loggedin-controls').width('100%');
@@ -1044,7 +1040,7 @@ XKit.extensions.postarchive = {
 				} else {
 
 					document.getElementsByName('desktop-loggedin-controls')[0].contentWindow.postMessage({
-						jquery_function: "removeClass",
+						remove_class: true,
 						args: ["xkit-post-archive-inblog-button-done"],
 						xkit: true
 					}, "https://www.tumblr.com");
@@ -1156,7 +1152,7 @@ XKit.extensions.postarchive = {
 		var blog_url = m_post.owner;
 
 		if (!blog_url) {
-			blog_url = window.location.href.split('/')[2].split('.')[0];
+			blog_url = $('meta[name="twitter:title"]').attr('content');
 		}
 
 		var api_url = "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
@@ -1212,7 +1208,7 @@ XKit.extensions.postarchive = {
 						} else {
 
 							document.getElementsByName('desktop-loggedin-controls')[0].contentWindow.postMessage({
-								jquery_function: "addClass",
+								add_class: true,
 								args: ["xkit-post-archive-inblog-button-done"],
 								xkit: true
 							}, "https://www.tumblr.com");
