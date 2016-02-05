@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.5.5 **//
+//* VERSION 0.6 **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -23,6 +23,11 @@ XKit.extensions.soft_refresh = new Object({
 			text:"Soft refresh when the home button is clicked.",
 			default:true,
 			value:true
+		},
+		"use_period_key":{
+			text:"Soft refresh when the period key is pressed.",
+			default:false,
+			value:false
 		},
 		"show_notifications":{
 			text:"Show refresh result notifications",
@@ -53,6 +58,15 @@ XKit.extensions.soft_refresh = new Object({
 			$(document).on("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
 			// Need to change all children to make sure the user doesn't click the new posts count number.
 			$("#home_button").children().attr('href','#');
+		}
+
+		if (this.preferences.use_period_key.value) {
+			window.addEventListener('keydown', function (e) {
+				var char = e.keyCode;
+				if (!char) return; // special key
+				else if (char == 190) // period key
+					XKit.extensions.soft_refresh.load_posts();
+			}, true);
 		}
 
 		XKit.extensions.soft_refresh.do_post_ids();
