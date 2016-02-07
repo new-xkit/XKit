@@ -245,6 +245,36 @@ XKit.tools.add_function = function(func, exec, addt) {
 	}
 };
 
+XKit.tools.unsafe_eval = function(f, context) {
+	if (typeof context === 'undefined') context = null;
+	if (typeof f !== 'function') throw new Error('Invalid argument to XKit.tools.unsafe_eval(): ' + f);
+
+	var callXKit = function(path, params /* ... */) {
+		var args = [].slice.apply(arguments);
+		window.postMessage({xkit_cmd: {path: args[0], params: args.slice(1)}}, '*');
+	};
+	var statement = '(' + f.toString() + ').call(' + [
+		JSON.stringify(context),
+		callXKit.toString()
+	].join(',') + ');';
+
+	var script = document.createElement('script');
+	script.setAttribute("type", "application/javascript");
+	script.textContent = statement;
+	document.body.appendChild(script);
+	document.body.removeChild(script);
+};
+
+window.addEventListener('message', function(event) {
+	var msg, path, namespace;
+	if (!(msg = event.data.xkit_cmd)) return;
+
+	namespace = XKit;
+	path = msg.path.split('.');
+	while (path.length > 1) namespace = namespace[path.shift()];
+	namespace[path[0]].apply(namespace, msg.params);
+});
+
 XKit.tools.dump_config = function(){
 	var values = GM_listValues();
 	if(values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.

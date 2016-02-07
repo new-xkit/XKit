@@ -1,0 +1,24 @@
+.html-field .tabs > .tab {
+    display: none;
+}
+
+.html-preview {
+    margin-bottom: 1em;
+}
+
+#super-markdown-controls, #super-markdown-controls > .tray {
+    position: static;
+    display: block;
+}
+
+#super-markdown-embed-code {
+    display: none;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 24px;
+}
+
+#super-markdown-embed-code.editor-placeholder:before{
+    content: attr(data-placeholder);
+}
