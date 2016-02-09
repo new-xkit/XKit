@@ -1747,7 +1747,7 @@ XKit.tools.getParameterByName = function(name){
 			post: function(obj) {
 
 				var m_return = {};
-				var post_data = JSON.parse($(obj).attr('data-json'));
+				var post_data = JSON.parse($(obj).attr('data-json') || "{}");
 
 				if (typeof post_data.id == "undefined" && $(".mh_post_head_link").length === 0) {
 					// Something is wrong.
@@ -1841,7 +1841,8 @@ XKit.tools.getParameterByName = function(name){
 				m_return.avatar = post_data["tumblelog-data"].avatar_url;
 
 				m_return.tags = "";
-				var post_tags = $(obj).find(".post_tags") || $(obj).parents('.post')[1].find('.post_tags');
+				var post_tags = $(obj).find(".post_tags").find('.post_tag');
+				post_tags = post_tags.length ? post_tags : $($(obj).parents('.post')[1]).find('.post_tags').find('.post_tag');
 				if (post_tags.length > 0) {
 					var to_return = "";
 					post_tags.each(function() {
