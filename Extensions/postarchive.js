@@ -90,7 +90,7 @@ XKit.extensions.postarchive = {
 				XKit.extensions.postarchive.archive.apply(null, e.data.args);
 			}
 			if (e.data.expand_in_blog_control_iframe) {
-				$('.tmblr-iframe--desktop-loggedin-controls').width('100%');
+				$('.tmblr-iframe--desktop-logged-in-controls').width('100%');
 			}
 		});
 
@@ -1039,7 +1039,7 @@ XKit.extensions.postarchive = {
 
 				} else {
 
-					document.getElementsByName('desktop-loggedin-controls')[0].contentWindow.postMessage({
+					document.getElementsByName('desktop-logged-in-controls')[0].contentWindow.postMessage({
 						remove_class: true,
 						args: ["xkit-post-archive-inblog-button-done"],
 						xkit: true
@@ -1152,7 +1152,7 @@ XKit.extensions.postarchive = {
 		var blog_url = m_post.owner;
 
 		if (!blog_url) {
-			blog_url = $('meta[name="twitter:title"]').attr('content');
+			blog_url = new RegExp("[\\?&]blogName=([^&#]*)").exec($('meta[property="al:ios:url"]').attr('content'))[1];
 		}
 
 		var api_url = "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
@@ -1207,7 +1207,7 @@ XKit.extensions.postarchive = {
 
 						} else {
 
-							document.getElementsByName('desktop-loggedin-controls')[0].contentWindow.postMessage({
+							document.getElementsByName('desktop-logged-in-controls')[0].contentWindow.postMessage({
 								add_class: true,
 								args: ["xkit-post-archive-inblog-button-done"],
 								xkit: true
