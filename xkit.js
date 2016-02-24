@@ -884,8 +884,9 @@ XKit = {
 			return txt.replace(new RegExp(replace, 'g'),with_this);
 		},
 		get_setting: function(setting_name, default_value) {
+            var storage_raw = "";
 			try {
-				var storage_raw = GM_getValue(setting_name, default_value);
+				storage_raw = GM_getValue(setting_name, default_value);
 				var storage = JSON.parse(storage_raw);
 				if (storage.storage_version === 2) {
 					return JSON.parse(storage.value);
@@ -893,7 +894,7 @@ XKit = {
 					return storage_raw;
 				}
 			} catch(e) {
-				return default_value;
+				return storage_raw || default_value;
 			}
 		},
 		set_setting: function(setting_name, new_value) {
