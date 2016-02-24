@@ -27,7 +27,8 @@ var paths = {
 		themes: ['Themes/**/*.css']
 	},
 	paperboy: [
-		'Paperboy/*'
+		'Paperboy/*',
+        '!Paperboy/Example'
 	],
 	vendor: [
 		'vendor/*.js',
