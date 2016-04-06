@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.5 **//
+//* VERSION 1.1.6 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
