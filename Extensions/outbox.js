@@ -1,6 +1,6 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.9 **//
-//* DESCRIPTION Saves your sent replies, fan mail and asks. **//
+//* VERSION 0.10.0 **//
+//* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -9,8 +9,6 @@
 XKit.extensions.outbox = new Object({
 
 	running: false,
-
-	fan_mail_form_key: "",
 
 	preferences: {
 		"sep0": {
@@ -36,7 +34,6 @@ XKit.extensions.outbox = new Object({
 	frame_run: function() {
 
 		XKit.console.add("Outbox working on Frame mode...");
-		this.run_fan_mail(true);
 		if (document.location.href.indexOf('/ask_form') !== -1) {
 			this.run_ask_frame();
 		}
@@ -91,88 +88,6 @@ XKit.extensions.outbox = new Object({
 
 	},
 
-	run_fan_mail: function(wait) {
-
-		function get_fanmail_send_button() {
-			var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
-			var send_button = fanmail_iframe
-				? fanmail_iframe.contentWindow.document.getElementsByClassName("send")
-				: document.getElementsByClassName("send");
-			return send_button.length > 0 ? send_button[0] : null;
-		}
-
-		if (wait === true) {
-			if (!get_fanmail_send_button()) {
-				XKit.console.add("Waiting for fan-mail window to pop up..");
-				setTimeout(function() { XKit.extensions.outbox.run_fan_mail(true); }, 200);
-				return;
-			}
-			get_fanmail_send_button().onclick = XKit.extensions.outbox.save_fan_mail;
-		}
-
-		XKit.console.add("Activating run_fan_mail on outbox...");
-		XKit.extensions.outbox.fan_mail_form_key = $('meta[name=tumblr-form-key]').attr("content");
-
-	},
-
-	save_fan_mail: function(e) {
-
-		var send_fan_mail_lightbox = document.getElementById("send_fan_mail_lightbox");
-		var base_document = send_fan_mail_lightbox
-			? send_fan_mail_lightbox.contentWindow.document
-			: document;
-		var message_textarea = base_document.getElementsByClassName("message")[0];
-		var m_msg = message_textarea.value;
-		var check_status = $("#checkmark").css("display") !== "none";
-
-		if ($("#to_input").attr('type') === "hidden") {
-			XKit.console.add("outbox: to field hidden, validating.");
-			check_status = true;
-		} else {
-			XKit.console.add("outbox: to field text box, might not make it.");
-		}
-
-		if ($.trim(m_msg) === "" || !check_status) {
-			return;
-		}
-
-		var m_messages = XKit.storage.get("outbox", "messages_" + XKit.extensions.outbox.fan_mail_form_key, "");
-		if (XKit.extensions.outbox.preferences.use_shared.value) {
-			m_messages = XKit.storage.get("outbox", "messages", "");
-		}
-
-		var m_messages_array = "";
-
-		try {
-			m_messages_array = JSON.parse(m_messages);
-			if (m_messages_array.length >= 50) {
-				// remove the last element.
-				m_messages_array.pop();
-			}
-		} catch(err) {
-			m_messages_array = [];
-		}
-
-		var m_obj = {};
-		m_obj.avatar = "fan_mail";
-		m_obj.username = base_document.getElementById("select_tumblelog_from").value;
-		m_obj.message = m_msg;
-		m_obj.answer = "";
-		m_obj.to = base_document.getElementById("to_input").value;
-		m_obj.time = new Date().getTime();
-
-		var form_key = $('meta[name=tumblr-form-key]').attr("content");
-
-		m_messages_array.unshift(m_obj);
-
-		if (XKit.extensions.outbox.preferences.use_shared.value) {
-			XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
-		} else {
-			XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
-		}
-
-	},
-
 	check_indash_asks: function() {
 
 		var form_key = XKit.interface.form_key();
@@ -223,14 +138,8 @@ XKit.extensions.outbox = new Object({
 
 		XKit.extensions.outbox.check_indash_asks();
 
-		if (XKit.interface.where().inbox !== true && document.location.href.indexOf('://www.tumblr.com/send') == -1) {
+		if (XKit.interface.where().inbox !== true) {
 			XKit.console.add("Outbox -> Quitting, not in inbox");
-			return;
-		}
-
-		XKit.extensions.outbox.run_fan_mail(true);
-
-		if (document.location.href.indexOf('://www.tumblr.com/send') !== -1) {
 			return;
 		}
 
@@ -282,9 +191,6 @@ XKit.extensions.outbox = new Object({
 
 		$("[id^='ask_answer_link_']").unbind("click", XKit.extensions.outbox.save_activate);
 		$("[id^='ask_answer_link_']").bind("click", XKit.extensions.outbox.save_activate);
-
-		$(".controls_link.reply_link").unbind("click", XKit.extensions.outbox.run_fan_mail(true));
-		$(".controls_link.reply_link").bind("click", XKit.extensions.outbox.run_fan_mail(true));
 
 	},
 
@@ -530,62 +436,7 @@ XKit.extensions.outbox = new Object({
 
 	},
 
-	render_fan_mail: function(obj, m_id) {
-
-		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
-
-		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
-
-		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
-		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
-
-		var m_day = "";
-		var m_date = "";
-
-		if (obj.time !== "" && typeof obj.time !== "undefined") {
-			var m = moment(obj.time);
-			m_day = m.format('ddd');
-			m_date = m.format('hh:mm a');
-		} else {
-			m_day = "?";
-			m_date = "Unknown";
-		}
-
-		obj.message = $("<div>" + obj.message + "</div>").text();
-
-		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
-				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
-				"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
-			"</div></div>";
-
-		to_return = to_return + "<div class=\"post-wrapper\">" +
-				"<span class=\"xkit-outbox-fanmail-indicator\">fan mail</span>" +
-				"<div class=\"post_header\"><div class=\"post_info\">You've sent to " + m_link + "</div></div>" +
-				"<div class=\"post_content clearfix\"><div class=\"post_content_inner clearfix\">" +
-					"<div class=\"post_body\">" +
-						"<div class=\"clear\">&nbsp;</div>" +
-						"<div class=\"post_question_fan_mail\">" + obj.message + "</div>" +
-					"</div>" +
-				"</div></div>" +
-				"<div class=\"post_footer clearfix\">" +
-					"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
-					"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
-						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
-					"</div></div>" +
-				"</div>" +
-			"</div>";
-
-		to_return = to_return + "</div></li>";
-
-		return to_return;
-
-	},
-
 	render: function(obj, m_id) {
-
-		if (obj.avatar === "fan_mail") {
-			return XKit.extensions.outbox.render_fan_mail(obj, m_id);
-		}
 
 		if (obj.avatar === "ask") {
 			return XKit.extensions.outbox.render_ask(obj, m_id);
@@ -680,7 +531,6 @@ XKit.extensions.outbox = new Object({
 		this.running = false;
 		XKit.extensions.outbox.end();
 		$("[id^='ask_answer_link_']").off("click", XKit.extensions.outbox.save_activate);
-		$(document).off("click","#send", XKit.extensions.outbox.save_fan_mail);
 		XKit.post_listener.remove("outbox_init");
 	}
 
