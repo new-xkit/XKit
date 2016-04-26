@@ -96,7 +96,13 @@ XBackground.prototype.messageHandlers = {
 
 			// Create response object.
 			var response = {};
-			response.request = JSON.stringify(request);
+			// Manually copy request object because Safari Technology Preview
+			// doesn't stringify it properly
+			var objRequest = {};
+			for (var key in request) {
+				objRequest[key] = request[key];
+			}
+			response.request = JSON.stringify(objRequest);
 			response.status = request.status;
 			response.settings = request.settings;
 			response.request_id = request.xkit_request_object.request_id;

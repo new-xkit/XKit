@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER new-xkit **//
@@ -84,7 +84,7 @@ XKit.extensions.postarchive = {
 		if ($('#postarchive_ul').length === 0) {
 			var xf_html = '<ul class="controls_section" id="postarchive_ul">' +
 				'<li class="section_header selected">Post Archive</li>' +
-					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="postarchive_view">' +
+					'<li class="no_push" style="height: 36px;"><a href="#" id="postarchive_view">' +
 						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 8px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
 					'</a></li>' +
 				'</ul>';
@@ -96,6 +96,7 @@ XKit.extensions.postarchive = {
 
 			XKit.extensions.postarchive.view();
 
+			return false;
 		});
 
 		if ($(".posts .post").length > 0) {

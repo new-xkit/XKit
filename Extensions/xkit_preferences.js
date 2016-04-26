@@ -31,12 +31,12 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		var m_html = '<div class="tab iconic' + holiday_class + '" id="new-xkit-control">' +
-			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#" onclick="return false">XKit Control Panel</a>' +
+			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#">XKit Control Panel</a>' +
 			'</div>';
 
 		// mobile stuff
 		var mobile_html = '<div class="tab iconic" id="new-xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
-			'<a style="color:transparent;" class="tab_anchor" href="#" onclick="return false">XKit</a>' +
+			'<a style="color:transparent;" class="tab_anchor" href="#">XKit</a>' +
 			'</div>';
 
 		if (XKit.browser().mobile) {
@@ -101,6 +101,8 @@ XKit.extensions.xkit_preferences = new Object({
 			} else {
 				document.location.href = ("http://www.tumblr.com/help");
 			}
+
+			return false;
 		});
 
 		// Check and deliver initial messages.
@@ -2433,7 +2435,7 @@ XKit.extensions.xkit_preferences = new Object({
 				'</div>' +
 				'<div id="xkit-about-window-links">' +
 					'<a href="http://www.xkit.info/seven">XKit Website</a>' +
-					'<a href="#" onclick="return false" id="xkit-open-credits">Credits</a>' +
+					'<a href="#" id="xkit-open-credits">Credits</a>' +
 					'<a href="http://new-xkit-extension.tumblr.com">New XKit Blog</a>' +
 					'<a href="http://www.xkit.info/seven/donate">Donate to XKit</a>' +
 					'<a href="http://www.xkit.info/seven/spread">Spread XKit</a>' +
@@ -2456,6 +2458,7 @@ XKit.extensions.xkit_preferences = new Object({
 					'By using this software you are agreeing to <a href="http://www.xkit.info/eula">XKit EULA</a>.',
 				"info", '<div class="xkit-button default" id="xkit-close-message">OK</div>');
 
+				return false;
 		});
 
 	},

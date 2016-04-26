@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5.9 **//
+//* VERSION 0.5.10 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -44,7 +44,7 @@ XKit.extensions.servant = new Object({
 
 				var m_object = {};
 
-				var m_text = $(obj).find(".post_body").text();
+				var m_text = $(obj).find(".post_content").text();
 
 				if ($(obj).find(".post_title").length > 0) {
 					m_text = m_text + " " + $(obj).find(".post_title").text();

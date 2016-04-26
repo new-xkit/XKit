@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.8 **//
+//* VERSION 0.9.9 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -237,7 +237,7 @@ XKit.extensions.outbox = new Object({
 		XKit.tools.init_css("outbox");
 
 		xf_html = '<ul class="controls_section" id="xkit_outbox_ul"><li class="section_header selected">OUTGOING</li>' +
-			'<li class="" style="height: 36px;"><a href="#" onclick="return false;" id="xkit-outbox-button">' +
+			'<li class="" style="height: 36px;"><a href="#" id="xkit-outbox-button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Outbox</div>' +
 			'</a></li></ul>';
 		$("ul.controls_section:last").before(xf_html);
@@ -260,6 +260,7 @@ XKit.extensions.outbox = new Object({
 
 			}
 
+			return false;
 		});
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");

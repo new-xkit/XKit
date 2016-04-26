@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.0.4 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -113,22 +113,25 @@ XKit.extensions.post_crushes = new Object({
 
 		m_object.channel_id = blog_url;
 
-		m_object.form_key = $("#form_key").val();
+		m_object.form_key = XKit.interface.form_key();
 
 		m_object.context_page = "dashboard";
 
-		m_object.context_id = "dashboard";
+		m_object.context_id = "";
 
 		// Not sure about this part:
 		m_object["is_rich_text[one]"] = "0";
 		m_object["is_rich_text[two]"] = "1";
 		m_object["is_rich_text[three]"] = "0";
 
-		m_object.MAX_FILE_SIZE = "10485760";
-
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
 		m_object["post[date]"] ="";
+
+		m_object.errors = false;
+		m_object.silent = false;
+		m_object.detached = true;
+		m_object.reblog = false;
 
 
 		m_object["post[type]"] = "photo";
@@ -156,7 +159,7 @@ XKit.extensions.post_crushes = new Object({
 			m_object["post[tags]"] = m_tags;
 		}
 		m_object["post[publish_on]"] ="";
-		m_object.custom_tweet = "";
+		m_object.custom_tweet = false;
 
 		m_object["post[photoset_order]"] = "o1";
 		m_object["post[photoset_layout]"] = "1";
@@ -216,12 +219,12 @@ XKit.extensions.post_crushes = new Object({
 
 			GM_xmlhttpRequest({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
+				json: true,
 				headers: {
 					"X-tumblr-puppies": kitty_data.kitten,
-					"X-tumblr-form-key": XKit.interface.form_key(),
-					"Content-Type": "application/json"
+					"X-tumblr-form-key": XKit.interface.form_key()
 				},
 				onerror: function(response) {
 					XKit.interface.kitty.set("");
@@ -230,7 +233,6 @@ XKit.extensions.post_crushes = new Object({
 				onload: function(response) {
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
 					var m_obj = jQuery.parseJSON(response.responseText);
-					console.log(m_obj);
 					if (m_obj.errors === false) {
 						$("#xkit_post_crushes").html("Posted!");
 						XKit.window.close();

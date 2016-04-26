@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -72,7 +72,7 @@ XKit.extensions.view_my_tags = new Object({
 
 		var xf_html = '<ul class="controls_section" id="view_my_tags_ul">' +
 					'<li class="section_header selected">VIEW MY TAGS</li>' +
-					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="view_my_tags_view">' +
+					'<li class="no_push" style="height: 36px;"><a href="#" id="view_my_tags_view">' +
 						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">View recent tags</div>' +
 					'</a></li>' +
 				'</ul>';
@@ -81,7 +81,7 @@ XKit.extensions.view_my_tags = new Object({
 
 			if ($("#xstats_ul").length > 0) {
 
-				xf_html = '<li class="no_push"><a href="#" onclick="return false;" id="view_my_tags_view">' +
+				xf_html = '<li class="no_push"><a href="#" id="view_my_tags_view">' +
 							'<div class="hide_overflow">View recent tags</div>' +
 						'</a></li>';
 
@@ -93,7 +93,11 @@ XKit.extensions.view_my_tags = new Object({
 
 			}
 
-			$("#view_my_tags_view").click(function() { XKit.extensions.view_my_tags.show(); });
+			$("#view_my_tags_view").click(function() {
+				XKit.extensions.view_my_tags.show();
+
+				return false;
+			});
 
 		}
 

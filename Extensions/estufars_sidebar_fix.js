@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.2 **//
+//* VERSION 1.1.5 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -26,7 +26,26 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 				return;
 			}
 		} else {
-			var disallowedurls = ["://www.tumblr.com/explore", "://www.tumblr.com/search", "://www.tumblr.com/following", "/reblog"];
+			var disallowedurls = [
+				"://www.tumblr.com/explore",
+				"://www.tumblr.com/search",
+				"://www.tumblr.com/following",
+				"/reblog",
+				"://www.tumblr.com/help",
+				"://www.tumblr.com/support",
+				"://www.tumblr.com/docs",
+				"://www.tumblr.com/developers",
+				"://www.tumblr.com/about",
+				"://www.tumblr.com/themes",
+				"://www.tumblr.com/policy",
+				"://www.tumblr.com/jobs",
+				"://www.tumblr.com/apps",
+				"://www.tumblr.com/logo",
+				"://www.tumblr.com/business",
+				"://www.tumblr.com/buttons",
+				"://www.tumblr.com/press",
+				"://www.tumblr.com/security"
+			];
 			for (var i = 0; i < disallowedurls.length; i++) {
 				if (document.location.href.indexOf(disallowedurls[i]) !== -1) {
 					return;

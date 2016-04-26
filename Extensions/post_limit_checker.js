@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.3.0 **//
+//* VERSION 0.3.1 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER new-xkit **//
@@ -20,14 +20,19 @@ XKit.extensions.post_limit_checker = new Object({
 
 		var xf_html = '<ul class="controls_section" id="post_limit_checker_ul">' +
 					'<li class="section_header selected">Post Limit</li>' +
-					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="post_limit_checker_view">' +
+					'<li class="no_push" style="height: 36px;"><a href="#" id="post_limit_checker_view">' +
 						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Check Post Limit</div>' +
 					'</a></li>' +
 				'</ul>';
 
 		$("ul.controls_section:first").before(xf_html);
 
-		$("#post_limit_checker_view").click(function() { XKit.extensions.post_limit_checker.start(); });
+		$("#post_limit_checker_view").click(function() {
+
+			XKit.extensions.post_limit_checker.start();
+
+			return false;
+		});
 	},
 
 	window_id: 0,
@@ -37,7 +42,7 @@ XKit.extensions.post_limit_checker = new Object({
 		var shown_message = XKit.storage.get("post_limit_checker","shown_warning","");
 
 		var m_html = "<div id=\"xkit-plc-list\" class=\"nano\"><div id=\"xkit-plc-list-content\" class=\"content\">" +
-					"<div class=\"xkit-warning-plc-text\"><b>Deleted posts</b><br/>Deleted posts are count by Tumblr, but this tool can't count them. For example, if you've made 250 posts since the last reset but then deleted 50 of them, this tool will tell you that you have 50 more posts to go, but in reality you've already hit your post limit.</div>" +
+					"<div class=\"xkit-warning-plc-text\"><b>Deleted posts</b><br/>Deleted posts are counted by Tumblr, but this tool can't count them. For example, if you've made 250 posts since the last reset but then deleted 50 of them, this tool will tell you that you have 50 more posts to go, but in reality you've already hit your post limit.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>Original photo posts</b><br/>There is a separate, 75 uploads per day limit for photo posts. This extension does not check for that.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>No Guarantee</b><br/>The New XKit Team is not making any guarantees about the reliability of this tool.</div>" +
 				"</div></div>";

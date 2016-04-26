@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.5.1 **//
+//* VERSION 1.5.2 **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -76,14 +76,14 @@ XKit.extensions.cleanfeed = new Object({
 
 		xf_html = '<ul class="controls_section" id="xcleanfeed_ul">' +
 			'<li class="section_header selected">CLEANFEED</li>' +
-			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xcleanfeed_button">' +
+			'<li class="no_push" style="height: 36px;"><a href="#" id="xcleanfeed_button">' +
 			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Filtering</div>' +
 			'<div class="count" id="xcleanfeedstatus" style="padding-top: 8px;">' + XKit.extensions.cleanfeed.lbl_off + '</div>' +
 			'<div id="xcleanfeedindicator">&nbsp;</div>' +
 			'</a></li>' +
 			'<div class="small_links by-xkit-cleanfeed">' +
-				'<a onclick="return false;" id="xkit-cleanfeed-mode">Mode: ' + normal_text + '</a>' +
-				'<a onclick="return false;" id="xkit-cleanfeed-mode-change" href="#">change/help</a>' +
+				'<a id="xkit-cleanfeed-mode">Mode: ' + normal_text + '</a>' +
+				'<a id="xkit-cleanfeed-mode-change" href="#">change/help</a>' +
 			'</div>' +
 			'</ul>';
 		$("ul.controls_section:first").before(xf_html);
@@ -125,12 +125,14 @@ XKit.extensions.cleanfeed = new Object({
 
 			});
 
+			return false;
 		});
 
 		$("#xcleanfeed_button").click(function() {
 
 			XKit.extensions.cleanfeed.toggle();
 
+			return false;
 		});
 
 		if (XKit.extensions.cleanfeed.preferences.full_block.value) {

@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.3 **//
+//* VERSION 0.2.4 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -24,7 +24,7 @@ XKit.extensions.drafts_plus = new Object({
 				'</a>' +
 			'</li>' +
 			'<li class="no_push">' +
-				'<a href="#" onclick="return false;" id="xshrinkposts_button">' +
+				'<a href="#" id="xshrinkposts_button">' +
 					'<div class="hide_overflow">Shrink Posts <div class="count" style="padding-top: 8px;">off</div></div>' +
 				'</a>' +
 			'</li>' +
@@ -48,6 +48,7 @@ XKit.extensions.drafts_plus = new Object({
 
 			}
 
+			return false;
 		});
 
 		$("#xshrinkposts_button").click(function() {
@@ -72,6 +73,7 @@ XKit.extensions.drafts_plus = new Object({
 
 			}
 
+			return false;
 		});
 
 	},

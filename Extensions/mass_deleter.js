@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.1.3 **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -41,12 +41,12 @@ XKit.extensions.mass_deleter = new Object({
 		if ($("#drafts_plus_sidebar").length > 0) {
 
 			xf_html = '<li class="no_push">' +
-					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
+					'<a href="#" class="customize xkit-mass-deleter" id="xkit-mass-deleter-100">' +
 						'<div class="hide_overflow">Delete 100 Drafts</div>' +
 					'</a>' +
 				'</li>' +
 				'<li class="no_push">' +
-					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-1000">' +
+					'<a href="#" class="customize xkit-mass-deleter" id="xkit-mass-deleter-1000">' +
 						'<div class="hide_overflow">Delete 1,000 Drafts</div>' +
 					'</a>' +
 				'</li>';
@@ -74,10 +74,14 @@ XKit.extensions.mass_deleter = new Object({
 
 		$("#xkit-mass-deleter-100").click(function() {
 			XKit.extensions.mass_deleter.delete_drafts(100);
+
+			return false;
 		});
 
 		$("#xkit-mass-deleter-1000").click(function() {
 			XKit.extensions.mass_deleter.delete_drafts(1000);
+
+			return false;
 		});
 
 	},

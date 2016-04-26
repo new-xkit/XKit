@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.4 **//
+//* VERSION 6.2.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -266,6 +266,11 @@ XKit.tools.make_gist = function(text, name) {
 };
 
 /**
+ * Cached nonce for use in script injection to overcome CSP
+ */
+XKit.tools.add_function_nonce = "";
+
+/**
  * Copies a function from the addon context into the page context. This
  * function will be serialized to a string, and then injected as a script tag
  * into the page.
@@ -275,10 +280,24 @@ XKit.tools.make_gist = function(text, name) {
  *                        `add_tag`. Only useful if `exec` is true
  */
 XKit.tools.add_function = function(func, exec, addt) {
+	if (!XKit.tools.add_function_nonce) {
+		var scripts = document.querySelectorAll('script');
+		for (var i = 0; i < scripts.length; i++) {
+			var nonce = scripts[i].getAttribute('nonce');
+			if (nonce) {
+				XKit.tools.add_function_nonce = nonce;
+				break;
+			}
+		}
+	}
+
 	try {
 		var script = document.createElement("script");
 		script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
 		script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
+		if (XKit.tools.add_function_nonce) {
+			script.setAttribute('nonce', XKit.tools.add_function_nonce);
+		}
 		document.body.appendChild(script);
 	} catch(e) {
 		alert(e.message);
@@ -688,20 +707,24 @@ XKit.tools.getParameterByName = function(name){
 
 					//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
 
-					$.ajax({
-						type: "POST",
-						url: "/svc/secure_form_key",
+					GM_xmlhttpRequest({
+						method: "POST",
+						url: "https://www.tumblr.com/svc/secure_form_key",
 						headers: {
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
-						success: function (data, status, res) {
+						onload: function (response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							XKit.interface.kitty.stored = res.getResponseHeader("X-tumblr-secure-form-key");
+							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
+							}
+							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
 							callback(m_object);
 						},
-						error: function(data, status, res) {
+						onerror: function(response) {
 							//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
 							m_object.errors = true;
 							m_object.kitten = "";
@@ -1014,8 +1037,8 @@ XKit.tools.getParameterByName = function(name){
 
 					var to_return = {};
 
-					to_return.is_reblog = $(".post-header").find(".reblog_source").length > 0;
-					to_return.is_original = $(".post-header").find(".reblog_source").length <= 0;
+					to_return.is_reblog = $(".post-form--header").find(".reblog_source").length > 0;
+					to_return.is_original = $(".post-form--header").find(".reblog_source").length <= 0;
 
 					return to_return;
 

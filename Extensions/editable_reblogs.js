@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.6 **//
+//* VERSION 3.0.7 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -121,10 +121,10 @@ XKit.extensions.editable_reblogs = new Object({
 			reblog_tree.find(".reblog-list-item").each(function(index) {
 				var reblog_data = {
 					reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
-					reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
-					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href')
-						? $(this).find('.reblog-tumblelog-name').attr('href')
-						: 'http://' + $(this).find('.reblog-tumblelog-name').text() + '.tumblr.com'
+					reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text().trim() : '',
+					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href').trim()
+						? $(this).find('.reblog-tumblelog-name').attr('href').trim()
+						: 'http://' + $(this).find('.reblog-tumblelog-name').text().trim() + '.tumblr.com'
 				};
 				all_quotes.push(reblog_data);
 			});

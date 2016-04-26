@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.3 **//
+//* VERSION 2.3.4 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -120,7 +120,7 @@ XKit.extensions.bookmarker = new Object({
 		}
 
 		m_html = '<ul class="controls_section" id="xbookmarks">' + m_html + '</ul>' +
-			'<div class="small_links" id="xbookmarker_small_links"><a href="#" onclick="return false;" id="xbookmarker_delete_all">delete all</a><a href="#" onclick="return false;" id="xbookmarker_help">bookmarker help</a></div>';
+			'<div class="small_links" id="xbookmarker_small_links"><a href="#" id="xbookmarker_delete_all">delete all</a><a href="#" id="xbookmarker_help">bookmarker help</a></div>';
 
 		if (document.location.href.indexOf("?bookmark=true") !== -1) {
 			$("#right_column").prepend(m_html);
@@ -148,6 +148,7 @@ XKit.extensions.bookmarker = new Object({
 
 			XKit.window.show("Bookmarker Help","Bookmarker lists your bookmarks on the sidebar.<br/><br/>To rename or delete a bookmark, you can click them while holding the <b>ALT</b> key on your keyboard.<br/><br/>To go back to a bookmarked post, just click on the bookmark. If the post you've bookmarked is deleted, you'll get the posts made around that time.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
+			return false;
 		});
 
 		$("#xbookmarker_delete_all").click(function() {
@@ -161,6 +162,7 @@ XKit.extensions.bookmarker = new Object({
 
 			});
 
+			return false;
 		});
 
 		$(document).on("click", ".xkit_bookmarker_button", function(event){
