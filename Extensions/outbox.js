@@ -435,8 +435,63 @@ XKit.extensions.outbox = new Object({
 		return to_return;
 
 	},
+	
+	render_fan_mail: function(obj, m_id) {
+
+		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
+
+		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
+
+		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
+		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
+
+		var m_day = "";
+		var m_date = "";
+
+		if (obj.time !== "" && typeof obj.time !== "undefined") {
+			var m = moment(obj.time);
+			m_day = m.format('ddd');
+			m_date = m.format('hh:mm a');
+		} else {
+			m_day = "?";
+			m_date = "Unknown";
+		}
+
+		obj.message = $("<div>" + obj.message + "</div>").text();
+
+		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
+				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
+				"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
+			"</div></div>";
+
+		to_return = to_return + "<div class=\"post-wrapper\">" +
+				"<span class=\"xkit-outbox-fanmail-indicator\">fan mail</span>" +
+				"<div class=\"post_header\"><div class=\"post_info\">You've sent to " + m_link + "</div></div>" +
+				"<div class=\"post_content clearfix\"><div class=\"post_content_inner clearfix\">" +
+					"<div class=\"post_body\">" +
+						"<div class=\"clear\">&nbsp;</div>" +
+						"<div class=\"post_question_fan_mail\">" + obj.message + "</div>" +
+					"</div>" +
+				"</div></div>" +
+				"<div class=\"post_footer clearfix\">" +
+					"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+					"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
+						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
+					"</div></div>" +
+				"</div>" +
+			"</div>";
+
+		to_return = to_return + "</div></li>";
+
+		return to_return;
+
+	},
 
 	render: function(obj, m_id) {
+
+		if (obj.avatar === "fan_mail") {
+			return XKit.extensions.outbox.render_fan_mail(obj, m_id);
+		}
 
 		if (obj.avatar === "ask") {
 			return XKit.extensions.outbox.render_ask(obj, m_id);
