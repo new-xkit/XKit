@@ -1766,12 +1766,13 @@ XKit.tools.getParameterByName = function(name){
 			post: function(obj) {
 
 				var m_return = {};
+				var post_data = JSON.parse($(obj).attr('data-json') || "{}");
 
-				if (typeof $(obj).attr('data-post-id') == "undefined" && $(".mh_post_head_link").length === 0) {
+				if (typeof post_data.id == "undefined" && $(".mh_post_head_link").length === 0) {
 					// Something is wrong.
 					m_return.error = true;
 
-					return;
+					return m_return;
 
 				} else if ($(".mh_post_head_link").length > 0) {
 
@@ -1802,16 +1803,16 @@ XKit.tools.getParameterByName = function(name){
 
 				m_return.error = false;
 
-				m_return.id = $(obj).attr('data-post-id');
-				m_return.root_id = $(obj).attr('data-root_id');
-				m_return.reblog_key = $(obj).attr('data-reblog-key');
-				m_return.owner = $(obj).attr('data-tumblelog-name');
-				m_return.tumblelog_key = $(obj).attr('data-tumblelog-key');
+				m_return.id = post_data.id;
+				m_return.root_id = post_data.root_id;
+				m_return.reblog_key = post_data["reblog-key"];
+				m_return.owner = post_data["tumblelog-name"];
+				m_return.tumblelog_key = post_data.tumblelog_key;
 
 				m_return.liked = $(obj).find(".post_control.like").hasClass("liked");
-				m_return.permalink = $(obj).find(".post_permalink").attr('href');
+				m_return.permalink = post_data.share_popover_data.post_url;
 
-				m_return.type = $(obj).attr('data-type');
+				m_return.type = post_data.type;
 
 				if ($(obj).find(".post_content_inner").length > 0) {
 					m_return.body = $(obj).find(".post_content_inner").html();
@@ -1823,19 +1824,19 @@ XKit.tools.getParameterByName = function(name){
 					}
 				}
 
-				m_return.animated = $(obj).hasClass("is_animated");
-				m_return.is_reblogged = $(obj).hasClass("is_reblog");
-				m_return.is_mine = $(obj).hasClass("is_mine");
-				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
+				m_return.animated = post_data["is-animated"];
+				m_return.is_reblogged = post_data.is_reblogged;
+				m_return.is_mine = post_data.is_mine;
+				m_return.is_following = post_data["tumblelog-data"].following;
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 
 				if (m_return.is_reblogged) {
 
 					try {
 
-						m_return.reblog_link = $(obj).find(".reblog_source").find("a").first().attr('href');
-						m_return.reblog_owner = $(obj).find(".reblog_source").find("a").first().text();
-						m_return.reblog_original_id = m_return.reblog_link.split('/')[4];
+						m_return.reblog_link = post_data["tumblelog-parent-data"].url + "/" + m_return.id;
+						m_return.reblog_owner = post_data["tumblelog-parent-data"].name;
+						m_return.reblog_original_id = m_return.id;
 
 					} catch(e) {
 
@@ -1856,12 +1857,14 @@ XKit.tools.getParameterByName = function(name){
 
 				m_return.note_count = n_count;
 
-				m_return.avatar = $(obj).find(".post_avatar_image").attr('src');
+				m_return.avatar = post_data["tumblelog-data"].avatar_url;
 
 				m_return.tags = "";
-				if ($(obj).find(".post_tags").length > 0) {
+				var post_tags = $(obj).find(".post_tags").find('.post_tag');
+				post_tags = post_tags.length ? post_tags : $($(obj).parents('.post')[1]).find('.post_tags').find('.post_tag');
+				if (post_tags.length > 0) {
 					var to_return = "";
-					$(obj).find(".post_tags").find(".post_tag").each(function() {
+					post_tags.each(function() {
 						if ($(this).hasClass("post_ask_me_link") === true) { return; }
 						var m_tag = $(this).text();
 						if (m_tag[0] === "#") {

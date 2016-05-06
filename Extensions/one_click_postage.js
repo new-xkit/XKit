@@ -747,14 +747,12 @@ XKit.extensions.one_click_postage = new Object({
 		});
 
 		$(document).on("mouseover",".reblog_button,.post_control.reblog", function(event) {
-			if ($(this).hasClass("radar_button") === true) {return; }
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
 			XKit.extensions.one_click_postage.open_menu($(this));
 		});
 
 		$(document).on("mouseout mouseleave",".reblog_button,.post_control.reblog", function() {
-			if ($(this).hasClass("radar_button") === true) {return; }
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
@@ -1073,8 +1071,8 @@ XKit.extensions.one_click_postage = new Object({
 
 		// Get the box ID.
 		var parent_box = $(obj).parentsUntil(".post").parent();
-		var box_id = $(parent_box).attr('id');
-		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('id');
+		var box_id = JSON.parse($(parent_box).attr("data-json")).id;
+		var previous_id = JSON.parse($(XKit.extensions.one_click_postage.last_object).attr("data-json") || "{}").id;
 
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
