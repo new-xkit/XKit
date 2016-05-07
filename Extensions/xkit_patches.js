@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.6 **//
+//* VERSION 6.2.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -505,7 +505,7 @@ XKit.tools.getParameterByName = function(name){
 						return this.nodeType === 3;
 					}).wrap('<span class="hidden">');
 
-				button.children(".icon-wrapper").addClass("xkit-hidden");
+				button.children(".button-label").hide();
 			},
 
 			/**
