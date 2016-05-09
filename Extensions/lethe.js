@@ -113,7 +113,7 @@ Lethe.prototype.showPost = function(hiddenPost) {
   this.hiddenPosts = this.hiddenPosts.filter(function(post) {
     return post !== hiddenPost;
   });
-  hiddenPost.parent.innerHTML = hiddenPost.html;
+  $(hiddenPost.parent).children('.post_media_hidden').replaceWith(hiddenPost.html);
 };
 
 
