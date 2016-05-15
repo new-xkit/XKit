@@ -1,5 +1,5 @@
 //* TITLE Hermes **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION Helps speed up your Tumblr experience **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -113,7 +113,7 @@ Lethe.prototype.showPost = function(hiddenPost) {
   this.hiddenPosts = this.hiddenPosts.filter(function(post) {
     return post !== hiddenPost;
   });
-  hiddenPost.parent.innerHTML = hiddenPost.html;
+  $(hiddenPost.parent).children('.post_media_hidden').replaceWith(hiddenPost.html);
 };
 
 
