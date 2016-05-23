@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.7 **//
+//* VERSION 6.2.8 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1334,7 +1334,7 @@ XKit.tools.getParameterByName = function(name){
 
 				m_object['post[type]'] = tumblr_object.post.type;
 
-				if (tumblr_object.post.type === "regular") {
+				if (typeof tumblr_object.post.one !== "undefined") {
 					m_object['post[one]'] = tumblr_object.post.one;
 				}
 
