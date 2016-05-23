@@ -112,6 +112,34 @@ XKit.extensions.servant = new Object({
 
 		},
 
+		has_tag: {
+
+			text: "Post is tagged",
+			type: "text",
+			compatibility: "post",
+			runs_on: "post",
+			returns: "the tag",
+			placeholder: "ie: 'xkit' (no pound sign)",
+			description: "Runs if a post is tagged with a certain tag, affects that post.",
+
+			run: function(parameter, obj) {
+
+				var m_object = {};
+
+				m_object.run = false;
+
+				// bit of a hacky approach but whatever
+				if ($(obj).find('a.post_tag').text().split('#').slice(1).indexOf(parameter) >= 0)
+					m_object.run = true;
+
+				m_object.return = parameter;
+				m_object.pass = $(obj);
+				return m_object;
+
+			},
+
+		},
+
 		made_by: {
 
 			text: "Post is from",
