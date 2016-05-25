@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.2.2 **//
+//* VERSION 5.3.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -44,6 +44,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"small_quotes": {
 			text: "Slim Quote post text on Dashboard",
+			default: false,
+			value: false
+		},
+		"quotes_with_paragraphs": {
+			text: "Render paragraph breaks in Quote posts",
 			default: false,
 			value: false
 		},
@@ -478,6 +483,12 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post.is_quote .post_title.large, .post.is_quote .post_title.extra_large { font-size: 20px; line-height: 22px; }", "xkit_tweaks_small_quotes");
 		}
 
+		if (XKit.extensions.tweaks.preferences.quotes_with_paragraphs.value) {
+			XKit.extensions.tweaks.add_css(".post.is_quote i, .post.is_quote em {font-style: italic !important;} .post.is_quote b, .post.is_quote strong {font-weight: bold;} .xtweaks-paragraph-quote:before, .xtweaks-paragraph-quote:after {display: none !important;} .xtweaks-paragraph-quote p:first-child, .xtweaks-paragraph-quote p:last-child {display: block !important;} .xtweaks-paragraph-quote p:first-child:before {content:'\\201C';} .xtweaks-paragraph-quote p:last-child:after {content:'\\201D';}", "xkit_tweaks_quotes_with_paragraphs");
+			XKit.post_listener.add("tweaks_quotes_with_paragraphs", XKit.extensions.tweaks.quotes_with_paragraphs);
+			XKit.extensions.tweaks.quotes_with_paragraphs();
+		}
+
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
 			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .recommended-unit-container { display: none !important; }", "xkit_tweaks_hide_recommended");
 		}
@@ -803,6 +814,15 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
+	quotes_with_paragraphs: function() {
+		$(".post.is_quote .quote").not(".xtweaks-paragraph-quotes-done").each(function() {
+			$(this).addClass("xtweaks-paragraph-quotes-done");
+			if ($('p',this).length > 0) {
+				$(this).addClass("xtweaks-paragraph-quote");
+			}
+		});
+	},
+
 	upload_photos: function() {
 
 
@@ -868,6 +888,8 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
+		XKit.tools.remove_css("xkit_tweaks_quotes_with_paragraphs");
+		XKit.post_listener.remove("tweaks_quotes_with_paragraphs");
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
