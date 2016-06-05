@@ -11,11 +11,15 @@
     line-height: 10px;
 }
 
-.theme_posts_experiment .post, .post:not(.new_post_buttons) * {
+.post.themed_posts_experiment .post_wrapper,
+.post.themed_posts_experiment.post_full .post_footer,
+.post.themed_posts_experiment .post_controls,
+.post.themed_posts_experiment .post_controls_inner,
+.post.themed_posts_experiment .reblogged {
 	background-color: inherit;
 }
 
-.themed_posts_experiment .post_wrapper .post_footer .post_controls .post_control.reblog.reblogged:after {
+.themed_posts_experiment .post_controls .post_control.reblog.reblogged:after {
 	color: inherit;
 	background: inherit;
 }
