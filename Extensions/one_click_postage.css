@@ -11,6 +11,15 @@
     line-height: 10px;
 }
 
+.theme_posts_experiment .post, .post:not(.new_post_buttons) * {
+	background-color: inherit;
+}
+
+.themed_posts_experiment .post_wrapper .post_footer .post_controls .post_control.reblog.reblogged:after {
+	color: inherit;
+	background: inherit;
+}
+
 #x1cpostage_quick_tags {
 	max-height: 70px;
 	overflow-y: auto;
