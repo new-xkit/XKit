@@ -1,14 +1,23 @@
 .post_controls .post_control.reblog.reblogged:after {
-    content: '\2713';
-    font-size: 18px;
-    color: #56bc8a;
-    opacity: 100;
-    display: block;
-    margin-top: 0px;
-    margin-left: 0px;
-    background: white;
-    height: 10px;
-    line-height: 10px;
+	content: '\2713';
+	font-size: 18px;
+	color: #56bc8a;
+	opacity: 100;
+	display: block;
+	margin-top: 0px;
+	margin-left: 0px;
+	background: white;
+	height: 10px;
+	line-height: 10px;
+}
+
+.theme_posts_experiment .post, .post:not(.new_post_buttons) * {
+	background-color: inherit;
+}
+
+.themed_posts_experiment .post_wrapper .post_footer .post_controls .post_control.reblog.reblogged:after {
+	color: inherit;
+	background: inherit;
 }
 
 #x1cpostage_quick_tags {

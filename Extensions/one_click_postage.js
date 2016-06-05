@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.1 **//
+//* VERSION 4.3.2 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -954,7 +954,7 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	make_button_reblogged: function(m_button) {
-    m_button.addClass("reblogged");
+	m_button.addClass("reblogged");
 	},
 
 	destroy: function() {
