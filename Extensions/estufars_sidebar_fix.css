@@ -7,7 +7,7 @@
 }
 
 .right_column .popover_menu {
-	width: 229px!important;
+	width: auto!important;
 	box-shadow: none!important;
 	background: transparent!important;
 	z-index: 0;
@@ -101,6 +101,10 @@
 
 .right_column .popover_menu_item_anchor, .right_column .blog-sub-nav-item-label {
 	font-weight: bold;
+}
+
+.right_column .tx-scrollbar-track {
+	display: none;
 }
 
 /* icon styles are from tumblr, they weren't getting applied when the menu is relocated */

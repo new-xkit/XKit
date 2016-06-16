@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.7 **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -54,20 +54,35 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		
 		XKit.tools.init_css("estufars_sidebar_fix");
 		
-		var account = document.getElementById("account_button");
-		account.click();
-		// wait for the menu to pop up
-		window.setTimeout(function() {
-			var popover = document.getElementsByClassName("popover--account-popover")[0];
+		function movesidebar() {
+			var popover = $(".popover--account-popover")[0];
 			var sidebar = document.getElementById("right_column");
 			popover.childNodes[0].classList.add("estufars_sidebar_fix");
 			sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
+			var account = document.getElementById("account_button");
 			account.style.display = "none";
 			// wait and then let tumblr know the menu is no longer active
 			window.setTimeout(function() {
 				document.querySelector(".tab_nav_account.active").click();
-			}, 500);
-		}, 250);
+			}, 250);
+		}
+		
+		if(!$(".popover--account-popover").length) {
+			var observer = new MutationObserver(function(mutations) {
+				mutations.forEach(function(mutation) {
+					var popover = $(".popover--account-popover")[0];
+					if (mutation.addedNodes[0] == popover) {
+						observer.disconnect();
+						movesidebar();
+					}
+				});
+			});
+			observer.observe(document.body, {childList: true});
+			var account = document.getElementById("account_button");
+			account.click();
+		} else {
+			movesidebar();
+		}
 	},
 	
 	destroy: function() {
@@ -77,7 +92,7 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		var account = document.getElementById("account_button");
 		var sidebar = document.getElementsByClassName("estufars_sidebar_fix")[0];
 		account.style.display = "inline-block";
-		var popover = document.getElementsByClassName("popover--account-popover")[0];
+		var popover = $(".popover--account-popover")[0];
 		popover.insertBefore(sidebar, popover.firstChild);
 		account.click();
 		popover.style.opacity = "0";
@@ -87,5 +102,4 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 			popover.style.opacity = "1";
 		}, 500);
 	}
-	
 });
