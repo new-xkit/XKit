@@ -2,6 +2,14 @@
 	display: none;
 }
 
+.right_column {
+	width: 240px!important;
+}
+
+.l-container {
+	width: 900px!important;
+}
+
 .right_column:after {
 	background: none!important;
 }
