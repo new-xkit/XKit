@@ -523,6 +523,20 @@ XKit.tools.getParameterByName = function(name){
 			},
 
 			/**
+			 * @return {JQuery} The like button in the iframe
+			 */
+			like_button: function() {
+				return $(".btn.like,.tx-button.like-button");
+			},
+
+			/**
+			 * @return {JQuery} The edit button in the iframe
+			 */
+			edit_button: function() {
+				return $(".btn.edit,.tx-button.edit-button");
+			},
+
+			/**
 			 * @return {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
