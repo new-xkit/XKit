@@ -149,6 +149,7 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		$(document).on('click', ".xblacklist_open_post", XKit.extensions.blacklist.unhide_post);
+		$(document).on('click', ".xblacklist_mobile_open_post", XKit.extensions.blacklist.mobile_unhide_post);
 
 		if (this.preferences.mini_block.value === true) {
 
@@ -503,13 +504,19 @@ XKit.extensions.blacklist = new Object({
 						tag_array.push($(this).html().replace("#","").toLowerCase());
 					});
 				}
+				if ($(this).find(".mh_post_tags").length > 0) {
+					$(this).find(".mh_post_tags a").each(function() {
+						tag_array.push($(this).html().replace("#","").toLowerCase());
+					});
+				}
+
 
 				//alert(tag_array);
 
 				// Collect the title contents too.
 				var m_title = "";
-				if ($(this).find(".post_title").length > 0) {
-					m_title = $(this).find(".post_title").html();
+				if ($(this).find(".post_title, .post-title").length > 0) {
+					m_title = $(this).find(".post_title, .post-title").html();
 				}
 
 				// Collect the author info, if the option is toggled.
@@ -536,7 +543,7 @@ XKit.extensions.blacklist = new Object({
 						m_bTitle = $(this).find(".post_avatar_link").attr('title');
 					}
 					} catch(e) {
-						console.log(" !! can't get author !!");
+						console.log(" !! can't get author !!", e);
 					}
 				}
 
@@ -547,8 +554,8 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".post_text_wrapper").html();
 				}
 
-				if ($(this).find(".post_body").length > 0) {
-					m_content = $(this).find(".post_body").html();
+				if ($(this).find(".post_content, .mh_post_middle").length > 0) {
+					m_content = $(this).find(".post_content, .mh_post_middle").html();
 				}
 
 				// Link buttons (link post's content) live inside a .post_media
@@ -561,8 +568,8 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".caption").html();
 				}
 
-				if ($(this).find(".reblog-list-item").length > 0) {
-					m_content = $(this).find(".reblog-list-item").map(function() {
+				if ($(this).find(".reblog-list-item, .reblog-content").length > 0) {
+					m_content = $(this).find(".reblog-list-item, .reblog-content").map(function() {
 					    return $(this).html();
 					}).get().join(" ");
 				}
@@ -585,14 +592,18 @@ XKit.extensions.blacklist = new Object({
 				if (m_result !== "") {
 					height_changed = true;
 					//$(this).css("background","red");
-					XKit.extensions.blacklist.hide_post($(this), m_result);
+                    if ($(".mh_post_page").length > 0) {
+                        XKit.extensions.blacklist.mobile_hide_post($(this), m_result);
+                    } else {
+                        XKit.extensions.blacklist.hide_post($(this), m_result);
+                    }
 				} else {
 					//$(this).css("background","green");
 				}
 
 			} catch(e) {
 
-				// XKit.console.add("Can't parse post: " + e.message);
+				console.log("Can't parse post: " + e.message);
 				// $(this).css("background","red");
 
 			}
@@ -737,6 +748,116 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_answer").css("display","none");
 
 	},
+
+	mobile_unhide_post: function(e) {
+
+		if (!XKit.extensions.blacklist.running) { return; }
+
+		m_this = e.target;
+		var m_div = $("#" + $(m_this).attr('data-post-id')).closest(".post");
+		$(m_div).removeClass("xblacklist_blacklisted_post");
+		$(m_div).find(".mh_post_head_name").css("display","");
+		$(m_div).find(".mh_post_head_two").css("display","");
+		$(m_div).find(".mh_post_foot").css("display","");
+		$(m_div).find(".mh_post_media").css("display","");
+		$(m_div).find(".mh_post_middle").css("display","");
+
+		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
+			$(m_div).find(".xkit-shorten-posts-embiggen").css("display","block");
+			var pre_hidden_height = $(m_div).attr('data-xkit-blacklist-old-height');
+			$(m_div).css("height", pre_hidden_height);
+		}
+
+		$(m_div).find(".xblacklist_excuse").remove();
+
+		// Fix for canvases on Disable Gifs:
+		if ($(m_div).hasClass("disable-gifs-checked")) {
+			try {
+				XKit.extensions.disable_gifs.redraw_canvases($(m_div));
+			} catch(err) {
+				// console.log("Unable to redraw canvases for Disable Gifs: " + e.message);
+			}
+		}
+
+	},
+
+    mobile_hide_post: function(obj, word) {
+		if (XKit.extensions.blacklist.preferences.dont_block_me.value === true) {
+			if ($(obj).find(".mh_post_foot_control.icon-trash").length > 0) {
+				return;
+			}
+		}
+
+		if (XKit.extensions.blacklist.preferences.dont_block_liked.value === true) {
+			if ($(obj).find('.mh_post_foot_control.like.is_liked').length > 0) { return; }
+			//if ($(obj).find('.post_answer_input').attr ('readonly')) { return; }
+		}
+
+		if (XKit.extensions.blacklist.preferences.dont_display.value === true) {
+			// Wow this user must hate the words they've added.
+			$(obj).addClass("xblacklist_hidden_post");
+			return;
+		}
+
+		var to_add_type = "";
+
+		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
+            var post_type = "";
+            if ($(obj).hasClass("post_type_photo")) {
+                post_type = "photo";
+            } else if ($(obj).hasClass("post_type_photoset")) {
+                post_type = "photoset";
+            } else if ($(obj).hasClass("post_type_note")) {
+                post_type = "note";
+            } else if ($(obj).hasClass("post_type_regular")) {
+                post_type = "regular";
+            }
+			to_add_type = "<div class=\"xkit-blacklist-post-type  " + post_type + "\">&nbsp;</div>";
+
+		}
+
+		var block_excuse = '<div class="xblacklist_excuse">' +
+					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_mobile_open_post xkit-button">Show it anyway</div></div>';
+
+		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
+			block_excuse = '<div class="xblacklist_excuse">' +
+					'Post blocked.' + to_add_type +
+					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_mobile_open_post xkit-button">Show it anyway</div></div>';
+		}
+
+		$(obj).addClass("xblacklist_blacklisted_post");
+		$(obj).find(".mh_post_head_name").css("display","none");
+		$(obj).find(".mh_post_head_two").css("display","none");
+		$(obj).find(".mh_post_foot").css("display","none");
+		$(obj).find(".mh_post_media").css("display","none");
+		$(obj).find(".mh_post_middle").css("display","none");
+		$(obj).find(".mh_post_head").after(block_excuse);
+		//$(obj).find(".post_footer_links").css('display','none');
+		//$(obj).find(".post_source").css('display','none');
+		//$(obj).find(".post-source-footer").css('display','none');
+
+		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
+			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
+		}
+
+		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
+			$(obj).find(".post_footer").css('display','none');
+		} else {
+			$(obj).find(".post_tags, .post_footer").css('display','none');
+		}
+
+		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
+
+			// This was also shortened.
+			$(obj).attr('data-xkit-blacklist-old-height', $(obj).css("height"));
+			$(obj).css("height","auto");
+			$(obj).find(".xkit-shorten-posts-embiggen").css("display","none");
+
+		}
+
+		$(obj).find(".post_answer").css("display","none");
+    },
 
 	do_post: function(obj, post_content, tags) {
 
