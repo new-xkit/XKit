@@ -521,7 +521,7 @@ XKit.extensions.blacklist = new Object({
 
 				// Collect the author info, if the option is toggled.
 				var m_author = "";
-				if (XKit.extensions.blacklist.preferences.check_authors.value && $(".mh_post_page").length > 0) {
+				if (XKit.extensions.blacklist.preferences.check_authors.value && $(".mh_post_page").length === 0) {
 					try {
 					var post_info_links = $(this).find(".post_info_link").map(function() {
 						return $(this).text();
