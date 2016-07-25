@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.9.0 **//
+//* VERSION 2.10.0 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -603,7 +603,7 @@ XKit.extensions.blacklist = new Object({
 
 			} catch(e) {
 
-				console.log("Can't parse post: " + e.message);
+				// XKit.console.add("Can't parse post: " + e.message);
 				// $(this).css("background","red");
 
 			}
@@ -760,6 +760,8 @@ XKit.extensions.blacklist = new Object({
 		$(m_div).find(".mh_post_head_two").css("display","");
 		$(m_div).find(".mh_post_foot").css("display","");
 		$(m_div).find(".mh_post_media").css("display","");
+		$(m_div).find(".mh_post_canvas").css("display","");
+		$(m_div).find(".mh_post_tags").css("display","");
 		$(m_div).find(".mh_post_middle").css("display","");
 
 		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -811,18 +813,20 @@ XKit.extensions.blacklist = new Object({
                 post_type = "note";
             } else if ($(obj).hasClass("post_type_regular")) {
                 post_type = "regular";
+            } else if ($(obj).hasClass("post_type_video")) {
+                post_type = "video";
             }
 			to_add_type = "<div class=\"xkit-blacklist-post-type  " + post_type + "\">&nbsp;</div>";
 
 		}
 
 		var block_excuse = '<div class="xblacklist_excuse">' +
-					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'Blocked because it contains the word "<b>' + word + '</b>" '  + to_add_type +
 					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_mobile_open_post xkit-button">Show it anyway</div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
 			block_excuse = '<div class="xblacklist_excuse">' +
-					'Post blocked.' + to_add_type +
+					'Post blocked. ' + to_add_type +
 					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_mobile_open_post xkit-button">Show it anyway</div></div>';
 		}
 
@@ -831,20 +835,16 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".mh_post_head_two").css("display","none");
 		$(obj).find(".mh_post_foot").css("display","none");
 		$(obj).find(".mh_post_media").css("display","none");
+		$(obj).find(".mh_post_canvas").css("display","none");
 		$(obj).find(".mh_post_middle").css("display","none");
 		$(obj).find(".mh_post_head").after(block_excuse);
-		//$(obj).find(".post_footer_links").css('display','none');
-		//$(obj).find(".post_source").css('display','none');
-		//$(obj).find(".post-source-footer").css('display','none');
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
 		}
 
-		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
-			$(obj).find(".post_footer").css('display','none');
-		} else {
-			$(obj).find(".post_tags, .post_footer").css('display','none');
+		if (XKit.extensions.blacklist.preferences.show_tags.value === false || XKit.extensions.blacklist.preferences.mini_block.value === true) {
+			$(obj).find(".mh_post_tags").css('display','none');
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -855,8 +855,6 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".xkit-shorten-posts-embiggen").css("display","none");
 
 		}
-
-		$(obj).find(".post_answer").css("display","none");
     },
 
 	do_post: function(obj, post_content, tags) {
