@@ -149,7 +149,6 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		$(document).on('click', ".xblacklist_open_post", XKit.extensions.blacklist.unhide_post);
-		$(document).on('click', ".xblacklist_mobile_open_post", XKit.extensions.blacklist.mobile_unhide_post);
 
 		if (this.preferences.mini_block.value === true) {
 
@@ -592,11 +591,7 @@ XKit.extensions.blacklist = new Object({
 				if (m_result !== "") {
 					height_changed = true;
 					//$(this).css("background","red");
-                    if ($(".mh_post_page").length > 0) {
-                        XKit.extensions.blacklist.mobile_hide_post($(this), m_result);
-                    } else {
-                        XKit.extensions.blacklist.hide_post($(this), m_result);
-                    }
+                    XKit.extensions.blacklist.hide_post($(this), m_result);
 				} else {
 					//$(this).css("background","green");
 				}
@@ -647,14 +642,15 @@ XKit.extensions.blacklist = new Object({
 		if (!XKit.extensions.blacklist.running) { return; }
 
 		m_this = e.target;
-		var m_div = $("#" + $(m_this).attr('data-post-id'));
+		var m_div = $("#" + $(m_this).attr('data-post-id')).closest(".post");
 		$(m_div).removeClass("xblacklist_blacklisted_post");
-		$(m_div).find(".post_info").css("display","block");
-		$(m_div).find(".post_controls").css("display","block");
+		$(m_div).find(".post_info, .mh_post_head_name, .mh_post_head_two").css("display","block");
+		$(m_div).find(".post_controls, .mh_post_foot").css("display","block");
 		$(m_div).find(".post_footer_links").css('display','block');
 		$(m_div).find(".post_source").css('display','block');
-		$(m_div).find(".post_tags").css('display','block');
+		$(m_div).find(".post_tags, .mh_post_tags").css('display','block');
 		$(m_div).find(".post_footer").css('display','table');
+        $(m_div).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display","block");
 
 		$(m_div).find(".post_answer").css("display","block");
 
@@ -666,6 +662,7 @@ XKit.extensions.blacklist = new Object({
 
 		$(m_div).find(".xblacklist_excuse").remove();
 		$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
+
 
 		// Fix for canvases on Disable Gifs:
 		if ($(m_div).hasClass("disable-gifs-checked")) {
@@ -681,13 +678,14 @@ XKit.extensions.blacklist = new Object({
 	hide_post: function(obj, word) {
 
 		if (XKit.extensions.blacklist.preferences.dont_block_me.value === true) {
-			if ($(obj).hasClass("is_mine") === true) {
+			if ($(obj).hasClass("is_mine") === true || $(obj).find(".mh_post_foot_control.icon-trash").length > 0) {
 				return;
 			}
 		}
 
 		if (XKit.extensions.blacklist.preferences.dont_block_liked.value === true) {
 			if ($(obj).find('.post_control.like.liked').length > 0) { return; }
+			if ($(obj).find('.mh_post_foot_control.like.is_liked').length > 0) { return; }
 			if ($(obj).find('.post_answer_input').attr ('readonly')) { return; }
 		}
 
@@ -697,43 +695,22 @@ XKit.extensions.blacklist = new Object({
 			return;
 		}
 
-		var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
-					$(obj).find(".post_content").html() + '</div>';
+        $(obj).addClass("xblacklist_blacklisted_post");
 
-		var to_add_type = "";
+        if ($(".mh_post_page").length === 0) {
+            XKit.extensions.blacklist.hide_desktop_content(obj, word);
+        } else {
+            XKit.extensions.blacklist.hide_mobile_content(obj, word);
+        }
 
-		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
-
-			to_add_type = "<div class=\"xkit-blacklist-post-type  " + $(obj).attr('data-type') + "\">&nbsp;</div>";
-
-		}
-
-		var block_excuse = '<div class="xblacklist_excuse">' +
-					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
-
-		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
-			block_excuse = '<div class="xblacklist_excuse">' +
-					'Post blocked.' + to_add_type +
-					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
-		}
-
-		$(obj).addClass("xblacklist_blacklisted_post");
-		$(obj).find(".post_info").css("display","none");
-		$(obj).find(".post_controls").css("display","none");
-		$(obj).find(".post_content").html(old_content + block_excuse);
-		$(obj).find(".post_footer_links").css('display','none');
-		$(obj).find(".post_source").css('display','none');
-		$(obj).find(".post-source-footer").css('display','none');
-
-		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
+        if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
 		}
 
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
 			$(obj).find(".post_footer").css('display','none');
 		} else {
-			$(obj).find(".post_tags, .post_footer").css('display','none');
+			$(obj).find(".post_tags, .post_footer, .mh_post_tags").css('display','none');
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -745,63 +722,41 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		$(obj).find(".post_answer").css("display","none");
-
 	},
 
-	mobile_unhide_post: function(e) {
+    hide_desktop_content: function(obj, word) {
+        var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
+					$(obj).find(".post_content").html() + '</div>';
 
-		if (!XKit.extensions.blacklist.running) { return; }
+        var to_add_type = "";
 
-		m_this = e.target;
-		var m_div = $("#" + $(m_this).attr('data-post-id')).closest(".post");
-		$(m_div).removeClass("xblacklist_blacklisted_post");
-		$(m_div).find(".mh_post_head_name").css("display","");
-		$(m_div).find(".mh_post_head_two").css("display","");
-		$(m_div).find(".mh_post_foot").css("display","");
-		$(m_div).find(".mh_post_media").css("display","");
-		$(m_div).find(".mh_post_canvas").css("display","");
-		$(m_div).find(".mh_post_tags").css("display","");
-		$(m_div).find(".mh_post_middle").css("display","");
+		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
 
-		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
-			$(m_div).find(".xkit-shorten-posts-embiggen").css("display","block");
-			var pre_hidden_height = $(m_div).attr('data-xkit-blacklist-old-height');
-			$(m_div).css("height", pre_hidden_height);
+			to_add_type = "<div class=\"xkit-blacklist-post-type  " + $(obj).attr('data-type') + "\">&nbsp;</div>";
+
 		}
 
-		$(m_div).find(".xblacklist_excuse").remove();
+        var block_excuse = '<div class="xblacklist_excuse">' +
+					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 
-		// Fix for canvases on Disable Gifs:
-		if ($(m_div).hasClass("disable-gifs-checked")) {
-			try {
-				XKit.extensions.disable_gifs.redraw_canvases($(m_div));
-			} catch(err) {
-				// console.log("Unable to redraw canvases for Disable Gifs: " + e.message);
-			}
+		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
+			block_excuse = '<div class="xblacklist_excuse">' +
+					'Post blocked.' + to_add_type +
+					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 		}
 
-	},
+		$(obj).find(".post_info").css("display","none");
+		$(obj).find(".post_controls").css("display","none");
+		$(obj).find(".post_content").html(old_content + block_excuse);
+		$(obj).find(".post_footer_links").css('display','none');
+		$(obj).find(".post_source").css('display','none');
+		$(obj).find(".post-source-footer").css('display','none');
+        $(obj).find(".post_answer").css("display","none");
+    },
 
-    mobile_hide_post: function(obj, word) {
-		if (XKit.extensions.blacklist.preferences.dont_block_me.value === true) {
-			if ($(obj).find(".mh_post_foot_control.icon-trash").length > 0) {
-				return;
-			}
-		}
-
-		if (XKit.extensions.blacklist.preferences.dont_block_liked.value === true) {
-			if ($(obj).find('.mh_post_foot_control.like.is_liked').length > 0) { return; }
-			//if ($(obj).find('.post_answer_input').attr ('readonly')) { return; }
-		}
-
-		if (XKit.extensions.blacklist.preferences.dont_display.value === true) {
-			// Wow this user must hate the words they've added.
-			$(obj).addClass("xblacklist_hidden_post");
-			return;
-		}
-
-		var to_add_type = "";
+    hide_mobile_content: function(obj, word) {
+        var to_add_type = "";
 
 		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
             var post_type = "";
@@ -820,17 +775,16 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		var block_excuse = '<div class="xblacklist_excuse">' +
-					'Blocked because it contains the word "<b>' + word + '</b>" '  + to_add_type +
-					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_mobile_open_post xkit-button">Show it anyway</div></div>';
+        var block_excuse = '<div class="xblacklist_excuse">' +
+					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
 			block_excuse = '<div class="xblacklist_excuse">' +
-					'Post blocked. ' + to_add_type +
-					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_mobile_open_post xkit-button">Show it anyway</div></div>';
+					'Post blocked.' + to_add_type +
+					'<div data-post-id="' + $(obj).find(".mh_post_notes").attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 		}
 
-		$(obj).addClass("xblacklist_blacklisted_post");
 		$(obj).find(".mh_post_head_name").css("display","none");
 		$(obj).find(".mh_post_head_two").css("display","none");
 		$(obj).find(".mh_post_foot").css("display","none");
@@ -838,23 +792,6 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".mh_post_canvas").css("display","none");
 		$(obj).find(".mh_post_middle").css("display","none");
 		$(obj).find(".mh_post_head").after(block_excuse);
-
-		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
-			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
-		}
-
-		if (XKit.extensions.blacklist.preferences.show_tags.value === false || XKit.extensions.blacklist.preferences.mini_block.value === true) {
-			$(obj).find(".mh_post_tags").css('display','none');
-		}
-
-		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
-
-			// This was also shortened.
-			$(obj).attr('data-xkit-blacklist-old-height', $(obj).css("height"));
-			$(obj).css("height","auto");
-			$(obj).find(".xkit-shorten-posts-embiggen").css("display","none");
-
-		}
     },
 
 	do_post: function(obj, post_content, tags) {
