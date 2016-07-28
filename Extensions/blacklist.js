@@ -591,7 +591,7 @@ XKit.extensions.blacklist = new Object({
 				if (m_result !== "") {
 					height_changed = true;
 					//$(this).css("background","red");
-                    XKit.extensions.blacklist.hide_post($(this), m_result);
+					XKit.extensions.blacklist.hide_post($(this), m_result);
 				} else {
 					//$(this).css("background","green");
 				}
