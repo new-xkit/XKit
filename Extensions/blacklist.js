@@ -522,25 +522,25 @@ XKit.extensions.blacklist = new Object({
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-                        var post_info_links = $(this).find(".post_info_link, .mh_post_head_name").map(function() {
-                            return $(this).text();
-                        });
+						var post_info_links = $(this).find(".post_info_link, .mh_post_head_name").map(function() {
+							return $(this).text();
+						});
 
-                        // Join the text of the post info links with spaces
-                        m_author += post_info_links.get().join(" ");
+						// Join the text of the post info links with spaces
+						m_author += post_info_links.get().join(" ");
 
-                        if ($(this).find(".reblog_source").length > 0) {
-                            m_author = m_author + " " + $(this).find(".reblog_source a").html();
-                        }
+						if ($(this).find(".reblog_source").length > 0) {
+							m_author = m_author + " " + $(this).find(".reblog_source a").html();
+						}
 
-    				    if ($(this).find(".post_source_link").length > 0) {
-    				        m_author = m_author + " " + $(this).find(".post_source_link").html();
-    				    }
+						if ($(this).find(".post_source_link").length > 0) {
+							m_author = m_author + " " + $(this).find(".post_source_link").html();
+						}
 
-    				    var m_bTitle = "";
-    				    if ($(this).find(".post_avatar_link").attr("title") !== undefined) {
-    				        m_bTitle = $(this).find(".post_avatar_link").attr('title');
-    				    }
+						var m_bTitle = "";
+						if ($(this).find(".post_avatar_link").attr("title") !== undefined) {
+							m_bTitle = $(this).find(".post_avatar_link").attr('title');
+						}
 					} catch(e) {
 						console.log(" !! can't get author !!", e);
 					}
@@ -569,7 +569,7 @@ XKit.extensions.blacklist = new Object({
 
 				if ($(this).find(".reblog-list-item").length > 0) {
 					m_content = $(this).find(".reblog-list-item").map(function() {
-					    return $(this).html();
+						return $(this).html();
 					}).get().join(" ");
 				}
 
@@ -582,8 +582,8 @@ XKit.extensions.blacklist = new Object({
 				m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
 				m_content = m_content.toLowerCase();
 
-			    // Preserve href links.
-			    m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
+				// Preserve href links.
+				m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
 				// Strip HTML tags.
 				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
 
@@ -650,7 +650,7 @@ XKit.extensions.blacklist = new Object({
 		$(m_div).find(".post_source").css('display','block');
 		$(m_div).find(".post_tags, .mh_post_tags").css('display','block');
 		$(m_div).find(".post_footer").css('display','table');
-        $(m_div).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display","block");
+		$(m_div).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display","block");
 
 		$(m_div).find(".post_answer").css("display","block");
 
@@ -695,15 +695,15 @@ XKit.extensions.blacklist = new Object({
 			return;
 		}
 
-        $(obj).addClass("xblacklist_blacklisted_post");
+		$(obj).addClass("xblacklist_blacklisted_post");
 
-        if ($(".mh_post_page").length > 0) {
-            XKit.extensions.blacklist.hide_mobile_content(obj, word);
-        } else {
-            XKit.extensions.blacklist.hide_desktop_content(obj, word);
-        }
+		if ($(".mh_post_page").length > 0) {
+			XKit.extensions.blacklist.hide_mobile_content(obj, word);
+		} else {
+			XKit.extensions.blacklist.hide_desktop_content(obj, word);
+		}
 
-        if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
+		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
 		}
 
@@ -724,11 +724,11 @@ XKit.extensions.blacklist = new Object({
 
 	},
 
-    hide_desktop_content: function(obj, word) {
-        var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
+	hide_desktop_content: function(obj, word) {
+		var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
 					$(obj).find(".post_content").html() + '</div>';
 
-        var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, $(obj).attr('data-type'), $(obj).attr('id'));
+		var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, $(obj).attr('data-type'), $(obj).attr('id'));
 
 		$(obj).find(".post_info").css("display","none");
 		$(obj).find(".post_controls").css("display","none");
@@ -736,26 +736,26 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_footer_links").css('display','none');
 		$(obj).find(".post_source").css('display','none');
 		$(obj).find(".post-source-footer").css('display','none');
-        $(obj).find(".post_answer").css("display","none");
-    },
+		$(obj).find(".post_answer").css("display","none");
+	},
 
-    hide_mobile_content: function(obj, word) {
-        var post_type = "";
+	hide_mobile_content: function(obj, word) {
+		var post_type = "";
 		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
-            if ($(obj).hasClass("post_type_photo")) {
-                post_type = "photo";
-            } else if ($(obj).hasClass("post_type_photoset")) {
-                post_type = "photoset";
-            } else if ($(obj).hasClass("post_type_note")) {
-                post_type = "note";
-            } else if ($(obj).hasClass("post_type_regular")) {
-                post_type = "regular";
-            } else if ($(obj).hasClass("post_type_video")) {
-                post_type = "video";
-            }
+			if ($(obj).hasClass("post_type_photo")) {
+				post_type = "photo";
+			} else if ($(obj).hasClass("post_type_photoset")) {
+				post_type = "photoset";
+			} else if ($(obj).hasClass("post_type_note")) {
+				post_type = "note";
+			} else if ($(obj).hasClass("post_type_regular")) {
+				post_type = "regular";
+			} else if ($(obj).hasClass("post_type_video")) {
+				post_type = "video";
+			}
 		}
 
-        var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, post_type, $(obj).find(".mh_post_notes").attr('id'));
+		var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, post_type, $(obj).find(".mh_post_notes").attr('id'));
 
 		$(obj).find(".mh_post_head_name").css("display","none");
 		$(obj).find(".mh_post_head_two").css("display","none");
@@ -764,24 +764,24 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".mh_post_canvas").css("display","none");
 		$(obj).find(".mh_post_middle").css("display","none");
 		$(obj).find(".mh_post_head").after(block_excuse);
-    },
+	},
 
-    get_block_excuse: function(word, post_type, id) {
-        var to_add_type = "";
-        if (XKit.extensions.blacklist.preferences.show_type.value === true) {
-            to_add_type = "<div class=\"xkit-blacklist-post-type  " + post_type + "\">&nbsp;</div>";
-        }
+	get_block_excuse: function(word, post_type, id) {
+		var to_add_type = "";
+		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
+			to_add_type = "<div class=\"xkit-blacklist-post-type  " + post_type + "\">&nbsp;</div>";
+		}
 
-        if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
+		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
 			return '<div class="xblacklist_excuse">' +
 					'Post blocked.' + to_add_type +
 					'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 		} else {
-            return '<div class="xblacklist_excuse">' +
-    				'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-    				'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
-        }
-    },
+			return '<div class="xblacklist_excuse">' +
+					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+		}
+	},
 
 	do_post: function(obj, post_content, tags) {
 
