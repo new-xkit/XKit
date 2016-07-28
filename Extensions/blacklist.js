@@ -522,25 +522,25 @@ XKit.extensions.blacklist = new Object({
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-    					var post_info_links = $(this).find(".post_info_link, .mh_post_head_name").map(function() {
-    						return $(this).text();
-    					});
+                        var post_info_links = $(this).find(".post_info_link, .mh_post_head_name").map(function() {
+                            return $(this).text();
+                        });
 
-    					// Join the text of the post info links with spaces
-    					m_author += post_info_links.get().join(" ");
+                        // Join the text of the post info links with spaces
+                        m_author += post_info_links.get().join(" ");
 
-    					if ($(this).find(".reblog_source").length > 0) {
-    						m_author = m_author + " " + $(this).find(".reblog_source a").html();
-    					}
+                        if ($(this).find(".reblog_source").length > 0) {
+                            m_author = m_author + " " + $(this).find(".reblog_source a").html();
+                        }
 
-    					if ($(this).find(".post_source_link").length > 0) {
-    						m_author = m_author + " " + $(this).find(".post_source_link").html();
-    					}
+    				    if ($(this).find(".post_source_link").length > 0) {
+    				        m_author = m_author + " " + $(this).find(".post_source_link").html();
+    				    }
 
-    					var m_bTitle = "";
-    					if ($(this).find(".post_avatar_link").attr("title") !== undefined) {
-    						m_bTitle = $(this).find(".post_avatar_link").attr('title');
-    					}
+    				    var m_bTitle = "";
+    				    if ($(this).find(".post_avatar_link").attr("title") !== undefined) {
+    				        m_bTitle = $(this).find(".post_avatar_link").attr('title');
+    				    }
 					} catch(e) {
 						console.log(" !! can't get author !!", e);
 					}
@@ -774,12 +774,12 @@ XKit.extensions.blacklist = new Object({
 
         if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
 			return '<div class="xblacklist_excuse">' +
-				   'Post blocked.' + to_add_type +
-				   '<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'Post blocked.' + to_add_type +
+					'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 		} else {
             return '<div class="xblacklist_excuse">' +
-    			   'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-    			   '<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+    				'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+    				'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
         }
     },
 
