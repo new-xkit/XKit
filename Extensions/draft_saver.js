@@ -25,9 +25,9 @@ XKit.extensions.draft_saver = new Object({
 			value: 15,
 			type: "combo",
 			values: [
-				"5 minutes", 5,
-				"15 minutes", 15,
-				"30 minutes", 30
+				"5 minutes", 300,
+				"15 minutes", 900,
+				"30 minutes", 1800
 			]
 		},
 
@@ -45,7 +45,6 @@ XKit.extensions.draft_saver = new Object({
 	},
 
 	save_current_content: function() {
-		console.log('saving');
 		var self = XKit.extensions.draft_saver;
 		var is_post_window_open = self.check_is_post_window_open();
 		if (!is_post_window_open) {
@@ -53,6 +52,11 @@ XKit.extensions.draft_saver = new Object({
 		}
 		try {
 			var current_content = XKit.interface.post_window.get_content_html();
+			if (current_content == "<p><br></p>") {
+				return;
+			}
+			XKit.storage.set('draft_saver', Date.now(), current_content);
+			self.clear_old_drafts();
 		} catch (e) {
 			XKit.window.show('Invalid editor type', 'ERROR: Draft Saver cannot currently get content from your editor type. '+
 				'To continue using Draft Saver, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> '+
@@ -63,7 +67,25 @@ XKit.extensions.draft_saver = new Object({
 			throw error;
 		}
 	},
-
+	clear_old_drafts: function() {
+		// There's no API call to delete specific keys from the storage, so we'll
+		// clear all of them and then restore the ones we want to keep.
+		var cache = XKit.storage.get_all('draft_saver');
+		XKit.storage.clear('draft_saver');
+		var keys = [];
+		for (var key in cache) {
+			if (cache.hasOwnProperty(key)) {
+				keys.push(key);
+			}
+		}
+		keys.sort(function(a, b){return b - a});
+		if (keys.length > XKit.extensions.draft_saver.preferences.number_of_saves.value) {
+			keys.length = XKit.extensions.draft_saver.preferences.number_of_saves.value;
+		}
+		keys.forEach(function(key) {
+			XKit.storage.set('draft_saver', key, cache[key].value);
+		});
+	},
 	check_is_post_window_open: function() {
 		if ($(".post-form").length > 0) {
 			return true;
