@@ -1,0 +1,13 @@
+.xkit-draft-saver-cp {
+	border-bottom: 1px dotted rgb(190,190,190);
+	padding: 9px 16px 9px 35px;
+	color: rgb(100,100,100);
+	font-size: 12px;
+	position: relative;
+	cursor: pointer;
+}
+
+.xkit-draft-saver-cp:hover {
+	background: rgb(245,245,245);
+}
+.xkit-draft-saver-cp .xkit-draft-title { font-weight: bold; }
