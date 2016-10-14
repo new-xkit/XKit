@@ -1343,33 +1343,41 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$("#xkit-extensions-panel-right-inner").html('<div id="xkit-extension-panel-no-settings">Updating...</div>');
 
-			if (typeof XKit.extensions.xkit_updates === "undefined" || typeof XKit.extensions.xkit_updates.update === "undefined") {
+			if (typeof XKit.extensions.xkit_updates === "undefined" ||
+				typeof XKit.extensions.xkit_updates.update === "undefined") {
+
 				XKit.window.show("Can't update",
-					'It looks like "XKit Updates" extension is missing or not working properly. It is highly recommended that you reset XKit.', "error",
+					'It looks like "XKit Updates" extension is missing or not working properly. '+
+					"It is highly recommended that you reset XKit.", "error",
 					'<div id="xkit-close-message" class="xkit-button default">OK</div>'+
 					'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
-				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
+				XKit.extensions.xkit_preferences.open_extension_control_panel(
+					XKit.extensions.xkit_preferences.current_open_extension_panel);
 				return;
 			}
 
 			$(this).addClass("disabled");
 
-			XKit.extensions.xkit_updates.update(XKit.extensions.xkit_preferences.current_open_extension_panel, function(mdata) {
+			XKit.extensions.xkit_updates.update(
+				XKit.extensions.xkit_preferences.current_open_extension_panel, function(mdata) {
 
 				if (mdata.errors === false) {
 					XKit.window.show("Done!", "<b>Done updating extension.</b><br/>"+
 						"Please refresh the page for changes to take effect.", "info",
 						'<div id="xkit-close-message" class="xkit-button default">OK</div>');
-					XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
+					XKit.extensions.xkit_preferences.open_extension_control_panel(
+						XKit.extensions.xkit_preferences.current_open_extension_panel);
 					return;
 				}
 
 				XKit.window.show("Can't update",
 					"Update manager returned the following message:<p>" + mdata.error + "</p>"+
-					"Please try again later or if the problem continues, reset XKit.", "error",
+					"Please try again later or if the problem continues, contact New XKit support.", "error",
 					'<div id="xkit-close-message" class="xkit-button default">OK</div>'+
-					'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
-				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
+					'<a href="http://new-xkit-support.tumblr.com" class="xkit-button">XKit support blog</a>');
+
+				XKit.extensions.xkit_preferences.open_extension_control_panel(
+					XKit.extensions.xkit_preferences.current_open_extension_panel);
 
 			});
 
