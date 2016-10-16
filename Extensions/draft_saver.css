@@ -11,3 +11,5 @@
 	background: rgb(245,245,245);
 }
 .xkit-draft-saver-cp .xkit-draft-title { font-weight: bold; }
+
+#xkit-draft-saver-window-display { width: 400px; height: 400px; }

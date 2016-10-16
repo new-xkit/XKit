@@ -21,7 +21,7 @@ XKit.extensions.draft_saver = new Object({
 
 	preferences: {
 		time_between_saves: {
-			text: "Save open drafts every",
+			text: "Save open post windows every",
 			default: 15,
 			value: 15,
 			type: "combo",
@@ -100,7 +100,6 @@ XKit.extensions.draft_saver = new Object({
 
 	cpanel: function(div) {
 		var drafts = XKit.storage.get_all('draft_saver');
-		console.log(drafts);
 		var html = '';
 		for (var key in drafts) {
 		    if (drafts.hasOwnProperty(key)) {
@@ -109,19 +108,17 @@ XKit.extensions.draft_saver = new Object({
 		    	if (shortContent.length > 100) {
 		    		shortContent = shortContent.substr(0, 100) + '...';
 		    	}
-		    	html +=	"<div class=\"xkit-draft-saver-cp\">" +
+		    	html +=	"<div class='xkit-draft-saver-cp draftId-" + key +"'>" +
 					"<div class=\"xkit-draft-title\">" + date + " <a class='xkit-draft-expand'>Expand</a></div>" +
 					"<div class='xkit-draft-content'>" + shortContent + "</div>" +
 					"</div>";
-		        console.log(key);
-		        console.log(drafts[key]);
-		        console.log(XKit.extensions.draft_saver.build_time_from_key(key));
 		    }
 		}
 		div.append(html);
 		$(".xkit-draft-saver-cp").click(function(e) {
-			console.log(e)
-			//XKit.extensions.draft_saver.add_bundle_ui();
+			var target = $(e.target).closest('.xkit-draft-saver-cp');
+			var postId = parseInt($(target).attr('class').match(/draftId[\w-]*\b/)[0].match(/\d+/));
+			XKit.extensions.draft_saver.show_draft_window(postId, drafts[postId]);
 		});
 	},
 
@@ -140,38 +137,23 @@ XKit.extensions.draft_saver = new Object({
 	destroy: function(){
 		this.running = false;
 		$(".xkit-draft-saver-cp").unbind("click");
+		$("#xkit-draft-saver-window-close").unbind('click');
 		clearInterval(this.interval);
 	},
-	add_bundle_ui: function(e) {
+	show_draft_window: function(postId, draft) {
+		var date = XKit.extensions.draft_saver.build_time_from_key(postId);
+		var html = $('<div></div>').append(draft.value);
+		html.find('p').append('\r\n');
+		html.find('blockquote').append('\r\n').find('p').prepend('\t');
+		XKit.window.show("Draft Recovery - " + date,
+			"<textarea id='xkit-draft-saver-window-display'>"
+				+ html.text()
+				+ "</textarea>",
+			"question",
+			"<div class=\"xkit-button default\" id=\"xkit-draft-saver-window-close\">Close</div>");
 
-		XKit.window.show("Create new bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">You have <b>" + remaining + "</b> bundle slots left.","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
-
-		$("#xkit-quick-tags-create-bundle").click(function() {
-
-			var title = $("#xkit-quick-tags-add-title").val();
-			var tags = $("#xkit-quick-tags-add-tags").val();
-
-			if ($.trim(title) === "") {
-				alert("Please enter a title for your bundle.");
-				return;
-			}
-
-			if ($.trim(tags) === "") {
-				alert("Please enter the tags for your bundle.");
-				return;
-			}
-
-			var m_object = {};
-			m_object.title = title;
-			m_object.tags = tags;
-			XKit.extensions.quick_tags.tag_array.push(m_object);
-
-			XKit.storage.set("quick_tags","user_tags", JSON.stringify(XKit.extensions.quick_tags.tag_array));
-
+		$("#xkit-draft-saver-window-close").click(function() {
 			XKit.window.close();
-			XKit.extensions.quick_tags.cpanel(m_div);
-			XKit.extensions.xkit_preferences.restart_extension("quick_tags");
-
 		});
 
 	}
