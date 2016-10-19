@@ -15,7 +15,7 @@ XKit.extensions.draft_saver = new Object({
 		this.running = true;
 		XKit.tools.init_css("draft_saver");
 		var number_of_saves = XKit.extensions.draft_saver.preferences.number_of_saves.value;
-		var time_between_saves = XKit.extensions.draft_saver.preferences.number_of_saves.value;
+		var time_between_saves = XKit.extensions.draft_saver.preferences.time_between_saves.value;
 		this.interval = setInterval(this.save_current_content, time_between_saves * 1000);
 	},
 
@@ -102,17 +102,17 @@ XKit.extensions.draft_saver = new Object({
 		var drafts = XKit.storage.get_all('draft_saver');
 		var html = '';
 		for (var key in drafts) {
-		    if (drafts.hasOwnProperty(key)) {
-		    	var date = XKit.extensions.draft_saver.build_time_from_key(key);
-		    	var shortContent = $(drafts[key].value).text();
-		    	if (shortContent.length > 100) {
-		    		shortContent = shortContent.substr(0, 100) + '...';
-		    	}
-		    	html +=	"<div class='xkit-draft-saver-cp draftId-" + key +"'>" +
+			if (drafts.hasOwnProperty(key)) {
+				var date = XKit.extensions.draft_saver.build_time_from_key(key);
+				var shortContent = $(drafts[key].value).text();
+				if (shortContent.length > 100) {
+					shortContent = shortContent.substr(0, 100) + '...';
+				}
+				html +=	"<div class='xkit-draft-saver-cp draftId-" + key +"'>" +
 					"<div class=\"xkit-draft-title\">" + date + " <a class='xkit-draft-expand'>Expand</a></div>" +
 					"<div class='xkit-draft-content'>" + shortContent + "</div>" +
 					"</div>";
-		    }
+			}
 		}
 		div.append(html);
 		$(".xkit-draft-saver-cp").click(function(e) {
