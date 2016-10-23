@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5.10 **//
+//* VERSION 0.5.11 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -119,7 +119,7 @@ XKit.extensions.servant = new Object({
 			compatibility: "post",
 			runs_on: "post",
 			returns: "the owner's URL",
-			placeholder: "ie: 'xkit-extension'",
+			placeholder: "ie: 'new-xkit-extension'",
 			description: "Runs if a post is created/reblogged from the URL you've entered is found, affects that post.",
 
 			run: function(parameter, obj) {
@@ -147,7 +147,7 @@ XKit.extensions.servant = new Object({
 			compatibility: "post",
 			runs_on: "post",
 			returns: "the source URL",
-			placeholder: "ie: 'xkit-extension'",
+			placeholder: "ie: 'new-xkit-extension'",
 			description: "Runs if a post is sourced to the URL you've entered is found, affects that post.",
 
 			run: function(parameter, obj) {
