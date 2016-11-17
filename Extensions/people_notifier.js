@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.6.0 **//
+//* VERSION 0.6.1 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER new-xkit **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
@@ -483,7 +483,7 @@ XKit.extensions.people_notifier = new Object({
 			var remaining = XKit.extensions.people_notifier.max_tracks - XKit.extensions.people_notifier.blogs.length;
 
 			var div_info_style = "margin-top: 10px; font-size: 12px; color: rgb(120,120,120);";
-			XKit.window.show("Add a person to track list", "<b>Please enter the URL of the person to track:</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: xkit-extension\" class=\"xkit-textbox\" id=\"xkit-people-notifier-add-url\">You have <b>" + remaining + "</b> track slots left.<div style=\"" + div_info_style + "\">To remove a person from list afterwards, hold the ALT key while clicking their username or click on the ✖ when hovering the mouse over their name on the sidebar.</div><div style=\"" + div_info_style + "\">Please be aware that the more blogs you add, the longer it will take to track them all.</div>", "question", "<div class=\"xkit-button default\" id=\"xkit-people-notifier-create\">Track URL</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Add a person to track list", "<b>Please enter the URL of the person to track:</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: new-xkit-extension\" class=\"xkit-textbox\" id=\"xkit-people-notifier-add-url\">You have <b>" + remaining + "</b> track slots left.<div style=\"" + div_info_style + "\">To remove a person from list afterwards, hold the ALT key while clicking their username or click on the ✖ when hovering the mouse over their name on the sidebar.</div><div style=\"" + div_info_style + "\">Please be aware that the more blogs you add, the longer it will take to track them all.</div>", "question", "<div class=\"xkit-button default\" id=\"xkit-people-notifier-create\">Track URL</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-people-notifier-create").click(function() {
 
@@ -495,7 +495,7 @@ XKit.extensions.people_notifier = new Object({
 				}
 
 				if (/^[a-zA-Z0-9\-]+$/.test(to_add) === false) {
-					XKit.extensions.people_notifier.show_error("Invalid username","Please enter the url only (ie: xkit-extension)");
+					XKit.extensions.people_notifier.show_error("Invalid username","Please enter the url only (ie: new-xkit-extension)");
 					return;
 				}
 

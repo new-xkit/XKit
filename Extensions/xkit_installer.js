@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9.4 **//
+//* VERSION 6.9.5 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
@@ -40,7 +40,7 @@ XKit.extensions.xkit_installer = new Object({
 			// Installation is complete I think!
 			XKit.progress.value("installation", 100);
 			XKit.installed.remove("xkit_installer");
-			XKit.window.show("Thanks for installing me!","<b>Installation of XKit is complete.</b><br/>After refreshing the page, the X icon will show up on the header next to the Inbox button. From there, you can customize XKit to your liking and get new extensions.", "info","<a href=\"http://www.tumblr.com/dashboard\" id=\"xkit-restart-and-use\" class=\"xkit-button default\">Refresh page and start using XKit</a><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">XKit keeps re-installing itself?</a>");
+			XKit.window.show("Thanks for installing me!","<b>Installation of XKit is complete.</b><br/>After refreshing the page, the X icon will show up on the header next to the Inbox button. From there, you can customize XKit to your liking and get new extensions.", "info","<a href=\"http://www.tumblr.com/dashboard\" id=\"xkit-restart-and-use\" class=\"xkit-button default\">Refresh page and start using XKit</a><a href=\"https://new-xkit-support.tumblr.com/\" class=\"xkit-button\">XKit keeps re-installing itself? Join our Livesupport</a>");
 			XKit.tools.set_setting("xkit_installation_complete","true");
 			$("#xkit-restart-and-use").click(function() {
 				$(this).addClass("disabled");

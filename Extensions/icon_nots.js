@@ -1,8 +1,8 @@
 //* TITLE Iconified Notifications **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0.2 **//
 //* DESCRIPTION Differentiate Notifications **//
 //* DETAILS This extension replaces words like 'reblogged your post' with an icon, making notifications easier to notice and frees up space for the post summary. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -89,10 +89,6 @@ XKit.extensions.icon_nots = new Object({
 			if ($(this).find("blockquote").length > 0) {
 				part2 = part2 + $(this).find("blockquote")[0].outerHTML;
 			}
-
-
-
-			//console.log(decodeURIComponent(escape(atob(old_html))));
 
 			$(this).html(part1 + "<div class=\"xkit-notification-icon\">&nbsp;</div>" + part2);
 

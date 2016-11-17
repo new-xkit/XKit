@@ -73,7 +73,7 @@ function init_bridge() {
 
 		if (last_error !== "") {
 
-			XKit.window.show("Corrupt storage","XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your Chrome's profile file is corrupt, please click on the button below for more information and learn how to fix it.", "error","<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">Didn't fix your problem?</a>");
+			XKit.window.show("Corrupt storage","XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your Chrome's profile file is corrupt, join <a href='https://new-xkit-support.tumblr.com/support'>our Live support chat</a> and we'll try to help!", "error","<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
 			$("#xkit-bridge-reset-and-continue").click(function() {
 				GM_flushStorage(function() {
 					init_bridge();
@@ -99,7 +99,7 @@ function init_bridge() {
 
 	} catch(e) {
 
-		XKit.window.show("Corrupt storage","XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your Chrome's profile file is corrupt, please click on the button below for more information and learn how to fix it.", "error","<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">Didn't fix your problem?</a>");
+		XKit.window.show("Corrupt storage","XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your Chrome's profile file is corrupt, join <a href='https://new-xkit-support.tumblr.com/support'>our Live support chat</a> and we'll try to help!", "error","<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
 		$("#xkit-bridge-reset-and-continue").click(function() {
 			GM_flushStorage(function() {
 				init_bridge();
