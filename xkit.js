@@ -209,36 +209,13 @@ XKit = {
 		XKit.flags[flag_id] = value;
 		XKit.tools.set_setting("xkit__flag__" + flag_id, value);
 	},
-	servers: {
-		list: [
-			"https://www.xkitcs.com"
-		],
-		count: 11,
-		get: function() {
-			return XKit.servers.list[XKit.servers.count];
-		},
-		next: function() {
-			XKit.servers.count++;
-			if (XKit.servers.count >= XKit.servers.list.length) {
-				XKit.servers.count = 0;
-			}
-			return XKit.servers.list[XKit.servers.count];
-		}
-	},
 	extensions: {},
 	download: {
-		try_count: 0,
-		max_try_count: 5,
-		// TODO: implement as module, lose most of this code
-		github_fetch: function(path, callback, fallback) {
+		fetch: function(path, callback) {
 			var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
 			GM_xmlhttpRequest({
 				method: "GET",
 				url: url,
-				onerror: function(response) {
-					XKit.console.add("Server error, falling back for download of " + path);
-					return fallback();
-				},
 				onload: function(response) {
 					// We are done!
 					var mdata = {};
@@ -248,94 +225,36 @@ XKit = {
 						// Server returned bad thingy.
 						XKit.console.add("Unable to download '" + path +
 										 "', server returned non-json object." + e.message);
-						return fallback();
 					}
 					callback(mdata);
 				}
 			});
 		},
 		extension: function(extension_id, callback) {
-			// Downloads the extension file.
-			function fallback() {
-				return XKit.download.page("get.php?extension=" + extension_id, callback);
-			}
-
-			XKit.download.github_fetch(extension_id + '.json', callback, fallback);
+			XKit.download.fetch(extension_id + '.json', callback);
 		},
-		page: function(page, callback, fallingBack) {
-			// Attempt to use Github distribution
-			function fallback() {
-				return XKit.download.page(page, callback, true);
-			}
-
-			if (!fallingBack) {
-				if (page === 'list.php') {
-					XKit.download.github_fetch('page/list.json', callback, fallback);
-					return;
-				}
-				if (page === 'gallery.php') {
-					XKit.download.github_fetch('page/gallery.json', callback, fallback);
-					return;
-				}
-				if (page === 'themes/index.php') {
-					XKit.download.github_fetch('page/themes.json', callback, fallback);
-					return;
-				}
-				if (page === 'paperboy/index.php') {
-					XKit.download.github_fetch('page/paperboy.json', callback, fallback);
-					return;
-				}
-				if (page === 'framework_version.php') {
-					XKit.download.github_fetch('page/framework_version.json', callback, fallback);
-					return;
-				}
-			}
-			// Downloads page from servers.
-			if (XKit.download.try_count >= XKit.download.max_try_count) {
-				XKit.download.try_count = 0;
-				var mdata = {};
-				mdata.errors = true;
-				mdata.server_down = true;
-				callback(mdata);
+		page: function(page, callback) {
+			if (page === 'list.php') {
+				XKit.download.fetch('page/list.json', callback);
 				return;
 			}
-			var m_url = XKit.servers.next() + "/seven/" + page;
-			if (m_url.indexOf("?") !== -1) {
-				m_url = m_url + "&ftch_id=" + XKit.tools.random_string();
-			} else {
-				m_url = m_url + "?ftch_id=" + XKit.tools.random_string();
+			if (page === 'gallery.php') {
+				XKit.download.fetch('page/gallery.json', callback);
+				return;
 			}
-			XKit.console.add("Trying to fetch: " + m_url);
-			GM_xmlhttpRequest({
-				method: "GET",
-				url: m_url,
-				onerror: function(response) {
-					XKit.console.add("Server error, retrying download of page " + page);
-					XKit.download.try_count++;
-					return XKit.download.page(page, callback);
-				},
-				onload: function(response) {
-					// We are done!
-					var mdata = {};
-					try {
-						mdata = jQuery.parseJSON(response.responseText);
-					} catch(e) {
-						// Server returned bad thingy.
-						XKit.console.add("Unable to download page '" + page + "', server returned non-json object." + e.message);
-						XKit.download.try_count++;
-						return XKit.download.page(page, callback);
-					}
-					if (mdata.errors) {
-						XKit.download.try_count = 0;
-						XKit.console.add("Fetch successful, but mdata.errors is true or script is empty.");
-						callback(mdata);
-					} else {
-						XKit.download.try_count = 0;
-						XKit.console.add("Fetch successful, calling callback.");
-						callback(mdata);
-					}
-				}
-			});
+			if (page === 'themes/index.php') {
+				XKit.download.fetch('page/themes.json', callback);
+				return;
+			}
+			if (page === 'paperboy/index.php') {
+				XKit.download.fetch('page/paperboy.json', callback);
+				return;
+			}
+			if (page === 'framework_version.php') {
+				XKit.download.fetch('page/framework_version.json', callback);
+				return;
+			}
+			XKit.download.fetch('page/' + page, callback);
 		}
 	},
 	install: function(extension_id, callback) {
