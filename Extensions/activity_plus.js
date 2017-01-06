@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3.6 **//
+//* VERSION 0.3.7 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -181,7 +181,6 @@ XKit.extensions.activity_plus = new Object({
 	do_condensed: function() {
 
 		$(".ui_note").not(".xkit-activity-plus-condensed-done").each(function() {
-
 			$(this).addClass("xkit-activity-plus-condensed-done");
 
 			if ($(this).hasClass("notificationblock-notification-blocked")) { return; }
@@ -218,7 +217,7 @@ XKit.extensions.activity_plus = new Object({
 
 				if ($(this).hasClass("is_like") || $(this).hasClass("is_reblog")) {
 
-					var post_url = $(this).find(".part_icon").find("a").attr('href');
+					var post_url = $(this).find(".part_glass").attr('href');
 
 					if (post_url === XKit.extensions.activity_plus.last_post_url) {
 
@@ -235,7 +234,7 @@ XKit.extensions.activity_plus = new Object({
 							}
 						}
 
-					} else{
+					} else {
 
 						XKit.extensions.activity_plus.do_condensed_condense();
 						XKit.extensions.activity_plus.last_post_url = post_url;
