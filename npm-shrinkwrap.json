@@ -302,6 +302,18 @@
       "from": "center-align@>=0.1.1 <0.2.0",
       "resolved": "https://registry.npmjs.org/center-align/-/center-align-0.1.1.tgz"
     },
+    "cfx": {
+      "version": "0.0.3",
+      "from": "cfx@0.0.3",
+      "resolved": "https://registry.npmjs.org/cfx/-/cfx-0.0.3.tgz",
+      "dependencies": {
+        "underscore": {
+          "version": "1.8.3",
+          "from": "underscore@latest",
+          "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
+        }
+      }
+    },
     "chalk": {
       "version": "1.1.1",
       "from": "chalk@>=1.0.0 <2.0.0",
@@ -950,6 +962,23 @@
           "version": "3.0.0",
           "from": "xtend@>=3.0.0 <3.1.0",
           "resolved": "https://registry.npmjs.org/xtend/-/xtend-3.0.0.tgz"
+        }
+      }
+    },
+    "gulp-cfx-xpi": {
+      "version": "0.0.4",
+      "from": "gulp-cfx-xpi@0.0.4",
+      "resolved": "https://registry.npmjs.org/gulp-cfx-xpi/-/gulp-cfx-xpi-0.0.4.tgz",
+      "dependencies": {
+        "readable-stream": {
+          "version": "1.0.33",
+          "from": "readable-stream@>=1.0.33-1 <1.1.0-0",
+          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.33.tgz"
+        },
+        "through2": {
+          "version": "0.6.5",
+          "from": "through2@>=0.6.3 <0.7.0",
+          "resolved": "https://registry.npmjs.org/through2/-/through2-0.6.5.tgz"
         }
       }
     },
@@ -1893,7 +1922,8 @@
       "dependencies": {
         "esprima-fb": {
           "version": "15001.1.0-dev-harmony-fb",
-          "from": "esprima-fb@>=15001.1.0-dev-harmony-fb <15001.2.0"
+          "from": "esprima-fb@15001.1.0-dev-harmony-fb",
+          "resolved": "https://registry.npmjs.org/esprima-fb/-/esprima-fb-15001.1.0-dev-harmony-fb.tgz"
         }
       }
     },
