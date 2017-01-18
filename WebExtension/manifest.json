@@ -4,7 +4,7 @@
     "run_at": "document_end",
     "css": [ "xkit.css" ],
     "exclude_matches": [ "https://www.tumblr.com/upload/image*, http://www.tumblr.com/upload/image*" ],
-    "js": [ "bridge.js", "jquery.js", "tiptip.js", "moment.js", "nano.js", "xkit.js" ],
+    "js": [ "bridge.js", "lodash.min.js", "jquery.js", "tiptip.js", "moment.js", "nano.js", "xkit.js" ],
     "matches": [ "http://*.tumblr.com/*", "https://*.tumblr.com/*" ]
   } ],
   "description": "A fork of XKit, the extension framework for Tumblr.",
