@@ -1,7 +1,7 @@
 /*
 
 	Bridge2 for XKit
-	Version 2.2
+	Version 2.2.1
 
 	(c) 2011 - 2013 STUDIOXENIX
 
@@ -10,7 +10,7 @@
 var bridge_error = false;
 var bridge_error_object;
 var xkit_storage = {};
-var bridge_ver = "2.1";
+var bridge_ver = "2.2.1";
 
 try {
 	var storage = chrome.storage.local;
@@ -126,7 +126,7 @@ function GM_deleteAllValues(callback) {
 
 	storage.get(function(items) {
 		for (var key in items) {
-			storage.remove(key);
+			GM_deleteValue(key);
 		}
 		storage.clear();
 		callback();
@@ -152,6 +152,7 @@ function GM_deleteValue(name) {
 
 	//console.log("Bridge : GM_deleteValue for " + name);
 	storage.remove(name);
+	delete xkit_storage[name];
 
 }
 
@@ -181,20 +182,7 @@ function GM_openInTab(url) {
 function GM_listValues() {
 
 	// // console.log("Bridge : GM_listValues");
-	try {
-		var list = [];
-		var reKey = new RegExp("^" + "");
-		for (var i = 0, il = window.localStorage.length; i < il; i++) {
-			// only use the script's own keys
-			var key = window.localStorage.key(i);
-			if (key.match(reKey)) {
-				list.push(key);
-			}
-		}
-		return list;
-	} catch(e) {
-		return "";
-	}
+	return Object.keys(xkit_storage);
 
 }
 
