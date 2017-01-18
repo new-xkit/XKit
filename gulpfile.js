@@ -27,11 +27,7 @@ var paths = {
 		themes: ['Themes/**/*.css']
 	},
 	vendor: [
-		'jquery.js',
-		'moment.js',
-		'nano.js',
-		'tiptip.js',
-		'lodash.min.js'
+		'vendor/*.js',
 	]
 };
 
