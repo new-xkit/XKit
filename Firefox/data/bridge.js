@@ -1,6 +1,6 @@
 /* global AddonStorage, unsafeWindow */
 
-var framework_version = '7.7.4';
+var framework_version = '7.7.5';
 var Tumblr = unsafeWindow.Tumblr;
 
 function getBridgeError() {
