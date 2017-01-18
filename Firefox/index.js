@@ -7,6 +7,7 @@ let Request = require('sdk/request').Request;
 let scripts = [
 	'bridge.js',
 	'xkit/jquery.js',
+	'xkit/lodash.min.js',
 	'xkit/moment.js',
 	'xkit/nano.js',
 	'xkit/tiptip.js',

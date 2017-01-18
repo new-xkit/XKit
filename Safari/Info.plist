@@ -39,6 +39,7 @@
 				<string>moment.js</string>
 				<string>tiptip.js</string>
 				<string>nano.js</string>
+				<string>lodash.min.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

@@ -33,7 +33,8 @@ var paths = {
 		'jquery.js',
 		'moment.js',
 		'nano.js',
-		'tiptip.js'
+		'tiptip.js',
+		'lodash.min.js'
 	]
 };
 
