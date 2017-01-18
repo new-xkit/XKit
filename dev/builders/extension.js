@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* eslint-env node */
 
 /**
  * Extension builder module.
@@ -25,11 +25,11 @@ var resourceUtil = require('./resource');
 var extensionBuilder = function() {
 	return through.obj(function(file, enc, cb) {
 		// Ignore empty files
-		if(file.isNull()) {
+		if (file.isNull()) {
 			cb();
 		}
 
-		if(file.isStream()) {
+		if (file.isStream()) {
 			this.emit('error', new PluginError('resource-builder', 'Streaming not supported'));
 			cb();
 		}
@@ -122,7 +122,7 @@ var extensionBuilder = function() {
  * @returns {Object<stream.Transform>}
  */
 var buildGalleryFile = function(filename) {
-	if(!filename) {
+	if (!filename) {
 		throw new PluginError('resource-builder', 'Missing file option for galleryBuilder');
 	}
 

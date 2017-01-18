@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.4.3 **//
+//* VERSION 0.4.4 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -123,6 +123,7 @@ XKit.extensions.audio_plus = {
 	start_check_current: function() {
 
 		XKit.tools.add_function(function() {
+			/* globals Tumblr, audiojs */
 			window.xkit_audio_plus_check_current_interval = setInterval(function() {
 				try {
 					var current_player = Tumblr.AudioPlayer.current_player_id;
@@ -142,7 +143,7 @@ XKit.extensions.audio_plus = {
 					m_object.playing = audiojs.instances["audiojs" + current_player].playing;
 					m_object.id = parseInt(current_player);
 					jQuery("#xkit-audio-plus-current-player").html("CU:" + JSON.stringify(m_object));
-				} catch(e){
+				} catch (e) {
 					jQuery("#xkit-audio-plus-current-player").html("");
 				}
 			}, 1000);
@@ -152,12 +153,12 @@ XKit.extensions.audio_plus = {
 
 	return_current_instance: function() {
 
-		if ($("#xkit-audio-plus-current-player").html().substring(0,3) !== "CU:") {
+		if ($("#xkit-audio-plus-current-player").html().substring(0, 3) !== "CU:") {
 			return -1;
 		} else {
 			try {
 				return JSON.parse($("#xkit-audio-plus-current-player").html().substring(3));
-			} catch(e) {
+			} catch (e) {
 				return -1;
 			}
 		}
@@ -169,15 +170,13 @@ XKit.extensions.audio_plus = {
 
 		if (instance === -1) { return; }
 
-		var m_object = {
-			id: instance.id
-		};
-
 		XKit.tools.add_function(function() {
 			var add_tags = JSON.parse(add_tag);
 			var m_object = audiojs.instances["audiojs" + add_tags.id];
 			m_object.pause();
-		}, true, JSON.stringify(m_object));
+		}, true, JSON.stringify({
+			id: instance.id
+		}));
 
 	},
 
@@ -186,15 +185,13 @@ XKit.extensions.audio_plus = {
 
 		if (instance === -1) { return; }
 
-		var m_object = {id: instance.id};
-
 		XKit.tools.add_function(function() {
-
 			var add_tags = JSON.parse(add_tag);
 			var m_object = audiojs.instances["audiojs" + add_tags.id];
 			m_object.play();
-
-		}, true, JSON.stringify(m_object));
+		}, true, JSON.stringify({
+			id: instance.id
+		}));
 
 	},
 
@@ -206,7 +203,7 @@ XKit.extensions.audio_plus = {
 				return firstParentWithClass(elt.parentNode, cls);
 			}
 		}
-		var slider =	e.target;
+		var slider = e.target;
 
 		var parent_post = firstParentWithClass(slider, "post");
 		var volume = slider.value;
@@ -234,7 +231,7 @@ XKit.extensions.audio_plus = {
 			// Check if hosted by Tumblr:
 			if ($(this).find(".audio_player").length === 0 || $(this).find(".audio_visualizer").length === 0) { return; }
 
-			var slider_html =	 "<div data-post-id=\"" + m_post.id + "\" class=\"xkit-audio-plus-slider-container\">" +
+			var slider_html = "<div data-post-id=\"" + m_post.id + "\" class=\"xkit-audio-plus-slider-container\">" +
 								"<input type=\"range\" value=\"100\" min=\"0\" max=\"100\" data-post-id=\"" + m_post.id + "\" title=\"somepeoplelikefish\" class=\"xkit-audio-plus-slider\"></input>" +
 						"</div>";
 

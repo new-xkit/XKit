@@ -6,9 +6,9 @@
 }
 
 #xcloud-panel input[type=text],
-#xcloud-panel input[type=password]  {
+#xcloud-panel input[type=password] {
 	-webkit-user-select: text !important;
-	-o-user-select: text  !important;
+	-o-user-select: text !important;
 	-moz-user-select: text !important;
 	user-select: text !important;
 }
@@ -192,7 +192,7 @@
 	margin-top: 15px;
 }
 
-.xcloud-inline-button  {
+.xcloud-inline-button {
 	display: block;
 	margin: 10px 0px;
 	text-align: center;

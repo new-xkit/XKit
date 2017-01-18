@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.4.5 **//
+//* VERSION 1.4.7 **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -10,7 +10,7 @@ XKit.extensions.read_more_now = new Object({
 
 	running: false,
 	button_caption: "Read More Now!",
-	apiKey: XKit.api_key, //*"fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",**//
+	apiKey: XKit.api_key,
 
 	preferences: {
 		auto_open: {
@@ -43,7 +43,7 @@ XKit.extensions.read_more_now = new Object({
 			$(this).addClass("disabled");
 			$(this).html("Retrieving post...");
 			var m_url = $(this).attr('data-post-url');
-			var json_page_parts = m_url.replace(/https?:\/\//,"").split("/");
+			var json_page_parts = m_url.replace(/https?:\/\//, "").split("/");
 			var blog_name = json_page_parts[0];
 			var post_id = json_page_parts[2];
 			var m_cont = $(this);
@@ -54,54 +54,54 @@ XKit.extensions.read_more_now = new Object({
 				method: "GET",
 				url: api_url,
 				json: true,
-			onerror: function() {
-				$(m_cont).removeClass("disabled");
-				$(m_cont).html(XKit.extensions.read_more_now.button_caption);
-				XKit.extensions.read_more_now.show_failed();
-			},
-			onload: function(response) {
-				var data = JSON.parse(response.responseText);
-				var m_object = data.response;
-				try {
-					var m_contents = m_object.posts[0].body;
-
-					if (m_object.posts[0].type === "photo") {
-						m_contents = m_object.posts[0]["photo-caption"] ||
-						             m_object.posts[0].caption;
-					}
-
-					if (m_object.posts[0].type === "answer") {
-						m_contents = m_object.posts[0].answer;
-					}
-
-					if (m_object.posts[0].type === "link") {
-						m_contents = m_object.posts[0].description;
-					}
-
-					var post_cont = $(m_cont).parent().parent();
-					if (post_cont.find(".post_title").length > 0) {
-						var post_title = post_cont.find(".post_title")[0].outerHTML;
-						post_cont.html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
-					} else {
-						post_cont.html(XKit.extensions.read_more_now.strip_scripts(m_contents));
-					}
-
-					if (XKit.interface.where().search) {
-						post_cont.find("img").load(function() {
-							XKit.interface.trigger_reflow();
-						});
-						XKit.interface.trigger_reflow();
-					}
-				} catch(e) {
+				onerror: function() {
 					$(m_cont).removeClass("disabled");
 					$(m_cont).html(XKit.extensions.read_more_now.button_caption);
 					XKit.extensions.read_more_now.show_failed();
-				}
-			}});
+				},
+				onload: function(response) {
+					var data = JSON.parse(response.responseText);
+					var m_object = data.response;
+					try {
+						var m_contents = m_object.posts[0].body;
+
+						if (m_object.posts[0].type === "photo") {
+							m_contents = m_object.posts[0]["photo-caption"] ||
+						             m_object.posts[0].caption;
+						}
+
+						if (m_object.posts[0].type === "answer") {
+							m_contents = m_object.posts[0].answer;
+						}
+
+						if (m_object.posts[0].type === "link") {
+							m_contents = m_object.posts[0].description;
+						}
+
+						var post_cont = $(m_cont).parent().parent();
+						if (post_cont.find(".post_title").length > 0) {
+							var post_title = post_cont.find(".post_title")[0].outerHTML;
+							post_cont.html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
+						} else {
+							post_cont.html(XKit.extensions.read_more_now.strip_scripts(m_contents));
+						}
+
+						if (XKit.interface.where().search) {
+							post_cont.find("img").load(function() {
+								XKit.interface.trigger_reflow();
+							});
+							XKit.interface.trigger_reflow();
+						}
+					} catch (e) {
+						$(m_cont).removeClass("disabled");
+						$(m_cont).html(XKit.extensions.read_more_now.button_caption);
+						XKit.extensions.read_more_now.show_failed();
+					}
+				}});
 		});
 	},
 
-	strip_scripts: function(s) {
+	strip_scripts: function(post_html) {
 
 		/*
 			From:
@@ -109,18 +109,18 @@ XKit.extensions.read_more_now = new Object({
 		*/
 
 		var div = document.createElement('div');
-		div.innerHTML = s;
+		div.innerHTML = post_html;
 		var scripts = div.getElementsByTagName('script');
 		var i = scripts.length;
 		while (i--) {
-				scripts[i].parentNode.removeChild(scripts[i]);
+			scripts[i].parentNode.removeChild(scripts[i]);
 		}
 		return div.innerHTML;
 	},
 
 	show_failed: function() {
 
-		XKit.window.show("Unable to fetch read more","Perhaps the user deleted the post?","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		XKit.window.show("Unable to fetch read more", "Perhaps the user deleted the post?", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 	},
 
@@ -142,36 +142,36 @@ XKit.extensions.read_more_now = new Object({
 
 			if (XKit.extensions.read_more_now.preferences.process_keep_reading.value) {
 				post.find("a").each(function() {
-					var a = $(this);
-					var link_text = a.text().trim();
+					var link = $(this);
+					var link_text = link.text().trim();
 					if ((link_text !== "Keep reading")
                                            && (link_text !== "Weiterlesen")        //German
                                            && (link_text !== "Afficher davantage") //French
                                            && (link_text !== "Continua a leggere") //Italian
-                                           && (link_text !== "さらに読む")         //Japanese
+                                           && (link_text !== "\u3055\u3089\u306B\u8AAD\u3080")         //Japanese
                                            && (link_text !== "Okumaya devam et")   //Turkish
                                            && (link_text !== "Seguir leyendo")     //Spanish
-                                           && (link_text !== "Читать дальше")      //Russian
+                                           && (link_text !== "\u0427\u0438\u0442\u0430\u0442\u044C \u0434\u0430\u043B\u044C\u0448\u0435")      //Russian
                                            && (link_text !== "Czytaj dalej")       //Polish
                                            && (link_text !== "Continuar a ler")    //Portuguese (Portugal)
                                            && (link_text !== "Continuar lendo")    //Portuguese (Brazil)
                                            && (link_text !== "Lees verder")        //Dutch
-                                           && (link_text !== "더 보기")  //Korean
-                                           && (link_text !== "继续阅读") //Simplified Chinese
-                                           && (link_text !== "繼續閱讀") /*Traditional Chinese (Hong Kong & Taiwan)*/) {
+                                           && (link_text !== "\uB354 \uBCF4\uAE30")  //Korean
+                                           && (link_text !== "\u7EE7\u7EED\u9605\u8BFB") //Simplified Chinese
+                                           && (link_text !== "\u7E7C\u7E8C\u95B1\u8B80") /*Traditional Chinese (Hong Kong & Taiwan)*/) {
 						return;
 					}
 					need_reflow = true;
 
-					if (/https?:\/\/[^.]+\.tumblr\.com\/post\/\d+/.test(a.attr("href"))) {
-						XKit.extensions.read_more_now.append_button_with_link(a.parent(), a.attr("href"));
+					if (/https?:\/\/[^.]+\.tumblr\.com\/post\/\d+/.test(link.attr("href"))) {
+						XKit.extensions.read_more_now.append_button_with_link(link.parent(), link.attr("href"));
 					} else {
 						// If url is not of the form
 						// http://something.tumblr.com/post/numbers/whatever it needs to be
 						// determined based on the post's author
 						var real_prefix = 'https://' + post.attr('data-tumblelog-name') + '.tumblr.com/';
-						var real_link = a.attr('href').replace(/https?:\/\/[^\/]+\//, real_prefix);
-						XKit.extensions.read_more_now.append_button_with_link(a.parent(), real_link);
+						var real_link = link.attr('href').replace(/https?:\/\/[^\/]+\//, real_prefix);
+						XKit.extensions.read_more_now.append_button_with_link(link.parent(), real_link);
 					}
 				});
 			}

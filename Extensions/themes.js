@@ -23,7 +23,7 @@ XKit.extensions.themes = new Object({
 		}
 
 
-		this.current_theme = XKit.storage.get("themes","my_theme","");
+		this.current_theme = XKit.storage.get("themes", "my_theme", "");
 		if (typeof this.current_theme === "undefined") {
 			this.current_theme = "";
 		}
@@ -73,7 +73,7 @@ XKit.extensions.themes = new Object({
 	load_theme: function() {
 
 		$("#xkit-themes-user-theme").remove();
-		var m_file_contents = XKit.storage.get("themes","my_theme_contents","");
+		var m_file_contents = XKit.storage.get("themes", "my_theme_contents", "");
 
 		m_file_contents = XKit.extensions.themes.replace_all(m_file_contents, "#content", ".l-content");
 		m_file_contents = XKit.extensions.themes.replace_all(m_file_contents, "#header", ".l-header");
@@ -87,22 +87,22 @@ XKit.extensions.themes = new Object({
 		// Unload the previous theme if loaded.
 		$("#xkit-themes-user-theme").remove();
 
-		XKit.storage.set("themes","my_theme", theme_name);
+		XKit.storage.set("themes", "my_theme", theme_name);
 
 		// Stop if default theme.
 		if (theme_name === "") { return; }
 
 		var m_index = XKit.extensions.themes.gallery_themes_file.indexOf(theme_name);
 		if (m_index === -1) {
-			XKit.storage.set("themes","my_theme","");
-			XKit.window.show("Error","Unable to load theme.","error",'<div class="xkit-button" id="xkit-close-message">Okay</div>');
+			XKit.storage.set("themes", "my_theme", "");
+			XKit.window.show("Error", "Unable to load theme.", "error", '<div class="xkit-button" id="xkit-close-message">Okay</div>');
 			return;
 		}
 
-		XKit.storage.set("themes","my_theme_version", XKit.extensions.themes.gallery_themes_version[m_index]);
+		XKit.storage.set("themes", "my_theme_version", XKit.extensions.themes.gallery_themes_version[m_index]);
 
 		// Voila!
-		XKit.storage.set("themes","my_theme_contents",XKit.extensions.themes.gallery_themes_contents[m_index]);
+		XKit.storage.set("themes", "my_theme_contents", XKit.extensions.themes.gallery_themes_contents[m_index]);
 		XKit.extensions.themes.load_theme();
 
 	},
@@ -145,7 +145,7 @@ XKit.extensions.themes = new Object({
 			};
 			XKit.extensions.themes.cpanel_add(def_theme);
 
-			for(var theme in mdata.themes) {
+			for (var theme in mdata.themes) {
 				XKit.extensions.themes.cpanel_add(mdata.themes[theme]);
 			}
 
@@ -159,7 +159,7 @@ XKit.extensions.themes = new Object({
 			});
 
 			if (XKit.extensions.themes.m_theme_count >= 3) {
-				$(".xkit-theme-obj:last-child").css("border-bottom","0");
+				$(".xkit-theme-obj:last-child").css("border-bottom", "0");
 			}
 
 			$("#xkit-extensions-panel-right").nanoScroller();

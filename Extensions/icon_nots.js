@@ -48,9 +48,9 @@ XKit.extensions.icon_nots = new Object({
 				var part1 = $(this).find(".activity").find("a")[0].outerHTML;
 				var part2 = $(this).find(".summary")[0].outerHTML;
 
-				$(this).html("<div class=\"activity\">" +part1 + "</div><div class=\"xkit-notification-icon\">&nbsp;</div>" + part2);
+				$(this).html("<div class=\"activity\">" + part1 + "</div><div class=\"xkit-notification-icon\">&nbsp;</div>" + part2);
 
-			} catch(e) {
+			} catch (e) {
 
 
 			}

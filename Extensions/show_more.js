@@ -64,7 +64,7 @@ XKit.extensions.show_more = new Object({
 
 	init_inbox_asks: function() {
 
-		var askbox_template = XKit.storage.get("show_more","inbox_ask_template","");
+		var askbox_template = XKit.storage.get("show_more", "inbox_ask_template", "");
 		if (askbox_template === "") {
 			return;
 		}
@@ -86,7 +86,7 @@ XKit.extensions.show_more = new Object({
 			XKit.extensions.show_more.init_inbox_asks();
 		} else {
 			if ($("#dashboard_ask_template").length > 0) {
-				XKit.storage.set("show_more","inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
+				XKit.storage.set("show_more", "inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
 			}
 		}
 
@@ -115,7 +115,7 @@ XKit.extensions.show_more = new Object({
 		$(document).on('mouseover', 'a', XKit.extensions.show_more.store_data_username_if_userlink);
 		$(document).on('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
-		$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.show_more.add_links_new);
+		$(document).on('click mouseover', '.tumblelog_popover .info_popover_button', XKit.extensions.show_more.add_links_new);
 		$(document).on('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 
 	},
@@ -128,16 +128,16 @@ XKit.extensions.show_more = new Object({
 
 		$("#xkit-classic-user-menu-glass").remove();
 		$(".xkit-classic-menu-opener").removeClass("opened");
-		$("#xkit-classic-user-menu").fadeOut('fast', function() { $(this).remove() });
+		$("#xkit-classic-user-menu").fadeOut('fast', function() { $(this).remove(); });
 
 	},
 
-	show_classic_menu: function(e) {
+	show_classic_menu: function(event) {
 
-		e.preventDefault();
-		e.stopPropagation();
+		event.preventDefault();
+		event.stopPropagation();
 
-		var m_obj = $(e.target);
+		var m_obj = $(event.target);
 
 		if (typeof XKit.extensions.show_more.popup_data.avatar_url === "undefined") {
 			return;
@@ -156,7 +156,7 @@ XKit.extensions.show_more = new Object({
 
 		m_html = m_html + "<a class=\"xkit-open\" target=\"_blank\" href=\"" + XKit.extensions.show_more.popup_data.url + "\">Open in New Tab</a>";
 
-		if (XKit.extensions.show_more.popup_data.show_ask == 1 ||XKit.extensions.show_more.popup_data.asks == 1) {
+		if (XKit.extensions.show_more.popup_data.show_ask == 1 || XKit.extensions.show_more.popup_data.asks == 1) {
 			var anon_status = "0";
 			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous || XKit.extensions.show_more.popup_data.anonymous_asks || XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
 				anon_status = "1";
@@ -214,13 +214,13 @@ XKit.extensions.show_more = new Object({
 
 			var m_data = XKit.extensions.show_more.popup_data;
 
-			for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+			for (var i = 0; i < XKit.extensions.show_more.custom_menu_extension.length; i++) {
 
 				var returned_menu = "";
 
 				try {
 					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-				} catch(err) {
+				} catch (err) {
 					returned_menu = "";
 				}
 
@@ -264,7 +264,7 @@ XKit.extensions.show_more = new Object({
 					$(".tumblelog_popover_glass").trigger('click');
 					setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 					$(".popover").hide();
-				} catch(err) {
+				} catch (err) {
 					alert(err.message);
 				}
 			});
@@ -287,10 +287,9 @@ XKit.extensions.show_more = new Object({
 			e.preventDefault();
 			XKit.extensions.show_more.hide_classic_menu();
 			XKit.tools.add_function(function() {
-				var f = {
-						href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
-				};
-				Tumblr.FanMail.show(f);
+				Tumblr.FanMail.show({
+					href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
+				});
 			}, true, "");
 
 		});
@@ -336,7 +335,7 @@ XKit.extensions.show_more = new Object({
 						var json_obj = JSON.parse(json_data);
 						json_obj.following = true;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));
-					} catch(e) {
+					} catch (e) {
 						// console.log("Unable to set popover obj data");
 					}
 				}
@@ -369,7 +368,7 @@ XKit.extensions.show_more = new Object({
 						var json_obj = JSON.parse(json_data);
 						json_obj.following = false;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));
-					} catch(e) {
+					} catch (e) {
 						// console.log("Unable to set popover obj data");
 					}
 				}
@@ -394,9 +393,9 @@ XKit.extensions.show_more = new Object({
 		var m_index = XKit.extensions.show_more.custom_menu_extension.indexOf(extension_name);
 		if (m_index === -1) { return; }
 
-		XKit.extensions.show_more.custom_menu_extension.splice(m_index,1);
-		XKit.extensions.show_more.custom_menu_function.splice(m_index,1);
-		XKit.extensions.show_more.custom_menu_callback.splice(m_index,1);
+		XKit.extensions.show_more.custom_menu_extension.splice(m_index, 1);
+		XKit.extensions.show_more.custom_menu_function.splice(m_index, 1);
+		XKit.extensions.show_more.custom_menu_callback.splice(m_index, 1);
 
 	},
 
@@ -449,7 +448,7 @@ XKit.extensions.show_more = new Object({
 
 			try {
 				XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
-			} catch(err) {
+			} catch (err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
 				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);
@@ -481,7 +480,7 @@ XKit.extensions.show_more = new Object({
 					console.log("show_more: Successfully fetched and stored popup_data.");
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
-					} catch(e){
+					} catch (err) {
 						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
@@ -505,7 +504,7 @@ XKit.extensions.show_more = new Object({
 
 		try {
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
-		} catch(err) {
+		} catch (err) {
 			XKit.console.add("show_more -> Can't parse popup_data");
 			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
@@ -574,13 +573,13 @@ XKit.extensions.show_more = new Object({
 
 			var m_data = XKit.extensions.show_more.popup_data;
 
-			for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+			for (var i = 0; i < XKit.extensions.show_more.custom_menu_extension.length; i++) {
 
 				var returned_menu = "";
 
 				try {
 					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-				} catch(e) {
+				} catch (e) {
 					returned_menu = "";
 				}
 
@@ -737,7 +736,6 @@ XKit.extensions.show_more = new Object({
 
 		var menu_box = $(e.target).parent().find(".tumblelog_menu_popover");
 		var user_url = $(menu_box).parent().find(".tumblelog_menu_link").attr('data-tumblelog-name');
-		var m_class = "";
 
 		var m_html = "";
 
@@ -746,7 +744,7 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.anon_available[user_url]) {
 
-			$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask','1');
+			$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask', '1');
 
 		}
 
@@ -814,7 +812,7 @@ XKit.extensions.show_more = new Object({
 			$("#xkit-avatar-magnetizer-window").remove();
 		}
 
-		avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
+		var avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
 
 		var m_html = "<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-avatar-magnetizer-window\">" +
@@ -839,14 +837,14 @@ XKit.extensions.show_more = new Object({
 	intercept_classic_menu_ask: function(event) {
 		event.preventDefault();
 
-		XKit.tools.add_function(function(){
+		XKit.tools.add_function(function() {
 			var args = JSON.parse(add_tag);
 			var config = jQuery("<div data-tumblelog-name='" + args.recipient + "' />");
 			config.data("anonymous_ask", args.anonymous_asks);
 			Tumblr.Events.trigger("ask:form:open", {
-                recipient: args.recipient,
-                allow_anonymous: args.anonymous_asks === "1" ? true : false
-            });
+				recipient: args.recipient,
+				allow_anonymous: args.anonymous_asks === "1" ? true : false
+			});
 		}, true, JSON.stringify({
 			recipient: this.getAttribute("data-tumblelog-name"),
 			anonymous_asks: this.getAttribute("data-anonymous-ask")
@@ -862,7 +860,7 @@ XKit.extensions.show_more = new Object({
 		$(document).off('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).off('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).off('mouseover', '.post_avatar .post_avatar_link', XKit.extensions.show_more.enable_classic_menu);
-		$(document).off('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
+		$(document).off('click', '.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
 		$(document).off('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 		this.running = false;
 	}

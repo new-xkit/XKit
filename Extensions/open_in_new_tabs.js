@@ -33,7 +33,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 		this.running = true;
 
 		if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
-			$("#content area").attr('target','_blank');
+			$("#content area").attr('target', '_blank');
 			$(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
 		}
 		
@@ -73,7 +73,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 			if (typeof $(m_box).attr('target') === "undefined") {
 				open_new_tab = true;
 			} else {
-				if($(m_box).attr('target').toLowerCase() !== "_blank") {
+				if ($(m_box).attr('target').toLowerCase() !== "_blank") {
 					open_new_tab = true;
 					
 				}
@@ -90,12 +90,12 @@ XKit.extensions.open_in_new_tabs = new Object({
 				open_new_tab = false;
 			}
 
-			if(open_new_tab === true) {
+			if (open_new_tab === true) {
 				e.preventDefault();
 				window.open(m_url, "_blank");
 			}
 
-		} catch(err) {
+		} catch (err) {
 
 			//alert(e.message);
 
@@ -103,7 +103,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 
 	},
 	
-		do: function() {
+	do: function() {
 
 		$("a").off("click", XKit.extensions.open_in_new_tabs.click);
 		$("a").on("click", XKit.extensions.open_in_new_tabs.click);
@@ -130,7 +130,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 			return;
 
 		var open_in_tab = false;
-		var tmp_link = link.replace("http://","").replace("https://","");
+		var tmp_link = link.replace("http://", "").replace("https://", "");
 		var link_components = tmp_link.split(".");
 
 		if (link_components.length == 3)

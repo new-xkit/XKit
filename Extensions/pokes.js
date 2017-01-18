@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.8.0 **//
+//* VERSION 0.11.3 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -12,14 +12,28 @@ XKit.extensions.pokes = {
 	pokedex_url: "https://new-xkit.github.io/XKit/Extensions/dist/page/pokedex.json",
 
 	preferences: {
+		"allow_fullwidth": {
+			text: "Allow spawning across the entire width of the page",
+			default: "true",
+			value: "true"
+		},
+		"sep0": {
+			text: "Backgrounds",
+			type: "separator"
+		},
 		"catch_backgrounds": {
 			text: "Give Pokémon a background (for visibility)",
 			default: false,
 			value: false
 		},
+		"transp_background": {
+			text: "Transparent Backgrounds",
+			default: "true",
+			value: "true"
+		},
 		"pokes_menu_header": {
 			text: "Menu",
-			type: "separator",
+			type: "separator"
 		},
 	},
 
@@ -46,7 +60,7 @@ XKit.extensions.pokes = {
 						mdata = JSON.parse(response.responseText);
 						XKit.extensions.pokes.gist_cache = mdata;
 						callback(mdata);
-					} catch(e) {
+					} catch (e) {
 						console.log("Poke data received was not valid JSON. Skipping instance.");
 						if (error) { error(response); }
 					}
@@ -71,6 +85,10 @@ XKit.extensions.pokes = {
 			XKit.extensions.pokes.fetchPoke(pokeNr, $(this));
 			$(this).addClass("poke_spawned");
 		});
+	},
+
+	randomInt: function(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
 	},
 
 	parse_pokemon: function(mdata, db_nr, pokedThing) {
@@ -102,31 +120,44 @@ XKit.extensions.pokes = {
 		var rarityPicker = Math.floor(Math.random() * 255);
 		if (rarityPicker >= 0 && rarityPicker <= rarity) {
 			var poke_html;
+			var poke_class;
+			var xpos = XKit.extensions.pokes.randomInt(-($(window).width() / 3), ($(window).width() / 2) - 100);
+			var ypos = XKit.extensions.pokes.randomInt(0, 600);
+
 			if (XKit.extensions.pokes.preferences.catch_backgrounds.value) {
-				poke_html = '<div class="poke poke_background' + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '">' +
-				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
-			} else {
-				poke_html = '<div class="poke' + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '">' +
-				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
+				if (XKit.extensions.pokes.preferences.transp_background.value) {
+					poke_class = "poke_bg_transp";
+				} else {
+					poke_class = "poke_bg";
+				}
 			}
+
+			if (XKit.extensions.pokes.preferences.allow_fullwidth.value) {
+				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
+				'<img src="' + poke_sprite + '" alt="' + poke_name + '"/>' + '</div>';
+			} else {
+				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
+				'<img src="' + poke_sprite + '" alt="' + poke_name + '"/>' + '</div>';
+			}
+
 			pokedThing.after(poke_html);
 			pokedThing.parent().find(".poke").click(function(event) {
-				if (XKit.storage.get("pokes","pokemon_storage","") === "") {
-					XKit.storage.set("pokes","pokemon_storage","[]");
+				if (XKit.storage.get("pokes", "pokemon_storage", "") === "") {
+					XKit.storage.set("pokes", "pokemon_storage", "[]");
 				}
 
 				try {
-					var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+					var storage_array = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", ""));
 					if (storage_array !== "") {
 						var poke_id = $(this).data("pokeid");
-						var poke_gender = $(this).data("pokegender");
-						var poke_name = $(this).data("pokename");
-						var poke_wiki_name = poke_name;
+						var caught_gender = $(this).data("pokegender");
+						var caught_name = $(this).data("pokename");
+						var poke_wiki_name = caught_name;
 
-						if (poke_name.indexOf(" ") > -1) {
-							var firstWord = poke_name.split(" ")[0];
-						if (firstWord == "Mega" || firstWord == "Primal") {
-								poke_wiki_name = poke_name.split(" ")[1];
+						if (caught_name.indexOf(" ") > -1) {
+							var firstWord = caught_name.split(" ")[0];
+							if (firstWord == "Mega" || firstWord == "Primal") {
+								poke_wiki_name = caught_name.split(" ")[1];
 							} else if (firstWord == "Cosplay") {
 								poke_wiki_name = "Cosplay Pikachu";
 							} else {
@@ -134,17 +165,17 @@ XKit.extensions.pokes = {
 							}
 						}
 
-						storage_array.push({ id: poke_id, gender: poke_gender, shiny: $(this).hasClass("pokes_shiny") });
-						XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
-						XKit.notifications.add("You caught a " + ($(this).hasClass("pokes_shiny") ? "shiny " : "") + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes", false, function () {
+						storage_array.push({ id: poke_id, gender: caught_gender, shiny: $(this).hasClass("pokes_shiny") });
+						XKit.storage.set("pokes", "pokemon_storage", JSON.stringify(storage_array));
+						XKit.notifications.add("You caught a " + ($(this).hasClass("pokes_shiny") ? "shiny " : "") + caught_gender + " " + caught_name.charAt(0).toUpperCase() + caught_name.substr(1) + "!", "pokes", false, function() {
 							window.open("http://bulbapedia.bulbagarden.net/wiki/" + poke_wiki_name);
 						});
 						$(this).hide();
 					} else {
-						XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+						XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					}
-				} catch(e) {
-					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-002","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				} catch (e) {
+					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-002", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				}
 			});
 		} else {
@@ -162,8 +193,7 @@ XKit.extensions.pokes = {
 		var rnd_nr = Math.floor(Math.random() * 101);
 		if (rnd_nr >= 0 && rnd_nr <= 8) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	},
@@ -175,37 +205,38 @@ XKit.extensions.pokes = {
 	destroy: function() {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
+		$(".poke").remove();
 	},
 
 	rename_poke: function(index, nick, cb) {
 		if (!cb) { cb = function() {}; }
 		try {
-			var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+			var storage_array = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", ""));
 			if (storage_array) {
 				storage_array[index].nickname = nick;
-				XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
+				XKit.storage.set("pokes", "pokemon_storage", JSON.stringify(storage_array));
 				cb();
 			} else {
-				XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-003","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-003", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			}
-		} catch(e) {
-			XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-004","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		} catch (e) {
+			XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-004", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		}
 	},
 
 	delete_poke: function(index, cb) {
 		if (!cb) { cb = function() {}; }
 		try {
-			var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+			var storage_array = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", ""));
 			if (storage_array) {
-				storage_array.splice(index,1);
-				XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
+				storage_array.splice(index, 1);
+				XKit.storage.set("pokes", "pokemon_storage", JSON.stringify(storage_array));
 				cb();
 			} else {
-				XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-005","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-005", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			}
-		} catch(e) {
-			XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-006","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		} catch (e) {
+			XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-006", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		}
 	},
 
@@ -213,6 +244,16 @@ XKit.extensions.pokes = {
 		var m_html =
 			'<div class="xkit-pokes-lightbox" style="opacity: 0">' +
 			'<div class="xkit-pokes-pc">' +
+					'<div class="xkit-pokes-pc-sorter">' +
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="chronological" title="Order of capture" checked="checked"></input>' +
+              '<label for="chronological"></label>' +
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="alphabetical" title="Name"></input>' +
+              '<label for="alphabetical"></label>' +
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="pokeid" title="Pokédex # ordering"></input>' +
+              '<label for="pokeid"></label>' +
+              '<input type="checkbox" class="xkit-pokes-sorter" id="reverse-toggle"></input>' +
+              '<label for="reverse-toggle"></label>' +
+					'</div>' +
 				'<div class="xkit-pokes-pc-info">' +
 					'<div class="gender"></div>' +
 					'<div class="nickname"></div>' +
@@ -240,6 +281,30 @@ XKit.extensions.pokes = {
 				}
 			});
 		});
+
+		var sortFunction = function(dataAttr, optData) {
+			var up = ($('input.xkit-pokes-sorter#reverse-toggle').is(":checked") ? -1 : 1);
+			return function(first, second) {
+				return ($(second).data(dataAttr) || $(second).data(optData)) < ($(first).data(dataAttr) || $(first).data(optData)) ? up : -up;
+			};
+		};
+
+		$('input:radio[name="xkit-pokes-sort"]#pokeid').change(function(e) {
+			$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokeid", "pokeid"))
+									.prependTo("#xkit-loading_pokemon");
+		});
+		$('input:radio[name="xkit-pokes-sort"]#alphabetical').change(function(e) {
+			$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokenick", "pokespecies"))
+									.prependTo("#xkit-loading_pokemon");
+		});
+		$('input:radio[name="xkit-pokes-sort"]#chronological').change(function(e) {
+			$("#xkit-loading_pokemon div.caught").sort(sortFunction('array_index', 'array_index'))
+									.prependTo("#xkit-loading_pokemon");
+		});
+		$('.xkit-pokes-sorter#reverse-toggle').change(function(e) {
+				 $("#xkit-loading_pokemon div.caught").sort(function(i) {return 1;}).prependTo("#xkit-loading_pokemon");
+		});
+
 		$(".xkit-pokes-lightbox").animate({
 			opacity: 1
 		});
@@ -265,7 +330,7 @@ XKit.extensions.pokes = {
 			if (typeof $("div.active").attr("data-pokenick") !== "undefined" && $("div.active").attr("data-pokenick")) {
 				pokename = $("div.active").attr("data-pokenick") + " (" + pokename + ")";
 			}
-			XKit.window.show("Release Pokémon","Do you really want to release <b>" + pokename + "</b>?<br/>This Pokémon will be lost. You can not undo this action.","question","<div id=\"release-pokemon-yes\" class=\"xkit-button default\">Yes, release Pokémon</div><div id=\"release-pokemon-no\" class=\"xkit-button\">Cancel</div>");
+			XKit.window.show("Release Pokémon", "Do you really want to release <b>" + pokename + "</b>?<br/>This Pokémon will be lost. You can not undo this action.", "question", "<div id=\"release-pokemon-yes\" class=\"xkit-button default\">Yes, release Pokémon</div><div id=\"release-pokemon-no\" class=\"xkit-button\">Cancel</div>");
 			$("#release-pokemon-no").click(function() {
 				XKit.window.close();
 			});
@@ -293,22 +358,22 @@ XKit.extensions.pokes = {
 			});
 		});
 		XKit.extensions.pokes.fetch_pokedex(function(mdata) {
-			var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
+			var caught = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", "[]"));
 			var header = "<p>You've caught " + caught.length + " total Pokémon!<br/> That's ";
 			var checklist = [];
-			var m_html = "";
-			$.each(caught, function (index, value) {
+			var caught_html = "";
+			$.each(caught, function(index, value) {
 				var sprite = mdata[value.id].sprite;
 				if (value.shiny) {
 					sprite = mdata[value.id].sprite_shiny || mdata[value.id].sprite;
 				}
-				m_html = m_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "'></div>";
+				caught_html = caught_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
 				if (checklist.indexOf(value.id) === -1) checklist.push(value.id);
 			});
 			header += checklist.length + " out of " + mdata.length + " different species of Pokémon!</p>";
-			$("#xkit-loading_pokemon").html(m_html);
+			$("#xkit-loading_pokemon").html(caught_html);
 			$(".caught_stats").html(header);
-			$(".xkit-pokes-pc-pokemon .caught").click(function () {
+			$(".xkit-pokes-pc-pokemon .caught").click(function() {
 				if ($(this).hasClass("active")) {
 					$(this).removeClass("active");
 					$(".xkit-pokes-pc-info .caught_stats").show();

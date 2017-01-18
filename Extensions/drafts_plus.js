@@ -16,7 +16,7 @@ XKit.extensions.drafts_plus = new Object({
 
 		XKit.tools.init_css("drafts_plus");
 
-		xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
+		var xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
 			'<li class="section_header selected">DRAFTS TOOLS</li>' +
 			'<li class="" id="drafts_plus_mass_edit_li"">' +
 				'<a href="#" class="customize" id="drafts_plus_mass_edit_button">' +
@@ -124,7 +124,7 @@ XKit.extensions.drafts_plus = new Object({
 					Tumblr.Events.trigger("DOMEventor:updateRect");
 				}
 
-			} catch(e) {
+			} catch (e) {
 
 				console.log("Drafts Plus ==2==> !!! " + e.message);
 
@@ -188,7 +188,7 @@ XKit.extensions.drafts_plus = new Object({
 				data: "id=" + m_object.post_id + "&form_key=" + m_object.form_key + "&queue=queue",
 				json: false,
 				onerror: function(response) {
-					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested action. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested action. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				},
 				onload: function(response) {
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
@@ -230,7 +230,7 @@ XKit.extensions.drafts_plus = new Object({
 				data: "id=" + m_object.post_id + "&form_key=" + m_object.form_key,
 				json: false,
 				onerror: function(response) {
-					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				},
 				onload: function(response) {
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
@@ -262,7 +262,7 @@ XKit.extensions.drafts_plus = new Object({
 				data: JSON.stringify(m_object),
 				json: true,
 				onerror: function(response) {
-					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				},
 				onload: function(response) {
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
@@ -275,7 +275,7 @@ XKit.extensions.drafts_plus = new Object({
 
 	scrolled: function() {
 
-		if($(window).scrollTop() + $(window).height() == $(document).height()) {
+		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
 
 			XKit.extensions.drafts_plus.load_posts();
 
@@ -299,7 +299,7 @@ XKit.extensions.drafts_plus = new Object({
 					Tumblr.Events.trigger("DOMEventor:updateRect");
 				}
 
-			} catch(e) {
+			} catch (e) {
 
 				console.log("Drafts Plus ==2==> !!! " + e.message);
 
@@ -315,7 +315,7 @@ XKit.extensions.drafts_plus = new Object({
 
 		var last_id = $("#posts").find("li.post_container").last().find(".post").attr('data-post-id');
 
-		var m_url = document.location.href.replace("#","");
+		var m_url = document.location.href.replace("#", "");
 
 		// http://www.tumblr.com/blog/xenix/drafts/after/
 
@@ -326,8 +326,8 @@ XKit.extensions.drafts_plus = new Object({
 			url: m_url,
 			onerror: function(response) {
 				XKit.extensions.drafts_plus.scroller_working = false;
-				$("#auto_pagination_loader_failure").css("display","block");
-				$("#auto_pagination_loader_loading").css("display","none");
+				$("#auto_pagination_loader_failure").css("display", "block");
+				$("#auto_pagination_loader_loading").css("display", "none");
 
 			},
 			onload: function(response) {
@@ -336,16 +336,16 @@ XKit.extensions.drafts_plus = new Object({
 				// console.log(new_posts);
 				try {
 					$("ol#posts").append(new_posts);
-				} catch(e) {
+				} catch (e) {
 					console.log("Drafts Plus ==3==> !!! " + e.message);
 				}
-				$("#auto_pagination_loader_failure").css("display","none");
-				$("#auto_pagination_loader_loading").css("display","block");
+				$("#auto_pagination_loader_failure").css("display", "none");
+				$("#auto_pagination_loader_loading").css("display", "block");
 
 				XKit.extensions.drafts_plus.add_overlays();
 				try {
-					XKit.tools.add_function(__trigger_load, true,"");
-				} catch(e) {
+					XKit.tools.add_function(__trigger_load, true, "");
+				} catch (e) {
 					console.log("Drafts+: " + e.message);
 				}
 

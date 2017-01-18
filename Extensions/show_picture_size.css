@@ -11,9 +11,14 @@
     background: rgba(0,0,0,.5);
     color: #eee;
     padding: 2px 4px;
+    z-index: 10;
 }
 
-.xkit-show-picture-size .post_media:hover .show-picture-size,
+.xkit-show-picture-size .post_media:hover > .show-picture-size,
 .xkit-show-picture-size .photoset .photoset_photo:hover .show-picture-size {
     display: none;
+}
+
+.photoset_row {
+	position: relative;
 }

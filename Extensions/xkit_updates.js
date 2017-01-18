@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -28,8 +28,7 @@ XKit.extensions.xkit_updates = new Object({
 		try {
 			XKit.tools.init_css("xkit_updates");
 			this.running = true;
-			var d = new Date();
-			var ms = d.getTime();
+			var ms = (new Date()).getTime();
 			var last_time = parseFloat(XKit.storage.get("xkit_updates", "last_update_check", "0"));
 			var difference = ms - last_time;
 			XKit.console.add("Updates: difference = " + difference);
@@ -43,13 +42,13 @@ XKit.extensions.xkit_updates = new Object({
 					XKit.console.add("Invalid check interval, reverting to default: too small or big.");
 				}
 			}
-			if (difference <= -1 ||difference >= XKit.extensions.xkit_updates.preferences.check_interval.value) {
+			if (difference <= -1 || difference >= XKit.extensions.xkit_updates.preferences.check_interval.value) {
 				XKit.console.add("Starting update checking..");
 				XKit.extensions.xkit_updates.get_list();
 			} else {
 				XKit.console.add("Skipping update checking.");
 			}
-		} catch(e) {
+		} catch (e) {
 			XKit.extensions.xkit_updates.show_update_failure();
 		}
 	},
@@ -78,7 +77,7 @@ XKit.extensions.xkit_updates = new Object({
 			XKit.extensions.xkit_updates.updated_list = [];
 			XKit.extensions.xkit_updates.updated_list_versions = [];
 
-			for(var extension in mdata.extensions) {
+			for (var extension in mdata.extensions) {
 
 				if (force_mode) {
 
@@ -89,7 +88,7 @@ XKit.extensions.xkit_updates = new Object({
 							check_this = true;
 						}
 
-						if (mdata.extensions[extension].name.substring(0,5) === "xkit_") {
+						if (mdata.extensions[extension].name.substring(0, 5) === "xkit_") {
 							// Always update internals no matter what.
 							check_this = true;
 						}
@@ -118,8 +117,7 @@ XKit.extensions.xkit_updates = new Object({
 				}
 				XKit.extensions.xkit_updates.update_next(force_mode);
 			} else {
-				var d = new Date();
-				var ms = d.getTime();
+				var ms = (new Date()).getTime();
 				XKit.storage.set("xkit_updates", "last_update_check", ms);
 				XKit.console.add("Update complete: no new extensions");
 			}
@@ -130,11 +128,26 @@ XKit.extensions.xkit_updates = new Object({
 
 	show_update_failure: function() {
 
-		XKit.notifications.add("<b>Could not update XKit:</b><br/>I could not reach the XKit servers to update myself. You might be running an old and buggy version of XKit. Click here for details.", "error", true, function() {
+		XKit.notifications.add("<b>Could not update New XKit:</b><br/>" +
+			"I could not reach the New XKit servers to update myself. " +
+			"You might be running an old and buggy version of New XKit. Click here for details.",
+			"error", true, function() {
 
-			XKit.window.show("Auto-Update failed.","XKit automatically updates itself from time to time in the background to bring you the latest features and bug fixes. Unfortunately, it was unable to contact the servers and download the latest updates. This might be a temporary server error or a problem with your connection.<br/><br/><b>If you have received this message more than twice in the last three days, it is highly recommended that you reset XKit.</b> If you don't, you'll be running an out-of-date XKit which might not work properly and cause problems.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://www.tumblr.com/xkit_reset\" class=\"xkit-button\">Reset XKit</a>");
+				XKit.window.show("Auto-Update failed.",
+				"New XKit automatically updates itself from time to time in the background " +
+				"to bring you the latest features and bug fixes. Unfortunately, it was " +
+				"unable to contact the servers and download the latest updates. This " +
+				"might be a temporary server error or a problem with your connection." +
+				"<br/><br/>" +
+				"<b>If you have received this message more than twice in the last three days, " +
+				"you should try to get into contact with New XKit support to try to fix the issue.</b> " +
+				"If you don't, you'll be running an out-of-date New XKit which might not work properly and cause problems.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+				'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button">New XKit Blog</a>' +
+				'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>');
 
-		});
+			});
 
 	},
 
@@ -142,36 +155,35 @@ XKit.extensions.xkit_updates = new Object({
 
 		if (XKit.extensions.xkit_updates.to_update_index >= XKit.extensions.xkit_updates.to_update.length) {
 
-			var d = new Date();
-			var ms = d.getTime();
+			var ms = (new Date()).getTime();
 			XKit.storage.set("xkit_updates", "last_update_check", ms);
 
 			// Completed all?
 
 			if (!force_mode) {
 
-				var to_show = XKit.tools.get_setting("xkit_show_update_notifications","true");
+				var to_show = XKit.tools.get_setting("xkit_show_update_notifications", "true");
 
 				if (to_show === "true") {
 					var suffix = "";
-					
-					if(XKit.extensions.xkit_updates.updated_list.length !== 1){
+
+					if (XKit.extensions.xkit_updates.updated_list.length !== 1) {
 						suffix = "s";
 					}
-					
+
 					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension" + suffix + ". Click here to view them.", "ok", true, function() {
 						var m_result = "";
-						for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
+						for (var i = 0; i < XKit.extensions.xkit_updates.updated_list.length; i++) {
 							m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
 						}
-						XKit.window.show("Auto-Update results","<b>XKit updated the following extension" + suffix + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+						XKit.window.show("Auto-Update results", "<b>XKit updated the following extension" + suffix + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					});
 
 				}
 
 			} else {
 
-				XKit.window.show("Complete!","<b>XKit updated all the extensions with version mismatch.</b><br/>Changes will be active when you refresh the page.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Complete!", "<b>XKit updated all the extensions with version mismatch.</b><br/>Changes will be active when you refresh the page.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 			}
 
@@ -190,7 +202,7 @@ XKit.extensions.xkit_updates = new Object({
 				if (mdata.error_not_found === true) {
 					// Probably removed.
 					XKit.console.add("Can not update " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index] + ": not found.");
-				}else{
+				} else {
 					XKit.extensions.xkit_updates.show_update_failure();
 					return;
 				}
@@ -247,7 +259,7 @@ XKit.extensions.xkit_updates = new Object({
 				m_result.title = mdata.title;
 				m_result.version = mdata.version;
 				callback(m_result);
-			} catch(e) {
+			} catch (e) {
 				m_result.errors = true;
 				m_result.error = "UP-ER:" + e.message;
 				callback(m_result);
@@ -269,7 +281,7 @@ XKit.extensions.xkit_updates = new Object({
 		}
 		return false;
 	},
-	
+
 	destroy: function() {
 		this.running = false;
 	}
