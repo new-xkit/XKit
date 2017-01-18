@@ -1,34 +1,21 @@
-# Extension Icons
+# Extension Icon
 
-Your extension's icon is very important.  A badly drawn icon, or an icon that doesn't really fix the rest of the icons used by XKit extensions will turn off your users, and will lead them to think the extension is amateurish, and might be buggy. A good branding is important for a good extension.
+Good branding is important for good extensions. As such, your extension icon is very important.  A poorly designed icon, or an icon that doesn't fit with the rest of XKit's iconography, will make your extension seem amateurish and poorly developed.
 
-### Technical
+**Keep your icon simple.** Focus your icon around a single symbol directly related to what your extension does. Try not to use more than one symbol per icon.
 
-* XKit extension icons are 32x32 pixels.
-* While displaying the icon, XKit rounds the corners of your icon and adds a subtle shadow to it.
+**Avoid ambiguity.** Though your icon should be simple, make sure it's not vague. An abstract icon makes it hard to understand what your extension does.
 
-### Style
+**Avoid realism.** Keep your icon as simple as possible by using a symbol rather than realistic images.
 
-* XKit icons are simple: they use one or two symbols on the icon.
-* They are not realistic: they use symbols, and not real/realistic photos.
+**Keep your backgrounds clear.** Other than your central symbol, there shouldn't be much in the background to distract from it.
 
-### Colours
+**Mind your colors.** Use light background colors and avoid dark ones. Contrast the colors between your symbol and the background so that it doesn't blend in.
 
-* Most extensions that work on dashboard, and add features to it have the same background colour of the dashboard as their background, and white on top of that.
-* Use light colours, especially on the background of your icon. Do not use black or a really dark color as the background color.
-* Use contrasting colours. Do not use, for example, light grey on top of a darker grey, it will be practically invisible when viewed on a laptop in a bright location.
+### Technical Details
 
-### Lightning
-
-* On XKit icons, lightning comes from top-left corner, and should be subtle.
-
-### Symbols
-
-* Don't go all abstract, use clear imagery.
-* Try to use as few symbols on your icon as possible.
-* Most XKit icons use [Glyphicons](http://glyphicons.com/) for their symbols.
-* The symbols should be at least ~4 px away from the corners of the icon.
-
-### In a nutshell
-
-![Icons guidelines](http://www.xkit.info/icons_guide.gif)
+* XKit extension icons are 64x64 pixels.
+* The symbols should be at least 4 px away from the edge of the icon.
+* Keep your icon square—XKit will automatically round the corners for you.
+* Not sure what symbol to use? [Glyphicons](http://glyphicons.com/) is a good resource to check out for reference.
+* Still having trouble with your icon? Check out Google's [Material Design guidelines](https://material.io/guidelines/style/icons.html#icons-product-icons) for additional help. (If you're _really_ desperate, [Apple's icon guidelines](https://developer.apple.com/ios/human-interface-guidelines/graphics/app-icon/) are a good resource, too.)

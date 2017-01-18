@@ -1,5 +1,5 @@
 //* TITLE Auto Load Images **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.1.3 **//
 //* DESCRIPTION Load inline photos automatically **//
 //* DETAILS This extension removes the &quot;gray box&quot; that appears on the photos attached to non-photo posts, allowing the photos to load automatically without you having to click on them. **//
 //* DEVELOPER STUDIOXENIX **//

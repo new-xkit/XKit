@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.5.2 **//
+//* VERSION 1.5.3 **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -63,8 +63,8 @@ XKit.extensions.cleanfeed = new Object({
 
 		XKit.tools.init_css("cleanfeed");
 
-		XKit.extensions.cleanfeed.status = XKit.storage.get("cleanfeed","status","false");
-		XKit.extensions.cleanfeed.mode = XKit.storage.get("cleanfeed","mode","normal");
+		XKit.extensions.cleanfeed.status = XKit.storage.get("cleanfeed", "status", "false");
+		XKit.extensions.cleanfeed.mode = XKit.storage.get("cleanfeed", "mode", "normal");
 
 		var normal_text = "";
 		if (XKit.extensions.cleanfeed.mode === "normal") {
@@ -74,7 +74,7 @@ XKit.extensions.cleanfeed = new Object({
 		}
 
 
-		xf_html = '<ul class="controls_section" id="xcleanfeed_ul">' +
+		var xf_html = '<ul class="controls_section" id="xcleanfeed_ul">' +
 			'<li class="section_header selected">CLEANFEED</li>' +
 			'<li class="no_push" style="height: 36px;"><a href="#" id="xcleanfeed_button">' +
 			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Filtering</div>' +
@@ -107,7 +107,7 @@ XKit.extensions.cleanfeed = new Object({
 						"<b>Important:</b> Smart mode depends on the blog rating gathered from Tumblr servers. If you turn on Smart mode and a blog is not set as a NSFW/Adult blog, either by the blogger or Tumblr, then their posts will appear on your dashboard without any filtering. Turn on Normal mode for maximum protection against genitalia in public." +
 					"</div>";
 
-			XKit.window.show("Change Mode","<b>Change the mode CleanFeed works on:</b>" + m_html, "question","<div class=\"xkit-button default\" id=\"xkit-cleanfeed-accept-message\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+			XKit.window.show("Change Mode", "<b>Change the mode CleanFeed works on:</b>" + m_html, "question", "<div class=\"xkit-button default\" id=\"xkit-cleanfeed-accept-message\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 			$(".xkit-cleanfeed-mode-toggle").click(function() {
 
@@ -152,7 +152,7 @@ XKit.extensions.cleanfeed = new Object({
 		var mode_text = "Normal";
 		if (mode === "smart") { mode_text = "Smart"; }
 
-		XKit.storage.set("cleanfeed","mode", mode);
+		XKit.storage.set("cleanfeed", "mode", mode);
 
 		XKit.extensions.cleanfeed.mode = mode;
 
@@ -259,7 +259,7 @@ XKit.extensions.cleanfeed = new Object({
 
 	hide_thumbnail: function(j) {
 
-		$(j).attr('src',XKit.extensions.cleanfeed.img_blank);
+		$(j).attr('src', XKit.extensions.cleanfeed.img_blank);
 		$(j).css("background", "#d5e3f3 no-repeat 50% 50% url(" + XKit.extensions.cleanfeed.img_lock + ")");
 		$(j).css("visibility", "visible");
 
@@ -267,14 +267,14 @@ XKit.extensions.cleanfeed = new Object({
 
 	show_thumbnail: function(j) {
 
-		$(j).attr('src',$(j).attr('data-thumbnail'));
-		$(j).css("background","transparent");
+		$(j).attr('src', $(j).attr('data-thumbnail'));
+		$(j).css("background", "transparent");
 
 	},
 
 	hide_photoset_picture: function(j) {
 
-		$(j).attr('src',XKit.extensions.cleanfeed.img_blank);
+		$(j).attr('src', XKit.extensions.cleanfeed.img_blank);
 		$(j).css("background", "#d5e3f3 no-repeat 50% 50% url(" + XKit.extensions.cleanfeed.img_lock + ")");
 		$(j).css("visibility", "visible");
 
@@ -282,18 +282,18 @@ XKit.extensions.cleanfeed = new Object({
 
 	show_photoset_picture: function(j) {
 
-		$(j).attr('src',$(j).attr('data-xkit-old-src'));
-		$(j).css("background","transparent");
+		$(j).attr('src', $(j).attr('data-xkit-old-src'));
+		$(j).css("background", "transparent");
 
 	},
 
 	smart_update_images: function() {
 
-		$(document).on("mouseenter",".xkit-cleanfeed-smart-checked-flagged .image_thumbnail", XKit.extensions.cleanfeed.m_enter);
-		$(document).on("mouseleave",".xkit-cleanfeed-smart-checked-flagged .image_thumbnail", XKit.extensions.cleanfeed.m_leave);
+		$(document).on("mouseenter", ".xkit-cleanfeed-smart-checked-flagged .image_thumbnail", XKit.extensions.cleanfeed.m_enter);
+		$(document).on("mouseleave", ".xkit-cleanfeed-smart-checked-flagged .image_thumbnail", XKit.extensions.cleanfeed.m_leave);
 
-		$(document).on("mouseenter",".xkit-cleanfeed-smart-checked-flagged .photoset_row img, .post.xkit-cleanfeed-smart-checked-flagged .image, .post.xkit-cleanfeed-smart-checked-flagged .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
-		$(document).on("mouseleave",".xkit-cleanfeed-smart-checked-flagged .photoset_row img, .post.xkit-cleanfeed-smart-checked-flagged .image, .post.xkit-cleanfeed-smart-checked-flagged .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
+		$(document).on("mouseenter", ".xkit-cleanfeed-smart-checked-flagged .photoset_row img, .post.xkit-cleanfeed-smart-checked-flagged .image, .post.xkit-cleanfeed-smart-checked-flagged .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
+		$(document).on("mouseleave", ".xkit-cleanfeed-smart-checked-flagged .photoset_row img, .post.xkit-cleanfeed-smart-checked-flagged .image, .post.xkit-cleanfeed-smart-checked-flagged .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
 
 		if (!XKit.extensions.cleanfeed.added_full_block_css && XKit.extensions.cleanfeed.preferences.full_block.value) {
 			XKit.tools.add_css(" .post.xkit-cleanfeed-smart-checked-flagged.video, .post.xkit-cleanfeed-smart-checked-flagged.photo, .post.xkit-cleanfeed-smart-checked-flagged.audio, .post.xkit-cleanfeed-smart-checked-flagged.is_video, .post.xkit-cleanfeed-smart-checked-flagged.is_photo, .post.xkit-cleanfeed-smart-checked-flagged.is_audio, .post.xkit-cleanfeed-smart-checked-flagged.is_photoset, { display: none !important; }", "cleanfeed_full_block");
@@ -388,11 +388,11 @@ XKit.extensions.cleanfeed = new Object({
 				XKit.extensions.cleanfeed.added_full_block_css = true;
 			}
 
-			$(document).on("mouseenter",".image_thumbnail", XKit.extensions.cleanfeed.m_enter);
-			$(document).on("mouseleave",".image_thumbnail", XKit.extensions.cleanfeed.m_leave);
+			$(document).on("mouseenter", ".image_thumbnail", XKit.extensions.cleanfeed.m_enter);
+			$(document).on("mouseleave", ".image_thumbnail", XKit.extensions.cleanfeed.m_leave);
 
-			$(document).on("mouseenter",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
-			$(document).on("mouseleave",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
+			$(document).on("mouseenter", ".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
+			$(document).on("mouseleave", ".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
 
 		} else {
 
@@ -422,10 +422,10 @@ XKit.extensions.cleanfeed = new Object({
 			XKit.tools.remove_css("cleanfeed_on");
 			XKit.extensions.cleanfeed.added_css = false;
 
-			$(document).off("mouseenter",".image_thumbnail", XKit.extensions.cleanfeed.m_enter);
-			$(document).off("mouseleave",".image_thumbnail", XKit.extensions.cleanfeed.m_leave);
-			$(document).off("mouseenter",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
-			$(document).off("mouseleave",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
+			$(document).off("mouseenter", ".image_thumbnail", XKit.extensions.cleanfeed.m_enter);
+			$(document).off("mouseleave", ".image_thumbnail", XKit.extensions.cleanfeed.m_leave);
+			$(document).off("mouseenter", ".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
+			$(document).off("mouseleave", ".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
 
 		}
 

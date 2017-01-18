@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2.3 **//
+//* VERSION 1.2.5 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -60,7 +60,7 @@ XKit.extensions.profiler = new Object({
 			$(".follower").each(function() {
 
 				var m_url = $(this).find(".name").text();
-				var m_storage = XKit.storage.get("profiler","nick-for--" + m_url, "");
+				var m_storage = XKit.storage.get("profiler", "nick-for--" + m_url, "");
 				if (m_storage === "") { return; }
 
 				$(this).find(".name").append("<div class=\"xkit-profiler-nickname-inline\">(" + m_storage + ")</div>");
@@ -90,12 +90,12 @@ XKit.extensions.profiler = new Object({
 				try {
 					var m_json_obj = JSON.parse(m_json_info);
 					post_owner = m_json_obj.name;
-				} catch(e) {
+				} catch (e) {
 					return;
 				}
 			}
 
-			var m_storage = XKit.storage.get("profiler","nick-for--" + post_owner, "");
+			var m_storage = XKit.storage.get("profiler", "nick-for--" + post_owner, "");
 
 			if (m_storage === "") { return; }
 
@@ -291,11 +291,11 @@ XKit.extensions.profiler = new Object({
 		$("#xkit-profiler-contents").nanoScroller();
 		$("#xkit-profiler-contents").nanoScroller({ scroll: 'top' });
 
-		$("body").css("overflow","hidden");
+		$("body").css("overflow", "hidden");
 
 		$("#xkit-profiler-close").click(function() {
 
-			$("body").css("overflow","auto");
+			$("body").css("overflow", "auto");
 			XKit.window.close();
 
 			if (XKit.extensions.profiler.is_inframe === true) {
@@ -309,7 +309,7 @@ XKit.extensions.profiler = new Object({
 			var new_name = prompt("Enter a nickname/title/description for this person");
 
 			if (new_name !== null) {
-				XKit.storage.set("profiler","nick-for--" + user_url, new_name);
+				XKit.storage.set("profiler", "nick-for--" + user_url, new_name);
 				$("#xkit-profiler-nickname").removeClass("loading-up").html(new_name);
 			} else {
 				console.log("Nothing entered.");
@@ -319,37 +319,27 @@ XKit.extensions.profiler = new Object({
 
 		});
 
-		var m_nickname = XKit.storage.get("profiler","nick-for--" + user_url, "");
+		var m_nickname = XKit.storage.get("profiler", "nick-for--" + user_url, "");
 		if (m_nickname === "") {
 			$("#xkit-profiler-nickname").removeClass("loading-up").html("Not set");
 		} else {
 			$("#xkit-profiler-nickname").removeClass("loading-up").html(m_nickname);
 		}
 
+		var blog_id;
 		var m_blogs = XKit.tools.get_blogs();
-		for(i=0;i<m_blogs.length;i++) {
+		for (var i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
 				blog_id = m_blogs[i];
 				break;
 			}
 		}
 
-		$.ajax({
-			type: "POST",
-			url: "/svc/tumblelog/followed_by",
-			data: "tumblelog=" + blog_id + "&query=" + user_url,
-			dataType: "text",
-		}).done(function( msg ) {
-			if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
-			try {
-				msg = JSON.parse(msg);
-				if (msg.response.is_friend === 1) {
-					$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
-				} else {
-					$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
-				}
-			} catch(e){
-				console.log("Profiler: " + e.message);
+		XKit.interface.is_following(user_url, blog_id).then(function(follow) {
+			if (follow) {
+				$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
+			} else {
+				$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
 			}
 		});
 
@@ -369,6 +359,8 @@ XKit.extensions.profiler = new Object({
 
 				var data = JSON.parse(response.responseText).response;
 				var dtx = new Date(data.blog.updated * 1000);
+				// defined in moment.js
+				/* globals moment */
 				var dt = moment(dtx);
 
 				$("#xkit-profiler-last-update").removeClass("loading-up").html(dt.from(new Date()));
@@ -382,7 +374,7 @@ XKit.extensions.profiler = new Object({
 				$("#xkit-profiler-custom-domain").removeClass("loading-up").html(m_custom_val);
 
 				if (data.blog.is_nsfw === true) {
-						$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
+					$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
 				} else {
 					$("#xkit-profiler-nsfw").removeClass("loading-up").html("No");
 				}
@@ -400,13 +392,13 @@ XKit.extensions.profiler = new Object({
 					method: "GET",
 					url: new_url,
 					json: true,
-					onerror: function(response) {
+					onerror: function(next_response) {
 						XKit.extensions.profiler.display_error(m_window_id);
 						return;
 					},
-					onload: function(response) {
-						var data = JSON.parse(response.responseText).response;
-						var date = new Date(data.posts[0].timestamp*1000);
+					onload: function(next_response) {
+						var next_data = JSON.parse(next_response.responseText).response;
+						var date = new Date(next_data.posts[0].timestamp * 1000);
 						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
 					}
 				});
@@ -422,7 +414,7 @@ XKit.extensions.profiler = new Object({
 
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://" + user_url + ".tumblr.com/api/read/json?read_id=" + XKit.tools.random_string(),
+			url: "https://" + user_url + ".tumblr.com/api/read/json?read_id=" + XKit.tools.random_string(),
 			json: false,
 			onerror: function(response) {
 				console.log("Error getting page.");
@@ -433,18 +425,18 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
-				var data = response.responseText.substring("var tumblr_api_read = ".length,
-														   response.responseText.length - 1);
-
-				try {
-					data = JSON.parse(data);
-				} catch(e) {
-					console.log("Error parsing data.");
-					XKit.extensions.profiler.display_error(m_window_id);
-					return;
+				// Manually look for the string "timezone":"Whatever" because
+				// the responseText is a substring of a JSON object
+				var timezone = '';
+				if (response.responseText) {
+					timezone = response.responseText.match(/"timezone":\s*("[^"]*")/)[1];
 				}
 
-				$("#xkit-profiler-timezone").removeClass("loading-up").html(data.tumblelog.timezone);
+				if (timezone) {
+					// Unescape the JS string
+					timezone = JSON.parse(timezone);
+					$("#xkit-profiler-timezone").removeClass("loading-up").html(timezone);
+				}
 
 			}
 		});
@@ -480,7 +472,7 @@ XKit.extensions.profiler = new Object({
 				var data = null;
 				try {
 					data = JSON.parse(response.responseText).response;
-				} catch(e) {
+				} catch (e) {
 					console.log("Error parsing data.");
 					XKit.extensions.profiler.display_error(m_window_id);
 					return;
@@ -508,9 +500,9 @@ XKit.extensions.profiler = new Object({
 
 	show_ump_error: function() {
 
-		if (XKit.storage.get("profiler","shown_warning_about_show_more","") !== "yass") {
-			XKit.window.show("Oops: User Menus+ is missing.", "<b>Profiler requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using Profiler.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-			XKit.storage.set("profiler","shown_warning_about_show_more","yass");
+		if (XKit.storage.get("profiler", "shown_warning_about_show_more", "") !== "yass") {
+			XKit.window.show("Oops: User Menus+ is missing.", "<b>Profiler requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using Profiler.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.storage.set("profiler", "shown_warning_about_show_more", "yass");
 		}
 
 	},
@@ -519,7 +511,7 @@ XKit.extensions.profiler = new Object({
 		this.running = false;
 		try {
 			XKit.extensions.show_more.remove_custom_menu("profiler");
-		} catch(e){
+		} catch (e) {
 			XKit.console.add("Can't remove custom menu, " + e.message);
 		}
 	}

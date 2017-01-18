@@ -49,7 +49,7 @@ XKit.extensions.panaroma = new Object({
 
 		if (document.location.href.indexOf("://www.tumblr.com/spotlight") !== -1) {
 			m_css = m_css + " .chrome_nav { width: 24%!important; min-width: 230px!important; } #cards { width: 75%!important; min-width: 650px!important; } #cards .card{ width:30%!important; min-width:190px!important; }#content { padding-top: 30px!important;  } ";
-	}
+		}
 
 		XKit.tools.add_css(m_css, "panaroma_directory");
 

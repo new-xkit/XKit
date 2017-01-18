@@ -1,15 +1,16 @@
+/* globals safari */
 var framework_version = 0;
 var storage_max = -1;
 var storage_used = -1;
 
 if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(searchString, position) {
-    position = position || 0;
-    return this.indexOf(searchString, position) === position;
-  };
+	String.prototype.startsWith = function(searchString, position) {
+		position = position || 0;
+		return this.indexOf(searchString, position) === position;
+	};
 }
 
-(function(){
+(function() {
 
 	if (typeof XBridge !== "undefined") { return; }
 
@@ -83,7 +84,7 @@ if (!String.prototype.startsWith) {
 
 				ev.message.request.getResponseHeader = function(header) {
 
-					for (var i=0; i<this.f_headers.length;i++) {
+					for (var i = 0; i < this.f_headers.length; i++) {
 						if (this.f_headers[i].substring(0, header.length + 1) === header + ":") {
 							return this.f_headers[i].substring(header.length + 2);
 						}
@@ -93,9 +94,9 @@ if (!String.prototype.startsWith) {
 
 				};
 
-				for (var i=0;i<XBridge.network.callbacks.length;i++) {
+				for (var i = 0; i < XBridge.network.callbacks.length; i++) {
 
-					callback = XBridge.network.callbacks[i];
+					var callback = XBridge.network.callbacks[i];
 
 					if (callback.id == ev.message.request_id) {
 
@@ -124,9 +125,9 @@ if (!String.prototype.startsWith) {
 
 				// Called after XBackground deletes all storage data.
 
-				for (var i=0;i<XBridge.storage.callbacks.length;i++) {
+				for (var i = 0; i < XBridge.storage.callbacks.length; i++) {
 
-					callback = XBridge.storage.callbacks[i];
+					var callback = XBridge.storage.callbacks[i];
 
 					if (callback.id == ev.message.id) {
 						XBridge.storage.callbacks[i].callback();
@@ -173,7 +174,7 @@ if (!String.prototype.startsWith) {
 			var text = "";
 			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-			for( var i=0; i < 50; i++ )
+			for ( var i = 0; i < 50; i++ )
 				text += possible.charAt(Math.floor(Math.random() * possible.length));
 
 			return text;
@@ -186,14 +187,14 @@ if (!String.prototype.startsWith) {
 
 			request: function(settings) {
 
-				settings.url = settings.url.replace("http://api.tumblr.com","https://api.tumblr.com");
+				settings.url = settings.url.replace("http://api.tumblr.com", "https://api.tumblr.com");
 
 				if (settings.url == "http://www.tumblr.com/dashboard" || settings.url == "http://www.tumblr.com/dashboard/") {
-					settings.url = settings.url.replace("http://","https://");
+					settings.url = settings.url.replace("http://", "https://");
 				}
 
 				if (settings.url.indexOf("http://") != -1 && settings.url.indexOf("tumblr.com/svc/") != -1) {
-					settings.url = settings.url.replace("http://","https://");
+					settings.url = settings.url.replace("http://", "https://");
 				}
 
 				var toSend = {};
@@ -226,7 +227,7 @@ if (!String.prototype.startsWith) {
 
 			write: function(name, value) {
 
-				var toWrite = (typeof value)[0] + window.btoa(value);
+				var toWrite = '%' + (typeof value)[0] + window.btoa(encodeURIComponent(value));
 				XBridge.storage_area[name] = toWrite;
 
 				// Send data to background page so it would get saved.
@@ -243,15 +244,21 @@ if (!String.prototype.startsWith) {
 				if (!value) { return defaultValue; }
 
 				var type = value[0];
-				value = window.atob(value.substring(1));
+				// Leading '%' denotes escaped encoding
+				if (type === '%') {
+					type = value[1];
+					value = decodeURIComponent(window.atob(value.substring(2)));
+				} else {
+					value = value.substring(1);
+				}
 
 				switch (type) {
-					case 'b':
-						return value === 'true';
-					case 'n':
-						return Number(value);
-					default:
-						return value;
+				case 'b':
+					return value === 'true';
+				case 'n':
+					return Number(value);
+				default:
+					return value;
 				}
 
 			},

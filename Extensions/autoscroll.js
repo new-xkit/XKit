@@ -1,14 +1,19 @@
 //* TITLE Auto Scroll **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION Scrolls the page at a variable pace. **//
-//* DETAILS Automatically scrolls the dashboard. Scrolling stops upon clicking outside the control.  **//
+//* DETAILS Automatically scrolls the dashboard. **//
 //* DEVELOPER Fr33dan **//
 //* BETA true **//
 
 XKit.extensions.autoscroll = new Object({
 
-  running: false,
+	running: false,
 	preferences: {
+		"ClickAnywhereToStop": {
+			text: "Click anywhere to stop scrolling",
+			default: true,
+			value: true
+		},
 		"StepsOnControl": {
 			text: "Number of steps to have on the control:",
 			type: "text",
@@ -43,78 +48,75 @@ XKit.extensions.autoscroll = new Object({
 		var totalStepCount = Number(this.preferences.StepsOnControl.value);
 		var maxSpeed = Number(this.preferences.PixelsPerSecond.value);
 		var smoothingFactor = 1 / Number(this.preferences.RefreshRate.value);
+		var clickAnywhereToStop = this.preferences.ClickAnywhereToStop.value;
 
 		var controlSteps = $(".auto_scroll_control_step");
 		var currentStep = null;
 		var isScrolling = false;
 		var middleNumber = Math.round(totalStepCount / 2);
-		var scrollFunction = function(){
+		var scrollFunction = function() {
 			var stepNumber = 0;
 			var numberOfSteps = 0;
 			var directionFactor = 1;
-			if(Number(currentStep) < middleNumber)
-			{
+			if (Number(currentStep) < middleNumber) {
 				numberOfSteps = middleNumber;
 				directionFactor = -1;
 				stepNumber = middleNumber - Number(currentStep);
-			} else
-			{
+			} else {
 				numberOfSteps = totalStepCount - middleNumber;
 				stepNumber = Number(currentStep) - middleNumber + 1;
 				directionFactor = 1;
 			}
-			window.scrollBy(0,maxSpeed * smoothingFactor * directionFactor);
-			if(isScrolling){
-				var timerRatio = stepNumber/numberOfSteps;
-				setTimeout(scrollFunction,1000 * smoothingFactor / timerRatio);
+			window.scrollBy(0, maxSpeed * smoothingFactor * directionFactor);
+			if (isScrolling) {
+				var timerRatio = stepNumber / numberOfSteps;
+				setTimeout(scrollFunction, 1000 * smoothingFactor / timerRatio);
 			}
 		};
-		$(document).on("click",".auto_scroll_control_step", function(event){
-			// Mark and store the selected speed.
-			controlSteps.removeAttr("selected");
-			$(event.target).attr("selected","true");
-			currentStep = $(event.target).attr("number");
-			XKit.console.add("Scroll index: " + currentStep);
+		$(document).on("click", ".auto_scroll_control_step", function(event) {
+			if (!$(event.target).is("[selected]")) {
+				// Mark and store the selected speed.
+				controlSteps.removeAttr("selected");
+				$(event.target).attr("selected", "true");
+				currentStep = $(event.target).attr("number");
 
-			// Start scrolling
-			var wasScrolling = isScrolling;
-			isScrolling = true;
-			// Function must be started after isScrolling is set
-			// to prevent possible race condition.
-			if(wasScrolling === false)
-			{
-				XKit.console.add("Scrolling Started");
-				setTimeout(scrollFunction,50);
+				// Start scrolling
+				var wasScrolling = isScrolling;
+				isScrolling = true;
+				// Function must be started after isScrolling is set
+				// to prevent possible race condition.
+				if (wasScrolling === false) {
+					setTimeout(scrollFunction, 50);
+				}
+			} else {
+				isScrolling = false;
+				controlSteps.removeAttr("selected");
 			}
 
 			// Prevent click event from being processed further.
 			event.stopPropagation();
 		});
 
-		$(document).on("click", null, function(event){
-			if(isScrolling === true)
-			{
+		$(document).on("click", null, function(event) {
+			if (clickAnywhereToStop && isScrolling === true) {
 				isScrolling = false;
 				controlSteps.removeAttr("selected");
-				XKit.console.add("Scrolling stopped");
 			}
 		});
 	},
 
-	initControl: function(){
+	initControl: function() {
 		XKit.tools.init_css("autoscroll");
 		// HTML for control
-		var m_html = '<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td>';
-		for(var j = 0; j < this.preferences.StepsOnControl.value; j++)
-		{
+		var m_html = '<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td class="auto_scroll_table_cell">';
+		for (var j = 0; j < this.preferences.StepsOnControl.value; j++) {
 			m_html += '<div class="auto_scroll_control_step" number = ' + j + '/>';
 
-			if(j + 1 == Math.round(this.preferences.StepsOnControl.value / 2))
-			{
+			if (j + 1 == Math.round(this.preferences.StepsOnControl.value / 2)) {
 				m_html += '<div class = "auto_scroll_control_center"/>';
 			}
 		}
-		m_html += '</td><td>' + this.imageCode + '</td></div>';
+		m_html += '</td><td class="auto_scroll_table_cell">' + this.imageCode + '</td></div>';
 		// Place it at the bottom of the document because it is fixed position
 		// anyway
 		$(document.body).append(m_html);
@@ -122,6 +124,7 @@ XKit.extensions.autoscroll = new Object({
 
 	destroy: function() {
 		this.running = false;
+		$(".auto_scroll_control_container").remove();
 	}
 
 });

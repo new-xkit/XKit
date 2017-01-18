@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.5.6 **//
+//* VERSION 0.5.7 **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -13,7 +13,7 @@ XKit.extensions.soft_refresh = new Object({
 	slow: true,
 	loading: false,
 	default_page_title: document.title,
-        preferences: {
+	preferences: {
 		"use_logo":{
 			text:"Soft refresh when the tumblr logo is clicked.",
 			default:true,
@@ -43,7 +43,7 @@ XKit.extensions.soft_refresh = new Object({
 
 		$(".logo-anchor").attr('data-old-href', $(".logo-anchor").attr('href'));
 		if (this.preferences.use_logo.value) {
-			$(".logo-anchor").attr('onclick','return false');
+			$(".logo-anchor").attr('onclick', 'return false');
 			$(".logo-anchor").attr('href', '#');
 			$(document).on("click", ".logo-anchor", XKit.extensions.soft_refresh.logo_clicked);
 		}
@@ -52,7 +52,7 @@ XKit.extensions.soft_refresh = new Object({
 		if (this.preferences.use_home_button.value) {
 			$(document).on("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
 			// Need to change all children to make sure the user doesn't click the new posts count number.
-			$("#home_button").children().attr('href','#');
+			$("#home_button").children().attr('href', '#');
 		}
 
 		XKit.extensions.soft_refresh.do_post_ids();
@@ -97,7 +97,7 @@ XKit.extensions.soft_refresh = new Object({
 		$("#xkit_soft_refresh").slideDown('fast');
 
 		document.title = this.default_page_title;
-		$("#new_post_notice_container").css("display","none");
+		$("#new_post_notice_container").css("display", "none");
 		$("#new_post_notice_container .tab_notice_value").html("0");
 
 		function soft_refresh_hit_triggers() {
@@ -114,7 +114,7 @@ XKit.extensions.soft_refresh = new Object({
 					});
 					Tumblr.Events.trigger("postsView:createPost", fakeView);
 				});
-			} catch(e) {
+			} catch (e) {
 				console.warn("soft_refresh new approach failed:", e);
 			}
 			Tumblr.Events.trigger("posts:load");
@@ -126,17 +126,16 @@ XKit.extensions.soft_refresh = new Object({
 			method: "GET",
 			url: "http://www.tumblr.com/dashboard/",
 			onerror: function(response) {
-				$("#xkit_soft_refresh").slideUp('fast', function(){ $(this).remove(); });
+				$("#xkit_soft_refresh").slideUp('fast', function() { $(this).remove(); });
 				XKit.extensions.soft_refresh.show_cant_load_error();
 				XKit.extensions.soft_refresh.loading = false;
 			},
 			onload: function(response) {
-				$("#xkit_soft_refresh").slideUp('fast', function(){ $(this).remove(); });
+				$("#xkit_soft_refresh").slideUp('fast', function() { $(this).remove(); });
 				var resText = response.responseText;
 				// Fixes the add_to_image_queue bug that causes this addon to stop working.
 				// Problem is that the response code wants to call a page embedded function
 				resText = resText.replace(/add_to_image_queue\(\'.*\'\)\;/g, "");
-				var new_posts = $("ol#posts", resText).html();
 
 				var m_count = 0;
 				var post_ids = [];
@@ -168,13 +167,13 @@ XKit.extensions.soft_refresh = new Object({
 
 				if (m_count === 0) {
 					if (XKit.extensions.soft_refresh.preferences.show_notifications.value === true) {
-						XKit.notifications.add("No new posts found.","info");
+						XKit.notifications.add("No new posts found.", "info");
 					}
 				} else {
 					XKit.tools.add_function(soft_refresh_hit_triggers, true, post_ids);
 					XKit.extensions.soft_refresh.check_embeds();
 					if (XKit.extensions.soft_refresh.preferences.show_notifications.value === true) {
-						XKit.notifications.add("Added " + m_count + " new posts.","ok");
+						XKit.notifications.add("Added " + m_count + " new posts.", "ok");
 					}
 				}
 				XKit.extensions.soft_refresh.loading = false;
@@ -193,7 +192,7 @@ XKit.extensions.soft_refresh = new Object({
 					script.textContent = $(this).html();
 					document.body.appendChild(script);
 					$(this).remove();
-				} catch(e) {
+				} catch (e) {
 					alert(e.message);
 				}
 
@@ -204,7 +203,7 @@ XKit.extensions.soft_refresh = new Object({
 
 	show_cant_load_error: function() {
 
-		XKit.window.show("Can't get new posts","I could not fetch the page requested. There might be a problem with Tumblr servers, please try again later, or click on the Refresh the Page button to refresh it manually.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"/dashboard/\" class=\"xkit-button\">Refresh the page</a>");
+		XKit.window.show("Can't get new posts", "I could not fetch the page requested. There might be a problem with Tumblr servers, please try again later, or click on the Refresh the Page button to refresh it manually.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"/dashboard/\" class=\"xkit-button\">Refresh the page</a>");
 
 	},
 
@@ -212,12 +211,12 @@ XKit.extensions.soft_refresh = new Object({
 
 		$(".logo-anchor").attr('href', $(".logo-anchor").attr('data-old-href'));
 		$(document).off("click", ".logo-anchor", XKit.extensions.soft_refresh.logo_clicked);
-		$(".logo-anchor").attr('onclick','');
+		$(".logo-anchor").attr('onclick', '');
 
 		$("#home_button a").attr('href', $("#home_button a").attr('data-old-href'));
 		$(document).off("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
-		$("#home_button").attr('onclick','');
-		$("#home_button").children().attr('href',$("#home_button a").attr('data-old-href'));
+		$("#home_button").attr('onclick', '');
+		$("#home_button").children().attr('href', $("#home_button a").attr('data-old-href'));
 
 		XKit.tools.remove_css("soft_refresh");
 		this.running = false;

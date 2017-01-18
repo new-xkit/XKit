@@ -28,7 +28,7 @@ XKit.extensions.xkit_installer = new Object({
 			// return;
 		}
 
-		XKit.window.show("Installing XKit","<div id=\"xkit-install-process\" style=\"font-weight: bold;\">Starting installation..</div>Please do not navigate away from this page." + XKit.progress.add("installation"),"info");
+		XKit.window.show("Installing XKit", "<div id=\"xkit-install-process\" style=\"font-weight: bold;\">Starting installation..</div>Please do not navigate away from this page." + XKit.progress.add("installation"), "info");
 
 		XKit.extensions.xkit_installer.next();
 
@@ -40,8 +40,8 @@ XKit.extensions.xkit_installer = new Object({
 			// Installation is complete I think!
 			XKit.progress.value("installation", 100);
 			XKit.installed.remove("xkit_installer");
-			XKit.window.show("Thanks for installing me!","<b>Installation of XKit is complete.</b><br/>After refreshing the page, the X icon will show up on the header next to the Inbox button. From there, you can customize XKit to your liking and get new extensions.", "info","<a href=\"http://www.tumblr.com/dashboard\" id=\"xkit-restart-and-use\" class=\"xkit-button default\">Refresh page and start using XKit</a><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">XKit keeps re-installing itself?</a>");
-			XKit.tools.set_setting("xkit_installation_complete","true");
+			XKit.window.show("Thanks for installing me!", "<b>Installation of XKit is complete.</b><br/>After refreshing the page, the X icon will show up on the header next to the Inbox button. From there, you can customize XKit to your liking and get new extensions.", "info", "<a href=\"http://www.tumblr.com/dashboard\" id=\"xkit-restart-and-use\" class=\"xkit-button default\">Refresh page and start using XKit</a><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">XKit keeps re-installing itself?</a>");
+			XKit.tools.set_setting("xkit_installation_complete", "true");
 			$("#xkit-restart-and-use").click(function() {
 				$(this).addClass("disabled");
 				$(this).html("Please wait..");
@@ -57,6 +57,8 @@ XKit.extensions.xkit_installer = new Object({
 		$("#xkit-install-process").html("Installing package " + to_install + "...");
 
 		XKit.install(to_install, function(mdata) {
+			// defined in xkit.js
+			/* globals show_error_installation */
 
 			if (mdata.errors) {
 				if (mdata.storage_error === true) {
@@ -78,11 +80,10 @@ XKit.extensions.xkit_installer = new Object({
 			try {
 				// Try evaling the script.
 				// If it's working, then move to the next one.
-				/* jshint evil: true */
-				eval(mdata.script + "\n//# sourceURL=xkit/"+mdata.id+".js");
+				eval(mdata.script + "\n//# sourceURL=xkit/" + mdata.id + ".js");
 				XKit.extensions.xkit_installer.installed++;
 				XKit.extensions.xkit_installer.next();
-			} catch(e) {
+			} catch (e) {
 				show_error_installation("[Code: 102] Can't run " + to_install + ":<br/>" + e.message);
 			}
 

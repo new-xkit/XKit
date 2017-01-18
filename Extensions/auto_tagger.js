@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.7.1 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -131,14 +131,25 @@ XKit.extensions.auto_tagger = new Object({
 			text: "Tag with date (ie: <i>#August 21th 2013, #August, #21th, #2013</i>)",
 			default: false,
 			value: false
-		}
+		},
 
+		"tag_source": {
+			text: "When reblogging, tag with the username of the original source if possible",
+			default: false,
+			value: false
+		},
+
+		"tag_source_prefix": {
+			text: "Prefix used for source tags",
+			type: "text",
+			default: "",
+			value: ""
+		},
 	},
 
-	new_post_check_interval: 0,
 	run: function() {
 		this.running = true;
-		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
+		setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
 	},
 
 	frame_run: function() {
@@ -181,14 +192,14 @@ XKit.extensions.auto_tagger = new Object({
 			// Url is wrong for a new post, neither new nor reblog
 			return;
 		}
-		
+
 		this.is_queue(); // Mutation Observer would work somewhere in this mess
 
 		var post_forms = $(".post-form");
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if(post_forms.length <= 0) {
+		if (post_forms.length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
@@ -222,6 +233,8 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	return_date_tag: function() {
+		// defined in moment.js
+		/* globals moment */
 
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);
@@ -230,7 +243,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	},
 
-	/**
+	/*
 	 * Return tags for the post object returned by XKit.interface.post or
 	 * XKit.interface.find_post.
 	 * Uses tag_for_reblogged, tag_for_original, tag_based_on_type, keep_tags,
@@ -287,6 +300,19 @@ XKit.extensions.auto_tagger = new Object({
 				to_return = this.mreturn_add(to_return, obj.owner);
 			}
 
+		}
+
+
+		if (XKit.extensions.auto_tagger.preferences.tag_source.value && obj.source_owner) {
+			var sourceTag;
+
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner.replace(/-/g, ' ');
+			} else {
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner;
+			}
+
+			to_return = this.mreturn_add(to_return, sourceTag);
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {
@@ -363,9 +389,9 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	inject_to_window: function(raw_string) {
-        $(".post-form--footer").css("display", "block");
-        $(".post-form--footer").css("opacity", "1");
-        if($(".post-form").length <= 0) {
+		$(".post-form--footer").css("display", "block");
+		$(".post-form--footer").css("opacity", "1");
+		if ($(".post-form").length <= 0) {
 			setTimeout(function() {
 				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);

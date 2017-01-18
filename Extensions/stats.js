@@ -54,7 +54,7 @@ XKit.extensions.stats = new Object({
 
 		}
 
-		$("#xstats_blog_stats").css("display","block");
+		$("#xstats_blog_stats").css("display", "block");
 
 		$("#xstats_blog_stats").click(function() {
 
@@ -153,7 +153,7 @@ XKit.extensions.stats = new Object({
 
 		}
 
-		users.sort(function(a,b) { return b.count-a.count; } );
+		users.sort(function(first, second) { return second.count - first.count; } );
 
 		console.log(types);
 		console.log("total note count = " + total_note_count);
@@ -186,9 +186,9 @@ XKit.extensions.stats = new Object({
 
 				try {
 
-					data = JSON.parse(response.responseText).response;
+					var data = JSON.parse(response.responseText).response;
 
-					for (var i=0;i<data.posts.length;i++) {
+					for (var i = 0; i < data.posts.length; i++) {
 
 						posts.push(data.posts[i]);
 
@@ -202,7 +202,7 @@ XKit.extensions.stats = new Object({
 						setTimeout(function() { XKit.extensions.stats.blog_next_page((page + 1), m_window_id, posts, blog_url); }, 400);
 					}
 
-				} catch(e) {
+				} catch (e) {
 					console.log("Error parsing data: " + e.message);
 					XKit.extensions.stats.display_error(m_window_id, "102");
 					return;
@@ -249,7 +249,7 @@ XKit.extensions.stats = new Object({
 
 				try {
 
-					$(".post.post_full:not('.is_mine')",response.responseText).each(function() {
+					$(".post.post_full:not('.is_mine')", response.responseText).each(function() {
 						posts.push(XKit.interface.post($(this)));
 					});
 
@@ -261,7 +261,7 @@ XKit.extensions.stats = new Object({
 						setTimeout(function() { XKit.extensions.stats.dashboard_next_page((page + 1), m_window_id, posts); }, 400);
 					}
 
-				} catch(e) {
+				} catch (e) {
 					console.log("Error parsing data: " + e.message);
 					XKit.extensions.stats.display_error(m_window_id, "102");
 					return;
@@ -274,7 +274,7 @@ XKit.extensions.stats = new Object({
 
 	is_in_list: function(haystack, needle) {
 
-		for (var i=0;i<haystack.length;i++) {
+		for (var i = 0; i < haystack.length; i++) {
 			if (haystack[i].url === needle) {
 				return i;
 			}
@@ -339,7 +339,7 @@ XKit.extensions.stats = new Object({
 
 		}
 
-		users.sort(function(a,b) { return b.count-a.count; } );
+		users.sort(function(first, second) { return second.count - first.count; } );
 
 		console.log(types);
 		console.log("total note count = " + total_note_count);
@@ -380,7 +380,7 @@ XKit.extensions.stats = new Object({
 		});
 
 		if (m_count <= 3) {
-			for (var i=m_count;i<4;i++){
+			for (var i = m_count; i < 4; i++) {
 				var mx_html = "<div class=\"xkit-stats-blog xkit-empty-slot\">" +
 							"<div class=\"m_title\">&nbsp;</div>" +
 						"</div>";
@@ -393,13 +393,13 @@ XKit.extensions.stats = new Object({
 			"<div class=\"xkit-stats-post-types\">";
 
 
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("regular",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("photo",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("quote",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("link",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("chat",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("video",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("audio",types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("regular", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("photo", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("quote", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("link", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("chat", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("video", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("audio", types, posts.length);
 
 		m_html = m_html + "</div>";
 
@@ -413,12 +413,12 @@ XKit.extensions.stats = new Object({
 				"<div class=\"xkit-stats-post-types xkit-stats-two-boxes\">";
 		}
 
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("original",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("reblogged",types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("original", types, posts.length);
+		m_html = m_html + XKit.extensions.stats.return_post_type_box("reblogged", types, posts.length);
 
 		if (blog_mode !== true) {
-			m_html = m_html + XKit.extensions.stats.return_post_type_box("liked",types, posts.length);
-			m_html = m_html + XKit.extensions.stats.return_post_type_box("animated",types, posts.length);
+			m_html = m_html + XKit.extensions.stats.return_post_type_box("liked", types, posts.length);
+			m_html = m_html + XKit.extensions.stats.return_post_type_box("animated", types, posts.length);
 		}
 
 		m_html = m_html + "</div>";
@@ -439,19 +439,19 @@ XKit.extensions.stats = new Object({
 
 	post_results: function(posts, types, users, blog_mode, blog_url) {
 
-		XKit.window.show("Please wait","Publishing the results...","info");
+		XKit.window.show("Please wait", "Publishing the results...", "info");
 
 		var arranged_types = [];
 
 		for (var obj in types) {
-			if (obj === "reblogged" ||obj === "liked" ||obj === "original" ||obj === "animated") { continue; }
+			if (obj === "reblogged" || obj === "liked" || obj === "original" || obj === "animated") { continue; }
 			arranged_types.push({
 				type: obj,
 				count: types[obj]
 			});
 		}
 
-		arranged_types.sort(function(a,b) { return b.count-a.count; } );
+		arranged_types.sort(function(first, second) { return second.count - first.count; });
 
 		var m_object = {};
 
@@ -470,7 +470,7 @@ XKit.extensions.stats = new Object({
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		m_object["post[date]"] ="";
+		m_object["post[date]"] = "";
 
 		m_object["post[state]"] = "0";
 		m_object["post[type]"] = "regular";
@@ -481,9 +481,9 @@ XKit.extensions.stats = new Object({
 			m_object["post[one]"] = "XStats Results for " + blog_url;
 		}
 
-		m_text = "<p><b>Top 4 blogs</b></p><ul>";
+		var m_text = "<p><b>Top 4 blogs</b></p><ul>";
 
-		for (var user_i = 0; user_i < 4; user_i++){
+		for (var user_i = 0; user_i < 4; user_i++) {
 			var perc = Math.round((users[user_i].count * 100) / posts.length);
 			m_text = m_text + "<li><a href=\"" + users[user_i].url + ".tumblr.com\">" + users[user_i].url + "</a> <small>(" + perc + "%)</small></li>";
 		}
@@ -492,7 +492,7 @@ XKit.extensions.stats = new Object({
 
 		m_text = m_text + "<p><b>Post Types</b></p><ul>";
 
-		for (var i=0;i<4;i++){
+		for (var i = 0; i < 4; i++) {
 			if (typeof arranged_types[i] === "undefined") { continue; }
 			var post_type_perc = Math.round((arranged_types[i].count * 100) / posts.length);
 			m_text = m_text + "<li>" + arranged_types[i].type + " <small>(" + post_type_perc + "%)</small></li>";
@@ -526,7 +526,7 @@ XKit.extensions.stats = new Object({
 
 		m_object["post[two]"] = m_text;
 
-		m_object["post[publish_on]"] ="";
+		m_object["post[publish_on]"] = "";
 		m_object.custom_tweet = "";
 		m_object["post[tags]"] = "xstats";
 
@@ -613,7 +613,7 @@ XKit.extensions.stats = new Object({
 		$("#xkit-stats-background").remove();
 		$("#xkit-stats-window").remove();
 
-		XKit.window.show("Oops.","An error prevented XStats from finding similar blogs.<br/>Please try again later.<br/>Code: \"XSTX" + err_code + "\"","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Oops.", "An error prevented XStats from finding similar blogs.<br/>Please try again later.<br/>Code: \"XSTX" + err_code + "\"", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 	},
 

@@ -71,7 +71,7 @@ See also [`gulp lint:scripts`](#gulp-lintscripts), [`gulp lint:css`](#gulp-lintc
 
 #### `gulp lint:scripts`
 
-Lints JavaScript files using JSHint and JSCS, and reports the output.
+Lints JavaScript files using ESLint, and reports the output.
 
 #### `gulp lint:css`
 

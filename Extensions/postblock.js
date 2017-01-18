@@ -23,7 +23,7 @@ XKit.extensions.postblock = new Object({
 
 		XKit.tools.add_css(".postblock-cp { text-align: center; padding-top: 48px; } .postblock-cp small { color: rgb(128,128,128); }", "xkit-postblock-cp");
 
-		var m_blacklist = XKit.storage.get("postblock","posts","").split(",");
+		var m_blacklist = XKit.storage.get("postblock", "posts", "").split(",");
 		if (m_blacklist !== "") {
 			this.blacklisted = m_blacklist;
 		}
@@ -31,7 +31,7 @@ XKit.extensions.postblock = new Object({
 		console.log("total of " + this.blacklisted.length + " posts blocked");
 
 		if ($("#posts").length > 0) {
-			$(document).on('click','.xpostblockbutton', XKit.extensions.postblock.on_click);
+			$(document).on('click', '.xpostblockbutton', XKit.extensions.postblock.on_click);
 			XKit.interface.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", "");
 			XKit.post_listener.add("postblock", XKit.extensions.postblock.do);
 			XKit.extensions.postblock.do();
@@ -50,12 +50,12 @@ XKit.extensions.postblock = new Object({
 			});
 			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
 				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
-				XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
+				XKit.storage.set("postblock", "posts", XKit.extensions.postblock.blacklisted.join(","));
 			}
 			return;
 		}
 
-		XKit.window.show("Block this post?","This post (including reblogs) will be blocked from your dashboard forever, without any indication that it was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-post-block-ok\">Block Post</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Block this post?", "This post (including reblogs) will be blocked from your dashboard forever, without any indication that it was blocked.", "question", "<div class=\"xkit-button default\" id=\"xkit-post-block-ok\">Block Post</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-post-block-ok").click(function() {
 
@@ -66,7 +66,7 @@ XKit.extensions.postblock = new Object({
 			});
 			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
 				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
-				XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
+				XKit.storage.set("postblock", "posts", XKit.extensions.postblock.blacklisted.join(","));
 			}
 
 		});
@@ -129,7 +129,7 @@ XKit.extensions.postblock = new Object({
 			if ($(this).hasClass("disabled")) { return; }
 
 			XKit.extensions.postblock.blacklisted.pop();
-			XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
+			XKit.storage.set("postblock", "posts", XKit.extensions.postblock.blacklisted.join(","));
 
 			$("#xkit-postblock-cp-count").html((XKit.extensions.postblock.blacklisted.length - 1));
 

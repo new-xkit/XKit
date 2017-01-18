@@ -1,5 +1,5 @@
 //* TITLE Highlighter **//
-//* VERSION 0.1.1 **//
+//* VERSION 0.1.2 **//
 //* DESCRIPTION Don't miss things **//
 //* DETAILS The cousin of Blacklister, this extension highlights posts depending on the words you decide. When a word you add is found on a post, the post will get a yellow-ish background. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -44,7 +44,7 @@ XKit.extensions.highlighter = new Object({
 		this.running = true;
 		XKit.tools.init_css("highlighter");
 
-		var m_highlighter = XKit.storage.get("highlighter","words","").split(",");
+		var m_highlighter = XKit.storage.get("highlighter", "words", "").split(",");
 		if (m_highlighter !== "") {
 			this.highlightered = m_highlighter;
 		}
@@ -74,12 +74,12 @@ XKit.extensions.highlighter = new Object({
 			var m_tags = "";
 			if ($(this).find(".tag").length > 0) {
 				$(this).find(".tag").each(function() {
-					m_tags = m_tags + " " + $(this).html().replace("#","");
+					m_tags = m_tags + " " + $(this).html().replace("#", "");
 				});
 			} else {
 				if ($(this).find(".post_tag").length > 0) {
 					$(this).find(".post_tag").each(function() {
-						m_tags = m_tags + " " + $(this).html().replace("#","");
+						m_tags = m_tags + " " + $(this).html().replace("#", "");
 					});
 				}
 			}
@@ -88,17 +88,6 @@ XKit.extensions.highlighter = new Object({
 			var m_title = "";
 			if ($(this).find(".post_title").length > 0) {
 				m_title = $(this).find(".post_title").html();
-			}
-
-			// Collect the author info, if the option is toggled.
-			var m_author = "";
-			if ($(this).find(".post_info_fence a").length > 0) {
-				m_author = $(this).find(".post_info_fence a").html();
-			}
-
-			var m_bTitle = "";
-			if ($(this).find(".post_avatar_link").attr("title").length > 0) {
-				m_bTitle = $(this).find(".post_avatar_link").attr('title');
 			}
 
 			// Collect the content.
@@ -136,13 +125,13 @@ XKit.extensions.highlighter = new Object({
 
 			var m_div = $("#" + $(this).attr('data-post-id'));
 			$(m_div).removeClass("xhighlighter_highlightered_post");
-			$(m_div).find(".post_info").css("display","block");
-			$(m_div).find(".post_controls").css("display","block");
-			$(m_div).find(".post_footer_links").css('display','block');
-			$(m_div).find(".post_tags").css('display','block');
-			$(m_div).find(".post_footer").css('display','table');
+			$(m_div).find(".post_info").css("display", "block");
+			$(m_div).find(".post_controls").css("display", "block");
+			$(m_div).find(".post_footer_links").css('display', 'block');
+			$(m_div).find(".post_tags").css('display', 'block');
+			$(m_div).find(".post_footer").css('display', 'table');
 
-			$(m_div).find(".full_answer_container_wrapper").css("display","block");
+			$(m_div).find(".full_answer_container_wrapper").css("display", "block");
 
 			$(m_div).find(".xhighlighter_excuse").remove();
 			$(m_div).find(".post_content").html($(m_div).find(".xhighlighter_old_content").html());
@@ -171,7 +160,7 @@ XKit.extensions.highlighter = new Object({
 		}
 
 		if (XKit.extensions.highlighter.preferences.check_for_blocking.value === true) {
-			if ($(obj).hasClass("xblacklist_hidden_post") === true ||$(obj).hasClass("xblacklist_blacklisted_post")) {
+			if ($(obj).hasClass("xblacklist_hidden_post") === true || $(obj).hasClass("xblacklist_blacklisted_post")) {
 				return;
 			}
 		}
@@ -184,10 +173,10 @@ XKit.extensions.highlighter = new Object({
 	do_post: function(post_content) {
 
 		if ($.trim(post_content) === "") { return ""; }
-		post_content = post_content.replace(new RegExp('\n','g'), ' ');
+		post_content = post_content.replace(/\n/g, ' ');
 		var p_words = post_content.split(" ");
 
-		for (var i=0;i<XKit.extensions.highlighter.highlightered.length;i++) {
+		for (var i = 0; i < XKit.extensions.highlighter.highlightered.length; i++) {
 
 			var m_word = XKit.extensions.highlighter.highlightered[i].toLowerCase();
 			if ($.trim(m_word) === "") { continue; }
@@ -217,9 +206,9 @@ XKit.extensions.highlighter = new Object({
 					if (XKit.extensions.highlighter.preferences.use_improved.value === true) {
 						// This will use some CPU...
 						if (post_content.indexOf(m_word) !== -1) {
-							for (var m=0;m<p_words.length;m++) {
-								if (p_words[m].indexOf(m_word) !== -1) {
-									mp_word = p_words[m].replace(/\./g, '');
+							for (var j = 0; j < p_words.length; j++) {
+								if (p_words[j].indexOf(m_word) !== -1) {
+									var mp_word = p_words[j].replace(/\./g, '');
 									mp_word = mp_word.replace(/\,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
 									if (m_word === mp_word) {
@@ -311,7 +300,7 @@ XKit.extensions.highlighter = new Object({
 
 	save_highlighter: function() {
 
-		XKit.storage.set("highlighter","words",this.highlightered.join(","));
+		XKit.storage.set("highlighter", "words", this.highlightered.join(","));
 
 	},
 
@@ -327,7 +316,7 @@ XKit.extensions.highlighter = new Object({
 		if (XKit.extensions.highlighter.highlightered.length <= 1) {
 			m_html = m_html + "<div id=\"xkit-highlighter-none\"><b>You have no highlighted words.</b><br/>Click on the button above to add new words to your Highlighter.</div>";
 		} else {
-			for (i=0;i<XKit.extensions.highlighter.highlightered.length;i++) {
+			for (var i = 0; i < XKit.extensions.highlighter.highlightered.length; i++) {
 				if (XKit.extensions.highlighter.highlightered[i] !== "") {
 					m_html = m_html + XKit.extensions.highlighter.create_highlighter_div(XKit.extensions.highlighter.highlightered[i]);
 				}
@@ -350,20 +339,20 @@ XKit.extensions.highlighter = new Object({
 
 		});
 
-		$("#highlighter-tips").click(function(){
+		$("#highlighter-tips").click(function() {
 
-			XKit.window.show("A few tips on highlighting","<ul class=\"xkit-highlighter-add-margins-to-ul\">" +
+			XKit.window.show("A few tips on highlighting", "<ul class=\"xkit-highlighter-add-margins-to-ul\">" +
 				"<li>You can add \"*\" at the end of a word to wildcard it.</li>" +
 				"<li>Wildcarded words match words that begin with it: for example, \"cat*\" will find \"category\", \"capital\" etc.</li>" +
 				"<li>If you add something that contains 2 or more words, it will be wildcarded automatically</li>" +
 				"<li>Adding too much words, especially wildcard ones, will slow your computer down dramatically.</li>" +
-				"</ul>","info","<div class=\"xkit-button\" id=\"xkit-close-message\">OK</div>");
+				"</ul>", "info", "<div class=\"xkit-button\" id=\"xkit-close-message\">OK</div>");
 
 		});
 
 		$("#highlighter-delete-all").click(function() {
 
-			XKit.window.show("Delete list","Delete all your highlightered words?","question","<div class=\"xkit-button default\" id=\"xkit-highlighter-delete-all-continue\">Yes, delete my list.</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Delete list", "Delete all your highlightered words?", "question", "<div class=\"xkit-button default\" id=\"xkit-highlighter-delete-all-continue\">Yes, delete my list.</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-highlighter-delete-all-continue").click(function() {
 
@@ -381,13 +370,13 @@ XKit.extensions.highlighter = new Object({
 
 		$("#highlighter-add-button").click(function() {
 
-			XKit.window.show("Add word to highlighter","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-highlighter-word\"><br/>Before adding a word, please check \"Tips on Highlighting\" section.","question","<div class=\"xkit-button default\" id=\"xkit-highlighter-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Add word to highlighter", "<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-highlighter-word\"><br/>Before adding a word, please check \"Tips on Highlighting\" section.", "question", "<div class=\"xkit-button default\" id=\"xkit-highlighter-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-highlighter-add-word").click(function() {
 
 				var m_to_add = $("#xkit-highlighter-word").val();
 
-				if (m_to_add === "" ||$.trim(m_to_add) === "") {
+				if (m_to_add === "" || $.trim(m_to_add) === "") {
 					XKit.window.close();
 					return;
 				}
@@ -407,7 +396,7 @@ XKit.extensions.highlighter = new Object({
 					return;
 				}
 
-				if (m_to_add.substring(0,1) === "#") {
+				if (m_to_add.substring(0, 1) === "#") {
 					alert("Please do not add hashtags to words.");
 					return;
 				}

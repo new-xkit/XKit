@@ -40,7 +40,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		if ($("#drafts_plus_sidebar").length > 0) {
 
-			xf_html = '<li class="no_push">' +
+			var xf_html = '<li class="no_push">' +
 					'<a href="#" class="customize xkit-mass-deleter" id="xkit-mass-deleter-100">' +
 						'<div class="hide_overflow">Delete 100 Drafts</div>' +
 					'</a>' +
@@ -106,7 +106,7 @@ XKit.extensions.mass_deleter = new Object({
 		XKit.extensions.mass_deleter.delete_drafts_array = [];
 		XKit.extensions.mass_deleter.delete_drafts_page = 1;
 
-		XKit.window.show("Mass Deleting Drafts","<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"),"info");
+		XKit.window.show("Mass Deleting Drafts", "<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"), "info");
 
 		var posts = XKit.interface.get_posts();
 
@@ -143,7 +143,7 @@ XKit.extensions.mass_deleter = new Object({
 	delete_current_array_next: function() {
 
 		if (XKit.extensions.mass_deleter.delete_drafts_array.length === 0) {
-			XKit.window.show("Complete!","<b>Deleted " + (XKit.extensions.mass_deleter.delete_from_array_max - XKit.extensions.mass_deleter.delete_fail_count) + " posts.<br/>Failed to delete " + XKit.extensions.mass_deleter.delete_fail_count + " posts.</b><br/><br/>Please refresh the page before deleting more drafts.","info","<div id=\"xkit-close-message-2\" class=\"xkit-button default\">OK</div>");
+			XKit.window.show("Complete!", "<b>Deleted " + (XKit.extensions.mass_deleter.delete_from_array_max - XKit.extensions.mass_deleter.delete_fail_count) + " posts.<br/>Failed to delete " + XKit.extensions.mass_deleter.delete_fail_count + " posts.</b><br/><br/>Please refresh the page before deleting more drafts.", "info", "<div id=\"xkit-close-message-2\" class=\"xkit-button default\">OK</div>");
 
 			$("#xkit-close-message-2").click(function() {
 				location.reload();
@@ -194,7 +194,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		$("#xkit-mass-deleter-status").html("Initializing: Gathering post ids.. (page " + XKit.extensions.mass_deleter.delete_drafts_page + ", total: "  + XKit.extensions.mass_deleter.delete_drafts_array.length + ")");
 
-		var m_url = document.location.href.replace("#","");
+		var m_url = document.location.href.replace("#", "");
 
 		m_url = m_url + "/after/" + XKit.extensions.mass_deleter.delete_last_post_id;
 
@@ -231,7 +231,7 @@ XKit.extensions.mass_deleter = new Object({
 
 				XKit.extensions.mass_deleter.delete_next_current = 0;
 
-				$(".posts .post",m_div).each(function() {
+				$(".posts .post", m_div).each(function() {
 					var m_post = XKit.interface.post($(this));
 					if (XKit.extensions.mass_deleter.delete_drafts_array.length >= XKit.extensions.mass_deleter.delete_drafts_limit) {
 						XKit.extensions.mass_deleter.delete_current_array();
@@ -260,7 +260,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	init_likes: function() {
 
-		xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' +
+		var xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' +
 			'<li class="no_push">' +
 				'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
 					'<div class="hide_overflow">Unlike 100 Likes</div>' +
@@ -298,7 +298,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	unlike_likes: function(limit) {
 
-		XKit.window.show("Warning!","Due to the way Tumblr works, mass unliking posts might or might not cause older likes to not show up. This is a very experimental feature and no support is provided. Please only continue if you are sure that you want to do this.","warning","<div class=\"xkit-button default\" id=\"xkit-mass-deleter-unlike-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Warning!", "Due to the way Tumblr works, mass unliking posts might or might not cause older likes to not show up. This is a very experimental feature and no support is provided. Please only continue if you are sure that you want to do this.", "warning", "<div class=\"xkit-button default\" id=\"xkit-mass-deleter-unlike-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-mass-deleter-unlike-continue").click(function() {
 
@@ -306,7 +306,7 @@ XKit.extensions.mass_deleter = new Object({
 			XKit.extensions.mass_deleter.unlike_likes_array = [];
 			XKit.extensions.mass_deleter.unlike_likes_page = 1;
 
-			XKit.window.show("Mass Unliking Posts","<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"),"info");
+			XKit.window.show("Mass Unliking Posts", "<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"), "info");
 
 			var posts = XKit.interface.get_posts();
 
@@ -338,7 +338,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		if (XKit.extensions.mass_deleter.unlike_likes_array.length === 0) {
 			console.log(	XKit.extensions.mass_deleter.unlike_likes_array);
-			XKit.window.show("Complete!","<b>Unliked " + (XKit.extensions.mass_deleter.unlike_from_array_max - XKit.extensions.mass_deleter.unlike_fail_count) + " posts.<br/>Failed to unlike " + XKit.extensions.mass_deleter.unlike_fail_count + " posts.</b><br/><br/>You might get a \"No Posts Found\" page when visiting the Likes page after Mass Unliking. Like a few posts and try again in a few hours, and it should return to normal. If XKit is unable to unlike posts, it's Tumblr's servers trying to adjust to unlikes. Try again in a couple of hours before Mass Unliking again.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.window.show("Complete!", "<b>Unliked " + (XKit.extensions.mass_deleter.unlike_from_array_max - XKit.extensions.mass_deleter.unlike_fail_count) + " posts.<br/>Failed to unlike " + XKit.extensions.mass_deleter.unlike_fail_count + " posts.</b><br/><br/>You might get a \"No Posts Found\" page when visiting the Likes page after Mass Unliking. Like a few posts and try again in a few hours, and it should return to normal. If XKit is unable to unlike posts, it's Tumblr's servers trying to adjust to unlikes. Try again in a couple of hours before Mass Unliking again.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			return;
 		}
 
@@ -411,7 +411,7 @@ XKit.extensions.mass_deleter = new Object({
 
 				XKit.extensions.mass_deleter.unlike_next_current = 0;
 
-				$(".posts .post",m_div).each(function() {
+				$(".posts .post", m_div).each(function() {
 					var m_post = XKit.interface.post($(this));
 					if (XKit.extensions.mass_deleter.unlike_likes_array.length >= XKit.extensions.mass_deleter.unlike_likes_limit) {
 						XKit.extensions.mass_deleter.unlike_current_array();
@@ -435,7 +435,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	display_error: function() {
 
-		XKit.window.show("Unable to perform task","Please try again later or file a bug report at the XKit blog.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Unable to perform task", "Please try again later or file a bug report at the XKit blog.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 	},
 

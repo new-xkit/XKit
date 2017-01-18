@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -19,9 +19,9 @@ XKit.extensions.audio_downloader = new Object({
 
 		XKit.tools.init_css("audio_downloader");
 
-		if (XKit.storage.get("audio_downloader","shown_welcome","false") === "false") {
+		if (XKit.storage.get("audio_downloader", "shown_welcome", "false") === "false") {
 			XKit.window.show("Welcome to Audio Downloader!", "If an audio post is downloadable, an arrow will appear next to the Like button that allows you to download the audio post as an MP3 file.<br/><br/><small>Please note that Audio Downloader only works on MP3 files hosted on Tumblr: any file shared on Tumblr from other services such as Spotify or SoundCloud can not be downloaded. In that case, the download arrow will not appear on the post.</small>", "info", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
-			XKit.storage.set("audio_downloader","shown_welcome","true");
+			XKit.storage.set("audio_downloader", "shown_welcome", "true");
 		}
 
 		if ($(".posts .post").length > 0) {
@@ -70,7 +70,7 @@ XKit.extensions.audio_downloader = new Object({
 					}
 
 					if (obj.posts[0].audio_type == "tumblr") {
-						m_url = obj.posts[0].audio_url;
+						var m_url = obj.posts[0].audio_url;
 						if (m_url.indexOf('https://www.tumblr.com/audio_file/') === 0) {
 							m_url = 'http://a.tumblr.com/' + m_url.substr(m_url.lastIndexOf('/') + 1) + 'o1.mp3';
 						}
@@ -108,7 +108,7 @@ XKit.extensions.audio_downloader = new Object({
 
 					});
 
-				} catch(e) {
+				} catch (e) {
 
 					XKit.extensions.audio_downloader.show_error("12 - " + e.message);
 
@@ -129,8 +129,9 @@ XKit.extensions.audio_downloader = new Object({
 		var text = "";
 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-		for( var i=0; i < 15; i++ )
+		for (var i = 0; i < 15; i++) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
 
 		return text;
 

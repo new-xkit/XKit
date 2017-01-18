@@ -68,11 +68,11 @@ XKit.extensions.view_on_dash = new Object({
 
 	show_open: function() {
 
-		XKit.window.show("View on Dash","Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: new-xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("View on Dash", "Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: new-xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-view-on-dash-ok").click(function() {
 
-			to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
+			var to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
 
 			if ($.trim(to_add) === "") {
 				XKit.window.close();
@@ -86,7 +86,6 @@ XKit.extensions.view_on_dash = new Object({
 
 			XKit.window.close();
 			XKit.tools.add_function(XKit.extensions.view_on_dash.open_peepr, true, to_add);
-
 		});
 
 	},
@@ -103,7 +102,7 @@ XKit.extensions.view_on_dash = new Object({
 		$("#view_on_dash_ul").remove();
 		try {
 			XKit.extensions.show_more.remove_custom_menu("view_on_dash");
-		} catch(e){
+		} catch (e) {
 			XKit.console.add("Can't remove custom menu, " + e.message);
 		}
 	}

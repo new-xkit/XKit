@@ -1,5 +1,5 @@
 .auto_scroll_control_container{
-  position:fixed;
+	position:fixed;
 	left:50px;
 	bottom:50px;
 	}
@@ -30,3 +30,6 @@
 	margin:auto;
 	vertical-align:middle;
 	}
+.auto_scroll_table_cell{
+	vertical-align:middle;
+    }

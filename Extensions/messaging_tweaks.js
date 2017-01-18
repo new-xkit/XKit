@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.7.1 **//
+//* VERSION 1.7.2 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -169,7 +169,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		XKit.extensions.messaging_tweaks.observer.disconnect();
 		var icons = $(".messaging-conversation-popovers .avatar:not(.xkit-my_messaging_icon, .xkit-others_messaging_icon)");
 		function img_onload(msg_div, emoji_text, emoji) {
-			msg_div.html(msg_div.html().replace(new RegExp(emoji_text, "g") , emoji.outerHTML));
+			msg_div.html(msg_div.html().replace(new RegExp(emoji_text, "g"), emoji.outerHTML));
 		}
 		icons.each(function() {
 			if ($(this).parents(".conversation-compose").length !== 0) { return; }
@@ -309,7 +309,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		XKit.extensions.messaging_tweaks.observer = new MutationObserver(XKit.extensions.messaging_tweaks.do_messages);
 		XKit.extensions.messaging_tweaks.chat_window_observer = new MutationObserver(function(mutations, observer) {
-			mutations.forEach(function (mutation) {
+			mutations.forEach(function(mutation) {
 				var i, node;
 				// Check if Chat Window has been added
 				if (mutation.addedNodes.length) {
@@ -433,7 +433,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		this.running = false;
 	},
 
-	cpanel: function (cp) {
+	cpanel: function(cp) {
 		function update() {
 			if (round_icons_setting.hasClass("selected")) {
 				rectangle_icons_setting.show();

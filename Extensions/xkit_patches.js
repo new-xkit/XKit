@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.4.2 **//
+//* VERSION 6.8.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -21,72 +21,16 @@ XKit.extensions.xkit_patches = new Object({
 
 		if ($("#unfollow_button").length > 0 || $("#pageCounter").length > 0) {
 
-			if (XKit.storage.get("xkit_patches","shown_unfollower_hater_message","") === "true") { return; }
+			if (XKit.storage.get("xkit_patches", "shown_unfollower_hater_message", "") === "true") { return; }
 
 			XKit.window.show("Unfollower Hater found", "<b>Unfollower Hater causes problems with XKit, including but not limited to TagViewer and Quick Tags not working properly, and really slow page response on tumblr.com/blog/[url] pages.</b><br/><br/>You are not required to remove it in order to use XKit, but no support will be provided to you if you don't disable it.<br/><small style=\"color: rgb(120,120,120);\">This message will not be displayed again once you click \"OK\".</small>", "error", "<div id=\"xkit-patches-unfollower-hater-ok\" class=\"xkit-button default\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/60595138775/quick-tags-tagviewer-and-unfollower-hater\" target=\"_BLANK\" class=\"xkit-button\">More information</a>");
 
 			$("#xkit-patches-unfollower-hater-ok").click(function() {
 
-				XKit.storage.set("xkit_patches","shown_unfollower_hater_message","true");
+				XKit.storage.set("xkit_patches", "shown_unfollower_hater_message", "true");
 				XKit.window.close();
 
 			});
-
-		}
-
-	},
-
-	/**
-	 * If User Menus+ is running, run patch_ask whenever the user menu is shown
-	 */
-	do_support_links: function() {
-		XKit.installed.when_running("show_more", function() {
-			$(document).on('click','.tumblelog_menu_btn', XKit.extensions.xkit_patches.patch_ask);
-		});
-	},
-
-	/**
-	 * When User Menus+ is running rename the "Ask" button on the
-	 * xkit-extension blog to "XKit Support"
-	 */
-	patch_ask: function() {
-
-		var m_parent;
-		if ($(".tumblelog_popover_v1").length > 0) {
-			m_parent = $(".tumblelog_popover_v1").find(".tumblelog_menu_popover").find("ul");
-		} else {
-			m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
-		}
-
-		//// console.log("->" + $(m_parent).html());
-
-		if ($(m_parent).find(".ask").attr('data-tumblelog-name') === "xkit-extension") {
-
-			$(m_parent).find(".ask").html("XKit Support");
-			$(m_parent).find(".ask").addClass("xkit-support-ask");
-			$(m_parent).find(".ask").removeClass("ask");
-
-		}
-
-	},
-
-	/**
-	 * Detect whether the user is running a UA switcher to pretend to be IE,
-	 * warning if detected.
-	 */
-	check_user_agent: function() {
-
-		var from_framework = XKit.browser().name;
-
-		var is_spoofed = false;
-
-		if ($("body").hasClass("is_ie")) {
-			is_spoofed = true;
-		}
-
-		if (is_spoofed) {
-
-			XKit.notifications.add("<b>User Agent Switcher detected.</b> User Agent Switchers cause a lot of problems with XKit and other extensions. Please disable it before sending a bug report.","ok");
 
 		}
 
@@ -100,380 +44,403 @@ XKit.extensions.xkit_patches = new Object({
 
 		XKit.tools.init_css("xkit_patches");
 
-		this.check_user_agent();
+		/**
+		 * Get the user's currently selected blog.
+		 * @return {String} blog id, e.g. new-xkit-extension.
+		 */
+		XKit.tools.get_current_blog = function() {
+			var avatar = $("#post_controls_avatar");
+			if (avatar.length > 0) {
+				var image = avatar.find(".post_avatar_image");
+				if (image.length > 0) {
+					return image.attr("alt");
+				}
+			}
+			XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
+			return XKit.tools.get_blogs()[0];
+		};
 
-/**
- * Get the user's currently selected blog.
- * @return {String} blog id, e.g. new-xkit-extension.
- */
-XKit.tools.get_current_blog = function() {
-	var avatar = $("#post_controls_avatar");
-	if (avatar.length > 0) {
-		var image = avatar.find(".post_avatar_image");
-		if (image.length > 0) {
-			return image.attr("alt");
-		}
-	}
-	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
-	return XKit.tools.get_blogs()[0];
-};
-
-/**
- * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
- * @return {Object} version descriptor with keys major, minor, and patch
- */
-XKit.tools.parse_version = function(versionString) {
-	if (typeof(versionString) === "undefined" || versionString === "") {
-		return {major: 0, minor: 0, patch: 0};
-	}
-	var version = {};
-	var versionSplit = versionString.split(".");
-	if (versionSplit.length < 3) {
-		var revisionString = versionSplit[1].toLowerCase().split("rev");
-		version.major = parseInt(versionSplit[0]);
-		version.minor = parseInt(revisionString[0].trim());
-		if (typeof(revisionString[1]) === "undefined") {
-			version.patch = 0;
-		} else {
+		/**
+		 * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
+		 * @param {String} versionString
+		 * @return {Object} version descriptor with keys major, minor, and patch
+		 */
+		XKit.tools.parse_version = function(versionString) {
+			if (typeof(versionString) === "undefined" || versionString === "") {
+				return {major: 0, minor: 0, patch: 0};
+			}
+			var version = {};
+			var versionSplit = versionString.split(".");
+			if (versionSplit.length < 3) {
+				var revisionString = versionSplit[1].toLowerCase().split("rev");
+				version.major = parseInt(versionSplit[0]);
+				version.minor = parseInt(revisionString[0].trim());
+				if (typeof(revisionString[1]) === "undefined") {
+					version.patch = 0;
+				} else {
 			// No need for toLowerCase here since we already do that when we split versionSplit above
-			version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
-		}
-	} else {
-		version.major = parseInt(versionSplit[0]);
-		version.minor = parseInt(versionSplit[1]);
-		version.patch = parseInt(versionSplit[2]);
-	}
-	return version;
-};
+					version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
+				}
+			} else {
+				version.major = parseInt(versionSplit[0]);
+				version.minor = parseInt(versionSplit[1]);
+				version.patch = parseInt(versionSplit[2]);
+			}
+			return version;
+		};
 
-XKit.extensions.xkit_patches.blog_list_message_listener = function(e){
-	if (e.origin == window.location.protocol+"//"+window.location.host &&
+		XKit.extensions.xkit_patches.blog_list_message_listener = function(e) {
+			if (e.origin == window.location.protocol + "//" + window.location.host &&
 		e.data.hasOwnProperty("xkit_blogs")) {
 
-		XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
-	}
-};
-
-window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
-
-
-/**
- * @return {Array<String>} user's blogs' IDs
- */
-XKit.tools.get_blogs = function() {
-	var m_blogs = [];
-
-	// Approach 1: Scrape the tumblelog models for ones we control
-	// code is above
-
-	if (XKit.blogs_from_tumblr){
-		m_blogs = XKit.blogs_from_tumblr;
-		XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-		return m_blogs;
-	}
-
-	// Approach 2: Scrape from the dynamically-created popover element.
-
-	if (!$("[data-js-channel-list]").length) {
-		// create the popover element
-		var account_menu = $("#account_button");
-		account_menu.click();
-		setTimeout(function(){
-			account_menu.click();
-		},10);
-	}
-
-	var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
-	if (blog_menu_items.length) {
-
-		blog_menu_items.each(function(){
-			blog_url = this.id.split("--")[1];
-			if (blog_url) {
-				m_blogs.push(blog_url);
+				XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
 			}
-		});
+		};
 
-		if (m_blogs.length) {
-			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-			return m_blogs;
-		}
-	}
+		window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 
-	// Approach 3: Use the last good cached data that we saved in settings
-	m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
-	if (m_blogs !== "") {
-		return m_blogs.split(";");
-	}
-};
 
-/**
- * Create an anonymous Github gist
- * @param {String} text - the gist's intended text
- * @param {String?} name - the user name to be associated with the gist
- * @return {Promise<String>} Promise resolved with the gist's URL
- */
-XKit.tools.make_gist = function(text, name) {
+		/**
+		 * @return {Array<String>} user's blogs' IDs
+		 */
+		XKit.tools.get_blogs = function() {
+			var m_blogs = [];
 
-	if(!name){
-		name = "xkit-gist";
-	}
-	var files = {};
-	files[name] = {content: text};
-	return $.ajax({
-		url: 'https://api.github.com/gists',
-		type: 'POST',
-		data: JSON.stringify({
-			description: "automatically created by xkit",
-			public: false,
-			files: files,
-		}),
-	}).then(function(resp){
-		return resp.html_url;
-	});
-};
+			// Approach 1: Scrape the tumblelog models for ones we control
+			// code is above
 
-/**
- * Creates a link to a github issue with error text and template
- * @param {String} title - the title of the github issue--should be unique and useful
- * @param {Object?} data - Key-value pairs to list at the top of the issue.
- * @param {Error?} error - An exception to serialize, if availible
- * @return {String} The url to link the user to
- */
-XKit.tools.github_issue = function(title, data, error) {
-	/*jshint -W069 */
+			if (XKit.blogs_from_tumblr) {
+				m_blogs = XKit.blogs_from_tumblr;
+				XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+				return m_blogs;
+			}
 
-	if (!data) {
-		data = {};
-	}
+			// Approach 2: Scrape from the dynamically-created popover element.
 
-	data['User Agent'] = window.navigator.userAgent;
-	data['XKit Version'] = XKit.version;
-	data['Patches Version'] = XKit.installed.get("xkit_patches").version;
-	data['Extensions'] = XKit.installed.list().join(", ");
-	data['URL'] = window.location.toString();
+			if (!$("[data-js-channel-list]").length) {
+				// create the popover element
+				var account_menu = $("#account_button");
+				account_menu.click();
+				setTimeout(function() {
+					account_menu.click();
+				}, 10);
+			}
 
-	body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
+			var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
+			if (blog_menu_items.length) {
+
+				blog_menu_items.each(function() {
+					var blog_url = this.id.split("--")[1];
+					if (blog_url) {
+						m_blogs.push(blog_url);
+					}
+				});
+
+				if (m_blogs.length) {
+					XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+					return m_blogs;
+				}
+			}
+
+			// Approach 3: Use the last good cached data that we saved in settings
+			m_blogs = XKit.tools.get_setting("xkit_cached_blogs", "");
+			if (m_blogs !== "") {
+				return m_blogs.split(";");
+			}
+		};
+
+		/**
+		 * Create an anonymous Github gist
+		 * @param {String} text - the gist's intended text
+		 * @param {String?} name - the user name to be associated with the gist
+		 * @return {Promise<String>} Promise resolved with the gist's URL
+		 */
+		XKit.tools.make_gist = function(text, name) {
+
+			if (!name) {
+				name = "xkit-gist";
+			}
+			var files = {};
+			files[name] = {content: text};
+			return $.ajax({
+				url: 'https://api.github.com/gists',
+				type: 'POST',
+				data: JSON.stringify({
+					description: "automatically created by xkit",
+					public: false,
+					files: files,
+				}),
+			}).then(function(resp) {
+				return resp.html_url;
+			});
+		};
+
+		/**
+		 * Creates a link to a github issue with error text and template
+		 * @param {String} title - the title of the github issue--should be unique and useful
+		 * @param {Object?} data - Key-value pairs to list at the top of the issue.
+		 * @param {Error?} error - An exception to serialize, if availible
+		 * @return {String} The url to link the user to
+		 */
+		XKit.tools.github_issue = function(title, data, error) {
+
+			if (!data) {
+				data = {};
+			}
+
+			data['User Agent'] = window.navigator.userAgent;
+			data['XKit Version'] = XKit.version;
+			data['Patches Version'] = XKit.installed.get("xkit_patches").version;
+			data['Extensions'] = XKit.installed.list().join(", ");
+			data['URL'] = window.location.toString();
+
+			var body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
 			  "including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
 	       "-----------\n\n";
 
-	if (error) {
-		body += "```\n" +
+			if (error) {
+				body += "```\n" +
 				error.stack +
 				"\n```\n\n";
-	}
-
-	body += "System Data | \xA0 \n";
-	body += "----------- | -----------\n";
-	$.each(data, function(key, value){
-		body += key + " | " + value + "\n";
-	});
-
-	return "https://github.com/new-xkit/XKit/issues/new?" + $.param({body: body, title: title});
-};
-
-/**
- * Cached nonce for use in script injection to overcome CSP
- */
-XKit.tools.add_function_nonce = "";
-
-/**
- * Copies a function from the addon context into the page context. This
- * function will be serialized to a string, and then injected as a script tag
- * into the page.
- * @param {Function} func
- * @param {boolean} exec - Whether to execute the function immediately
- * @param {Object} addt - The desired contents of the global variable
- *                        `add_tag`. Only useful if `exec` is true
- */
-XKit.tools.add_function = function(func, exec, addt) {
-	if (!XKit.tools.add_function_nonce) {
-		var scripts = document.querySelectorAll('script');
-		for (var i = 0; i < scripts.length; i++) {
-			var nonce = scripts[i].getAttribute('nonce');
-			if (nonce) {
-				XKit.tools.add_function_nonce = nonce;
-				break;
 			}
-		}
-	}
 
-	try {
-		var script = document.createElement("script");
-		script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
-		script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
-		if (XKit.tools.add_function_nonce) {
-			script.setAttribute('nonce', XKit.tools.add_function_nonce);
-		}
-		document.body.appendChild(script);
-	} catch(e) {
-		alert(e.message);
-	}
-};
+			body += "System Data | \xA0 \n";
+			body += "----------- | -----------\n";
+			$.each(data, function(key, value) {
+				body += key + " | " + value + "\n";
+			});
 
-// Scrape Tumblr's data object now that we can run add_function
-XKit.tools.add_function(function() {
-	var blogs = [];
-	try {
-		var models = Tumblr.dashboardControls.allTumblelogs;
-		models.filter(function(model){
-			return model.attributes.hasOwnProperty("is_current");
-		}).forEach(function(model){
-			blogs.push(model.attributes.name);
-		});
-		if(blogs.length){
-			window.postMessage({
-				xkit_blogs: blogs,
-			}, window.location.protocol+"//"+window.location.host);
-		}
-	} catch (_) {}
-}, true);
+			return "https://github.com/new-xkit/XKit/issues/new?" + $.param({body: body, title: title});
+		};
 
-/**
- * @return {Object} The elements of XKit's storage as a map from setting key to
- *                  setting value
- */
-XKit.tools.dump_config = function(){
-	var values = GM_listValues();
-	if(values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
-		values = Object.keys(window.xkit_storage);
-	}
-	return values.reduce(function(obj, x) {
-		obj[x] = GM_getValue(x);
-		return obj;
-	}, {});
-};
 
-/**
- * @param {String} text - the text to be escaped
- * @return {String} Will return the passed text, with all potentially
- *                  dangerous-for-HTML characters escaped
- *
- * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
- * for the source of the list of escaping rules in this function.
- *
- * Under no circumstances should the output of this function be injected into
- * an unquoted element attribute, as there are many ways to escape from an
- * unquoted attribute that aren't covered here. Don't use unquoted attributes
- */
-XKit.tools.escape_html = function(text){
-    return String(text)
+		/**
+		 * Quick-and-dirty function debouncing.
+		 * Debounced functions will only occur 'delay' milliseconds after their last call.
+		 * Multiple calls before the function is executed resets the timer.
+		 * @param {Function} func - Function to wrap. Will be executed with
+		                            the *last* passed 'this' values and arguments
+		 * @param {Number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
+		 * @return {Function} The wrapped, debounced function.
+		 */
+		XKit.tools.debounce = function(func, wait) {
+			var timeout_id;
+			return function() {
+				var last_context = this;
+				var last_args = arguments;
+
+				var exec = function() {
+					timeout_id = null;
+					func.apply(last_context, last_args);
+				};
+				clearTimeout(timeout_id);
+				timeout_id = setTimeout(exec, wait);
+			};
+		};
+
+		/**
+		 * Cached nonce for use in script injection to overcome CSP
+		 */
+		XKit.tools.add_function_nonce = "";
+
+		/**
+		 * Copies a function from the addon context into the page context. This
+		 * function will be serialized to a string, and then injected as a script tag
+		 * into the page.
+		 * @param {Function} func
+		 * @param {boolean} exec - Whether to execute the function immediately
+		 * @param {Object} addt - The desired contents of the global variable
+		 *                        `add_tag`. Only useful if `exec` is true
+		 */
+		XKit.tools.add_function = function(func, exec, addt) {
+			if (!XKit.tools.add_function_nonce) {
+				var scripts = document.querySelectorAll('script');
+				for (var i = 0; i < scripts.length; i++) {
+					var nonce = scripts[i].getAttribute('nonce');
+					if (nonce) {
+						XKit.tools.add_function_nonce = nonce;
+						break;
+					}
+				}
+			}
+
+			try {
+				var script = document.createElement("script");
+				script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
+				script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
+				if (XKit.tools.add_function_nonce) {
+					script.setAttribute('nonce', XKit.tools.add_function_nonce);
+				}
+				document.body.appendChild(script);
+			} catch (e) {
+				alert(e.message);
+			}
+		};
+
+		// Scrape Tumblr's data object now that we can run add_function
+		XKit.tools.add_function(function() {
+			var blogs = [];
+			try {
+				var models = Tumblr.dashboardControls.allTumblelogs;
+				models.filter(function(model) {
+					return model.attributes.hasOwnProperty("is_current");
+				}).forEach(function(model) {
+					blogs.push(model.attributes.name);
+				});
+				if (blogs.length) {
+					window.postMessage({
+						xkit_blogs: blogs,
+					}, window.location.protocol + "//" + window.location.host);
+				}
+			} catch (e) {}
+		}, true);
+
+		/**
+		 * @return {Object} The elements of XKit's storage as a map from setting key to
+		 *                  setting value
+		 */
+		XKit.tools.dump_config = function() {
+			var values = GM_listValues();
+			if (values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
+				values = Object.keys(window.xkit_storage);
+			}
+			return values.reduce(function(obj, x) {
+				obj[x] = GM_getValue(x);
+				return obj;
+			}, {});
+		};
+
+		/**
+		 * @param {String} text - the text to be escaped
+		 * @return {String} Will return the passed text, with all potentially
+		 *                  dangerous-for-HTML characters escaped
+		 *
+		 * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
+		 * for the source of the list of escaping rules in this function.
+		 *
+		 * Under no circumstances should the output of this function be injected into
+		 * an unquoted element attribute, as there are many ways to escape from an
+		 * unquoted attribute that aren't covered here. Don't use unquoted attributes
+		 */
+		XKit.tools.escape_html = function(text) {
+			return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;")
         .replace(/\//g, "&#x2F;");
-};
+		};
 
-/**
- * @param {String} name - Name of URL parameter to retrieve
- * @return {String} Value of parameter or ""
- */
-XKit.tools.getParameterByName = function(name){
-	// http://stackoverflow.com/a/901144/2073440
-	name = encodeURIComponent(name);
-	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-		results = regex.exec(location.search);
-	if (results === null) {
-		return "";
-	} else {
-		var parameter = results[1];
-		return decodeURIComponent(parameter.replace(/\+/g, " "));
-	}
-};
+		/**
+		 * @param {String} name - Name of URL parameter to retrieve
+		 * @return {String} Value of parameter or ""
+		 */
+		XKit.tools.getParameterByName = function(name) {
+			// http://stackoverflow.com/a/901144/2073440
+			name = encodeURIComponent(name);
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+			if (results === null) {
+				return "";
+			} else {
+				var parameter = results[1];
+				return decodeURIComponent(parameter.replace(/\+/g, " "));
+			}
+		};
 
-/**
- * @return {Object} An overview of the browser's information:
- *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
- *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
- *	chrome: boolean - Whether the browser is Chrome
- *	firefox: boolean - Whether the browser is Firefox
- *	safari: boolean - Whether the browser is Safari
- *	opera: boolean - Whether the browser is Opera (Always false as implemented currently)
- *	version: number - The numerical representation of the browser's version or 0 if unknown
- *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
- */
-	XKit.browser = function() {
+		/**
+		 * @return {Object} An overview of the browser's information:
+		 *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
+		 *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
+		 *	chrome: boolean - Whether the browser is Chrome
+		 *	firefox: boolean - Whether the browser is Firefox
+		 *	safari: boolean - Whether the browser is Safari
+		 *	opera: boolean - Whether the browser is Opera (Always false as implemented currently)
+		 *	version: number - The numerical representation of the browser's version or 0 if unknown
+		 *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
+		 */
+		XKit.browser = function() {
 
-		var to_return = {};
+			var to_return = {};
 
-		to_return.name = "UNKNOWN";
-		to_return.spoofed = false;
-		to_return.chrome = false;
-		to_return.firefox = false;
-		to_return.safari = false;
-		to_return.opera = false;
-		to_return.version = 0;
-		to_return.mobile = false;
-
-		// First, let's check if it's chrome.
-		if (window.chrome) {
-			to_return.chrome = true;
-		} else {
-			// it can still be chrome?
-			var is_chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-			to_return.chrome = is_chrome;
-		}
-
-		function get_ua_version(user_agent) {
-			var index = navigator.userAgent.toLowerCase().indexOf(user_agent);
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + (user_agent.length)));
-			return real_version;
-		}
-
-		if (to_return.chrome === true) {
-			// Get version.
-			to_return.name = "Google Chrome";
-			to_return.version = get_ua_version("chrome/");
-		}
-
-		// Then, let's check if it's firefox.
-		if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-			to_return.name = "Mozilla Firefox";
-			to_return.firefox = true;
-			to_return.version = get_ua_version("firefox/");
-		}
-
-		// Blahblah Safari blah.
-		if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
-			to_return.name = "Apple Safari";
-			to_return.safari = true;
+			to_return.name = "UNKNOWN";
+			to_return.spoofed = false;
+			to_return.chrome = false;
 			to_return.firefox = false;
-			to_return.version = get_ua_version("safari/");
-		}
+			to_return.safari = false;
+			to_return.opera = false;
+			to_return.version = 0;
+			to_return.mobile = false;
 
-		to_return.ug = navigator.userAgent.toLowerCase();
+			// First, let's check if it's chrome.
+			if (window.chrome) {
+				to_return.chrome = true;
+			} else {
+				// it can still be chrome?
+				var is_chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+				to_return.chrome = is_chrome;
+			}
 
-		// Check if there is spoofing!
-		// A lot of people now switch to IE.
-		if (navigator.userAgent.indexOf('MSIE') > -1) {
-			to_return.spoofed = true;
-		}
+			function get_ua_version(user_agent) {
+				var index = navigator.userAgent.toLowerCase().indexOf(user_agent);
+				var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + (user_agent.length)));
+				return real_version;
+			}
 
-		// Check if you're viewing the mobile version
-		if ($('.is_mobile').length > 0) {
-			to_return.mobile = true;
-		}
+			if (to_return.chrome === true) {
+				// Get version.
+				to_return.name = "Google Chrome";
+				to_return.version = get_ua_version("chrome/");
+			}
 
-		return to_return;
+			// Then, let's check if it's firefox.
+			if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+				to_return.name = "Mozilla Firefox";
+				to_return.firefox = true;
+				to_return.version = get_ua_version("firefox/");
+			}
 
-	};
+			// Blahblah Safari blah.
+			if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
+				to_return.name = "Apple Safari";
+				to_return.safari = true;
+				to_return.firefox = false;
+				to_return.version = get_ua_version("safari/");
+			}
+
+			to_return.ug = navigator.userAgent.toLowerCase();
+
+			// Check if there is spoofing!
+			// A lot of people now switch to IE.
+			if (navigator.userAgent.indexOf('MSIE') > -1) {
+				to_return.spoofed = true;
+			}
+
+			// Check if you're viewing the mobile version
+			if ($('.is_mobile').length > 0) {
+				to_return.mobile = true;
+			}
+
+			return to_return;
+
+		};
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
 			XKit.retina = window.devicePixelRatio > 1;
-		} catch(e) { }
+		} catch (e) { }
 
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
-		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
 
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
 
-			if (!window._ || !window.jQuery){
+			if (!window._ || !window.jQuery) {
 				return;
 			}
+			/* globals _ */
 
-			if (_.get(window,"Tumblr.Prima.CrtPlayer")) {
+			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
 				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
 				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
 					function(wrapped, _event) {
@@ -498,11 +465,29 @@ XKit.tools.getParameterByName = function(name){
 			});
 		}, true, {});
 
+		XKit.tools.add_function(function fix_jk_scrolling() {
+			if (!window._ || !window.jQuery) {
+				return;
+			}
+
+			if (_.get(window, "Tumblr.KeyCommands.update_post_positions")) {
+				Tumblr.KeyCommands.update_post_positions = _.wrap(Tumblr.KeyCommands.update_post_positions,
+					function(wrapped, _event) {
+						wrapped.call(this);
+						this.post_positions = _.pick(this.post_positions,
+							function(scroll_pos, element_id) {
+								var element = jQuery("[data-pageable='" + element_id + "']");
+								return element.is(":visible") && element.height() > 0;
+							});
+					});
+			}
+		}, true, {});
+
 		setTimeout(function() {
 
 			var form_key_to_save = $('meta[name=tumblr-form-key]').attr("content");
 
-			if (typeof form_key_to_save !== "undefined" &&form_key_to_save !== "") {
+			if (typeof form_key_to_save !== "undefined" && form_key_to_save !== "") {
 				XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(form_key_to_save));
 			}
 
@@ -591,12 +576,13 @@ XKit.tools.getParameterByName = function(name){
 		};
 
 		if (XKit.frame_mode === true) {
-
+			// from xkit.js
+			/* globals xkit_check_storage */
 			xkit_check_storage();
 
 			// console.log("XKit Patches determined that it's in frame mode, resizing stuff!");
 
-			$("#iframe_controls,#dashboard_iframe").css("width","auto");
+			$("#iframe_controls,#dashboard_iframe").css("width", "auto");
 
 			var m_url = $("#tumblelog_name").attr('data-tumblelog-name');
 
@@ -678,6 +664,8 @@ XKit.tools.getParameterByName = function(name){
 
 			$("#tiptip_holder").css("z-index", "99000000");
 
+			// from xkit.js
+			/* globals centerIt */
 			centerIt($("#xkit-window"));
 			$("#xkit-window").fadeIn('fast');
 
@@ -758,7 +746,7 @@ XKit.tools.getParameterByName = function(name){
 						headers: {
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
-						onload: function (response) {
+						onload: function(response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
 							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
@@ -767,12 +755,14 @@ XKit.tools.getParameterByName = function(name){
 							}
 							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
+							m_object.response = response;
 							callback(m_object);
 						},
 						onerror: function(response) {
 							//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
 							m_object.errors = true;
 							m_object.kitten = "";
+							m_object.response = response;
 							XKit.interface.kitty.stored = "";
 							callback(m_object);
 						}
@@ -809,7 +799,7 @@ XKit.tools.getParameterByName = function(name){
 							"}", "xkit_interface_post_window_icon___" + class_name);
 
 					$(document).on('click', '.' + class_name, function() {
-						if ($(this).hasClass("xkit-interface-working") ||$(this).hasClass("xkit-interface-disabled")) { return; }
+						if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
 						if (typeof func === "function") { func.call(this, event); }
 					});
 
@@ -891,9 +881,12 @@ XKit.tools.getParameterByName = function(name){
 					}
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
-					XKit.tools.add_function(function(){
+					XKit.tools.add_function(function() {
+						/* globals require */
+						/* eslint-disable no-shadow */
 						var new_content = add_tag[0];
 						var html_or_markdown = add_tag[1];
+						/* eslint-enable no-shadow */
 						var editor_div = document.getElementsByClassName("ace_editor");
 						if (html_or_markdown === "Markdown") {
 							new_content = require('to-markdown').toMarkdown(new_content);
@@ -901,7 +894,7 @@ XKit.tools.getParameterByName = function(name){
 						if (editor_div.length === 1) {
 							var editor = window.ace.edit(editor_div[0]);
 							editor.setValue(new_content);
-							setTimeout(function(){
+							setTimeout(function() {
 								jQuery(".ace_marker-layer").empty();
 							}, 500);
 						}
@@ -1061,7 +1054,6 @@ XKit.tools.getParameterByName = function(name){
 				 * @return {String} Type of post, see also XKit.interface.post_window.post_type
 				 */
 				type: function() {
-					var to_return = {};
 					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
 					var form = $('.post-form');
 					for (var i = 0; i < types.length; i++) {
@@ -1122,38 +1114,45 @@ XKit.tools.getParameterByName = function(name){
 				 */
 				do: function() {
 
-					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }
+					if (!XKit.interface.post_window_listener_running) {
+						XKit.interface.post_window_listener_window_id = 0;
+						XKit.interface.post_window_listener.set_listen();
+						return;
+					}
 
 					var post_content = $(".post-form");
 					var ask_form = $(".post_ask_answer_form");
 
-					if(post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
+					if (post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
 						// No post window yet. Do nothing.
 						XKit.interface.post_window_listener_window_id = 0;
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					}
 
 					if (XKit.interface.post_window_listener_window_id !== 0) {
 						// Already ran the functions here?
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					} else {
 						XKit.interface.post_window_listener_window_id = XKit.tools.random_string();
 					}
 
 					if (XKit.interface.post_window_listener_id.length === 0) {
 						// We got not functions to run.
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					}
 
 					// XKit.console.add("interface -> Post Window found, running attached functions. [" + XKit.interface.post_window_listener_window_id + "]");
 
-					for (var i=0;i<XKit.interface.post_window_listener_id.length;i++) {
+					for (var i = 0; i < XKit.interface.post_window_listener_id.length; i++) {
 
 						if (typeof XKit.interface.post_window_listener_func[i] === "function") {
 
 							try {
 								XKit.interface.post_window_listener_func[i].call();
-							}catch(e) {
+							} catch (e) {
 								// XKit.console.add("interface -> post_window_listener -> can't run \"" + XKit.interface.post_window_listener_id[i] + "\": " + e.message);
 							}
 						}
@@ -1220,13 +1219,13 @@ XKit.tools.getParameterByName = function(name){
 					var tags_array = tags.split(",");
 					var added_tag_count = 0;
 
-					for (var i=0;i<tags_array.length;i++) {
+					for (var i = 0; i < tags_array.length; i++) {
 
 						var formatted = encodeURIComponent(tags_array[i]);
 
 						if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
 
-						if (tags_array[i].substring(0,1) === " ") {
+						if (tags_array[i].substring(0, 1) === " ") {
 							tags_array[i] = tags_array[i].substring(1);
 						}
 
@@ -1379,7 +1378,7 @@ XKit.tools.getParameterByName = function(name){
 
 				m_object['post[type]'] = tumblr_object.post.type;
 
-				if (tumblr_object.post.type === "regular") {
+				if (typeof tumblr_object.post.one !== "undefined") {
 					m_object['post[one]'] = tumblr_object.post.one;
 				}
 
@@ -1452,14 +1451,13 @@ XKit.tools.getParameterByName = function(name){
 						if (retry_mode === false) {
 							XKit.interface.edit(tumblr_object, func, true);
 						} else {
-
 							to_return.error = true;
-							to_return.status = response.status;
+							to_return.status = kitty_data.response.status;
 
-							if (response.status === 401) {
+							if (kitty_data.response.status === 401) {
 								to_return.message = "Permission Denied";
 							} else {
-								if (response.status === 404) {
+								if (kitty_data.response.status === 404) {
 									to_return.message = "Post Not Found";
 								} else {
 									to_return.message = "Unknown";
@@ -1509,7 +1507,7 @@ XKit.tools.getParameterByName = function(name){
 							try {
 								to_return.data = jQuery.parseJSON(response.responseText);
 								func(to_return);
-							} catch(e) {
+							} catch (e) {
 								to_return.error = true;
 								to_return.error_message = "Error parsing JSON";
 								func(to_return);
@@ -1523,7 +1521,7 @@ XKit.tools.getParameterByName = function(name){
 			},
 
 			/**
-			 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+			 * @param {Object} post_object - Interface Post Object provided by XKit.interface.post
 			 * @param {Function} func - Called on error or on completion with an object describing
 			 *                          the results of the fetch. The object has key error: true
 			 *                          if there is an error.
@@ -1584,7 +1582,7 @@ XKit.tools.getParameterByName = function(name){
 						try {
 							to_return.data = jQuery.parseJSON(response.responseText);
 							func(to_return);
-						} catch(e) {
+						} catch (e) {
 							to_return.error = true;
 							to_return.error_message = e.message;
 							func(to_return);
@@ -1700,7 +1698,7 @@ XKit.tools.getParameterByName = function(name){
 				}
 
 				$(document).on('click', '.' + class_name, function() {
-					if ($(this).hasClass("xkit-interface-working") ||$(this).hasClass("xkit-interface-disabled")) { return; }
+					if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
 					if (typeof func === "function") { func.call(this, event); }
 				});
 
@@ -1733,7 +1731,6 @@ XKit.tools.getParameterByName = function(name){
 
 				var m_html = "<div " + m_data + " title=\"" + m_text + "\" class=\"xkit-interface-control-button post_control post_control_icon " + class_name + "\" " + additional + "></div>";
 
-
 				if ($(obj).find(".post_controls_inner").length > 0) {
 					$(obj).find(".post_controls_inner").prepend(m_html);
 				} else if (XKit.browser().mobile) {
@@ -1742,6 +1739,9 @@ XKit.tools.getParameterByName = function(name){
 					$(obj).find(".post_controls").prepend(m_html);
 				}
 
+				if (XKit.interface.where().search) {
+					XKit.interface.trigger_reflow();
+				}
 			},
 
 			/**
@@ -1874,6 +1874,41 @@ XKit.tools.getParameterByName = function(name){
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 
+
+				if (m_return.is_reblogged && $(obj).attr('data-json')) {
+					try {
+						var json = $(obj).attr('data-json');
+						var parsedJson = JSON.parse(json);
+						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
+					} catch (e) {
+						console.log('Error retrieving data-json attribute of post');
+					}
+				} else if ($(obj).hasClass("has_source")) {
+					// Different pages (such as the sidebar) don't always have data-json defined,
+					// so fall back to checking for source elements
+					try {
+						var sourceJson = $(obj).find('.post-source-link').attr('data-peepr');
+						var parsedSourceJson = JSON.parse(sourceJson);
+						m_return.source_owner = parsedSourceJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of post-source-link');
+					}
+				} else if ($(obj).find(".reblog_info").length > 0) {
+					// If there is no source link but there is a reblog link, then
+					// the reblog source is the source
+					try {
+						var reblogJson = $(obj).find(".reblog_info").attr('data-peepr');
+						var parsedReblogJson = JSON.parse(reblogJson);
+						m_return.source_owner = parsedReblogJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of reblog_info');
+					}
+				} else {
+					// If there is no reblog or source link, consider the
+					// post owner to be the original source
+					m_return.source_owner = m_return.owner;
+				}
+
 				if (m_return.is_reblogged) {
 
 					try {
@@ -1882,7 +1917,7 @@ XKit.tools.getParameterByName = function(name){
 						m_return.reblog_owner = $(obj).find(".reblog_source").find("a").first().text();
 						m_return.reblog_original_id = m_return.reblog_link.split('/')[4];
 
-					} catch(e) {
+					} catch (e) {
 
 
 					}
@@ -1895,7 +1930,7 @@ XKit.tools.getParameterByName = function(name){
 					if ($(obj).find(".note_link_current").html() === "") {
 						n_count = 0;
 					} else {
-						n_count = $(obj).find(".note_link_current").html().replace(/\D/g,'');
+						n_count = $(obj).find(".note_link_current").html().replace(/\D/g, '');
 					}
 				}
 
@@ -1932,7 +1967,7 @@ XKit.tools.getParameterByName = function(name){
 
 				var to_return = $('meta[name=tumblr-form-key]').attr("content");
 
-				if (typeof to_return === "undefined" ||to_return === "") {
+				if (typeof to_return === "undefined" || to_return === "") {
 					// console.log(" --- XKit Interface: Form Key could not be fetched, using stored one.");
 					to_return = window.atob(XKit.storage.get("xkit_patches", "last_stored_form_key", ""));
 				} else {
@@ -1976,43 +2011,43 @@ XKit.tools.getParameterByName = function(name){
 				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
 
 				// Needs to be in a variable, otherwise account button can't be clicked. (Weird as fuck)
-				m_account = $("#account_button");
+				var m_account = $("#account_button");
 
 				m_account.click(); // Because tab must be open to steal data from it
 
 				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").length > 0) {
-					m_return.name = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").html().replace(",","");
+					m_return.name = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").html().replace(",", "");
 				} else {
 					m_return.name = 'ERROR';
 				}
 
 				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").length > 0) {
-					m_return.title = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").html().replace(",","");
+					m_return.title = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").html().replace(",", "");
 				} else {
 					m_return.title = 'ERROR';
 				}
 
 
 				if ($(".blog-sub-nav-details").find(".blog-sub-nav-item").length > 0) {
-					$(".blog-sub-nav-details").children(".blog-sub-nav-item").each(function(index, obj){
+					$(".blog-sub-nav-details").children(".blog-sub-nav-item").each(function(index, obj) {
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Posts') {
-							m_return.posts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.posts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Followers') {
-							m_return.followers = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.followers = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Activity') {
 							// Hax. Won't properly retrieve $(this).find(".blog-sub-nav-item-data.sparkline") for some reason.
-							m_return.activity = $(this).find(".blog-sub-nav-item-link").html().slice(113).slice(0,-8);
+							m_return.activity = $(this).find(".blog-sub-nav-item-link").html().slice(113).slice(0, -8);
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Drafts') {
-							m_return.drafts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.drafts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Processing') {
-							m_return.processing = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.processing = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Queue') {
-							m_return.queue = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.queue = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 					});
 				}
@@ -2055,7 +2090,8 @@ XKit.tools.getParameterByName = function(name){
 					dashboard: false,
 					likes: false,
 					following: false,
-					tagged: false
+					tagged: false,
+					explore: false
 				};
 
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
@@ -2080,7 +2116,7 @@ XKit.tools.getParameterByName = function(name){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "activity") {
 							m_return.activity = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -2091,7 +2127,7 @@ XKit.tools.getParameterByName = function(name){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "queue") {
 							m_return.queue = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -2102,7 +2138,7 @@ XKit.tools.getParameterByName = function(name){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "drafts") {
 							m_return.drafts = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -2113,7 +2149,7 @@ XKit.tools.getParameterByName = function(name){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "followers") {
 							m_return.followers = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -2128,12 +2164,17 @@ XKit.tools.getParameterByName = function(name){
 
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 					if (href_parts[3] === "blog") {
-						m_return.user_url = href_parts[4].replace("#","");
+						m_return.user_url = href_parts[4].replace("#", "");
 					}
 				}
 
 				if (document.location.href.indexOf("tumblr.com/search/") !== -1) {
 					m_return.search = true;
+				}
+
+				if ($("body").hasClass("discover") ||
+						document.location.href.indexOf("tumblr.com/explore/") !== -1) {
+					m_return.explore = true;
 				}
 
 				if ($("body").hasClass("dashboard_posts_likes") ||
@@ -2167,7 +2208,7 @@ XKit.tools.getParameterByName = function(name){
 			 * Tell Tumblr to reflow the page. Used to recalculate post dimensions
 			 * and j/k scrolling.
 			 */
-			trigger_reflow: function() {
+			trigger_reflow: XKit.tools.debounce(function() {
 				if (this.where().search) {
 					// Found by logging calls to Tumblr.Events.trigger on the search page
 					// search:post:photo_expanded is where the magic happens
@@ -2181,6 +2222,37 @@ XKit.tools.getParameterByName = function(name){
 						Tumblr.Events.trigger("DOMEventor:updateRect");
 					}, true, "");
 				}
+			}, 250),
+
+			show_peepr_for: function(blog, post) {
+				var payload = {
+					tumblelog_name: blog
+				};
+				if (post) {
+					payload.post_id = post;
+				}
+
+				XKit.tools.add_function(function() {
+					Tumblr.Events.trigger("peepr-open-request", add_tag);
+				}, true, payload);
+			},
+
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @param {String} username
+			 * @param {String} blog
+			 * @return {Promise<Boolean>}
+			 */
+			is_following: function(username, blog) {
+				return $.ajax({
+					type: "GET",
+					url: "/svc/blog/followed_by",
+					data: "tumblelog=" + blog + "&query=" + username,
+					dataType: "json",
+				}).then(function(msg) {
+					return msg.response.is_friend == 1;
+				});
 			}
 		});
 
@@ -2228,7 +2300,7 @@ XKit.tools.getParameterByName = function(name){
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
-				if ($(".posts").length > 0){
+				if ($(".posts").length > 0) {
 					post_count = $(".posts .post").length;
 				} else if ($("#posts").length > 0) {
 					post_count = $("#posts .post").length;
@@ -2239,7 +2311,7 @@ XKit.tools.getParameterByName = function(name){
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
-				if(XKit.post_listener.count > 0){
+				if (XKit.post_listener.count > 0) {
 					XKit.post_listener.run_callbacks();
 				}
 			} else {
@@ -2260,26 +2332,17 @@ XKit.tools.getParameterByName = function(name){
 			if (XKit.post_listener.callbacks.length === 0) {
 				return;
 			}
-			var successful_count = 0;
-			var fail_count = 0;
-			for (var i=0;i<XKit.post_listener.callbacks.length;i++) {
-
+			for (var i = 0; i < XKit.post_listener.callbacks.length; i++) {
 				try {
 					XKit.post_listener.callbacks[i]();
-					successful_count++;
-				} catch(e) {
-					// console.log("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
-					fail_count++;
+				} catch (e) {
+					console.error("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
 				}
-
 			}
-			// console.log("[Post Listener] Ran " + XKit.post_listener.callbacks.length + " callbacks, " + successful_count + " successful, " + fail_count + " failed.");
 		};
 
 		if ($(".search_control.post_layout").length > 0) {
-
 			setTimeout(function() { XKit.post_listener.check(true); }, 400);
-
 		}
 
 		/**
@@ -2291,54 +2354,52 @@ XKit.tools.getParameterByName = function(name){
 		 * @param {Function} callback - On click callback for notification
 		 */
 		XKit.notifications.add = function(message, type, sticky, callback) {
+			if ($("#xkit-notifications").length <= 0) {
+				setTimeout(function() { XKit.notifications.add(message, type, sticky, callback); }, 500);
+				return;
+			}
 
-				//alert($("#xkit-notifications").length);
-				if($("#xkit-notifications").length <= 0) {
-					setTimeout(function() { XKit.notifications.add(message,type,sticky,callback); }, 500);
-					return;
-				}
+			XKit.notifications.count++;
 
-				XKit.notifications.count++;
+			var m_class = "";
+			if (type === "mail") { m_class = "notification-mail"; }
+			if (type === "ok") { m_class = "notification-ok"; }
+			if (type === "error") { m_class = "notification-error"; }
+			if (type === "warning") { m_class = "notification-warning"; }
+			if (type === "pokes") { m_class = "notification-pokes"; }
 
-				var m_class = "";
-				if (type === "mail") { m_class = "notification-mail"; }
-				if (type === "ok") { m_class = "notification-ok"; }
-				if (type === "error") { m_class = "notification-error"; }
-				if (type === "warning") { m_class = "notification-warning"; }
-				if (type === "pokes") { m_class = "notification-pokes"; }
+			if (sticky === true) {
+				m_class = m_class + " sticky";
+			}
 
-				if (sticky === true) {
-					m_class = m_class + " sticky";
-				}
-
-				var m_html = "<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
+			var m_html = "<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
 									message +
 								"</div>";
 
-				$("#xkit-notifications").append(m_html);
+			$("#xkit-notifications").append(m_html);
 
 				// XKit.console.add(" Notification > " + message);
 
-				var m_notification_id = XKit.notifications.count;
-				setTimeout(function() {
-					$("#xkit_notification_" + m_notification_id).slideDown('slow');
-				}, 100);
-				$("#xkit_notification_" + m_notification_id).click(function() {
-					if(typeof callback !== undefined) {
-						try {
-							callback();
-						} catch(e) {
+			var m_notification_id = XKit.notifications.count;
+			setTimeout(function() {
+				$("#xkit_notification_" + m_notification_id).slideDown('slow');
+			}, 100);
+			$("#xkit_notification_" + m_notification_id).click(function() {
+				if (typeof callback !== undefined) {
+					try {
+						callback();
+					} catch (e) {
 							// Meh.
-						}
 					}
-					$("#xkit_notification_" + m_notification_id).slideUp('slow');
-				});
-				if (sticky !== true) {
-					setTimeout(function() {
-						$("#xkit_notification_" + m_notification_id).slideUp('slow');
-					}, 5000);
 				}
-			};
+				$("#xkit_notification_" + m_notification_id).slideUp('slow');
+			});
+			if (sticky !== true) {
+				setTimeout(function() {
+					$("#xkit_notification_" + m_notification_id).slideUp('slow');
+				}, 5000);
+			}
+		};
 
 	},
 

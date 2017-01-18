@@ -104,7 +104,7 @@ XKit.extensions.replyviewer = new Object({
 
 		// Quick Hack:
 		if (document.location.href.toLowerCase().indexOf("https://") !== -1) {
-			m_url = m_url.replace("http://","https://");
+			m_url = m_url.replace("http://", "https://");
 		}
 
 		$.ajax({
@@ -113,7 +113,7 @@ XKit.extensions.replyviewer = new Object({
 		}).error(function() {
 
 			XKit.window.close();
-			XKit.window.show("Unable to fetch required data", "ReplyViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Unable to fetch required data", "ReplyViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 		}).done(function(data, textStatus, jqXHR) {
 
@@ -199,11 +199,11 @@ XKit.extensions.replyviewer = new Object({
 		$("#replyviewer-window").bind('scroll', function() {
 
 			var c_height = 0;
-			$("#replyviewer-window").children().each(function(){
+			$("#replyviewer-window").children().each(function() {
 				c_height = c_height + $(this).outerHeight(true);
 			});
 
-			if($("#replyviewer-window").scrollTop() >= c_height - 400) {
+			if ($("#replyviewer-window").scrollTop() >= c_height - 400) {
 
 				if (XKit.extensions.replyviewer.loading_more) {return; }
 
@@ -223,13 +223,13 @@ XKit.extensions.replyviewer = new Object({
 
 	show_loader: function() {
 
-		$("#replyviewer-loader-icon").css("display","block");
+		$("#replyviewer-loader-icon").css("display", "block");
 
 	},
 
 	hide_loader: function() {
 
-		$("#replyviewer-loader-icon").css("display","none");
+		$("#replyviewer-loader-icon").css("display", "none");
 
 	},
 

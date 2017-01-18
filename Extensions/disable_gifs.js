@@ -26,7 +26,7 @@ XKit.extensions.disable_gifs = new Object({
 		this.running = true;
 		XKit.tools.init_css("disable_gifs");
 		if ($("#posts").length > 0) {
-			$(document).on('click','.disable_gifs_button', XKit.extensions.disable_gifs.on_click);
+			$(document).on('click', '.disable_gifs_button', XKit.extensions.disable_gifs.on_click);
 			//$(document).on('click','.xkit-disable-gifs-canvas-thumbnail', XKit.extensions.disable_gifs.toggle_enlarge);
 
 			XKit.interface.create_control_button("disable_gifs_button", this.button_icon, "Play Gif", "", this.on_icon);
@@ -95,7 +95,7 @@ XKit.extensions.disable_gifs = new Object({
 		var image = new Image();
 		image.src = url;
 
-		image.onload = (function(){
+		image.onload = (function() {
 
 			console.log("return_as_jpg for " + url + " ---> Complete loading image.");
 
@@ -114,7 +114,7 @@ XKit.extensions.disable_gifs = new Object({
 
 		if ($(post_obj).find(".photo_info").length > 0) {
 			$(post_obj).find(".photo_info").before(m_canvas_html);
-		}else {
+		} else {
 			$(post_obj).find(".post_media").append(m_canvas_html);
 		}
 		$("#xkit-disable-gifs-canvas-for-" + post_id).attr("width", width);
@@ -126,7 +126,7 @@ XKit.extensions.disable_gifs = new Object({
 		var image = new Image();
 		image.src = url;
 
-		image.onload = (function(){
+		image.onload = (function() {
 
 			console.log("return_as_jpg for " + url + " ---> Complete loading image.");
 
@@ -197,7 +197,7 @@ XKit.extensions.disable_gifs = new Object({
 				}
 			}
 
-		} catch(e) {
+		} catch (e) {
 
 			console.log("[!!!!!!]check_if_animated --> " + e.message);
 
@@ -220,7 +220,6 @@ XKit.extensions.disable_gifs = new Object({
 			var m_post = XKit.interface.post($(this));
 			// if (m_post.animated !== true) { return; }
 
-			var image_src = "";
 			//alert(XKit.extensions.disable_gifs.check_if_animated($(this)));
 			if (XKit.extensions.disable_gifs.check_if_animated($(this)) === false) {
 				return;
@@ -232,11 +231,11 @@ XKit.extensions.disable_gifs = new Object({
 			}
 
 			if ($(this).find(".image_thumbnail").length > 0) {
-				$(this).find(".image_thumbnail").css("display","none");
+				$(this).find(".image_thumbnail").css("display", "none");
 				XKit.extensions.disable_gifs.return_as_jpg($(this).find(".image_thumbnail").attr('src'), $(this).find(".image_thumbnail").attr('width'), $(this).find(".image_thumbnail").attr('height'), m_post.id, $(this).find(".image_thumbnail"), this);
 			} else {
 				if ($(this).find(".image").length > 0) {
-					$(this).find(".image").css("display","none");
+					$(this).find(".image").css("display", "none");
 					XKit.extensions.disable_gifs.return_as_jpg($(this).find(".image").attr('src'), $(this).find(".image").attr('width'), $(this).find(".image").attr('height'), m_post.id, $(this).find(".image"), this);
 				} else {
 					if ($(this).find(".photoset_photo").length > 0) {
@@ -244,9 +243,9 @@ XKit.extensions.disable_gifs = new Object({
 						var img_id = 0;
 						var m_parent = $(this);
 						$(this).find(".photoset_photo").each(function() {
-							$(this).find("img").css("display","none");
+							$(this).find("img").css("display", "none");
 							img_id++;
-							XKit.extensions.disable_gifs.return_as_jpg_photoset($(this).find("img").attr('src'), $(this).find("img").css('width').replace("px",""), $(this).find("img").css('height').replace("px",""), m_post.id, $(this), m_parent, $(this).parent(), $(this), img_id, "es");
+							XKit.extensions.disable_gifs.return_as_jpg_photoset($(this).find("img").attr('src'), $(this).find("img").css('width').replace("px", ""), $(this).find("img").css('height').replace("px", ""), m_post.id, $(this), m_parent, $(this).parent(), $(this), img_id, "es");
 						});
 					}
 				}
@@ -269,12 +268,12 @@ XKit.extensions.disable_gifs = new Object({
 
 		if ($(parent).hasClass("xkit-disable-gifs-playing")) {
 			XKit.interface.completed_control_button(obj, true);
-			$(parent).find(".image, .image_thumbnail, .photoset_photo img").css("display","block");
-			$(parent).find(".xkit-disable-gifs-canvas-container").css("display","none");
-		}else {
+			$(parent).find(".image, .image_thumbnail, .photoset_photo img").css("display", "block");
+			$(parent).find(".xkit-disable-gifs-canvas-container").css("display", "none");
+		} else {
 			XKit.interface.completed_control_button(obj, false);
-			$(parent).find(".image, .image_thumbnail, .photoset_photo img").css("display","none");
-			$(parent).find(".xkit-disable-gifs-canvas-container").css("display","block");
+			$(parent).find(".image, .image_thumbnail, .photoset_photo img").css("display", "none");
+			$(parent).find(".xkit-disable-gifs-canvas-container").css("display", "block");
 		}
 
 	},
