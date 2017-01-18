@@ -22,16 +22,16 @@ XKit.extensions.old_stats = new Object({
 			XKit.install("estufars_sidebar_fix", function(mdata) {
 				if (mdata.errors) {
 					if (mdata.storage_error === true) {
-						show_error_installation("[Code: 631] Can't store data on browser");
+						XKit.show_error_installation("[Code: 631] Can't store data on browser");
 						return;
 					}
 					if (mdata.server_down === true) {
-						show_error_installation("[Code: 101] Can't reach XKit servers");
+						XKit.show_error_installation("[Code: 101] Can't reach XKit servers");
 					} else {
 						if (mdata.file === "not_found") {
-							show_error_installation("Can't download " + to_install + ": Not found");
+							XKit.show_error_installation("Can't download estufars_sidebar_fix: Not found");
 						} else {
-							show_error_installation("Can't download " + to_install);
+							XKit.show_error_installation("Can't download estufars_sidebar_fix");
 						}
 					}
 					return;
