@@ -505,7 +505,7 @@ XKit.extensions.blacklist = new Object({
 				}
 				if ($(this).find(".mh_post_tags").length > 0) {
 					$(this).find(".mh_post_tags a").each(function() {
-						tag_array.push($(this).html().replace("#","").toLowerCase());
+						tag_array.push($(this).html().replace("#", "").toLowerCase());
 					});
 				}
 
@@ -536,7 +536,7 @@ XKit.extensions.blacklist = new Object({
 						if ($(this).find(".post_source_link").length > 0) {
 							m_author = m_author + " " + $(this).find(".post_source_link").html();
 						}
-					} catch(e) {
+					} catch (e) {
 						console.log(" !! can't get author !!", e);
 					}
 				}
@@ -639,13 +639,13 @@ XKit.extensions.blacklist = new Object({
 		var m_this = e.target;
 		var m_div = $("#" + $(m_this).attr('data-post-id')).closest(".post");
 		$(m_div).removeClass("xblacklist_blacklisted_post");
-		$(m_div).find(".post_info, .mh_post_head_name, .mh_post_head_two").css("display","block");
-		$(m_div).find(".post_controls, .mh_post_foot").css("display","block");
-		$(m_div).find(".post_footer_links").css('display','block');
-		$(m_div).find(".post_source").css('display','block');
-		$(m_div).find(".post_tags, .mh_post_tags").css('display','block');
-		$(m_div).find(".post_footer").css('display','table');
-		$(m_div).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display","block");
+		$(m_div).find(".post_info, .mh_post_head_name, .mh_post_head_two").css("display", "block");
+		$(m_div).find(".post_controls, .mh_post_foot").css("display", "block");
+		$(m_div).find(".post_footer_links").css('display', 'block');
+		$(m_div).find(".post_source").css('display', 'block');
+		$(m_div).find(".post_tags, .mh_post_tags").css('display', 'block');
+		$(m_div).find(".post_footer").css('display', 'table');
+		$(m_div).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display", "block");
 
 		$(m_div).find(".post_answer").css("display", "block");
 
@@ -704,7 +704,7 @@ XKit.extensions.blacklist = new Object({
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
 			$(obj).find(".post_footer").css('display', 'none');
 		} else {
-			$(obj).find(".post_tags, .post_footer, .mh_post_tags").css('display','none');
+			$(obj).find(".post_tags, .post_footer, .mh_post_tags").css('display', 'none');
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -730,13 +730,13 @@ XKit.extensions.blacklist = new Object({
     
 		var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, $(obj).attr('data-type'), post_id);
 
-		$(obj).find(".post_info").css("display","none");
-		$(obj).find(".post_controls").css("display","none");
+		$(obj).find(".post_info").css("display", "none");
+		$(obj).find(".post_controls").css("display", "none");
 		$(obj).find(".post_content").html(old_content + block_excuse);
-		$(obj).find(".post_footer_links").css('display','none');
-		$(obj).find(".post_source").css('display','none');
-		$(obj).find(".post-source-footer").css('display','none');
-		$(obj).find(".post_answer").css("display","none");
+		$(obj).find(".post_footer_links").css('display', 'none');
+		$(obj).find(".post_source").css('display', 'none');
+		$(obj).find(".post-source-footer").css('display', 'none');
+		$(obj).find(".post_answer").css("display", "none");
 	},
 
 	hide_mobile_content: function(obj, word) {
@@ -757,12 +757,12 @@ XKit.extensions.blacklist = new Object({
 
 		var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, post_type, $(obj).find(".mh_post_notes").attr('id'));
 
-		$(obj).find(".mh_post_head_name").css("display","none");
-		$(obj).find(".mh_post_head_two").css("display","none");
-		$(obj).find(".mh_post_foot").css("display","none");
-		$(obj).find(".mh_post_media").css("display","none");
-		$(obj).find(".mh_post_canvas").css("display","none");
-		$(obj).find(".mh_post_middle").css("display","none");
+		$(obj).find(".mh_post_head_name").css("display", "none");
+		$(obj).find(".mh_post_head_two").css("display", "none");
+		$(obj).find(".mh_post_foot").css("display", "none");
+		$(obj).find(".mh_post_media").css("display", "none");
+		$(obj).find(".mh_post_canvas").css("display", "none");
+		$(obj).find(".mh_post_middle").css("display", "none");
 		$(obj).find(".mh_post_head").after(block_excuse);
 	},
 
