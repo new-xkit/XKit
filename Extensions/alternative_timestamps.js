@@ -1,10 +1,13 @@
 //* TITLE Alternative Timestamps **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Adds timestamps to dashboard posts using a parsing method **//
 //* DETAILS This version of Timestamps uses parsing methods to display the timestamp instead of AJAX calls. Currently only in English. **//
 //* DEVELOPER jesskay **//
 //* FRAME false **//
 //* BETA true **//
+
+// defined in moment.js
+/* globals moment */
 
 XKit.extensions.alternative_timestamps = new Object({
 
@@ -40,7 +43,7 @@ XKit.extensions.alternative_timestamps = new Object({
 
 			var moment_timestamp = XKit.extensions.alternative_timestamps.parse_timestamp($(this));
 
-			if(moment_timestamp !== null) {
+			if (moment_timestamp !== null) {
 				var post_id = $(this).attr('id').replace('post_', '');
 
 				var $timestamp = $('<div>');
@@ -64,14 +67,14 @@ XKit.extensions.alternative_timestamps = new Object({
 
 	parse_timestamp: function($post) {
 		var permalink_title = $post.find('.post_permalink').attr('title');
-		if(permalink_title.indexOf('-') < 0) { return null; }
+		if (permalink_title.indexOf('-') < 0) { return null; }
 
 		var permalink_time = permalink_title.slice(permalink_title.indexOf('-') + 2);
 		var permalink_time_without_ordinals = this.strip_ordinals(permalink_time);
 
 		var moment_post_time = moment(); // wrong, but next it's refined
 
-		if(permalink_time.match(this.days_regex) !== null) {
+		if (permalink_time.match(this.days_regex) !== null) {
 			// "{day of week}, {time}"
 
 			var day_name = permalink_time.match(this.days_regex)[1];
@@ -81,17 +84,17 @@ XKit.extensions.alternative_timestamps = new Object({
 			moment_post_time.hours(moment_permalink_time_without_days.hours());
 			moment_post_time.minutes(moment_permalink_time_without_days.minutes());
 
-			while(moment_post_time.format("dddd") !== day_name) {
+			while (moment_post_time.format("dddd") !== day_name) {
 				moment_post_time.subtract(moment.duration(1, 'days'));
 			}
-		} else if(permalink_time.match(',') === null) {
+		} else if (permalink_time.match(',') === null) {
 			// "{time}"
 
 			var moment_permalink_time_hmma = moment(permalink_time, 'h:mma');
 
 			moment_post_time.hours(moment_permalink_time_hmma.hours());
 			moment_post_time.minutes(moment_permalink_time_hmma.minutes());
-		} else if(permalink_time.match(this.year_regex) === null) {
+		} else if (permalink_time.match(this.year_regex) === null) {
 			// "{month} {day}{ordinal}, {time}"
 
 			var moment_permalink_time_without_ordinals = moment(permalink_time_without_ordinals, 'MMM D, h:mma');
@@ -119,14 +122,14 @@ XKit.extensions.alternative_timestamps = new Object({
 		format_string = format_string || this.preferences.format_string.value;
 
 		format_string = format_string.replace(/\[(.*)\]/g, this.escape_raw);
-                format_string = format_string.replace(/RR/g, this.escape_raw(null, moment_timestamp.fromNow()));
+		format_string = format_string.replace(/RR/g, this.escape_raw(null, moment_timestamp.fromNow()));
 
 		return moment_timestamp.format(format_string);
 	},
 
 	escape_raw: function(full_match, raw_block) {
-		return raw_block.replace(/./g, function(c) {
-			return '\\' + c;
+		return raw_block.replace(/./g, function(char) {
+			return '\\' + char;
 		});
 	},
 

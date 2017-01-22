@@ -108,7 +108,7 @@ XKit.extensions.find_blogs = new Object({
 
 		if (XKit.interface.where().user_url === "") { return; }
 
-		xf_html = '<ul class="controls_section" id="find_blogs_ul">' +
+		var xf_html = '<ul class="controls_section" id="find_blogs_ul">' +
 			'<li class="section_header selected">FIND BLOGS</li>' +
 			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="find_blogs_button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Similar to ' + XKit.interface.where().user_url + '<span class="sub_control link_arrow arrow_right"></span></div>' +
@@ -175,7 +175,7 @@ XKit.extensions.find_blogs = new Object({
 
 	is_in_array: function(arr, username) {
 
-		for (var i=0;i<arr.length;i++) {
+		for (var i = 0; i < arr.length; i++) {
 			if (arr[i].url === username) {
 				return i;
 			}
@@ -196,12 +196,15 @@ XKit.extensions.find_blogs = new Object({
 			},
 			onload: function(response) {
 				try {
-					data = JSON.parse(response.responseText);
-					if (data.following === true) { return callback(true, m_url); } else { return callback(false, m_url); }
-				} catch(e) {
+					var data = JSON.parse(response.responseText);
+					if (data.following === true) {
+						return callback(true, m_url);
+					} else {
+						return callback(false, m_url);
+					}
+				} catch (e) {
 					return callback(false, m_url);
 				}
-				return callback(false, m_url);
 			}
 		});
 
@@ -213,8 +216,6 @@ XKit.extensions.find_blogs = new Object({
 		if (XKit.extensions.find_blogs.window_id !== m_window_id) {return; }
 
 		var container = [];
-
-		var people_backup = people;
 
 		while (people.length > 0) {
 
@@ -237,17 +238,17 @@ XKit.extensions.find_blogs = new Object({
 
 		console.log("old container length = " + container.length);
 
-		for (var i=0;i<container.length;i++) {
+		for (var i = 0; i < container.length; i++) {
 			if (container[i].count <= 2) {
 				if (container.length >= 100) {
-					container.splice(i,1);
+					container.splice(i, 1);
 				}
 			}
 		}
 
 		console.log("new container length = " + container.length);
 
-		container.sort(function(a,b) { return b.count-a.count; } );
+		container.sort(function(first, second) { return second.count - first.count; } );
 
 		try {
 
@@ -267,7 +268,7 @@ XKit.extensions.find_blogs = new Object({
 				XKit.extensions.find_blogs.show_results(m_url, compiled_array, m_window_id);
 			}
 
-		} catch(e) {
+		} catch (e) {
 			console.log(e);
 		}
 
@@ -321,7 +322,7 @@ XKit.extensions.find_blogs = new Object({
 
 		var m_count = 0;
 
-		for (var i=0;i<m_array.length;i++){
+		for (var i = 0; i < m_array.length; i++) {
 			if (m_count >= 8) {break; }
 			var mx_html = "<a target=\"_BLANK\" href=\"http://" + m_array[i] + ".tumblr.com/\"><div class=\"xkit-find-blogs-blog\">" +
 						"<img src=\"https://api.tumblr.com/v2/blog/" + m_array[i] + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
@@ -374,20 +375,20 @@ XKit.extensions.find_blogs = new Object({
 				if (XKit.extensions.find_blogs.window_id !== m_window_id) {return; }
 
 				try {
-					data = JSON.parse(response.responseText);
+					var data = JSON.parse(response.responseText);
 
-					for (var i=0;i<data.response.posts.length;i++) {
+					for (var i = 0; i < data.response.posts.length; i++) {
 
 						var m_post = data.response.posts[i];
 
 						try {
-							if (typeof data.response.posts[i].reblogged_from_name !== "undefined") {
-								people.push(data.response.posts[i].reblogged_from_name);
+							if (typeof m_post.reblogged_from_name !== "undefined") {
+								people.push(m_post.reblogged_from_name);
 							}
-							if (typeof data.response.posts[i].source_title !== "undefined") {
-								people.push(data.response.posts[i].source_title);
+							if (typeof m_post.source_title !== "undefined") {
+								people.push(m_post.source_title);
 							}
-						} catch(e) {
+						} catch (e) {
 							console.log("Can't read post, " + e.message);
 						}
 
@@ -395,7 +396,7 @@ XKit.extensions.find_blogs = new Object({
 
 					setTimeout(function() { XKit.extensions.find_blogs.fetch(m_url, (page + 3), m_window_id, people); }, 400);
 
-				} catch(e) {
+				} catch (e) {
 					console.log("Error parsing data: " + e.message);
 					XKit.extensions.find_blogs.display_error(m_window_id, "102");
 					return;
@@ -413,7 +414,7 @@ XKit.extensions.find_blogs = new Object({
 		$("#xkit-find-blogs-background").remove();
 		$("#xkit-find-blogs-window").remove();
 
-		XKit.window.show("Oops.","An error prevented Find Blogs from finding similar blogs.<br/>Please try again later.<br/>Code: \"FINB" + err_code + "\"","error","<div id=\"xkit-close-message-find-blogs\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Oops.", "An error prevented Find Blogs from finding similar blogs.<br/>Please try again later.<br/>Code: \"FINB" + err_code + "\"", "error", "<div id=\"xkit-close-message-find-blogs\" class=\"xkit-button default\">OK</div>");
 
 		$("#xkit-close-message-find-blogs").click(function() {
 
@@ -435,9 +436,9 @@ XKit.extensions.find_blogs = new Object({
 
 	show_ump_error: function() {
 
-		if (XKit.storage.get("find_blogs","shown_warning_about_show_more","") !== "yass") {
-			XKit.window.show("Oops: User Menus+ is missing.", "<b>Find Blogs requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using find_blogs.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-			XKit.storage.set("find_blogs","shown_warning_about_show_more","yass");
+		if (XKit.storage.get("find_blogs", "shown_warning_about_show_more", "") !== "yass") {
+			XKit.window.show("Oops: User Menus+ is missing.", "<b>Find Blogs requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using find_blogs.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.storage.set("find_blogs", "shown_warning_about_show_more", "yass");
 		}
 
 	},

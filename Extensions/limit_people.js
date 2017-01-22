@@ -41,7 +41,7 @@ XKit.extensions.limit_people = new Object({
 			XKit.post_listener.add("limit_people", XKit.extensions.limit_people.do);
 			XKit.extensions.limit_people.do();
 
-			$(document).on("click",".xkit-limit-people-opener", XKit.extensions.limit_people.open);
+			$(document).on("click", ".xkit-limit-people-opener", XKit.extensions.limit_people.open);
 
 		}
 
@@ -60,7 +60,7 @@ XKit.extensions.limit_people = new Object({
 
 		});
 
-		$($(m_obj).attr('data-to-get') + " .post.xkit-limit-people-grouped-hidden").css("opacity","0").removeClass("xkit-limit-people-grouped-hidden");
+		$($(m_obj).attr('data-to-get') + " .post.xkit-limit-people-grouped-hidden").css("opacity", "0").removeClass("xkit-limit-people-grouped-hidden");
 
 		$($(m_obj).attr('data-to-get') + " .post").animate({ opacity: 1}, 400);
 
@@ -82,7 +82,7 @@ XKit.extensions.limit_people = new Object({
 
 		var posts = XKit.interface.get_posts("xkit-limit-people-checked");
 
-		var after_v = parseInt(XKit.extensions.limit_people.preferences.limit.value.replace("after",""));
+		var after_v = parseInt(XKit.extensions.limit_people.preferences.limit.value.replace("after", ""));
 
 		var no_endless = $("body").hasClass("without_auto_paginate");
 

@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.4 **//
+//* VERSION 0.4.5 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -34,7 +34,7 @@ XKit.extensions.view_my_tags = new Object({
 		this.running = true;
 		if ($("#post_controls_avatar").length === 1) {
 			// For now, this will only work on pages where the user's avatar is visible
-			this.url = $("#post_controls_avatar").attr("href").replace("http://", "").replace("/", "");
+			this.url = $("#post_controls_avatar").attr("href").replace(/https?:\/\//, '').replace(/\//g, '');
 		}
 
 		$("body").append("<div id=\"xkit-view-my-tags-data\"></div>");
@@ -43,10 +43,10 @@ XKit.extensions.view_my_tags = new Object({
 
 		XKit.interface.post_window.create_control_button("xkit-view-my-tags-window", this.button_icon, "View my Tags");
 		XKit.interface.post_window_listener.add("view_my_tags", XKit.extensions.view_my_tags.post_window);
-		$(document).on("click",".xkit-view-my-tags-window", XKit.extensions.view_my_tags.post_window_icon);
+		$(document).on("click", ".xkit-view-my-tags-window", XKit.extensions.view_my_tags.post_window_icon);
 
 		if (XKit.extensions.view_my_tags.url !== "") {
-			var api_url = "https://api.tumblr.com/v2/blog/" +  XKit.extensions.view_my_tags.url + "/posts?api_key=" + XKit.extensions.view_my_tags.apiKey + "&limit=20";
+			var api_url = "https://api.tumblr.com/v2/blog/" + XKit.extensions.view_my_tags.url + "/posts?api_key=" + XKit.extensions.view_my_tags.apiKey + "&limit=20";
 
 			GM_xmlhttpRequest({
 				method: "GET",
@@ -56,8 +56,8 @@ XKit.extensions.view_my_tags = new Object({
 					var data = JSON.parse(response.responseText);
 					var user_tags_array = [];
 					var user_tags_hashmap = {};
-					data.response.posts.forEach(function(post){
-						post.tags.forEach(function(tag){
+					data.response.posts.forEach(function(post) {
+						post.tags.forEach(function(tag) {
 							if (!user_tags_hashmap.hasOwnProperty(tag)) {
 								user_tags_array.push(tag);
 								user_tags_hashmap[tag] = 1;
@@ -120,7 +120,10 @@ XKit.extensions.view_my_tags = new Object({
 
 		var m_data = $("#xkit-view-my-tags-data").html();
 
-		if (m_data === "") { XKit.extensions.view_my_tags.show_error("VMT-509"); }
+		if (m_data === "") {
+			XKit.extensions.view_my_tags.show_error("VMT-509");
+			return;
+		}
 
 		try {
 
@@ -137,11 +140,11 @@ XKit.extensions.view_my_tags = new Object({
 
 			}
 
-			for (var i=0;i<m_array.length;i++) {
+			for (var i = 0; i < m_array.length; i++) {
 
 				if (!in_post_window) {
 					m_html = m_html + "<div class=\"xkit-view-my-tags-tag\">" + m_array[i] + "</div>";
-				} else{
+				} else {
 					var extra_tags = "";
 					console.log(m_array[i] + "=" + XKit.interface.post_window.tag_exists(m_array[i]));
 					if (XKit.interface.post_window.tag_exists(m_array[i]) === true) { extra_tags = "xkit-view-tags-green"; }
@@ -154,13 +157,13 @@ XKit.extensions.view_my_tags = new Object({
 
 			XKit.window.show("View My Tags", m_html, "info", "<div id=\"xkit-close-message-view-my-tags\" class=\"xkit-button\">Close</div><input type=\"text\" placeholder=\"Search tags...\" id=\"xkit-view-my-tags-search\">");
 
-			$("body").css("overflow","hidden");
+			$("body").css("overflow", "hidden");
 
 			$("#view-my-tags-window-outer").nanoScroller();
 
 			$("#xkit-close-message-view-my-tags").click(function() {
 
-				$("body").css("overflow","auto");
+				$("body").css("overflow", "auto");
 				XKit.window.close();
 
 			});
@@ -173,14 +176,11 @@ XKit.extensions.view_my_tags = new Object({
 					$(".xkit-view-my-tags-tag").removeClass("xkit-view-tags-hidden");
 				}
 
-				var m_count = 0;
-
 				$(".xkit-view-my-tags-tag").each(function() {
 
 					if ($(this).html().toLowerCase().indexOf(m_value) !== -1) {
 
 						$(this).removeClass("xkit-view-tags-hidden");
-						m_count++;
 
 					} else {
 
@@ -210,7 +210,7 @@ XKit.extensions.view_my_tags = new Object({
 
 			});
 
-		} catch(e) {
+		} catch (e) {
 
 			XKit.extensions.view_my_tags.show_error("VMT-510: " + e.message);
 
@@ -220,7 +220,7 @@ XKit.extensions.view_my_tags = new Object({
 
 	show_error: function(error_code) {
 
-		XKit.window.show("Unable to retrieve tags","View My Tags were unable to retrieve your latest tags.<br/>Please try again later.<br/><br/>Error Code:<br/>" + error_code,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Unable to retrieve tags", "View My Tags were unable to retrieve your latest tags.<br/>Please try again later.<br/><br/>Error Code:<br/>" + error_code, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 	},
 

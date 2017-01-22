@@ -166,7 +166,7 @@ XKit.extensions.xwidgets = new Object({
 
 				var box_id = $(obj).attr('data-id');
 
-				var m_storage = XKit.storage.get("xwidgets","widget-storage-" + box_id, "");
+				var m_storage = XKit.storage.get("xwidgets", "widget-storage-" + box_id, "");
 
 				var list_html = '<div style="padding: 5px; padding-top: 29px; text-align: center;"><select id="xtime_timezone-for-' + box_id + '" style="width: 100%;">' +
 					'<option value="-12">(GMT -12:00) International Date Line West</option>' +
@@ -233,7 +233,7 @@ XKit.extensions.xwidgets = new Object({
 
 					$("#time-selector-confirm-for-" + box_id).click(function() {
 
-						XKit.storage.set("xwidgets","widget-storage-" + box_id, $("#xtime_timezone-for-" + box_id).val());
+						XKit.storage.set("xwidgets", "widget-storage-" + box_id, $("#xtime_timezone-for-" + box_id).val());
 						XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + box_id));
 						XKit.extensions.xwidgets.widgets.world_clock.init($("#xwidgets-box-" + box_id), data);
 
@@ -250,36 +250,36 @@ XKit.extensions.xwidgets = new Object({
 
 				var m_caption = "";
 
-				switch(m_storage) {
-					case 4:
-						m_caption = "Baku";
+				switch (m_storage) {
+				case 4:
+					m_caption = "Baku";
 					break;
-					case 3:
-						m_caption = "Kuwait";
+				case 3:
+					m_caption = "Kuwait";
 					break;
-					case 2:
-						m_caption = "Istanbul";
+				case 2:
+					m_caption = "Istanbul";
 					break;
-					case 1:
-						m_caption = "Vienna";
+				case 1:
+					m_caption = "Vienna";
 					break;
-					case 0:
-						m_caption = "London";
+				case 0:
+					m_caption = "London";
 					break;
-					case -2:
-						m_caption = "Buenos Aires";
+				case -2:
+					m_caption = "Buenos Aires";
 					break;
-					case -5:
-						m_caption = "Eastern Time";
+				case -5:
+					m_caption = "Eastern Time";
 					break;
-					case -6:
-						m_caption = "Central Time";
+				case -6:
+					m_caption = "Central Time";
 					break;
-					case -8:
-						m_caption = "Pacific Time";
+				case -8:
+					m_caption = "Pacific Time";
 					break;
-					default:
-						m_caption = "GMT " + m_storage;
+				default:
+					m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);
@@ -304,19 +304,19 @@ XKit.extensions.xwidgets = new Object({
 
 				var now = new Date();
 				var isitlocal = false;
-				var ofst = now.getTimezoneOffset()/60;
+				var ofst = now.getTimezoneOffset() / 60;
 				var secs = now.getSeconds();
-				var sec = -1.57+Math.PI*secs/30;
+				//var sec = -1.57 + Math.PI * secs / 30;
 				var mins = now.getMinutes();
-				var min = -1.57+Math.PI*mins/30;
-				var hr=(isitlocal)?now.getHours():(now.getHours() + parseInt(ofst)) + parseInt(timezone);
-				var hrs=-1.575+Math.PI*hr/6+Math.PI*parseInt(now.getMinutes())/360;
-				if (hr < 0) hr+=24;
-				if (hr > 23) hr-=24;
-				ampm = (hr > 11)?"PM":"AM";
-				statusampm = ampm;
+				//var min = -1.57 + Math.PI * mins / 30;
+				var hr = (isitlocal) ? now.getHours() : (now.getHours() + parseInt(ofst)) + parseInt(timezone);
+				//var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
+				if (hr < 0) hr += 24;
+				if (hr > 23) hr -= 24;
+				var ampm = (hr > 11) ? "PM" : "AM";
+				var statusampm = ampm;
 
-				hr2 = hr;
+				var hr2 = hr;
 				if (hr2 === 0) {
 					hr2 = 12;
 				}
@@ -327,14 +327,14 @@ XKit.extensions.xwidgets = new Object({
 					hr2 = "0" + hr2;
 				}
 
-				var finaltime=hr2+':'+((mins < 10)?"0"+mins:mins)+':'+((secs < 10)?"0"+secs:secs)+' '+statusampm;
+				var finaltime = hr2 + ':' + ((mins < 10) ? "0" + mins : mins) + ':' + ((secs < 10) ? "0" + secs : secs) + ' ' + statusampm;
 
 				$(obj).find(".time").html(finaltime);
 
 
 			},
 
-			destroy: function(obj, data){
+			destroy: function(obj, data) {
 				//alert(data.interval);
 				clearInterval(data.interval);
 			}
@@ -365,7 +365,7 @@ XKit.extensions.xwidgets = new Object({
 
 				var box_id = $(obj).attr('data-id');
 
-				var m_storage = XKit.storage.get("xwidgets","widget-storage-" + box_id, "");
+				var m_storage = XKit.storage.get("xwidgets", "widget-storage-" + box_id, "");
 
 				var list_html = '<div style="padding: 5px; padding-top: 29px; text-align: center;"><select id="xtime_timezone-for-' + box_id + '" style="width: 100%;">' +
 					'<option value="-12">(GMT -12:00) International Date Line West</option>' +
@@ -432,7 +432,7 @@ XKit.extensions.xwidgets = new Object({
 
 					$("#time-selector-confirm-for-" + box_id).click(function() {
 
-						XKit.storage.set("xwidgets","widget-storage-" + box_id, $("#xtime_timezone-for-" + box_id).val());
+						XKit.storage.set("xwidgets", "widget-storage-" + box_id, $("#xtime_timezone-for-" + box_id).val());
 						XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + box_id));
 						XKit.extensions.xwidgets.widgets.world_clock_24.init($("#xwidgets-box-" + box_id), data);
 
@@ -449,36 +449,36 @@ XKit.extensions.xwidgets = new Object({
 
 				var m_caption = "";
 
-				switch(m_storage) {
-					case 4:
-						m_caption = "Baku";
+				switch (m_storage) {
+				case 4:
+					m_caption = "Baku";
 					break;
-					case 3:
-						m_caption = "Kuwait";
+				case 3:
+					m_caption = "Kuwait";
 					break;
-					case 2:
-						m_caption = "Istanbul";
+				case 2:
+					m_caption = "Istanbul";
 					break;
-					case 1:
-						m_caption = "Vienna";
+				case 1:
+					m_caption = "Vienna";
 					break;
-					case 0:
-						m_caption = "London";
+				case 0:
+					m_caption = "London";
 					break;
-					case -2:
-						m_caption = "Buenos Aires";
+				case -2:
+					m_caption = "Buenos Aires";
 					break;
-					case -5:
-						m_caption = "Eastern Time";
+				case -5:
+					m_caption = "Eastern Time";
 					break;
-					case -6:
-						m_caption = "Central Time";
+				case -6:
+					m_caption = "Central Time";
 					break;
-					case -8:
-						m_caption = "Pacific Time";
+				case -8:
+					m_caption = "Pacific Time";
 					break;
-					default:
-						m_caption = "GMT " + m_storage;
+				default:
+					m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);
@@ -503,15 +503,15 @@ XKit.extensions.xwidgets = new Object({
 
 				var now = new Date();
 				var isitlocal = false;
-				var ofst = now.getTimezoneOffset()/60;
+				var ofst = now.getTimezoneOffset() / 60;
 				var secs = now.getSeconds();
-				var sec = -1.57+Math.PI*secs/30;
+				// var sec = -1.57 + Math.PI * secs / 30;
 				var mins = now.getMinutes();
-				var min = -1.57+Math.PI*mins/30;
-				var hr=(isitlocal)?now.getHours():(now.getHours() + parseInt(ofst)) + parseInt(timezone);
-				var hrs=-1.575+Math.PI*hr/6+Math.PI*parseInt(now.getMinutes())/360;
-				if (hr < 0) hr+=24;
-				if (hr > 23) hr-=24;
+				// var min = -1.57 + Math.PI * mins / 30;
+				var hr = (isitlocal) ? now.getHours() : (now.getHours() + parseInt(ofst)) + parseInt(timezone);
+				// var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
+				if (hr < 0) hr += 24;
+				if (hr > 23) hr -= 24;
 				/* ampm = (hr > 11)?"PM":"AM";
 				statusampm = ampm;*/
 
@@ -519,25 +519,25 @@ XKit.extensions.xwidgets = new Object({
 				//	hr = hr + 12;
 				}
 
-				hr2 = hr;
+				var hr2 = hr;
 				if (hr2 === 0) {
 					hr2 = 24;
 				}
 				//(hr2 < 13)?hr2:hr2 %= 12;
-				if (hr2<10) {
+				if (hr2 < 10) {
 					hr2 = "0" + hr2;
 				}
 
 
 
-				var finaltime=hr2+':'+((mins < 10)?"0"+mins:mins)+':'+((secs < 10)?"0"+secs:secs);
+				var finaltime = hr2 + ':' + ((mins < 10) ? "0" + mins : mins) + ':' + ((secs < 10) ? "0" + secs : secs);
 
 				$(obj).find(".time").html(finaltime);
 
 
 			},
 
-			destroy: function(obj, data){
+			destroy: function(obj, data) {
 				clearInterval(data.interval);
 			}
 
@@ -556,10 +556,10 @@ XKit.extensions.xwidgets = new Object({
 
 				var box_id = $(obj).attr('data-id');
 
-				var m_storage = XKit.storage.get("xwidgets","widget-storage-" + box_id, "");
+				var m_storage = XKit.storage.get("xwidgets", "widget-storage-" + box_id, "");
 
 				if (m_storage !== "") {
-					if (m_storage.substring(0,2) === "[[" && m_storage.substring(m_storage.length - 2,m_storage.length) === "]]") {
+					if (m_storage.substring(0, 2) === "[[" && m_storage.substring(m_storage.length - 2, m_storage.length) === "]]") {
 						m_storage = m_storage.substring(2, m_storage.length - 2);
 					}
 				}
@@ -579,7 +579,7 @@ XKit.extensions.xwidgets = new Object({
 					var m_blogs = XKit.tools.get_blogs();
 					var m_selector = "";
 
-					for (var i=0;i<m_blogs.length;i++) {
+					for (var i = 0; i < m_blogs.length; i++) {
 
 						if (m_blogs[i] !== "") {
 
@@ -592,7 +592,7 @@ XKit.extensions.xwidgets = new Object({
 
 					$("#blog-selector-confirm-for-" + box_id).click(function() {
 
-						XKit.storage.set("xwidgets","widget-storage-" + box_id, "[[" + $("#blog-selector-for-" + box_id).val() + "]]");
+						XKit.storage.set("xwidgets", "widget-storage-" + box_id, "[[" + $("#blog-selector-for-" + box_id).val() + "]]");
 						XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + box_id));
 						XKit.extensions.xwidgets.widgets.blog_information.init($("#xwidgets-box-" + box_id), data);
 
@@ -636,20 +636,20 @@ XKit.extensions.xwidgets = new Object({
 						},
 						onload: function(response) {
 
-							var data = $(response.responseText);
-							var follower_count = $(".followers .count", data).html();
-							var queue_count = $(".queue .count", data).html();
-							var drafts_count = $(".drafts .count", data).html();
+							var blog_page = $(response.responseText);
+							var follower_count = $(".followers .count", blog_page).html();
+							var queue_count = $(".queue .count", blog_page).html();
+							var drafts_count = $(".drafts .count", blog_page).html();
 
-							if ($(".followers .count", data).length === 0) {
+							if ($(".followers .count", blog_page).length === 0) {
 								follower_count = "0";
 							}
 
-							if ($(".queue .count", data).length === 0) {
+							if ($(".queue .count", blog_page).length === 0) {
 								queue_count = "0";
 							}
 
-							if ($(".drafts .count", data).length === 0) {
+							if ($(".drafts .count", blog_page).length === 0) {
 								drafts_count = "0";
 							}
 
@@ -678,13 +678,13 @@ XKit.extensions.xwidgets = new Object({
 
 				var box_id = $(obj).attr('data-id');
 
-				var m_storage = XKit.storage.get("xwidgets","widget-storage-" + box_id, "");
+				var m_storage = XKit.storage.get("xwidgets", "widget-storage-" + box_id, "");
 
 				var m_text = "";
 
 				if (m_storage !== "") {
 					m_text = m_storage;
-					if (m_text.substring(0,2) === "[[" && m_text.substring(m_text.length - 2,m_text.length) === "]]") {
+					if (m_text.substring(0, 2) === "[[" && m_text.substring(m_text.length - 2, m_text.length) === "]]") {
 						m_text = m_text.substring(2, m_text.length - 2);
 					}
 				}
@@ -695,7 +695,7 @@ XKit.extensions.xwidgets = new Object({
 				$(obj).find(".nano-notepad-area").bind("input propertychange", function() {
 
 					box_id = $(this).attr('data-id');
-					XKit.storage.set("xwidgets","widget-storage-" + box_id, "[[" + $(this).val() + "]]");
+					XKit.storage.set("xwidgets", "widget-storage-" + box_id, "[[" + $(this).val() + "]]");
 
 				});
 
@@ -704,7 +704,7 @@ XKit.extensions.xwidgets = new Object({
 					event.stopPropagation();
 					event.stopImmediatePropagation();
 					box_id = $(this).attr('data-id');
-					XKit.storage.set("xwidgets","widget-storage-" + box_id, "[[" + $(this).val() + "]]");
+					XKit.storage.set("xwidgets", "widget-storage-" + box_id, "[[" + $(this).val() + "]]");
 
 				});
 
@@ -729,7 +729,7 @@ XKit.extensions.xwidgets = new Object({
 					if (XKit.extensions.xcloud.running === false) {
 						show_error = true;
 					} else {
-						if (XKit.storage.get("xcloud","username","") === "") {
+						if (XKit.storage.get("xcloud", "username", "") === "") {
 							show_error = true;
 						}
 					}
@@ -747,7 +747,7 @@ XKit.extensions.xwidgets = new Object({
 				var m_html = "<div class=\"title\">" +
 							"Signed as" +
 							"<div class=\"username\">" +
-								XKit.storage.get("xcloud","username","") +
+								XKit.storage.get("xcloud", "username", "") +
 							"</div>" +
 						"</div>" +
 						"<div class=\"button\">" +
@@ -793,7 +793,7 @@ XKit.extensions.xwidgets = new Object({
 						var m_count = 0;
 						var m_html = "";
 
-						$(xml_doc).find("item").each(function(){
+						$(xml_doc).find("item").each(function() {
 
 							if (m_count >= 6) {return false; }
 
@@ -842,7 +842,7 @@ XKit.extensions.xwidgets = new Object({
 						var m_count = 0;
 						var m_html = "";
 
-						$(xml_doc).find("item").each(function(){
+						$(xml_doc).find("item").each(function() {
 
 							if (m_count >= 6) {return false; }
 
@@ -892,8 +892,8 @@ XKit.extensions.xwidgets = new Object({
 				data.interval = setInterval(function() { this_widget.tick(obj, data); }, 1000);
 				this_widget.tick(obj, data);
 
-				$(document).off("click",".xkit-audio-plus-button",this_widget.button_pressed);
-				$(document).on("click",".xkit-audio-plus-button",this_widget.button_pressed);
+				$(document).off("click", ".xkit-audio-plus-button", this_widget.button_pressed);
+				$(document).on("click", ".xkit-audio-plus-button", this_widget.button_pressed);
 
 
 
@@ -901,7 +901,6 @@ XKit.extensions.xwidgets = new Object({
 
 			button_pressed: function(e) {
 
-				var m_button = $(e.target);
 				var m_parent = $(e.target).parent();
 
 				if ($(m_parent).hasClass("song-actually-playing")) {
@@ -919,16 +918,6 @@ XKit.extensions.xwidgets = new Object({
 			tick: function(obj, data) {
 
 				var m_player = XKit.extensions.audio_plus.return_current_instance();
-
-				if (typeof XKit.extensions.audio_plus === "undefined") {
-					this_widget.show_error(obj);
-					return;
-				} else {
-					if (XKit.extensions.audio_plus.running !== true) {
-						this_widget.show_error(obj);
-						return;
-					}
-				}
 
 				if (m_player === -1) {
 					$(obj).addClass("xkit-no-song-playing");
@@ -982,7 +971,7 @@ XKit.extensions.xwidgets = new Object({
 
 			},
 
-			destroy: function(obj, data){
+			destroy: function(obj, data) {
 				clearInterval(data.interval);
 			}
 
@@ -1004,33 +993,33 @@ XKit.extensions.xwidgets = new Object({
 				// Had to do this. ugh. based on a lights out game generator I found.
 
 				var puzzles = [
-						"# # ## # ##   ### #    ##",
-						"####  #   # # ###  ## #  ",
-						" ###  ### #    ## ## #   ",
-						"##    ########     #  # #",
-						" #    #######  #        #",
-						" #  # ###  ### ####  ## #",
-						"# # # ##       #### ###  ",
-						"  #  ############ ###   #",
-						"#  ##   ###    # # ####  ",
-						"  ####  #  ###  ###   ###",
-						"## ##     #  # ###  # ## ",
-						"   #  ### # ## # # ## #  ",
-						"#  #    ### ##   # ### ##",
-						"## ### # ## # # ## ##  # ",
-						"#   # ###    #  ###  ####",
-						"#  # # # ### ##  ## #  # ",
-						"#   ## #  #  #### ## #   ",
-						"#   # ##       #  ### # #",
-						"####  ### #   ## #   # ##",
-						"   # #       ###   #    #",
+					"# # ## # ##   ### #    ##",
+					"####  #   # # ###  ## #  ",
+					" ###  ### #    ## ## #   ",
+					"##    ########     #  # #",
+					" #    #######  #        #",
+					" #  # ###  ### ####  ## #",
+					"# # # ##       #### ###  ",
+					"  #  ############ ###   #",
+					"#  ##   ###    # # ####  ",
+					"  ####  #  ###  ###   ###",
+					"## ##     #  # ###  # ## ",
+					"   #  ### # ## # # ## #  ",
+					"#  #    ### ##   # ### ##",
+					"## ### # ## # # ## ##  # ",
+					"#   # ###    #  ###  ####",
+					"#  # # # ### ##  ## #  # ",
+					"#   ## #  #  #### ## #   ",
+					"#   # ##       #  ### # #",
+					"####  ### #   ## #   # ##",
+					"   # #       ###   #    #",
 				];
 
 				var m_puzzle = Math.floor(Math.random() * puzzles.length);
 				var m_count = 0;
-				for (var y=0;y<5;y++) {
+				for (var y = 0; y < 5; y++) {
 					m_boxes = m_boxes + "<div class=\"line\">";
-					for (var x=0;x<5;x++) {
+					for (var x = 0; x < 5; x++) {
 						var __class = "";
 						if (puzzles[m_puzzle].substring(m_count, m_count + 1) === "#") {
 							__class = "on";
@@ -1066,11 +1055,11 @@ XKit.extensions.xwidgets = new Object({
 					var box_id = $(obj).attr('data-id');
 
 					if ($(this).parent().parent().find(".box.on").length === 0) {
-						XKit.window.show("A WINNER IS YOU<i>!!</i>","Congratulations! You've finished the puzzle in " + data.moves + " moves.","info","<div id=\"xkit-puzzle-restart-for-" + box_id + "\" class=\"xkit-button default\">Restart</div>");
+						XKit.window.show("A WINNER IS YOU<i>!!</i>", "Congratulations! You've finished the puzzle in " + data.moves + " moves.", "info", "<div id=\"xkit-puzzle-restart-for-" + box_id + "\" class=\"xkit-button default\">Restart</div>");
 
 						$("#xkit-puzzle-restart-for-" + box_id).click(function() {
 
-							XKit.extensions.xwidgets.widgets.lights_out.init(obj,data);
+							XKit.extensions.xwidgets.widgets.lights_out.init(obj, data);
 							XKit.window.close();
 
 						});
@@ -1107,7 +1096,7 @@ XKit.extensions.xwidgets = new Object({
 		$("#xkit-xwidgets-add-list").nanoScroller();
 		$("#xkit-xwidgets-add-list").nanoScroller({ scroll: 'top' });
 
-		$("body").css("overflow","hidden");
+		$("body").css("overflow", "hidden");
 
 		$(".xwidgets-add-list-item").click(function() {
 
@@ -1119,7 +1108,7 @@ XKit.extensions.xwidgets = new Object({
 		$("#xkit-close-message-xwidgets").click(function() {
 
 			XKit.window.close();
-			$("body").css("overflow","auto");
+			$("body").css("overflow", "auto");
 
 		});
 
@@ -1127,7 +1116,7 @@ XKit.extensions.xwidgets = new Object({
 
 			var widget_id = $(".xwidgets-add-list-item.selected").attr('data-id');
 
-			XKit.storage.set("xwidgets","widget-storage-" + box_id, "");
+			XKit.storage.set("xwidgets", "widget-storage-" + box_id, "");
 
 			XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + box_id));
 			XKit.extensions.xwidgets.widget_data[box_id] = {};
@@ -1137,7 +1126,7 @@ XKit.extensions.xwidgets = new Object({
 			XKit.extensions.xwidgets.save_settings();
 
 			XKit.window.close();
-			$("body").css("overflow","auto");
+			$("body").css("overflow", "auto");
 
 		});
 
@@ -1178,7 +1167,7 @@ XKit.extensions.xwidgets = new Object({
 
 		$("body").append(m_html);
 
-		$(document).on('click','.xwidgets-box', XKit.extensions.xwidgets.handle_click);
+		$(document).on('click', '.xwidgets-box', XKit.extensions.xwidgets.handle_click);
 
 		XKit.extensions.xwidgets.load_settings();
 
@@ -1202,7 +1191,7 @@ XKit.extensions.xwidgets = new Object({
 
 		setTimeout(function() {
 
-			for (var i=1;i<=6;i++) {
+			for (var i = 1; i <= 6; i++) {
 				XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + i));
 				if (typeof XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[i]].destroy === "function") {
 					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[i]].destroy($("#xwidgets-box-" + i), XKit.extensions.xwidgets.widget_data[i]);
@@ -1217,13 +1206,13 @@ XKit.extensions.xwidgets = new Object({
 	load_settings: function() {
 
 		try {
-			var __user_widgets = XKit.storage.get("xwidgets","user_widgets", "");
+			var __user_widgets = XKit.storage.get("xwidgets", "user_widgets", "");
 			if (__user_widgets === "" || typeof __user_widgets === "undefined") {
 				XKit.extensions.xwidgets.user_widgets = [];
 			} else {
 				XKit.extensions.xwidgets.user_widgets = JSON.parse(__user_widgets);
 			}
-		} catch(e) {
+		} catch (e) {
 			XKit.extensions.xwidgets.user_widgets = [];
 		}
 
@@ -1233,7 +1222,7 @@ XKit.extensions.xwidgets = new Object({
 
 	save_settings: function() {
 
-		XKit.storage.set("xwidgets","user_widgets", JSON.stringify(XKit.extensions.xwidgets.user_widgets));
+		XKit.storage.set("xwidgets", "user_widgets", JSON.stringify(XKit.extensions.xwidgets.user_widgets));
 
 	},
 
@@ -1254,7 +1243,7 @@ XKit.extensions.xwidgets = new Object({
 
 		console.log(XKit.extensions.xwidgets.user_widgets);
 
-		for (var i=1;i<=6;i++) {
+		for (var i = 1; i <= 6; i++) {
 
 			XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + i));
 
@@ -1265,7 +1254,7 @@ XKit.extensions.xwidgets = new Object({
 				try {
 					XKit.console.add("---> " + [XKit.extensions.xwidgets.user_widgets[i]]);
 					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[i]].init($("#xwidgets-box-" + i), XKit.extensions.xwidgets.widget_data[i]);
-				} catch(e) {
+				} catch (e) {
 					XKit.console.add("Can't load slot #" + i + ": " + e.message);
 					XKit.extensions.xwidgets.widgets.blank.init($("#xwidgets-box-" + i), XKit.extensions.xwidgets.widget_data[i]);
 				}
@@ -1305,23 +1294,24 @@ XKit.extensions.xwidgets = new Object({
 
 			slot_no = parseInt(slot_no);
 
-			XKit.window.show("Remove Widget on Slot #" + slot_no + "?","Are you sure you want to remove the widget on this slot?","question","<div id=\"xkit-remove-widget\" class=\"xkit-button default\">Remove</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+			XKit.window.show("Remove Widget on Slot #" + slot_no + "?", "Are you sure you want to remove the widget on this slot?", "question", "<div id=\"xkit-remove-widget\" class=\"xkit-button default\">Remove</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 			$("#xkit-remove-widget").click(function() {
 
 				XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + slot_no));
 				XKit.extensions.xwidgets.widgets.blank.init($("#xwidgets-box-" + slot_no), XKit.extensions.xwidgets.widget_data[slot_no]);
 
-				XKit.storage.set("xwidgets","widget-storage-" + slot_no, "");
+				XKit.storage.set("xwidgets", "widget-storage-" + slot_no, "");
 
 				if (typeof XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[slot_no]].destroy === "function") {
 					console.log("Destroying widget at " + slot_no);
-					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[slot_no]].destroy($("#xwidgets-box-" + slot_no), XKit.extensions.xwidgets.widget_data[slot_no]);
+					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[slot_no]]
+						.destroy($("#xwidgets-box-" + slot_no), XKit.extensions.xwidgets.widget_data[slot_no]);
 				}
 
 				XKit.extensions.xwidgets.user_widgets[slot_no] = "blank";
 
-				XKit.extensions.xwidgets.widget_data[i] = {};
+				XKit.extensions.xwidgets.widget_data[slot_no] = {};
 				XKit.extensions.xwidgets.save_settings();
 
 				XKit.window.close();
@@ -1341,7 +1331,7 @@ XKit.extensions.xwidgets = new Object({
 
 	destroy: function() {
 		this.running = false;
-		$(document).off('click','.xwidgets-box', XKit.extensions.xwidgets.handle_click);
+		$(document).off('click', '.xwidgets-box', XKit.extensions.xwidgets.handle_click);
 		$(document).off('keydown', XKit.extensions.xwidgets.key_down);
 		$("#xwidgets-drawer, #xwidgets-opener").remove();
 		XKit.tools.remove_css("xwidgets");

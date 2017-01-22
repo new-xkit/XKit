@@ -114,7 +114,7 @@ XKit.extensions.classic_header = new Object({
 		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
 
 			// The nav menu is written terribly. Thanks @staff.
-			XKit.tools.add_css(" #container { position: absolute; top:44px; max-width: 800px; width: 100%; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
+			XKit.tools.add_css(" #container { position: absolute; top:44px; max-width: 800px; width: 100%; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }", "classic_header_mobile_sticky");
 
 			$('#footer').insertAfter($('#load_more_posts'));
 
@@ -125,7 +125,7 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_logout.value) {
-			m_html = '<a class=\"nav-item with-icon\" href=\"/logout\"><span class=\"nav-text nav-item-goodbye\">Log Out</span></a>';
+			var m_html = '<a class=\"nav-item with-icon\" href=\"/logout\"><span class=\"nav-text nav-item-goodbye\">Log Out</span></a>';
 			$('.nav-site-sections').append(m_html);
 		}
 
@@ -151,71 +151,71 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		try {
-		var tab_blogs = $(".tab_blog");
-		if (tab_blogs.length > 0) {
-			tab_blogs.each(function(index) {
-				var tab_blog = $(this);
-				if (tab_blog.hasClass('tab_dashboard')) {
-					return;
-				}
+			var tab_blogs = $(".tab_blog");
+			if (tab_blogs.length > 0) {
+				tab_blogs.each(function(index) {
+					var tab_blog = $(this);
+					if (tab_blog.hasClass('tab_dashboard')) {
+						return;
+					}
 
-				m_counter ++;
+					m_counter ++;
 
-				if (m_counter >= max_count) {
-					return;
-				}
+					if (m_counter >= max_count) {
+						return;
+					}
 
-				var raw_id = tab_blog.attr('id');
+					var raw_id = tab_blog.attr('id');
 				// Id has the form tab_blog_{blog-name}
-				var blog_id = raw_id.substring('tab_blog_'.length, raw_id.length);
-				var blog_icon = tab_blog.find('.blog_icon').css('background-image');
-				if (!blog_icon || blog_icon === "none") {
-					blog_icon = "no-repeat url(\"http://assets.tumblr.com/images/lock_avatar.png\") 50% / 8px";
-				}
+					var blog_id = raw_id.substring('tab_blog_'.length, raw_id.length);
+					var blog_icon = tab_blog.find('.blog_icon').css('background-image');
+					if (!blog_icon || blog_icon === "none") {
+						blog_icon = "no-repeat url(\"http://assets.tumblr.com/images/lock_avatar.png\") 50% / 8px";
+					}
 
-				var blog_name = tab_blog.find('.blog_name').text();
-				var is_private = tab_blog.find('.blog_icon').hasClass('private');
+					var blog_name = tab_blog.find('.blog_name').text();
+					var is_private = tab_blog.find('.blog_icon').hasClass('private');
 
-				if (is_private) {
-					blog_name += ' [private]';
-				}
+					if (is_private) {
+						blog_name += ' [private]';
+					}
 
-				m_html = m_html + '<div class="xoldeheader-item-container">' +
+					m_html = m_html + '<div class="xoldeheader-item-container">' +
 						'<a href="http://www.tumblr.com/blog/' + blog_id + '/" class="xoldeheader-item"' +
 						' id="xoldeheader-item-' + blog_id + '"' +
 						' style=\'background: ' + blog_icon + '\' title="' + blog_name + '">&nbsp;</a>' +
 						' <div class="selection_nipple"></div></div>';
-			});
-			XKit.storage.set("classic_header","header_html",m_html);
-		} else {
-			if (XKit.storage.get("classic_header", "header_html","") === "") {
-				return;
+				});
+				XKit.storage.set("classic_header", "header_html", m_html);
 			} else {
-				m_html = XKit.storage.get("classic_header", "header_html","");
-			}
-		}
-
-		$("#user_tools").prepend('<div id="xoldeheader">' + m_html + '</div>');
-
-		if (XKit.extensions.classic_header.preferences.show_bubble.value === true) {
-			$(".xoldeheader-item").tipTip({maxWidth: "auto", delay: 10, edgeOffset: 5 });
-		}
-
-		if (document.location.href.indexOf('/blog/') !== -1) {
-
-			var user_url = document.location.href.substring(document.location.href.indexOf('/blog/') + 6);
-			user_url = user_url.replace("#","");
-			if (user_url.indexOf("/") !== -1) {
-				user_url = user_url.substring(0,user_url.indexOf("/"));
+				if (XKit.storage.get("classic_header", "header_html", "") === "") {
+					return;
+				} else {
+					m_html = XKit.storage.get("classic_header", "header_html", "");
+				}
 			}
 
-			$("#xoldeheader-item-" + user_url).addClass("selected");
-			$("#xoldeheader-item-" + user_url).parent().addClass("selected");
-			$("#home_button").removeClass("selected");
+			$("#user_tools").prepend('<div id="xoldeheader">' + m_html + '</div>');
 
-		}
+			if (XKit.extensions.classic_header.preferences.show_bubble.value === true) {
+				$(".xoldeheader-item").tipTip({maxWidth: "auto", delay: 10, edgeOffset: 5 });
+			}
 
-		} catch(e) {
+			if (document.location.href.indexOf('/blog/') !== -1) {
+
+				var user_url = document.location.href.substring(document.location.href.indexOf('/blog/') + 6);
+				user_url = user_url.replace("#", "");
+				if (user_url.indexOf("/") !== -1) {
+					user_url = user_url.substring(0, user_url.indexOf("/"));
+				}
+
+				$("#xoldeheader-item-" + user_url).addClass("selected");
+				$("#xoldeheader-item-" + user_url).parent().addClass("selected");
+				$("#home_button").removeClass("selected");
+
+			}
+
+		} catch (e) {
 			XKit.console.add(e.message);
 		}
 

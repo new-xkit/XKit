@@ -94,7 +94,7 @@ XKit.extensions.tagviewer = new Object({
 		}).error(function() {
 
 			XKit.window.close();
-			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 		}).done(function(data, textStatus, jqXHR) {
 
@@ -109,7 +109,6 @@ XKit.extensions.tagviewer = new Object({
 
 			$(reblogs).each(function() {
 
-				var blog_username = this.blog_url;
 				var blog_name = this.blog_name;
 				var post_id = this.post_id;
 				var blog_avatar = this.avatar_url[48];
@@ -132,8 +131,8 @@ XKit.extensions.tagviewer = new Object({
 
 						try {
 
-							var data = JSON.parse(response.responseText);
-							var post = data.response.posts[0];
+							var responseData = JSON.parse(response.responseText);
+							var post = responseData.response.posts[0];
 
 							if (typeof post.tags !== "undefined") {
 								if (post.tags.length > 0) {
@@ -142,7 +141,7 @@ XKit.extensions.tagviewer = new Object({
 								}
 							}
 
-						} catch(e) {
+						} catch (e) {
 							XKit.console.add("tagviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
 						}
 
@@ -185,11 +184,11 @@ XKit.extensions.tagviewer = new Object({
 		$("#tagviewer-window").bind('scroll', function() {
 
 			var c_height = 0;
-			$("#tagviewer-window").children().each(function(){
+			$("#tagviewer-window").children().each(function() {
 				c_height = c_height + $(this).outerHeight(true);
 			});
 
-			if($("#tagviewer-window").scrollTop() >= c_height - 400) {
+			if ($("#tagviewer-window").scrollTop() >= c_height - 400) {
 
 				if (XKit.extensions.tagviewer.loading_more) {return; }
 
@@ -209,13 +208,13 @@ XKit.extensions.tagviewer = new Object({
 
 	show_loader: function() {
 
-		$("#tagviewer-loader-icon").css("display","block");
+		$("#tagviewer-loader-icon").css("display", "block");
 
 	},
 
 	hide_loader: function() {
 
-		$("#tagviewer-loader-icon").css("display","none");
+		$("#tagviewer-loader-icon").css("display", "none");
 
 	},
 
@@ -230,7 +229,7 @@ XKit.extensions.tagviewer = new Object({
 				"</div>" +
 				"<div class=\"tagviewer-tag-tags\">";
 
-		for (var i=0;i<tags.length;i++) {
+		for (var i = 0; i < tags.length; i++) {
 			var formatted_tag = XKit.tools.replace_all(tags[i], " ", "+");
 			m_html = m_html + "<a target=\"_blank\" href=\"http://www.tumblr.com/tagged/" + formatted_tag + "/\" class=\"tagviewer-tag-tag\">#" + tags[i] + "</a>";
 		}

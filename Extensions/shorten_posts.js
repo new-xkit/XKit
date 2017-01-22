@@ -188,7 +188,7 @@ XKit.extensions.shorten_posts = new Object({
 			$(this).removeClass("xkit-shorten-posts-shortened");
 			$(this).removeClass("xkit-shorten-posts-shortened-show-tags");
 			$(this).addClass("xkit-shorten-posts-embiggened");
-			$(this).css('height','auto');
+			$(this).css('height', 'auto');
 		});
 
 	},
@@ -199,7 +199,7 @@ XKit.extensions.shorten_posts = new Object({
 
 		var post_id = $(obj).attr('data-post-id');
 		$(obj).attr('data-old-height', m_height);
-		$(obj).css('height',XKit.extensions.shorten_posts.preferences.height.value + "px");
+		$(obj).css('height', XKit.extensions.shorten_posts.preferences.height.value + "px");
 		$(obj).addClass("xkit-shorten-posts-shortened");
 
 		$(obj).append("<div class=\"xkit-shorten-posts-embiggen xkit-shorten-posts-embiggen-for-post-" + post_id + "\" data-post-id=\"" + post_id + "\" data-old-height=\"" + m_height + "\">This post has been shortened. Click here to show the full post</div>");
@@ -222,7 +222,7 @@ XKit.extensions.shorten_posts = new Object({
 		$(".xkit-shorten-posts-embiggen").remove();
 
 		$(".post.xkit-shorten-posts-shortened").each(function() {
-			$(this).css('height','auto');
+			$(this).css('height', 'auto');
 		});
 
 		$(".xkit-shorten-posts-embiggen").off("click", XKit.extensions.shorten_posts.embiggen);
@@ -246,17 +246,13 @@ XKit.extensions.shorten_posts = new Object({
 		if (isNaN(XKit.extensions.shorten_posts.preferences.height.value) === true) {
 			XKit.console.add("Invalid post height check interval, reverting to default: not a number.");
 			XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
-			return true;
 		} else {
 			var m_height = XKit.extensions.shorten_posts.preferences.height.value;
 			if (m_height > XKit.extensions.shorten_posts.height_max || m_height < XKit.extensions.shorten_posts.height_min) {
 				XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
 				XKit.console.add("Invalid post height check interval, reverting to default: too small or big.");
 			}
-			return true;
 		}
-
-		return false;
 
 	},
 
@@ -264,7 +260,7 @@ XKit.extensions.shorten_posts = new Object({
 
 		$("#xkit-shorten-posts-height-help").click(function() {
 
-			XKit.window.show("Maximum post height", "XKit will shorten posts longer than the height entered here.<br/><br/>The minimum value you can enter is <b>200</b>, and the maximum is <b>" + XKit.extensions.shorten_posts.height_max + "</b>. If you enter a value bigger or smaller than these, XKit will return to it's default value, which is 350 pixels.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.window.show("Maximum post height", "XKit will shorten posts longer than the height entered here.<br/><br/>The minimum value you can enter is <b>200</b>, and the maximum is <b>" + XKit.extensions.shorten_posts.height_max + "</b>. If you enter a value bigger or smaller than these, XKit will return to it's default value, which is 350 pixels.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 		});
 

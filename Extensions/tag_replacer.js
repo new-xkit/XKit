@@ -1,8 +1,8 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.4.5 **//
+//* VERSION 0.4.6 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -18,12 +18,12 @@ XKit.extensions.tag_replacer = new Object({
 		if (!XKit.interface.where().channel) {
 			return;
 		}
-		if (typeof XKit.interface.where().user_url === "undefined" ||XKit.interface.where().user_url === "") {return; }
+		if (typeof XKit.interface.where().user_url === "undefined" || XKit.interface.where().user_url === "") {return; }
 
 		XKit.tools.init_css("tag_replacer");
 
 		if ($("#tag_replacer.ul").length === 0) {
-			xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
+			var xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
 				'<li class="section_header selected">Tag Replacer</li>' +
 				'<li class="no_push" style="height: 36px;"><a data-url="' + XKit.interface.where().user_url + '" href="#" id="tag_replacer_button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
@@ -32,8 +32,8 @@ XKit.extensions.tag_replacer = new Object({
 		}
 
 		$("#tag_replacer_button").click(function() {
-			var m_url = $(".open_blog_link").attr('href').replace("http://","");
-			if (m_url.substring(m_url.length - 1) === "/") { m_url = m_url.substring(0,m_url.length - 1); }
+			var m_url = $(".open_blog_link").attr('href').replace(/https?:\/\//gi, "");
+			if (m_url.substring(m_url.length - 1) === "/") { m_url = m_url.substring(0, m_url.length - 1); }
 			XKit.extensions.tag_replacer.show(m_url);
 
 			return false;
@@ -43,7 +43,7 @@ XKit.extensions.tag_replacer = new Object({
 
 	show: function(url) {
 
-		XKit.window.show("Tag Replacer","<b>Replace this tag:</b><input type=\"text\" maxlength=\"150\" placeholder=\"Enter a tag (example: 'I like pandas')\" class=\"xkit-textbox\" id=\"xkit-tag-replacer-replace\"><div class=\"xkit-checkbox\" id=\"xkit-tag-replacer-case-sensitive\"><b>&nbsp;</b>Case Sensitive Mode</div><div class=\"xkit-tag-replacer-separator\">&nbsp;</div><b>With this tag:</b> (leave blank to delete the tag)<input type=\"text\" maxlength=\"150\" placeholder=\"Enter a tag (example: 'I still like pandas')\" class=\"xkit-textbox\" id=\"xkit-tag-replacer-with\"><div class=\"xkit-checkbox\" id=\"xkit-tag-replacer-append\"><b>&nbsp;</b>Don't replace the tag but append the tag above</div><div class=\"xkit-tag-replacer-separator\">&nbsp;</div><small>You can replace only one tag at a time.<br/>Due to technical reasons, you can't edit tags containing dashes.</small>", "question", "<div class=\"xkit-button default\" id=\"xkit-tag-replacer-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Tag Replacer", "<b>Replace this tag:</b><input type=\"text\" maxlength=\"150\" placeholder=\"Enter a tag (example: 'I like pandas')\" class=\"xkit-textbox\" id=\"xkit-tag-replacer-replace\"><div class=\"xkit-checkbox\" id=\"xkit-tag-replacer-case-sensitive\"><b>&nbsp;</b>Case Sensitive Mode</div><div class=\"xkit-tag-replacer-separator\">&nbsp;</div><b>With this tag:</b> (leave blank to delete the tag)<input type=\"text\" maxlength=\"150\" placeholder=\"Enter a tag (example: 'I still like pandas')\" class=\"xkit-textbox\" id=\"xkit-tag-replacer-with\"><div class=\"xkit-checkbox\" id=\"xkit-tag-replacer-append\"><b>&nbsp;</b>Don't replace the tag but append the tag above</div><div class=\"xkit-tag-replacer-separator\">&nbsp;</div><small>You can replace only one tag at a time.<br/>Due to technical reasons, you can't edit tags containing dashes.</small>", "question", "<div class=\"xkit-button default\" id=\"xkit-tag-replacer-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-tag-replacer-case-sensitive").click(function() { $(this).toggleClass("selected"); });
 		$("#xkit-tag-replacer-append").click(function() { $(this).toggleClass("selected"); });
@@ -111,7 +111,7 @@ XKit.extensions.tag_replacer = new Object({
 
 		XKit.extensions.tag_replacer.next();
 
-		XKit.window.show("Working...","Tag Replacer is trying to find posts with the tag you've entered, please wait. This might take a while.<div id=\"xkit-tag-replacer-progress\">Initializing...</div>","info");
+		XKit.window.show("Working...", "Tag Replacer is trying to find posts with the tag you've entered, please wait. This might take a while.<div id=\"xkit-tag-replacer-progress\">Initializing...</div>", "info");
 
 	},
 
@@ -125,12 +125,12 @@ XKit.extensions.tag_replacer = new Object({
 
 		if (XKit.extensions.tag_replacer.p_array.length === 0) {
 
-			XKit.window.show("Nothing for me to do.","Tag Replacer could not find any posts containing the tag you were searching for.","error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Nothing for me to do.", "Tag Replacer could not find any posts containing the tag you were searching for.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			return;
 
 		}
 
-		XKit.window.show("Working...","Tag Replacer is replacing tags." + XKit.progress.add("tag-replacer-pb") +  "<div id=\"xkit-tag-replacer-progress\">This might take a long, long, long time.</div>","info");
+		XKit.window.show("Working...", "Tag Replacer is replacing tags." + XKit.progress.add("tag-replacer-pb") +  "<div id=\"xkit-tag-replacer-progress\">This might take a long, long, long time.</div>", "info");
 		XKit.extensions.tag_replacer.replace_next();
 
 	},
@@ -146,9 +146,9 @@ XKit.extensions.tag_replacer = new Object({
 
 		if (XKit.extensions.tag_replacer.p_array_index >= XKit.extensions.tag_replacer.p_array.length) {
 			if (XKit.extensions.tag_replacer.success_count === 0) {
-				XKit.window.show("Thank you, come again!","Tag Replacer could not find any posts with the tag you've specified. Make sure you turn off Case Sensitive mode if you can't find the posts.","info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Thank you, come again!", "Tag Replacer could not find any posts with the tag you've specified. Make sure you turn off Case Sensitive mode if you can't find the posts.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			} else {
-				XKit.window.show("Thank you, come again!","Tag Replacer replaced tags of " + XKit.extensions.tag_replacer.success_count + " posts. (Failed: " + XKit.extensions.tag_replacer.fail_count + " posts)" ,"info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Thank you, come again!", "Tag Replacer replaced tags of " + XKit.extensions.tag_replacer.success_count + " posts. (Failed: " + XKit.extensions.tag_replacer.fail_count + " posts)", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			}
 			return;
 		}
@@ -166,7 +166,7 @@ XKit.extensions.tag_replacer = new Object({
 
 			var m_tags = data.data.post.tags.split(",");
 			if (!XKit.extensions.tag_replacer.case_sensitive) {
-				m_tags = m_tags.map(function(tag){
+				m_tags = m_tags.map(function(tag) {
 					return tag.toLowerCase();
 				});
 			}
@@ -175,7 +175,7 @@ XKit.extensions.tag_replacer = new Object({
 
 			if (XKit.extensions.tag_replacer.append_mode === false) {
 
-				for (var i=0;i<m_tags.length;i++) {
+				for (var i = 0; i < m_tags.length; i++) {
 					if (encodeURIComponent(m_tags[i]) === XKit.extensions.tag_replacer.t_replace) {
 						found_tag = true;
 						m_tags[i] = XKit.extensions.tag_replacer.t_with;
@@ -205,12 +205,12 @@ XKit.extensions.tag_replacer = new Object({
 
 			var m_post_object = XKit.interface.edit_post_object(data.data, { tags: tags_to_post });
 
-			XKit.interface.edit(m_post_object, function(data) {
+			XKit.interface.edit(m_post_object, function(edit_data) {
 
-				var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
-				XKit.progress.value("tag-replacer-pb", perc);
+				var progress_perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
+				XKit.progress.value("tag-replacer-pb", progress_perc);
 
-				if (data.error === false && data.data.errors === false) {
+				if (edit_data.error === false && edit_data.data.errors === false) {
 
 					console.log("Post " + m_post + " updated successfully.");
 
@@ -242,8 +242,8 @@ XKit.extensions.tag_replacer = new Object({
 			json: true,
 			onerror: function(response) {
 				if (response.status === 404) {
-					XKit.window.show("Nothing for me to do.","Tag Replacer could not find any posts containing the tag you were searching for.","error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-				}else {
+					XKit.window.show("Nothing for me to do.", "Tag Replacer could not find any posts containing the tag you were searching for.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				} else {
 					XKit.extensions.tag_replacer.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: TGR-230");
 				}
 				return;
@@ -259,7 +259,7 @@ XKit.extensions.tag_replacer = new Object({
 						return;
 					}
 
-					for (var i=0;i<posts.length;i++) {
+					for (var i = 0; i < posts.length; i++) {
 						XKit.extensions.tag_replacer.p_array.push(posts[i].id);
 					}
 
@@ -268,7 +268,7 @@ XKit.extensions.tag_replacer = new Object({
 					XKit.extensions.tag_replacer.page++;
 					setTimeout(function() { XKit.extensions.tag_replacer.next(); }, 1500);
 
-				} catch(e) {
+				} catch (e) {
 					// Could this be a custom URL and Tumblr's stupidity on stripping the JSON part of the URL requested?
 					XKit.extensions.tag_replacer.show_error("<b>Unable to read JSON received from API calls.</b><br/>Please try again later.<br/><br/>Error Code: TGR-235");
 					return;

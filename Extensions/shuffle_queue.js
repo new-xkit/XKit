@@ -143,14 +143,14 @@ XKit.extensions.shuffle_queue = new Object({
 
 	clear: function() {
 
-		XKit.window.show("Clear Queue?","Delete all the posts in your queue?","question","<div class=\"xkit-button default\" id=\"xkit-clear-queue-confirm\">Yes</div>	<div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Clear Queue?", "Delete all the posts in your queue?", "question", "<div class=\"xkit-button default\" id=\"xkit-clear-queue-confirm\">Yes</div>	<div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-clear-queue-confirm").click(function() {
 
 			XKit.extensions.shuffle_queue.posts_to_delete = [];
 			XKit.extensions.shuffle_queue.delete_page = 0;
 
-			XKit.window.show("Please wait...","<span id=\"xkit-shuffle-queue-progress\">Please wait, gathering posts to delete...</span>" + XKit.progress.add("shuffle-queue-delete"),"info");
+			XKit.window.show("Please wait...", "<span id=\"xkit-shuffle-queue-progress\">Please wait, gathering posts to delete...</span>" + XKit.progress.add("shuffle-queue-delete"), "info");
 
 			XKit.extensions.shuffle_queue.clear_collect_next();
 
@@ -174,11 +174,11 @@ XKit.extensions.shuffle_queue = new Object({
 				"X-Requested-With": "XMLHttpRequest"
 			},
 			onerror: function(response) {
-				XKit.window.show("Unable to clear queue","I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-200)","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-200)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			},
 			onload: function(response) {
 
-				if ($(".no_posts_found",response.responseText).length > 0) {
+				if ($(".no_posts_found", response.responseText).length > 0) {
 
 					XKit.extensions.shuffle_queue.posts_to_delete_count = XKit.extensions.shuffle_queue.posts_to_delete.length;
 					XKit.extensions.shuffle_queue.clear_delete_next(); return;
@@ -187,7 +187,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 				var start_deleting = false;
 
-				$(".post",response.responseText).each(function() {
+				$(".post", response.responseText).each(function() {
 
 					if (XKit.extensions.shuffle_queue.posts_to_delete.indexOf(parseInt($(this).attr('data-post-id'))) === -1) {
 
@@ -226,7 +226,7 @@ XKit.extensions.shuffle_queue = new Object({
 				sarcasm = "<br>But it's not like you had a lot of queued posts anyway.";
 			}
 
-			XKit.window.show("Cleared Queue.","Queue+ deleted " + XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
+			XKit.window.show("Cleared Queue.", "Queue+ deleted " + XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm, "info", "<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
 
 			$("#xkit-queue-refresh").click(function() {
 
@@ -262,7 +262,7 @@ XKit.extensions.shuffle_queue = new Object({
 				"x-tumblr-form-key": form_key,
 			},
 			onerror: function(response) {
-				XKit.window.show("Unable to clear queue","I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-150)","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-150)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			},
 			onload: function(response) {
 
@@ -272,12 +272,12 @@ XKit.extensions.shuffle_queue = new Object({
 
 					if (m_obj.response.success === true) {
 						XKit.extensions.shuffle_queue.clear_delete_next();
-					}else {
-						XKit.window.show("Unable to clear queue","I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-130)","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					} else {
+						XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-130)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					}
 
-				} catch(e) {
-					XKit.window.show("Unable to clear queue","I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-100)","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				} catch (e) {
+					XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-100)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				}
 
 			}
@@ -305,7 +305,7 @@ XKit.extensions.shuffle_queue = new Object({
 		var m_url = XKit.interface.where().user_url;
 
 		var IDs = [];
-		$("#posts").find(".post").not("#next_post").each(function(){
+		$("#posts").find(".post").not("#next_post").each(function() {
 			if ($(this).attr('data-post-id') !== "" && typeof $(this).attr('data-post-id') !== "undefined") {
 				IDs.push($(this).attr('data-post-id'));
 			}
@@ -316,14 +316,14 @@ XKit.extensions.shuffle_queue = new Object({
 			console.log("Less than 5 posts, submitting!");
 			XKit.extensions.shuffle_queue.submit_shuffle_data(IDs, false, m_url);
 
-		} else{
+		} else {
 
 			console.log("More than 5 posts, submitting part by part.!");
 			XKit.extensions.shuffle_queue.submit_shuffle_data(IDs, true, m_url);
 
 		}
 
-		setTimeout(function() { $("#xshufflequeue_button").parent().removeClass("selected"); },10);
+		setTimeout(function() { $("#xshufflequeue_button").parent().removeClass("selected"); }, 10);
 
 	},
 
@@ -343,7 +343,7 @@ XKit.extensions.shuffle_queue = new Object({
 				data: "post_ids=" + to_send_single + "&form_key=" + form_key,
 				json: false,
 				onerror: function(response) {
-					XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					$("#xshufflequeue_button").find(".count").html("&nbsp;");
 					$("#xshufflequeue_button").removeClass("disabled");
 				},
@@ -351,7 +351,7 @@ XKit.extensions.shuffle_queue = new Object({
 					$("#xshufflequeue_button").find(".count").html("&nbsp;");
 					$("#xshufflequeue_button").removeClass("disabled");
 					if (response.status !== 200) {
-						XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+						XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					}
 
 				}
@@ -366,7 +366,7 @@ XKit.extensions.shuffle_queue = new Object({
 			}
 
 			var temp_ids = [];
-			for (var i=0;i<5;i++) {
+			for (var i = 0; i < 5; i++) {
 				temp_ids.push(IDs.shift());
 			}
 
@@ -380,14 +380,14 @@ XKit.extensions.shuffle_queue = new Object({
 				data: "post_ids=" + to_send_multi + "&form_key=" + form_key,
 				json: false,
 				onerror: function(response) {
-					XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					$("#xshufflequeue_button").find(".count").html("&nbsp;");
 					$("#xshufflequeue_button").removeClass("disabled");
 				},
 				onload: function(response) {
 
 					if (response.status !== 200) {
-						XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+						XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 						$("#xshufflequeue_button").find(".count").html("&nbsp;");
 						$("#xshufflequeue_button").removeClass("disabled");
 					} else {
@@ -401,9 +401,9 @@ XKit.extensions.shuffle_queue = new Object({
 
 	},
 
-	shuffle_data: function(o) {
-		for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-		return o;
+	shuffle_data: function(array) {
+		for (var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
+		return array;
 	},
 
 	destroy: function() {

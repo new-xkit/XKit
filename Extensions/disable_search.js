@@ -43,9 +43,9 @@ XKit.extensions.disable_search = {
 			mutations.forEach(function(mutation) {
 				if (mutation.target.className === 'scrollable_container'
 					&& mutation.addedNodes.length > 0) {
-					for (var i = 0; i<mutation.addedNodes.length; i++) {
+					for (var i = 0; i < mutation.addedNodes.length; i++) {
 						var links_to_change = $(mutation.addedNodes[i]).find('.search_typeahead');
-						for (var j = 0; j<links_to_change.length; j++) {
+						for (var j = 0; j < links_to_change.length; j++) {
 							$(links_to_change[j]).off('click');
 							$(links_to_change[j]).on('click', search_result_click_handler);
 							$(links_to_change[j]).attr('href', $(links_to_change[j]).attr('href')

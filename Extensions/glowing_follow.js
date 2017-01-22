@@ -1,5 +1,5 @@
 //* TITLE Glowing Follow **//
-//* VERSION 1.0.6 **//
+//* VERSION 1.0.7 **//
 //* DESCRIPTION Glowing plusses on non-mutual followers' blogs **//
 //* DETAILS Makes the Follow button on people's blogs glow if they are following you and you are not following them. Before proceeding, please keep in mind that sometimes, ignorance is bliss. **//
 //* DEVELOPER new-xkit **//
@@ -29,7 +29,7 @@ XKit.extensions.glowing_follow = new Object({
 
 			var blog_id = "";
 			var m_blogs = XKit.tools.get_blogs();
-			for(i=0;i<m_blogs.length;i++) {
+			for (var i = 0; i < m_blogs.length; i++) {
 				if (m_blogs[i] !== "") {
 					blog_id = m_blogs[i];
 					break;
@@ -40,20 +40,9 @@ XKit.extensions.glowing_follow = new Object({
 				return;
 			}
 
-			// Check following status!
-			$.ajax({
-				type: "POST",
-				url: "/svc/tumblelog/followed_by",
-				data: "tumblelog=" + blog_id + "&query=" + username,
-				dataType: "text",
-			}).done(function( msg ) {
-				try {
-					msg = JSON.parse(msg);
-					if (msg.response.is_friend === 1) {
-						follow_button.addClass("xglow");
-					}
-				} catch(e){
-					console.log("Glowing Follow: " + e.message);
+			XKit.interface.is_following(username, blog_id).then(function(follow) {
+				if (follow) {
+					follow_button.addClass("xglow");
 				}
 			});
 

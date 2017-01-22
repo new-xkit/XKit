@@ -20,16 +20,19 @@
 	background-repeat: no-repeat;		 
 	background-size: 100px 100px;
 	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
 }
 .poke_bg_transp {
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASBAMAAACk4JNkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNvyMY98AAAAhUExURf///zAwMEhQUHh4gJhIOKCgwNhYONjI8PiQOPjQOPj4+CJu/FkAAAALdFJOUwC0tLS0tLS0tLS0/fXDXAAAAH1JREFUCNdjYGBgEBQUZAADwY6ODjCTEcjoaBMAsiRmgpiJQKHOVTOArDQBJJZEB1g2LRHIAutAYYmAWWlpjgxCHk1KQEaKIoOQkupStTQnJUUGRiOtVUpKSspA86pMlwIZpUDrxBcbl5eXB4JcEA5khAqAXRUaGgpzINilAJ/TLm7LlTr9AAAAAElFTkSuQmCC);
 	background-repeat: no-repeat;		 
 	background-size: 100px 100px;
 	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
 }
 .poke img {
 	width: 100px;
 	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
 }
 .poke::after {
 	font-family: pokepixelplus, monospace;
@@ -356,6 +359,7 @@
 	height: auto;
 	vertical-align:middle;
 	image-rendering: pixelated;
+	image-rendering: -moz-crisp-edges;
 }
 .caught::after {
 	float: right;

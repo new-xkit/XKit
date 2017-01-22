@@ -1,11 +1,14 @@
 //* TITLE Servant **//
-//* VERSION 0.5.10 **//
+//* VERSION 0.5.11 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* SLOW true **//
 //* BETA false **//
+
+// defined in xkit.js
+/* globals centerIt */
 
 XKit.extensions.servant = new Object({
 
@@ -260,7 +263,7 @@ XKit.extensions.servant = new Object({
 						if (m_post.type === "photo" || m_post.type === "panorama" || m_post.type === "photoset") {
 							m_object.run = true;
 						}
-					}else {
+					} else {
 						if (m_post.type === search_for) {
 							m_object.run = true;
 						}
@@ -641,7 +644,7 @@ XKit.extensions.servant = new Object({
 
 				var m_today = new Date();
 
-				if(m_today.getDay() === 6 || m_today.getDay() === 0) {
+				if (m_today.getDay() === 6 || m_today.getDay() === 0) {
 					m_object.run = true;
 				} else {
 					m_object.run = false;
@@ -731,9 +734,8 @@ XKit.extensions.servant = new Object({
 				var m_return = false;
 
 				try {
-					/* jshint evil: true */
-					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant"+(new Date()).getTime()+".js");
-				} catch(e) {
+					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
+				} catch (e) {
 					m_return = false;
 					console.log("Unable to run Servant! ---> " + e.message);
 				}
@@ -791,7 +793,7 @@ XKit.extensions.servant = new Object({
 
 				var parameter_fixed = parameter;
 
-				for (var i=0;i<=10;i++) {
+				for (var i = 0; i <= 10; i++) {
 					parameter_fixed = parameter_fixed.replace("%" + (i + 1), returns[i]);
 				}
 
@@ -814,7 +816,7 @@ XKit.extensions.servant = new Object({
 
 				var parameter_fixed = parameter;
 
-				for (var i=0;i<=10;i++) {
+				for (var i = 0; i <= 10; i++) {
 					parameter_fixed = parameter_fixed.replace("%" + (i + 1), returns[i]);
 				}
 
@@ -844,7 +846,7 @@ XKit.extensions.servant = new Object({
 				// To_Pass 	 -> passed objects, such as a post
 				// Compatibility -> "post", "time", etc.
 
-				for (var i=0;i<to_pass.length;i++) {
+				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
 						$(to_pass[i]).remove();
 					}
@@ -862,9 +864,9 @@ XKit.extensions.servant = new Object({
 
 			run: function(parameter, returns, to_pass, compatibility) {
 
-				for (var i=0;i<to_pass.length;i++) {
+				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
-						$(to_pass[i]).css("box-shadow","0px 0px 10px 4px yellow");
+						$(to_pass[i]).css("box-shadow", "0px 0px 10px 4px yellow");
 					}
 				}
 
@@ -893,7 +895,7 @@ XKit.extensions.servant = new Object({
 					$(this).closest(".post.post_full").addClass("xkit-servant-dimmed-but-active");
 				};
 
-				for (var i=0;i<to_pass.length;i++) {
+				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
 						$(to_pass[i]).addClass("xkit-servant-dimmed");
 						$(to_pass[i]).find(".post_control_menu.creator").click(on_click);
@@ -917,7 +919,7 @@ XKit.extensions.servant = new Object({
 				// To_Pass 	 -> passed objects, such as a post
 				// Compatibility -> "post", "time", etc.
 
-				for (var i=0;i<to_pass.length;i++) {
+				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
 						$(to_pass[i]).find(".post_control.like").not(".liked").trigger('click');
 					}
@@ -940,7 +942,7 @@ XKit.extensions.servant = new Object({
 				// To_Pass 	 -> passed objects, such as a post
 				// Compatibility -> "post", "time", etc.
 
-				for (var i=0;i<to_pass.length;i++) {
+				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
 						$(to_pass[i]).find(".post_control.like.liked").trigger('click');
 					}
@@ -964,7 +966,7 @@ XKit.extensions.servant = new Object({
 				// To_Pass 	 -> passed objects, such as a post
 				// Compatibility -> "post", "time", etc.
 
-				for (var i=0;i<to_pass.length;i++) {
+				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
 						$(to_pass[i]).append("<div class=\"xkit-servant-rubber-band\" style=\"background-color: " + parameter + "\">&nbsp;</div>");
 					}
@@ -1038,31 +1040,31 @@ XKit.extensions.servant = new Object({
 
 				setTimeout(function() {
 
-				try {
+					try {
 
-					if (XKit.installed.check(parameter) === true) {
-						if (XKit.installed.enabled(parameter) === false) {
+						if (XKit.installed.check(parameter) === true) {
+							if (XKit.installed.enabled(parameter) === false) {
 
-							try {
-								if (typeof XKit.extensions[parameter].preferences !== "undefined") {
-									XKit.extensions.xkit_main.load_extension_preferences(parameter);
+								try {
+									if (typeof XKit.extensions[parameter].preferences !== "undefined") {
+										XKit.extensions.xkit_main.load_extension_preferences(parameter);
+									}
+									XKit.extensions[parameter].run();
+									XKit.installed.enable(parameter);
+									XKit.notifications.add("Enabled '" + parameter + "'", "ok");
+								} catch (e) {
+									XKit.console.add("Can not run " + parameter + ": " + e.message);
 								}
-								XKit.extensions[parameter].run();
-								XKit.installed.enable(parameter);
-								XKit.notifications.add("Enabled '" + parameter + "'", "ok");
-							} catch(e) {
-								XKit.console.add("Can not run " + extension_id + ": " + e.message);
+
 							}
 
 						}
 
+					} catch (e) {
+
+						console.log("Can't disable " + parameter + ", " + e.message);
+
 					}
-
-				} catch(e) {
-
-					console.log("Can't disable " + parameter + ", " + e.message);
-
-				}
 
 
 				}, 1000);
@@ -1082,21 +1084,21 @@ XKit.extensions.servant = new Object({
 
 				setTimeout(function() {
 
-				try {
+					try {
 
-					if (XKit.installed.check(parameter) === true) {
-						if (XKit.installed.enabled(parameter) === true) {
-							XKit.installed.disable(parameter);
-							XKit.extensions[parameter].destroy();
-							XKit.notifications.add("Disabled '" + parameter + "'", "ok");
+						if (XKit.installed.check(parameter) === true) {
+							if (XKit.installed.enabled(parameter) === true) {
+								XKit.installed.disable(parameter);
+								XKit.extensions[parameter].destroy();
+								XKit.notifications.add("Disabled '" + parameter + "'", "ok");
+							}
 						}
+
+					} catch (e) {
+
+						console.log("Can't disable " + parameter + ", " + e.message);
+
 					}
-
-				} catch(e) {
-
-					console.log("Can't disable " + parameter + ", " + e.message);
-
-				}
 
 
 				}, 1000);
@@ -1125,32 +1127,26 @@ XKit.extensions.servant = new Object({
 
 				var parameter_fixed = parameter;
 
-				for (var i=0;i<=10;i++) {
+				for (var i = 0; i <= 10; i++) {
 					parameter_fixed = parameter_fixed.replace("%" + (i + 1), returns[i]);
 				}
 
 				var m_post = "";
 
-				for (var j=0;j<to_pass.length;j++) {
+				for (var j = 0; j < to_pass.length; j++) {
 					if (compatibility[j] === "post") {
 						m_post = $(to_pass[j]);
 					}
 				}
 
 				if (m_post !== "") {
-
 					var to_run = function() {
-						post = m_post;
-						/* jshint evil: true */
-						eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant"+(new Date()).getTime()+".js");
+						eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 					};
+
 					to_run();
-
 				} else {
-
-					/* jshint evil: true */
-					eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant"+(new Date()).getTime()+".js");
-
+					eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 				}
 
 			}
@@ -1182,7 +1178,7 @@ XKit.extensions.servant = new Object({
 			XKit.extensions.servant.servants = JSON.parse(servants_load);
 			console.log("Servant loaded " + XKit.extensions.servant.servants.length + " servants.");
 
-		} catch(e) {
+		} catch (e) {
 
 			XKit.extensions.servant.servants = [];
 			XKit.extensions.servant.save_servants();
@@ -1217,13 +1213,13 @@ XKit.extensions.servant = new Object({
 
 	run_servants: function() {
 
-		m_servants = XKit.extensions.servant.servants;
+		var m_servants = XKit.extensions.servant.servants;
 
 		if (m_servants.length === 0) { return; }
 
 		var runs_on_posts = [];
 
-		for (var i=0;i<m_servants.length;i++) {
+		for (var i = 0; i < m_servants.length; i++) {
 
 			var m_result = XKit.extensions.servant.run_servant(m_servants[i], false);
 
@@ -1255,7 +1251,7 @@ XKit.extensions.servant = new Object({
 
 		$(posts).each(function() {
 
-			for (var i=0;i<XKit.extensions.servant.runs_on_posts.length;i++) {
+			for (var i = 0; i < XKit.extensions.servant.runs_on_posts.length; i++) {
 				XKit.extensions.servant.run_servant(XKit.extensions.servant.runs_on_posts[i], true);
 			}
 
@@ -1283,7 +1279,7 @@ XKit.extensions.servant = new Object({
 		var has_runs_on = false;
 		var does_run_on = "";
 
-		for (var i=0;i<causes.length;i++) {
+		for (var i = 0; i < causes.length; i++) {
 
 			if (XKit.extensions.servant.causes[causes[i].id].runs_on === "post") {
 				has_runs_on = true;
@@ -1351,8 +1347,6 @@ XKit.extensions.servant = new Object({
 
 		actions.forEach(function(action) {
 
-			var to_run = XKit.extensions.servant.actions[action.id].run;
-
 			var m_result = XKit.extensions.servant.actions[action.id].run(action.value, returns, to_pass, compatibility, obj);
 
 			if (XKit.extensions.servant.actions[action.id].stop === true) {
@@ -1416,8 +1410,10 @@ XKit.extensions.servant = new Object({
 
 		$(".xkit-servant-add-more-actions").click(function() {
 
-			var m_html = XKit.extensions.servant.add_field_action();
-			$(".xkit-servant-do").find(".xkit-servant-add-more").before(m_html);
+			$(".xkit-servant-do")
+				.find(".xkit-servant-add-more")
+				.before(XKit.extensions.servant.add_field_action());
+
 			centerIt($("#xkit-window"));
 
 			XKit.extensions.servant.readjust_lines($(".xkit-servant-option-action-line-0"));
@@ -1429,8 +1425,9 @@ XKit.extensions.servant = new Object({
 
 		$(".xkit-servant-add-more-causes").click(function() {
 
-			var m_html = XKit.extensions.servant.add_field_cause();
-			$(".xkit-servant-when").find(".xkit-servant-add-more").before(m_html);
+			$(".xkit-servant-when")
+				.find(".xkit-servant-add-more")
+				.before(XKit.extensions.servant.add_field_cause());
 			centerIt($("#xkit-window"));
 
 			XKit.extensions.servant.readjust_lines($(".xkit-servant-option-cause-line-0"));
@@ -1624,12 +1621,12 @@ XKit.extensions.servant = new Object({
 
 		var m_html = "<select class=\"xkit-servant-option-listbox\">";
 
-		for (var i=0;i<m_array.length;i++) {
+		for (var i = 0; i < m_array.length; i++) {
 
 			var extension_name = XKit.installed.title(m_array[i]);
 			var extension_id = m_array[i];
 
-			if (m_array[i].substring(0,5) === "xkit_") { continue; }
+			if (m_array[i].substring(0, 5) === "xkit_") { continue; }
 
 			m_html = m_html + "<option value=\"" + extension_id + "\">" + extension_name + "</option>";
 
@@ -1642,8 +1639,6 @@ XKit.extensions.servant = new Object({
 	},
 
 	settings_box_color: function(obj, parent, real_val) {
-
-		var m_array = XKit.installed.list();
 
 		var m_html = "<select class=\"xkit-servant-option-listbox\">";
 
@@ -1665,8 +1660,6 @@ XKit.extensions.servant = new Object({
 	},
 
 	settings_box_post_type: function(obj, parent, real_val) {
-
-		var m_array = XKit.installed.list();
 
 		var m_html = "<select class=\"xkit-servant-option-listbox\">";
 
@@ -1759,8 +1752,8 @@ XKit.extensions.servant = new Object({
 
 		});
 
-		if (m_compatibility_action === "" &&m_compatibility_cause === "") { return false; }
-		if (m_compatibility_action !==m_compatibility_cause && m_compatibility_action !== "") { return true; }
+		if (m_compatibility_action === "" && m_compatibility_cause === "") { return false; }
+		if (m_compatibility_action !== m_compatibility_cause && m_compatibility_action !== "") { return true; }
 
 		return false;
 
@@ -1842,7 +1835,7 @@ XKit.extensions.servant = new Object({
 
 			}
 
-			if (typeof XKit.extensions.servant.add_window_option_get_real_value($(this)).attr('data-returns') !== "undefined" &&XKit.extensions.servant.add_window_option_get_real_value($(this)).attr('data-returns') !== "undefined") {
+			if (typeof XKit.extensions.servant.add_window_option_get_real_value($(this)).attr('data-returns') !== "undefined" && XKit.extensions.servant.add_window_option_get_real_value($(this)).attr('data-returns') !== "undefined") {
 
 				var m_id = $(settings_box).parent().attr('data-id');
 
@@ -1861,16 +1854,16 @@ XKit.extensions.servant = new Object({
 		});
 
 		if (XKit.extensions.servant.check_js() === true) {
-			$(".xkit-servant-javascript-warning").css("display","block");
+			$(".xkit-servant-javascript-warning").css("display", "block");
 		} else {
-			$(".xkit-servant-javascript-warning").css("display","none");
+			$(".xkit-servant-javascript-warning").css("display", "none");
 		}
 
 		if (XKit.extensions.servant.check_compatibility() === true) {
-			$(".xkit-servant-compatibility-error").css("display","block");
+			$(".xkit-servant-compatibility-error").css("display", "block");
 			$("#xkit-servant-add").addClass("disabled");
 		} else {
-			$(".xkit-servant-compatibility-error").css("display","none");
+			$(".xkit-servant-compatibility-error").css("display", "none");
 			$("#xkit-servant-add").removeClass("disabled");
 		}
 
@@ -1887,7 +1880,7 @@ XKit.extensions.servant = new Object({
 
 			if (id === "0") { return; }
 
-			$(this).parent().fadeOut('fast', function(){ var m_obj = this; $(this).remove(); XKit.extensions.servant.readjust_lines($(m_obj)); centerIt($("#xkit-window")); XKit.extensions.servant.react_to_selection_change(); });
+			$(this).parent().fadeOut('fast', function() { var m_obj = this; $(this).remove(); XKit.extensions.servant.readjust_lines($(m_obj)); centerIt($("#xkit-window")); XKit.extensions.servant.react_to_selection_change(); });
 
 		});
 
@@ -1910,7 +1903,7 @@ XKit.extensions.servant = new Object({
 
 		if ($(line_obj).hasClass("xkit-servant-option-line-cause")) {
 			selector = ".xkit-servant-option-line-cause";
-		} else{
+		} else {
 			selector = ".xkit-servant-option-line-action";
 			is_action = true;
 		}
@@ -1921,7 +1914,7 @@ XKit.extensions.servant = new Object({
 
 			$(this).attr('data-id', index);
 
-			for (var i=0;i<10;i++) {
+			for (var i = 0; i < 10; i++) {
 				$(this).removeClass("xkit-servant-option-action-line-" + i);
 				$(this).removeClass("xkit-servant-option-cause-line-" + i);
 			}
@@ -2032,8 +2025,10 @@ XKit.extensions.servant = new Object({
 		var m_description = "When ";
 
 		var m_action = "";
+		var m_val;
+
 		if (obj.actions.length > 1) {
-			for (var i=0;i<obj.actions.length;i++) {
+			for (var i = 0; i < obj.actions.length; i++) {
 				m_val = "";
 				m_action = m_action + XKit.extensions.servant.actions[obj.actions[i].id].text.toLowerCase();
 				if (i < obj.actions.length - 1) {
@@ -2048,7 +2043,7 @@ XKit.extensions.servant = new Object({
 			for (var cause_i = 0; cause_i < obj.causes.length; cause_i++) {
 				var cause = obj.causes[cause_i];
 				m_val = "";
-				if (typeof cause.value !== "undefined" &&cause.value !== "") {
+				if (typeof cause.value !== "undefined" && cause.value !== "") {
 					m_val = " " + cause.value;
 				}
 				m_description = m_description + XKit.extensions.servant.causes[cause.id].text + m_val;
@@ -2059,7 +2054,7 @@ XKit.extensions.servant = new Object({
 			m_description = m_description + ", " + m_action;
 		} else {
 			m_val = "";
-			if (typeof obj.causes[0].value !== "undefined" &&obj.causes[0].value !== "") {
+			if (typeof obj.causes[0].value !== "undefined" && obj.causes[0].value !== "") {
 				m_val = " " + obj.causes[0].value;
 			}
 			m_description = m_description + XKit.extensions.servant.causes[obj.causes[0].id].text + m_val + ", " + m_action;
@@ -2092,7 +2087,7 @@ XKit.extensions.servant = new Object({
 
 			XKit.extensions.servant.servant_count_for_list = 1;
 
-			for (var i=0;i<XKit.extensions.servant.servants.length;i++) {
+			for (var i = 0; i < XKit.extensions.servant.servants.length; i++) {
 
 				servant_html = servant_html + XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
 				XKit.extensions.servant.servant_count_for_list++;
@@ -2149,11 +2144,11 @@ XKit.extensions.servant = new Object({
 
 		XKit.extensions.servant.load_servants();
 
-		for (var i=0;i<XKit.extensions.servant.servants.length;i++) {
+		for (var i = 0; i < XKit.extensions.servant.servants.length; i++) {
 
 			if (XKit.extensions.servant.servants[i].id === id) {
 
-				XKit.extensions.servant.servants.splice(i,1);
+				XKit.extensions.servant.servants.splice(i, 1);
 
 			}
 

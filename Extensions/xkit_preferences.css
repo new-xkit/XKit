@@ -1,13 +1,5 @@
 #help_button, .tab_help { display: none !important; }
 
-#new-xkit-control.xkit-help-forwarder > a {
-
-	background-image: url('/images/navbar_sprite.png?f207586267d75d4d9ccdc41e921dd773') !important;
-	background-size: 175px 36px !important;
-	background-repeat: no-repeat;
-
-}
-
 #xkit-spring-cleaning-list {
 
 	margin-top: 10px;
@@ -420,7 +412,7 @@
 #xkit-about-window-text {
 
 	position: absolute;
-	top: 70px; left: 385px;
+	top: 30px; left: 385px;
 	width: 350px;
 
 }

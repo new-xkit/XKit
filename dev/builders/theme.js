@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* eslint-env node */
 
 /**
  * Themes builder module.
@@ -24,11 +24,11 @@ var resourceUtil = require('./resource');
 var themeBuilder = function() {
 	return through.obj(function(file, enc, cb) {
 		// Ignore empty files
-		if(file.isNull()) {
+		if (file.isNull()) {
 			cb();
 		}
 
-		if(file.isStream()) {
+		if (file.isStream()) {
 			this.emit('error', new PluginError('resource-builder', 'Streaming not supported'));
 			cb();
 		}
@@ -79,9 +79,10 @@ var themeBuilder = function() {
  * @see [vinyl]{@link https://github.com/wearefractal/vinyl}
  *
  * @param {string|Object<vinyl>} filename - Name of the file to write
+ * @return {Object<stream.Transform>}
  */
-var buildGalleryFile= function(filename) {
-	if(!filename) {
+var buildGalleryFile = function(filename) {
+	if (!filename) {
 		throw new PluginError('resource-builder', 'Missing file option for galleryBuilder');
 	}
 

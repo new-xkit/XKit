@@ -16,42 +16,42 @@ XKit.extensions.search_likes = new Object({
 		if (document.location.href.indexOf("://www.tumblr.com/likes") !== -1) {
 
 
-		XKit.tools.init_css("search_likes");
+			XKit.tools.init_css("search_likes");
 
-		var m_html = '<li id="xkit-search-likes-li">' +
+			var m_html = '<li id="xkit-search-likes-li">' +
 				'<a href="#" class="customize" id="xkit-search-likes-button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Search liked posts</div>' +
 				'</a>' +
 				'</li>';
 
-		var x_html = "<div id=\"xkit-search-likes-box\">" +
+			var x_html = "<div id=\"xkit-search-likes-box\">" +
 					"<input type=\"text\" placeholder=\"Enter URL/text...\" id=\"xkit-search-likes-input\">" +
 				"</div>";
 
-		m_html = '<ul class="controls_section" id="xkit-search-likes-ul"><li class=\"section_header selected\">SEARCH LIKES</li>' + m_html + '</ul>';
+			m_html = '<ul class="controls_section" id="xkit-search-likes-ul"><li class=\"section_header selected\">SEARCH LIKES</li>' + m_html + '</ul>';
 
-		$("ul.controls_section:first").after(m_html);
-		$("#xkit-search-likes-ul").before(x_html);
+			$("ul.controls_section:first").after(m_html);
+			$("#xkit-search-likes-ul").before(x_html);
 
-		$("#xkit-search-likes-button").click(function() {
+			$("#xkit-search-likes-button").click(function() {
 
-			XKit.extensions.search_likes.search_start();
+				XKit.extensions.search_likes.search_start();
 
-			return false;
-		});
+				return false;
+			});
 
-		$("#xkit-search-likes-input").keyup(function() {
+			$("#xkit-search-likes-input").keyup(function() {
 
-			var m_value = $(this).val().toLowerCase();
-			m_value = $.trim(m_value);
+				var m_value = $(this).val().toLowerCase();
+				m_value = $.trim(m_value);
 
-			$(".xkit-search-likes-done").removeClass("xkit-search-likes-done");
-			XKit.extensions.search_likes.term = m_value;
-			XKit.extensions.search_likes.search_do_posts();
+				$(".xkit-search-likes-done").removeClass("xkit-search-likes-done");
+				XKit.extensions.search_likes.term = m_value;
+				XKit.extensions.search_likes.search_do_posts();
 
-			$(".xkit-search-likes-done").removeClass("xkit-search-likes-done").removeClass("xkit-search-likes-found");
+				$(".xkit-search-likes-done").removeClass("xkit-search-likes-done").removeClass("xkit-search-likes-found");
 
-		});
+			});
 
 		}
 
@@ -250,15 +250,15 @@ XKit.extensions.search_likes = new Object({
 
 		try {
 
-			term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
-			var pattern = new RegExp("("+term+")", "i");
+			term = term.replace(/(\s+)/, "(<[^>]+>)*$1(<[^>]+>)*");
+			var pattern = new RegExp("(" + term + ")", "i");
 
 			src_str = src_str.replace(pattern, "<mark>$1</mark>");
-			src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/,"$1</mark>$2<mark>$4");
+			src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/, "$1</mark>$2<mark>$4");
 
 			return src_str;
 
-		} catch(e) {
+		} catch (e) {
 
 			return src_str;
 

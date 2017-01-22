@@ -25,7 +25,7 @@ XKit.extensions.read_posts = new Object({
 		XKit.tools.init_css('read_posts');
 		XKit.post_listener.add('read_posts_process', this.process_posts);
 		this.process_posts();
-		$(document).on("click",".post_notes_inner *, .post_control.reply, .tumblelog_menu_button, .share_social_button, .post_control_menu", XKit.extensions.read_posts.undim);
+		$(document).on("click", ".post_notes_inner *, .post_control.reply, .tumblelog_menu_button, .share_social_button, .post_control_menu", XKit.extensions.read_posts.undim);
 		$(document).on("click", XKit.extensions.read_posts.redim);
 
 		this.running = true;
@@ -65,7 +65,7 @@ XKit.extensions.read_posts = new Object({
 	mark_post_read: function(post_id) {
 		var read_posts = JSON.parse(XKit.storage.get('read_posts', 'read_posts', '[]'));
 
-		if(XKit.storage.quota('read_posts') <= (post_id.length + 50)) {
+		if (XKit.storage.quota('read_posts') <= (post_id.length + 50)) {
 			/* drop oldest ~33.3% of posts to make room for new */
 			read_posts = read_posts.slice(Math.round(read_posts.length / 2));
 		}
@@ -114,7 +114,7 @@ XKit.extensions.read_posts = new Object({
 		this.remove_classes();
 		XKit.tools.remove_css('read_posts');
 		XKit.post_listener.remove('read_posts_process');
-		$("document").off("click",".post.read_posts_read .post_control.reply", XKit.extensions.read_posts.undim);
+		$("document").off("click", ".post.read_posts_read .post_control.reply", XKit.extensions.read_posts.undim);
 		this.running = false;
 	}
 

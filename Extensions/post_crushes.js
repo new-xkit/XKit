@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0.4 **//
+//* VERSION 2.0.5 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -61,7 +61,7 @@ XKit.extensions.post_crushes = new Object({
 		$("#crushes").after('<div class="xkit-button xkit-wide-button" id="xkit_post_crushes" style="display: block; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 10px; border-radius: 4px; margin-top: 15px;">Post My Crushes</div>');
 
 		$("#xkit_post_crushes").click(function() {
-			if($(this).hasClass("xkit_button_gray") === true) { return; }
+			if ($(this).hasClass("xkit_button_gray") === true) { return; }
 			XKit.extensions.post_crushes.post();
 		});
 
@@ -82,17 +82,17 @@ XKit.extensions.post_crushes = new Object({
 		$("#xkit_post_crushes").addClass("disabled");
 		$("#xkit_post_crushes").html("Please wait...");
 
-		for (i=1; i<=9; i++) {
+		for (i = 1; i <= 9; i++) {
 			var crush_img_src = $("#crush_" + i).attr('style').substring($("#crush_" + i).attr('style').indexOf("url('") + 5);
-				crush_img_src = crush_img_src.substring(0, crush_img_src.indexOf("'"));
+			crush_img_src = crush_img_src.substring(0, crush_img_src.indexOf("'"));
 			crush_img.push(crush_img_src);
 			crush_url.push($("#crush_" + i).attr('href'));
 			crush_name.push($("#crush_" + i).attr('data-tumblelog-name'));
-			crush_val.push($("#crush_" + i).find("span").html().replace("%",""));
+			crush_val.push($("#crush_" + i).find("span").html().replace("%", ""));
 		}
 
-		for (i=0; i<=8; i++) {
-			send_string = send_string + "&img" + (i+1) + "=" + crush_img[i] + "&val" + (i+1) + "=" + crush_val[i];
+		for (i = 0; i <= 8; i++) {
+			send_string = send_string + "&img" + (i + 1) + "=" + crush_img[i] + "&val" + (i + 1) + "=" + crush_val[i];
 		}
 
 		send_url = send_url + encodeURI(send_string);
@@ -100,7 +100,7 @@ XKit.extensions.post_crushes = new Object({
 		var m_tags = "";
 		var send_txt = "<strong>" + XKit.extensions.post_crushes.preferences.default_title.value + ":</strong><ol>";
 
-		for (i=0; i<=8; i++) {
+		for (i = 0; i <= 8; i++) {
 			var perc = '<small> (' + crush_val[i] + '%)</small>';
 			if (XKit.extensions.post_crushes.preferences.show_percentage.value === false) { perc = ""; }
 			send_txt = send_txt + '<li><a href="' + crush_url[i] + '">' + crush_name[i] + '</a>' + perc + '</li>';
@@ -126,7 +126,7 @@ XKit.extensions.post_crushes = new Object({
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		m_object["post[date]"] ="";
+		m_object["post[date]"] = "";
 
 		m_object.errors = false;
 		m_object.silent = false;
@@ -144,7 +144,7 @@ XKit.extensions.post_crushes = new Object({
 			alert("Unable to Post Crushes\nCan't get list of current blogs, please visit dashboard first.");
 			return;
 		} else {
-			for(i=0;i<m_blogs.length;i++) {
+			for (i = 0; i < m_blogs.length; i++) {
 				if (m_blogs[i] !== "") {
 					blog_selector_html = blog_selector_html + "<option value=\"" + m_blogs[i] + "\">" + m_blogs[i] + "</option>";
 				}
@@ -155,10 +155,10 @@ XKit.extensions.post_crushes = new Object({
 
 		if (XKit.extensions.post_crushes.preferences.tag_people.value === false) {
 			m_object["post[tags]"] = "";
-		}else {
+		} else {
 			m_object["post[tags]"] = m_tags;
 		}
-		m_object["post[publish_on]"] ="";
+		m_object["post[publish_on]"] = "";
 		m_object.custom_tweet = false;
 
 		m_object["post[photoset_order]"] = "o1";
@@ -166,7 +166,7 @@ XKit.extensions.post_crushes = new Object({
 		m_object["photo_src[]"] = send_url;
 		m_object["images[o1]"] = send_url;
 
-		XKit.window.show("Post Crushes","<b>Post Caption:</b><input id=\"xkit-post-crushes-additional-text\" type=\"text\" class=\"xkit-textbox\" maxlength=\"256\" placeholder=\"optional additional text for this post\"><b>Blog to Post to:</b><br/>" + blog_selector_html + "<div style=\"margin-top: 10px; font-size: 13px; color: rgb(130,130,130);\">For additional options please check the Post Crushes control panel.</div>","question","<div data-status=\"0\" class=\"xkit-button default xkit-post-crushes-proceed\">Publish</div><div data-status=\"1\" class=\"xkit-button xkit-post-crushes-proceed\">Draft</div><div data-status=\"2\" class=\"xkit-button xkit-post-crushes-proceed\">Queue</div><div id=\"xkit-post-crushes-ignore\" class=\"xkit-button\">Cancel</div>");
+		XKit.window.show("Post Crushes", "<b>Post Caption:</b><input id=\"xkit-post-crushes-additional-text\" type=\"text\" class=\"xkit-textbox\" maxlength=\"256\" placeholder=\"optional additional text for this post\"><b>Blog to Post to:</b><br/>" + blog_selector_html + "<div style=\"margin-top: 10px; font-size: 13px; color: rgb(130,130,130);\">For additional options please check the Post Crushes control panel.</div>", "question", "<div data-status=\"0\" class=\"xkit-button default xkit-post-crushes-proceed\">Publish</div><div data-status=\"1\" class=\"xkit-button xkit-post-crushes-proceed\">Draft</div><div data-status=\"2\" class=\"xkit-button xkit-post-crushes-proceed\">Queue</div><div id=\"xkit-post-crushes-ignore\" class=\"xkit-button\">Cancel</div>");
 
 		$(".xkit-post-crushes-proceed").click(function() {
 
@@ -177,7 +177,7 @@ XKit.extensions.post_crushes = new Object({
 			var m_text = $.trim($("#xkit-post-crushes-additional-text").val());
 
 			if (m_text !== "") {
-				m_object["post[two]"] = send_txt + "<p>" + m_text + "</p>";
+				m_object["post[two]"] = send_txt + "<p>" + XKit.tools.escape_html(m_text) + "</p>";
 			} else {
 				m_object["post[two]"] = send_txt;
 			}

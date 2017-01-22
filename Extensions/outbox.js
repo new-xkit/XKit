@@ -60,11 +60,11 @@ XKit.extensions.outbox = new Object({
 					// remove the last element.
 					m_messages_array.pop();
 				}
-			} catch(e) {
+			} catch (e) {
 				m_messages_array = [];
 			}
 
-			m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
+			var m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
 			m_username = m_username.substring(0, m_username.indexOf("."));
 
 			var m_obj = {};
@@ -109,7 +109,7 @@ XKit.extensions.outbox = new Object({
 					// remove the last element.
 					m_messages_array.pop();
 				}
-			} catch(e) {
+			} catch (e) {
 				m_messages_array = [];
 			}
 
@@ -145,7 +145,7 @@ XKit.extensions.outbox = new Object({
 
 		XKit.tools.init_css("outbox");
 
-		xf_html = '<ul class="controls_section" id="xkit_outbox_ul"><li class="section_header selected">OUTGOING</li>' +
+		var xf_html = '<ul class="controls_section" id="xkit_outbox_ul"><li class="section_header selected">OUTGOING</li>' +
 			'<li class="" style="height: 36px;"><a href="#" id="xkit-outbox-button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Outbox</div>' +
 			'</a></li></ul>';
@@ -173,15 +173,15 @@ XKit.extensions.outbox = new Object({
 		});
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
-		if (form_key === "" ||typeof form_key === "undefined") {
-			XKit.notifications.add("Can't load Outbox, data-form-key not defined.","error");
+		if (form_key === "" || typeof form_key === "undefined") {
+			XKit.notifications.add("Can't load Outbox, data-form-key not defined.", "error");
 			return;
 		}
 
 		XKit.post_listener.add("outbox_init", XKit.extensions.outbox.init_outbox_buttons);
 		XKit.extensions.outbox.init_outbox_buttons();
 
-		$(document).on('click','.xkit-outbox-save-checkbox', function() {
+		$(document).on('click', '.xkit-outbox-save-checkbox', function() {
 			$(this).toggleClass("selected");
 		});
 
@@ -261,7 +261,7 @@ XKit.extensions.outbox = new Object({
 					// remove the last element.
 					m_messages_array.pop();
 				}
-			} catch(e) {
+			} catch (err) {
 				m_messages_array = [];
 			}
 
@@ -280,19 +280,19 @@ XKit.extensions.outbox = new Object({
 			} else {
 				XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
 			}
-			XKit.notifications.add("Saved to outbox.","ok");
+			XKit.notifications.add("Saved to outbox.", "ok");
 
 		}, 1);
 
 	},
 
 	poke_tinymce: function(post_id) {
-		source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
+		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
 						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
 				 " } ";
 
 		if ('function' == typeof source) {
-				source = '(' + source + ')();';
+			source = '(' + source + ')();';
 		}
 
 		var script = document.createElement('script');
@@ -306,7 +306,7 @@ XKit.extensions.outbox = new Object({
 		XKit.tools.add_css(" .post { display: none; } .post.by-xkit-outbox { display: block !important; } #auto_pagination_loader, #next_page_link { display: none !important; } ", "outbox_additional");
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
-		if (form_key === "" ||typeof form_key === "undefined") {
+		if (form_key === "" || typeof form_key === "undefined") {
 			XKit.extensions.outbox.show_empty("Can't load messages,<br/>data-form-key not found.");
 			return;
 		}
@@ -325,8 +325,8 @@ XKit.extensions.outbox = new Object({
 		try {
 			messages_array = JSON.parse(m_messages);
 			XKit.extensions.outbox.show(messages_array);
-			$(document).on('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
-		} catch(e) {
+			$(document).on('click', '.xkit-outbox-delete', XKit.extensions.outbox.delete);
+		} catch (e) {
 			XKit.extensions.outbox.show_empty("Can't load messages,<br/>" + e.message);
 		}
 
@@ -346,7 +346,7 @@ XKit.extensions.outbox = new Object({
 
 		try {
 			m_messages_array = JSON.parse(m_messages);
-		} catch(err) {
+		} catch (err) {
 		}
 
 		m_messages_array.splice(parseInt($(obj).attr('data-outbox-id')), 1);
@@ -391,16 +391,15 @@ XKit.extensions.outbox = new Object({
 
 		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
 
-		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
-		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
-
 		var m_day = "";
 		var m_date = "";
 
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
-			var m = moment(obj.time);
-			m_day = m.format('ddd');
-			m_date = m.format('hh:mm a');
+			// defined in moment.js
+			/* globals moment */
+			var moment_val = moment(obj.time);
+			m_day = moment_val.format('ddd');
+			m_date = moment_val.format('hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -442,16 +441,13 @@ XKit.extensions.outbox = new Object({
 
 		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
 
-		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
-		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
-
 		var m_day = "";
 		var m_date = "";
 
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
-			var m = moment(obj.time);
-			m_day = m.format('ddd');
-			m_date = m.format('hh:mm a');
+			var moment_val = moment(obj.time);
+			m_day = moment_val.format('ddd');
+			m_date = moment_val.format('hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -508,9 +504,9 @@ XKit.extensions.outbox = new Object({
 		var m_date = "";
 
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
-			var m = moment(obj.time);
-			m_day = m.format('ddd');
-			m_date = m.format('hh:mm a');
+			var moment_val = moment(obj.time);
+			m_day = moment_val.format('ddd');
+			m_date = moment_val.format('hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -555,7 +551,7 @@ XKit.extensions.outbox = new Object({
 	show_empty: function(m_message) {
 
 		var m_error = "No messages on outbox yet.";
-		if (typeof m_message !== "undefined" &&m_message !== "") {
+		if (typeof m_message !== "undefined" && m_message !== "") {
 			m_error = m_message;
 		}
 
@@ -578,7 +574,7 @@ XKit.extensions.outbox = new Object({
 			$('#posts').remove();
 		}
 		XKit.tools.remove_css("outbox_additional");
-		$(document).off('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
+		$(document).off('click', '.xkit-outbox-delete', XKit.extensions.outbox.delete);
 
 	},
 

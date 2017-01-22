@@ -1,0 +1,74 @@
+.post-form--header .reblog-title {
+	margin: 10px; color: #444;
+}
+
+.xkit-er-edit-button {
+    display: block;
+    position: relative;
+    width: 28px;
+    height: 28px;
+    float: right;
+    margin-right: 21px;
+    margin-top: 21px;
+    border: 3px solid #ddd;
+    border-radius: 50%;
+    color: #ddd;
+}
+
+.xkit-er-edit-button.icon_edit_pencil:before {
+	font-size: 25px;
+	padding-left: 1px;
+	padding-top: 1px;
+}
+
+.xkit-er-edit-button.icon_edit_pencil:not(.disabled):hover {
+	border-color: white;
+	color: white;
+	cursor: pointer;
+}
+
+.xkit-er-edit-button.disabled {
+    border-color: #999;
+    color: #999;
+}
+
+.xkit-er-callout--container {
+    position: relative;
+    left: -86px;
+    width: 135px;
+    background: white;
+    display: none;
+    top: -35px;
+    float: right;
+    line-height: 21px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.xkit-er-callout--header {
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	background: #2E7D32;
+	padding: 9px;
+	color: white;
+}
+
+.xkit-er-callout--body {
+	padding: 9px;
+	display: block;
+	font-size: 13px;
+}
+
+.xkit-er-callout--container:before {
+	display: inline-block;
+	position: absolute;
+	content: '';
+	right: -20px;
+	top: 0px;
+	width: 0;
+	height: 0;
+	border-top: 0px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-left: 20px solid #2E7D32;
+}

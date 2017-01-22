@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.5 **//
+//* VERSION 1.9.6 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -132,7 +132,7 @@ XKit.extensions.xinbox = new Object({
 
 			$(document).on('click', '#paper_white-lined-1', function() {
 
-				$("#fan_mail").css("background-image","url('http://xkit.info/seven/extension_assets/paper.png')");
+				$("#fan_mail").css("background-image", "url('http://xkit.info/seven/extension_assets/paper.png')");
 
 			});
 
@@ -169,7 +169,7 @@ XKit.extensions.xinbox = new Object({
 
 		XKit.extensions.xinbox.slimify_outgoing();
 
-		if(XKit.extensions.xinbox.preferences.show_new_notification.value === true) {
+		if (XKit.extensions.xinbox.preferences.show_new_notification.value === true) {
 			XKit.extensions.xinbox.notification_check_interval = setInterval(function() { XKit.extensions.xinbox.check_for_new(); }, 2000);
 			XKit.extensions.xinbox.check_for_new(true);
 		}
@@ -180,22 +180,22 @@ XKit.extensions.xinbox = new Object({
 
 
 		if (XKit.extensions.xinbox.preferences.show_reply_button.value === true) {
-			$(document).on('click','.xkit-xinbox-pa-reply', XKit.extensions.xinbox.on_click_to_pa_reply);
+			$(document).on('click', '.xkit-xinbox-pa-reply', XKit.extensions.xinbox.on_click_to_pa_reply);
 			XKit.interface.create_control_button("xkit-xinbox-pa-reply", this.reply_button_icon, "Reply to Answer", "");
 			XKit.post_listener.add("xinbox_show_reply_buttons", XKit.extensions.xinbox.show_reply_button);
 			XKit.extensions.xinbox.show_reply_button();
 		}
 
-		if(XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
+		if (XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
 			XKit.post_listener.add("xinbox_init_tags", XKit.extensions.xinbox.init_tags);
 			XKit.extensions.xinbox.init_tags();
 		}
 
-		if(XKit.extensions.xinbox.preferences.hide_fan_mail_button.value === true && $("#right_column > .send_fan_mail").length > 0) {
+		if (XKit.extensions.xinbox.preferences.hide_fan_mail_button.value === true && $("#right_column > .send_fan_mail").length > 0) {
 			XKit.tools.add_css("#right_column > .send_fan_mail { display: none; } #right_column .controls_section { margin-top: 0 !important; margin-bottom: 18px; } ", "xkit_inbox_hide_fan_mail_button");
 		}
 
-		if(XKit.extensions.xinbox.preferences.slim_fan_mail.value === true) {
+		if (XKit.extensions.xinbox.preferences.slim_fan_mail.value === true) {
 			var m_css = " .fan_mail .message { " +
 						" background: white !important; " +
 						" padding-left: 20px !important; padding-right: 20px !important; " +
@@ -217,16 +217,16 @@ XKit.extensions.xinbox = new Object({
 			XKit.tools.add_css(m_css, "xkit_inbox_slim_fan_mail");
 		}
 
-		if(XKit.extensions.xinbox.preferences.mass_editor.value === true) {
+		if (XKit.extensions.xinbox.preferences.mass_editor.value === true) {
 			XKit.extensions.xinbox.init_mass_editor();
 		}
 
-		if(XKit.extensions.xinbox.preferences.auto_expand_fan_mail.value === true) {
+		if (XKit.extensions.xinbox.preferences.auto_expand_fan_mail.value === true) {
 			var au_ex_css = ".post.fan_mail .read_more, .post.fan_mail .message_body_truncated { display: none; } .post.fan_mail .message_body { display: block !important; }";
 			XKit.tools.add_css(au_ex_css, "xkit_inbox_auto_expand");
 		}
 
-		if(XKit.extensions.xinbox.preferences.inbox_search.value === true) {
+		if (XKit.extensions.xinbox.preferences.inbox_search.value === true) {
 			XKit.extensions.xinbox.init_inbox_search();
 		}
 
@@ -248,8 +248,8 @@ XKit.extensions.xinbox = new Object({
 				Tumblr.Events.trigger("ask:form:open", {
 					recipient: e_target.attr("data-tumblelog-name")
 				});
-			} catch(e){
-				console.log("Error: " + e.message);
+			} catch (err) {
+				console.error("Error: " + err.message);
 			}
 
 		}, true, m_post_id);
@@ -258,7 +258,7 @@ XKit.extensions.xinbox = new Object({
 
 	show_reply_button: function() {
 
-		if (XKit.installed.check("show_more") !== true || XKit.installed.enabled("show_more") !== true){ return; }
+		if (XKit.installed.check("show_more") !== true || XKit.installed.enabled("show_more") !== true) { return; }
 
 		$(".post.is_private_answer").not(".xinbox-done-reply-button-on-pas").each(function() {
 
@@ -269,7 +269,7 @@ XKit.extensions.xinbox = new Object({
 				var tumblelog_name = "";
 				try {
 					tumblelog_name = JSON.parse($(this).find(".post_avatar_link").attr('data-tumblelog-popover')).name;
-				} catch(e) {
+				} catch (e) {
 					// Probably own ask.
 					tumblelog_name = JSON.parse($(this).attr('data-json'))['tumblelog-name'];
 				}
@@ -278,7 +278,7 @@ XKit.extensions.xinbox = new Object({
 					XKit.interface.add_control_button($(this), "xkit-xinbox-pa-reply", " data-tumblelog-name=\"" + tumblelog_name + "\" data-tumblelog-name=\"" + tumblelog_name + "\" id=\"xinbox-reply-button-" + $(this).attr('data-post-id') + "\" data-json=\"" + $(this).find(".post_avatar_link").attr('data-tumblelog-popover') + "\"");
 				}
 
-			} catch(e) {
+			} catch (e) {
 
 
 			}
@@ -332,7 +332,7 @@ XKit.extensions.xinbox = new Object({
 
 		var posts = $(".post");
 
-		if (m_value === "" ||m_value.length <= 1) {
+		if (m_value === "" || m_value.length <= 1) {
 			// Show all
 
 			get_post_body(posts).find("mark").contents().unwrap();
@@ -402,8 +402,8 @@ XKit.extensions.xinbox = new Object({
 
 	remove_wraps: function(src_str) {
 
-		src_str = XKit.tools.replace_all(src_str, "<wrap>","");
-		src_str = XKit.tools.replace_all(src_str, "<\/wrap>","");
+		src_str = XKit.tools.replace_all(src_str, "<wrap>", "");
+		src_str = XKit.tools.replace_all(src_str, "<\/wrap>", "");
 
 		return src_str;
 
@@ -413,11 +413,11 @@ XKit.extensions.xinbox = new Object({
 
 		/* from http://jsfiddle.net/UPs3V/ */
 
-		term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
-		var pattern = new RegExp("("+term+")", "i");
+		term = term.replace(/(\s+)/, "(<[^>]+>)*$1(<[^>]+>)*");
+		var pattern = new RegExp("(" + term + ")", "i");
 
 		src_str = src_str.replace(pattern, "<mark>$1</mark>");
-		src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/,"$1</mark>$2<mark>$4");
+		src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/, "$1</mark>$2<mark>$4");
 
 		return src_str;
 
@@ -485,7 +485,7 @@ XKit.extensions.xinbox = new Object({
 
 		try {
 			$(".fan_mail_read_more").trigger('click');
-		} catch(e) {
+		} catch (e) {
 			XKit.console.add("auto_expand_fan_mail: " + e.message);
 		}
 
@@ -497,7 +497,7 @@ XKit.extensions.xinbox = new Object({
 			return;
 		}
 
-		xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
+		var xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
 			'<li class="" id="xinbox_mass_edit_li" style="height: 36px;">' +
 				'<a href="#" class="customize" id="xinbox_mass_edit_button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
@@ -641,8 +641,8 @@ XKit.extensions.xinbox = new Object({
 		var button_default = "No messages selected";
 
 		if (current_msg > msg_count) {
-			selected_post_count = 0;
-			XKit.window.show("Done!","All messages deleted successfully.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			this.selected_post_count = 0;
+			XKit.window.show("Done!", "All messages deleted successfully.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			$("#xkit_delete_selected").html(button_default);
 			$("#xkit_delete_selected").addClass("disabled");
 			XKit.extensions.xinbox.mass_editor_working = false;
@@ -655,31 +655,31 @@ XKit.extensions.xinbox = new Object({
 		$(".xpost-selected:eq(0)").addClass("xpost-working");
 
 		var channel_id = $(".xpost-selected:eq(0) .post_info_link").text() || XKit.tools.get_blogs()[0];
-		var m_id = $(".xpost-selected:eq(0)").attr('id').replace("post_","");
+		var m_id = $(".xpost-selected:eq(0)").attr('id').replace("post_", "");
 
 		setTimeout(function() {
 
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/delete",
-			data: "channel_id=" + channel_id + "&post_id=" + m_id,
-			headers: {
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/delete",
+				data: "channel_id=" + channel_id + "&post_id=" + m_id,
+				headers: {
 					"x-tumblr-form-key": m_key
-			},
-			onerror: function(response) {
-				alert("XInbox can not fetch the required page:\n\n" +
+				},
+				onerror: function(response) {
+					alert("XInbox can not fetch the required page:\n\n" +
 				"There might be a connection problem, or the extension might need updating.\n\n" +
 				"Please try again later, and if the problem continues, disable XInbox from \n" +
 				"the XKit Control Panel (X icon > XInbox > Disable this Extension) to answer\n" +
 				"your asks while this problem is being fixed.");
-			},
-			onload: function(response) {
-				XKit.extensions.xinbox.delete_msg_index = current_msg;
-				var post_div = $(".xpost-selected:eq(0)");
-				$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
-				setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
-			}
-		});
+				},
+				onload: function(response) {
+					XKit.extensions.xinbox.delete_msg_index = current_msg;
+					var post_div = $(".xpost-selected:eq(0)");
+					$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
+					setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
+				}
+			});
 
 		}, 700);
 
@@ -689,7 +689,7 @@ XKit.extensions.xinbox = new Object({
 
 		if ($("#ask_answer_field_" + (+post_id) + "_tbl").length > 0) {
 
-			$("#ask_answer_field_" + (+post_id) + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height","220px");
+			$("#ask_answer_field_" + (+post_id) + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height", "220px");
 
 		} else {
 
@@ -708,10 +708,10 @@ XKit.extensions.xinbox = new Object({
 			$("[id^='ask_answer_link_']").bind("click", function() {
 
 				var m_parent = $(this).parentsUntil(".post").parent();
-				var post_id = $(m_parent).attr('id').replace("post_","");
+				var post_id = $(m_parent).attr('id').replace("post_", "");
 
 				// Make it longer?
-				if(XKit.extensions.xinbox.preferences.bigger_answer_boxes.value === true) {
+				if (XKit.extensions.xinbox.preferences.bigger_answer_boxes.value === true) {
 					XKit.extensions.xinbox.resize_text_area(post_id);
 				}
 
@@ -720,16 +720,16 @@ XKit.extensions.xinbox = new Object({
 
 				// Disable default buttons.
 				var submit_button = $(m_parent).find('[id^="ask_publish_button_"]');
-				$(submit_button).attr('onclick','return false;');
-				$(submit_button).attr('data-state','0');
+				$(submit_button).attr('onclick', 'return false;');
+				$(submit_button).attr('data-state', '0');
 
 				var queue_button = $(m_parent).find('[id^="ask_queue_button_"]');
-				$(queue_button).attr('onclick','return false;');
-				$(queue_button).attr('data-state','2');
+				$(queue_button).attr('onclick', 'return false;');
+				$(queue_button).attr('data-state', '2');
 
 				var draft_button = $(m_parent).find('[id^="ask_draft_button_"]');
-				$(draft_button).attr('onclick','return false;');
-				$(draft_button).attr('data-state','1');
+				$(draft_button).attr('onclick', 'return false;');
+				$(draft_button).attr('data-state', '1');
 
 				var this_obj = m_parent;
 				var m_box_id = "xinbox_tags_" + post_id;
@@ -743,7 +743,7 @@ XKit.extensions.xinbox = new Object({
 					// If the ask is anonymous there is no link to their blog to parse.
 					// If the blog is secondary there will be a link to respondant's own blog
 					// and this will be found instead. Reset asker to anoymous if this is the case.
-					if(asker === respondant){
+					if (asker === respondant) {
 						asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 					}
 				}
@@ -798,7 +798,7 @@ XKit.extensions.xinbox = new Object({
 				var publish_button_div = "<button class=\"chrome blue xkit-xinbox-button xkit-xinbox-button-publish\" data-state=\"0\" data-post-id=\"" + $(m_parent).attr('data-post-id') + "\">Publish</button>";
 
 				if (private_button.length > 0) {
-					$(private_button).css("margin-left","2px");
+					$(private_button).css("margin-left", "2px");
 					$(private_button).before(publish_button_div);
 				} else {
 					$(m_parent).find(".ask_cancel_button").parent().append(publish_button_div);
@@ -816,12 +816,12 @@ XKit.extensions.xinbox = new Object({
 
 				all_buttons = $(m_parent).find('.xkit-xinbox-button');
 
-				$(all_buttons).attr('onclick','');
-				$(all_buttons).bind("click",function(event) {
+				$(all_buttons).attr('onclick', '');
+				$(all_buttons).bind("click", function(event) {
 
 					event.preventDefault();
 
-					$(all_buttons).attr('disabled','disabled');
+					$(all_buttons).attr('disabled', 'disabled');
 
 					var m_tags = "";
 
@@ -833,7 +833,7 @@ XKit.extensions.xinbox = new Object({
 						asker = asker.replace(/-/g, ' ');
 					}
 
-					if(XKit.extensions.xinbox.preferences.tag_usernames.value === true) {
+					if (XKit.extensions.xinbox.preferences.tag_usernames.value === true) {
 						if (m_tags === "") {
 							m_tags = asker;
 						} else {
@@ -841,7 +841,7 @@ XKit.extensions.xinbox = new Object({
 						}
 					}
 
-					if(XKit.extensions.xinbox.preferences.tag_custom.value === true) {
+					if (XKit.extensions.xinbox.preferences.tag_custom.value === true) {
 						if (XKit.extensions.xinbox.preferences.custom_tag.value !== "") {
 							if (m_tags === "") {
 								m_tags = XKit.extensions.xinbox.preferences.custom_tag.value;
@@ -870,7 +870,7 @@ XKit.extensions.xinbox = new Object({
 				if (XKit.extensions.xinbox.preferences.show_tag_box.value === true) {
 
 					// Calculate tag box width.
-					$(m_parent).find(".ask_cancel_button").parent().css("padding-top","0");
+					$(m_parent).find(".ask_cancel_button").parent().css("padding-top", "0");
 
 					// Add our tag box here.
 
@@ -886,7 +886,7 @@ XKit.extensions.xinbox = new Object({
 
 			});
 
-		} catch(e) {
+		} catch (e) {
 			XKit.notifications.add("<b>Can't run " + this.title + ":</b><br/>" + e.message, "error");
 		}
 
@@ -900,20 +900,20 @@ XKit.extensions.xinbox = new Object({
 
 		if (answer === "" && XKit.extensions.xinbox.preferences.check_for_blanks.value === true) {
 			// Check if the user really wants to post this.
-			if (!confirm("XInbox is curious:\nYou didn't enter an answer. Send it anyway?")){
+			if (!confirm("XInbox is curious:\nYou didn't enter an answer. Send it anyway?")) {
 				return;
 			}
 		}
 
 		var load_box = $('#post_control_loader_' + post_id);
 
-		$(post_div).find('.xinbox_tag_box_input').attr('disabled','disabled');
-		$(post_div).find('[id^="ask_publish_button_"]').attr('disabled','disabled');
-		$(post_div).find('[id^="ask_cancel_button_"]').attr('disabled','disabled');
-		$(post_div).find('[id^="ask_queue_button_"]').attr('disabled','disabled');
-		$(post_div).find('[id^="ask_draft_button_"]').attr('disabled','disabled');
-		$(post_div).find('[id^="private_answer_button_"]').attr('disabled','disabled');
-		$(load_box).css("display","block");
+		$(post_div).find('.xinbox_tag_box_input').attr('disabled', 'disabled');
+		$(post_div).find('[id^="ask_publish_button_"]').attr('disabled', 'disabled');
+		$(post_div).find('[id^="ask_cancel_button_"]').attr('disabled', 'disabled');
+		$(post_div).find('[id^="ask_queue_button_"]').attr('disabled', 'disabled');
+		$(post_div).find('[id^="ask_draft_button_"]').attr('disabled', 'disabled');
+		$(post_div).find('[id^="private_answer_button_"]').attr('disabled', 'disabled');
+		$(load_box).css("display", "block");
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
 
@@ -937,7 +937,7 @@ XKit.extensions.xinbox = new Object({
 				var mdata = null;
 				try {
 					mdata = $.parseJSON(response.responseText);
-				} catch(e) {
+				} catch (e) {
 					XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 					return;
 				}
@@ -968,9 +968,9 @@ XKit.extensions.xinbox = new Object({
 		m_object.silent = false;
 		m_object.context_id = "";
 		if ($(".editor_note a").length > 0) {
-		m_object.editor_type = "markdown";
+			m_object.editor_type = "markdown";
 		} else {
-		m_object.editor_type = "rich";
+			m_object.editor_type = "rich";
 		}
 
 		m_object["is_rich_text[one]"] = "0";
@@ -1017,23 +1017,22 @@ XKit.extensions.xinbox = new Object({
 				onload: function(response) {
 					// We are done!
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
-					var mdata = null;
 					try {
-						mdata = $.parseJSON(response.responseText);
-					} catch(e) {
+						var responseData = $.parseJSON(response.responseText);
+					} catch (e) {
 						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 						return;
 					}
-					if (mdata.errors === false) {
+					if (responseData.errors === false) {
 						$(post_div).fadeOut('slow', function() {
 							$(post_div).parent().remove();
 							XKit.tools.add_function(function() {
 								Tumblr.Events.trigger("DOMEventor:updateRect");
 							}, true, "");
 						});
-						if (state === "" ||state === "0") { XKit.notifications.add("Published ask.","ok"); }
-						if (state === "1") { XKit.notifications.add("Drafted ask.","ok"); }
-						if (state === "2") { XKit.notifications.add("Queued ask.","ok"); }
+						if (state === "" || state === "0") { XKit.notifications.add("Published ask.", "ok"); }
+						if (state === "1") { XKit.notifications.add("Drafted ask.", "ok"); }
+						if (state === "2") { XKit.notifications.add("Queued ask.", "ok"); }
 					} else {
 						XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
 					}
@@ -1046,17 +1045,17 @@ XKit.extensions.xinbox = new Object({
 
 	show_error: function(msg) {
 
-		XKit.window.show("Can't publish ask","Something went wrong and prevented XKit from publishing this ask. You might want to disable XInbox (or at least the tagging options of XInbox) if this is related to a recent Tumblr change.<br/><p>" + msg + "</p>Try refreshing the page and trying again, or disable XInbox extension and file a bug report.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Can't publish ask", "Something went wrong and prevented XKit from publishing this ask. You might want to disable XInbox (or at least the tagging options of XInbox) if this is related to a recent Tumblr change.<br/><p>" + msg + "</p>Try refreshing the page and trying again, or disable XInbox extension and file a bug report.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 	},
 
 	poke_tinymce: function(post_id) {
-		source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
+		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
 						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
 						" } ";
 
 		if ('function' == typeof source) {
-				source = '(' + source + ')();';
+			source = '(' + source + ')();';
 		}
 
 		var script = document.createElement('script');

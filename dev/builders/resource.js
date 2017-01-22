@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* eslint-env node */
 
 /**
  * Resource builder module.
@@ -32,16 +32,16 @@ var File = gutil.File,
 module.exports.resourceBuilder = function(file, resource, contentsKey, attributes) {
 	attributes.forEach(function(attribute) {
 		var value = module.exports.getAttribute(resource[contentsKey], attribute.name);
-		if(value !== null) {
+		if (value !== null) {
 			resource[attribute.name] = value;
 		} else {
-			if(attribute.required) {
+			if (attribute.required) {
 				throw new PluginError('resource-builder',
 					'Required attribute ' + attribute.name +
 					' not set in ' + path.relative(process.cwd(), file.path)
 				);
 			}
-			if(attribute.default !== null) {
+			if (attribute.default !== null) {
 				resource[attribute.name] = attribute.default;
 			}
 		}
@@ -58,7 +58,7 @@ module.exports.resourceBuilder = function(file, resource, contentsKey, attribute
  * of streams of files into a gallery object.
  * @see [vinyl]{@link https://github.com/wearefractal/vinyl}
  *
- * @param {string|Object<vinyl>} file                      - Name of the file to write
+ * @param {string|Object<vinyl>} galleryFileIn             - Name of the file to write
  * @param {Object}               gallery                   - Resource gallery object
  * @param {string}               gallery.server            - Status of the server
  * @param {Object[]}             gallery[resourceArrayKey] - Array of resource objects
@@ -68,21 +68,21 @@ module.exports.resourceBuilder = function(file, resource, contentsKey, attribute
  * @returns {Object<stream.Transform>}
  */
 // Adapted from https://github.com/wearefractal/gulp-concat
-module.exports.galleryBuilder = function(file, gallery, attributeMapping, resourceArrayKey, resourceNameKey) {
+module.exports.galleryBuilder = function(galleryFileIn, gallery, attributeMapping, resourceArrayKey, resourceNameKey) {
 	var latestFile;
 	var latestMod;
 
 	function bufferContents(file, enc, cb) {
-		if(file.isNull()) {
+		if (file.isNull()) {
 			cb();
 			return;
-		};
+		}
 
-		if(file.isStream()) {
+		if (file.isStream()) {
 			this.emit('error', new PluginError('resource-builder',  'Streaming not supported'));
 			cb();
 			return;
-		};
+		}
 
 		// Set latest file if not already set
 		// or if the current file was modified more recently.
@@ -94,14 +94,14 @@ module.exports.galleryBuilder = function(file, gallery, attributeMapping, resour
 		var resource = JSON.parse(file.contents.toString());
 		var galleryResource = {};
 		Object.keys(attributeMapping).forEach(function(key) {
-			if(resource.hasOwnProperty(key)) {
+			if (resource.hasOwnProperty(key)) {
 				galleryResource[attributeMapping[key]] = resource[key];
 			}
 		});
 
 		gallery[resourceArrayKey].push(galleryResource);
 		cb();
-	};
+	}
 
 	function endStream(cb) {
 		// No files passed in, no file goes out
@@ -115,17 +115,17 @@ module.exports.galleryBuilder = function(file, gallery, attributeMapping, resour
 		gallery[resourceArrayKey] = module.exports.alphaSort(gallery[resourceArrayKey], resourceNameKey);
 
 		var galleryFile;
-		if (typeof file === 'string') {
+		if (typeof galleryFileIn === 'string') {
 			galleryFile = latestFile.clone({contents: false});
-			galleryFile.path = path.join(latestFile.base, file);
+			galleryFile.path = path.join(latestFile.base, galleryFileIn);
 		} else {
-			galleryFile = new File(file);
+			galleryFile = new File(galleryFileIn);
 		}
 
 		galleryFile.contents = new Buffer(JSON.stringify(gallery));
 		this.push(galleryFile);
 		cb();
-	};
+	}
 
 	return through.obj(bufferContents, endStream);
 };
@@ -161,15 +161,15 @@ module.exports.addResourceDependency = function(resource, key, filename) {
 
 	try {
 		contents = module.exports.readResourceSync(filename);
-	} catch(e) {
-		if(e.code === 'ENOENT') {
+	} catch (e) {
+		if (e.code === 'ENOENT') {
 			contents = '';
 		} else {
 			throw e;
 		}
 	}
 
-	if(contents.length > 0) {
+	if (contents.length > 0) {
 		resource[key] = contents;
 	}
 
@@ -191,7 +191,7 @@ module.exports.getAttribute = function(contents, attribute) {
 	var regex = new RegExp('/\\*\\s*' + attribute + '\\s*(.+?)\\s*\\*\\*?/');
 	var match = contents.match(regex);
 
-	if(!match) {
+	if (!match) {
 		return null;
 	}
 	return match[1];
@@ -209,10 +209,10 @@ module.exports.alphaSort = function(resources, key) {
 	return resources.sort(function(rsA, rsB) {
 		var aName = rsA[key].toLowerCase();
 		var bName = rsB[key].toLowerCase();
-		if(aName > bName) {
+		if (aName > bName) {
 			return 1;
 		}
-		if(aName < bName) {
+		if (aName < bName) {
 			return -1;
 		}
 		return 0;
