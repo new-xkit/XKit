@@ -736,6 +736,8 @@ XKit.extensions.blacklist = new Object({
 				post_type = "video";
 			} else if ($(obj).hasClass("post_type_audio")) {
 				post_type = "audio";
+			} else if ($(obj).hasClass("post_type_link")) {
+				post_type = "link";
 			}
 		}
 		
@@ -745,9 +747,9 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display", "none"); // page content (mobile only)
 		$(obj).find(".post_controls, .post-source-footer, .mh_post_foot").css("display", "none"); // footer
 		if (isMobile) { // depending on platform, use different method for adding block excuse
-			$(obj).find(".post_content").html(old_content + block_excuse);
-		} else {
 			$(obj).find(".mh_post_head").after(block_excuse);
+		} else {
+			$(obj).find(".post_content").html(old_content + block_excuse);
 		}
 	},
 
