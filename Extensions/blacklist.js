@@ -742,7 +742,7 @@ XKit.extensions.blacklist = new Object({
 		var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, post_type, post_id);
 		
 		$(obj).find(".post_info, .mh_post_head_name, .mh_post_head_two").css("display", "none"); // header
-		$(obj).find(".mh_post_media, .mh_post_canvas, mh_post_middle").css("display", "none"); // page content (mobile only)
+		$(obj).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display", "none"); // page content (mobile only)
 		$(obj).find(".post_controls, .post-source-footer, .mh_post_foot").css("display", "none"); // footer
 		if (isMobile) { // depending on platform, use different method for adding block excuse
 			$(obj).find(".post_content").html(old_content + block_excuse);
