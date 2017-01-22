@@ -715,6 +715,7 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".xkit-shorten-posts-embiggen").css("display", "none");
 
 		}
+	},
 
 	hide_desktop_content: function(obj, word) {
 		var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
