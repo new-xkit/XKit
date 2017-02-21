@@ -231,16 +231,9 @@ XKit.extensions.messaging_tweaks = new Object({
 			XKit.extensions.messaging_tweaks.first_chat_open = true;
 			XKit.extensions.messaging_tweaks.read_message_count = 0;
 			if (XKit.extensions.messaging_tweaks.preferences.allow_minimising.value) {
-				$(".messaging-conversation-popovers").animate({ bottom: "0px" }, "fast");
 				$(".conversation-header-main").on("click.minimise_header", function(e) {
-					if (e.target !== this) { return; }
-					if (!$(this).hasClass("minimised")) {
-						$(".messaging-conversation-popovers").animate({ bottom: "-404px" });
-						$(this).addClass("minimised");
-					} else {
-						document.title = "Tumblr";
-						$(".messaging-conversation-popovers").animate({ bottom: "0px" });
-						$(this).removeClass("minimised");
+					if ($('.minimize').length) {
+						$('.minimize').get(0).click();
 					}
 				});
 			}
@@ -293,12 +286,13 @@ XKit.extensions.messaging_tweaks = new Object({
 			$(document).on("keydown.minimise_header", function(e) {
 				if (!e.altKey) { return; }
 				if (e.which === 40) {
-					$(".messaging-conversation-popovers").animate({ bottom: "-404px" });
-					$(this).addClass("minimised");
+					if ($('.minimize').length) {
+						 $('.minimize').get(0).click();
+					}
 				} else if (e.which === 38) {
-					document.title = "Tumblr";
-					$(".messaging-conversation-popovers").animate({ bottom: "0px" });
-					$(this).removeClass("minimised");
+					if ($('.conversation-minimized').length) {
+						$('.conversation-minimized').get(0).click();
+					}
 				}
 			});
 		}
@@ -439,10 +433,6 @@ XKit.extensions.messaging_tweaks = new Object({
 		$(".xkit-my_messaging_message").removeClass("xkit-my_messaging_message");
 		$(".xkit-my_messaging_icon").removeClass("xkit-my_messaging_icon");
 		XKit.tools.remove_css("messaging_tweaks");
-		if ($(".conversation-header-main").hasClass("minimised")) {
-			$(".messaging-conversation-popovers").animate({ bottom: "0px" });
-			$(".conversation-header-main").removeClass("minimised");
-		}
 		$(".conversation-header-main").off("click.minimise_header");
 		$(document).off("keydown.minimise_header");
 		this.running = false;
