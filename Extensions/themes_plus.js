@@ -6,22 +6,22 @@
 //* FRAME false **//
 //* BETA false **//
 
-jQuery.fn.selectText = function(){
-    var doc = document;
-    var element = this[0];
-    var range, selection;
+jQuery.fn.selectText = function() {
+	var doc = document;
+	var element = this[0];
+	var range, selection;
 
-    if (doc.body.createTextRange) {
-        range = document.body.createTextRange();
-        range.moveToElementText(element);
-        range.select();
-    } else if (window.getSelection) {
-        selection = window.getSelection();
-        range = document.createRange();
-        range.selectNodeContents(element);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
+	if (doc.body.createTextRange) {
+		range = document.body.createTextRange();
+		range.moveToElementText(element);
+		range.select();
+	} else if (window.getSelection) {
+		selection = window.getSelection();
+		range = document.createRange();
+		range.selectNodeContents(element);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
 };
 
 /**
@@ -32,8 +32,9 @@ jQuery.fn.selectText = function(){
  * Dual licensed under the MIT and GPL licenses
  *
  */
-(function ($) {
-	var ColorPicker = function () {
+/* eslint-disable id-length, no-unused-vars */
+(function($) {
+	var ColorPicker = function() {
 		var
 			ids = {},
 			inAction,
@@ -42,49 +43,49 @@ jQuery.fn.selectText = function(){
 			tpl = '<div class="colorpicker"><div class="colorpicker_color"><div><div></div></div></div><div class="colorpicker_hue"><div></div></div><div class="colorpicker_new_color"></div><div class="colorpicker_current_color"></div><div class="colorpicker_hex"><input type="text" maxlength="6" size="6" /></div><div class="colorpicker_rgb_r colorpicker_field"><input type="text" maxlength="3" size="3" /><span></span></div><div class="colorpicker_rgb_g colorpicker_field"><input type="text" maxlength="3" size="3" /><span></span></div><div class="colorpicker_rgb_b colorpicker_field"><input type="text" maxlength="3" size="3" /><span></span></div><div class="colorpicker_hsb_h colorpicker_field"><input type="text" maxlength="3" size="3" /><span></span></div><div class="colorpicker_hsb_s colorpicker_field"><input type="text" maxlength="3" size="3" /><span></span></div><div class="colorpicker_hsb_b colorpicker_field"><input type="text" maxlength="3" size="3" /><span></span></div><div class="colorpicker_submit"></div></div>',
 			defaults = {
 				eventName: 'click',
-				onShow: function () {},
-				onBeforeShow: function(){},
-				onHide: function () {},
-				onChange: function () {},
-				onSubmit: function () {},
+				onShow: function() {},
+				onBeforeShow: function() {},
+				onHide: function() {},
+				onChange: function() {},
+				onSubmit: function() {},
 				color: 'ff0000',
 				livePreview: true,
 				flat: false
 			},
-			fillRGBFields = function  (hsb, cal) {
+			fillRGBFields = function(hsb, cal) {
 				var rgb = HSBToRGB(hsb);
 				$(cal).data('colorpicker').fields
 					.eq(1).val(rgb.r).end()
 					.eq(2).val(rgb.g).end()
 					.eq(3).val(rgb.b).end();
 			},
-			fillHSBFields = function  (hsb, cal) {
+			fillHSBFields = function(hsb, cal) {
 				$(cal).data('colorpicker').fields
 					.eq(4).val(hsb.h).end()
 					.eq(5).val(hsb.s).end()
 					.eq(6).val(hsb.b).end();
 			},
-			fillHexFields = function (hsb, cal) {
+			fillHexFields = function(hsb, cal) {
 				$(cal).data('colorpicker').fields
 					.eq(0).val(HSBToHex(hsb)).end();
 			},
-			setSelector = function (hsb, cal) {
+			setSelector = function(hsb, cal) {
 				$(cal).data('colorpicker').selector.css('backgroundColor', '#' + HSBToHex({h: hsb.h, s: 100, b: 100}));
 				$(cal).data('colorpicker').selectorIndic.css({
-					left: parseInt(150 * hsb.s/100, 10),
-					top: parseInt(150 * (100-hsb.b)/100, 10)
+					left: parseInt(150 * hsb.s / 100, 10),
+					top: parseInt(150 * (100 - hsb.b) / 100, 10)
 				});
 			},
-			setHue = function (hsb, cal) {
-				$(cal).data('colorpicker').hue.css('top', parseInt(150 - 150 * hsb.h/360, 10));
+			setHue = function(hsb, cal) {
+				$(cal).data('colorpicker').hue.css('top', parseInt(150 - 150 * hsb.h / 360, 10));
 			},
-			setCurrentColor = function (hsb, cal) {
+			setCurrentColor = function(hsb, cal) {
 				$(cal).data('colorpicker').currentColor.css('backgroundColor', '#' + HSBToHex(hsb));
 			},
-			setNewColor = function (hsb, cal) {
+			setNewColor = function(hsb, cal) {
 				$(cal).data('colorpicker').newColor.css('backgroundColor', '#' + HSBToHex(hsb));
 			},
-			keyDown = function (ev) {
+			keyDown = function(ev) {
 				var pressedKey = ev.charCode || ev.keyCode || -1;
 				if ((pressedKey > charMin && pressedKey <= 90) || pressedKey == 32) {
 					return false;
@@ -94,7 +95,7 @@ jQuery.fn.selectText = function(){
 					change.apply(this);
 				}
 			},
-			change = function (ev) {
+			change = function(ev) {
 				var cal = $(this).parent().parent(), col;
 				if (this.parentNode.className.indexOf('_hex') > 0) {
 					cal.data('colorpicker').color = col = HexToHSB(fixHex(this.value));
@@ -121,16 +122,16 @@ jQuery.fn.selectText = function(){
 				setNewColor(col, cal.get(0));
 				cal.data('colorpicker').onChange.apply(cal, [col, HSBToHex(col), HSBToRGB(col)]);
 			},
-			blur = function (ev) {
+			blur = function(ev) {
 				var cal = $(this).parent().parent();
 				cal.data('colorpicker').fields.parent().removeClass('colorpicker_focus');
 			},
-			focus = function () {
+			focus = function() {
 				charMin = this.parentNode.className.indexOf('_hex') > 0 ? 70 : 65;
 				$(this).parent().parent().data('colorpicker').fields.parent().removeClass('colorpicker_focus');
 				$(this).parent().addClass('colorpicker_focus');
 			},
-			downIncrement = function (ev) {
+			downIncrement = function(ev) {
 				var field = $(this).parent().find('input').focus();
 				var current = {
 					el: $(this).parent().addClass('colorpicker_slider'),
@@ -143,21 +144,21 @@ jQuery.fn.selectText = function(){
 				$(document).bind('mouseup', current, upIncrement);
 				$(document).bind('mousemove', current, moveIncrement);
 			},
-			moveIncrement = function (ev) {
+			moveIncrement = function(ev) {
 				ev.data.field.val(Math.max(0, Math.min(ev.data.max, parseInt(ev.data.val + ev.pageY - ev.data.y, 10))));
 				if (ev.data.preview) {
 					change.apply(ev.data.field.get(0), [true]);
 				}
 				return false;
 			},
-			upIncrement = function (ev) {
+			upIncrement = function(ev) {
 				change.apply(ev.data.field.get(0), [true]);
 				ev.data.el.removeClass('colorpicker_slider').find('input').focus();
 				$(document).unbind('mouseup', upIncrement);
 				$(document).unbind('mousemove', moveIncrement);
 				return false;
 			},
-			downHue = function (ev) {
+			downHue = function(ev) {
 				var current = {
 					cal: $(this).parent(),
 					y: $(this).offset().top
@@ -166,25 +167,25 @@ jQuery.fn.selectText = function(){
 				$(document).bind('mouseup', current, upHue);
 				$(document).bind('mousemove', current, moveHue);
 			},
-			moveHue = function (ev) {
+			moveHue = function(ev) {
 				change.apply(
 					ev.data.cal.data('colorpicker')
 						.fields
 						.eq(4)
-						.val(parseInt(360*(150 - Math.max(0,Math.min(150,(ev.pageY - ev.data.y))))/150, 10))
+						.val(parseInt(360 * (150 - Math.max(0, Math.min(150, (ev.pageY - ev.data.y)))) / 150, 10))
 						.get(0),
 					[ev.data.preview]
 				);
 				return false;
 			},
-			upHue = function (ev) {
+			upHue = function(ev) {
 				fillRGBFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				fillHexFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				$(document).unbind('mouseup', upHue);
 				$(document).unbind('mousemove', moveHue);
 				return false;
 			},
-			downSelector = function (ev) {
+			downSelector = function(ev) {
 				var current = {
 					cal: $(this).parent(),
 					pos: $(this).offset()
@@ -193,41 +194,41 @@ jQuery.fn.selectText = function(){
 				$(document).bind('mouseup', current, upSelector);
 				$(document).bind('mousemove', current, moveSelector);
 			},
-			moveSelector = function (ev) {
+			moveSelector = function(ev) {
 				change.apply(
 					ev.data.cal.data('colorpicker')
 						.fields
 						.eq(6)
-						.val(parseInt(100*(150 - Math.max(0,Math.min(150,(ev.pageY - ev.data.pos.top))))/150, 10))
+						.val(parseInt(100 * (150 - Math.max(0, Math.min(150, (ev.pageY - ev.data.pos.top)))) / 150, 10))
 						.end()
 						.eq(5)
-						.val(parseInt(100*(Math.max(0,Math.min(150,(ev.pageX - ev.data.pos.left))))/150, 10))
+						.val(parseInt(100 * (Math.max(0, Math.min(150, (ev.pageX - ev.data.pos.left)))) / 150, 10))
 						.get(0),
 					[ev.data.preview]
 				);
 				return false;
 			},
-			upSelector = function (ev) {
+			upSelector = function(ev) {
 				fillRGBFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				fillHexFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				$(document).unbind('mouseup', upSelector);
 				$(document).unbind('mousemove', moveSelector);
 				return false;
 			},
-			enterSubmit = function (ev) {
+			enterSubmit = function(ev) {
 				$(this).addClass('colorpicker_focus');
 			},
-			leaveSubmit = function (ev) {
+			leaveSubmit = function(ev) {
 				$(this).removeClass('colorpicker_focus');
 			},
-			clickSubmit = function (ev) {
+			clickSubmit = function(ev) {
 				var cal = $(this).parent();
 				var col = cal.data('colorpicker').color;
 				cal.data('colorpicker').origColor = col;
 				setCurrentColor(col, cal.get(0));
 				cal.data('colorpicker').onSubmit(col, HSBToHex(col), HSBToRGB(col), cal.data('colorpicker').el);
 			},
-			show = function (ev) {
+			show = function(ev) {
 				var cal = $('#' + $(this).data('colorpickerId'));
 				cal.data('colorpicker').onBeforeShow.apply(this, [cal.get(0)]);
 				var pos = $(this).offset();
@@ -247,7 +248,7 @@ jQuery.fn.selectText = function(){
 				$(document).bind('mousedown', {cal: cal}, hide);
 				return false;
 			},
-			hide = function (ev) {
+			hide = function(ev) {
 				if (!isChildOf(ev.data.cal.get(0), ev.target, ev.data.cal.get(0))) {
 					if (ev.data.cal.data('colorpicker').onHide.apply(this, [ev.data.cal.get(0)])) {
 						ev.data.cal.hide();
@@ -266,14 +267,14 @@ jQuery.fn.selectText = function(){
 					return !!(parentEl.compareDocumentPosition(el) & 16);
 				}
 				var prEl = el.parentNode;
-				while(prEl && prEl != container) {
+				while (prEl && prEl != container) {
 					if (prEl == parentEl)
 						return true;
 					prEl = prEl.parentNode;
 				}
 				return false;
 			},
-			getViewport = function () {
+			getViewport = function() {
 				var m = document.compatMode == 'CSS1Compat';
 				return {
 					l : window.pageXOffset || (m ? document.documentElement.scrollLeft : document.body.scrollLeft),
@@ -282,25 +283,25 @@ jQuery.fn.selectText = function(){
 					h : window.innerHeight || (m ? document.documentElement.clientHeight : document.body.clientHeight)
 				};
 			},
-			fixHSB = function (hsb) {
+			fixHSB = function(hsb) {
 				return {
 					h: Math.min(360, Math.max(0, hsb.h)),
 					s: Math.min(100, Math.max(0, hsb.s)),
 					b: Math.min(100, Math.max(0, hsb.b))
 				};
 			},
-			fixRGB = function (rgb) {
+			fixRGB = function(rgb) {
 				return {
 					r: Math.min(255, Math.max(0, rgb.r)),
 					g: Math.min(255, Math.max(0, rgb.g)),
 					b: Math.min(255, Math.max(0, rgb.b))
 				};
 			},
-			fixHex = function (hex) {
+			fixHex = function(hex) {
 				var len = 6 - hex.length;
 				if (len > 0) {
 					var o = [];
-					for (var i=0; i<len; i++) {
+					for (var i = 0; i < len; i++) {
 						o.push('0');
 					}
 					o.push(hex);
@@ -308,14 +309,14 @@ jQuery.fn.selectText = function(){
 				}
 				return hex;
 			},
-			HexToRGB = function (hex) {
+			HexToRGB = function(hex) {
 				hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
 				return {r: hex >> 16, g: (hex & 0x00FF00) >> 8, b: (hex & 0x0000FF)};
 			},
-			HexToHSB = function (hex) {
+			HexToHSB = function(hex) {
 				return RGBToHSB(HexToRGB(hex));
 			},
-			RGBToHSB = function (rgb) {
+			RGBToHSB = function(rgb) {
 				var hsb = {
 					h: 0,
 					s: 0,
@@ -341,49 +342,57 @@ jQuery.fn.selectText = function(){
 				if (hsb.h < 0) {
 					hsb.h += 360;
 				}
-				hsb.s *= 100/255;
-				hsb.b *= 100/255;
+				hsb.s *= 100 / 255;
+				hsb.b *= 100 / 255;
 				return hsb;
 			},
-			HSBToRGB = function (hsb) {
+			HSBToRGB = function(hsb) {
 				var rgb = {};
 				var h = Math.round(hsb.h);
-				var s = Math.round(hsb.s*255/100);
-				var v = Math.round(hsb.b*255/100);
-				if(s === 0) {
+				var s = Math.round(hsb.s * 255 / 100);
+				var v = Math.round(hsb.b * 255 / 100);
+				if (s === 0) {
 					rgb.r = rgb.g = rgb.b = v;
 				} else {
 					var t1 = v;
-					var t2 = (255-s)*v/255;
-					var t3 = (t1-t2)*(h%60)/60;
-					if(h==360) h = 0;
-					if(h<60) {rgb.r=t1;	rgb.b=t2; rgb.g=t2+t3}
-					else if(h<120) {rgb.g=t1; rgb.b=t2;	rgb.r=t1-t3}
-					else if(h<180) {rgb.g=t1; rgb.r=t2;	rgb.b=t2+t3}
-					else if(h<240) {rgb.b=t1; rgb.r=t2;	rgb.g=t1-t3}
-					else if(h<300) {rgb.b=t1; rgb.g=t2;	rgb.r=t2+t3}
-					else if(h<360) {rgb.r=t1; rgb.g=t2;	rgb.b=t1-t3}
-					else {rgb.r=0; rgb.g=0;	rgb.b=0}
+					var t2 = (255 - s) * v / 255;
+					var t3 = (t1 - t2) * (h % 60) / 60;
+					if (h == 360) h = 0;
+					if (h < 60) {
+						rgb.r = t1; rgb.b = t2; rgb.g = t2 + t3;
+					} else if (h < 120) {
+						rgb.g = t1; rgb.b = t2; rgb.r = t1 - t3;
+					} else if (h < 180) {
+						rgb.g = t1; rgb.r = t2; rgb.b = t2 + t3;
+					} else if (h < 240) {
+						rgb.b = t1; rgb.r = t2; rgb.g = t1 - t3;
+					} else if (h < 300) {
+						rgb.b = t1; rgb.g = t2; rgb.r = t2 + t3;
+					} else if (h < 360) {
+						rgb.r = t1; rgb.g = t2; rgb.b = t1 - t3;
+					} else {
+						rgb.r = 0; rgb.g = 0; rgb.b = 0;
+					}
 				}
-				return {r:Math.round(rgb.r), g:Math.round(rgb.g), b:Math.round(rgb.b)};
+				return {r: Math.round(rgb.r), g: Math.round(rgb.g), b: Math.round(rgb.b)};
 			},
-			RGBToHex = function (rgb) {
+			RGBToHex = function(rgb) {
 				var hex = [
 					rgb.r.toString(16),
 					rgb.g.toString(16),
 					rgb.b.toString(16)
 				];
-				$.each(hex, function (nr, val) {
+				$.each(hex, function(nr, val) {
 					if (val.length == 1) {
 						hex[nr] = '0' + val;
 					}
 				});
 				return hex.join('');
 			},
-			HSBToHex = function (hsb) {
+			HSBToHex = function(hsb) {
 				return RGBToHex(HSBToRGB(hsb));
 			},
-			restoreOriginal = function () {
+			restoreOriginal = function() {
 				var cal = $(this).parent();
 				var col = cal.data('colorpicker').origColor;
 				cal.data('colorpicker').color = col;
@@ -395,8 +404,8 @@ jQuery.fn.selectText = function(){
 				setNewColor(col, cal.get(0));
 			};
 		return {
-			init: function (opt) {
-				opt = $.extend({}, defaults, opt||{});
+			init: function(opt) {
+				opt = $.extend({}, defaults, opt || {});
 				if (typeof opt.color == 'string') {
 					opt.color = HexToHSB(opt.color);
 				} else if (typeof(opt.color.r) === "number" &&
@@ -410,7 +419,7 @@ jQuery.fn.selectText = function(){
 				} else {
 					return this;
 				}
-				return this.each(function () {
+				return this.each(function() {
 					if (!$(this).data('colorpickerId')) {
 						var options = $.extend({}, opt);
 						options.origColor = opt.color;
@@ -462,14 +471,14 @@ jQuery.fn.selectText = function(){
 				});
 			},
 			showPicker: function() {
-				return this.each( function () {
+				return this.each( function() {
 					if ($(this).data('colorpickerId')) {
 						show.apply(this);
 					}
 				});
 			},
 			hidePicker: function() {
-				return this.each( function () {
+				return this.each( function() {
 					if ($(this).data('colorpickerId')) {
 						$('#' + $(this).data('colorpickerId')).hide();
 					}
@@ -489,7 +498,7 @@ jQuery.fn.selectText = function(){
 				} else {
 					return this;
 				}
-				return this.each(function(){
+				return this.each(function() {
 					if ($(this).data('colorpickerId')) {
 						var cal = $('#' + $(this).data('colorpickerId'));
 						cal.data('colorpicker').color = col;
@@ -512,6 +521,7 @@ jQuery.fn.selectText = function(){
 		ColorPickerShow: ColorPicker.showPicker,
 		ColorPickerSetColor: ColorPicker.setColor
 	});
+	/* eslint-enable id-length, no-unused-vars */
 })(jQuery);
 
 XKit.extensions.themes_plus = new Object({
@@ -566,8 +576,8 @@ XKit.extensions.themes_plus = new Object({
 
 			"text": "Page Background Color",
 			"type": "color",
-			"of": ["body",".identity-legacy",".identity"],
-			"attr": ["background-color","background","background"],
+			"of": ["body", ".identity-legacy", ".identity"],
+			"attr": ["background-color", "background", "background"],
 			"default": ""
 
 		},
@@ -576,8 +586,8 @@ XKit.extensions.themes_plus = new Object({
 
 			"text": "Content Background Color<br/><small>(also changes permalink ear on posts)</small>",
 			"type": "color",
-			"of": [".l-container.l-container--two-column .right_column, .l-container.l-container--two-column-dashboard .right_column, .l-container.l-container--two-column-dashboard .left_column",".l-container.l-container--two-column .l-content, .l-container.l-container--two-column-dashboard .l-content",".search_form_row",".l-header .selection_nipple", ".post_full .post_permalink:before"],
-			"attr": ["background","background-color", "background", "border-bottom-color", "border-right-color"],
+			"of": [".l-container.l-container--two-column .right_column, .l-container.l-container--two-column-dashboard .right_column, .l-container.l-container--two-column-dashboard .left_column", ".l-container.l-container--two-column .l-content, .l-container.l-container--two-column-dashboard .l-content", ".search_form_row", ".l-header .selection_nipple", ".post_full .post_permalink:before"],
+			"attr": ["background", "background-color", "background", "border-bottom-color", "border-right-color"],
 			"default": ""
 
 		},
@@ -688,15 +698,15 @@ XKit.extensions.themes_plus = new Object({
 			return;
 		}
 
-		var m_shown_warning = XKit.storage.get("themes_plus","shown_warning","");
+		var m_shown_warning = XKit.storage.get("themes_plus", "shown_warning", "");
 
 		if (m_shown_warning !== "yasss") {
 
-			XKit.window.show("Welcome to Themes+!","Please disable Themes and Theme Editor extensions and Stylish themes before using Themes+.<br/><br/>To get started, click on the XKit Control Panel > Themes+ > Open Themes+ Control panel.","info","<div id=\"xkit-themes-plus-warning-ok\" class=\"xkit-button default\">OK</div>");
+			XKit.window.show("Welcome to Themes+!", "Please disable Themes and Theme Editor extensions and Stylish themes before using Themes+.<br/><br/>To get started, click on the XKit Control Panel > Themes+ > Open Themes+ Control panel.", "info", "<div id=\"xkit-themes-plus-warning-ok\" class=\"xkit-button default\">OK</div>");
 
 			$("#xkit-themes-plus-warning-ok").click(function() {
 
-				XKit.storage.set("themes_plus","shown_warning","yasss");
+				XKit.storage.set("themes_plus", "shown_warning", "yasss");
 				XKit.window.close();
 
 			});
@@ -709,14 +719,14 @@ XKit.extensions.themes_plus = new Object({
 
 	load_theme: function() {
 
-		var m_storage = XKit.storage.get("themes_plus","current_theme","");
+		var m_storage = XKit.storage.get("themes_plus", "current_theme", "");
 
 		if (m_storage !== "") {
 			try {
 				m_storage = m_storage.substring(11, m_storage.length);
 				XKit.extensions.themes_plus.current_theme = JSON.parse(decodeURIComponent(escape(window.atob(m_storage))));
 
-			} catch(e) {
+			} catch (e) {
 				XKit.extensions.themes_plus.current_theme = XKit.extensions.themes_plus.blank_theme_obj();
 			}
 		} else {
@@ -769,7 +779,7 @@ XKit.extensions.themes_plus = new Object({
 
 	should_render_container_background: function() {
 
-		if ($("body").hasClass("help_page") ||$("body").hasClass("corp_page")) {
+		if ($("body").hasClass("help_page") || $("body").hasClass("corp_page")) {
 			return false;
 		}
 
@@ -811,7 +821,7 @@ XKit.extensions.themes_plus = new Object({
 				var to_return_css = opt.on_true;
 				if (opt.on_true.indexOf("#content") !== -1) {
 					if (render_container !== true) {
-						to_return_css = to_return_css.replace("#content","#__content__");
+						to_return_css = to_return_css.replace("#content", "#__content__");
 					}
 				}
 				if (obj === true) {
@@ -823,7 +833,7 @@ XKit.extensions.themes_plus = new Object({
 
 				var color_css = "";
 
-				for (var i=0;i<opt.of.length;i++) {
+				for (var i = 0; i < opt.of.length; i++) {
 					var x_class = opt.attr[i];
 					if (opt.of[i] === "#content") {
 						if (render_container !== true) {
@@ -845,7 +855,7 @@ XKit.extensions.themes_plus = new Object({
 
 			}
 
-		} else{
+		} else {
 			console.log("[Themes+] --- property " + obj_name + " is unsupported or invalid.");
 		}
 
@@ -907,7 +917,7 @@ XKit.extensions.themes_plus = new Object({
 				var m_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
-					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
+					if (typeof m_theme[obj] !== "undefined" && m_theme[obj] !== "") {
 						m_value = m_theme[obj];
 					}
 				}
@@ -927,12 +937,12 @@ XKit.extensions.themes_plus = new Object({
 				var checkbox_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
-					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
+					if (typeof m_theme[obj] !== "undefined" && m_theme[obj] !== "") {
 						checkbox_value = m_theme[obj];
 					}
 				}
 
-				if (checkbox_value === "true" || checkbox_value === true){
+				if (checkbox_value === "true" || checkbox_value === true) {
 					checkbox_value = "selected";
 				} else {
 					checkbox_value = "";
@@ -952,7 +962,7 @@ XKit.extensions.themes_plus = new Object({
 				var color_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
-					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
+					if (typeof m_theme[obj] !== "undefined" && m_theme[obj] !== "") {
 						color_value = m_theme[obj];
 					}
 				}
@@ -977,12 +987,12 @@ XKit.extensions.themes_plus = new Object({
 				var image_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
-					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
+					if (typeof m_theme[obj] !== "undefined" && m_theme[obj] !== "") {
 						image_value = m_theme[obj];
 					}
 				}
 
-				if (image_value.substring(0,7) !== "http://") {
+				if (image_value.substring(0, 7) !== "http://") {
 					image_value = "http://" + image_value;
 				}
 
@@ -1035,14 +1045,14 @@ XKit.extensions.themes_plus = new Object({
 		if (!refresh_mode) {
 			$("#xkit-themes-plus-container").animate({ left: "0" }, 600);
 		} else {
-			$("#xkit-themes-plus-container").css("left","0px");
+			$("#xkit-themes-plus-container").css("left", "0px");
 		}
 
 		$(".xkit-themes-plus-option-panel-text-url").change(function(event) {
 
 			var m_option_id = $(this).parentsUntil(".xkit-themes-plus-option").parent().attr('data-option');
-			var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
-			var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
+			// var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
+			// var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
 
 			/*XKit.tools.remove_css("xkit-themes-plus-preview-" + m_option_id);
 
@@ -1079,32 +1089,30 @@ XKit.extensions.themes_plus = new Object({
 			var value = $(this).attr('data-value');
 
 			var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
-			var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
+			// var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
 
 			if (!value) {
-
 				value = $(m_of[0]).css("background-color");
-
 			}
 
-			var m_obj = this;
+			var this_picker = this;
 
 			var m_color = value;
 
-			if (m_color.substring(0,1) !== "#") { m_color = XKit.extensions.themes_plus.rgb_to_hex(m_color.replace('rgba','rgb')); }
+			if (m_color.substring(0, 1) !== "#") { m_color = XKit.extensions.themes_plus.rgb_to_hex(m_color.replace('rgba', 'rgb')); }
 
 			$(this).ColorPicker({
 				color: m_color,
-				onShow: function (colpkr) {
+				onShow: function(colpkr) {
 					$(colpkr).fadeIn(50);
 					return false;
 				},
-				onHide: function (colpkr) {
+				onHide: function(colpkr) {
 					$(colpkr).fadeOut(50);
 					return false;
 				},
-				onChange: function (hsb, hex, rgb) {
-					$(m_obj).css('backgroundColor', '#' + hex);
+				onChange: function(hsb, hex, rgb) {
+					$(this_picker).css('backgroundColor', '#' + hex);
 					/*XKit.tools.remove_css("xkit-themes-plus-preview-" + m_option_id);
 					var m_css = "";
 					for (var i=0;i<m_of.length;i++) {
@@ -1121,13 +1129,13 @@ XKit.extensions.themes_plus = new Object({
 
 		$("#xkit-themes-plus-import-export").click(function() {
 
-			XKit.window.show("Import/Export Theme", "<b>What would you like to do?</b><br/>To use a theme made by someone else, click \"Import Theme\". To share your theme, click \"Export Theme\": you will be presented with a code that you can share with other Themes+ users.","question","<div id=\"xkit-themes-plus-export-confirm\" class=\"xkit-button default\">Export Theme</div><div id=\"xkit-themes-plus-import-confirm\" class=\"xkit-button\">Import Theme</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+			XKit.window.show("Import/Export Theme", "<b>What would you like to do?</b><br/>To use a theme made by someone else, click \"Import Theme\". To share your theme, click \"Export Theme\": you will be presented with a code that you can share with other Themes+ users.", "question", "<div id=\"xkit-themes-plus-export-confirm\" class=\"xkit-button default\">Export Theme</div><div id=\"xkit-themes-plus-import-confirm\" class=\"xkit-button\">Import Theme</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 			$("#xkit-themes-plus-export-confirm").click(function() {
 
 				var m_data = "[XKIT_THEME|" + XKit.extensions.themes_plus.theme_compatibility + "|" + window.btoa(unescape(encodeURIComponent(JSON.stringify(XKit.extensions.themes_plus.create_theme_obj_from_settings())))) + "]";
 
-				var m_html = "<div id=\"xkit-themes-plus-share-code\" class=\"nano\">" +
+				var share_code_html = "<div id=\"xkit-themes-plus-share-code\" class=\"nano\">" +
 							"<div class=\"content\">" +
 								"<div id=\"xkit-themes-plus-share-code-inner\">" +
 									m_data +
@@ -1135,7 +1143,7 @@ XKit.extensions.themes_plus = new Object({
 							"</div>" +
 						"</div>";
 
-				XKit.window.show("Export Theme","Share the code below to let others use your theme!" + m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Export Theme", "Share the code below to let others use your theme!" + share_code_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 				$("#xkit-themes-plus-share-code").nanoScroller();
 				$("#xkit-themes-plus-share-code").nanoScroller({ scroll: 'top' });
@@ -1146,9 +1154,9 @@ XKit.extensions.themes_plus = new Object({
 
 			$("#xkit-themes-plus-import-confirm").click(function() {
 
-				var m_html = "<div style=\"\"><input type=\"text\" placeholder=\"Paste the XKit Themes+ theme code you have here.\"  id=\"xkit-themes-plus-input-code-code-code-code\" class=\"xkit-textbox\"></div>";
+				var import_html = "<div style=\"\"><input type=\"text\" placeholder=\"Paste the XKit Themes+ theme code you have here.\"  id=\"xkit-themes-plus-input-code-code-code-code\" class=\"xkit-textbox\"></div>";
 
-				XKit.window.show("Import Theme","<b>Theme Code:</b><br/>Only Themes+ Codes are accepted." + m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-themes-plus-confirm-input-code\">OK</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+				XKit.window.show("Import Theme", "<b>Theme Code:</b><br/>Only Themes+ Codes are accepted." + import_html, "info", "<div class=\"xkit-button default\" id=\"xkit-themes-plus-confirm-input-code\">OK</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 				$("#xkit-themes-plus-confirm-input-code").click(function() {
 
@@ -1173,7 +1181,7 @@ XKit.extensions.themes_plus = new Object({
 					var data_obj = null;
 					try {
 						data_obj = JSON.parse(decodeURIComponent(escape(window.atob(data))));
-					} catch(e) {
+					} catch (e) {
 						alert("Theme file corrupt or not compatible.");
 						return;
 					}
@@ -1210,11 +1218,11 @@ XKit.extensions.themes_plus = new Object({
 
 		$("#xkit-themes-plus-delete-theme").click(function() {
 
-			XKit.window.show("Delete Theme", "<b>You sure you want to delete this theme?</b><br/>You can not undo this with the Cancel button on the control panel, by the way.","warning","<div id=\"xkit-themes-plus-delete-theme-confirm\" class=\"xkit-button default\">Delete theme</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+			XKit.window.show("Delete Theme", "<b>You sure you want to delete this theme?</b><br/>You can not undo this with the Cancel button on the control panel, by the way.", "warning", "<div id=\"xkit-themes-plus-delete-theme-confirm\" class=\"xkit-button default\">Delete theme</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 			$("#xkit-themes-plus-delete-theme-confirm").click(function() {
 
-				XKit.storage.set("themes_plus","current_theme", " ");
+				XKit.storage.set("themes_plus", "current_theme", " ");
 
 				XKit.tools.remove_css("themes_plus_current_theme");
 
@@ -1261,13 +1269,13 @@ XKit.extensions.themes_plus = new Object({
 	save_theme: function() {
 
 		var save_str = "XKIT-BTOA!!" + window.btoa(unescape(encodeURIComponent(JSON.stringify(XKit.extensions.themes_plus.current_theme))));
-		XKit.storage.set("themes_plus","current_theme", save_str);
+		XKit.storage.set("themes_plus", "current_theme", save_str);
 
 	},
 
 	strip_html: function(txt) {
 
-		return txt.replace(/(<([^>]+)>)/ig,"");
+		return txt.replace(/(<([^>]+)>)/ig, "");
 
 	},
 
@@ -1285,7 +1293,7 @@ XKit.extensions.themes_plus = new Object({
 		$(".xkit-themes-plus-option-color").each(function() {
 
 			var m_option_id = $(this).parentsUntil(".xkit-themes-plus-option").parent().attr('data-option');
-			m_theme_obj[m_option_id] = XKit.extensions.themes_plus.rgb_to_hex($(this).css("background-color").replace('rgba','rgb'));
+			m_theme_obj[m_option_id] = XKit.extensions.themes_plus.rgb_to_hex($(this).css("background-color").replace('rgba', 'rgb'));
 
 		});
 

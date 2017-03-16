@@ -16,12 +16,13 @@ XKit.extensions.old_stats = new Object({
 		var followers_show = " ";
 		var drafts_show	= " ";
 		var queue_show = " ";
+		var processing_show = " ";
 
-		if (XKit.interface.where().inbox) { 
+		if (XKit.interface.where().inbox) {
 			return;
 		}
-		if (XKit.interface.where().likes) { 
-			return; 
+		if (XKit.interface.where().likes) {
+			return;
 		}
 
 		if (m_user.posts === 0) {

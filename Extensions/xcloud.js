@@ -1,5 +1,5 @@
 //* TITLE XCloud **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Sync XKit data on clouds **//
 //* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatable with STUDIOXENIX servers.**//
 //* DEVELOPER new-xkit **//
@@ -29,7 +29,7 @@ XKit.extensions.xcloud = new Object({
 
 		XKit.tools.init_css("xcloud");
 		this.load_user_login();
-		$("#xkit-cp-tab-xcloud").css("display","block");
+		$("#xkit-cp-tab-xcloud").css("display", "block");
 	},
 
 	reload_welcome_panel: function() {
@@ -153,12 +153,14 @@ XKit.extensions.xcloud = new Object({
 
 	panel: function() {
 
-		var m_html ="<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
+		var m_html = "<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
 					"<div id=\"xcloud-panel-right\">" + XKit.extensions.xcloud.return_panel_welcome() +
 					"</div>" +
-					"<div id=\"xcloud-panel-left\">&nbsp;</div>" +
+					'<div id="xcloud-panel-left"><div id="xcloud-local-datastore"><span style="color: whitesmoke; font-weight: bold;">Local Backup</span><br>' +
+						'<div id="xcloud-local-export" class="xcloud-local-button">Export</div><br>' +
+						'<div id="xcloud-local-import" class="xcloud-local-button">Import</div>' +
+					'</div></div>' +
 					"</div>";
-
 		return m_html;
 
 	},
@@ -178,12 +180,23 @@ XKit.extensions.xcloud = new Object({
 
 	panel_appended: function() {
 		var xcloud_url = this.get_xcloud_url();
+		var self = this;
 
+		var exportPanel = $("#xcloud-local-export");
+		exportPanel.unbind("click");
+		exportPanel.bind("click", function() {
+			self.local_export();
+		});
+
+		var importPanel = $("#xcloud-local-import");
+		importPanel.unbind("click");
+		importPanel.bind("click", function() {
+			self.local_import();
+		});
 
 		$("#xcloud-use-old").unbind('change');
-		$("#xcloud-use-old").bind('change', function(){
+		$("#xcloud-use-old").bind('change', function() {
 			XKit.extensions.xcloud.useoldserver = $(this).is(':checked');
-			console.log("Use XCloud old server: " + XKit.extensions.xcloud.useoldserver);
 		});
 
 		$("#xcloud-login").unbind("click");
@@ -201,12 +214,12 @@ XKit.extensions.xcloud = new Object({
 			var m_password = XKit.extensions.xcloud.md5($("#xcloud-login-password").val());
 
 			if ($.trim(m_username) === "" || $.trim($("#xcloud-login-password").val()) === "") {
-				XKit.window.show("Hey there!","Please enter a username and password.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Hey there!", "Please enter a username and password.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
 			if ($("#xcloud-login-password").val().length <= 5) {
-				XKit.window.show("Hey there!","Please enter a password that is at least 6 characters long.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Hey there!", "Please enter a password that is at least 6 characters long.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
@@ -218,7 +231,7 @@ XKit.extensions.xcloud = new Object({
 				onerror: function() {
 
 					XKit.extensions.xcloud.hide_overlay();
-					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 
 				},
@@ -228,14 +241,14 @@ XKit.extensions.xcloud = new Object({
 					var mdata = null;
 					try {
 						mdata = jQuery.parseJSON(response.responseText);
-					} catch(e) {
+					} catch (e) {
 						XKit.extensions.xcloud.hide_overlay();
-						XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 					}
 
 					if (mdata.server_down) {
-						XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 					}
 
@@ -264,14 +277,14 @@ XKit.extensions.xcloud = new Object({
 							err_title = "Username Taken";
 						}
 
-						XKit.window.show("Unable to sign up","<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Unable to sign up", "<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 
 					}
 				}
 			};
 
-			if(XKit.extensions.xcloud.useoldserver){
+			if (XKit.extensions.xcloud.useoldserver) {
 				registerRequest.method = "GET";
 				registerRequest.url += "?username=" + m_username + "&password=" + m_password;
 				registerRequest.json = false;
@@ -292,12 +305,12 @@ XKit.extensions.xcloud = new Object({
 			var m_password = XKit.extensions.xcloud.md5($("#xcloud-login-password").val());
 
 			if ($.trim(m_username) === "" || $.trim($("#xcloud-login-password").val()) === "") {
-				XKit.window.show("Hey there!","Please enter a username and password.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Hey there!", "Please enter a username and password.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
 			if ($("#xcloud-login-password").val().length <= 5) {
-				XKit.window.show("Hey there!","Please enter a password that is at least 6 characters long.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Hey there!", "Please enter a password that is at least 6 characters long.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
@@ -310,7 +323,7 @@ XKit.extensions.xcloud = new Object({
 				onerror: function() {
 
 					XKit.extensions.xcloud.hide_overlay();
-					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 
 				},
@@ -323,14 +336,14 @@ XKit.extensions.xcloud = new Object({
 					var mdata = null;
 					try {
 						mdata = jQuery.parseJSON(response.responseText);
-					} catch(e) {
+					} catch (e) {
 						XKit.extensions.xcloud.hide_overlay();
-						XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 					}
 
 					if (mdata.server_down) {
-						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 					}
 
@@ -374,7 +387,7 @@ XKit.extensions.xcloud = new Object({
 				}
 			};
 
-			if(XKit.extensions.xcloud.useoldserver){
+			if (XKit.extensions.xcloud.useoldserver) {
 				authorizationRequest.url += "?username=" + m_username + "&password=" + m_password;
 			} else {
 				authorizationRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password), "Content-Type": "application/json" };
@@ -454,6 +467,49 @@ XKit.extensions.xcloud = new Object({
 
 	},
 
+	local_export: function() {
+		var upload_data = this.create_export_data(false)[0];
+		var data_blob = new Blob([upload_data], {type: "text/plain"});
+
+
+		var dummyLink = document.createElement("a");
+		document.body.appendChild(dummyLink);
+		dummyLink.style = "display: none";
+
+		var fileName = "xcloud_payload.txt";
+		var url = window.URL.createObjectURL(data_blob);
+		dummyLink.href = url;
+		dummyLink.download = fileName;
+		dummyLink.click();
+
+		setTimeout(function() {
+			window.URL.revokeObjectURL(url);
+			XKit.extensions.xcloud.hide_overlay();
+		}, 100);
+
+	},
+
+	local_import: function() {
+		var self = this;
+		var element = document.createElement('input');
+		element.setAttribute('type', 'file');
+		element.addEventListener("change", function() {
+			XKit.extensions.xcloud.show_overlay(true);
+			if (this.files.length === 1) {
+				var reader  = new FileReader();
+				reader.addEventListener('loadend', function(result) {
+					self.process_restore({"data":result.currentTarget.result});
+				});
+				reader.readAsText(this.files[0]);
+			}
+
+		}, false);
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	},
+
+
 	show_overlay: function(fetch_mode) {
 
 		$("#xcloud-overlay-background").remove();
@@ -509,7 +565,7 @@ XKit.extensions.xcloud = new Object({
 			onerror: function() {
 
 				XKit.extensions.xcloud.hide_overlay();
-				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 
 			},
@@ -518,7 +574,7 @@ XKit.extensions.xcloud = new Object({
 				var data = jQuery.parseJSON(response.responseText);
 				if (data.server_down) {
 					XKit.extensions.xcloud.hide_overlay();
-					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 
@@ -549,7 +605,7 @@ XKit.extensions.xcloud = new Object({
 			}
 		};
 
-		if(XKit.extensions.xcloud.useoldserver){
+		if (XKit.extensions.xcloud.useoldserver) {
 			fetchRequest.url += "?username=" + m_username + "&password=" + m_password;
 		} else {
 			fetchRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password), "Content-Type": "application/json" };
@@ -572,14 +628,17 @@ XKit.extensions.xcloud = new Object({
 		try {
 			mdata.data = mdata.data.substring(3, mdata.data.length - 3);
 			m_obj = JSON.parse(XKit.extensions.xcloud.base64_decode(mdata.data));
-		} catch(e) {
+		} catch (e) {
 			XKit.extensions.xcloud.process_error("Unable to parse JSON");
+			this.hide_overlay();
+			return;
 		}
 
 
 
 		if (m_obj.identifier !== "XCLOUD") {
 			XKit.extensions.xcloud.process_error("Invalid Identifier");
+			this.hide_overlay();
 			return;
 		}
 
@@ -604,12 +663,12 @@ XKit.extensions.xcloud = new Object({
 			var extension_settings = {};
 			try {
 				//Check if the payloads is using utf8.
-				if(m_obj.use_utf8) {
+				if (m_obj.use_utf8) {
 					extension_settings = JSON.parse(XKit.extensions.xcloud.b64_to_utf8(mext.preferences));
 				} else {
 					extension_settings = JSON.parse(XKit.extensions.xcloud.base64_decode(mext.preferences));
 				}
-			} catch(e) {
+			} catch (e) {
 				XKit.extensions.xcloud.errors_list.push("Unable to restore settings of " + extension_name);
 			}
 			var extension_enabled = mext.enabled;
@@ -631,15 +690,15 @@ XKit.extensions.xcloud = new Object({
 			full_list.push(extension_name);
 
 
-			if(extension_name !== "xcloud") {
+			if (extension_name !== "xcloud") {
 				XKit.tools.set_setting("xkit_extension_storage__" + extension_name, JSON.stringify(extension_settings));
 			}
 
 		}
 
-		for(var i=0;i<m_installed.length;i++) {
+		for (var i = 0; i < m_installed.length; i++) {
 
-			if (m_installed[i].substring(0,5) === "xkit_") { continue; }
+			if (m_installed[i].substring(0, 5) === "xkit_") { continue; }
 			if (full_list.indexOf(m_installed[i]) == -1) {
 
 				XKit.installed.remove(m_installed[i]);
@@ -659,16 +718,21 @@ XKit.extensions.xcloud = new Object({
 		//Grab the gallery to check available extensions.
 		//We want to exclude unavailable extensions since the install script will make the whole thing partially succeed.
 		// Also to make this backwards compatible we need to use the page function which will go to xkitcs.com for XKit 7.5 and gh_pages for New-XKit
-		XKit.download.page('gallery.php', function(gallery_json){
-			XKit.extensions.xcloud.extensions_upgraded = false;
+		XKit.download.page('gallery.php', function(gallery_json) {
+			if (gallery_json.errors) {
+				XKit.extensions.xcloud.hide_overlay();
+				XKit.window.show("Could not restore", "Couldn't download extension data from the XKit servers.<br/><br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			} else {
+				XKit.extensions.xcloud.extensions_upgraded = false;
 
-			var extension_array = [];
-			$.each(gallery_json.extensions, function(index, value){
-				extension_array.push(value.name);
-			});
+				var extension_array = [];
+				$.each(gallery_json.extensions, function(index, value) {
+					extension_array.push(value.name);
+				});
 
-			XKit.extensions.xcloud.gallery_available = extension_array;
-			XKit.extensions.xcloud.process_download_extension_next();
+				XKit.extensions.xcloud.gallery_available = extension_array;
+				XKit.extensions.xcloud.process_download_extension_next();
+			}
 		});
 
 
@@ -688,11 +752,11 @@ XKit.extensions.xcloud = new Object({
 
 		XKit.progress.value("xcloud-restore-process", perc);
 
-		if($.inArray(m_name, XKit.extensions.xcloud.gallery_available) >= 0){
+		if ($.inArray(m_name, XKit.extensions.xcloud.gallery_available) >= 0) {
 			XKit.console.add("XCloud restore -> " + m_name);
 			XKit.install(m_name, function(mdata) {
 				if (mdata.server_down || mdata.errors) {
-					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + extension_name);
+					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + m_name);
 				} else if (XKit.extensions.xcloud.extensions_to_download_enabled[XKit.extensions.xcloud.extensions_to_download_count] === false) {
 					XKit.installed.disable(XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count]);
 				}
@@ -716,7 +780,7 @@ XKit.extensions.xcloud = new Object({
 
 		var message = "";
 
-		if(XKit.extensions.xcloud.extensions_upgraded){
+		if (XKit.extensions.xcloud.extensions_upgraded) {
 			message = "<b>XCloud successfully restored your settings and your XKit configuration has been synced with our servers.</b><br/>Please refresh the page to continue.";
 		} else {
 			message = "<b>XCloud successfully restored your settings.</b><br/>Please refresh the page to continue.";
@@ -724,15 +788,15 @@ XKit.extensions.xcloud = new Object({
 
 		XKit.extensions.xkit_preferences.close();
 		XKit.extensions.xcloud.hide_overlay();
-		XKit.window.show("Restore complete",message,"info");
+		XKit.window.show("Restore complete", message, "info");
 	},
 
 	process_error: function(txt) {
 
-		XKit.window.show("Could not restore","Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Could not restore", "Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 	},
 
-	start_upload: function() {
+	create_export_data: function(limit_data) {
 
 		XKit.extensions.xcloud.show_overlay();
 
@@ -745,10 +809,10 @@ XKit.extensions.xcloud = new Object({
 		var skipping = [];
 		var skipping_size = [];
 
-		for (var i=0; i<installed.length; i++) {
+		for (var i = 0; i < installed.length; i++) {
 
 			// Skip internal extensions.
-			if (installed[i].substring(0,5) === "xkit_") {
+			if (installed[i].substring(0, 5) === "xkit_") {
 				continue;
 			}
 
@@ -757,7 +821,7 @@ XKit.extensions.xcloud = new Object({
 
 			//XCloud data was being pushed up with user's md5 hash which is kind of a security issue.
 			//	Instead we'll just not upload the XCloud extension.  We know the user will have it when they restore.
-			if (installed[i] === "xcloud"){
+			if (installed[i] === "xcloud") {
 				m_data = this.utf8_to_b64(JSON.stringify({}));
 			} else {
 				m_data = this.utf8_to_b64(JSON.stringify(XKit.storage.get_all(installed[i])));
@@ -768,12 +832,10 @@ XKit.extensions.xcloud = new Object({
 			m_to_add.preferences = m_data;
 			m_to_add.enabled = XKit.installed.enabled(installed[i]);
 
-			if ((m_data.length / 1024 / 1024) >= 1.5) {
-				console.log("Skipping " + m_to_add.extension + " because length = " + (m_data.length / 1024 / 1024) + " kilobytes");
+			if (limit_data && (m_data.length / 1024 / 1024) >= 1.5) {
 				skipping.push(m_to_add.extension);
 				skipping_size.push((m_data.length / 1024 / 1024));
 			} else {
-				console.log("Added " + m_to_add.extension + " to upload object. Length = " + (m_data.length / 1024 / 1024) + " kilobytes");
 				to_send.settings.push(m_to_add);
 			}
 
@@ -785,13 +847,21 @@ XKit.extensions.xcloud = new Object({
 		//Add this flag to the payload so we know we can unescape the payload.
 		to_send.use_utf8 = true;
 
-		console.log("Encoding upload object.");
 
 		to_send = JSON.stringify(to_send);
 		console.log("Original size = " + (to_send.length / 1024 / 1024) + " megabytes");
 
 		//We need to base64 encode it without utf8 support so it's compatible with the old payload.
 		to_send = "XCS" + XKit.extensions.xcloud.base64_encode(to_send) + "XCE";
+
+		return [to_send, skipping];
+	},
+
+	start_upload: function() {
+		XKit.extensions.xcloud.show_overlay();
+		var payload_pair = this.create_export_data(true);
+		var to_send = payload_pair[0];
+		var skipping = payload_pair[1];
 
 		if ((to_send.length / 1024 / 1024) >= 5) {
 
@@ -801,12 +871,13 @@ XKit.extensions.xcloud = new Object({
 		}
 
 		if (skipping.length > 0) {
-			m_html = "<ol>";
-			for (var j=0; j<skipping.length; j++) {
-				m_html += "<li><b>" + XKit.installed.title(skipping[j]) + "</b> &middot; " + Math.ceil(skipping_size[j]) + " MB</li>";
+			var m_html = "<ol>";
+			for (var i = 0; i < skipping.length; i++) {
+				m_html += "<li><b>" + XKit.installed.title(skipping[i]) + "</b>";
+				// &middot; " + Math.ceil(this.skipping_size[i]) + " MB</li>";
 			}
 			m_html += "</ol>";
-			XKit.window.show("Skipping some extensions","The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." + m_html + "<small style=\"color: rgb(110,110,110);\">If these extensions have data that you can remove, please try removing them and retry the backup process. If you are not using these extensions, click on \"Reset Settings\" button on top-right corner of their control panel to free up space on your computer.</small>", "warning", "<div class=\"xkit-button default\" id=\"xkit-xcloud-backup-skip-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Skipping some extensions", "The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." + m_html + "<small style=\"color: rgb(110,110,110);\">If these extensions have data that you can remove, please try removing them and retry the backup process. If you are not using these extensions, click on \"Reset Settings\" button on top-right corner of their control panel to free up space on your computer.</small>", "warning", "<div class=\"xkit-button default\" id=\"xkit-xcloud-backup-skip-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 			$("#xkit-xcloud-backup-skip-continue").click(function() {
 				XKit.window.close();
 				XKit.extensions.xcloud.send_upload_data(to_send);
@@ -831,7 +902,7 @@ XKit.extensions.xcloud = new Object({
 			onerror: function() {
 
 				XKit.extensions.xcloud.hide_overlay();
-				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 
 			},
@@ -840,9 +911,9 @@ XKit.extensions.xcloud = new Object({
 				var mdata = null;
 				try {
 					mdata = jQuery.parseJSON(response.responseText);
-				} catch(e) {
+				} catch (e) {
 					XKit.extensions.xcloud.hide_overlay();
-					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 				if (mdata.errors === "false") {
@@ -873,13 +944,13 @@ XKit.extensions.xcloud = new Object({
 						err_title = "Wrong Password";
 					}
 
-					XKit.window.show("Unable to complete synchronization","<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Unable to complete synchronization", "<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				}
 			}
 		};
 
 
-		if(XKit.extensions.xcloud.useoldserver){
+		if (XKit.extensions.xcloud.useoldserver) {
 			uploadRequest.data = "username=" + m_username + "&password=" + m_password + "&" + "data=" + to_send;
 			uploadRequest.json = false;
 		} else {
@@ -898,7 +969,7 @@ XKit.extensions.xcloud = new Object({
 
 
 		if ($("#xcloud-welcome-panel").hasClass("forced")) {
-			$("#xcloud-welcome-panel").css("left","-100%");
+			$("#xcloud-welcome-panel").css("left", "-100%");
 			$("#xcloud-welcome-panel").removeClass("forced");
 		}
 
@@ -929,8 +1000,8 @@ XKit.extensions.xcloud = new Object({
 
 	save_user_login: function() {
 
-		XKit.storage.set("xcloud","username", XKit.extensions.xcloud.username);
-		XKit.storage.set("xcloud","password", "[" + XKit.extensions.xcloud.password + "]");
+		XKit.storage.set("xcloud", "username", XKit.extensions.xcloud.username);
+		XKit.storage.set("xcloud", "password", "[" + XKit.extensions.xcloud.password + "]");
 		XKit.storage.set("xcloud", "useoldserver", XKit.extensions.xcloud.useoldserver + "");
 
 	},
@@ -945,7 +1016,7 @@ XKit.extensions.xcloud = new Object({
 		//default use old server so users upgrading won't have to relogin.
 		XKit.extensions.xcloud.useoldserver = XKit.storage.get("xcloud", "useoldserver", "true") === "true";
 
-		if (XKit.extensions.xcloud.password.substring(0,1) === "[") {
+		if (XKit.extensions.xcloud.password.substring(0, 1) === "[") {
 			if (XKit.extensions.xcloud.password.substring(XKit.extensions.xcloud.password.length - 1) === "]") {
 				XKit.extensions.xcloud.password = XKit.extensions.xcloud.password.substring(1, XKit.extensions.xcloud.password.length - 1);
 			}
@@ -967,6 +1038,7 @@ XKit.extensions.xcloud = new Object({
 
 
 	md5: function(str) {
+		/* eslint-disable id-length */
 
 		// http://kevin.vanzonneveld.net
 		// +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
@@ -980,11 +1052,11 @@ XKit.extensions.xcloud = new Object({
 		// *     returns 1: '6e658d4bfcb59cc13f96c14450ac40b9'
 		var xl;
 
-		var rotateLeft = function (lValue, iShiftBits) {
+		var rotateLeft = function(lValue, iShiftBits) {
 			return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
 		};
 
-		var addUnsigned = function (lX, lY) {
+		var addUnsigned = function(lX, lY) {
 			var lX4, lY4, lX8, lY8, lResult;
 			lX8 = (lX & 0x80000000);
 			lY8 = (lY & 0x80000000);
@@ -1005,42 +1077,42 @@ XKit.extensions.xcloud = new Object({
 			}
 		};
 
-		var _F = function (x, y, z) {
+		var _F = function(x, y, z) {
 			return (x & y) | ((~x) & z);
 		};
-		var _G = function (x, y, z) {
+		var _G = function(x, y, z) {
 			return (x & z) | (y & (~z));
 		};
-		var _H = function (x, y, z) {
+		var _H = function(x, y, z) {
 			return (x ^ y ^ z);
 		};
-		var _I = function (x, y, z) {
+		var _I = function(x, y, z) {
 			return (y ^ (x | (~z)));
 		};
 
-		var _FF = function (a, b, c, d, x, s, ac) {
+		var _FF = function(a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_F(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
 		};
 
-		var _GG = function (a, b, c, d, x, s, ac) {
+		var _GG = function(a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_G(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
 		};
 
-		var _HH = function (a, b, c, d, x, s, ac) {
+		var _HH = function(a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_H(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
 		};
 
-		var _II = function (a, b, c, d, x, s, ac) {
+		var _II = function(a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_I(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
 		};
 
-		var convertToWordArray = function (str) {
+		var convertToWordArray = function(word) {
 			var lWordCount;
-			var lMessageLength = str.length;
+			var lMessageLength = word.length;
 			var lNumberOfWords_temp1 = lMessageLength + 8;
 			var lNumberOfWords_temp2 = (lNumberOfWords_temp1 - (lNumberOfWords_temp1 % 64)) / 64;
 			var lNumberOfWords = (lNumberOfWords_temp2 + 1) * 16;
@@ -1050,7 +1122,7 @@ XKit.extensions.xcloud = new Object({
 			while (lByteCount < lMessageLength) {
 				lWordCount = (lByteCount - (lByteCount % 4)) / 4;
 				lBytePosition = (lByteCount % 4) * 8;
-				lWordArray[lWordCount] = (lWordArray[lWordCount] | (str.charCodeAt(lByteCount) << lBytePosition));
+				lWordArray[lWordCount] = (lWordArray[lWordCount] | (word.charCodeAt(lByteCount) << lBytePosition));
 				lByteCount++;
 			}
 			lWordCount = (lByteCount - (lByteCount % 4)) / 4;
@@ -1061,7 +1133,7 @@ XKit.extensions.xcloud = new Object({
 			return lWordArray;
 		};
 
-		var wordToHex = function (lValue) {
+		var wordToHex = function(lValue) {
 			var wordToHexValue = "",
 				wordToHexValue_temp = "",
 				lByte, lCount;
@@ -1177,6 +1249,7 @@ XKit.extensions.xcloud = new Object({
 		var temp = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
 
 		return temp.toLowerCase();
+		/* eslint-enable id-length */
 	},
 
 	utf8_encode: function(argString) {
@@ -1205,8 +1278,8 @@ XKit.extensions.xcloud = new Object({
 
 		start = end = 0;
 		stringl = string.length;
-		for (var n = 0; n < stringl; n++) {
-			var c1 = string.charCodeAt(n);
+		for (var i = 0; i < stringl; i++) {
+			var c1 = string.charCodeAt(i);
 			var enc = null;
 
 			if (c1 < 128) {
@@ -1223,9 +1296,9 @@ XKit.extensions.xcloud = new Object({
 					( c1        & 63) | 128
 				);
 			} else { // surrogate pairs
-				if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + n); }
-				var c2 = string.charCodeAt(++n);
-				if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (n-1)); }
+				if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + i); }
+				var c2 = string.charCodeAt(++i);
+				if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (i - 1)); }
 				c1 = ((c1 & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
 				enc = String.fromCharCode(
 					(c1 >> 18)       | 240,
@@ -1239,7 +1312,7 @@ XKit.extensions.xcloud = new Object({
 					utftext += string.slice(start, end);
 				}
 				utftext += enc;
-				start = end = n + 1;
+				start = end = i + 1;
 			}
 		}
 
@@ -1294,13 +1367,13 @@ XKit.extensions.xcloud = new Object({
 
 		enc = tmp_arr.join('');
 
-		var r = data.length % 3;
+		var padding = data.length % 3;
 
-		return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+		return (padding ? enc.slice(0, padding - 3) : enc) + '==='.slice(padding || 3);
 
 	},
 
-	base64_decode: function (data) {
+	base64_decode: function(data) {
 		// http://kevin.vanzonneveld.net
 		// +   original by: Tyler Akins (http://rumkin.com)
 		// +   improved by: Thunder.m

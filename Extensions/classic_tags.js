@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.3 **//
+//* VERSION 1.6.4 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -153,37 +153,37 @@ XKit.extensions.classic_tags = new Object({
 							return;
 						}
 
-						var newer_posts_count = data.response.map(function (post) {
+						var newer_posts_count = data.response.map(function(post) {
 							return post.timestamp;
-						}).filter(function (timestamp) {
+						}).filter(function(timestamp) {
 							return timestamp > newest_post_seen;
 						}).length;
 
 						promise.resolve(newer_posts_count);
-					} catch(e) {
+					} catch (e) {
 						fail();
 					}
 				}
 			});
-		} catch(e) {
+		} catch (e) {
 			fail();
 		}
 
-		return promise.then(function (count) {
+		return promise.then(function(count) {
 			if (count === self.max_posts_per_tag) { count += "+"; }
 			self.tagcounts[tag_name] = count;
 			return count;
 		});
 	},
 
-	update_tag_timestamp: function () {
+	update_tag_timestamp: function() {
 		try {
 			var current_tag = $(".tag_controls .tag").text().trim();
 			var newest_post = $(".posts .post[data-id]").first();
 			var post_id = newest_post.attr("data-id");
 			var post_data = newest_post.attr("data-json");
 			var blog_url = JSON.parse(post_data)["tumblelog-data"].uuid;
-			return XKit.extensions.classic_tags.get_post_timestamp(blog_url, post_id).then(function (timestamp) {
+			return XKit.extensions.classic_tags.get_post_timestamp(blog_url, post_id).then(function(timestamp) {
 				XKit.storage.set("classic_tags", "lastseen#" + current_tag, timestamp);
 			});
 		} catch (e) {
@@ -192,7 +192,7 @@ XKit.extensions.classic_tags = new Object({
 		}
 	},
 
-	update_tag_counts: function (next_update) {
+	update_tag_counts: function(next_update) {
 		var self = this;
 		var new_post_count_promises = [];
 
@@ -205,7 +205,7 @@ XKit.extensions.classic_tags = new Object({
 		if (self.preferences.show_tags_on_sidebar.value) {
 			var list = $("#xtags");
 			var list_hidden = list.hasClass("hidden");
-			$(".xtag").each(function () {
+			$(".xtag").each(function() {
 				var li = $(this);
 				var anchor = li.find(".result_link");
 				var tag_name = anchor.attr("data-tag-result");
@@ -213,13 +213,13 @@ XKit.extensions.classic_tags = new Object({
 					return true;
 				}
 
-				fetch_count(tag_name).then(function (count) {
+				fetch_count(tag_name).then(function(count) {
 					if (!count) { return; }
 					if (list_hidden) {
 						list.removeClass("hidden");
 						list_hidden = false;
 					}
-					
+
 					li.removeClass("hidden");
 					var existing_count = anchor.find(".count");
 					if (existing_count.length) {
@@ -230,7 +230,7 @@ XKit.extensions.classic_tags = new Object({
 				});
 			});
 		} else {
-			$("#popover_search .result_link").each(function () {
+			$("#popover_search .result_link").each(function() {
 				var link = $(this);
 				var tag_name = link.attr("data-tag-result");
 				var count = self.tagcounts[tag_name];
@@ -243,8 +243,8 @@ XKit.extensions.classic_tags = new Object({
 		var search = $("#search_query");
 		var new_label = "Search [new]";
 		if (self.preferences.show_new_notification.value && search.attr("placeholder") !== new_label) {
-			$.when.apply($, new_post_count_promises).then(function () {
-				var any_new_posts = Array.prototype.some.call(arguments, function (count) { return !!count; });
+			$.when.apply($, new_post_count_promises).then(function() {
+				var any_new_posts = Array.prototype.some.call(arguments, function(count) { return !!count; });
 				if (any_new_posts) {
 					search.attr("placeholder", new_label);
 				}
@@ -266,16 +266,16 @@ XKit.extensions.classic_tags = new Object({
 			}
 
 			if (XKit.interface.where().tagged && !location.href.match(/before=[0-9]+/i)) {
-				XKit.extensions.classic_tags.update_tag_timestamp().then(function () {
+				XKit.extensions.classic_tags.update_tag_timestamp().then(function() {
 					XKit.extensions.classic_tags.show();
 				});
 			} else {
 				XKit.extensions.classic_tags.show();
 			}
 
-		} catch(e) {
+		} catch (e) {
 
-			XKit.console.add("Can't run Classic Tags:" + e.message);
+			console.error("Can't run Classic Tags:" + e.message);
 
 		}
 	},
@@ -306,7 +306,7 @@ XKit.extensions.classic_tags = new Object({
 					$("#right_column").append(m_html);
 
 				} else {
-					
+
 					if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
 						$("#right_column").prepend(m_html);
 					} else if ($("ul.controls_section:eq(1)").length > 0) {
@@ -328,7 +328,6 @@ XKit.extensions.classic_tags = new Object({
 
 		$(".tracked_tag").each(function() {
 			var result = $(this).find(".result_link");
-			var tag = result.attr('data-tag-result');
 			var href = result.attr('href');
 
 			if ($("body").attr('data-page-root') === href) {
@@ -343,25 +342,23 @@ XKit.extensions.classic_tags = new Object({
 
 			var m_title = $(this);
 			var result_title = $(m_title).find(".result_title");
-			result_title.html(result_title.html().replace("#",""));
+			result_title.html(result_title.html().replace("#", ""));
 
 			m_html = m_html + '<li class="xtag ' + extra_classes + '"><div class="hide_overflow">' + $(m_title).html() + '</div></li>';
-
 		});
+
 		if (m_html !== "" && XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
-			var extra_class = XKit.extensions.classic_tags.preferences.only_new_tags.value ? "hidden": "";
+			var extra_class = XKit.extensions.classic_tags.preferences.only_new_tags.value ? "hidden" : "";
 			m_html = '<ul class="controls_section ' + extra_class + '" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
 
 			if (document.location.href.indexOf('/tagged/') !== -1) {
-
 				$("#right_column").children(".tag_controls").after(m_html);
 			} else if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
 			    $("#right_column").prepend(m_html);
 			} else if ($("#xim_small_links").length > 0) {
 				$("#xim_small_links").after(m_html);
 			} else {
-			    //$("#right_column").append(m_html);
-				$(".controls_section_radar").before(m_html);
+				$("#right_column").prepend(m_html);
 			}
 		}
 

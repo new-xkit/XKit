@@ -1,20 +1,9 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.4.2 **//
+//* VERSION 6.8.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
-XKit.extensions.lang_english = {
-
-	common: {
-
-		"ok": "OK",
-		"cancel": "Cancel"
-
-	}
-
-};
-
-XKit.api_key = "Ux4LGODTVuvFBSRAelySTNT1Mucd4xQcVNXLxbpMraEFVFmlVK";
+XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
 
 XKit.extensions.xkit_patches = new Object({
 
@@ -32,13 +21,13 @@ XKit.extensions.xkit_patches = new Object({
 
 		if ($("#unfollow_button").length > 0 || $("#pageCounter").length > 0) {
 
-			if (XKit.storage.get("xkit_patches","shown_unfollower_hater_message","") === "true") { return; }
+			if (XKit.storage.get("xkit_patches", "shown_unfollower_hater_message", "") === "true") { return; }
 
 			XKit.window.show("Unfollower Hater found", "<b>Unfollower Hater causes problems with XKit, including but not limited to TagViewer and Quick Tags not working properly, and really slow page response on tumblr.com/blog/[url] pages.</b><br/><br/>You are not required to remove it in order to use XKit, but no support will be provided to you if you don't disable it.<br/><small style=\"color: rgb(120,120,120);\">This message will not be displayed again once you click \"OK\".</small>", "error", "<div id=\"xkit-patches-unfollower-hater-ok\" class=\"xkit-button default\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/60595138775/quick-tags-tagviewer-and-unfollower-hater\" target=\"_BLANK\" class=\"xkit-button\">More information</a>");
 
 			$("#xkit-patches-unfollower-hater-ok").click(function() {
 
-				XKit.storage.set("xkit_patches","shown_unfollower_hater_message","true");
+				XKit.storage.set("xkit_patches", "shown_unfollower_hater_message", "true");
 				XKit.window.close();
 
 			});
@@ -47,281 +36,458 @@ XKit.extensions.xkit_patches = new Object({
 
 	},
 
-	do_support_links: function() {
-		XKit.installed.when_running("show_more", function() {
-			$(document).on('click','.tumblelog_menu_btn', XKit.extensions.xkit_patches.patch_ask);
-		});
-	},
-
-	patch_ask: function() {
-
-		var m_parent;
-		if ($(".tumblelog_popover_v1").length > 0) {
-			m_parent = $(".tumblelog_popover_v1").find(".tumblelog_menu_popover").find("ul");
-		} else {
-			m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
-		}
-
-		//// console.log("->" + $(m_parent).html());
-
-		if ($(m_parent).find(".ask").attr('data-tumblelog-name') === "xkit-extension") {
-
-			$(m_parent).find(".ask").html("XKit Support");
-			$(m_parent).find(".ask").addClass("xkit-support-ask");
-			$(m_parent).find(".ask").removeClass("ask");
-
-		}
-
-	},
-
-	check_user_agent: function() {
-
-		var from_framework = XKit.browser().name;
-
-		var is_spoofed = false;
-
-		if ($("body").hasClass("is_ie")) {
-			is_spoofed = true;
-		}
-
-		if (is_spoofed) {
-
-			XKit.notifications.add("<b>User Agent Switcher detected.</b> User Agent Switchers cause a lot of problems with XKit and other extensions. Please disable it before sending a bug report.","ok");
-
-		}
-
-	},
-
+	/**
+	 * Injects xkit_patches into the XKit object.
+	 */
 	run: function() {
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
 
-		this.check_user_agent();
+		/**
+		 * Get the user's currently selected blog.
+		 * @return {String} blog id, e.g. new-xkit-extension.
+		 */
+		XKit.tools.get_current_blog = function() {
+			var avatar = $("#post_controls_avatar");
+			if (avatar.length > 0) {
+				var image = avatar.find(".post_avatar_image");
+				if (image.length > 0) {
+					return image.attr("alt");
+				}
+			}
+			XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
+			return XKit.tools.get_blogs()[0];
+		};
 
-XKit.tools.get_current_blog = function() {
-	var avatar = $("#post_controls_avatar");
-	if (avatar.length > 0) {
-		var image = avatar.find(".post_avatar_image");
-		if (image.length > 0) {
-			return image.attr("alt");
-		}
-	}
-	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
-	return XKit.tools.get_blogs()[0];
-};
-
-XKit.tools.parse_version = function(versionString) {
-	if (typeof(versionString) === "undefined" || versionString === "") {
-		return {major: 0, minor: 0, patch: 0};
-	}
-	var version = {};
-	var versionSplit = versionString.split(".");
-	if (versionSplit.length < 3) {
-		var revisionString = versionSplit[1].toLowerCase().split("rev");
-		version.major = parseInt(versionSplit[0]);
-		version.minor = parseInt(revisionString[0].trim());
-		if (typeof(revisionString[1]) === "undefined") {
-			version.patch = 0;
-		} else {
+		/**
+		 * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
+		 * @param {String} versionString
+		 * @return {Object} version descriptor with keys major, minor, and patch
+		 */
+		XKit.tools.parse_version = function(versionString) {
+			if (typeof(versionString) === "undefined" || versionString === "") {
+				return {major: 0, minor: 0, patch: 0};
+			}
+			var version = {};
+			var versionSplit = versionString.split(".");
+			if (versionSplit.length < 3) {
+				var revisionString = versionSplit[1].toLowerCase().split("rev");
+				version.major = parseInt(versionSplit[0]);
+				version.minor = parseInt(revisionString[0].trim());
+				if (typeof(revisionString[1]) === "undefined") {
+					version.patch = 0;
+				} else {
 			// No need for toLowerCase here since we already do that when we split versionSplit above
-			version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
-		}
-	} else {
-		version.major = parseInt(versionSplit[0]);
-		version.minor = parseInt(versionSplit[1]);
-		version.patch = parseInt(versionSplit[2]);
-	}
-	return version;
-};
+					version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
+				}
+			} else {
+				version.major = parseInt(versionSplit[0]);
+				version.minor = parseInt(versionSplit[1]);
+				version.patch = parseInt(versionSplit[2]);
+			}
+			return version;
+		};
 
-XKit.tools.get_blogs = function() {
-	var m_blogs = [];
+		XKit.extensions.xkit_patches.blog_list_message_listener = function(e) {
+			if (e.origin == window.location.protocol + "//" + window.location.host &&
+		e.data.hasOwnProperty("xkit_blogs")) {
 
-	// Approach 2: Find where Tumblr invokes its bootstrap function
-	var script_tags = $("script");
-	for (var i = 0; i < script_tags.length; i++) {
-		var s = $(script_tags[i]).html();
+				XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+			}
+		};
 
-		if (s.indexOf("require(\"context\").bootloader") < 0) {
-			continue;
-		}
+		window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 
-		s = s.replace("require(\"context\").bootloader(", "");
-		s = s.substring(0, s.length - 2);
 
-		var obj = JSON.parse(s);
-		var channels = obj.Context.userinfo.channels;
+		/**
+		 * @return {Array<String>} user's blogs' IDs
+		 */
+		XKit.tools.get_blogs = function() {
+			var m_blogs = [];
 
-		for (var item in channels) {
-			m_blogs.push(channels[item].name);
-		}
+			// Approach 1: Scrape the tumblelog models for ones we control
+			// code is above
 
-		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
-		return m_blogs;
-	}
-
-	// Approach 1: Scrape the hidden tab switching element
-	var tab_switching = $("#tab_switching");
-	if (tab_switching.length > 0) {
-		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
-			m_blogs.push($(this).attr('id').replace(/^tab_blog_/,''));
-		});
-		if (m_blogs.length > 0) {
-			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-			return m_blogs;
-		}
-	}
-
-	// Approach 3: Scrape from the dynamically-created popover element.
-	if ($("#popover_blogs").length > 0) {
-		$("#popover_blogs > .popover_inner").children(".item").not(":last-child").each(function(index, obj) {
-			var mX = $(this).attr("id");
-			mX = mX.substring(9, mX.length);
-			m_blogs.push(mX);
-		});
-		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
-		return m_blogs;
-	}
-
-	// Approach 4: Use the last good cached data that we saved in settings
-	m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
-	if (m_blogs !== "") {
-		return m_blogs.split(";");
-	}
-};
-
-XKit.tools.make_gist = function(text, name) {
-
-	if(!name){
-		name = "xkit-gist";
-	}
-	var files = {};
-	files[name] = {content: text};
-	return $.ajax({
-		url: 'https://api.github.com/gists',
-		type: 'POST',
-		data: JSON.stringify({
-			description: "automatically created by xkit",
-			public: false,
-			files: files,
-		}),
-		// '{"description": "a gist for a user with token api call via ajax","public": false,"files": {"file1.txt": {"content": "testing 1 2 3"}}}'
-	}).then(function(resp){
-		return resp.html_url;
-	});
-};
-
-XKit.tools.add_function = function(func, exec, addt) {
-	try {
-		var script = document.createElement("script");
-		script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
-		script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
-		document.body.appendChild(script);
-	} catch(e) {
-		alert(e.message);
-	}
-};
-
-XKit.tools.dump_config = function(){
-	var values = GM_listValues();
-	if(values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
-		values = Object.keys(window.xkit_storage);
-	}
-	return values.reduce(function(obj, x) {
-		obj[x] = GM_getValue(x);
-		return obj;
-	}, {});
-};
-
-	XKit.browser = function() {
-
-		var to_return = {};
-
-		to_return.name = "UNKNOWN";
-		to_return.spoofed = false;
-		to_return.chrome = false;
-		to_return.firefox = false;
-		to_return.safari = false;
-		to_return.opera = false;
-		to_return.version = 0;
-		to_return.mobile = false;
-
-		// First, let's check if it's chrome.
-		if (window.chrome) {
-			to_return.chrome = true;
-		} else {
-			// it can still be chrome?
-			var is_chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-			to_return.chrome = is_chrome;
-		}
-
-		function get_ua_version(user_agent) {
-			var index = navigator.userAgent.toLowerCase().indexOf(user_agent);
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + (user_agent.length)));
-			return real_version;
-		}
-
-		if (to_return.chrome === true) {
-			// Get version.
-			to_return.name = "Google Chrome";
-			to_return.version = get_ua_version("chrome/");
-		}
-
-		// Then, let's check if it's firefox.
-		if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-			to_return.name = "Mozilla Firefox";
-			to_return.firefox = true;
-			to_return.version = get_ua_version("firefox/");
-		}
-
-		// Blahblah Safari blah.
-		if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
-			to_return.name = "Apple Safari";
-			to_return.safari = true;
-			to_return.firefox = false;
-			to_return.version = get_ua_version("safari/");
-		}
-
-		to_return.ug = navigator.userAgent.toLowerCase();
-
-		// Check if there is spoofing!
-		// A lot of people now switch to IE.
-		if (navigator.userAgent.indexOf('MSIE') > -1) {
-			to_return.spoofed = true;
-		}
-
-		// Check if you're viewing the mobile version
-		if ($('.is_mobile').length > 0) {
-			to_return.mobile = true;
-		}
-
-		return to_return;
-
-	};
-
-		try {
-
-			XKit.retina = window.devicePixelRatio > 1;
-
-			if (XKit.retina === true) {
-				// console.log("Retina screen mode.");
+			if (XKit.blogs_from_tumblr) {
+				m_blogs = XKit.blogs_from_tumblr;
+				XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+				return m_blogs;
 			}
 
-		} catch(e) {
+			// Approach 2: Scrape from the dynamically-created popover element.
 
-			// console.log("!!!!!!" + e.message);
+			if (!$("[data-js-channel-list]").length) {
+				// create the popover element
+				var account_menu = $("#account_button");
+				account_menu.click();
+				setTimeout(function() {
+					account_menu.click();
+				}, 10);
+			}
 
-		}
+			var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
+			if (blog_menu_items.length) {
+
+				blog_menu_items.each(function() {
+					var blog_url = this.id.split("--")[1];
+					if (blog_url) {
+						m_blogs.push(blog_url);
+					}
+				});
+
+				if (m_blogs.length) {
+					XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+					return m_blogs;
+				}
+			}
+
+			// Approach 3: Use the last good cached data that we saved in settings
+			m_blogs = XKit.tools.get_setting("xkit_cached_blogs", "");
+			if (m_blogs !== "") {
+				return m_blogs.split(";");
+			}
+		};
+
+		/**
+		 * Create an anonymous Github gist
+		 * @param {String} text - the gist's intended text
+		 * @param {String?} name - the user name to be associated with the gist
+		 * @return {Promise<String>} Promise resolved with the gist's URL
+		 */
+		XKit.tools.make_gist = function(text, name) {
+
+			if (!name) {
+				name = "xkit-gist";
+			}
+			var files = {};
+			files[name] = {content: text};
+			return $.ajax({
+				url: 'https://api.github.com/gists',
+				type: 'POST',
+				data: JSON.stringify({
+					description: "automatically created by xkit",
+					public: false,
+					files: files,
+				}),
+			}).then(function(resp) {
+				return resp.html_url;
+			});
+		};
+
+		/**
+		 * Creates a link to a github issue with error text and template
+		 * @param {String} title - the title of the github issue--should be unique and useful
+		 * @param {Object?} data - Key-value pairs to list at the top of the issue.
+		 * @param {Error?} error - An exception to serialize, if availible
+		 * @return {String} The url to link the user to
+		 */
+		XKit.tools.github_issue = function(title, data, error) {
+
+			if (!data) {
+				data = {};
+			}
+
+			data['User Agent'] = window.navigator.userAgent;
+			data['XKit Version'] = XKit.version;
+			data['Patches Version'] = XKit.installed.get("xkit_patches").version;
+			data['Extensions'] = XKit.installed.list().join(", ");
+			data['URL'] = window.location.toString();
+
+			var body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
+			  "including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
+	       "-----------\n\n";
+
+			if (error) {
+				body += "```\n" +
+				error.stack +
+				"\n```\n\n";
+			}
+
+			body += "System Data | \xA0 \n";
+			body += "----------- | -----------\n";
+			$.each(data, function(key, value) {
+				body += key + " | " + value + "\n";
+			});
+
+			return "https://github.com/new-xkit/XKit/issues/new?" + $.param({body: body, title: title});
+		};
+
+
+		/**
+		 * Quick-and-dirty function debouncing.
+		 * Debounced functions will only occur 'delay' milliseconds after their last call.
+		 * Multiple calls before the function is executed resets the timer.
+		 * @param {Function} func - Function to wrap. Will be executed with
+		                            the *last* passed 'this' values and arguments
+		 * @param {Number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
+		 * @return {Function} The wrapped, debounced function.
+		 */
+		XKit.tools.debounce = function(func, wait) {
+			var timeout_id;
+			return function() {
+				var last_context = this;
+				var last_args = arguments;
+
+				var exec = function() {
+					timeout_id = null;
+					func.apply(last_context, last_args);
+				};
+				clearTimeout(timeout_id);
+				timeout_id = setTimeout(exec, wait);
+			};
+		};
+
+		/**
+		 * Cached nonce for use in script injection to overcome CSP
+		 */
+		XKit.tools.add_function_nonce = "";
+
+		/**
+		 * Copies a function from the addon context into the page context. This
+		 * function will be serialized to a string, and then injected as a script tag
+		 * into the page.
+		 * @param {Function} func
+		 * @param {boolean} exec - Whether to execute the function immediately
+		 * @param {Object} addt - The desired contents of the global variable
+		 *                        `add_tag`. Only useful if `exec` is true
+		 */
+		XKit.tools.add_function = function(func, exec, addt) {
+			if (!XKit.tools.add_function_nonce) {
+				var scripts = document.querySelectorAll('script');
+				for (var i = 0; i < scripts.length; i++) {
+					var nonce = scripts[i].getAttribute('nonce');
+					if (nonce) {
+						XKit.tools.add_function_nonce = nonce;
+						break;
+					}
+				}
+			}
+
+			try {
+				var script = document.createElement("script");
+				script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
+				script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
+				if (XKit.tools.add_function_nonce) {
+					script.setAttribute('nonce', XKit.tools.add_function_nonce);
+				}
+				document.body.appendChild(script);
+			} catch (e) {
+				alert(e.message);
+			}
+		};
+
+		// Scrape Tumblr's data object now that we can run add_function
+		XKit.tools.add_function(function() {
+			var blogs = [];
+			try {
+				var models = Tumblr.dashboardControls.allTumblelogs;
+				models.filter(function(model) {
+					return model.attributes.hasOwnProperty("is_current");
+				}).forEach(function(model) {
+					blogs.push(model.attributes.name);
+				});
+				if (blogs.length) {
+					window.postMessage({
+						xkit_blogs: blogs,
+					}, window.location.protocol + "//" + window.location.host);
+				}
+			} catch (e) {}
+		}, true);
+
+		/**
+		 * @return {Object} The elements of XKit's storage as a map from setting key to
+		 *                  setting value
+		 */
+		XKit.tools.dump_config = function() {
+			var values = GM_listValues();
+			if (values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
+				values = Object.keys(window.xkit_storage);
+			}
+			return values.reduce(function(obj, x) {
+				obj[x] = GM_getValue(x);
+				return obj;
+			}, {});
+		};
+
+		/**
+		 * @param {String} text - the text to be escaped
+		 * @return {String} Will return the passed text, with all potentially
+		 *                  dangerous-for-HTML characters escaped
+		 *
+		 * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
+		 * for the source of the list of escaping rules in this function.
+		 *
+		 * Under no circumstances should the output of this function be injected into
+		 * an unquoted element attribute, as there are many ways to escape from an
+		 * unquoted attribute that aren't covered here. Don't use unquoted attributes
+		 */
+		XKit.tools.escape_html = function(text) {
+			return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+        .replace(/\//g, "&#x2F;");
+		};
+
+		/**
+		 * @param {String} name - Name of URL parameter to retrieve
+		 * @return {String} Value of parameter or ""
+		 */
+		XKit.tools.getParameterByName = function(name) {
+			// http://stackoverflow.com/a/901144/2073440
+			name = encodeURIComponent(name);
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+			if (results === null) {
+				return "";
+			} else {
+				var parameter = results[1];
+				return decodeURIComponent(parameter.replace(/\+/g, " "));
+			}
+		};
+
+		/**
+		 * @return {Object} An overview of the browser's information:
+		 *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
+		 *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
+		 *	chrome: boolean - Whether the browser is Chrome
+		 *	firefox: boolean - Whether the browser is Firefox
+		 *	safari: boolean - Whether the browser is Safari
+		 *	opera: boolean - Whether the browser is Opera (Always false as implemented currently)
+		 *	version: number - The numerical representation of the browser's version or 0 if unknown
+		 *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
+		 */
+		XKit.browser = function() {
+
+			var to_return = {};
+
+			to_return.name = "UNKNOWN";
+			to_return.spoofed = false;
+			to_return.chrome = false;
+			to_return.firefox = false;
+			to_return.safari = false;
+			to_return.opera = false;
+			to_return.version = 0;
+			to_return.mobile = false;
+
+			// First, let's check if it's chrome.
+			if (window.chrome) {
+				to_return.chrome = true;
+			} else {
+				// it can still be chrome?
+				var is_chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+				to_return.chrome = is_chrome;
+			}
+
+			function get_ua_version(user_agent) {
+				var index = navigator.userAgent.toLowerCase().indexOf(user_agent);
+				var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + (user_agent.length)));
+				return real_version;
+			}
+
+			if (to_return.chrome === true) {
+				// Get version.
+				to_return.name = "Google Chrome";
+				to_return.version = get_ua_version("chrome/");
+			}
+
+			// Then, let's check if it's firefox.
+			if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+				to_return.name = "Mozilla Firefox";
+				to_return.firefox = true;
+				to_return.version = get_ua_version("firefox/");
+			}
+
+			// Blahblah Safari blah.
+			if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
+				to_return.name = "Apple Safari";
+				to_return.safari = true;
+				to_return.firefox = false;
+				to_return.version = get_ua_version("safari/");
+			}
+
+			to_return.ug = navigator.userAgent.toLowerCase();
+
+			// Check if there is spoofing!
+			// A lot of people now switch to IE.
+			if (navigator.userAgent.indexOf('MSIE') > -1) {
+				to_return.spoofed = true;
+			}
+
+			// Check if you're viewing the mobile version
+			if ($('.is_mobile').length > 0) {
+				to_return.mobile = true;
+			}
+
+			return to_return;
+
+		};
+
+		// Identify retina screen displays. Unused anywhere else
+		try {
+			XKit.retina = window.devicePixelRatio > 1;
+		} catch (e) { }
 
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
-		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
+
+		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
+
+			if (!window._ || !window.jQuery) {
+				return;
+			}
+			/* globals _ */
+
+			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
+				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
+				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
+					function(wrapped, _event) {
+						if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
+							if (!this.$el.find('video[src^="blob:"]').length) {
+								return true;
+							}
+						}
+						return wrapped.call(this, _event);
+					});
+			}
+
+			// unfortunately we're not fast enought to catch some
+			// CRT instances that are currently instantiated, so handle those differently
+			jQuery('video').parent().each(function() {
+				this.addEventListener('loadedmetadata', function(event) {
+					var $target = jQuery(event.target);
+					if (!$target.is(":visible") || !jQuery.contains(document, event.target)) {
+						event.stopPropagation();
+					}
+				}, true); // uses .parent() and capturing to preempt tumblr's js
+			});
+		}, true, {});
+
+		XKit.tools.add_function(function fix_jk_scrolling() {
+			if (!window._ || !window.jQuery) {
+				return;
+			}
+
+			if (_.get(window, "Tumblr.KeyCommands.update_post_positions")) {
+				Tumblr.KeyCommands.update_post_positions = _.wrap(Tumblr.KeyCommands.update_post_positions,
+					function(wrapped, _event) {
+						wrapped.call(this);
+						this.post_positions = _.pick(this.post_positions,
+							function(scroll_pos, element_id) {
+								var element = jQuery("[data-pageable='" + element_id + "']");
+								return element.is(":visible") && element.height() > 0;
+							});
+					});
+			}
+		}, true, {});
 
 		setTimeout(function() {
 
 			var form_key_to_save = $('meta[name=tumblr-form-key]').attr("content");
 
-			if (typeof form_key_to_save !== "undefined" &&form_key_to_save !== "") {
+			if (typeof form_key_to_save !== "undefined" && form_key_to_save !== "") {
 				XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(form_key_to_save));
 			}
 
@@ -329,72 +495,94 @@ XKit.tools.dump_config = function(){
 
 		XKit.iframe = {
 
-			__full_mode: false,
-
-			___resize: function(width, height) {
-
-				try {
-
-					var m_obj = {};
-					m_obj.width = width;
-					m_obj.height = height;
-
-					XKit.tools.add_function(function() {
-						try {
-							add_tag = JSON.parse(add_tag);
-							_t.postMessage(["resize_iframe", add_tag.width, add_tag.height, "body_class", "top_bar", _t.protocol_host()], "*", window.parent);
-						} catch(e) {
-							// console.log("[!!!] XKit Patches: Unable to resize the iframe: " + e.message);
-						}
-					}, true, JSON.stringify(m_obj));
-
-				} catch(e) {
-
-					// console.log("[!!!] XKit Patches: Unable to resize the iframe: " + e.message);
-
-				}
-
+			/**
+			 * @return {String} Id of blog which the iframe refers to (usually
+			 *                  the blog in which the iframe is embedded)
+			 */
+			get_tumblelog: function() {
+				var new_channel_id = document.location.href.match(/[&?]tumblelogName=([\w-]+)/);
+				var archive_channel_id = document.location.href.match(/[&?]name=([\w-]+)/);
+				var old_channel_id = $("#tumblelog_name").attr('data-tumblelog-name');
+				return (new_channel_id && new_channel_id[1]) || (archive_channel_id && archive_channel_id[1]) || old_channel_id;
 			},
 
-			resize: function(width, height) {
-
-				XKit.iframe.___full_mode = false;
-				XKit.iframe.___resize(width, height);
-
+			/**
+			 * @return {String} Post to which this iframe refers
+			 */
+			single_post_id: function() {
+				var all_post_ids = document.location.href.match(/[&?](singlePostId|pid|postId)=(\d+)/);
+				return all_post_ids[2];
 			},
 
-			full: function() {
-
-				XKit.iframe.___full_mode = true;
-				XKit.iframe.___resize(window.outerWidth, window.outerHeight);
-
-				window.onresize = function() {
-
-					if (XKit.iframe.___full_mode) {
-						XKit.iframe.___resize(window.outerWidth, window.outerHeight);
-					}
-
-				};
-
+			/**
+			 * @return {String} Form key of the iframe (the data to use in a
+			 *                  reblog or other API request)
+			 */
+			form_key: function() {
+				var new_form_key = $("meta[name=tumblr-form-key]").attr("content");
+				var old_form_key = $(".btn.reblog").attr('data-form-key');
+				return new_form_key || old_form_key;
 			},
 
-			restore: function() {
+			/**
+			 * Hide the text of a button in the iframe.
+			 * @param {JQuery} button
+			 */
+			hide_button: function(button) {
+				button.addClass("no_label");
+				button.addClass("no-text").contents()
+					.filter(function() {
+						return this.nodeType === 3;
+					}).wrap('<span class="hidden">');
 
-				XKit.iframe.___full_mode = false;
-				XKit.iframe.___resize(360, 26);
+				button.children(".button-label").hide();
+			},
 
-			}
+			/**
+			 * @return {JQuery} The follow button in the iframe
+			 */
+			follow_button: function() {
+				return $(".btn.follow,.tx-button.follow-button");
+			},
+
+			/**
+			 * @return {JQuery} The unfollow button in the iframe
+			 */
+			unfollow_button: function() {
+				return $(".btn.unfollow,.tx-button.unfollow-button");
+			},
+
+			/**
+			 * @return {JQuery} The delete button in the iframe
+			 */
+			delete_button: function() {
+				return $(".btn.delete,.tx-button.delete-button");
+			},
+
+			/**
+			 * @return {JQuery} The reblog button in the iframe
+			 */
+			reblog_button: function() {
+				return $(".btn.reblog,.tx-button.reblog-button");
+			},
+
+			/**
+			 * @return {JQuery} The dashboard button in the iframe
+			 */
+			dashboard_button: function() {
+				return $(".btn.dashboard,.tx-button.dashboard-button");
+			},
 
 		};
 
 		if (XKit.frame_mode === true) {
-
+			// from xkit.js
+			/* globals xkit_check_storage */
 			xkit_check_storage();
 
 			// console.log("XKit Patches determined that it's in frame mode, resizing stuff!");
 
-			$("#iframe_controls").css("width","auto");
-			XKit.iframe.restore();
+			$("#iframe_controls,#dashboard_iframe").css("width", "auto");
 
 			var m_url = $("#tumblelog_name").attr('data-tumblelog-name');
 
@@ -414,6 +602,9 @@ XKit.tools.dump_config = function(){
 			XKit.storage.max_area_size = 153600;
 		}
 
+		/**
+		 * Close the current XKit alert window. Counterpart to `XKit.window.show`
+		 */
 		XKit.window.close = function() {
 
 			$("#xkit-window-shadow").fadeOut('fast');
@@ -427,6 +618,17 @@ XKit.tools.dump_config = function(){
 
 		};
 
+		/**
+		 * Show an XKit alert window
+		 * @param {String} title - Text for alert window's title bar
+		 * @param {String} msg - Text for body of window, can be HTML
+		 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+		 *   icon type, determined by CSS class `icon`.
+		 *   See also xkit_patches.css.
+		 * @param {String} buttons - The HTML to be used in the button area of the window.
+		 *                           Usually divs with class "xkit-button".
+		 * @param {boolean} wide - Whether the XKit window should be wide.
+		 */
 		XKit.window.show = function(title, msg, icon, buttons, wide) {
 
 			if (typeof icon === "undefined") {
@@ -462,6 +664,8 @@ XKit.tools.dump_config = function(){
 
 			$("#tiptip_holder").css("z-index", "99000000");
 
+			// from xkit.js
+			/* globals centerIt */
 			centerIt($("#xkit-window"));
 			$("#xkit-window").fadeIn('fast');
 
@@ -476,62 +680,6 @@ XKit.tools.dump_config = function(){
 
 		};
 
-		XKit.lang = new Object({
-
-			default: "english",
-			current: "",
-
-			init: function() {
-
-				var lang = XKit.storage.get("xkit_patches","language","");
-
-				if (lang === "" || typeof lang === "undefined") {
-					lang = "english";
-				}
-
-				XKit.lang.current = lang;
-
-			},
-
-			get: function(path, par1, par2, par3) {
-
-				var m_path = path.split(".");
-
-				var m_lang = XKit.extensions["lang_" + XKit.lang.current];
-
-				if (typeof m_lang == "undefined") {
-					m_lang = XKit.extensions["lang_" + XKit.lang.default];
-				}
-
-				var m_obj = m_lang;
-				var set_to_default = false;
-
-				for (var i=0;i<m_path.length;i++) {
-
-					if (typeof m_obj[m_path[i]] !== "undefined") {
-						m_obj = m_obj[m_path[i]];
-					} else {
-						return "???";
-					}
-
-				}
-
-				if (typeof par1 === "undefined") { par1 = "???" }
-				if (typeof par2 === "undefined") { par2 = "???" }
-				if (typeof par3 === "undefined") { par3 = "???" }
-
-				m_obj = m_obj.replace("%1", par1);
-				m_obj = m_obj.replace("%2", par2);
-				m_obj = m_obj.replace("%3", par3);
-
-				return m_obj;
-
-			}
-
-		});
-
-		XKit.lang.init();
-
 		XKit.interface = new Object({
 
 			revision: 2,
@@ -545,12 +693,19 @@ XKit.tools.dump_config = function(){
 			post_window_listener_running: false,
 			post_window_listener_window_id: 0,
 
+			/**
+			 * Interface for tracking the secure_form_key used in Tumblr API
+			 * requests.
+			 */
 			kitty: {
 
 				stored: "",
 				store_time: 0,
 				expire_time: 600000,
 
+				/**
+				 * @param {String} kitty - The new secure_form_key value.
+				 */
 				set: function(kitty) {
 
 					if (typeof kitty === "undefined") { kitty = ""; }
@@ -559,6 +714,10 @@ XKit.tools.dump_config = function(){
 
 				},
 
+				/**
+				 * Get the secure_form_key through a request using the current form_key
+				 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+				 */
 				get: function(callback) {
 
 					var m_object = {};
@@ -581,23 +740,29 @@ XKit.tools.dump_config = function(){
 
 					//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
 
-					$.ajax({
-						type: "POST",
-						url: "/svc/secure_form_key",
+					GM_xmlhttpRequest({
+						method: "POST",
+						url: "https://www.tumblr.com/svc/secure_form_key",
 						headers: {
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
-						success: function (data, status, res) {
+						onload: function(response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							XKit.interface.kitty.stored = res.getResponseHeader("X-tumblr-secure-form-key");
+							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
+							}
+							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
+							m_object.response = response;
 							callback(m_object);
 						},
-						error: function(data, status, res) {
+						onerror: function(response) {
 							//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
 							m_object.errors = true;
 							m_object.kitten = "";
+							m_object.response = response;
 							XKit.interface.kitty.stored = "";
 							callback(m_object);
 						}
@@ -614,6 +779,14 @@ XKit.tools.dump_config = function(){
 				added_icon_icon: [],
 				added_icon_text: [],
 
+				/**
+				 * Create a specification for a control button that can be added to
+				 * future posts using `XKit.post_window.add_control_button`.
+				 * @param {String} class_name - CSS class of the button to be created
+				 * @param {String} icon - URL of the button's icon
+				 * @param {String} text - Hover text of the button
+				 * @param {EventListener} func - Function called on click of control button
+				 */
 				create_control_button: function(class_name, icon, text, func) {
 
 					XKit.interface.post_window.added_icon.push(class_name);
@@ -626,12 +799,18 @@ XKit.tools.dump_config = function(){
 							"}", "xkit_interface_post_window_icon___" + class_name);
 
 					$(document).on('click', '.' + class_name, function() {
-						if ($(this).hasClass("xkit-interface-working") ||$(this).hasClass("xkit-interface-disabled")) { return; }
+						if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
 						if (typeof func === "function") { func.call(this, event); }
 					});
 
 				},
 
+				/**
+				 * Instantiate and add a previously "created" button to the
+				 * current post window.
+				 * @param {String} class_name - CSS class of the button to be added
+				 * @param {String?} additional - String inserted into the button's div tag
+				 */
 				add_control_button: function(class_name, additional) {
 
 					if (typeof additional == "undefined") {additional = ""; }
@@ -657,8 +836,7 @@ XKit.tools.dump_config = function(){
 				},
 
 				/**
-				 * Gets the content of the post window.
-				 * @param {String} new_content
+				 * @return {String} HTML content of the current post window
 				 */
 				get_content_html: function() {
 					if ($(".html-field").css("display") === "none") {
@@ -703,9 +881,12 @@ XKit.tools.dump_config = function(){
 					}
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
-					XKit.tools.add_function(function(){
+					XKit.tools.add_function(function() {
+						/* globals require */
+						/* eslint-disable no-shadow */
 						var new_content = add_tag[0];
 						var html_or_markdown = add_tag[1];
+						/* eslint-enable no-shadow */
 						var editor_div = document.getElementsByClassName("ace_editor");
 						if (html_or_markdown === "Markdown") {
 							new_content = require('to-markdown').toMarkdown(new_content);
@@ -713,7 +894,7 @@ XKit.tools.dump_config = function(){
 						if (editor_div.length === 1) {
 							var editor = window.ace.edit(editor_div[0]);
 							editor.setValue(new_content);
-							setTimeout(function(){
+							setTimeout(function() {
 								jQuery(".ace_marker-layer").empty();
 							}, 500);
 						}
@@ -741,6 +922,10 @@ XKit.tools.dump_config = function(){
 					}
 				},
 
+				/**
+				 * @param {String} tag
+				 * @return {boolean} Whether the tag exists in the current post window's tag input
+				 */
 				tag_exists: function(tag) {
 
 					var found = false;
@@ -761,10 +946,17 @@ XKit.tools.dump_config = function(){
 
 				},
 
+				/**
+				 * Remove all tags from the current post window
+				 */
 				remove_all_tags: function() {
 					$(".post-form--tag-editor").find(".tag-label").click();
 				},
 
+				/**
+				 * Remove a specific tag from the current post window
+				 * @param {String} tag
+				 */
 				remove_tag: function(tag) {
 
 					tag = tag.toLowerCase();
@@ -784,6 +976,13 @@ XKit.tools.dump_config = function(){
 					});
 				},
 
+				/**
+				 * @return {Object} State of the post, with keys
+				 *	publish: boolean - Whether the post will be published (default new post)
+				 *	draft: boolean - Whether the post will be drafted
+				 *	queue: boolean - Whether the post will be queued
+				 *	private: boolean - Whether the post will be "published privately"
+				 */
 				state: function() {
 
 					var to_return = {};
@@ -797,6 +996,9 @@ XKit.tools.dump_config = function(){
 
 				},
 
+				/**
+				 * @return {Object} Description of post type, see keys in function source
+				 */
 				post_type: function() {
 					var post_form = $(".post-form");
 					return {
@@ -811,12 +1013,19 @@ XKit.tools.dump_config = function(){
 					};
 				},
 
+				/**
+				 * @return {String} Blog making the post
+				 */
 				blog: function() {
 
 					return $("#channel_id").val();
 
 				},
 
+				/**
+				 * @param {String} url - URL of blog to which to switch the post window
+				 * @return {boolean} Whether the switch succeeded
+				 */
 				switch_blog: function(url) {
 
 					$("#tumblelog_choices").find(".option").each(function() {
@@ -832,14 +1041,19 @@ XKit.tools.dump_config = function(){
 
 				},
 
+				/**
+				 * @return {boolean} Whether the post window is currently open
+				 */
 				open: function() {
 
 					return XKit.interface.post_window_listener_window_id !== 0;
 
 				},
 
+				/**
+				 * @return {String} Type of post, see also XKit.interface.post_window.post_type
+				 */
 				type: function() {
-					var to_return = {};
 					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
 					var form = $('.post-form');
 					for (var i = 0; i < types.length; i++) {
@@ -852,12 +1066,16 @@ XKit.tools.dump_config = function(){
 					return 'text';
 				},
 
+				/**
+				 * @return {Object} Description of originality of post with boolean
+				 *                  keys is_reblog and is_original for the two cases.
+				 */
 				origin: function() {
 
 					var to_return = {};
 
-					to_return.is_reblog = $(".post-header").find(".reblog_source").length > 0;
-					to_return.is_original = $(".post-header").find(".reblog_source").length <= 0;
+					to_return.is_reblog = $(".post-form--header").find(".reblog_source").length > 0;
+					to_return.is_original = $(".post-form--header").find(".reblog_source").length <= 0;
 
 					return to_return;
 
@@ -867,6 +1085,9 @@ XKit.tools.dump_config = function(){
 
 			post_window_listener: {
 
+				/**
+				 * Begin running the post_window_listener
+				 */
 				run: function() {
 
 					if (XKit.interface.post_window_listener_running) { return; }
@@ -876,46 +1097,62 @@ XKit.tools.dump_config = function(){
 
 				},
 
+				/**
+				 * Schedule the execution of XKit.interface.post_window_listener
+				 */
 				set_listen: function() {
 
 					setTimeout(function() { XKit.interface.post_window_listener.do(); }, 800);
 
 				},
 
+				/**
+				 * Perform the logic of the post_window_listener, running all
+				 * registered post_window_listener callbacks if there is a
+				 * newly opened post window. Otherwise schedules itself to run
+				 * later using set_listen.
+				 */
 				do: function() {
 
-					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }
+					if (!XKit.interface.post_window_listener_running) {
+						XKit.interface.post_window_listener_window_id = 0;
+						XKit.interface.post_window_listener.set_listen();
+						return;
+					}
 
 					var post_content = $(".post-form");
 					var ask_form = $(".post_ask_answer_form");
 
-					if(post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
+					if (post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
 						// No post window yet. Do nothing.
 						XKit.interface.post_window_listener_window_id = 0;
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					}
 
 					if (XKit.interface.post_window_listener_window_id !== 0) {
 						// Already ran the functions here?
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					} else {
 						XKit.interface.post_window_listener_window_id = XKit.tools.random_string();
 					}
 
 					if (XKit.interface.post_window_listener_id.length === 0) {
 						// We got not functions to run.
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					}
 
 					// XKit.console.add("interface -> Post Window found, running attached functions. [" + XKit.interface.post_window_listener_window_id + "]");
 
-					for (var i=0;i<XKit.interface.post_window_listener_id.length;i++) {
+					for (var i = 0; i < XKit.interface.post_window_listener_id.length; i++) {
 
 						if (typeof XKit.interface.post_window_listener_func[i] === "function") {
 
 							try {
 								XKit.interface.post_window_listener_func[i].call();
-							}catch(e) {
+							} catch (e) {
 								// XKit.console.add("interface -> post_window_listener -> can't run \"" + XKit.interface.post_window_listener_id[i] + "\": " + e.message);
 							}
 						}
@@ -945,6 +1182,10 @@ XKit.tools.dump_config = function(){
 					}
 				},
 
+				/**
+				 * @param {String} id - ID of function to remove as provided in
+				 *                      XKit.interface.post_window_listener.add
+				 */
 				remove: function(id) {
 
 					var m_id = XKit.interface.post_window_listener_id.indexOf(id);
@@ -965,6 +1206,11 @@ XKit.tools.dump_config = function(){
 				// Each function here requires a Interface Post Object,
 				// you can get using interface.post.
 
+				/**
+				 * Set the tags of a post
+				 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+				 * @param {String} tags - Comma-separated array of tags
+				 */
 				tags: function(post_obj, tags) {
 
 					var post_div = $("#post_" + post_obj.id);
@@ -973,13 +1219,13 @@ XKit.tools.dump_config = function(){
 					var tags_array = tags.split(",");
 					var added_tag_count = 0;
 
-					for (var i=0;i<tags_array.length;i++) {
+					for (var i = 0; i < tags_array.length; i++) {
 
 						var formatted = encodeURIComponent(tags_array[i]);
 
 						if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
 
-						if (tags_array[i].substring(0,1) === " ") {
+						if (tags_array[i].substring(0, 1) === " ") {
 							tags_array[i] = tags_array[i].substring(1);
 						}
 
@@ -1011,6 +1257,14 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * Override parameters of a post object
+			 * @param {Object} tumblr_object
+			 * @param {Object} settings - Object with keys `tags` and/or `caption` which
+			 *                            will override tumblr_object's corresponding keys.
+			 * @return {Object} Updated tumblr_object (same as the param) or an
+			 *                  error object with keys `error` and `message`
+			 */
 			edit_post_object: function(tumblr_object, settings) {
 
 				// Used to modify a Tumblr Post Object.
@@ -1056,6 +1310,15 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * Edit a post
+			 * @param {Object} tumblr_object - Tumblr information corresponding to post
+			 * @param {Function} func - Callback upon edit completion or error. If error,
+			 *                          argument has keys error:true and message:String. Otherwise
+			 *                          it contains JSON data of Tumblr's response to the edit.
+			 * @param {boolean?} retry_mode - True if this function has failed and is
+			 *                                attempting to retry the edit
+			 */
 			edit: function(tumblr_object, func, retry_mode) {
 
 				// Used to edit a post.
@@ -1115,7 +1378,7 @@ XKit.tools.dump_config = function(){
 
 				m_object['post[type]'] = tumblr_object.post.type;
 
-				if (tumblr_object.post.type === "regular") {
+				if (typeof tumblr_object.post.one !== "undefined") {
 					m_object['post[one]'] = tumblr_object.post.one;
 				}
 
@@ -1188,14 +1451,13 @@ XKit.tools.dump_config = function(){
 						if (retry_mode === false) {
 							XKit.interface.edit(tumblr_object, func, true);
 						} else {
-
 							to_return.error = true;
-							to_return.status = response.status;
+							to_return.status = kitty_data.response.status;
 
-							if (response.status === 401) {
+							if (kitty_data.response.status === 401) {
 								to_return.message = "Permission Denied";
 							} else {
-								if (response.status === 404) {
+								if (kitty_data.response.status === 404) {
 									to_return.message = "Post Not Found";
 								} else {
 									to_return.message = "Unknown";
@@ -1245,7 +1507,7 @@ XKit.tools.dump_config = function(){
 							try {
 								to_return.data = jQuery.parseJSON(response.responseText);
 								func(to_return);
-							} catch(e) {
+							} catch (e) {
 								to_return.error = true;
 								to_return.error_message = "Error parsing JSON";
 								func(to_return);
@@ -1258,6 +1520,13 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * @param {Object} post_object - Interface Post Object provided by XKit.interface.post
+			 * @param {Function} func - Called on error or on completion with an object describing
+			 *                          the results of the fetch. The object has key error: true
+			 *                          if there is an error.
+			 * @param {boolean} reblog_mode - Whether the post is a reblog
+			 */
 			fetch: function(post_object, func, reblog_mode) {
 
 				// Fetches internal Tumblr object for a post, then calls callback (func)
@@ -1313,7 +1582,7 @@ XKit.tools.dump_config = function(){
 						try {
 							to_return.data = jQuery.parseJSON(response.responseText);
 							func(to_return);
-						} catch(e) {
+						} catch (e) {
 							to_return.error = true;
 							to_return.error_message = e.message;
 							func(to_return);
@@ -1324,9 +1593,13 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * Adds or removes the "working" animation from the control button.
+			 * @param {JQuery} obj
+			 * @param {boolean} working - Whether the button should be "working"
+			 */
 			switch_control_button: function(obj, working) {
 
-				// Switches control button between "working" and normal.
 
 				if (working) {
 					$(obj).addClass("xkit-interface-working");
@@ -1337,9 +1610,13 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * Adds or removes the "disabled" animation from the control button.
+			 * @param {JQuery} obj
+			 * @param {boolean} disabled - Whether the button should be "disabled"
+			 */
 			disable_control_button: function(obj, disabled) {
 
-				// Switches control button between disabled and normal.
 
 				if (disabled) {
 					$(obj).addClass("xkit-interface-disabled");
@@ -1350,9 +1627,13 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * Adds or removes the "green/completed" animation from the control button.
+			 * @param {JQuery} obj
+			 * @param {boolean} completed - Whether the button should be "green/completed"
+			 */
 			completed_control_button: function(obj, completed) {
 
-				// Switches control button between normal and "green/completed"
 
 				if (completed) {
 					$(obj).addClass("xkit-interface-completed");
@@ -1363,6 +1644,16 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * Create a specification for a control button that can be added to
+			 * future posts using `XKit.interface.add_control_button`.
+			 * @param {String} class_name - CSS class of the button to be created
+			 * @param {String} icon - URL of the button's icon
+			 * @param {String} text - Hover text of the button
+			 * @param {EventListener} func - Function called on click of control button
+			 * @param {String?} ok_icon - URL of icon displayed when the button is
+			 *                            "completed" (e.g. reblog button turning green)
+			 */
 			create_control_button: function(class_name, icon, text, func, ok_icon) {
 
 				XKit.interface.added_icon.push(class_name);
@@ -1407,12 +1698,19 @@ XKit.tools.dump_config = function(){
 				}
 
 				$(document).on('click', '.' + class_name, function() {
-					if ($(this).hasClass("xkit-interface-working") ||$(this).hasClass("xkit-interface-disabled")) { return; }
+					if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
 					if (typeof func === "function") { func.call(this, event); }
 				});
 
 			},
 
+			/**
+			 * Instantiate and add a previously "created" button to the
+			 * specified post.
+			 * @param {Object} obj - Interface Post Object
+			 * @param {String} class_name - CSS class of the button to be added
+			 * @param {String?} additional - String inserted into the button's div tag
+			 */
 			add_control_button: function(obj, class_name, additional) {
 
 				if (typeof additional == "undefined") {additional = ""; }
@@ -1433,7 +1731,6 @@ XKit.tools.dump_config = function(){
 
 				var m_html = "<div " + m_data + " title=\"" + m_text + "\" class=\"xkit-interface-control-button post_control post_control_icon " + class_name + "\" " + additional + "></div>";
 
-
 				if ($(obj).find(".post_controls_inner").length > 0) {
 					$(obj).find(".post_controls_inner").prepend(m_html);
 				} else if (XKit.browser().mobile) {
@@ -1442,6 +1739,9 @@ XKit.tools.dump_config = function(){
 					$(obj).find(".post_controls").prepend(m_html);
 				}
 
+				if (XKit.interface.where().search) {
+					XKit.interface.trigger_reflow();
+				}
 			},
 
 			/**
@@ -1483,6 +1783,10 @@ XKit.tools.dump_config = function(){
 				return posts;
 			},
 
+			/**
+			 * @param {String} post_id
+			 * @return {Object} Interface Post Object of post with given id
+			 */
 			find_post: function(post_id) {
 
 				// Return a post object based on post ID.
@@ -1500,6 +1804,10 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * @param {JQuery} obj - Post element
+			 * @return {Object} Interface Post Object or {error: true}
+			 */
 			post: function(obj) {
 
 				var m_return = {};
@@ -1566,6 +1874,41 @@ XKit.tools.dump_config = function(){
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 
+
+				if (m_return.is_reblogged && $(obj).attr('data-json')) {
+					try {
+						var json = $(obj).attr('data-json');
+						var parsedJson = JSON.parse(json);
+						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
+					} catch (e) {
+						console.log('Error retrieving data-json attribute of post');
+					}
+				} else if ($(obj).hasClass("has_source")) {
+					// Different pages (such as the sidebar) don't always have data-json defined,
+					// so fall back to checking for source elements
+					try {
+						var sourceJson = $(obj).find('.post-source-link').attr('data-peepr');
+						var parsedSourceJson = JSON.parse(sourceJson);
+						m_return.source_owner = parsedSourceJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of post-source-link');
+					}
+				} else if ($(obj).find(".reblog_info").length > 0) {
+					// If there is no source link but there is a reblog link, then
+					// the reblog source is the source
+					try {
+						var reblogJson = $(obj).find(".reblog_info").attr('data-peepr');
+						var parsedReblogJson = JSON.parse(reblogJson);
+						m_return.source_owner = parsedReblogJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of reblog_info');
+					}
+				} else {
+					// If there is no reblog or source link, consider the
+					// post owner to be the original source
+					m_return.source_owner = m_return.owner;
+				}
+
 				if (m_return.is_reblogged) {
 
 					try {
@@ -1574,7 +1917,7 @@ XKit.tools.dump_config = function(){
 						m_return.reblog_owner = $(obj).find(".reblog_source").find("a").first().text();
 						m_return.reblog_original_id = m_return.reblog_link.split('/')[4];
 
-					} catch(e) {
+					} catch (e) {
 
 
 					}
@@ -1587,7 +1930,7 @@ XKit.tools.dump_config = function(){
 					if ($(obj).find(".note_link_current").html() === "") {
 						n_count = 0;
 					} else {
-						n_count = $(obj).find(".note_link_current").html().replace(/\D/g,'');
+						n_count = $(obj).find(".note_link_current").html().replace(/\D/g, '');
 					}
 				}
 
@@ -1617,11 +1960,14 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * @return {String} The current Tumblr form_key used for authentication
+			 */
 			form_key: function() {
 
 				var to_return = $('meta[name=tumblr-form-key]').attr("content");
 
-				if (typeof to_return === "undefined" ||to_return === "") {
+				if (typeof to_return === "undefined" || to_return === "") {
 					// console.log(" --- XKit Interface: Form Key could not be fetched, using stored one.");
 					to_return = window.atob(XKit.storage.get("xkit_patches", "last_stored_form_key", ""));
 				} else {
@@ -1632,12 +1978,26 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * @return {String} The concatentation of two form keys. Unused and likely a typo.
+			 */
 			check_key: function() {
 
 				return $("body").attr('data-form-key') + $("body").attr('data-form-key');
 
 			},
 
+			/**
+			 * @return {Object} Various information about the current user with keys
+			 *	posts: number - Number of posts
+			 *	followers: number - Number of followers
+			 *	drafts: number - Number of drafts
+			 *	processing: number - Number of posts "processing" (may be defunct)
+			 *	queue: number - Number of posts in queue
+			 *	activity: String - Activity data as a stringified array
+			 *	name: String - username
+			 *  title: String - blog title
+			 */
 			user: function() {
 
 				var m_return = {};
@@ -1651,43 +2011,43 @@ XKit.tools.dump_config = function(){
 				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
 
 				// Needs to be in a variable, otherwise account button can't be clicked. (Weird as fuck)
-				m_account = $("#account_button");
+				var m_account = $("#account_button");
 
 				m_account.click(); // Because tab must be open to steal data from it
 
 				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").length > 0) {
-					m_return.name = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").html().replace(",","");
+					m_return.name = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").html().replace(",", "");
 				} else {
 					m_return.name = 'ERROR';
 				}
 
 				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").length > 0) {
-					m_return.title = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").html().replace(",","");
+					m_return.title = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").html().replace(",", "");
 				} else {
 					m_return.title = 'ERROR';
 				}
 
 
 				if ($(".blog-sub-nav-details").find(".blog-sub-nav-item").length > 0) {
-					$(".blog-sub-nav-details").children(".blog-sub-nav-item").each(function(index, obj){
+					$(".blog-sub-nav-details").children(".blog-sub-nav-item").each(function(index, obj) {
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Posts') {
-							m_return.posts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.posts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Followers') {
-							m_return.followers = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.followers = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Activity') {
 							// Hax. Won't properly retrieve $(this).find(".blog-sub-nav-item-data.sparkline") for some reason.
-							m_return.activity = $(this).find(".blog-sub-nav-item-link").html().slice(113).slice(0,-8);
+							m_return.activity = $(this).find(".blog-sub-nav-item-link").html().slice(113).slice(0, -8);
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Drafts') {
-							m_return.drafts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.drafts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Processing') {
-							m_return.processing = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.processing = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 						if ($(this).find(".blog-sub-nav-item-label").html() === 'Queue') {
-							m_return.queue = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+							m_return.queue = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",", ""));
 						}
 					});
 				}
@@ -1700,6 +2060,22 @@ XKit.tools.dump_config = function(){
 
 			},
 
+			/**
+			 * @return {Object} Information about the browser's current location in Tumblr with keys
+			 *	inbox: boolean - Whether viewing inbox
+			 *	activity: boolean - Whether viewing activity
+			 *	queue: boolean - Whether viewing queue
+			 *	channel: boolean - Whether viewing a channel
+			 *	search: boolean - Whether viewing a search
+			 *	drafts: boolean - Whether viewing drafts
+			 *	followers: boolean - Whether viewing followers
+			 *	channel: boolean - Whether viewing a channel
+			 *	tagged: boolean - Whether viewing tagged posts
+			 *	user_url: String - The url of the currently viewed side blog.
+			 *	                   Otherwise the user's main URL
+			 *	endless: boolean - Whether the current view scrolls endlessly
+			 *	following: boolean - Whether the viewed blog follows the user
+			 */
 			where: function() {
 				var m_return = {
 					inbox: false,
@@ -1714,7 +2090,8 @@ XKit.tools.dump_config = function(){
 					dashboard: false,
 					likes: false,
 					following: false,
-					tagged: false
+					tagged: false,
+					explore: false
 				};
 
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
@@ -1739,7 +2116,7 @@ XKit.tools.dump_config = function(){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "activity") {
 							m_return.activity = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -1750,7 +2127,7 @@ XKit.tools.dump_config = function(){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "queue") {
 							m_return.queue = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -1761,7 +2138,7 @@ XKit.tools.dump_config = function(){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "drafts") {
 							m_return.drafts = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -1772,7 +2149,7 @@ XKit.tools.dump_config = function(){
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						if (href_parts[5] === "followers") {
 							m_return.followers = true;
-							m_return.user_url = href_parts[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#", "");
 						}
 					}
 				}
@@ -1787,12 +2164,17 @@ XKit.tools.dump_config = function(){
 
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 					if (href_parts[3] === "blog") {
-						m_return.user_url = href_parts[4].replace("#","");
+						m_return.user_url = href_parts[4].replace("#", "");
 					}
 				}
 
 				if (document.location.href.indexOf("tumblr.com/search/") !== -1) {
 					m_return.search = true;
+				}
+
+				if ($("body").hasClass("discover") ||
+						document.location.href.indexOf("tumblr.com/explore/") !== -1) {
+					m_return.explore = true;
 				}
 
 				if ($("body").hasClass("dashboard_posts_likes") ||
@@ -1826,7 +2208,7 @@ XKit.tools.dump_config = function(){
 			 * Tell Tumblr to reflow the page. Used to recalculate post dimensions
 			 * and j/k scrolling.
 			 */
-			trigger_reflow: function() {
+			trigger_reflow: XKit.tools.debounce(function() {
 				if (this.where().search) {
 					// Found by logging calls to Tumblr.Events.trigger on the search page
 					// search:post:photo_expanded is where the magic happens
@@ -1840,9 +2222,43 @@ XKit.tools.dump_config = function(){
 						Tumblr.Events.trigger("DOMEventor:updateRect");
 					}, true, "");
 				}
+			}, 250),
+
+			show_peepr_for: function(blog, post) {
+				var payload = {
+					tumblelog_name: blog
+				};
+				if (post) {
+					payload.post_id = post;
+				}
+
+				XKit.tools.add_function(function() {
+					Tumblr.Events.trigger("peepr-open-request", add_tag);
+				}, true, payload);
+			},
+
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @param {String} username
+			 * @param {String} blog
+			 * @return {Promise<Boolean>}
+			 */
+			is_following: function(username, blog) {
+				return $.ajax({
+					type: "GET",
+					url: "/svc/blog/followed_by",
+					data: "tumblelog=" + blog + "&query=" + username,
+					dataType: "json",
+				}).then(function(msg) {
+					return msg.response.is_friend == 1;
+				});
 			}
 		});
 
+		/**
+		 * Initialize all of XKit
+		 */
 		XKit.init = function() {
 
 			// Check page then return control to init_extension.
@@ -1873,13 +2289,18 @@ XKit.tools.dump_config = function(){
 			}
 		};
 
-		// New Post Listener for Posts_v2
+		/**
+		 * Check for the existence of new posts on the page, running callbacks
+		 * if there are new posts
+		 * @param {boolean?} no_timeout - If true, do not schedule the check for
+		 *                                running in the future
+		 */
 		XKit.post_listener.check = function(no_timeout) {
 			var post_count = -1;
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
-				if ($(".posts").length > 0){
+				if ($(".posts").length > 0) {
 					post_count = $(".posts .post").length;
 				} else if ($("#posts").length > 0) {
 					post_count = $("#posts .post").length;
@@ -1890,7 +2311,7 @@ XKit.tools.dump_config = function(){
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
-				if(XKit.post_listener.count > 0){
+				if (XKit.post_listener.count > 0) {
 					XKit.post_listener.run_callbacks();
 				}
 			} else {
@@ -1904,86 +2325,90 @@ XKit.tools.dump_config = function(){
 			}
 		};
 
+		/**
+		 * Run all callbacks registered to run when new posts appear
+		 */
 		XKit.post_listener.run_callbacks = function() {
 			if (XKit.post_listener.callbacks.length === 0) {
 				return;
 			}
-			var successful_count = 0;
-			var fail_count = 0;
-			for (var i=0;i<XKit.post_listener.callbacks.length;i++) {
-
+			for (var i = 0; i < XKit.post_listener.callbacks.length; i++) {
 				try {
 					XKit.post_listener.callbacks[i]();
-					successful_count++;
-				} catch(e) {
-					// console.log("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
-					fail_count++;
+				} catch (e) {
+					console.error("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
 				}
-
 			}
-			// console.log("[Post Listener] Ran " + XKit.post_listener.callbacks.length + " callbacks, " + successful_count + " successful, " + fail_count + " failed.");
 		};
 
 		if ($(".search_control.post_layout").length > 0) {
-
 			setTimeout(function() { XKit.post_listener.check(true); }, 400);
-
 		}
 
-		// Patch notifications adder
+		/**
+		 * Add an XKit notification popup (will appear in bottom left corner)
+		 * @param {String} message - Text of notification
+		 * @param {String} type - Desired CSS class of notification, see function
+		 *                        for possibilities.
+		 * @param {boolean} sticky - If true, the notification will not fade out over time.
+		 * @param {Function} callback - On click callback for notification
+		 */
 		XKit.notifications.add = function(message, type, sticky, callback) {
+			if ($("#xkit-notifications").length <= 0) {
+				setTimeout(function() { XKit.notifications.add(message, type, sticky, callback); }, 500);
+				return;
+			}
 
-				//alert($("#xkit-notifications").length);
-				if($("#xkit-notifications").length <= 0) {
-					setTimeout(function() { XKit.notifications.add(message,type,sticky,callback); }, 500);
-					return;
-				}
+			XKit.notifications.count++;
 
-				XKit.notifications.count++;
+			var m_class = "";
+			if (type === "mail") { m_class = "notification-mail"; }
+			if (type === "ok") { m_class = "notification-ok"; }
+			if (type === "error") { m_class = "notification-error"; }
+			if (type === "warning") { m_class = "notification-warning"; }
+			if (type === "pokes") { m_class = "notification-pokes"; }
 
-				var m_class = "";
-				if (type === "mail") { m_class = "notification-mail"; }
-				if (type === "ok") { m_class = "notification-ok"; }
-				if (type === "error") { m_class = "notification-error"; }
-				if (type === "warning") { m_class = "notification-warning"; }
+			if (sticky === true) {
+				m_class = m_class + " sticky";
+			}
 
-				if (sticky === true) {
-					m_class = m_class + " sticky";
-				}
-
-				var m_html = "<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
+			var m_html = "<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
 									message +
 								"</div>";
 
-				$("#xkit-notifications").append(m_html);
+			$("#xkit-notifications").append(m_html);
 
 				// XKit.console.add(" Notification > " + message);
 
-				var m_notification_id = XKit.notifications.count;
-				setTimeout(function() {
-					$("#xkit_notification_" + m_notification_id).slideDown('slow');
-				}, 100);
-				$("#xkit_notification_" + m_notification_id).click(function() {
-					if(typeof callback !== undefined) {
-						try {
-							callback();
-						} catch(e) {
+			var m_notification_id = XKit.notifications.count;
+			setTimeout(function() {
+				$("#xkit_notification_" + m_notification_id).slideDown('slow');
+			}, 100);
+			$("#xkit_notification_" + m_notification_id).click(function() {
+				if (typeof callback !== undefined) {
+					try {
+						callback();
+					} catch (e) {
 							// Meh.
-						}
 					}
-					$("#xkit_notification_" + m_notification_id).slideUp('slow');
-				});
-				if (sticky !== true) {
-					setTimeout(function() {
-						$("#xkit_notification_" + m_notification_id).slideUp('slow');
-					}, 5000);
 				}
-			};
+				$("#xkit_notification_" + m_notification_id).slideUp('slow');
+			});
+			if (sticky !== true) {
+				setTimeout(function() {
+					$("#xkit_notification_" + m_notification_id).slideUp('slow');
+				}, 5000);
+			}
+		};
 
 	},
 
+	/**
+	 * Clean up xkit_patches
+	 */
 	destroy: function() {
 		// console.log = XKit.log_back;
+		window.removeEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 		XKit.tools.remove_css("xkit_patches");
 		this.running = false;
 	}

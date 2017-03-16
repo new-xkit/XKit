@@ -1,5 +1,6 @@
 .xkit-activity-plus-condensed-item.xkit-activity-plus-yellow-mode-on {
-	display: none; height: 0;
+	display: none !important;
+	height: 0 !important;
 	overflow: hidden;
 }
 
@@ -8,7 +9,8 @@
 }
 
 .xkit-activity-plus-condensed-item-opened.xkit-activity-plus-yellow-mode-on {
-	display: block; height: auto;
+	display: block !important;
+	height: auto !important;
 	overflow: hidden;
    	-webkit-transition: 0.3s ease-in;
    	-moz-transition: 0.3s ease-in;

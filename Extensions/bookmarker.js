@@ -1,7 +1,7 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.3 **//
+//* VERSION 2.3.5 **//
 //* DESCRIPTION Dashboard Time Machine **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
 //* FRAME false **//
 //* BETA false **//
@@ -62,7 +62,7 @@ XKit.extensions.bookmarker = new Object({
 
 			// Check for new body layout.
 			if ($("body").hasClass("posts_v2") === true) {
-				XKit.tools.add_css("#xkit-bookmarker-not-found-inner { padding: 20px 20px 20px 60px; margin-bottom: 10px; }","bookmarker_new_layout");
+				XKit.tools.add_css("#xkit-bookmarker-not-found-inner { padding: 20px 20px 20px 60px; margin-bottom: 10px; }", "bookmarker_new_layout");
 			}
 		}
 	},
@@ -120,14 +120,14 @@ XKit.extensions.bookmarker = new Object({
 		}
 
 		m_html = '<ul class="controls_section" id="xbookmarks">' + m_html + '</ul>' +
-			'<div class="small_links" id="xbookmarker_small_links"><a href="#" onclick="return false;" id="xbookmarker_delete_all">delete all</a><a href="#" onclick="return false;" id="xbookmarker_help">bookmarker help</a></div>';
+			'<div class="small_links" id="xbookmarker_small_links"><a href="#" id="xbookmarker_delete_all">delete all</a><a href="#" id="xbookmarker_help">bookmarker help</a></div>';
 
 		if (document.location.href.indexOf("?bookmark=true") !== -1) {
 			$("#right_column").prepend(m_html);
 		} else {
 			if (XKit.extensions.bookmarker.preferences.display_on_top.value === true) {
 				$("ul.controls_section:first").after(m_html);
-			} else{
+			} else {
 				if ($("#tumblr_radar").length > 0) {
 					//$("#tumblr_radar").before(m_html);
 					$(".controls_section_radar").before(m_html);
@@ -146,13 +146,14 @@ XKit.extensions.bookmarker = new Object({
 
 		$("#xbookmarker_help").click(function() {
 
-			XKit.window.show("Bookmarker Help","Bookmarker lists your bookmarks on the sidebar.<br/><br/>To rename or delete a bookmark, you can click them while holding the <b>ALT</b> key on your keyboard.<br/><br/>To go back to a bookmarked post, just click on the bookmark. If the post you've bookmarked is deleted, you'll get the posts made around that time.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Bookmarker Help", "Bookmarker lists your bookmarks on the sidebar.<br/><br/>To rename or delete a bookmark, you can click them while holding the <b>ALT</b> key on your keyboard.<br/><br/>To go back to a bookmarked post, just click on the bookmark. If the post you've bookmarked is deleted, you'll get the posts made around that time.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
+			return false;
 		});
 
 		$("#xbookmarker_delete_all").click(function() {
 
-			XKit.window.show("Delete all bookmarks","You sure about this?", "question", "<div class=\"xkit-button default\" id=\"xkit-bookmarker-delete-all-ok\">OK</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Delete all bookmarks", "You sure about this?", "question", "<div class=\"xkit-button default\" id=\"xkit-bookmarker-delete-all-ok\">OK</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-bookmarker-delete-all-ok").click(function() {
 
@@ -161,9 +162,10 @@ XKit.extensions.bookmarker = new Object({
 
 			});
 
+			return false;
 		});
 
-		$(document).on("click", ".xkit_bookmarker_button", function(event){
+		$(document).on("click", ".xkit_bookmarker_button", function(event) {
 
 			var post_id = $(this).attr('data-xkit-bookmarker-post-id');
 			if ($(this).hasClass("on") === true) {
@@ -178,7 +180,7 @@ XKit.extensions.bookmarker = new Object({
 		});
 
 
-		$(document).on("click", ".xbookmark", function(event){
+		$(document).on("click", ".xbookmark", function(event) {
 
 			var post_id = $(this).attr('data-xkit-bookmark-post-id');
 
@@ -186,7 +188,7 @@ XKit.extensions.bookmarker = new Object({
 
 			if (event.altKey) {
 				// Ask for the caption.
-				XKit.window.show("Rename/Delete bookmark","What would you like to rename this to? <input id=\"xkit-bookmark-caption\" type=\"text\" class=\"xkit-textbox\" placeholder=\"Write something short here.\">", "question", "<div class=\"xkit-button default\" id=\"xkit-bookmarker-rename-ok\">OK</div><div class=\"xkit-button\" id=\"xkit-bookmarker-delete-ok\">Delete this bookmark</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+				XKit.window.show("Rename/Delete bookmark", "What would you like to rename this to? <input id=\"xkit-bookmark-caption\" type=\"text\" class=\"xkit-textbox\" placeholder=\"Write something short here.\">", "question", "<div class=\"xkit-button default\" id=\"xkit-bookmarker-rename-ok\">OK</div><div class=\"xkit-button\" id=\"xkit-bookmarker-delete-ok\">Delete this bookmark</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 				$("#xkit-bookmarker-delete-ok").click(function() {
 
@@ -231,7 +233,7 @@ XKit.extensions.bookmarker = new Object({
 
 	retrieve_bookmark_object: function(post_id) {
 
-		for (var i=0;i<XKit.extensions.bookmarker.bookmarks.length; i++) {
+		for (var i = 0; i < XKit.extensions.bookmarker.bookmarks.length; i++) {
 			if (XKit.extensions.bookmarker.bookmarks[i].id === post_id) {
 				return XKit.extensions.bookmarker.bookmarks[i];
 			}
@@ -242,6 +244,8 @@ XKit.extensions.bookmarker = new Object({
 	},
 
 	create_bookmark_div: function(current_bookmark) {
+		// defined in moment.js
+		/* globals moment */
 
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);
@@ -251,7 +255,7 @@ XKit.extensions.bookmarker = new Object({
 		}
 
 		var bookmark_caption = current_bookmark.caption;
-		if (bookmark_caption === "" ||typeof bookmark_caption === "undefined") {
+		if (bookmark_caption === "" || typeof bookmark_caption === "undefined") {
 
 			var dt = moment(current_bookmark.date);
 
@@ -303,7 +307,7 @@ XKit.extensions.bookmarker = new Object({
 
 		XKit.extensions.bookmarker.load_bookmarks();
 
-		while(XKit.extensions.bookmarker.bookmarks.length>0) {
+		while (XKit.extensions.bookmarker.bookmarks.length > 0) {
 			XKit.extensions.bookmarker.remove_bookmark(XKit.extensions.bookmarker.bookmarks[0].id);
 		}
 
@@ -318,14 +322,14 @@ XKit.extensions.bookmarker = new Object({
 
 	},
 
-	remove_bookmark: function(post_id,mass_mode) {
+	remove_bookmark: function(post_id, mass_mode) {
 
 		// Reload everything.
 		XKit.extensions.bookmarker.load_bookmarks();
 
 		var m_index = -1;
 
-		for (var i=0;i<XKit.extensions.bookmarker.bookmarks.length; i++) {
+		for (var i = 0; i < XKit.extensions.bookmarker.bookmarks.length; i++) {
 			//alert(i + "\ncurrently: " + XKit.extensions.bookmarker.bookmarks[i].id + "\nwanted: " + post_id);
 			if (XKit.extensions.bookmarker.bookmarks[i].id == post_id) {
 				m_index = i;
@@ -364,23 +368,23 @@ XKit.extensions.bookmarker = new Object({
 
 	load_bookmarks: function() {
 
-		var m_bookmarks = XKit.storage.get("bookmarker","my_bookmarks","");
+		var m_bookmarks = XKit.storage.get("bookmarker", "my_bookmarks", "");
 		if (m_bookmarks === "") {
-			m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");
+			m_bookmarks = XKit.storage.get("bookmarks", "my_bookmarks", "");
 		} else {
 			try {
 				XKit.extensions.bookmarker.bookmarks = JSON.parse(m_bookmarks);
 				if (XKit.extensions.bookmarker.bookmarks.length === 0) {
-					m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");
+					m_bookmarks = XKit.storage.get("bookmarks", "my_bookmarks", "");
 				}
-			} catch(e) {
-				m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");
+			} catch (e) {
+				m_bookmarks = XKit.storage.get("bookmarks", "my_bookmarks", "");
 			}
 		}
 
 		try {
 			XKit.extensions.bookmarker.bookmarks = JSON.parse(m_bookmarks);
-		} catch(e) {
+		} catch (e) {
 			XKit.extensions.bookmarker.bookmarks = [];
 			XKit.extensions.bookmarker.save_bookmarks();
 		}
@@ -389,8 +393,8 @@ XKit.extensions.bookmarker = new Object({
 
 	save_bookmarks: function() {
 
-		XKit.storage.set("bookmarks","my_bookmarks", JSON.stringify(XKit.extensions.bookmarker.bookmarks));
-		XKit.storage.set("bookmarker","my_bookmarks", JSON.stringify(XKit.extensions.bookmarker.bookmarks));
+		XKit.storage.set("bookmarks", "my_bookmarks", JSON.stringify(XKit.extensions.bookmarker.bookmarks));
+		XKit.storage.set("bookmarker", "my_bookmarks", JSON.stringify(XKit.extensions.bookmarker.bookmarks));
 
 	},
 
@@ -398,7 +402,7 @@ XKit.extensions.bookmarker = new Object({
 
 		// Create a temp array to look up so to not waste CPU.
 		var m_array = [];
-		for(var i=0;i<XKit.extensions.bookmarker.bookmarks.length;i++) {
+		for (var i = 0; i < XKit.extensions.bookmarker.bookmarks.length; i++) {
 			m_array.push(XKit.extensions.bookmarker.bookmarks[i].id);
 		}
 
@@ -412,9 +416,9 @@ XKit.extensions.bookmarker = new Object({
 				m_class = "xkit_bookmarker_button on";
 			}
 
-			var m_html = "<a class=\"post_control post_control_icon xbookmarker_post_icon " + m_class + "\" data-xkit-bookmarker-post-id=\"" + post_id + "\" onclick=\"return false\"></a>";
+			var m_html = "<a class=\"post_control post_control_icon xbookmarker_post_icon " + m_class + "\" data-xkit-bookmarker-post-id=\"" + post_id + "\" onclick=\"return false\" title=\"Bookmarker\"></a>";
 			if ($(this).find(".post_controls_inner").length > 0) {
-				m_html = "<a class=\"post_control post_control_icon xbookmarker_post_icon xkit_new_dashboard " + m_class + "\" data-xkit-bookmarker-post-id=\"" + post_id + "\" onclick=\"return false\"></a>";
+				m_html = "<a class=\"post_control post_control_icon xbookmarker_post_icon xkit_new_dashboard " + m_class + "\" data-xkit-bookmarker-post-id=\"" + post_id + "\" onclick=\"return false\" title=\"Bookmarker\"></a>";
 				$(this).find(".post_controls_inner").prepend(m_html);
 			} else {
 				$(this).find(".post_controls").prepend(m_html);
@@ -428,7 +432,7 @@ XKit.extensions.bookmarker = new Object({
 
 		$("#xkit-bookmarks-format-help").click(function() {
 
-			XKit.window.show("Bookmark time formatting","Bookmarks extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Bookmark time formatting", "Bookmarks extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 		});
 

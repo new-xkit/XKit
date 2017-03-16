@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.2 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -37,26 +37,26 @@ XKit.extensions.show_originals = new Object({
 					XKit.extensions.show_originals.dont_show_mine = true;
 				}
 			}
-		} catch(e) {
+		} catch (e) {
 			console.log("show_originals -> can't read tweaks property: " + e.message);
 			XKit.extensions.show_originals.dont_show_mine = false;
 		}
 
 		if (!$("body").hasClass("with_auto_paginate")) {
-			if (XKit.storage.get("show_originals","shown_warning_about_scrolling","") !== "yass") {
+			if (XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
 				XKit.notifications.add("Show Originals only works when Endless Scrolling is turned on. Click here to learn more and disable this warning.", "warning", false, function() {
-					XKit.window.show("Endless Scrolling required.","Show Originals require Endless Scrolling to be enabled on your dashboard. Click on the Tumblr Settings button (gear icon) on top-right of the page and then Dashboard > Enable endless scrolling.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					XKit.storage.set("show_originals","shown_warning_about_scrolling","yass");
+					XKit.window.show("Endless Scrolling required.", "Show Originals require Endless Scrolling to be enabled on your dashboard. Click on the Tumblr Settings button (gear icon) on top-right of the page and then Dashboard > Enable endless scrolling.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.storage.set("show_originals", "shown_warning_about_scrolling", "yass");
 				});
 			}
 			return;
 		}
 
-		XKit.extensions.show_originals.status = XKit.storage.get("show_originals","status","false");
+		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
 
-		xf_html = '<ul class="controls_section" id="xshow_originals_ul">' +
+		var xf_html = '<ul class="controls_section" id="xshow_originals_ul">' +
 			'<li class="section_header selected">SHOW ORIGINALS</li>' +
-			'<li class="no_push" style="height:36px;"><a href="#" onclick="return false;" id="xshoworiginals_button">' +
+			'<li class="no_push" style="height:36px;"><a href="#" id="xshoworiginals_button">' +
 			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Originals Only</div>' +
 			'<div class="count" id="xshoworiginalsstatus" style="padding-top: 8px;">' + XKit.extensions.show_originals.lbl_off + '</div>' +
 			'<div id="xshoworiginalsindicator">&nbsp;</div>' +
@@ -65,8 +65,10 @@ XKit.extensions.show_originals = new Object({
 
 		XKit.extensions.show_originals.update_button();
 
-		$("#xshow_originals_ul").click(function() {
+		$("#xshoworiginals_button").click(function() {
 			XKit.extensions.show_originals.toggle();
+
+			return false;
 		});
 
 		XKit.tools.init_css("show_originals");

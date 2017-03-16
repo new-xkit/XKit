@@ -1,26 +1,48 @@
 .xglow {
-	animation:glow 1.75s;
-	-moz-animation:glow 1.75s;
-	-webkit-animation:glow 1.75s;
-	animation-iteration-count:infinite;
-	-webkit-animation-iteration-count:infinite;
-	-moz-animation-iteration-count:infinite;
+	text-shadow: 0 0 3px #FFF;
+	background: rgba(0,0,0,0.70) !important;
+	animation: glow 1.75s;
+	-moz-animation: glow 1.75s;
+	-webkit-animation: glow 1.75s;
+	animation-iteration-count: infinite;
+	-moz-animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
 }
 
 @keyframes glow {
-	0% {background:rgba(0,0,0,0.70);}
-	50% {background:rgba(0,0,0,0.38);}
-	100% {background:rgba(0,0,0,0.70);}
+	50% {text-shadow: 0 0 0 #FFF;
+		background: rgba(0,0,0,0.38);}
 }
 
 @-moz-keyframes glow {
-	0% {background:rgba(0,0,0,0.70);}
-	50% {background:rgba(0,0,0,0.38);}
-	100% {background:rgba(0,0,0,0.70);}
+	50% {text-shadow: 0 0 0 #FFF;
+		background: rgba(0,0,0,0.38);}
 }
 
 @-webkit-keyframes glow {
-	0% {background:rgba(0,0,0,0.70);}
-	50% {background:rgba(0,0,0,0.38);}
-	100% {background:rgba(0,0,0,0.70);}
+	50% {text-shadow: 0 0 0 #FFF;
+		background: rgba(0,0,0,0.38);}
+}
+
+.xglow::before {
+	filter: drop-shadow(0 0 3px #FFF);
+	-webkit-filter: drop-shadow(0 0 3px #FFF);
+	animation: glow_before 1.75s;
+	-moz-animation: glow_before 1.75s;
+	-webkit-animation: glow_before 1.75s;
+	animation-iteration-count: infinite;
+	-moz-animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+}
+
+@keyframes glow_before {
+	50% {filter: drop-shadow(0 0 0 #FFF);}
+}
+
+@-moz-keyframes glow_before {
+	50% {filter: drop-shadow(0 0 0 #FFF);}
+}
+
+@-webkit-keyframes glow_before {
+	50% {-webkit-filter: drop-shadow(0 0 0 #FFF);}
 }

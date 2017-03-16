@@ -22,10 +22,10 @@ finding something going wrong. There's a long list of known issues
 Come join us in [the XKit repo chat](https://gitter.im/new-xkit/XKit) if you get stuck, or want some advice! There's normally a few people lurking in there any time of day.
 
 ### Writing a New Extension
-Check out [the wiki page](https://github.com/new-xkit/XKit/wiki/Writing-a-New-Extension)!
+Read the guide on [writing a new extension](./docs/extensions/Writing-a-New-Extension.md)!
 
 ### Develop XKit
-Review the project prerequisites and learn how to build XKit from source [over on the wiki](https://github.com/new-xkit/XKit/wiki/Build-XKit).
+Review the project prerequisites and learn how to [build XKit from source](./docs/contributing/Build-XKit.md).
 
 ### Quickstart
 In your clone of this repository run:
@@ -42,4 +42,4 @@ gulp build
 
 Builds can be found in the `build/` directory.
 
-For a list of available build tasks, see [the documentation](https://github.com/new-xkit/XKit/wiki/Build-XKit#gulp-tasks).
+For a list of available build tasks, see [the documentation](./docs/contributing/Build-XKit.md#gulp-tasks).

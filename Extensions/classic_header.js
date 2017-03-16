@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.3.2 **//
+//* VERSION 2.4.2 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -19,26 +19,43 @@ XKit.extensions.classic_header = new Object({
 		"fixed_width": {
 			text: "Reduce the max width of the header to match the dashboard",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"fixed_position": {
 			text: "Fixed position header (un-stickify)",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"fix_color": {
 			text: "Make the tab notification bubbles red again",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
+		},
+		"mobile_sticky": {
+			text: "Scrolling header (like desktop)",
+			default: false,
+			value: false,
+			mobile_only: true
+		},
+		"mobile_logout": {
+			text: "Add logout button to menu",
+			default: false,
+			value: false,
+			mobile_only: true
 		},
 		"sep1": {
 			text: "Blogs on the header",
 			type: "separator",
+			desktop_only: true
 		},
 		"show_avatars": {
 			text: "Show my blogs on the header",
 			default: true,
-			value: true
+			value: true,
+			desktop_only: true
 		},
 		appearance: {
 			text: "Avatar Appearance",
@@ -47,8 +64,10 @@ XKit.extensions.classic_header = new Object({
 			type: "combo",
 			values: [
 				"Circle (default)", "circle",
-				"Rounded Box", "box"
+				"Rounded Box", "box",
+				"Square", "square"
 			],
+			desktop_only: true
 		},
 		maximum: {
 			text: "Maximum blogs to show",
@@ -62,11 +81,13 @@ XKit.extensions.classic_header = new Object({
 				"4 Blogs", "b4",
 				"5 Blogs", "b5"
 			],
+			desktop_only: true
 		},
 		"show_bubble": {
 			text: "Show blog title bubble on hover",
 			default: true,
-			value: true
+			value: true,
+			desktop_only: true
 		}
 	},
 
@@ -75,20 +96,37 @@ XKit.extensions.classic_header = new Object({
 		XKit.tools.init_css("classic_header");
 		$("#xoldeheader").remove();
 
-		if (XKit.extensions.classic_header.preferences.show_avatars.value === true) {
+		if (XKit.extensions.classic_header.preferences.show_avatars.value) {
 			XKit.extensions.classic_header.show_blogs();
 		}
-
 		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
 			XKit.tools.add_css(" @media screen and (min-width: 900px){.l-header {max-width: 900px!important;}}", "classic_header_fixed_width");
 		}
 
-		if (XKit.extensions.classic_header.preferences.fixed_position.value === true) {
+		if (XKit.extensions.classic_header.preferences.fixed_position.value) {
 			XKit.tools.add_css(" .l-header-container { position: absolute !important; }", "classic_header_fixed_position");
 		}
 
-		if (XKit.extensions.classic_header.preferences.fix_color.value === true) {
+		if (XKit.extensions.classic_header.preferences.fix_color.value) {
 			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; } .selected .tab_notice, .tab_notice { background: #bc3333 !important; } .tab_bar .tab.selected .tab_anchor, .tab_bar .tab.active .tab_anchor {opacity: 0.5;}", "classic_header_fixed_color");
+		}
+
+		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
+
+			// The nav menu is written terribly. Thanks @staff.
+			XKit.tools.add_css(" #container { position: absolute; top:44px; max-width: 800px; width: 100%; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }", "classic_header_mobile_sticky");
+
+			$('#footer').insertAfter($('#load_more_posts'));
+
+			if ($('.mh_post_buttons').length > 0) {
+				$('.mh_post_buttons').insertBefore($('#content'));
+			}
+
+		}
+
+		if (XKit.extensions.classic_header.preferences.mobile_logout.value) {
+			var m_html = '<a class=\"nav-item with-icon\" href=\"/logout\"><span class=\"nav-text nav-item-goodbye\">Log Out</span></a>';
+			$('.nav-site-sections').append(m_html);
 		}
 
 	},
@@ -108,74 +146,76 @@ XKit.extensions.classic_header = new Object({
 
 		if (XKit.extensions.classic_header.preferences.appearance.value === "box") {
 			XKit.tools.add_css(".xoldeheader-item { border-radius: 7px !important; }", "classic_header_box");
+		} else if (XKit.extensions.classic_header.preferences.appearance.value === "square") {
+			XKit.tools.add_css(".xoldeheader-item { border-radius: 0px !important; }", "classic_header_square");
 		}
 
 		try {
-		var tab_blogs = $(".tab_blog");
-		if (tab_blogs.length > 0) {
-			tab_blogs.each(function(index) {
-				var tab_blog = $(this);
-				if (tab_blog.hasClass('tab_dashboard')) {
-					return;
-				}
+			var tab_blogs = $(".tab_blog");
+			if (tab_blogs.length > 0) {
+				tab_blogs.each(function(index) {
+					var tab_blog = $(this);
+					if (tab_blog.hasClass('tab_dashboard')) {
+						return;
+					}
 
-				m_counter ++;
+					m_counter ++;
 
-				if (m_counter >= max_count) {
-					return;
-				}
+					if (m_counter >= max_count) {
+						return;
+					}
 
-				var raw_id = tab_blog.attr('id');
+					var raw_id = tab_blog.attr('id');
 				// Id has the form tab_blog_{blog-name}
-				var blog_id = raw_id.substring('tab_blog_'.length, raw_id.length);
-				var blog_icon = tab_blog.find('.blog_icon').css('background-image');
-				if (!blog_icon || blog_icon === "none") {
-					blog_icon = "no-repeat url(\"http://assets.tumblr.com/images/lock_avatar.png\") 50% / 8px";
-				}
+					var blog_id = raw_id.substring('tab_blog_'.length, raw_id.length);
+					var blog_icon = tab_blog.find('.blog_icon').css('background-image');
+					if (!blog_icon || blog_icon === "none") {
+						blog_icon = "no-repeat url(\"http://assets.tumblr.com/images/lock_avatar.png\") 50% / 8px";
+					}
 
-				var blog_name = tab_blog.find('.blog_name').text();
-				var is_private = tab_blog.find('.blog_icon').hasClass('private');
+					var blog_name = tab_blog.find('.blog_name').text();
+					var is_private = tab_blog.find('.blog_icon').hasClass('private');
 
-				if (is_private) {
-					blog_name += ' [private]';
-				}
+					if (is_private) {
+						blog_name += ' [private]';
+					}
 
-				m_html = m_html + '<div class="xoldeheader-item-container">' +
+					m_html = m_html + '<div class="xoldeheader-item-container">' +
 						'<a href="http://www.tumblr.com/blog/' + blog_id + '/" class="xoldeheader-item"' +
 						' id="xoldeheader-item-' + blog_id + '"' +
 						' style=\'background: ' + blog_icon + '\' title="' + blog_name + '">&nbsp;</a>' +
 						' <div class="selection_nipple"></div></div>';
-			});
-			XKit.storage.set("classic_header","header_html",m_html);
-		} else {
-			if (XKit.storage.get("classic_header", "header_html","") === "") {
-				return;
+				});
+				XKit.storage.set("classic_header", "header_html", m_html);
 			} else {
-				m_html = XKit.storage.get("classic_header", "header_html","");
-			}
-		}
-
-		$("#user_tools").prepend('<div id="xoldeheader">' + m_html + '</div>');
-
-		if (XKit.extensions.classic_header.preferences.show_bubble.value === true) {
-			$(".xoldeheader-item").tipTip({maxWidth: "auto", delay: 10, edgeOffset: 5 });
-		}
-
-		if (document.location.href.indexOf('/blog/') !== -1) {
-
-			var user_url = document.location.href.substring(document.location.href.indexOf('/blog/') + 6);
-			user_url = user_url.replace("#","");
-			if (user_url.indexOf("/") !== -1) {
-				user_url = user_url.substring(0,user_url.indexOf("/"));
+				if (XKit.storage.get("classic_header", "header_html", "") === "") {
+					return;
+				} else {
+					m_html = XKit.storage.get("classic_header", "header_html", "");
+				}
 			}
 
-			$("#xoldeheader-item-" + user_url).addClass("selected");
-			$("#xoldeheader-item-" + user_url).parent().addClass("selected");
-			$("#home_button").removeClass("selected");
+			$("#user_tools").prepend('<div id="xoldeheader">' + m_html + '</div>');
 
-		}
+			if (XKit.extensions.classic_header.preferences.show_bubble.value === true) {
+				$(".xoldeheader-item").tipTip({maxWidth: "auto", delay: 10, edgeOffset: 5 });
+			}
 
-		} catch(e) {
+			if (document.location.href.indexOf('/blog/') !== -1) {
+
+				var user_url = document.location.href.substring(document.location.href.indexOf('/blog/') + 6);
+				user_url = user_url.replace("#", "");
+				if (user_url.indexOf("/") !== -1) {
+					user_url = user_url.substring(0, user_url.indexOf("/"));
+				}
+
+				$("#xoldeheader-item-" + user_url).addClass("selected");
+				$("#xoldeheader-item-" + user_url).parent().addClass("selected");
+				$("#home_button").removeClass("selected");
+
+			}
+
+		} catch (e) {
 			XKit.console.add(e.message);
 		}
 
@@ -186,8 +226,11 @@ XKit.extensions.classic_header = new Object({
 		XKit.tools.remove_css("classic_header_fixed_color");
 		XKit.tools.remove_css("classic_header_fixed_position");
 		XKit.tools.remove_css("classic_header_fixed_width");
+		XKit.tools.remove_css("classic_header_mobile_sticky");
+		$(".nav-item-goodbye").remove();
 		$("#xoldeheader").remove();
 		XKit.tools.remove_css("classic_header_box");
+		XKit.tools.remove_css("classic_header_square");
 	}
 
 });

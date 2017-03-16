@@ -87,7 +87,7 @@ XKit.extensions.jk_across_pages = new Object({
 				that.$posts = jQuery('.post_container').not('#new_post_buttons');
 
 				if (that.preferences.view_entire_posts.value && evt.which === 74 /* j */ &&
-					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0]){
+					that.postAtY(that.scrollBufferJ + 1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0]) {
 
 					evt.stopPropagation(); // Try to stop Tumblr's event listener
 
@@ -130,8 +130,8 @@ XKit.extensions.jk_across_pages = new Object({
 			jQuery(document.body).unbind('.xkit_jk_across_pages');
 			XKit.tools.remove_css("jk_across_pages");
 			this.running = false;
-		} catch(err) {
-			if (console && console.error) console.error(e);
+		} catch (err) {
+			if (console && console.error) console.error(err);
 		}
 	}
 

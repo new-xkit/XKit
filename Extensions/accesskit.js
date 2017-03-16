@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1.8 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER new-xkit **//
@@ -29,6 +29,11 @@ XKit.extensions.accesskit = new Object({
 		"sep-2": {
 			text: "Dashboard Adjustments",
 			type: "separator"
+		},
+		visible_captions: {
+			text: "Make image captions viewable below image",
+			default: false,
+			value: false
 		},
 		make_links_blue: {
 			text: "Make links on the posts on my dashboard blue",
@@ -79,19 +84,19 @@ XKit.extensions.accesskit = new Object({
 			type: "separator"
 		},
 		invert: {
-			text: "Invert colors (Chrome/Safari only, may cause slowness/problems)",
+			text: "Invert colors (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
 		},
 		grayscale: {
-			text: "Use grayscale colors (Chrome/Safari only, may cause slowness/problems)",
+			text: "Use grayscale colors (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
 		},
 		contrast: {
-			text: "Increase overall contrast (Chrome/Safari only, may cause slowness/problems)",
+			text: "Increase overall contrast (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
@@ -148,8 +153,12 @@ XKit.extensions.accesskit = new Object({
 
 		if (m_filters !== "") {
 
-			m_css = m_css + " html { -webkit-filter: " + m_filters + "; } ";
+			m_css = m_css + "html {height: 100%; } body { height: 100%; filter: " + m_filters + "; } ";
 
+		}
+
+		if (this.preferences.visible_captions.value === true) {
+			XKit.post_listener.add("accesskit_vis_caps", XKit.extensions.accesskit.vis_caps);
 		}
 
 		if (this.preferences.make_links_blue.value === true) {
@@ -288,6 +297,46 @@ XKit.extensions.accesskit = new Object({
 		}
 
 		XKit.tools.add_css(m_css, "accesskit");
+
+	},
+
+	vis_caps: function() {
+
+		if (!XKit.interface.where().dashboard && !XKit.interface.where().channel && !XKit.interface.where().inbox) {
+			// probs on a blog. abort mission.
+			return;
+		}
+
+		var imgCap = '';
+		var imgWidth = '';
+		var rowHeight = '';
+
+		$('.photoset_row').each(function() {
+
+			if (!$(this).hasClass('xkit-accesskit-viscaps')) { //prevents double-dipping
+
+				$(this).attr('style', $(this).attr('style').replace('height', 'min-height'));
+				rowHeight = $(this).css('min-height');
+
+				$(this).find('a').each(function() {
+
+					if (!$(this).hasClass('xkit-accesskit-viscaps')) { //protection!
+
+						imgCap = $(this).find('img').attr('alt');
+						imgWidth = $(this).find('img').css('width');
+						$(this).html('<div style="height: ' + rowHeight + '; overflow: hidden;">' + $(this).html() + '</div><p style="width: ' + imgWidth + '; white-space: pre-wrap">' + imgCap + '</p>');
+
+						$(this).addClass('xkit-accesskit-viscaps');
+
+					}
+
+				});
+
+				$(this).addClass('xkit-accesskit-viscaps');
+
+			}
+
+		});
 
 	},
 

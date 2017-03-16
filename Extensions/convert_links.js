@@ -17,7 +17,7 @@ XKit.extensions.convert_links = new Object({
 
 		if (XKit.interface.where().inbox !== true) { return; }
 
-		$(document).on('click','.xkit-convert-links-button', XKit.extensions.convert_links.on_click);
+		$(document).on('click', '.xkit-convert-links-button', XKit.extensions.convert_links.on_click);
 		XKit.interface.create_control_button("xkit-convert-links-button", this.button_icon, "Convert Links", "");
 
 		XKit.post_listener.add("convert_links", XKit.extensions.convert_links.do);
@@ -37,23 +37,23 @@ XKit.extensions.convert_links = new Object({
 
 		m_content = m_content.substring(0, m_content.indexOf("<div "));
 
-		m_content = XKit.tools.replace_all(m_content, '\\\)','');
-		m_content = XKit.tools.replace_all(m_content, '\\\(','');
-		m_content = XKit.tools.replace_all(m_content, '[.]','.');
-		m_content = XKit.tools.replace_all(m_content, '\\\[','');
-		m_content = XKit.tools.replace_all(m_content, '\\\]','');
-		m_content = XKit.tools.replace_all(m_content, '[/]','/');
-		m_content = XKit.tools.replace_all(m_content, ' / ','/');
+		m_content = XKit.tools.replace_all(m_content, '\\\)', '');
+		m_content = XKit.tools.replace_all(m_content, '\\\(', '');
+		m_content = XKit.tools.replace_all(m_content, '[.]', '.');
+		m_content = XKit.tools.replace_all(m_content, '\\\[', '');
+		m_content = XKit.tools.replace_all(m_content, '\\\]', '');
+		m_content = XKit.tools.replace_all(m_content, '[/]', '/');
+		m_content = XKit.tools.replace_all(m_content, ' / ', '/');
 		//m_content = XKit.tools.replace_all(m_content, '(.)','.');
-		m_content = XKit.tools.replace_all(m_content, '(dot)','.');
-		m_content = XKit.tools.replace_all(m_content, ' dot ','.');
-		m_content = XKit.tools.replace_all(m_content, ' com','.com');
-		m_content = XKit.tools.replace_all(m_content, ' org','.org');
-		m_content = XKit.tools.replace_all(m_content, ' net','.net');
+		m_content = XKit.tools.replace_all(m_content, '(dot)', '.');
+		m_content = XKit.tools.replace_all(m_content, ' dot ', '.');
+		m_content = XKit.tools.replace_all(m_content, ' com', '.com');
+		m_content = XKit.tools.replace_all(m_content, ' org', '.org');
+		m_content = XKit.tools.replace_all(m_content, ' net', '.net');
 
-		m_content = XKit.tools.replace_all(m_content, 'www ','www.');
+		m_content = XKit.tools.replace_all(m_content, 'www ', 'www.');
 
-		m_content = m_content.replace(/\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:(?:[^\s()<>.]+[.]?)+|((?:[^\s()<>]+|(?:([^\s()<>]+)))))+(?:((?:[^\s()<>]+|(?:([^\s()<>]+))))|[^\s`!()[]{};:'".,<>?]))/gi,"<a target=_blank href=http://$1>$1</a>");
+		m_content = m_content.replace(/\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:(?:[^\s()<>.]+[.]?)+|((?:[^\s()<>]+|(?:([^\s()<>]+)))))+(?:((?:[^\s()<>]+|(?:([^\s()<>]+))))|[^\s`!()[]{};:'".,<>?]))/gi, "<a target=_blank href=http://$1>$1</a>");
 
 		$(parent).find(".post_body").html(m_content + m_html);
 

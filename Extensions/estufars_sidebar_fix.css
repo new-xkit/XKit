@@ -1,3 +1,7 @@
+.popover--account-popover {
+	display: none;
+}
+
 .right_column:after {
 	background: none!important;
 }
@@ -38,7 +42,7 @@
 	background-color: transparent;
 }
 
-.right_column .popover_inner_list>.popover_menu_item:hover, .right_column .popover_menu_list .popover_menu_sublist .blog-sub-nav-item:hover, .right_column .blog-list-item:hover {
+.right_column .popover_menu_item_anchor:hover, .right_column .popover_menu_list .popover_menu_sublist .blog-sub-nav-item:hover, .right_column .blog-list-item:hover {
 	background-color: #3c4b61!important;
 	background-color: rgba(255,255,255,.05)!important;
 	box-shadow: none!important;
@@ -97,6 +101,35 @@
 
 .right_column .popover_menu_item_anchor, .right_column .blog-sub-nav-item-label {
 	font-weight: bold;
+}
+
+/* icon styles are from tumblr, they weren't getting applied when the menu is relocated */
+
+.right_column .popover_menu_item_anchor_icon {
+	font-family: "tumblr-icons","Blank";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	text-decoration: none;
+	text-transform: none;
+}
+
+.right_column .popover_menu_item_anchor_icon.like-icon::before {
+	content: "\EA4F";
+}
+
+.right_column .popover_menu_item_anchor_icon.following-icon::before {
+	content: "\EA44";
+}
+
+.right_column .popover_menu_item_anchor_icon.settings-icon::before {
+	content: "\EA9B";
+}
+
+.right_column .popover_menu_item_anchor_icon.help-icon::before {
+	content: "\EA4B";
 }
 
 .right_column .tx-scroll {

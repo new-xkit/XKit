@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.7 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -18,7 +18,6 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 	},
 	
 	run: function() {
-		XKit.tools.init_css("estufars_sidebar_fix");
 		this.running = true;
 		
 		if (XKit.extensions.estufars_sidebar_fix.preferences.dashonly.value) {
@@ -26,7 +25,26 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 				return;
 			}
 		} else {
-			var disallowedurls = ["://www.tumblr.com/explore", "://www.tumblr.com/search", "/reblog"];
+			var disallowedurls = [
+				"://www.tumblr.com/explore",
+				"://www.tumblr.com/search",
+				"://www.tumblr.com/following",
+				"/reblog",
+				"://www.tumblr.com/help",
+				"://www.tumblr.com/support",
+				"://www.tumblr.com/docs",
+				"://www.tumblr.com/developers",
+				"://www.tumblr.com/about",
+				"://www.tumblr.com/themes",
+				"://www.tumblr.com/policy",
+				"://www.tumblr.com/jobs",
+				"://www.tumblr.com/apps",
+				"://www.tumblr.com/logo",
+				"://www.tumblr.com/business",
+				"://www.tumblr.com/buttons",
+				"://www.tumblr.com/press",
+				"://www.tumblr.com/security"
+			];
 			for (var i = 0; i < disallowedurls.length; i++) {
 				if (document.location.href.indexOf(disallowedurls[i]) !== -1) {
 					return;
@@ -34,17 +52,22 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 			}
 		}
 		
+		XKit.tools.init_css("estufars_sidebar_fix");
+		
 		var account = document.getElementById("account_button");
 		account.click();
-		var popover = document.getElementsByClassName("popover--account-popover")[0];
-		var sidebar = document.getElementById("right_column");
-		popover.childNodes[0].classList.add("estufars_sidebar_fix");
-		sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
-		account.style.display = "none";
-		// this needs to be delayed a second for some reason
+		// wait for the menu to pop up
 		window.setTimeout(function() {
-			document.querySelector(".tab_nav_account.active").click();
-		}, 1000);
+			var popover = document.getElementsByClassName("popover--account-popover")[0];
+			var sidebar = document.getElementById("right_column");
+			popover.childNodes[0].classList.add("estufars_sidebar_fix");
+			sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
+			account.style.display = "none";
+			// wait and then let tumblr know the menu is no longer active
+			window.setTimeout(function() {
+				document.querySelector(".tab_nav_account.active").click();
+			}, 500);
+		}, 250);
 	},
 	
 	destroy: function() {

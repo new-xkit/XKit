@@ -1,7 +1,7 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.6.6 **//
+//* VERSION 0.7.1 **//
 //* DESCRIPTION Tags posts automatically. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
 //* FRAME false **//
 //* BETA false **//
@@ -14,7 +14,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep0": {
 			text: "Keeping Tags",
-			type: "separator",
+			type: "separator"
 		},
 
 		"keep_tags": {
@@ -25,7 +25,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep1": {
 			text: "Tags by Type",
-			type: "separator",
+			type: "separator"
 		},
 
 		"tag_for_text": {
@@ -86,7 +86,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep2": {
 			text: "Tags by State",
-			type: "separator",
+			type: "separator"
 		},
 
 		"tag_for_original": {
@@ -112,7 +112,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep3": {
 			text: "Miscellaneous",
-			type: "separator",
+			type: "separator"
 		},
 
 		"tag_person": {
@@ -131,14 +131,25 @@ XKit.extensions.auto_tagger = new Object({
 			text: "Tag with date (ie: <i>#August 21th 2013, #August, #21th, #2013</i>)",
 			default: false,
 			value: false
-		}
+		},
 
+		"tag_source": {
+			text: "When reblogging, tag with the username of the original source if possible",
+			default: false,
+			value: false
+		},
+
+		"tag_source_prefix": {
+			text: "Prefix used for source tags",
+			type: "text",
+			default: "",
+			value: ""
+		},
 	},
 
-	new_post_check_interval: 0,
 	run: function() {
 		this.running = true;
-		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
+		setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
 	},
 
 	frame_run: function() {
@@ -147,22 +158,20 @@ XKit.extensions.auto_tagger = new Object({
 		}
 	},
 
-	reblog_do: function() {
+	is_queue: function() {
 
-		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
+		if ($(".post-form--header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.is_queue(); }, 100); return; }
 
-		if ($("#post_state").val() === "2") {
-			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
-				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === false) {
-					XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
-				}
+		if ($(".create_post_button").html() == "Queue") {
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "" && !$('.create_post_button').hasClass('xkit-queuetag')) {
+				$('.create_post_button').addClass('xkit-queuetag');
+				XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
 			}
 		} else {
-			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
-				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === true) {
-					// Remove tag.
-					XKit.extensions.auto_tagger.remove_tag(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
-				}
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "" && $('.create_post_button').hasClass('xkit-queuetag')) {
+				// Remove tag
+				$('.create_post_button').removeClass('xkit-queuetag');
+				XKit.extensions.auto_tagger.remove_tag(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
 			}
 		}
 
@@ -177,16 +186,20 @@ XKit.extensions.auto_tagger = new Object({
 		var original = true;
 		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) {
 			original = false;
+		} else if (document.location.href.indexOf("://www.tumblr.com/edit") === -1 && $(".post-form").length > 0) {
+			// A new post has been created from the button in the header
 		} else if (document.location.href.indexOf("://www.tumblr.com/new/") === -1) {
 			// Url is wrong for a new post, neither new nor reblog
 			return;
 		}
 
+		this.is_queue(); // Mutation Observer would work somewhere in this mess
+
 		var post_forms = $(".post-form");
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if(post_forms.length <= 0) {
+		if (post_forms.length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
@@ -220,6 +233,8 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	return_date_tag: function() {
+		// defined in moment.js
+		/* globals moment */
 
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);
@@ -228,7 +243,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	},
 
-	/**
+	/*
 	 * Return tags for the post object returned by XKit.interface.post or
 	 * XKit.interface.find_post.
 	 * Uses tag_for_reblogged, tag_for_original, tag_based_on_type, keep_tags,
@@ -285,6 +300,19 @@ XKit.extensions.auto_tagger = new Object({
 				to_return = this.mreturn_add(to_return, obj.owner);
 			}
 
+		}
+
+
+		if (XKit.extensions.auto_tagger.preferences.tag_source.value && obj.source_owner) {
+			var sourceTag;
+
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner.replace(/-/g, ' ');
+			} else {
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner;
+			}
+
+			to_return = this.mreturn_add(to_return, sourceTag);
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {
@@ -361,8 +389,9 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	inject_to_window: function(raw_string) {
-
-		if($(".post-form").length <= 0) {
+		$(".post-form--footer").css("display", "block");
+		$(".post-form--footer").css("opacity", "1");
+		if ($(".post-form").length <= 0) {
 			setTimeout(function() {
 				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);

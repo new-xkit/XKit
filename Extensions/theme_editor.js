@@ -1,5 +1,5 @@
 //* TITLE Theme Editor **//
-//* VERSION 0.1.5 **//
+//* VERSION 0.1.6 **//
 //* DESCRIPTION For theme developers **//
 //* DETAILS If you are good with CSS, hop in and make your own theme.<br><br>When installed, this extension disables the standard Themes extension, and adds a button on your sidebar on your dashboard that lets you write and load your own theme. When you are done, you can submit it to xkit-dev.tumblr.com so it can be added to the theme gallery.<br><br>This extension is <b>not recommended</b> for people without CSS/HTML experience and only provided for XKit theme developers. Please disable Themes and Yoohoo! extensions before using. For better editing, Textarea Code Formatter for Chrome or Tabinta for Firefox is recommended. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -32,8 +32,8 @@ XKit.extensions.theme_editor = new Object({
 			}
 		}
 
-		xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' +
-			'<li class="no_push"><a href="#" onclick="return false;" class="customize" id="xkit-theme-editor-button">' +
+		var xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' +
+			'<li class="no_push"><a href="#" class="customize" id="xkit-theme-editor-button">' +
 			'<div class="hide_overflow">Edit Theme</div>' +
 			'</a></li></ul>';
 		$("ul.controls_section:eq(1)").before(xf_html);
@@ -42,6 +42,7 @@ XKit.extensions.theme_editor = new Object({
 
 			XKit.extensions.theme_editor.open();
 
+			return false;
 		});
 
 		this.load_user_theme();
@@ -54,7 +55,7 @@ XKit.extensions.theme_editor = new Object({
 		$("#xkit-themes-user-theme").remove();
 		$("#xkit-theme-editor-user-theme").remove();
 
-		var m_theme = XKit.storage.get("theme_editor","my_theme",XKit.extensions.theme_editor.testing_theme);
+		var m_theme = XKit.storage.get("theme_editor", "my_theme", XKit.extensions.theme_editor.testing_theme);
 
 		if (typeof passed_theme !== "undefined") {
 			m_theme = passed_theme;
@@ -71,7 +72,7 @@ XKit.extensions.theme_editor = new Object({
 			$("#xkit-theme-editor-window").remove();
 		}
 
-		var m_theme = XKit.storage.get("theme_editor","my_theme",XKit.extensions.theme_editor.testing_theme);
+		var m_theme = XKit.storage.get("theme_editor", "my_theme", XKit.extensions.theme_editor.testing_theme);
 
 		var m_html = "<div id=\"xkit-theme-editor-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-theme-editor-window\">" +
@@ -87,7 +88,7 @@ XKit.extensions.theme_editor = new Object({
 		$("body").append(m_html);
 
 		$("#xkit-theme-editor-textarea").bind("keydown", function(event) {
-			if(event.which === 190) {
+			if (event.which === 190) {
 				event.stopPropagation();
 				event.stopImmediatePropagation();
 			}
@@ -102,15 +103,15 @@ XKit.extensions.theme_editor = new Object({
 		});
 
 		$("#xkit-theme-editor-save").click(function() {
-			XKit.storage.set("theme_editor","my_theme",$("#xkit-theme-editor-textarea").val());
+			XKit.storage.set("theme_editor", "my_theme", $("#xkit-theme-editor-textarea").val());
 			XKit.extensions.theme_editor.load_user_theme();
 			XKit.extensions.theme_editor.close();
 		});
 
 		$("#xkit-theme-editor-delete").click(function() {
-			XKit.window.show("Delete theme?","You can not undo this action.","question","<div class=\"xkit-button default\" id=\"xkit-theme-editor-delete-confirm\">Yes, delete my theme.</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Delete theme?", "You can not undo this action.", "question", "<div class=\"xkit-button default\" id=\"xkit-theme-editor-delete-confirm\">Yes, delete my theme.</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 			$("#xkit-theme-editor-delete-confirm").click(function() {
-				XKit.storage.set("theme_editor","my_theme","");
+				XKit.storage.set("theme_editor", "my_theme", "");
 				XKit.extensions.theme_editor.load_user_theme();
 				XKit.extensions.theme_editor.close();
 				XKit.window.close();
@@ -128,7 +129,9 @@ XKit.extensions.theme_editor = new Object({
 
 	destroy: function() {
 		this.running = false;
+		$("#xkit-theme-editor-ul").remove();
 		$("#xkit-theme-editor-user-theme").remove();
+		XKit.tools.remove_css("theme_editor");
 	}
 
 });

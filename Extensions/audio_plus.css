@@ -32,3 +32,60 @@
 	background: rgba(0,0,0,0.33);
 	border-radius: 6px;
 }
+
+.xkit-audio-plus-controls {
+	position: fixed;
+	bottom: 50px;
+	left: 50%;
+	transform: translateX(245px) translateY(0px);
+
+	background-color: #f8f8f8;
+	z-index: 10000;
+	width: 70px;
+	height: 70px;
+	border-radius: 35px;
+	border: 1px solid #d9d9d9;
+	display: none;
+}
+
+.xkit-audio-plus-controls.showing {
+	display: block;
+}
+
+/* The following three heavily use Tumblr's dock_button styles */
+#xkit-audio-plus-controls-undock-container {
+	position: fixed;
+	right: -1.5px;
+
+	background-color: #748089;
+	border-radius: 100%;
+	font-size: 12px;
+	cursor: pointer;
+	height: 21px;
+	width: 21px;
+	color: #fff;
+}
+
+#xkit-audio-plus-controls-undock::before {
+	content: "";
+}
+
+#xkit-audio-plus-controls-undock {
+	font-family: "tumblr-icons","Blank";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+
+	margin-left: -3.5px;
+	margin-top: -3.5px;
+	position: absolute;
+	line-height: 8px;
+	height: 7px;
+	width: 7px;
+	left: 50%;
+	top: 50%;
+
+	font-size: 12px;
+	cursor: pointer;
+	color: #fff;
+}

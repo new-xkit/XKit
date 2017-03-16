@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* eslint-env node */
 'use strict';
 
 var cache = require('gulp-cached'),
@@ -7,22 +7,20 @@ var cache = require('gulp-cached'),
 	connectStatic = require('serve-static'),
 	csslint = require('gulp-csslint'),
 	del = require('del'),
+	eslint = require('gulp-eslint'),
 	exec = require('child_process').exec,
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	https = require('https'),
-	jshint = require('gulp-jshint'),
-	jscs = require('gulp-jscs'),
 	merge = require('merge-stream'),
 	path = require('path'),
-	stylish = require('jshint-stylish'),
 	zip = require('gulp-zip');
 
 var BUILD_DIR = 'build';
 var paths = {
 	scripts: {
-		dev: ['gulpfile.js'],
+		dev: ['gulpfile.js', 'dev/**/*.js'],
 		core: ['editor.js', 'xkit.js'],
 		extensions: ['Extensions/**/*.js', '!Extensions/**/*.icon.js']
 	},
@@ -83,10 +81,9 @@ gulp.task('lint:scripts', function() {
 
 	return gulp.src(src)
 		.pipe(cache('lint:scripts'))
-		.pipe(jshint())
-		.pipe(jshint.reporter(stylish))
-		.pipe(jshint.reporter('fail'))
-		.pipe(jscs());
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
 
 gulp.task('lint:css', function() {
@@ -149,7 +146,7 @@ gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 		 // directory containing a `package.json`.
 		 {cwd: 'build/firefox'},
 		 function(err, stdout, stderr) {
-			if(err) { return cb(err); }
+			if (err) { return cb(err); }
 			cb();
 		});
 });
@@ -184,7 +181,7 @@ gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build:themes', ['clean:themes'], function(cb) {
+gulp.task('build:themes', ['clean:themes'], function() {
 	var themeBuilder = require('./dev/builders/theme');
 	return gulp.src(paths.css.themes)
 		.pipe(themeBuilder())
@@ -216,13 +213,13 @@ gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 	gulp.watch('Themes/**/*.css', ['build:themes']);
 
 	var devServer = https.createServer({
-				key: fs.readFileSync('./dev/certs/key.pem'),
-				cert: fs.readFileSync('./dev/certs/cert.pem')
-			}, devApp)
+		key: fs.readFileSync('./dev/certs/key.pem'),
+		cert: fs.readFileSync('./dev/certs/cert.pem')
+	}, devApp)
 		.listen(31337);
 
 	devServer.on('error', function(error) {
-		log(colors.underline(colors.red('ERROR'))+' Unable to start server!');
+		log(colors.underline(colors.red('ERROR')) + ' Unable to start server!');
 		callback(error); // we couldn't start the server, so report it and quit gulp
 	});
 
