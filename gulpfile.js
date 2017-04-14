@@ -129,12 +129,14 @@ gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
 	);
 
 	var firefox = ['Firefox/**/*'];
+	var webext = ['Chrome/**/*.@(js|png)'];
+
 
 	var extension = gulp.src(firefox)
 		.pipe(gulp.dest(BUILD_DIR + '/firefox'));
 
-	var content = gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox/data/xkit'));
+	var content = gulp.src(src.concat(webext))
+		.pipe(gulp.dest(BUILD_DIR + '/firefox/webextension'));
 
 	return merge(extension, content);
 });

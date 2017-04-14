@@ -7,7 +7,15 @@
 
 */
 
-/* globals chrome */
+/* globals chrome, browser, msBrowser */
+
+if (typeof(chrome) === 'undefined') {
+	if (typeof(msBrowser) !== 'undefined') {
+		chrome = msBrowser; // eslint-disable-line no-global-assign
+	} else if (typeof(browser) !== 'undefined') {
+		chrome = browser; // eslint-disable-line no-global-assign
+	}
+}
 
 var bridge_error = false;
 var bridge_error_object;
@@ -67,7 +75,7 @@ function init_bridge() {
 
 		storage.get(function(items) {
 
-			if (typeof chrome.runtime.lastError !== "undefined") {
+			if (chrome.runtime.lastError) {
 				last_error = chrome.runtime.lastError.message;
 				console.log("storage.get error: " + last_error);
 			}
@@ -88,13 +96,15 @@ function init_bridge() {
 			storage_loaded = true;
 			console.log("[XKit Bridge] Storage loaded, calling XKit.. bye!");
 
-			storage.getBytesInUse(function(bytes) {
-				storage_used = bytes;
-				storage_max = -1;
+			if (storage.getBytesInUse) {
+				storage.getBytesInUse(function(bytes) {
+					storage_used = bytes;
+					storage_max = -1;
+					call_xkit();
+				});
+			} else {
 				call_xkit();
-			});
-
-
+			}
 
 		});
 
@@ -115,7 +125,10 @@ function GM_flushStorage(callback) {
 
 	storage.remove("xkit_something", function() {
 		storage.clear(function(items) {
-			var last_error = chrome.runtime.lastError.message;
+			var last_error = 'unknown error';
+			if (chrome.runtime.lastError) {
+				last_error = chrome.runtime.lastError.message;
+			}
 			console.log("storage.clear error: " + last_error);
 			callback();
 		});
