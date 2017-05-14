@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.4.2 **//
+//* VERSION 5.4.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -154,6 +154,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"wide_sources": {
 			text: "Increase max width of post sources to avoid shortening",
+			default: true,
+			value: true
+		},
+		"add_id_to_reblog_peepr": {
+			text: "Open sidebar to exact post when clicking on username of who post was reblogged from",
 			default: true,
 			value: true
 		},
@@ -317,6 +322,10 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.old_photo_margins.value) {
 			XKit.post_listener.add("tweaks_old_photo_margins", XKit.extensions.tweaks.old_photo_margins);
+		}
+
+		if (XKit.extensions.tweaks.preferences.add_id_to_reblog_peepr.value) {
+			XKit.post_listener.add("tweaks_add_id_to_reblog_peepr", XKit.extensions.tweaks.add_id_to_reblog_peepr);
 		}
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
@@ -758,6 +767,36 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
+	add_id_to_reblog_peepr: function() {
+		"use strict";
+		var where = XKit.interface.where();
+		if (!where.dashboard && !where.likes)
+			return;
+		var posts = XKit.interface.get_posts("add-id-to-reblog-peepr", false);
+		$(posts).each(function() {
+			var $this = $(this);
+			$this.addClass("add-id-to-reblog-peepr"); // checked by tweak
+			var post = XKit.interface.post($this);
+			if (!post.is_reblogged)
+				return;
+			var source = $this.find(".reblog_source").find("a.post_info_link");
+			if (source.length === 0) {
+				return; // no info - user deactivated or glitch
+			}
+			var peepr = JSON.parse(source.attr("data-peepr"));
+			if (peepr.postId)
+				return;
+			var href = source.attr("href");
+			var id = href.match(/\/post\/(\d+)/)[1];
+			if (isNaN(parseInt(id, 10))) {
+				return; // something went wrong.
+			} // parseInt is done solely in conditional because Tumblr uses string postIds
+			peepr.postId = id;
+			source.attr("data-peepr", JSON.stringify(peepr));
+			$this.addClass("add-id-to-reblog-peepr-modified"); // modified by tweak
+		});
+	},
+
 	check_for_liked_posts: function() {
 
 		if (document.location.href.indexOf('/dashboard') === -1) {
@@ -889,6 +928,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_wide_sources");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
+		XKit.post_listener.remove("tweaks_add_id_to_reblog_peepr");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		clearInterval(this.hide_bubble_interval);
@@ -905,6 +945,13 @@ XKit.extensions.tweaks = new Object({
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
 		XKit.tools.remove_css("tweaks_grey_urls");
+		$(".add-id-to-reblog-peepr-modified").find(".reblog_source").find("a.post_info_link").each(function() { 
+			var $this = $(this);
+			var peepr = JSON.parse($this.attr("data-peepr"));
+			delete peepr.postId;
+			$this.attr("data-peepr", JSON.stringify(peepr));
+		});
+		$(".add-id-to-reblog-peepr").removeClass("add-id-to-reblog-peepr add-id-to-reblog-peepr-modified");
 	}
 
 });
