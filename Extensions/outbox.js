@@ -434,7 +434,7 @@ XKit.extensions.outbox = new Object({
 		return to_return;
 
 	},
-
+	
 	render_fan_mail: function(obj, m_id) {
 
 		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
