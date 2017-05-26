@@ -330,7 +330,7 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link{ background-position: -785px -58px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
-			".activity-notification div.retags{ margin: 3px 0 0; padding-left: 41px; }",
+			".activity-notification div.retags{ margin: 3px 0 0 !important; padding-left: 41px !important; }",
 			"tweaks_fix_activity_feed");
 		}
 
