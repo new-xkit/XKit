@@ -99,8 +99,13 @@ XKit.extensions.tweaks = new Object({
 			text: "User Interface tweaks",
 			type: "separator",
 		},
-		"fix_activity_feed": {
-			text: "Re-slim the Activity feed and highlight notes from mutuals",
+		"highlight_mutuals": {
+			text: "Make notes from mutuals more obviously highlighted",
+			default: false,
+			value: false
+		},
+		"slim_activity_feed": {
+			text: "Re-slim the Activity feed",
 			default: false,
 			value: false,
 			experimental: true
@@ -315,9 +320,8 @@ XKit.extensions.tweaks = new Object({
 	run: function() {
 		this.running = true;
 	
-		if (XKit.extensions.tweaks.preferences.fix_activity_feed.value) {
-			XKit.tools.add_css(".activity-notification.is_friend{ background-color: #f3f8fb; }" +
-			".ui_notes .activity-notification{ padding: 10px; }" +
+		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
+			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
 			".ui_notes .activity-notification .activity-notification__activity, .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ transform: translate(-10px) }" +
 			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; }" +
@@ -331,7 +335,11 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
 			".activity-notification div.retags{ margin: 3px 0 0 !important; padding-left: 41px !important; }",
-			"tweaks_fix_activity_feed");
+			"tweaks_slim_activity_feed");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.highlight_mutuals.value) {
+			XKit.tools.add_css(".activity-notification.is_friend{ background-color: #f3f8fb; }", "tweaks_highlight_mutuals");
 		}
 
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
@@ -913,7 +921,8 @@ XKit.extensions.tweaks = new Object({
 
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
-		XKit.tools.remove_css("tweaks_fix_activity_feed");
+		XKit.tools.remove_css("tweaks_slim_activity_feed");
+		XKit.tools.remove_css("tweaks_highlight_mutuals");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
