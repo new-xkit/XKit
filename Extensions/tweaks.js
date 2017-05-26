@@ -99,6 +99,11 @@ XKit.extensions.tweaks = new Object({
 			text: "User Interface tweaks",
 			type: "separator",
 		},
+		"fix_activity_feed": {
+			text: "Slim notifications back down on the Activity page and highlight notes from mutuals",
+			default: true,
+			value: true
+		},
 		"old_sidebar_width": {
 			text: "Return the sidebar to its original width",
 			default: false,
@@ -539,7 +544,11 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value) {
 			XKit.extensions.tweaks.add_css("#posts .post .post_control.move_to_top { display: inline-block !important; } ", "always_show_move_to_top");
 		}
-
+		
+		if (XKit.extensions.tweaks.preferences.fix_activity_feed.value) {
+			XKit.extensions.tweaks.add_css(".ui_notes .activity-notification{ padding: 10px; } .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; } .ui_notes .activity-notification .activity-notification__activity, .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ transform: translate(-10px) } .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_main{ white-space: normal; } .ui_notes .activity-notification .activity-notification__icon{ padding: 0; } .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding: 10px; } .ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; } div.activity-notification.is_friend, li.activity-notification.is_friend{ background-color: #f3f8fb; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular{ background-position: -784px -2px; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.quote{ background-position: -784px -30px; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.ask_answer{ background-position: -785px -171px; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link{ background-position: -785px -58px; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; } .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; } .activity-notification div.retags{ margin: 3px 0 0; padding-left: 41px; }", "fix_activity_feed");
+		}
+										   
 		if (XKit.extensions.tweaks.preferences.slim_sidebar.value) {
 			var moz_fix = "";
 			if (XKit.browser().firefox) {
@@ -888,6 +897,7 @@ XKit.extensions.tweaks = new Object({
 
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
+		XKit.tools.remove_css("fix_activity_feed");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
