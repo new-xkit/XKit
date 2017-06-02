@@ -14,6 +14,7 @@
    "manifest_version": 2,
    "minimum_chrome_version": "44.0",
    "name": "New XKit",
+   "author": "New XKit Team",
    "permissions": ["*://*/*", "*://*/", "unlimitedStorage", "storage", "http://*.tumblr.com/", "https://*.tumblr.com/" ],
    "version": "7.7.1",
    "web_accessible_resources": [ "manifest.json", "editor.js" ]
