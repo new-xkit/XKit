@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.7.3</string>
+	<string>7.7.4</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>7.7.4</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Database Quota</key>
@@ -39,6 +39,7 @@
 				<string>moment.js</string>
 				<string>tiptip.js</string>
 				<string>nano.js</string>
+				<string>lodash.min.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
