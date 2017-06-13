@@ -99,11 +99,6 @@ XKit.extensions.tweaks = new Object({
 			text: "User Interface tweaks",
 			type: "separator",
 		},
-		"highlight_mutuals": {
-			text: "Make notes from mutuals more obviously highlighted",
-			default: false,
-			value: false
-		},
 		"slim_activity_feed": {
 			text: "Re-slim the Activity feed",
 			default: false,
@@ -338,10 +333,6 @@ XKit.extensions.tweaks = new Object({
 			"tweaks_slim_activity_feed");
 		}
 		
-		if (XKit.extensions.tweaks.preferences.highlight_mutuals.value) {
-			XKit.tools.add_css(".activity-notification.is_friend{ background-color: #f3f8fb; }", "tweaks_highlight_mutuals");
-		}
-
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
 			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
@@ -922,7 +913,6 @@ XKit.extensions.tweaks = new Object({
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
 		XKit.tools.remove_css("tweaks_slim_activity_feed");
-		XKit.tools.remove_css("tweaks_highlight_mutuals");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
