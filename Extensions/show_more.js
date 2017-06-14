@@ -426,13 +426,19 @@ XKit.extensions.show_more = new Object({
 
 		var m_url = $(m_obj).attr('href').toLowerCase();
 
-		if (m_url.substring(m_url.length - 1) === "/") {m_url = m_url.substring(0, m_url.length - 1); }
+		/*Test for a link to a tumblr blog in a form that will have a popover
+		The regex has two capture groups, respectively the username and the path of the linked blog page.
+		https://xyz.tumblr.com links alway have a popover, while https://xyz.tumblr.com/foo/bar links do not have
+		a popover unless they're in a reblog header, in which case they have the post_info_link class.*/
+		var userlink_re = /https?:\/\/(?!www)([a-z]+)\.tumblr\.com([a-z0-9\/-]*)/;
+		var test = userlink_re.exec(m_url);
 
-		if (m_url.substring(0, 7) === "http://" && m_url.substring(m_url.length - 11) === ".tumblr.com") {
-			var m_username = m_url.substring(7, m_url.length - 11);
-			XKit.extensions.show_more.store_data_username(e, true, m_username);
+		if (test) {
+			if (test[2] == "" || test[2] == "/" || $(m_obj).hasClass("post_info_link")) {
+				var m_username = test[1];
+				XKit.extensions.show_more.store_data_username(e, true, m_username);
+			}
 		}
-
 
 	},
 
