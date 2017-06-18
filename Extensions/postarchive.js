@@ -242,7 +242,7 @@ XKit.extensions.postarchive = {
 
 		var m_post_list_html = "";
 
-		m_post_list_html = `${m_post_list_html}<div data-category="" class="xkit-postarchive-cat-separator-uncategorized xkit-postarchive-cat-separator xkit-pac-opened"><div class="xkit-postarchive-cat-separator-title">Uncategorized</div></div>`;
+		m_post_list_html += `<div data-category="" class="xkit-postarchive-cat-separator-uncategorized xkit-postarchive-cat-separator xkit-pac-opened"><div class="xkit-postarchive-cat-separator-title">Uncategorized</div></div>`;
 		m_post_list_html = m_post_list_html + XKit.extensions.postarchive.render_posts_uncategorized();
 
 
@@ -255,7 +255,7 @@ XKit.extensions.postarchive = {
 
 				if (XKit.extensions.postarchive.categories[i].collapsed === true) { m_collapse_class = ""; m_collapse_class_post = "xkit-postarchive-hidden-category-item"; }
 
-				m_post_list_html = `${m_post_list_html}<div data-category="${XKit.extensions.postarchive.categories[i].id}" class="xkit-postarchive-cat-separator ${m_collapse_class}"><div class="xkit-postarchive-cat-separator-title">${XKit.extensions.postarchive.categories[i].title}</div></div>`;
+				m_post_list_html += `<div data-category="${XKit.extensions.postarchive.categories[i].id}" class="xkit-postarchive-cat-separator ${m_collapse_class}"><div class="xkit-postarchive-cat-separator-title">${XKit.extensions.postarchive.categories[i].title}</div></div>`;
 
 				var cat_index = XKit.extensions.postarchive.render_posts_on_category(XKit.extensions.postarchive.categories[i].id, m_collapse_class_post);
 
@@ -265,7 +265,7 @@ XKit.extensions.postarchive = {
 
 				} else {
 
-					m_post_list_html = `${m_post_list_html}<div data-category="${XKit.extensions.postarchive.categories[i].id}" class="xkit-postarchive-no-posts-index ${m_collapse_class_post}">No posts</div>`;
+					m_post_list_html += `<div data-category="${XKit.extensions.postarchive.categories[i].id}" class="xkit-postarchive-no-posts-index ${m_collapse_class_post}">No posts</div>`;
 
 				}
 
@@ -273,23 +273,24 @@ XKit.extensions.postarchive = {
 
 		}
 
-		var m_html = `${"<div id=\"xkit-postarchive-background\">&nbsp;</div>" +
-				"<div id=\"xkit-postarchive-container\">" +
-					"<div id=\"xkit-postarchive-sidebar\" class=\"nano\">" +
-						"<div id=\"xkit-postarchive-sidebar-content\" class=\"content\">"}${
-							m_post_list_html
-						}</div>` +
-					`</div>` +
-					`<input type="text" placeholder="Search archived post titles.." id="xkit-postarchive-search">` +
-					`<div id="xkit-postarchive-export" class="xkit-button">Export</div>` +
-					`<div id="xkit-postarchive-import" class="xkit-button">Import</div>` +
-					`<div id="xkit-postarchive-content" class="xkit-postarchive-no-post-selected">` +
-						`Select a post from the right to get started.` +
-					`</div>` +
-					`<div id="xkit-postarchive-remove-this" class="xkit-button hidden">remove</div>` +
-					`<div id="xkit-postarchive-recategorize-this" class="xkit-button hidden">recategorize</div>` +
-					`<div id="xkit-postarchive-rename-this" class="xkit-button hidden">rename</div>` +
-				`</div>`;
+		var m_html =
+			`<div id="xkit-postarchive-background">&nbsp;</div>
+			<div id="xkit-postarchive-container">
+				<div id="xkit-postarchive-sidebar" class="nano">
+					<div id="xkit-postarchive-sidebar-content" class="content">
+						${m_post_list_html}
+					</div>
+				</div>
+				<input type="text" placeholder="Search archived post titles.." id="xkit-postarchive-search">
+				<div id="xkit-postarchive-export" class="xkit-button">Export</div>
+				<div id="xkit-postarchive-import" class="xkit-button">Import</div>
+				<div id="xkit-postarchive-content" class="xkit-postarchive-no-post-selected">
+					Select a post from the right to get started.
+				</div>
+				<div id="xkit-postarchive-remove-this" class="xkit-button hidden">remove</div>
+				<div id="xkit-postarchive-recategorize-this" class="xkit-button hidden">recategorize</div>
+				<div id="xkit-postarchive-rename-this" class="xkit-button hidden">rename</div>
+			</div>`;
 
 		$("body").append(m_html);
 
@@ -525,11 +526,11 @@ XKit.extensions.postarchive = {
 			post_class = "is_regular";
 
 			if (data.title !== "" && data.title !== null) {
-				post_contents = `${post_contents}<div class="post_title">${data.title}</div>`;
+				post_contents += `<div class="post_title">${data.title}</div>`;
 			}
 
 			if (data.body !== "" && data.body !== null) {
-				post_contents = `${post_contents}<div class="post_body">${data.body}</div>`;
+				post_contents += `<div class="post_body">${data.body}</div>`;
 			}
 
 		}
@@ -539,11 +540,11 @@ XKit.extensions.postarchive = {
 			post_class = "is_quote";
 
 			if (data.text !== "" && data.text !== null) {
-				post_contents = `${post_contents}<div class="post_title medium"><span class="quote">"${data.text}"</span></div>`;
+				post_contents += `<div class="post_title medium"><span class="quote">"${data.text}"</span></div>`;
 			}
 
 			if (data.source !== "" && data.source !== null) {
-				post_contents = `${post_contents}<div class="post_body"><table class="quote_source_table"><tbody><tr><td valign="top" class="quote_source_mdash">&nbsp;</td><td valign="top" class="quote_source">- ${data.source}</td></tr></tbody></table></div>`;
+				post_contents += `<div class="post_body"><table class="quote_source_table"><tbody><tr><td valign="top" class="quote_source_mdash">&nbsp;</td><td valign="top" class="quote_source">- ${data.source}</td></tr></tbody></table></div>`;
 			}
 
 		}
@@ -554,7 +555,7 @@ XKit.extensions.postarchive = {
 
 			if (data.link_image !== "" && data.link_image !== null && typeof data.link_image !== "undefined") {
 
-				post_contents = `${post_contents}<div class="post_media"><div class="link_button clickable"><div class="link_thumbnail_container"><a href="${data.url}" target="_blank" class="link_thumbnail_click"><img class="link_thumbnail" src="${data.link_image}" alt=""></a></div><div class="link_text_container"><div class="link_text_outer"><div class="link_text"><a href="${data.url}" target="_blank" class="link_title">${data.title}</a><a href="${data.url}" target="_blank" class="link_source">${data.url}</a></div></div></div></div></div>`;
+				post_contents += `<div class="post_media"><div class="link_button clickable"><div class="link_thumbnail_container"><a href="${data.url}" target="_blank" class="link_thumbnail_click"><img class="link_thumbnail" src="${data.link_image}" alt=""></a></div><div class="link_text_container"><div class="link_text_outer"><div class="link_text"><a href="${data.url}" target="_blank" class="link_title">${data.title}</a><a href="${data.url}" target="_blank" class="link_source">${data.url}</a></div></div></div></div></div>`;
 
 			} else {
 
@@ -566,13 +567,13 @@ XKit.extensions.postarchive = {
 
 				}
 
-				post_contents = `${post_contents}<div class="post_media"><div class="link_button clickable"><div class="link_text_container"><div class="link_text_outer"><div class="link_text"><a href="${data.url}" target="_blank" class="link_title">${link_title}</a></div></div></div></div></div>`;
+				post_contents += `<div class="post_media"><div class="link_button clickable"><div class="link_text_container"><div class="link_text_outer"><div class="link_text"><a href="${data.url}" target="_blank" class="link_title">${link_title}</a></div></div></div></div></div>`;
 
 			}
 
 			if (data.description !== "" && data.description !== null) {
 
-				post_contents = `${post_contents}<div class="post_body">${data.description}</div>`;
+				post_contents += `<div class="post_body">${data.description}</div>`;
 
 			}
 
@@ -582,7 +583,7 @@ XKit.extensions.postarchive = {
 
 			post_class = "is_note";
 
-			post_contents = `${post_contents}<div class="post_body"><div class="note_item"><div class="text"><p class="asker"><span class="name">${data.asking_name}</span><span>&nbsp;asked:</span></p><p>${data.question}</p></div><div class="nipple"></div></div><div class="avatar"><img src="http://assets.tumblr.com/images/anonymous_avatar_96.gif" alt="" width="40" height="40"></div><div class="answer post_info">${data.answer}</div></div>`;
+			post_contents += `<div class="post_body"><div class="note_item"><div class="text"><p class="asker"><span class="name">${data.asking_name}</span><span>&nbsp;asked:</span></p><p>${data.question}</p></div><div class="nipple"></div></div><div class="avatar"><img src="http://assets.tumblr.com/images/anonymous_avatar_96.gif" alt="" width="40" height="40"></div><div class="answer post_info">${data.answer}</div></div>`;
 
 		}
 
@@ -605,10 +606,10 @@ XKit.extensions.postarchive = {
 				m_post_inner_html = m_post_inner_html.replace('width="500"', 'width="540"');
 			}
 
-			post_contents = `${post_contents}<div class="post_media">${m_post_inner_html}</div>`;
+			post_contents += `<div class="post_media">${m_post_inner_html}</div>`;
 
 			if (data.caption !== "" && data.caption !== null) {
-				post_contents = `${post_contents}<div class="post_body">${data.caption}</div>`;
+				post_contents += `<div class="post_body">${data.caption}</div>`;
 			}
 
 		}
@@ -617,10 +618,10 @@ XKit.extensions.postarchive = {
 
 			post_class = "is_audio";
 
-			post_contents = `${post_contents}<div class="post_media">${data.embed}</div>`;
+			post_contents += `<div class="post_media">${data.embed}</div>`;
 
 			if (data.caption !== "" && data.caption !== null) {
-				post_contents = `${post_contents}<div class="post_body">${data.caption}</div>`;
+				post_contents += `<div class="post_body">${data.caption}</div>`;
 			}
 
 		}
@@ -690,26 +691,39 @@ XKit.extensions.postarchive = {
 							margin_top = (m_height - shortest) / 2;
 						}
 
-						in_row_html = `${in_row_html}<a href="${XKit.extensions.postarchive.get_photo(data, current_photo, "500")}" class="photoset_photo xkit-postarchive-photoset-photo" onclick="return false;" id="photoset_link_${data.id}_${current_photo}">`;
-						in_row_html = `${in_row_html}<img style="margin-top: -${margin_top}px;" class="photoset_photo" width="${m_width}" alt="" src="${XKit.extensions.postarchive.get_photo(data, current_photo, "500")}" data-thumbnail="${XKit.extensions.postarchive.get_photo(data, current_photo, "100")}">`;
-						in_row_html = `${in_row_html}</a>`;
+						in_row_html +=
+							`<a href="${XKit.extensions.postarchive.get_photo(data, current_photo, "500")}"
+								class="photoset_photo xkit-postarchive-photoset-photo"
+								onclick="return false;"
+								id="photoset_link_${data.id}_${current_photo}"
+							>
+								<img style="margin-top: -${margin_top}px;"
+									class="photoset_photo" width="${m_width}"
+									alt=""
+									src="${XKit.extensions.postarchive.get_photo(data, current_photo, "500")}"
+									data-thumbnail="${XKit.extensions.postarchive.get_photo(data, current_photo, "100")}"
+								>
+							</a>`;
 
 						current_photo++;
 
 					}
 
-					photo_post_inner_html = `${photo_post_inner_html}<div class="photoset_row photoset_row_${row}" style="height: ${shortest}px;">${in_row_html}</div>`;
+					photo_post_inner_html +=
+						`<div class="photoset_row photoset_row_${row}" style="height: ${shortest}px;">
+							${in_row_html}
+						</div>`;
 
 				});
 
-				photo_post_inner_html = `${photo_post_inner_html}</div>`;
+				photo_post_inner_html += `</div>`;
 
 			}
 
-			post_contents = `${post_contents}<div class="post_media">${photo_post_inner_html}</div>`;
+			post_contents += `<div class="post_media">${photo_post_inner_html}</div>`;
 
 			if (data.caption !== "" && data.caption !== null) {
-				post_contents = `${post_contents}<div class="post_body">${data.caption}</div>`;
+				post_contents += `<div class="post_body">${data.caption}</div>`;
 			}
 
 		}
@@ -720,10 +734,10 @@ XKit.extensions.postarchive = {
 
 			data.tags.forEach(function(tag) {
 				var fixed_tag_url = XKit.tools.replace_all(tag, + " ", "-");
-				post_tags = `${post_tags}<a class="post_tag" href="http://tumblr.com/tagged/${fixed_tag_url}">#${tag}</a>`;
+				post_tags += `<a class="post_tag" href="http://tumblr.com/tagged/${fixed_tag_url}">#${tag}</a>`;
 			});
 
-			post_tags = `${post_tags}</div></div>`;
+			post_tags += `</div></div>`;
 
 		}
 
@@ -742,25 +756,36 @@ XKit.extensions.postarchive = {
 
 		}
 
-		m_html = `${m_html}<div class="xkit-dont-run-extensions post post_full ${post_class} same_user_as_last with_permalink no_source xkit_view_on_dash_post" id="post_${data.id}"  data-post-id='${data.id}' data-root_id='${data.id}' data-tumblelog-name='${username}' data-reblog-key='${data.reblog_key}' data-type='${data.type}'>` +
-					`<div class="post_wrapper">` +
-						`<div class="post_header">` +
-							`<div class="post_info">` +
-								`<img src="http://api.tumblr.com/v2/blog/${data.blog_name}.tumblr.com/avatar/48" class="xkit-post-archive-avatar"><span style="font-weight:normal; margin-right: 8px;">Archived from:</span><a target="_BLANK" href="${data.post_url}">${data.blog_name}</a>` +
-							`</div>${
-							source_div
-						}</div>` +
-						`<div class="post_content clearfix">` +
-							`<div class="post_content_inner clearfix">` +
-								`<div class="post_container">${
-									post_contents
-								}</div>` +
-							`</div>` +
-						`</div>${
-					post_tags
-				}</div>` +
-			`</div>` +
-		`</li>`;
+		m_html += `
+			<div
+				class="xkit-dont-run-extensions post post_full ${post_class} same_user_as_last with_permalink no_source xkit_view_on_dash_post"
+				id="post_${data.id}"
+				data-post-id='${data.id}'
+				data-root_id='${data.id}'
+				data-tumblelog-name='${username}'
+				data-reblog-key='${data.reblog_key}'
+				data-type='${data.type}'
+			>
+					<div class="post_wrapper">
+						<div class="post_header">
+							<div class="post_info">
+								<img src="http://api.tumblr.com/v2/blog/${data.blog_name}.tumblr.com/avatar/48" class="xkit-post-archive-avatar">
+								<span style="font-weight:normal; margin-right: 8px;">Archived from:</span>
+								<a target="_BLANK" href="${data.post_url}">${data.blog_name}</a>
+							</div>
+							${source_div}
+						</div>
+						<div class="post_content clearfix">
+							<div class="post_content_inner clearfix">
+								<div class="post_container">
+									${post_contents}
+								</div>
+							</div>
+						</div>
+					${post_tags}
+				</div>
+			</div>
+		</li>`;
 
 		return m_html;
 
@@ -859,7 +884,7 @@ XKit.extensions.postarchive = {
 
 				for (var i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
 
-					m_categories = `${m_categories}<option value="${XKit.extensions.postarchive.categories[i].id}">${XKit.extensions.postarchive.categories[i].title}</div>`;
+					m_categories += `<option value="${XKit.extensions.postarchive.categories[i].id}">${XKit.extensions.postarchive.categories[i].title}</div>`;
 
 				}
 
@@ -1060,7 +1085,7 @@ XKit.extensions.postarchive = {
 
 			for (var i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
 
-				m_categories = `${m_categories}<option value="${XKit.extensions.postarchive.categories[i].id}">${XKit.extensions.postarchive.categories[i].title}</div>`;
+				m_categories += `<option value="${XKit.extensions.postarchive.categories[i].id}">${XKit.extensions.postarchive.categories[i].title}</div>`;
 
 			}
 
@@ -1268,17 +1293,18 @@ XKit.extensions.postarchive = {
 
 			for (var j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
 
-				cat_list = `${cat_list}<div class="xkit-postarchive-cp-item" data-id="${XKit.extensions.postarchive.categories[j].id}">${XKit.extensions.postarchive.categories[j].title}</div>`;
+				cat_list += `<div class="xkit-postarchive-cp-item" data-id="${XKit.extensions.postarchive.categories[j].id}">${XKit.extensions.postarchive.categories[j].title}</div>`;
 
 			}
 		}
 
-		var m_html = `${"<div id=\"xkit-postarchive-custom-panel\">" +
-					"<div id=\"xkit-postarchive-custom-panel-toolbar\">" +
-						"<div id=\"xkit-postarchive-add-category\" class=\"xkit-button\">Add new category</div>" +
-					"</div>"}${
-					cat_list
-				}</div>`;
+		var m_html =
+			`<div id="xkit-postarchive-custom-panel">
+				<div id="xkit-postarchive-custom-panel-toolbar">
+					<div id="xkit-postarchive-add-category" class="xkit-button">Add new category</div>
+				</div>
+				${cat_list}
+			</div>`;
 
 		$(m_div).html(m_html);
 
@@ -1287,7 +1313,7 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-add-category").click(function() {
 
-			XKit.window.show("New category", "<b>Category Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Recipes\" class=\"xkit-textbox\" id=\"xkit-postarchive-category-add-title\">", "question", "<div class=\"xkit-button default\" id=\"xkit-postarchive-create-category\">Create Category</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("New category", '<b>Category Name:</b><input type="text" maxlength="40" placeholder="eg: Recipes" class="xkit-textbox" id="xkit-postarchive-category-add-title">', "question", '<div class="xkit-button default" id="xkit-postarchive-create-category">Create Category</div><div class="xkit-button" id="xkit-close-message">Cancel</div>');
 
 			$("#xkit-postarchive-create-category").click(function() {
 
