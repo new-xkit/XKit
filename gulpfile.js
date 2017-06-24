@@ -47,8 +47,8 @@ gulp.task('clean:modules', function(cb) {
 	del(['node_modules'], cb);
 });
 
-gulp.task('clean:chrome', function(cb) {
-	del([BUILD_DIR + '/chrome'], cb);
+gulp.task('clean:webext', function(cb) {
+	del([BUILD_DIR + '/webext'], cb);
 });
 
 gulp.task('clean:firefox', function(cb) {
@@ -74,7 +74,7 @@ gulp.task('lint:scripts', function() {
 		paths.scripts.dev,
 		paths.scripts.core,
 		paths.scripts.extensions,
-		['Chrome/**/*.js',
+		['WebExtension/**/*.js',
 		 'Firefox/**/*.js',
 		 'Safari/**/*.js']
 	);
@@ -101,24 +101,24 @@ gulp.task('lint:css', function() {
 
 gulp.task('lint', ['lint:scripts']);
 
-gulp.task('copy:chrome', ['clean:chrome', 'lint'], function() {
+gulp.task('copy:webext', ['clean:webext', 'lint'], function() {
 	var src = [].concat(
 		paths.scripts.core,
 		paths.css.core,
 		paths.vendor,
-		['Chrome/**/*']
+		['WebExtension/**/*']
 	);
 
 	return gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/chrome'));
+		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
-gulp.task('compress:chrome', ['copy:chrome'], function() {
-	var chromeManifest = JSON.parse(fs.readFileSync('Chrome/manifest.json'));
+gulp.task('compress:webext', ['copy:webext'], function() {
+	var webextManifest = JSON.parse(fs.readFileSync('WebExtension/manifest.json'));
 
-	return gulp.src(BUILD_DIR + '/chrome/**/*')
-		.pipe(zip('new-xkit-' + chromeManifest.version + '.zip'))
-		.pipe(gulp.dest(BUILD_DIR + '/chrome'));
+	return gulp.src(BUILD_DIR + '/webext/**/*')
+		.pipe(zip('new-xkit-' + webextManifest.version + '.zip'))
+		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
 gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
@@ -129,7 +129,7 @@ gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
 	);
 
 	var firefox = ['Firefox/**/*'];
-	var webext = ['Chrome/**/*.@(js|png)'];
+	var webext = ['WebExtension/**/*.@(js|png)'];
 
 
 	var extension = gulp.src(firefox)
@@ -166,7 +166,7 @@ gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 
 });
 
-gulp.task('build:chrome', ['compress:chrome']);
+gulp.task('build:webext', ['compress:webext']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
@@ -191,7 +191,7 @@ gulp.task('build:themes', ['clean:themes'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:chrome', 'build:firefox', 'build:safari']);
+gulp.task('build', ['build:webext', 'build:firefox', 'build:safari']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);
