@@ -320,7 +320,7 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
 			".ui_notes .activity-notification .activity-notification__activity, .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ transform: translate(-10px) }" +
 			".xkit-activity-plus-timestamp{ transform: translate(-53px, 6px) }" +
-			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; }" +
+			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; min-width: 25px; }" +
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding: 10px; }" +
 			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; }" +
