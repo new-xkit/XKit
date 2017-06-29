@@ -424,25 +424,29 @@ XKit.extensions.show_more = new Object({
 
 		if (typeof $(m_obj).attr('href') === "undefined") { return; }
 
-		var m_url = $(m_obj).attr('href').toLowerCase();
+		var m_url = $(m_obj).attr('href');
 
 		/*Test for a link to a tumblr blog in a form that will have a popover
 		The regex has two capture groups, respectively the username and the path of the linked blog page.
 		https://xyz.tumblr.com links alway have a popover, while https://xyz.tumblr.com/foo/bar links do not have
 		a popover unless they're in a reblog header, in which case they have the post_info_link class.*/
-		var userlink_re = /https?:\/\/(?!www)([a-z]+)\.tumblr\.com([a-z0-9\/-]*)/;
-		var test = userlink_re.exec(m_url);
+		var m_test = /https?:\/\/(?!www)([a-z]+)\.tumblr\.com([a-z0-9/-]*)/.exec(m_url);
 
-		if (test) {
-			if (test[2] == "" || test[2] == "/" || $(m_obj).hasClass("post_info_link")) {
-				var m_username = test[1];
-				XKit.extensions.show_more.store_data_username(e, true, m_username);
+		if (m_test) {
+			if (m_test[2] == "" || m_test[2] == "/" || $(m_obj).hasClass("post_info_link")) {
+				XKit.extensions.show_more.store_data_username(e, true, m_test[1]);
 			}
+		}
+		/* handle tmblr.co links, which appear in mentions*/
+		m_test = /https?:\/\/tmblr\.co\/([A-Za-z0-9_-]+)/.exec(m_url);
+
+		if (m_test) {
+			XKit.extensions.show_more.store_data_username(e, true, m_test[1], true);
 		}
 
 	},
 
-	store_data_username: function(e, userlink_mode, real_username) {
+	store_data_username: function(e, userlink_mode, blog_identifier, is_mention) {
 
 		var m_obj = $(e.target);
 
@@ -457,7 +461,7 @@ XKit.extensions.show_more = new Object({
 			} catch (err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
-				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);
+				XKit.console.add("show_more: Can't parse popup_data:" + e.message);
 			}
 
 		} else {
@@ -468,25 +472,25 @@ XKit.extensions.show_more = new Object({
 
 			GM_xmlhttpRequest({
 				method: "GET",
-				url: "http://www.tumblr.com/svc/tumblelog_popover/" + real_username + "?is_user_mention=false",
+				url: "http://www.tumblr.com/svc/tumblelog_popover/" + blog_identifier + "?is_user_mention=" + (is_mention || false),
 				json: false,
 				headers: {
 					"X-tumblr-form-key": XKit.interface.form_key(),
 				},
 				onerror: function(response) {
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Could not fetch data, also ID mismatch."); return; }
-					console.log("show_more: Could not fetch data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { XKit.console.add("show_more: Could not fetch data, also ID mismatch."); return; }
+					XKit.console.add("show_more: Could not fetch data.");
 					XKit.extensions.show_more.popup_data = {};
 					XKit.extensions.show_more.popup_data.error = true;
-					XKit.console.add("show_more -> Can't parse popup_data - not defined.");
 				},
 				onload: function(response) {
 
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Fetched data but ID mismatch."); return; }
-					console.log("show_more: Successfully fetched and stored popup_data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { XKit.console.add("show_more: Fetched data but ID mismatch."); return; }
+					XKit.console.add("show_more: Successfully fetched popup_data.");
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
 					} catch (err) {
+						XKit.console.add("show_more: Could not store popup_data.");
 						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
