@@ -430,7 +430,7 @@ XKit.extensions.show_more = new Object({
 		The regex has two capture groups, respectively the username and the path of the linked blog page.
 		https://xyz.tumblr.com links alway have a popover, while https://xyz.tumblr.com/foo/bar links do not have
 		a popover unless they're in a reblog header, in which case they have the post_info_link class.*/
-		var m_test = /https?:\/\/(?!www)([a-z]+)\.tumblr\.com([a-z0-9/-]*)/.exec(m_url);
+		var m_test = /https?:\/\/(?!www)([a-z0-9-]+)\.tumblr\.com([a-z0-9/-]*)/.exec(m_url);
 
 		if (m_test) {
 			if (m_test[2] == "" || m_test[2] == "/" || $(m_obj).hasClass("post_info_link")) {
