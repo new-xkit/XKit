@@ -809,22 +809,25 @@ XKit.extensions.tweaks = new Object({
 	add_id_to_reblog_peepr: function() {
 		"use strict";
 		var where = XKit.interface.where();
-		if (!where.dashboard && !where.likes)
+		if (!where.dashboard && !where.likes) {
 			return;
+		}
 		var posts = XKit.interface.get_posts("add-id-to-reblog-peepr", false);
 		$(posts).each(function() {
 			var $this = $(this);
 			$this.addClass("add-id-to-reblog-peepr"); // checked by tweak
 			var post = XKit.interface.post($this);
-			if (!post.is_reblogged)
+			if (!post.is_reblogged) {
 				return;
+			}
 			var source = $this.find(".reblog_source").find("a.post_info_link");
 			if (source.length === 0) {
 				return; // no info - user deactivated or glitch
 			}
 			var peepr = JSON.parse(source.attr("data-peepr"));
-			if (peepr.postId)
+			if (peepr.postId) {
 				return;
+			}
 			var href = source.attr("href");
 			var id = href.match(/\/post\/(\d+)/)[1];
 			if (isNaN(parseInt(id, 10))) {
