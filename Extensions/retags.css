@@ -17,6 +17,21 @@ label.retags .binary_switch_label {
     white-space: nowrap;
 }
 
+.activity-notification {
+    flex-wrap: wrap;
+}
+
+.activity-notification div.retags {
+    width: 100%;
+    margin: -4px 0 0 0;
+    padding-left: 53px;
+    padding-right: 60px;
+}
+
+.is_retags .activity-notification__activity_message.conversational {
+    margin-bottom: 10px;
+}
+
 div.retags {
     white-space: normal;
     margin-bottom: 10px;

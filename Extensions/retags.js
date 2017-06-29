@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.1.3 **//
+//* VERSION     1.2.1 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -9,7 +9,7 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: XKit.api_key,
-	selectors: '.type_2,.type_8,.type_6,.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
+	selectors: '.type_2,.type_8,.type_6,.reblog:not(.ui_avatar_link),.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
 
 	run: function() {
@@ -30,7 +30,8 @@ XKit.extensions.retags = {
 		var notesProcessed = false;
 		ms.forEach(function(mutation) {
 			var $baseMutatedElements = $(mutation.addedNodes);
-			var nonPopoverNotes = $baseMutatedElements.find('.note:not(.ui_post_badge)');
+			var activityNotes = $baseMutatedElements.find('.activity-notification');
+			var fallbackNotes = $baseMutatedElements.find('.note:not(.ui_post_badge)');
 			if ($baseMutatedElements.hasClass('note-list')) {
 				//remove existing retags items (if tabbing between popover views)
 				$baseMutatedElements.find('.retags-wrapper').remove();
@@ -39,8 +40,10 @@ XKit.extensions.retags = {
 				XKit.extensions.retags.tag_popover(elements.filter(XKit.extensions.retags.selectors));
 			} else if ($baseMutatedElements.hasClass('post-activity-note') && !notesProcessed) {
 				XKit.extensions.retags.tag_popover($baseMutatedElements.filter(XKit.extensions.retags.selectors));
-			} else if (nonPopoverNotes.length > 0) {
-				XKit.extensions.retags.tag(nonPopoverNotes.filter(XKit.extensions.retags.selectors));
+			} else if (activityNotes.length > 0) {
+				XKit.extensions.retags.tag(activityNotes.filter(XKit.extensions.retags.selectors));
+			} else if (fallbackNotes.length > 0) {
+				XKit.extensions.retags.tag(fallbackNotes.filter(XKit.extensions.retags.selectors));
 			} else {
 				XKit.extensions.retags.tag($baseMutatedElements.filter(XKit.extensions.retags.selectors));
 			}
@@ -88,7 +91,7 @@ XKit.extensions.retags = {
 
 	tag: function(elements) {
 		$(elements).each(function() {
-			var $element = $(this), retagClass, $target, url;
+			var $element = $(this),	retagClass, $target, url, host, id;
 			if ($element.find('div.retags').length) {
 				return false;
 			}
@@ -101,15 +104,13 @@ XKit.extensions.retags = {
 				   retagClass = 'with_commentary';
 				   $target = $element;
 				   url = $target.find('.action').data('post-url');
-			// Activity
-			} else if ($element.hasClass('ui_note')) {
-				if ($element.find('.part_response').length) {
-					$element.addClass('is_response');
-				}
+			// Activity (page/dropdown)
+			} else if ($element.hasClass('activity-notification')) {
 				retagClass = 'is_retags';
 				$target = $element;
-				url = $target.find('.part_glass').attr('href');
-			// dashboard
+				var glass = $($element).find('.activity-notification__glass');
+				url = glass.attr('href');
+				// dashboard
 			} else if ($element.hasClass('notification') && !XKit.browser().mobile) {
 				$target = $element.find('.notification_sentence');
 				url = $target.find('.notification_target').attr('href');
@@ -121,7 +122,8 @@ XKit.extensions.retags = {
 			}
 			if (url) {
 				url = url.split('/');
-				var host = url[2], id = url[4];
+				host = url[2];
+				id = url[4];
 				XKit.extensions.retags.request(host, id).then(function(tags) {
 					XKit.extensions.retags.append_tag($element, retagClass, $target, tags);
 				}).fail(function(errorResponse) {
@@ -261,8 +263,9 @@ XKit.extensions.retags = {
 
 	css_toggle:
 	$('<style class="retags"> ' +
-		'.ui_note { display: none; } ' +
+		'.ui_note, .ui_notes .activity-notification { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
+		'.activity-notification.is_retags, .activity-notification.is_reply, .activity-notification.is_reblog:not(.naked), .activity-notification.user_mention, .activity-notification.note_mention { display: flex; }' +
 	'</style>'),
 
 	mobile_toggle:

@@ -33,6 +33,7 @@
     semi-spacing: error
     comma-spacing: error
     space-infix-ops: error
+    template-curly-spacing: error
     space-before-function-paren: [error, never]
     space-before-blocks: error
     keyword-spacing:

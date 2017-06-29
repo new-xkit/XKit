@@ -11,10 +11,13 @@ These are the stylesheet classes used by Tumblr on their pages.
 
 ### Data attributes
 
-* `data-post-id` for post ID
-* `data-type` for post Type
+* `data-post-id` for post ID of the post
+* `data-type` for post type of the post
 * `data-following-tumblelog` if following that user
 * `data-tumblelog-name` for owner of the post
+* `data-root-id` for the post ID of the original post
+* `data-json` metadata about the post in json format
+* `data-is-animated` whether the original photoset or video has animation
 
 ### Post Types
 
@@ -29,3 +32,7 @@ These are the stylesheet classes used by Tumblr on their pages.
 ### Others
 
 * .is_mine if posted by user on main/sideblogs.
+* .is_original if it is the original post made, not a reblog.
+* .is_regular if it is a regular text post
+* .is_note is a publically posted ask
+* .is_reblog if it is a reblogged post

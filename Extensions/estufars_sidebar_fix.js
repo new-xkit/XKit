@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -19,6 +19,12 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 
 	run: function() {
 		this.running = true;
+
+		// Temporary hotfix for Firefox issues
+		if (XKit.browser().firefox) {
+			console.error("Refusing to run old sidebar on Firefox due to pinned-target bug");
+			return;
+		}
 
 		if (XKit.extensions.estufars_sidebar_fix.preferences.dashonly.value) {
 			if (document.location.href.indexOf('://www.tumblr.com/dashboard') === -1) {
