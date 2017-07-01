@@ -141,7 +141,7 @@ XKit.extensions.find_inactives = new Object({
 							var m_user = {};
 							m_user.username = username;
 							m_user.days = last_updated;
-
+							m_user.controls = $(this).find(".controls").html();
 							XKit.extensions.find_inactives.retired_people_list.push(m_user);
 						}
 
@@ -286,10 +286,13 @@ XKit.extensions.find_inactives = new Object({
 
 		for (var i = 0; i < XKit.extensions.find_inactives.retired_people_list.length; i++) {
 
-			m_html = m_html + "<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
+			m_html = m_html + '<div class="find-inactives-blog">' +
+				'<div class="find-inactives-blog-link" data-url="http://' + XKit.extensions.find_inactives.retired_people_list[i].username + '.tumblr.com/">' +
 			"<div class=\"name\">" + XKit.extensions.find_inactives.retired_people_list[i].username + "</div>" +
 			"<div class=\"days\">" + XKit.extensions.find_inactives.retired_people_list[i].days + "</div>" +
 			"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +
+				'</div>'+
+			'<div style="float:right; margin-top: 10px; margin-right: 6px;">' + XKit.extensions.find_inactives.retired_people_list[i].controls +'</div>' +
 			"</div>";
 
 		}
@@ -309,6 +312,22 @@ XKit.extensions.find_inactives = new Object({
 
 		});
 
+		$(".unfollow_button").bind("click", function() {
+			console.log(this);
+			var unfollowButton = $(this);
+			var name = $(this).attr("data-name");
+			var key = $(this).attr("data-formkey");
+			$.ajax({
+				type: "POST",
+				url: "/svc/unfollow",
+				data: "form_key=" + key + "&data[tumblelog]=" + name + "&data[source]=UNFOLLOW_SOURCE_FOLLOWING_PAGE",
+				dataType: "text"
+			}).done(function() {
+				unfollowButton.hide();
+			});
+		});
+
+
 
 		if ($(".find-inactives-blog").length > 4) {
 
@@ -316,7 +335,7 @@ XKit.extensions.find_inactives = new Object({
 
 		}
 
-		$(".find-inactives-blog").click(function() {
+		$(".find-inactives-blog-link").click(function() {
 
 			window.open($(this).attr('data-url'));
 
