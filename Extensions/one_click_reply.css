@@ -112,6 +112,10 @@
 	background: green !important;
 }
 
+.activity-notification .xkit-reply-selected-pn, .activity-notification .xkit-reply-selected-pn:hover {
+	background-color: #b1dda5 !important;
+}
+
 .note.xkit-reply-selected-pn {
 	background: #b1dda5 !important;
 }

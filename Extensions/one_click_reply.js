@@ -438,12 +438,12 @@ XKit.extensions.one_click_reply = new Object({
 		if (!$(target).find('.xkit-reply-button-pn').length) {
 			var html = '<a class="xkit-reply-button-pn xkit-notes-activity">reply</a>';
 			$(target).append(html);
+			$(target).find(".xkit-reply-button-pn").click(function(e) {
+				e.preventDefault();
+				XKit.extensions.one_click_reply.make_post(this, true, e);
+			});
 		}
 		$(target).find(".xkit-reply-button-pn").css("display", "block");
-		$(target).find(".xkit-reply-button-pn").click(function(e) {
-			e.preventDefault();
-			XKit.extensions.one_click_reply.make_post(this, true, e);
-		});
 	},
 
 	enter: function(event) {
@@ -515,7 +515,9 @@ XKit.extensions.one_click_reply = new Object({
 	},
 
 	make_post: function(obj, pn_mode, event, silent_mode) {
-
+		if (!$(obj).hasClass('xkit-reply-button-pn') && pn_mode) {
+			return;
+		}
 		if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value === true && silent_mode !== true) {
 			if (!event.altKey && !pn_mode) {
 				// Do not open window if pressing alt key to select items.
@@ -559,7 +561,7 @@ XKit.extensions.one_click_reply = new Object({
 						// Cycle thru all the posts and gather information.
 
 						if ($(this).hasClass("xkit-reply-selected-pn") === true) {
-							var pn_post = XKit.extensions.one_click_reply.make_post_activity($(this).find(".xkit-reply-button-pn"), true);
+							var pn_post = XKit.extensions.one_click_reply.make_post_activity(this, true);
 							m_tags = m_tags + "," + pn_post.tags;
 							m_text = m_text + pn_post.sentence + "<p></p>";
 							// m_text = m_text + XKit.extensions.one_click_reply.make_post_activity(this, true);
