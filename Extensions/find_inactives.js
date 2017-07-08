@@ -118,9 +118,7 @@ XKit.extensions.find_inactives = new Object({
 				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
 			},
 			onload: function(response) {
-
 				try {
-
 					var perc = self.page_tracker.get_progress();
 
 					XKit.progress.value("find-inactives", perc);
@@ -138,13 +136,19 @@ XKit.extensions.find_inactives = new Object({
 
 
 						if (last_updated_days >= parseInt(XKit.extensions.find_inactives.preferences.time.value)) {
-							var m_user = {};
-							m_user.username = username;
-							m_user.days = last_updated;
+							var m_user = {
+								username: username,
+								days: last_updated,
+								days_value: last_updated_days
+							};
 
 							XKit.extensions.find_inactives.retired_people_list.push(m_user);
 						}
+					});
 
+					// Sort inactive blogs -- Oldest first
+					XKit.extensions.find_inactives.retired_people_list.sort(function(blog_a, blog_b) {
+						return -(blog_a.days_value - blog_b.days_value);
 					});
 
 					self.page_tracker.finished_processing_page(next_page);
