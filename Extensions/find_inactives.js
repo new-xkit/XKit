@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.3.2 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension lets you find blogs that haven't been updated in a certain amount of time. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -148,7 +148,7 @@ XKit.extensions.find_inactives = new Object({
 
 					// Sort inactive blogs -- Oldest first
 					XKit.extensions.find_inactives.retired_people_list.sort(function(blog_a, blog_b) {
-						return -(blog_a.days_value - blog_b.days_value);
+						return blog_b.days_value - blog_a.days_value;
 					});
 
 					self.page_tracker.finished_processing_page(next_page);
