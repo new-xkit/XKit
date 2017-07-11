@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.0 **//
+//* VERSION 5.5.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -102,8 +102,7 @@ XKit.extensions.tweaks = new Object({
 		"slim_activity_feed": {
 			text: "Re-slim the Activity feed",
 			default: false,
-			value: false,
-			experimental: true
+			value: false
 		},
 		"old_sidebar_width": {
 			text: "Return the sidebar to its original width",
@@ -330,7 +329,8 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
 			".activity-notification div.retags{ margin: 3px 0 0 !important; padding-left: 41px !important; }" +
-			".xkit-activity-plus-timestamp{ transform: translate(-13px) }",
+			".xkit-activity-plus-timestamp{ transform: translate(-13px) }" +
+			".xkit-reply-button-pn.xkit-notes-activity{ transform: translate(31px,-9px) }",
 			"tweaks_slim_activity_feed");
 		}
 		
