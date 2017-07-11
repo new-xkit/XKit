@@ -155,19 +155,12 @@ XKit.extensions.timestamps = new Object({
 
 			var blog_name = '';
 			if (XKit.interface.where().inbox !== true) {
-				var permalink = '';
-				if ((post.find('.permalink').length <= 0 && post.find(".post_permalink").length <= 0) && (post.find(".post-info-tumblelog").find("a").length <= 0)) {
+				var $permalink = post.find('.permalink, .post_permalink, .post-info-tumblelog a');
+
+				if ($permalink.length <= 0) {
 					return;
 				}
-				permalink = post.find(".permalink").attr('href');
-				if (!permalink) {
-					permalink = post.find(".post-info-tumblelog").find("a").attr("href");
-				}
-
-
-				if (post.find(".post_permalink").length > 0) {
-					permalink = post.find(".post_permalink").attr('href');
-				}
+				var permalink = $permalink.attr('href');
 
 				if (permalink) {
 					// Split permalink into sections, discarding the scheme
