@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.7 **//
+//* VERSION 3.3.8 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -620,7 +620,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 				onload: function(response) {
 					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var redirect_url = XKit.tools.getParameterByName("redirect_to");
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("postForms:saved");

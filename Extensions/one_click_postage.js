@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.3 **//
+//* VERSION 4.3.4 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -432,7 +432,7 @@ XKit.extensions.one_click_postage = new Object({
 				},
 				onload: function(response) {
 					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					try {
 						var mdata = jQuery.parseJSON(response.responseText);
 						if (mdata.errors === false) {
@@ -1406,7 +1406,7 @@ XKit.extensions.one_click_postage = new Object({
 				},
 				onload: function(response) {
 					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 					var mdata;
 					try {
