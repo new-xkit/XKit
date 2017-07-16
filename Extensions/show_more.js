@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.5 **//
+//* VERSION 2.5.6 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -430,20 +430,23 @@ XKit.extensions.show_more = new Object({
 		The regex has two capture groups, respectively the username and the path of the linked blog page.
 		https://xyz.tumblr.com links alway have a popover, while https://xyz.tumblr.com/foo/bar links do not have
 		a popover unless they're in a reblog header, in which case they have the post_info_link class.*/
-		var m_test = /https?:\/\/(?!www\.)([a-z0-9-]+)\.tumblr\.com([a-z0-9/-]*)/.exec(m_url);
+		var m_test, m_identifier, m_path;
 
+		m_test = /https?:\/\/(?!www\.)([a-z0-9-]+)\.tumblr\.com([a-z0-9/-]*)/.exec(m_url);
 		if (m_test) {
-			if (m_test[2] == "" || m_test[2] == "/" || $(m_obj).hasClass("post_info_link")) {
-				XKit.extensions.show_more.store_data_username(e, true, m_test[1]);
+			m_path = m_test[2];
+			if (m_path == "" || m_path == "/" || $(m_obj).hasClass("post_info_link")) {
+				m_identifier = m_test[1];
+				XKit.extensions.show_more.store_data_username(e, true, m_identifier);
+			}
+		} else {
+			/* handle tmblr.co links, which appear in mentions*/
+			m_test = /https?:\/\/tmblr\.co\/([A-Za-z0-9_-]+)/.exec(m_url);
+			if (m_test) {
+				m_identifier = m_test[1];
+				XKit.extensions.show_more.store_data_username(e, true, m_identifier, true);
 			}
 		}
-		/* handle tmblr.co links, which appear in mentions*/
-		m_test = /https?:\/\/tmblr\.co\/([A-Za-z0-9_-]+)/.exec(m_url);
-
-		if (m_test) {
-			XKit.extensions.show_more.store_data_username(e, true, m_test[1], true);
-		}
-
 	},
 
 	store_data_username: function(e, userlink_mode, blog_identifier, is_mention) {
