@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.9.3 **//
+//* VERSION 2.10.0 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -503,24 +503,30 @@ XKit.extensions.blacklist = new Object({
 						tag_array.push($(this).html().replace("#", "").toLowerCase());
 					});
 				}
+				if ($(this).find(".mh_post_tags").length > 0) {
+					$(this).find(".mh_post_tags a").each(function() {
+						tag_array.push($(this).html().replace("#", "").toLowerCase());
+					});
+				}
+
 
 				//alert(tag_array);
 
 				// Collect the title contents too.
 				var m_title = "";
-				if ($(this).find(".post_title").length > 0) {
-					m_title = $(this).find(".post_title").html();
+				if ($(this).find(".post_title, .post-title").length > 0) {
+					m_title = $(this).find(".post_title, .post-title").html();
 				}
 
 				// Collect the author info, if the option is toggled.
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-						var post_info_links = $(this).find(".post_info_link").map(function() {
+						var post_info_links = $(this).find(".post_info_link, .mh_post_head_name").map(function() {
 							return $(this).text();
 						});
 
-					// Join the text of the post info links with spaces
+						// Join the text of the post info links with spaces
 						m_author += post_info_links.get().join(" ");
 
 						if ($(this).find(".reblog_source").length > 0) {
@@ -531,7 +537,7 @@ XKit.extensions.blacklist = new Object({
 							m_author = m_author + " " + $(this).find(".post_source_link").html();
 						}
 					} catch (e) {
-						console.log(" !! can't get author !!");
+						console.log(" !! can't get author !!", e);
 					}
 				}
 
@@ -542,8 +548,8 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".post_text_wrapper").html();
 				}
 
-				if ($(this).find(".post_body").length > 0) {
-					m_content = $(this).find(".post_body").html();
+				if ($(this).find(".post_body, .mh_post_middle").length > 0) {
+					m_content = $(this).find(".post_body, .mh_post_middle").html();
 				}
 
 				// Link buttons (link post's content) live inside a .post_media
@@ -558,7 +564,7 @@ XKit.extensions.blacklist = new Object({
 
 				if ($(this).find(".reblog-list-item").length > 0) {
 					m_content = $(this).find(".reblog-list-item").map(function() {
-					    return $(this).html();
+						return $(this).html();
 					}).get().join(" ");
 				}
 
@@ -571,8 +577,8 @@ XKit.extensions.blacklist = new Object({
 				m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
 				m_content = m_content.toLowerCase();
 
-			    // Preserve href links.
-			    m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
+				// Preserve href links.
+				m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
 				// Strip HTML tags.
 				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
 
@@ -631,14 +637,15 @@ XKit.extensions.blacklist = new Object({
 		if (!XKit.extensions.blacklist.running) { return; }
 
 		var m_this = e.target;
-		var m_div = $("#" + $(m_this).attr('data-post-id'));
+		var m_div = $("#" + $(m_this).attr('data-post-id')).closest(".post");
 		$(m_div).removeClass("xblacklist_blacklisted_post");
-		$(m_div).find(".post_info").css("display", "block");
-		$(m_div).find(".post_controls").css("display", "block");
+		$(m_div).find(".post_info, .mh_post_head_name, .mh_post_head_two").css("display", "block");
+		$(m_div).find(".post_controls, .mh_post_foot").css("display", "block");
 		$(m_div).find(".post_footer_links").css('display', 'block');
 		$(m_div).find(".post_source").css('display', 'block');
-		$(m_div).find(".post_tags").css('display', 'block');
+		$(m_div).find(".post_tags, .mh_post_tags").css('display', 'block');
 		$(m_div).find(".post_footer").css('display', 'table');
+		$(m_div).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display", "block");
 
 		$(m_div).find(".post_answer").css("display", "block");
 
@@ -650,6 +657,7 @@ XKit.extensions.blacklist = new Object({
 
 		$(m_div).find(".xblacklist_excuse").remove();
 		$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
+
 
 		// Fix for canvases on Disable Gifs:
 		if ($(m_div).hasClass("disable-gifs-checked")) {
@@ -665,13 +673,14 @@ XKit.extensions.blacklist = new Object({
 	hide_post: function(obj, word) {
 
 		if (XKit.extensions.blacklist.preferences.dont_block_me.value === true) {
-			if ($(obj).hasClass("is_mine") === true) {
+			if ($(obj).hasClass("is_mine") === true || $(obj).find(".mh_post_foot_control.icon-trash").length > 0) {
 				return;
 			}
 		}
 
 		if (XKit.extensions.blacklist.preferences.dont_block_liked.value === true) {
 			if ($(obj).find('.post_control.like.liked').length > 0) { return; }
+			if ($(obj).find('.mh_post_foot_control.like.is_liked').length > 0) { return; }
 			if ($(obj).find('.post_answer_input').attr ('readonly')) { return; }
 		}
 
@@ -680,42 +689,9 @@ XKit.extensions.blacklist = new Object({
 			$(obj).addClass("xblacklist_hidden_post");
 			return;
 		}
-
-		var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
-					$(obj).find(".post_content").html() + '</div>';
-
-		var to_add_type = "";
-
-		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
-
-			to_add_type = "<div class=\"xkit-blacklist-post-type  " + $(obj).attr('data-type') + "\">&nbsp;</div>";
-
-		}
-
-		var post_id = $(obj).attr('id');
-		// If the post doesn't have an id, reuse a conveniently unique attribute
-		if (!post_id) {
-			post_id = $(obj).attr('data-post-id');
-			$(obj).attr('id', post_id);
-		}
-
-		var block_excuse = '<div class="xblacklist_excuse">' +
-					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
-
-		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
-			block_excuse = '<div class="xblacklist_excuse">' +
-					'Post blocked.' + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
-		}
-
 		$(obj).addClass("xblacklist_blacklisted_post");
-		$(obj).find(".post_info").css("display", "none");
-		$(obj).find(".post_controls").css("display", "none");
-		$(obj).find(".post_content").html(old_content + block_excuse);
-		$(obj).find(".post_footer_links").css('display', 'none');
-		$(obj).find(".post_source").css('display', 'none');
-		$(obj).find(".post-source-footer").css('display', 'none');
+		
+		XKit.extensions.blacklist.hide_content(obj, word);
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
@@ -724,7 +700,7 @@ XKit.extensions.blacklist = new Object({
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
 			$(obj).find(".post_footer").css('display', 'none');
 		} else {
-			$(obj).find(".post_tags, .post_footer").css('display', 'none');
+			$(obj).find(".post_tags, .post_footer, .mh_post_tags").css('display', 'none');
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -735,9 +711,63 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".xkit-shorten-posts-embiggen").css("display", "none");
 
 		}
+	},
+	
+	hide_content: function(obj, word) {
+		var isMobile = $(".mh_post_page").length > 0;
+		
+		var old_content = (isMobile) ? "" : '<div style="display: none;" class="xblacklist_old_content">' +
+					$(obj).find(".post_content").html() + '</div>';
+		
+		var post_id = (isMobile) ? $(obj).find(".mh_post_notes").attr('id') : $(obj).attr('id') || $(obj).attr('data-post-id');
+		$(obj).attr('id', post_id);
+		
+		var post_type = (isMobile) ? "" : $(obj).attr('data-type');
+		if (isMobile) {
+			if ($(obj).hasClass("post_type_photo")) {
+				post_type = "photo";
+			} else if ($(obj).hasClass("post_type_photoset")) {
+				post_type = "photoset";
+			} else if ($(obj).hasClass("post_type_note")) {
+				post_type = "note";
+			} else if ($(obj).hasClass("post_type_regular")) {
+				post_type = "regular";
+			} else if ($(obj).hasClass("post_type_video")) {
+				post_type = "video";
+			} else if ($(obj).hasClass("post_type_audio")) {
+				post_type = "audio";
+			} else if ($(obj).hasClass("post_type_link")) {
+				post_type = "link";
+			}
+		}
+		
+		var block_excuse = XKit.extensions.blacklist.get_block_excuse(word, post_type, post_id);
+		
+		$(obj).find(".post_info, .mh_post_head_name, .mh_post_head_two").css("display", "none"); // header
+		$(obj).find(".mh_post_media, .mh_post_canvas, .mh_post_middle").css("display", "none"); // page content (mobile only)
+		$(obj).find(".post_controls, .post-source-footer, .mh_post_foot").css("display", "none"); // footer
+		if (isMobile) { // depending on platform, use different method for adding block excuse
+			$(obj).find(".mh_post_head").after(block_excuse);
+		} else {
+			$(obj).find(".post_content").html(old_content + block_excuse);
+		}
+	},
 
-		$(obj).find(".post_answer").css("display", "none");
+	get_block_excuse: function(word, post_type, id) {
+		var to_add_type = "";
+		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
+			to_add_type = "<div class=\"xkit-blacklist-post-type  " + post_type + "\">&nbsp;</div>";
+		}
 
+		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
+			return '<div class="xblacklist_excuse">' +
+					'Post blocked.' + to_add_type +
+					'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+		} else {
+			return '<div class="xblacklist_excuse">' +
+					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'<div data-post-id="' + id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+		}
 	},
 
 	do_post: function(obj, post_content, tags) {
