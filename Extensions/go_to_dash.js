@@ -1,5 +1,5 @@
 //* TITLE Go-To-Dash **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION View a post on a blog on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds a 'view' button on peoples blogs that allows you to go back to that post on your dashboard. This feature only works on the blogs you follow. If the post was made before you followed them, you might not see them on your dashboard when you click the view button. **//
@@ -25,13 +25,13 @@ XKit.extensions.go_to_dash = new Object({
 		if ($("#xkit_gotodash").length > 0) {
 			return;
 		}
+		
+		XKit.tools.init_css("go_to_dash");
 
 		var post_id = XKit.iframe.single_post_id();
 		var next_post_id = parseInt(post_id) + 1;
 
-		// The CSS class 'embed-button' uses Tumblr's CSS to add padding
-		// to the button itself.
-		var go_back_html = '<a href="/dashboard/2/' + next_post_id + '" class="tx-button btn embed-button" target="_top" ' +
+		var go_back_html = '<a href="/dashboard/2/' + next_post_id + '" class="tx-icon-button" target="_top" ' +
 			'id="xkit_gotodash" title="View on dashboard"><span class="button-label">View</span></a>';
 
 		// Remove the text from the dashboard button because otherwise the iframe
@@ -39,7 +39,7 @@ XKit.extensions.go_to_dash = new Object({
 		XKit.iframe.hide_button(XKit.iframe.dashboard_button());
 
 		var place = XKit.iframe.unfollow_button().length ?
-			XKit.iframe.unfollow_button() : XKit.iframe.delete_button();
+			XKit.iframe.dashboard_button() : XKit.iframe.delete_button();
 		place.before(go_back_html);
 
 		this.running = true;
@@ -47,6 +47,7 @@ XKit.extensions.go_to_dash = new Object({
 
 	destroy: function() {
 		$("#xkit_gotodash").remove();
+		XKit.tools.remove_css("go_to_dash");
 		this.running = false;
 	}
 
