@@ -29,9 +29,9 @@ XKit.extensions.go_to_dash = new Object({
 		var post_id = XKit.iframe.single_post_id();
 		var next_post_id = parseInt(post_id) + 1;
 
-		// The CSS class 'embed-button' uses Tumblr's CSS to add padding
-		// to the button itself.
-		var go_back_html = '<a href="/dashboard/2/' + next_post_id + '" class="tx-button btn embed-button" target="_top" ' +
+		// CSS class 'tx-button' gives basic button styling
+		// CSS class 'tx-button--tertiary' adds correct margins, so it fits in with Unfollow and Block
+		var go_back_html = '<a href="/dashboard/2/' + next_post_id + '" class="tx-button tx-button--tertiary" target="_top" ' +
 			'id="xkit_gotodash" title="View on dashboard"><span class="button-label">View</span></a>';
 
 		// Remove the text from the dashboard button because otherwise the iframe
