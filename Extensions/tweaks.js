@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.1 **//
+//* VERSION 5.5.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -75,7 +75,7 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"bold_links": {
+		"bold_links_new": {
 			text: "Use 'Classic' (bold) links on text posts",
 			default: false,
 			value: false
@@ -313,7 +313,7 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
-	
+
 		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
 			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
@@ -333,7 +333,7 @@ XKit.extensions.tweaks = new Object({
 			".xkit-reply-button-pn.xkit-notes-activity{ transform: translate(31px,-9px) }",
 			"tweaks_slim_activity_feed");
 		}
-		
+
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
 			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
@@ -466,8 +466,8 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post .post_content h2 { font-size: 15px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 		}
 
-		if (XKit.extensions.tweaks.preferences.bold_links.value) {
-			XKit.extensions.tweaks.add_css(".post-typography-update .post .post-content a, .post-typography-update .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
+		if (XKit.extensions.tweaks.preferences.bold_links_new.value) {
+			XKit.extensions.tweaks.add_css(".post .post-content a, .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
 		}
 
 		if (XKit.extensions.tweaks.preferences.swap_buttons.value) {
