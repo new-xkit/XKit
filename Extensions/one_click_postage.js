@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.4 **//
+//* VERSION 4.3.5 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -1114,6 +1114,14 @@ XKit.extensions.one_click_postage = new Object({
 			}
 			return;
 		}
+		
+		// Firefox list menus make the popup unable to detect the cursor on top of them
+		// Increased delay lets user pick a blog without the menu closing so suddenly
+		if (XKit.browser().firefox) {
+			var delay = 3000;
+		} else {
+			var delay = 700;
+		}
 
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
@@ -1124,7 +1132,7 @@ XKit.extensions.one_click_postage = new Object({
 					$("#x1cpostage_box").slideUp('fast');
 				}
 			}
-		}, 700);
+		}, delay);
 
 		/* eslint-enable no-undef */
 	},
