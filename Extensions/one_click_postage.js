@@ -1115,12 +1115,11 @@ XKit.extensions.one_click_postage = new Object({
 			return;
 		}
 		
+		delay = 700;
 		// Firefox list menus make the popup unable to detect the cursor on top of them
 		// Increased delay lets user pick a blog without the menu closing so suddenly
 		if (XKit.browser().firefox) {
-			var delay = 3000;
-		} else {
-			var delay = 700;
+			delay = 3000;
 		}
 
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
