@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.2 **//
+//* VERSION 6.8.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -752,6 +752,9 @@ XKit.extensions.xkit_patches = new Object({
 							var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
 							if (!kitty_text) {
 								kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							}
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
 							}
 							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
