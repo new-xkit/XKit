@@ -399,7 +399,7 @@ XKit.extensions.outbox = new Object({
 			/* globals moment */
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
-			m_date = moment_val.format('hh:mm a');
+			m_date = moment_val.format('MM/DD/YY hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -447,7 +447,7 @@ XKit.extensions.outbox = new Object({
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
-			m_date = moment_val.format('hh:mm a');
+			m_date = moment_val.format('MM/DD/YY hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -506,7 +506,7 @@ XKit.extensions.outbox = new Object({
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
-			m_date = moment_val.format('hh:mm a');
+			m_date = moment_val.format('MM/DD/YY hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
