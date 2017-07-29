@@ -186,14 +186,13 @@ XKit.extensions.audio_plus = {
 		var audio_plus = XKit.extensions.audio_plus;
 		audio_plus.scroll_waiting = false;
 
-		// Check for pause icons within an audio player within a post
-		var playing_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
-		if (playing_icons.length === 0) {
+		var pause_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
+		if (pause_icons.length === 0) {
 			return;
 		}
 
 		// Arbitrarily select the first if there are multiple
-		var player = audio_plus.audio_player_of_element(playing_icons[0]);
+		var player = audio_plus.audio_player_of_element(pause_icons[0]);
 		var player_bounds = player.getBoundingClientRect();
 
 		// If not completely off the screen
