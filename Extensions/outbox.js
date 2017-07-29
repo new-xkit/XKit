@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.10.0 **//
+//* VERSION 0.11.0 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
