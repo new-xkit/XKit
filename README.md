@@ -8,7 +8,7 @@ XKit is a small extension framework that powers tweaks for Tumblr.
 Currently we support [Firefox](https://addons.mozilla.org/en-US/firefox/addon/new-xkit/) and [Chrome](https://chrome.google.com/webstore/detail/new-xkit/inobiceghmpkaklcknpniboilbjmlald) officially. 
 We support Opera unofficially using the same file as the Chrome extension, [which you can download here](https://github.com/new-xkit/XKit/releases).
 
-## Support [![Discord](https://img.shields.io/discord/104051306309644288.svg)](https://new-xkit-extension.tumblr.com/discord-support)
+## Support [![Discord](https://img.shields.io/badge/discord-join%20chat-7289DA.svg)](https://new-xkit-extension.tumblr.com/discord-support)
 
 First, [check the list of issues](https://github.com/new-xkit/XKit/issues), and see if there's something there that looks like the problem you're having. Otherwise, [file a new issue](https://github.com/new-xkit/XKit/issues) or come join our support chat; just hop on over to our [Discord server](https://new-xkit-extension.tumblr.com/discord-support). We don't bite!
 
