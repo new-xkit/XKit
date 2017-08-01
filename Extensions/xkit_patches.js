@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.3 **//
+//* VERSION 6.8.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -538,39 +538,47 @@ XKit.extensions.xkit_patches = new Object({
 				button.children(".button-label").hide();
 			},
 
+            /**
+			 * @param  {String} name: the css class name of the button
+			 * @return {JQuery} the element for that css class name
+			 */
+			tx_button_selector: function(name) {
+				return $(`.tx-button.${name}-button, .tx-icon-button.${name}-button`);
+			},
+
 			/**
 			 * @return {JQuery} The follow button in the iframe
 			 */
 			follow_button: function() {
-				return $(".btn.follow,.tx-button.follow-button");
+				return this.tx_button_selector("follow");
 			},
 
 			/**
 			 * @return {JQuery} The unfollow button in the iframe
 			 */
 			unfollow_button: function() {
-				return $(".btn.unfollow,.tx-button.unfollow-button");
+				return this.tx_button_selector("unfollow");
 			},
 
 			/**
 			 * @return {JQuery} The delete button in the iframe
 			 */
 			delete_button: function() {
-				return $(".btn.delete,.tx-button.delete-button");
+				return this.tx_button_selector("delete");
 			},
 
 			/**
 			 * @return {JQuery} The reblog button in the iframe
 			 */
 			reblog_button: function() {
-				return $(".btn.reblog,.tx-button.reblog-button");
+				return this.tx_button_selector("reblog");
 			},
 
 			/**
 			 * @return {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
-				return $(".btn.dashboard,.tx-button.dashboard-button");
+				return this.tx_button_selector("dashboard");
 			},
 
 		};
