@@ -578,7 +578,7 @@ XKit.extensions.xkit_patches = new Object({
 			 * @return {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
-				return this.tx_button_selector("unfollow");
+				return this.tx_button_selector("dashboard");
 			},
 
 		};
