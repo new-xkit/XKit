@@ -538,7 +538,7 @@ XKit.extensions.xkit_patches = new Object({
 				button.children(".button-label").hide();
 			},
 
-            /**
+			/**
 			 * @param  {String} name: the css class name of the button
 			 * @return {JQuery} the element for that css class name
 			 */
@@ -760,6 +760,9 @@ XKit.extensions.xkit_patches = new Object({
 							var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
 							if (!kitty_text) {
 								kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							}
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
 							}
 							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
