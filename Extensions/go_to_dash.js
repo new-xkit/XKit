@@ -25,14 +25,14 @@ XKit.extensions.go_to_dash = new Object({
 		if ($("#xkit_gotodash").length > 0) {
 			return;
 		}
+		
+		XKit.tools.init_css("go_to_dash");
 
 		var post_id = XKit.iframe.single_post_id();
 		var next_post_id = parseInt(post_id) + 1;
 
-		// CSS class 'tx-button' gives basic button styling
-		// CSS class 'tx-button--tertiary' adds correct margins, so it fits in with Unfollow and Block
-		var go_back_html = '<a href="/dashboard/2/' + next_post_id + '" class="tx-button tx-button--tertiary" target="_top" ' +
-			'id="xkit_gotodash" title="View on dashboard"><span class="button-label">View On Dashboard</span></a>';
+		var go_back_html = '<a href="/dashboard/2/' + next_post_id + '" class="tx-icon-button" target="_top" ' +
+			'id="xkit_gotodash" title="View on dashboard"><span class="button-label">View</span></a>';
 
 		// Remove the text from the dashboard button because otherwise the iframe
 		// overflows
@@ -47,6 +47,7 @@ XKit.extensions.go_to_dash = new Object({
 
 	destroy: function() {
 		$("#xkit_gotodash").remove();
+		XKit.tools.remove_css("go_to_dash");
 		this.running = false;
 	}
 
