@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.2 **//
+//* VERSION 5.5.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -313,6 +313,7 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
+		this.css_to_add = "";
 
 		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
 			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
@@ -917,8 +918,8 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	destroy: function() {
-
 		this.running = false;
+
 		XKit.tools.remove_css("xkit_tweaks");
 		XKit.tools.remove_css("tweaks_slim_activity_feed");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
@@ -927,12 +928,15 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_wide_sources");
+
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
+		XKit.post_listener.remove("tweaks_split_gear");
+
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		clearInterval(this.hide_bubble_interval);
-		XKit.post_listener.remove("tweaks_split_gear");
+
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
 		$("#new_post_in_tracked_tags_bubble").remove();
@@ -944,7 +948,7 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display", "block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
+
 		XKit.tools.remove_css("tweaks_grey_urls");
 	}
-
 });
