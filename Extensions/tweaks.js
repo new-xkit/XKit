@@ -317,9 +317,10 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
 			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
-			".ui_notes .activity-notification .activity-notification__activity, .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ transform: translate(-10px) }" +
+			".ui_notes .activity-notification .activity-notification__activity{ transform: translate(-10px); }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ background-color: rgba(0,0,0,0) !important; padding: 5px 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; min-width: 25px; }" +
-			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding: 10px; }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding-top: 5px; }" +
 			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular{ background-position: -784px -2px; }" +
@@ -328,7 +329,10 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link{ background-position: -785px -58px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
-			".activity-notification div.retags{ margin: 3px 0 0 !important; padding-left: 41px !important; }" +
+			".ui_notes .date_header, .ui_notes .date_header.date_activity{ padding: 0 10px; }" +
+			".activity-popover-notifications .ui_notes .activity-notification .activity-notification__avatar{ height: 25px; }" +
+			".activity-notification div.retags{ margin: 0 !important; padding-left: 41px !important; }" +
+			".is_retags .activity-notification__activity_message.conversational{ margin-bottom: 0 !important; }" +
 			".xkit-activity-plus-timestamp{ transform: translate(-13px) }" +
 			".xkit-reply-button-pn.xkit-notes-activity{ transform: translate(31px,-9px) }",
 			"tweaks_slim_activity_feed");
