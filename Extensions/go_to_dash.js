@@ -41,6 +41,7 @@ XKit.extensions.go_to_dash = new Object({
 		var is_following = XKit.iframe.unfollow_button().length;
 		var place = is_following ? XKit.iframe.dashboard_button() : XKit.iframe.delete_button();
 		place.before(go_back_html);
+		XKit.iframe.size_frame_to_fit();
 
 		this.running = true;
 	},
