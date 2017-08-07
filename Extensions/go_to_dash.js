@@ -25,7 +25,7 @@ XKit.extensions.go_to_dash = new Object({
 		if ($("#xkit_gotodash").length > 0) {
 			return;
 		}
-		
+
 		XKit.tools.init_css("go_to_dash");
 
 		var post_id = XKit.iframe.single_post_id();
@@ -38,8 +38,8 @@ XKit.extensions.go_to_dash = new Object({
 		// overflows
 		XKit.iframe.hide_button(XKit.iframe.dashboard_button());
 
-		var place = XKit.iframe.unfollow_button().length ?
-			XKit.iframe.dashboard_button() : XKit.iframe.delete_button();
+		var is_following = XKit.iframe.unfollow_button().length;
+		var place = is_following ? XKit.iframe.dashboard_button() : XKit.iframe.delete_button();
 		place.before(go_back_html);
 
 		this.running = true;

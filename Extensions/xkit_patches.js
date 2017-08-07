@@ -538,7 +538,7 @@ XKit.extensions.xkit_patches = new Object({
 				button.children(".button-label").hide();
 			},
 
-            /**
+			/**
 			 * @param  {String} name: the css class name of the button
 			 * @return {JQuery} the element for that css class name
 			 */
@@ -581,6 +581,36 @@ XKit.extensions.xkit_patches = new Object({
 				return this.tx_button_selector("dashboard");
 			},
 
+			/**
+			 * Uses tumblr's built-in RPC functionality to resize the in-blog iframe.
+			 * The iframe will be resized to the maximum of the current body size or
+			 * the iframe-controls-container size.
+			 *
+			 * This is the same postMessage call that happens when you click on the
+			 * profile menu, without the body classes arguments. (Tumblr also allows
+			 * for the code to set classes on the iframe element and the body of the page)
+			 */
+			size_frame_to_fit: function() {
+				var button_container = $(".iframe-controls-container")[0] || {};
+
+				var width = Math.max(
+					button_container.scrollWidth || -Infinity,
+					document.body.scrollWidth);
+
+				var height = Math.max(
+					button_container.scrollHeight || -Infinity,
+					document.body.scrollHeight);
+
+				var payload = {
+					method: "tumblr-unified-controls:IframeControls:size",
+					args: [{
+						width: width,
+						height: height
+					}]
+				};
+
+				window.top.postMessage(JSON.stringify(payload), "*");
+			}
 		};
 
 		if (XKit.frame_mode === true) {

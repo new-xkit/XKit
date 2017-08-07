@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.4 **//
+//* VERSION 4.3.5 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -176,44 +176,27 @@ XKit.extensions.one_click_postage = new Object({
 
 		XKit.iframe.hide_button(XKit.iframe.reblog_button());
 
-		var m_css = "#iframe_controls, #dashboard_iframe { width: auto !important; } " +
-				".tx-button--with-icon.xkit-in-frame-button:before {content: ''; display: inline-block; vertical-align: bottom; " +
-					"width: 20px;height: 18px;} " +
-				"#x1cpostage_in_blog_reblog:before {" +
-					" background-size: auto; background-position: 50% 50%; background-repeat: no-repeat; " +
-					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzA2MTUwNUY0MDFBMTFFM0I3QjRGNERGODZCRDlCN0MiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzA2MTUwNjA0MDFBMTFFM0I3QjRGNERGODZCRDlCN0MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MDYxNTA1RDQwMUExMUUzQjdCNEY0REY4NkJEOUI3QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3MDYxNTA1RTQwMUExMUUzQjdCNEY0REY4NkJEOUI3QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuZEKdMAAAD/SURBVHjalJK7CsIwFIbjBd9AUITSqUJ3L4NduklWn8S1z+OjKE5uBSelU+tlU2jpEv8DSakx1fjDR08Oybn1tIQQzFIDkOnONrPXDngfXqrAEtINzOp+ZRyFvZ6AqwCqhTH7T129BdIV9H60cAFTUwtn4IHBlwB90NGTKGMoA5wMD10QgR0o5DeS/irARLYgDI83DcMkv0uXluBhuLCSmSpxzkWapnVXRNPsNCzUFqzJyPOcBUHAsixjZVnW73BV6hzcDS0UKlUcx8JxHJEkSb2CQmXegwVItCoOyvB937QPB33iI+1czYCy09qEYfg2g1/7b/UXbII07sFLgAEAWx1gAHMEnncAAAAASUVORK5CYII=); " +
-				"}" +
-				"#x1cpostage_in_blog_queue:before {" +
-					" background-size: auto; background-position: 50% 50%; background-repeat: no-repeat; " +
-					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDZEMUIyMEM0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDZEMUIyMEQ0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MDYxNTA2MTQwMUExMUUzQjdCNEY0REY4NkJEOUI3QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3MDYxNTA2MjQwMUExMUUzQjdCNEY0REY4NkJEOUI3QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmHw4kUAAAErSURBVHjahJKxasMwEIblBNq1tHQyGJduhtLBfoDi2WOH0jxAKd27eMlbhEyBQN+gD+ApU8hS3N2blw7pYLxd/oOTOYQcH3yWdJbu9N8pICKjLAMFeAIP4vsBFfgGe+MaBxDeQE3jVssefcbow0eatqMbhD/ZRGbfTTIbYCaaE6UqAM9m3BI5M9SgcjLMJfpG1gG4dPZUWsKf55rG4Qo8ggsZ37UEn3Vqfgc+wAr8y3gN4jEJ1rbgHnyN/Gd/PJNH4jN+OC/g1TqKojBt29ol+xfn2ngLdjzpuo7SNKUwDKlpGr1nd+4hcfX7ofl1TVEUuQF6W8Q1+AS/jozD0Pwk8ck8uO1iOUsp7A0obSrOzjXP81zfoDSenmviqS5MBbBBSiloL2MpfnMSYADCFn1McDQb3wAAAABJRU5ErkJggg==); " +
-				"}" +
-				"#x1cpostage_in_blog_draft:before {" +
-					" background-size: auto; background-position: 50% 50%; background-repeat: no-repeat; " +
-					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjUxMEI2MUU0RjcxMTFFM0E2REZERTA4MTkxRkNEODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODlFMzUxNEU0Rjc4MTFFM0E2REZERTA4MTkxRkNEODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNTEwQjYxQzRGNzExMUUzQTZERkRFMDgxOTFGQ0Q4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNTEwQjYxRDRGNzExMUUzQTZERkRFMDgxOTFGQ0Q4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnBnWXQAAADUSURBVHjapFI7DsMgDMVRLtElypw7sLByJM7Tq2TslgNkCjcIYnGNCqlDoESqpZfnGP+wAUQU/0gXGWsMAPz/In34QPQKaoXFzwT4ucfJ+ZvzECwl7W9WgrszaAkWr9DqgF0H8q01O6CAkWAIM8GRaSYYwpgcimDBTyxLsI8pACsJDI/QWuO2bdxkqjOgwweRDvq+70JKKay1wnvP3XSrA5dKLcuCwzDguq68A9c1tvBKyjRN5fOsg4PzGYTqwaSUOs2guoWI21toJTneQWQT7eItwABahmWkthQpGAAAAABJRU5ErkJggg==); " +
-				"}" +
-				".xkit-in-frame-button.xkit-button-working:before { background-image: url(data:image/gif;base64,R0lGODlhEAAQAIAAAP///////yH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDZEMUIyMTQ0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDZEMUIyMTU0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowNkQxQjIxMjQwMUMxMUUzQjdCNEY0REY4NkJEOUI3QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNkQxQjIxMzQwMUMxMUUzQjdCNEY0REY4NkJEOUI3QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAkQAAEALAAAAAAQABAAAAIVjI+py+0Po3QAmHptwoHzCYbiSDIFACH5BAkQAAEALAcABwAGAAIAAAIFBBJmaAUAIfkECRAAAQAsCwAHAAIAAgAAAgKEUQAh+QQFEAABACwAAAAAAQABAAACAkwBACH5BAUQAAEALAMABwACAAIAAAIChFEAIfkEBRAAAQAsBwAHAAIAAgAAAgKEUQAh+QQFEAABACwAAAAAAQABAAACAkwBADs=) !important; } " +
-				".xkit-in-frame-button.xkit-button-done { background-color: #59982a !important; }" +
-				".xkit-in-frame-button.xkit-button-error { background-color: #982a2a !important; }";
+		XKit.tools.init_css("one_click_postage");
 
-		XKit.tools.add_css(m_css, "x1cpostage_in_blog");
+		function button(type, label) {
+			return `<a
+					  id="x1cpostage_in_blog_${type}"
+					  class="tx-button--with-icon tx-icon-button xkit-in-frame-button"
+					  role="button"
+					  aria-label="${label}"
+					  title="${label}"
+					  tabindex="0"
+					>
+					  <span class="button-label">${label}</span>
+					</a>`;
+		}
 
-		var old_classes = "btn icon reblog no_label ";
-		var new_classes = "tx-button tx-button--with-icon no-text ";
-
-		var m_html = '<a id="x1cpostage_in_blog_reblog" onclick="return false" ' +
-						'class="' + old_classes + new_classes + 'xkit-in-frame-button">' +
-							'<span class="hidden">1-Click Reblog</span>' +
-						'</a>' +
-					 '<a id="x1cpostage_in_blog_queue" onclick="return false" ' +
-						'class="' + old_classes + new_classes + 'xkit-in-frame-button">' +
-							'<span class="hidden">1-Click Reblog</span>' +
-						'</a>' +
-					 '<a id="x1cpostage_in_blog_draft" onclick="return false" ' +
-						'class="' + old_classes + new_classes + 'xkit-in-frame-button">' +
-							'<span class="hidden">1-Click Reblog</span>' +
-						'</a>';
+		var m_html = button("reblog", "One-Click Reblog") +
+					 button("queue",  "One-Click Queue") +
+					 button("draft",  "One-Click Draft");
 
 		XKit.iframe.reblog_button().after(m_html);
+		XKit.iframe.size_frame_to_fit();
 
 		$("#x1cpostage_in_blog_reblog").click(function() {
 			XKit.extensions.one_click_postage.in_blog_post($(this), 0, false);
