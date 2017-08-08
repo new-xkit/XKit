@@ -1725,7 +1725,8 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.tools.add_css("." + class_name + ":after {" +
 							" background-image: url('" + icon + "') !important;" +
 							" background-size: auto auto !important;" +
-							" margin-top: -9px !important; " +
+							" margin-top: -7px !important; " +
+							" opacity: 1 !important; " +
 							"}", "xkit_interface_icon___" + class_name);
 
 					if (typeof ok_icon !== "undefined") {
