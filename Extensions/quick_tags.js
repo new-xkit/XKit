@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.5.9 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -10,9 +10,8 @@ XKit.extensions.quick_tags = new Object({
 
 	running: false,
 
-	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6REUyOTgzM0UwM0RBMTFFMzk4MjNDQ0YzRkVDODBDQkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6REUyOTgzM0YwM0RBMTFFMzk4MjNDQ0YzRkVDODBDQkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFNkYwOTk2QjAzQUQxMUUzOTgyM0NDRjNGRUM4MENCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFNkYwOTk2QzAzQUQxMUUzOTgyM0NDRjNGRUM4MENCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PtfUnGQAAAEPSURBVHjarJM/DsIgGMXBaKf2BDq7eTRHd4+glzAewEPo4GDSwX+jg4ODiY2JqRHfZ8BQ+iGtKclLS4Af7+OBVEqJJltLNNza5kdKGbKaoJqsjsNnYO4Sm8ZBi3SG+hzv1NXgGbTWfVtbKDZrOHHAMdSBeuSKge50+SyQC+WGgRzfM/RixvvQyls+4/ACTaEF485WSuWXOBbwYU3Onb5PByrfB8wqAJQnqIQDDskZm1wYmhqovYjaxByJJVHRKaUfSwNDaoWsrH/p9H+1edW3TFDaXAbm5XXOSQXmHaGoKeCeYG4o/wJ3H2f6LropC0/K39fA3MGoMF4R2IVO3DUpbVjD4QC6Qhto5MIM8C3AAHzrYQgVtFTHAAAAAElFTkSuQmCC",
-	button_ok_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6REUyOTgzNDIwM0RBMTFFMzk4MjNDQ0YzRkVDODBDQkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6REUyOTgzNDMwM0RBMTFFMzk4MjNDQ0YzRkVDODBDQkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpERTI5ODM0MDAzREExMUUzOTgyM0NDRjNGRUM4MENCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpERTI5ODM0MTAzREExMUUzOTgyM0NDRjNGRUM4MENCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqyFhvoAAAE0SURBVHjaYvz//z8DNQETA5UBC4yRs0yHkFN5p0Rd+UKKC/8QUHsCaCkPKQb+htJ/gXg5EJ9DU6sNxGcIGYotDFuAOB6I/YH4JJqcOhCfBRrKS4qBn4FhBXLtCyD+h0VeDWQRLpcywpINUME3IMUJxG+BeCkQKwOxNx7fXQViC/SIQnYhM5QWBuIsIHYlEP6gMD2P7n1skQJLTmxEJDsVID6NbCiyl3OBVB/QC6zouohIoyDvWwL1foYnbCBnMlCjMroBQHFGIlwKS1LGKLEM1FxAQa4Dxf5sFmJUIruSgPd/E8zLJHj/LhCnUKu0uQ3EWkALf1HDwFtArAMyDKX4whVOBLx5E4j1YIahGIgPAC2QhhYU0mguM0E2jOgSG6jpKZDyBOKPQHwJiMuA2BhbgQsQYAB+k3Pj/Off2gAAAABJRU5ErkJggg==",
-
+	button_icon:" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAaRJREFUOBGlk7FKw1AUhnMjQSpZpIsP4KCLHUQ3h+oLuDkLxSWlSd7AooNbSkmLeQAfw3ZxKDpVEH0EF52EUqKp/x+SEq7NTYIXLufmnNPvnv/cUzEcDjfn8/mNEKKhaZqOnV0/+JiYpnnVarU+s4G8s/A8L0DwIi+Bflz2ZhhG07Ksd1UeY3pSGc/nOB9mt67rR/BPF4vFThiG48FgsMVE1aLEWCZALzifYo9oHcd5sm37AZWd4Ls0VO5ZB9WYAHSw49Vutz+qQGVgH5V+gdRPeJWhotfrPaKqA/aOMrMg+ez7fh29vIe/gfyVD8UKv/lDJKzTqlYZ+QROCImiCAX4dRWQsSKojqG9RnWvyG1Qzn+hgrdyvgAboZe7+JzyVVkJY6ol97RWq+3Hr8x/ACDHbDQAlSrF8N/yUg7/bDbbXo5NAm1WgWJCzgDyExVdTMlzLDlxxCaRP+aNcOTKJwzxO+StwXZd172E1f4A6SyC5sFygSqoCqYEroLyAdgzWSZz07VSchqkleSnoWXPUkdqC4FMlKC5sBRaygZBsIH+7RUl/wJcdCuw4Tjk5QAAAABJRU5ErkJggg==",
+	button_ok_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAcBJREFUOBGlk79KA0EQxmc2F2JCFEQLH8BCMZoiJJ2F+gJiESVWNjYJWgmWES0EC0mIoA9wChY21sZGMCRVJEEfwUYtDInC5dadIyuXNXeXw4Vj/83+br5vZ3Ffnx9vgXnMEeLAkYGtIUAXESuaFj08TT++27Ych5jT5y44wLZjhNgQ0JewFl46Sdde3eJoj1mZ0YCxLS0Aqb4PtUUBq3POZzpG537vOjnlCZQyGZpNg+OqYUKZ+sJGs1bI1B/4SGTFD7TPM+B8BzhErb6Xytla9c0PtB+IWASEljCtaJfmB4pZPVYF4EnyjmTaQeo4e5OawK/2nfA07nRRDBEM66CphVSAOh8mUyb8qtDBLnRLlIEKUedeUBYMjh0Jz54tGULOf6HiMQBQfbWNTllkO2uViCgVykTNTp2rnk6OhhLWLdMLiGjhZTLab6aiKs7pR1T8H5/f079lQ1B6Xn6guavYOudQIiACHhQyjSdLMi3IRvLpmdEf3eT3YLpILUCw0mYjT4w/QFr0gjrBHIFuUDeYK3AQlC7A8kyRSbGyDZQsN6m3y5frds/kmuw9gRRoh7rBJHSoPn+biOxexha8gn8AF6tJ8Q8uzcUAAAAASUVORK5CYII=",
 	preferences: {
 		"sep0": {
 			text: "Options",
@@ -69,7 +68,9 @@ XKit.extensions.quick_tags = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("quick_tags");
-		
+
+		if (!$(".post.post_full, .post.post_brick").length) { return; }
+
 		if (!$(".post.post_full, .post.post_brick").length) { return; }
 
 		XKit.interface.post_window.create_control_button("xkit-quick-tags-window", this.button_icon, "Quick Tags in a window!");
@@ -321,8 +322,7 @@ XKit.extensions.quick_tags = new Object({
 						"<div class=\"" + add_class_2 + "\">" + m_user_tags + m_add_button + "</div>" +
 					"</div>" +
 					"<div class=\"xkit-tag-other\">" +
-						"<div class=\"xkit-tag-name\">Other: <span style=\"font-weight: normal\">type and press enter</span></div>" +
-						"<input id=\"xkit-tag-input\" placeholder=\"comma separated tags\" type=\"text\">" +
+						"<input id=\"xkit-tag-input\" placeholder=\"new tags (comma separated)\" type=\"text\">" +
 					"</div>" +
 				"</div>";
 
