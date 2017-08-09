@@ -2,7 +2,7 @@
   "title": "New XKit",
   "name": "new-xkit",
   "fullName": "New XKit",
-  "version": "7.7.6",
+  "version": "7.7.7",
   "description": "Fork of XKit, the Tumblr extension framework",
   "main": "./main.js",
   "author": "",
