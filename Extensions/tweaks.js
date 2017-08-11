@@ -320,7 +320,7 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__activity{ transform: translate(-10px); }" +
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ background-color: rgba(0,0,0,0) !important; padding: 5px 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; min-width: 25px; }" +
-			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding-top: 5px; }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response blockquote{ margin: 10px 0 5px 5px; padding-left: 15px; border-left: solid 3px; }" +
 			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular{ background-position: -784px -2px; }" +
