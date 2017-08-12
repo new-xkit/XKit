@@ -26,7 +26,6 @@ try {
 	var storage = browser.storage.local;
 	var storage_loaded = false;
 	var framework_version = getVersion();
-	// Default to unlimited storage since we have that pref
 	var storage_used = 0;
 	var storage_max = -1;
 	init_bridge();
