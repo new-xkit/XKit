@@ -53,7 +53,7 @@ XKit.extensions.retags = {
 	tag_popover: function(elements) {
 		$(elements).each(function() {
 			var $element = $(this), retagClass, $target, host, id;
-			if ($element.find('div.retags').length || $element.find('p.note-added-tags').length) {
+			if ($element.find('div.retags, p.note-added-tags').length) {
 				return false;
 			}
 			if ($element.is('.is_reply, .is_answer, .type_6')) {
