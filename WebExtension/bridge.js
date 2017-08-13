@@ -26,7 +26,7 @@ try {
 	var storage = browser.storage.local;
 	var storage_loaded = false;
 	var framework_version = getVersion();
-	var storage_used = -1;
+	var storage_used = 0;
 	var storage_max = -1;
 	init_bridge();
 } catch (e) {
@@ -89,6 +89,16 @@ function init_bridge() {
 					});
 				});
 				return;
+			}
+			if (typeof(chrome) === 'undefined') {
+				if (!items.isProperlyMigrated) {
+					XKit.window.show("Storage migration in progress", "XKit is still busy migrating your preferences from the old storage system to the new one. Please check back in a couple seconds by refreshing the page.", "warning",  "<div class=\"xkit-button default\" id=\"xkit-bridge-refresh\">Refresh</div>");
+					$("#xkit-bridge-refresh").click(function() {
+						window.location = window.location;
+					});
+					return;
+				}
+
 			}
 			for (var key in items) {
 				xkit_storage[key] = items[key];
