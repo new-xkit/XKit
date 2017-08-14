@@ -1074,10 +1074,10 @@ function xkit_init_special() {
 	}
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
-		if (XKit.browser().chrome === true) {
-			/* global chrome */
+		if (typeof(browser) !== 'undefined') {
+			/* global browser */
 			var xhr = new XMLHttpRequest();
-			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
+			xhr.open('GET', browser.extension.getURL('editor.js'), false);
 			xhr.send(null);
 			try {
 				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
@@ -1085,9 +1085,12 @@ function xkit_init_special() {
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			}
-		}
-		if (XKit.browser().firefox === true || XKit.browser().safari === true) {
+		} else if (XKit.extensions.xkit_editor) {
 			XKit.extensions.xkit_editor.run();
+		} else {
+			XKit.window.show("Can't launch XKit Editor",
+				"Extension platform unsupported or broken.", "error",
+				"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		}
 	}
 
