@@ -1,7 +1,7 @@
 //* TITLE XCloud **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION Sync XKit data on clouds **//
-//* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatable with STUDIOXENIX servers.**//
+//* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatible with STUDIOXENIX servers.**//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
@@ -14,6 +14,33 @@ XKit.extensions.xcloud = new Object({
 	useoldserver: true,
 	gallery_available: {},
 	extensions_upgraded: false,
+	preferences: {
+		"sep_0": {
+			text: "AutoSync&emsp;<a id=\"xkit-autosync-help\" href=\"#\" onclick=\"return false\">What is this?</a>",
+			type: "separator"
+		},
+		"shortcut": {
+			text: "Enable alt + C shortcut to use AutoSync",
+			default: false,
+			value: false,
+			experimental: true
+		}
+	},
+	
+	cpanel: function() {
+		$("#xkit-autosync-help").click(function() {
+			XKit.window.show("What is AutoSync?", "AutoSync is a helpful tool that syncs your data in the right direction for you.<br/><br/>" +
+							"It's especially useful for travelling between computers; you can't accidentally upload an older config to XCloud if AutoSync is doing everything for you.",
+							"info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div> <div class=\"xkit-button\" id=\"xkit-autosync-continue\">How does it work?</div>");
+		$("#xkit-autosync-continue").click(function() {
+			XKit.window.show("How does AutoSync work?", "Whenever XKit's storage system is written to, a timestamp is stored, which gets sent along with your settings when you upload to XCloud.<br/><br/>" +
+							"Provided your XCloud data has a timestamp, AutoSync can read it and determine whether your XCloud is newer or older than your current configuration.<br/><br/>" +
+							"If the timestamp is newer, it saves the data it received while checking the timestamp.<br/><br/>" +
+							"If the timestamp is older, it discards the data it receives and uploads your current config.<br/><br/>",
+							"info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			});
+        });
+    },
 
 
 	get_xcloud_url: function() {
@@ -30,6 +57,19 @@ XKit.extensions.xcloud = new Object({
 		XKit.tools.init_css("xcloud");
 		this.load_user_login();
 		$("#xkit-cp-tab-xcloud").css("display", "block");
+		if (this.preferences.shortcut.value === true) {
+			$(document).on('keydown', XKit.extensions.xcloud.key_down);
+		}
+	},
+
+	key_down: function(e) {
+		if (e.altKey === true && e.which === 67 && !$("#xcloud-overlay").length > 0) {
+			if (XKit.storage.get("xkit_preferences", "launch_count") <= 5) {
+				XKit.extensions.xcloud.start_fetch(false);
+			} else {
+				XKit.extensions.xcloud.start_fetch(true);
+			}
+		}
 	},
 
 	reload_welcome_panel: function() {
@@ -461,7 +501,7 @@ XKit.extensions.xcloud = new Object({
 		$("#xcloud-restore-do").unbind("click");
 		$("#xcloud-restore-do").bind("click", function() {
 
-			XKit.extensions.xcloud.start_fetch();
+			XKit.extensions.xcloud.start_fetch(false);
 
 		});
 
@@ -498,7 +538,7 @@ XKit.extensions.xcloud = new Object({
 			if (this.files.length === 1) {
 				var reader  = new FileReader();
 				reader.addEventListener('loadend', function(result) {
-					self.process_restore({"data":result.currentTarget.result});
+					self.process_restore({"data":result.currentTarget.result}, false);
 				});
 				reader.readAsText(this.files[0]);
 			}
@@ -551,12 +591,21 @@ XKit.extensions.xcloud = new Object({
 
 	},
 
-	start_fetch: function() {
+	start_fetch: function(auto) {
 		var xcloud_url = this.get_xcloud_url();
 		XKit.extensions.xcloud.show_overlay(true);
 
 		var m_username = XKit.extensions.xcloud.username;
 		var m_password = XKit.extensions.xcloud.password;
+		
+		if (m_username === "" || m_password === "") {
+			XKit.extensions.xcloud.hide_overlay();
+			XKit.window.show("AutoSync failure!",
+							"You don't seem to be logged into XCloud.<br/>" +
+							"Please log into XCloud before using AutoSync.",
+							"error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			return;
+		}
 
 		var fetchRequest = {
 			method: "GET",
@@ -579,7 +628,7 @@ XKit.extensions.xcloud = new Object({
 				}
 
 				if (data.errors === "false") {
-					XKit.extensions.xcloud.process_restore(data);
+					XKit.extensions.xcloud.process_restore(data, auto);
 
 				} else {
 
@@ -622,7 +671,7 @@ XKit.extensions.xcloud = new Object({
 	extensions_to_download_count: 0,
 	errors_list: [],
 
-	process_restore: function(mdata) {
+	process_restore: function(mdata, auto) {
 
 		var m_obj = null;
 		try {
@@ -642,7 +691,11 @@ XKit.extensions.xcloud = new Object({
 			return;
 		}
 
-		$("#xcloud-overlay-title").html("Restoring settings...");
+		if (auto) {
+			$("#xcloud-overlay-title").html("Checking timestamp...");
+		} else {
+			$("#xcloud-overlay-title").html("Restoring settings...");
+		}
 
 		XKit.extensions.xcloud.errors_list = [];
 		XKit.extensions.xcloud.extensions_to_download = [];
@@ -657,8 +710,14 @@ XKit.extensions.xcloud = new Object({
 			var mext = m_obj.settings[ext];
 
 			var extension_name = mext.extension;
+	        
+			if (auto && extension_name !== "xkit_preferences") {
+			    continue;
+			} else if (auto) {
+			    var localstamp = XKit.storage.get("xkit_preferences", "last_update");
+			}
 
-			XKit.console.add("Restoring settings of " + extension_name);
+			if (!auto) { XKit.console.add("Restoring settings of " + extension_name); }
 
 			var extension_settings = {};
 			try {
@@ -690,8 +749,33 @@ XKit.extensions.xcloud = new Object({
 			full_list.push(extension_name);
 
 
-			if (extension_name !== "xcloud") {
+			if (!auto && extension_name !== "xcloud" || auto && extension_name === "xkit_preferences") {
 				XKit.tools.set_setting("xkit_extension_storage__" + extension_name, JSON.stringify(extension_settings));
+				if (auto && XKit.storage.get("xkit_preferences", "last_update") === "") {
+					XKit.window.show("AutoSync failure!",
+					"Your XCloud data has no timestamp, so AutoSync can't tell if it's newer or older than your current configuration.<br/><br/>" +
+					"Please manually upload to XCloud once for AutoSync to work.",
+					"error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					return;
+				} else if (auto && XKit.storage.get("xkit_preferences", "last_update") < localstamp) {
+					// Local changes are more recent than the XCloud data; XCloud needs replacing
+					XKit.storage.set("xkit_preferences", "last_update", localstamp);
+					XKit.extensions.xcloud.start_upload();
+					return;
+				} else if (auto && XKit.storage.get("xkit_preferences", "last_update") > localstamp) {
+					// Local changes are older than the XCloud data; local is out of date and needs replacing
+					// We're already in the loop for restoration though, so let's just continue!
+					$("#xcloud-overlay-title").html("Restoring settings...");
+					auto = false;
+				} else if (auto) {
+					XKit.extensions.xcloud.hide_overlay();
+					XKit.window.show("All up to date!", "Your XKit config and XCloud data already match.<br/><br/>" +
+					"Local timestamp: " + localstamp + "<br/>XCloud timestamp: " + XKit.storage.get("xkit_preferences", "last_update"), "info");
+					setTimeout(function() {
+						XKit.window.close();
+					}, 2000);
+					return;
+				}
 			}
 
 		}
@@ -810,12 +894,6 @@ XKit.extensions.xcloud = new Object({
 		var skipping_size = [];
 
 		for (var i = 0; i < installed.length; i++) {
-
-			// Skip internal extensions.
-			if (installed[i].substring(0, 5) === "xkit_") {
-				continue;
-			}
-
 
 			var m_data;
 
