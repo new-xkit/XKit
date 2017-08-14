@@ -15,7 +15,7 @@
   "manifest_version": 2,
   "name": "New XKit",
   "permissions": ["*://*/*", "*://*/", "storage", "http://*.tumblr.com/", "https://*.tumblr.com/" ],
-  "version": "7.7.7",
+  "version": "7.7.8",
   "web_accessible_resources": [ "manifest.json", "editor.js" ],
   "background": {
    "scripts": ["background.js"]
