@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.4 **//
+//* VERSION 6.8.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -94,6 +94,7 @@ XKit.extensions.xkit_patches = new Object({
 		e.data.hasOwnProperty("xkit_blogs")) {
 
 				XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+				XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
 			}
 		};
 
@@ -116,15 +117,6 @@ XKit.extensions.xkit_patches = new Object({
 			}
 
 			// Approach 2: Scrape from the dynamically-created popover element.
-
-			if (!$("[data-js-channel-list]").length) {
-				// create the popover element
-				var account_menu = $("#account_button");
-				account_menu.click();
-				setTimeout(function() {
-					account_menu.click();
-				}, 10);
-			}
 
 			var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
 			if (blog_menu_items.length) {
