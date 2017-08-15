@@ -637,7 +637,7 @@ XKit.extensions.xcloud = new Object({
 					var err_desc = "";
 					if (typeof(data.error_code) === "undefined") {
 						err_desc = "<br/>No error code was given.<br/>" +
-						"It might be that you have no XCloud data.<br/>"
+						"It might be that you have no XCloud data.";
 					}
 					if (data.error_code === "102") {
 						err_desc = "<br/>Usernames can only have letters and numbers.";
