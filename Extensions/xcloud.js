@@ -30,15 +30,16 @@ XKit.extensions.xcloud = new Object({
 	cpanel: function() {
 		$("#xkit-autosync-help").click(function() {
 			XKit.window.show("What is AutoSync?", "AutoSync is a helpful tool that syncs your data in the right direction for you.<br/><br/>" +
-			"It's especially useful for travelling between computers; you can't accidentally upload an older config to XCloud if AutoSync is doing everything for you.",
+			"It's especially useful for travelling between computers; you can't accidentally upload an older config to XCloud if AutoSync is doing everything for you.<br/><br/>" +
+			"However, just switching this option on will make XKit think your current configuration is the newest, so please enable it on all your computers before using it, or it won't work as intended.",
 			"info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div> <div class=\"xkit-button\" id=\"xkit-autosync-continue\">How does it work?</div>");
-		});
-		$("#xkit-autosync-continue").click(function() {
-			XKit.window.show("How does AutoSync work?", "Whenever XKit's storage system is written to, a timestamp is stored, which gets sent along with your settings when you upload to XCloud.<br/><br/>" +
-			"Provided your XCloud data has a timestamp, AutoSync can read it and determine whether your XCloud is newer or older than your current configuration.<br/><br/>" +
-			"If the timestamp is newer, it saves the data it received while checking the timestamp.<br/><br/>" +
-			"If the timestamp is older, it discards the data it receives and uploads your current config.<br/><br/>",
-			"info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			$("#xkit-autosync-continue").click(function() {
+				XKit.window.show("How does AutoSync work?", "Whenever XKit's storage system is written to, a timestamp is stored, which gets sent along with your settings when you upload to XCloud.<br/><br/>" +
+				"Provided your XCloud data has a timestamp, AutoSync can read it and determine whether your XCloud is newer or older than your current configuration.<br/><br/>" +
+				"If the timestamp is newer, it saves the data it received while checking the timestamp.<br/><br/>" +
+				"If the timestamp is older, it discards the data it receives and uploads your current config.",
+				"info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			});
 		});
 	},
 
