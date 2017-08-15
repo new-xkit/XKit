@@ -664,6 +664,7 @@ XKit.extensions.xkit_patches = new Object({
 					// Storage went fine, so it's timestamp time!
 					var blacklist = ["xkit_", "xkit_timestamp_cache", "post_", "new_post_buttons_html", "extension__setting__format"];
 					var blacklisted = false;
+					var i = 0; // If this build fails I'm going to bed.
 					for (i = 0; i in blacklist; i++) {
 						if (extension_id.substring(0, blacklist[i].length) === blacklist[i] || key.substring(0, blacklist[i].length) === blacklist[i]) {
 							blacklisted = true;
