@@ -64,7 +64,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	key_down: function(e) {
-		if (e.altKey === true && e.which === 67 && !$("#xcloud-overlay").length > 0) {
+		if (e.altKey === true && e.which === 67 && !$("#xcloud-overlay, #xkit-window").length > 0) {
 			if (XKit.storage.get("xkit_preferences", "launch_count") <= 5) {
 				XKit.extensions.xcloud.start_fetch(false);
 			} else {
