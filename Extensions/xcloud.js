@@ -635,6 +635,10 @@ XKit.extensions.xcloud = new Object({
 
 					XKit.extensions.xcloud.hide_overlay();
 					var err_desc = "";
+					if (typeof(data.error_code) === "undefined") {
+						err_desc = "<br/>No error code was given.<br/>" +
+						"It might be that you have no XCloud data.<br/>"
+					}
 					if (data.error_code === "102") {
 						err_desc = "<br/>Usernames can only have letters and numbers.";
 					}
