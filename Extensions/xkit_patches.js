@@ -664,15 +664,15 @@ XKit.extensions.xkit_patches = new Object({
 					// Storage went fine, so it's timestamp time!
 					var blacklist = ["xkit_", "xkit_timestamp_cache", "post_", "new_post_buttons_html", "extension__setting__format"];
 					var blacklisted = false;
-					for (x in blacklist) {
-						if (extension_id.substring(0, blacklist[x].length) === blacklist[x] || key.substring(0, blacklist[x].length) === blacklist[x]) {
+					for (i = 0; i in blacklist; i++) {
+						if (extension_id.substring(0, blacklist[i].length) === blacklist[i] || key.substring(0, blacklist[i].length) === blacklist[i]) {
 							blacklisted = true;
 							break;
 						}
 					}
 					if (!blacklisted) {
 						var storets = XKit.storage.get_all("xkit_preferences");
-						storets["last_update"].value = Date.now();
+						storets.last_update.value = Date.now();
 						XKit.tools.set_setting("xkit_extension_storage__xkit_preferences", JSON.stringify(storets));
 				    }
 					return true;
