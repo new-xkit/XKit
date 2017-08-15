@@ -1,6 +1,6 @@
 //* TITLE XDoom **//
 //* VERSION 1.0.0 **//
-//* DESCRIPTION	Can Tumblr run Doom? **//
+//* DESCRIPTION Can Tumblr run Doom? **//
 //* DETAILS Yes. Yes it can. I promise we still work on bug fixes and other things sometimes! **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
