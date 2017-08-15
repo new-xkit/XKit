@@ -351,7 +351,11 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.grey_urls.value) {
-			XKit.tools.add_css(".xkit-outbox-link {color: #A1A1A1 !important; } .post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; } .post-form--header .tumblelog-select .caption {color: #A1A1A1 !important; } .post_brick .post_header .post_info_tumblelog {color: #A1A1A1 !important; }", "tweaks_grey_urls");
+			XKit.extensions.tweaks.add_css(".xkit-outbox-link, " +
+				".post_full .post_header .post_info .post_info_link:first-child, " +
+				".post_full .post_content .reblog-list-item .reblog-header .reblog-tumblelog-name, " +
+				".post-form--header .tumblelog-select .caption, " +
+				".post_brick .post_header .post_info_tumblelog {color: #A1A1A1 !important; }", "xkit_tweaks_grey_urls");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_bubble.value && !XKit.interface.where().dashboard) {
@@ -944,7 +948,6 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display", "block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
-		XKit.tools.remove_css("tweaks_grey_urls");
 	}
 
 });
