@@ -64,7 +64,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	key_down: function(e) {
-		if (e.altKey === true && e.which === 67 && !$("#xcloud-overlay, #xkit-window").length > 0) {
+		if (e.altKey === true && e.which === 67 && !$("#xcloud-overlay, #xkit-window, #xkit-control-panel").length > 0) {
 			if (XKit.storage.get("xkit_preferences", "launch_count") <= 5) {
 				XKit.extensions.xcloud.start_fetch(false);
 			} else {
@@ -1001,7 +1001,11 @@ XKit.extensions.xcloud = new Object({
 				}
 				if (mdata.errors === "false") {
 					XKit.extensions.xcloud.hide_overlay();
-					XKit.extensions.xcloud.change_panel("<div class=\"xcloud-title\" style=\"margin-top: 80px;\">All done!</div>Your XKit settings are now in sync with XCloud. <div id=\"xcloud-start-using\" class=\"xcloud-inline-button xkit-button default\">OK</div>");
+					if ($("#xkit-control-panel").length > 0) {
+						XKit.extensions.xcloud.change_panel("<div class=\"xcloud-title\" style=\"margin-top: 80px;\">All done!</div>Your XKit settings are now in sync with XCloud. <div id=\"xcloud-start-using\" class=\"xcloud-inline-button xkit-button default\">OK</div>");
+					} else {
+						XKit.notifications.add("<b>All done!</b><br/>Your XKit settings are now in sync with XCloud.", "ok");
+					}
 				} else {
 					XKit.extensions.xcloud.hide_overlay();
 					var err_desc = "";
