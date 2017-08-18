@@ -373,7 +373,7 @@ XKit.extensions.messaging_tweaks = new Object({
 			XKit.tools.add_css(".messaging-share-post-search, .messaging-share-post-main {display:none;}", "messaging_tweaks");
 		}
 		if (XKit.extensions.messaging_tweaks.preferences.hide_online_indicators.value) {
-			$(".status-indicator-wrapper, .chat-status-banner").hide();
+			XKit.tools.add_css(".status-indicator-wrapper, .chat-status-banner {display:none;}", "messaging_tweaks");
 		}
 		if (XKit.extensions.messaging_tweaks.preferences.make_icons_round.value) {
 			XKit.tools.add_css(".avatar > img { border-radius: 30px !important; transition: border-radius 0.5s; }", "messaging_tweaks");
@@ -426,7 +426,6 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		$(".true-icon").removeClass("true-icon");
 		$(".tab.iconic.tab_messaging").show();
-		$(".status-indicator-wrapper, .chat-status-banner").hide();
 		$(".xkit-others_messaging_message, .xkit-my_messaging_message").each(function() {
 			var msg_div = $(this).find(".message-bubble .message");
 			msg_div.find("img").each(function() {
