@@ -1097,6 +1097,13 @@ XKit.extensions.one_click_postage = new Object({
 			}
 			return;
 		}
+		
+		var delay = 700;
+		// Firefox list menus make the popup unable to detect the cursor on top of them
+		// Increased delay lets user pick a blog without the menu closing so suddenly
+		if (XKit.browser().firefox) {
+			delay = 3000;
+		}
 
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
@@ -1107,7 +1114,7 @@ XKit.extensions.one_click_postage = new Object({
 					$("#x1cpostage_box").slideUp('fast');
 				}
 			}
-		}, 700);
+		}, delay);
 
 		/* eslint-enable no-undef */
 	},
