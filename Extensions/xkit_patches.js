@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.5 **//
+//* VERSION 6.8.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2280,7 +2280,7 @@ XKit.extensions.xkit_patches = new Object({
 			is_following: function(username, blog) {
 				return $.ajax({
 					type: "GET",
-					url: "/svc/blog/followed_by",
+					url: "https://www.tumblr.com/svc/blog/followed_by",
 					data: "tumblelog=" + blog + "&query=" + username,
 					dataType: "json",
 				}).then(function(msg) {
