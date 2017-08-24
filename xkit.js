@@ -526,6 +526,16 @@ var xkit_global_start = Date.now();  // log start timestamp
 					}
 				}
 			},
+			remove: function(extension_id, key) {
+				var m_storage = XKit.storage.get_all(extension_id);
+				if (!m_storage.hasOwnProperty(key)) return true;
+				delete m_storage[key];
+				// We're going to skip the storage limit checks, on the basis that:
+				//   - the previous serialisation should have fit within limits; and
+				//   - deletion shouldn't increase the size of our new serialisation.
+				var mresult = XKit.tools.set_setting("xkit_extension_storage__" + extension_id, JSON.stringify(m_storage));
+				return !mresult.errors;
+			},
 			get_all: function(extension_id) {
 				var m_data = XKit.tools.get_setting("xkit_extension_storage__" + extension_id, "");
 				if (m_data !== "") {
