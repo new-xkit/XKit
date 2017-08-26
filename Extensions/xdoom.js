@@ -67,6 +67,7 @@ XKit.extensions.xdoom = new Object({
 
 		$("#xdoom-source-link").click(function() {
 			XKit.extensions.xkit_preferences.open();
+			$('*[data-extension-id="xdoom"]').click();
 		});
 	},
 
