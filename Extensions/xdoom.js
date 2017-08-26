@@ -13,9 +13,14 @@ XKit.extensions.xdoom = new Object({
 			<div class="post post_full is_video not_mine" id="post_164195587730" data-type="video">
 				<div class="post_avatar show_user_menu post-avatar--sticky ">
 					<div class="post_avatar_wrapper">
-						<a class="post_avatar_link" href="#" target="_blank" title="XDoom" id="post_avatar_xdoom" style="background-image: url(&quot;http://files.gamebanana.com/img/ico/sprays/530-90_54ef9af46280b.jpg&quot;);">
-							<div class="xkit-classic-menu-opener">&nbsp;</div>&nbsp;
-						</a>
+						<a
+							class="post_avatar_link"
+							href="https://new-xkit-extension.tumblr.com/"
+							target="_blank"
+							data-peepr="{&quot;tumblelog&quot;:&quot;new-xkit-extension&quot;}" 
+							title="XDoomguy"
+							style="background-image: url(&quot;http://files.gamebanana.com/img/ico/sprays/530-90_54ef9af46280b.jpg&quot;);"
+						></a>
 					</div>
 				</div>
 				<div class="post_wrapper">
@@ -32,10 +37,10 @@ XKit.extensions.xdoom = new Object({
 										<a class="reblog-avatar post_sub_avatar" href="#" rel="noopener">
 											<img class="reblog-avatar-image-thumb" src="http://files.gamebanana.com/img/ico/sprays/530-90_54ef9af46280b.jpg">
 										</a>
-										<a class="reblog-tumblelog-name post_info_link" href="#"> Doomguy </a>
+										<a class="reblog-tumblelog-name post_info_link" href="https://new-xkit-extension.tumblr.com">Doomguy</a>
 									</div>
 									<div class="reblog-content">
-										<p>Play some doom</p>
+										<p>Play some Doom!</p>
 										<p>If the game doesn't capture your keyboard input, click on one of the black borders above or below the game</p>
 									</div>
 								</div>
@@ -44,7 +49,7 @@ XKit.extensions.xdoom = new Object({
 					</div>
 					<div class="post-source-footer">
 						<span class="post-source-name-prefix">Source:</span>
-						<a class="post-source-link" target="_blank" href="#" title="XDoom" rel="noopener">New XKit</a>
+						<a id="xdoom-source-link" class="post-source-link post_info_link" target="_blank" title="XDoom" rel="noopener" style="cursor: pointer;">New XKit</a>
 					</div>
 					<div class="post_footer clearfix" data-subview="footer"></div>
 				</div>
@@ -58,6 +63,14 @@ XKit.extensions.xdoom = new Object({
 		$("xdoom_iframe").load(function() {
 			console.log("IFRAME IS LOADED");
 			$("#xdoom_iframe")[0].window.scrollTo(38, 20);
+		});
+
+		$("#xdoom-source-link").click(function() {
+			XKit.extensions.xkit_preferences.open();
+			while (!('*[data-extension-id="xdoom"]')) {
+				continue;
+			}
+			$('*[data-extension-id="xdoom"]').click();
 		});
 	},
 
