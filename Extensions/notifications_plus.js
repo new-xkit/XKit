@@ -170,7 +170,7 @@ XKit.extensions.notifications_plus = new Object({
 		var using_preview = false;
 
 		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
-			if ($(obj).hasClass("ui_note") === true) {
+			if ($(obj).hasClass("activity-notification") === true) {
 				if ($(obj).find(".ui_post_badge").hasClass("photo")) {
 					using_preview = true;
 					var m_preview = $(obj).find(".ui_post_badge").css("background-image");
