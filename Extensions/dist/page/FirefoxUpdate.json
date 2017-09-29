@@ -1,0 +1,12 @@
+{
+	"addons": {
+		"@new-xkit": {
+            "updates": [
+				{
+					"version": "7.8.0",
+                    "update_link": "https://github.com/new-xkit/XKit/releases/download/v7.8.0/new_xkit-7.8.0.xpi"
+				}
+            ]
+        }
+    }
+}
