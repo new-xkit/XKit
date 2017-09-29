@@ -8,13 +8,10 @@ var cache = require('gulp-cached'),
 	csslint = require('gulp-csslint'),
 	del = require('del'),
 	eslint = require('gulp-eslint'),
-	exec = require('child_process').exec,
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	https = require('https'),
-	merge = require('merge-stream'),
-	path = require('path'),
 	zip = require('gulp-zip');
 
 var BUILD_DIR = 'build';
@@ -51,10 +48,6 @@ gulp.task('clean:webext', function(cb) {
 	del([BUILD_DIR + '/webext'], cb);
 });
 
-gulp.task('clean:firefox', function(cb) {
-	del([BUILD_DIR + '/firefox'], cb);
-});
-
 gulp.task('clean:safari', function(cb) {
 	del([BUILD_DIR + '/safari.safariextension'], cb);
 });
@@ -75,7 +68,6 @@ gulp.task('lint:scripts', function() {
 		paths.scripts.core,
 		paths.scripts.extensions,
 		['WebExtension/**/*.js',
-		 'Firefox/**/*.js',
 		 'Safari/**/*.js']
 	);
 
@@ -121,38 +113,6 @@ gulp.task('compress:webext', ['copy:webext'], function() {
 		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
-gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
-	var src = [].concat(
-		paths.scripts.core,
-		paths.css.core,
-		paths.vendor
-	);
-
-	var firefox = ['Firefox/**/*'];
-	var webext = ['WebExtension/**/*.@(js|png)'];
-
-
-	var extension = gulp.src(firefox)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox'));
-
-	var content = gulp.src(src.concat(webext))
-		.pipe(gulp.dest(BUILD_DIR + '/firefox/webextension'));
-
-	return merge(extension, content);
-});
-
-gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
-	// `jpm xpi` executable must be expressed relative to `exec({cwd})`
-	exec(path.relative('build/firefox', 'node_modules/.bin/jpm xpi'),
-		 // `jpm xpi` must be executed from the extension
-		 // directory containing a `package.json`.
-		 {cwd: 'build/firefox'},
-		 function(err, stdout, stderr) {
-			if (err) { return cb(err); }
-			cb();
-		});
-});
-
 gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 	var src = [].concat(
 		paths.scripts.core,
@@ -167,8 +127,6 @@ gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 });
 
 gulp.task('build:webext', ['compress:webext']);
-
-gulp.task('build:firefox', ['compress:firefox']);
 
 gulp.task('build:safari', ['copy:safari']);
 
@@ -191,7 +149,7 @@ gulp.task('build:themes', ['clean:themes'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:webext', 'build:firefox', 'build:safari']);
+gulp.task('build', ['build:webext', 'build:safari']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);
