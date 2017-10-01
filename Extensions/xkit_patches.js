@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.6 **//
+//* VERSION 6.8.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1902,7 +1902,7 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				m_return.animated = $(obj).hasClass("is_animated");
-				m_return.is_reblogged = $(obj).hasClass("is_reblog");
+				m_return.is_reblogged = $(obj).hasClass("is_reblog") || $(obj).find(".reblog_info").length > 0;
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
