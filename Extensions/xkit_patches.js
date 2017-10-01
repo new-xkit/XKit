@@ -631,6 +631,48 @@ XKit.extensions.xkit_patches = new Object({
 		} else {
 			XKit.storage.max_area_size = 153600;
 		}
+		
+		// Redefine storage.set to store a timestamp for XCloud AutoSync
+		XKit.storage.set = function(extension_id, key, value) {
+			var m_storage = XKit.storage.get_all(extension_id);
+			if (typeof m_storage[key] === "undefined") {
+				m_storage[key] = {value: value};
+			} else {
+				m_storage[key].value = value;
+			}
+			var save_this = true;
+			if (JSON.stringify(m_storage).length >= XKit.storage.max_area_size) {
+				save_this = false;
+			}
+			if (XKit.flags.do_not_limit_extension_storage === true) {
+				save_this = true;
+			}
+			if (!save_this) {
+				XKit.storage.show_error(extension_id, JSON.stringify(m_storage).length);
+				return false;
+			} else {
+				var mresult = XKit.tools.set_setting("xkit_extension_storage__" + extension_id, JSON.stringify(m_storage));
+				if (mresult.errors === false) {
+					// Storage went fine, so it's timestamp time!
+					var blacklist = ["xkit_", "xkit_timestamp_cache", "post_", "new_post_buttons_html", "extension__setting__format", "header_html"];
+					var blacklisted = false;
+					for (var i = 0; i in blacklist; i++) {
+						if (extension_id.substring(0, blacklist[i].length) === blacklist[i] || key.substring(0, blacklist[i].length) === blacklist[i]) {
+							blacklisted = true;
+							break;
+						}
+					}
+					if (!blacklisted) {
+						var storets = XKit.storage.get_all("xkit_preferences");
+						storets.last_update.value = Date.now();
+						XKit.tools.set_setting("xkit_extension_storage__xkit_preferences", JSON.stringify(storets));
+				    }
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
 
 		/**
 		 * Close the current XKit alert window. Counterpart to `XKit.window.show`

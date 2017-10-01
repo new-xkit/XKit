@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.4 **//
+//* VERSION 7.4.5 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -941,6 +941,7 @@ XKit.extensions.xkit_preferences = new Object({
 					try {
 						eval(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js");
 						XKit.extensions[m_extension_id].run();
+						XKit.storage.set("xkit_preferences", "last_update", Date.now());
 					} catch (e) {
 
 					}
@@ -1397,6 +1398,7 @@ XKit.extensions.xkit_preferences = new Object({
 				setTimeout(function() {
 					XKit.extensions.xkit_main.load_extension_preferences(XKit.extensions.xkit_preferences.current_open_extension_panel);
 					XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].run();
+					XKit.storage.set("xkit_preferences", "last_update", Date.now());
 					XKit.window.close();
 					XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				}, 500);
@@ -1430,6 +1432,7 @@ XKit.extensions.xkit_preferences = new Object({
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
 					XKit.installed.remove(XKit.extensions.xkit_preferences.current_open_extension_panel);
+					XKit.storage.set("xkit_preferences", "last_update", Date.now());
 					XKit.window.close();
 					XKit.extensions.xkit_preferences.current_panel = "";
 					XKit.extensions.xkit_preferences.show_my_extensions();
@@ -1456,6 +1459,8 @@ XKit.extensions.xkit_preferences = new Object({
 				XKit.extensions[extension_id].run();
 				$(this).addClass("selected");
 			}
+			
+			XKit.storage.set("xkit_preferences", "last_update", Date.now());
 
 			// Re-open the extension panel:
 			XKit.extensions.xkit_preferences.current_open_extension_panel = "";
