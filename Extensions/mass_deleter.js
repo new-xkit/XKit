@@ -428,7 +428,7 @@ XKit.extensions.mass_deleter = new Object({
 						XKit.extensions.mass_deleter.unlike_likes_array.push(m_post.id + ";" + m_post.reblog_key);
 					}
 				});
- 				if (XKit.extensions.mass_deleter.unlike_next_page_url == null){
+				if (XKit.extensions.mass_deleter.unlike_next_page_url == null) {
 					//We didn't get the next page, so we're assuming this one was the last.
 					XKit.extensions.mass_deleter.unlike_current_array();
 					stop_action = true;
