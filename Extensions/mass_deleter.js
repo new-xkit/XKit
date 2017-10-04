@@ -408,7 +408,7 @@ XKit.extensions.mass_deleter = new Object({
 					} else {
 						console.log("Page empty, but retrying anyways...");
 						XKit.extensions.mass_deleter.unlike_next_current++;
-						XKit.extensions.mass_deleter.unlike_likes_page++; 
+						XKit.extensions.mass_deleter.unlike_likes_page++;
 						setTimeout(function() { XKit.extensions.mass_deleter.unlike_next_page(); }, 400);
 						return;
 					}
