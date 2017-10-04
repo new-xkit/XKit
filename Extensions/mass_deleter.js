@@ -129,7 +129,6 @@ XKit.extensions.mass_deleter = new Object({
 		XKit.extensions.mass_deleter.delete_drafts_page++;
 		XKit.extensions.mass_deleter.delete_next_page();
 
-		
 	},
 
 	delete_current_array: function() {
