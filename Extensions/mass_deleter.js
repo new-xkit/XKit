@@ -129,7 +129,7 @@ XKit.extensions.mass_deleter = new Object({
 		XKit.extensions.mass_deleter.delete_drafts_page++;
 		XKit.extensions.mass_deleter.delete_next_page();
 
-
+		
 	},
 
 	delete_current_array: function() {
@@ -293,10 +293,9 @@ XKit.extensions.mass_deleter = new Object({
 
 	unlike_next_max: 30,
 	unlike_next_current: 0,
-	unlike_next_page_url: "",
+	unlike_next_page_url: undefined,
 
 	unlike_fail_count: 0,
-
 
 	unlike_likes: function(limit) {
 
