@@ -1277,7 +1277,7 @@ XKit.extensions.servant = new Object({
 
 		var posts = XKit.interface.get_posts("xkit-servants-all-done");
 
-		$(posts).each(function(index, value) {
+		$(posts).each(function() {
 
 			for (var i = 0; i < XKit.extensions.servant.runs_on_posts.length; i++) {
 				XKit.extensions.servant.run_servant(XKit.extensions.servant.runs_on_posts[i], true);
