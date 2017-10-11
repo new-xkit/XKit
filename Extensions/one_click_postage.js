@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.5 **//
+//* VERSION 4.3.6 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
