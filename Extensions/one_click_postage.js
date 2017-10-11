@@ -968,8 +968,8 @@ XKit.extensions.one_click_postage = new Object({
 
 		// Get the box ID.
 		var parent_box = $(obj).parentsUntil(".post").parent();
-		var box_id = $(parent_box).attr('id');
-		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('id');
+		var box_id = $(parent_box).attr('data-post-id');
+		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('data-post-id');
 
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
