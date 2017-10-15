@@ -516,7 +516,7 @@ XKit.extensions.blacklist = new Object({
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-						var post_info_links = $(this).find(".post_info_link, .reblog-tumblelog-name.inactive").map(function() {
+						var post_info_links = $(this).find(".post_info_link, .reblog-tumblelog-name").map(function() {
 							return $(this).text();
 						});
 
