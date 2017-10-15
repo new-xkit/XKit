@@ -516,7 +516,7 @@ XKit.extensions.blacklist = new Object({
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-						var post_info_links = $(this).find(".post_info_link").map(function() {
+						var post_info_links = $(this).find(".post_info_link, .reblog-tumblelog-name.inactive").map(function() {
 							return $(this).text();
 						});
 
@@ -556,8 +556,8 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".caption").html();
 				}
 
-				if ($(this).find(".reblog-list-item").length > 0) {
-					m_content = $(this).find(".reblog-list-item").map(function() {
+				if ($(this).find(".reblog-content").length > 0) {
+					m_content = $(this).find(".reblog-content").map(function() {
 					    return $(this).html();
 					}).get().join(" ");
 				}
