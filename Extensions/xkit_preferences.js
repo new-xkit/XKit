@@ -172,8 +172,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 		}
 
-
-
 		XKit.extensions.xkit_preferences.spring_cleaning();
 
 	},
@@ -725,7 +723,6 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		$(document).on('keydown', XKit.extensions.xkit_preferences.on_modal_keydown);
-
 	},
 
 	close: function() {
@@ -793,7 +790,6 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 	},
-
 
 	show_get: function() {
 
@@ -2233,7 +2229,6 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 	},
-
 
 	show_others_panel_flags: function() {
 
