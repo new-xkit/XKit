@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.3 **//
+//* VERSION 5.5.4 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -855,7 +855,7 @@ XKit.extensions.tweaks = new Object({
 
 				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
+				$(this).find(".post_control.queue").addClass("icon_queue_small").removeClass("queue").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.post_control_menu.creator").css("display", "none");
 			});
 		}
