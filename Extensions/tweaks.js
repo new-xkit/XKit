@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.4 **//
+//* VERSION 5.5.5 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -431,6 +431,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
+			XKit.tools.add_css(".post_controls .post_control.queue::after { background: none !important; }", "tweaks_split_gear");
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
 		}
@@ -840,7 +841,6 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	split_gear: function() {
-
 		if (!XKit.browser().mobile) { // mobile stuff
 			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
 				$(this).addClass("xkit-tweaks-split-gear-done");
@@ -855,7 +855,7 @@ XKit.extensions.tweaks = new Object({
 
 				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.queue").addClass("icon_queue_small").removeClass("queue").appendTo($(this).find(".post_controls_inner"));
+				$(this).find(".post_control.queue").addClass("icon_queue_small").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.post_control_menu.creator").css("display", "none");
 			});
 		}
