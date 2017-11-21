@@ -1,0 +1,8 @@
+.mutuals::after{
+	font-family: tumblr-icons, None;
+	content: "\EA59";
+	padding-left: 0.3em;
+	font-weight: normal;
+	font-size: 1.23em;
+	line-height: 0;
+}
