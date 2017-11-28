@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.1 **//
+//* VERSION 6.8.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -94,6 +94,7 @@ XKit.extensions.xkit_patches = new Object({
 		e.data.hasOwnProperty("xkit_blogs")) {
 
 				XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+				XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
 			}
 		};
 
@@ -116,15 +117,6 @@ XKit.extensions.xkit_patches = new Object({
 			}
 
 			// Approach 2: Scrape from the dynamically-created popover element.
-
-			if (!$("[data-js-channel-list]").length) {
-				// create the popover element
-				var account_menu = $("#account_button");
-				account_menu.click();
-				setTimeout(function() {
-					account_menu.click();
-				}, 10);
-			}
 
 			var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
 			if (blog_menu_items.length) {
@@ -539,40 +531,78 @@ XKit.extensions.xkit_patches = new Object({
 			},
 
 			/**
+			 * @param  {String} name: the css class name of the button
+			 * @return {JQuery} the element for that css class name
+			 */
+			tx_button_selector: function(name) {
+				return $(`.tx-button.${name}-button, .tx-icon-button.${name}-button`);
+			},
+
+			/**
 			 * @return {JQuery} The follow button in the iframe
 			 */
 			follow_button: function() {
-				return $(".btn.follow,.tx-button.follow-button");
+				return this.tx_button_selector("follow");
 			},
 
 			/**
 			 * @return {JQuery} The unfollow button in the iframe
 			 */
 			unfollow_button: function() {
-				return $(".btn.unfollow,.tx-button.unfollow-button");
+				return this.tx_button_selector("unfollow");
 			},
 
 			/**
 			 * @return {JQuery} The delete button in the iframe
 			 */
 			delete_button: function() {
-				return $(".btn.delete,.tx-button.delete-button");
+				return this.tx_button_selector("delete");
 			},
 
 			/**
 			 * @return {JQuery} The reblog button in the iframe
 			 */
 			reblog_button: function() {
-				return $(".btn.reblog,.tx-button.reblog-button");
+				return this.tx_button_selector("reblog");
 			},
 
 			/**
 			 * @return {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
-				return $(".btn.dashboard,.tx-button.dashboard-button");
+				return this.tx_button_selector("dashboard");
 			},
 
+			/**
+			 * Uses tumblr's built-in RPC functionality to resize the in-blog iframe.
+			 * The iframe will be resized to the maximum of the current body size or
+			 * the iframe-controls-container size.
+			 *
+			 * This is the same postMessage call that happens when you click on the
+			 * profile menu, without the body classes arguments. (Tumblr also allows
+			 * for the code to set classes on the iframe element and the body of the page)
+			 */
+			size_frame_to_fit: function() {
+				var button_container = $(".iframe-controls-container")[0] || {};
+
+				var width = Math.max(
+					button_container.scrollWidth || -Infinity,
+					document.body.scrollWidth);
+
+				var height = Math.max(
+					button_container.scrollHeight || -Infinity,
+					document.body.scrollHeight);
+
+				var payload = {
+					method: "tumblr-unified-controls:IframeControls:size",
+					args: [{
+						width: width,
+						height: height
+					}]
+				};
+
+				window.top.postMessage(JSON.stringify(payload), "*");
+			}
 		};
 
 		if (XKit.frame_mode === true) {
@@ -749,7 +779,10 @@ XKit.extensions.xkit_patches = new Object({
 						onload: function(response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							}
 							if (!kitty_text) {
 								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
 							}
@@ -1502,7 +1535,7 @@ XKit.extensions.xkit_patches = new Object({
 						},
 						onload: function(response) {
 
-							XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+							XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 							try {
 								to_return.data = jQuery.parseJSON(response.responseText);
@@ -1869,7 +1902,7 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				m_return.animated = $(obj).hasClass("is_animated");
-				m_return.is_reblogged = $(obj).hasClass("is_reblog");
+				m_return.is_reblogged = $(obj).hasClass("is_reblog") || $(obj).find(".reblog_info").length > 0;
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
@@ -2247,7 +2280,7 @@ XKit.extensions.xkit_patches = new Object({
 			is_following: function(username, blog) {
 				return $.ajax({
 					type: "GET",
-					url: "/svc/blog/followed_by",
+					url: "https://www.tumblr.com/svc/blog/followed_by",
 					data: "tumblelog=" + blog + "&query=" + username,
 					dataType: "json",
 				}).then(function(msg) {

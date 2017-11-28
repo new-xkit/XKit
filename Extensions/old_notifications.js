@@ -1,5 +1,5 @@
 //* TITLE Classic Notifications **//
-//* VERSION 0.7.0 **//
+//* VERSION 0.7.1 **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -94,10 +94,16 @@ XKit.extensions.old_notifications = new Object({
 			response = $obj.find(".activity-notification__activity_response").html();
 		}
 
-		var original_url = $obj.find(".ui_post_badge").attr('href');
+		var fake_original_url = notification_url;
+		var original_id = null;
+		try {
+			var peepr = JSON.parse($obj.find(".ui_post_badge").attr('data-peepr'));
+			original_id = peepr.postId;
+			fake_original_url = `http://${peepr.tumblelog}.tumblr.com/post/${original_id}`;
+		} catch (e) {
+		}
 
-		if (typeof original_url !== "undefined") {
-
+		if (original_id) {
 			if (typeof XKit.extensions.old_notifications !== "undefined") {
 
 				for (var i = 0; i < XKit.extensions.old_notifications.blacklisted.length; i++) {
@@ -105,7 +111,7 @@ XKit.extensions.old_notifications = new Object({
 					    typeof(XKit.extensions.old_notifications.blacklisted[i]) === "undefined") {
 						continue;
 					}
-					if (original_url.indexOf("/post/" + XKit.extensions.old_notifications.blacklisted[i]) !== -1) {
+					if (original_id === XKit.extensions.old_notifications.blacklisted[i]) {
 						// console.log("[Old Notifications]Blocking notification because of post " + XKit.extensions.old_notifications.blacklisted[i]);
 						return "";
 					}
@@ -294,7 +300,7 @@ XKit.extensions.old_notifications = new Object({
 			preview_img_html = "<img src=\"" + preview_image + "\">";
 		}
 
-		var m_html = "<li data-url-original=\"" + original_url + "\" data-load-url=\"" + load_url + "\" id=\"xkit-old-notifications-" + (XKit.extensions.old_notifications.notification_count + 1) + "\" class=\"xkit-old-notifications notification " + additional_classes + "\">" +
+		var m_html = "<li data-url-original=\"" + fake_original_url + "\" data-load-url=\"" + load_url + "\" id=\"xkit-old-notifications-" + (XKit.extensions.old_notifications.notification_count + 1) + "\" class=\"xkit-old-notifications notification " + additional_classes + "\">" +
 				"<div class=\"notification_inner  clearfix\">" +
 					"<div class=\"notification_sentence\">" +
 						"<div class=\"hide_overflow\">" +

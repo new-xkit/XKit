@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0.5 **//
+//* VERSION 2.0.6 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -231,7 +231,7 @@ XKit.extensions.post_crushes = new Object({
 					XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
 				},
 				onload: function(response) {
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var m_obj = jQuery.parseJSON(response.responseText);
 					if (m_obj.errors === false) {
 						$("#xkit_post_crushes").html("Posted!");

@@ -1,7 +1,7 @@
 //* TITLE XNeko **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION A cat for your dashboard! **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* DETAILS A free spirited Japanese cat for your dashboard.<br>It is based on the Neko application by Kenji Gotoh. **//
 //* BETA false **//
@@ -33,6 +33,11 @@ XKit.extensions.xneko = new Object({
 			type: "text",
 			default: "Maneki-neko",
 			value: "Maneki-neko"
+		},
+		"viewport": {
+			text: "Stay in the window regardless of scrolling",
+			default: true,
+			value: true
 		},
 		"stay_away": {
 			text: "Stay at least 10 pixels away from the cursor",
@@ -89,17 +94,24 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.place($(window).width() / 2 - 16, $(window).height() / 2 - 16);
 
 		$(document).mousemove(function(e) {
-			if (XKit.extensions.xneko.preferences.stay_away.value === true) {
-				XKit.extensions.xneko.mouse_x = e.pageX - 15;
-				XKit.extensions.xneko.mouse_y = e.pageY - 15;
+			if (XKit.extensions.xneko.preferences.viewport.value) {
+				XKit.extensions.xneko.mouse_x = e.clientX;
+				XKit.extensions.xneko.mouse_y = e.clientY;
 			} else {
 				XKit.extensions.xneko.mouse_x = e.pageX;
 				XKit.extensions.xneko.mouse_y = e.pageY;
 			}
+
+			if (XKit.extensions.xneko.preferences.stay_away.value) {
+				XKit.extensions.xneko.mouse_x -= 15;
+				XKit.extensions.xneko.mouse_y -= 15;
+			}
 		});
 
 		$("#xneko").addClass(XKit.extensions.xneko.preferences.appearance.value);
-
+		if (XKit.extensions.xneko.preferences.viewport.value) {
+			XKit.tools.add_css("#xneko { position: fixed; }", "xneko_sticky");
+		}
 	},
 
 	think: function(cat, force_mode) {
@@ -321,6 +333,7 @@ XKit.extensions.xneko = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("xneko");
+		XKit.tools.remove_css("xneko_sticky");
 		if (typeof XKit.extensions.xneko.neko !== "undefined") {
 			if (typeof XKit.extensions.xneko.neko.die === "function") {
 				XKit.extensions.xneko.neko.die();

@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.1 **//
+//* VERSION 5.5.6 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -75,7 +75,7 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"bold_links": {
+		"bold_links_new": {
 			text: "Use 'Classic' (bold) links on text posts",
 			default: false,
 			value: false
@@ -102,8 +102,7 @@ XKit.extensions.tweaks = new Object({
 		"slim_activity_feed": {
 			text: "Re-slim the Activity feed",
 			default: false,
-			value: false,
-			experimental: true
+			value: false
 		},
 		"old_sidebar_width": {
 			text: "Return the sidebar to its original width",
@@ -319,13 +318,15 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
-	
+		this.css_to_add = "";
+
 		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
 			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
-			".ui_notes .activity-notification .activity-notification__activity, .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ transform: translate(-10px) }" +
+			".ui_notes .activity-notification .activity-notification__activity{ transform: translate(-10px); }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ background-color: rgba(0,0,0,0) !important; padding: 5px 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; min-width: 25px; }" +
-			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding: 10px; }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response blockquote{ margin: 10px 0 5px 5px; padding-left: 15px; border-left: 3px solid #d9d9d9; }" +
 			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular{ background-position: -784px -2px; }" +
@@ -334,11 +335,15 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link{ background-position: -785px -58px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
 			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
-			".activity-notification div.retags{ margin: 3px 0 0 !important; padding-left: 41px !important; }" +
-			".xkit-activity-plus-timestamp{ transform: translate(-13px) }",
+			".ui_notes .date_header, .ui_notes .date_header.date_activity{ padding: 0 10px; }" +
+			".activity-popover-notifications .ui_notes .activity-notification .activity-notification__avatar{ height: 25px; }" +
+			".activity-notification div.retags{ margin: 0 !important; padding-left: 41px !important; }" +
+			".is_retags .activity-notification__activity_message.conversational{ margin-bottom: 0 !important; }" +
+			".xkit-activity-plus-timestamp{ transform: translate(-13px) }" +
+			".xkit-reply-button-pn.xkit-notes-activity{ transform: translate(31px,-9px) }",
 			"tweaks_slim_activity_feed");
 		}
-		
+
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
 			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
@@ -435,6 +440,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
+			XKit.tools.add_css(".post_controls .post_control.queue::after { background: none !important; }", "tweaks_split_gear");
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
 		}
@@ -475,8 +481,8 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post .post_content h2 { font-size: 15px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 		}
 
-		if (XKit.extensions.tweaks.preferences.bold_links.value) {
-			XKit.extensions.tweaks.add_css(".post-typography-update .post .post-content a, .post-typography-update .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
+		if (XKit.extensions.tweaks.preferences.bold_links_new.value) {
+			XKit.extensions.tweaks.add_css(".post .post-content a, .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
 		}
 
 		if (XKit.extensions.tweaks.preferences.swap_buttons.value) {
@@ -877,7 +883,6 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	split_gear: function() {
-
 		if (!XKit.browser().mobile) { // mobile stuff
 			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
 				$(this).addClass("xkit-tweaks-split-gear-done");
@@ -892,7 +897,7 @@ XKit.extensions.tweaks = new Object({
 
 				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
+				$(this).find(".post_control.queue").addClass("icon_queue_small").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.post_control_menu.creator").css("display", "none");
 			});
 		}
@@ -959,8 +964,8 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	destroy: function() {
-
 		this.running = false;
+
 		XKit.tools.remove_css("xkit_tweaks");
 		XKit.tools.remove_css("tweaks_slim_activity_feed");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
@@ -969,13 +974,16 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_wide_sources");
+
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		XKit.post_listener.remove("tweaks_add_id_to_reblog_peepr");
+		XKit.post_listener.remove("tweaks_split_gear");
+
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		clearInterval(this.hide_bubble_interval);
-		XKit.post_listener.remove("tweaks_split_gear");
+
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
 		$("#new_post_in_tracked_tags_bubble").remove();
@@ -987,6 +995,7 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display", "block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
+
 		XKit.tools.remove_css("tweaks_grey_urls");
 		$(".add-id-to-reblog-peepr-modified").find(".reblog_source").find("a.post_info_link").each(function() { 
 			var $this = $(this);
@@ -996,5 +1005,4 @@ XKit.extensions.tweaks = new Object({
 		});
 		$(".add-id-to-reblog-peepr").removeClass("add-id-to-reblog-peepr add-id-to-reblog-peepr-modified");
 	}
-
 });

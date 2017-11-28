@@ -31,6 +31,16 @@ if (my_name !== "") {
 
 Returns everything stored in `extension_id` storage area as an object.
 
+<a name="remove" href="XKit.storage.md#remove">#</a> XKit.storage.**remove**(_extension_id_, _key_)
+
+Removes `key` from storage. Returns `true` on success.
+
+Example usage:
+
+```javascript
+XKit.storage.remove("my_extension", "name");
+```
+
 <a name="size" href="XKit.storage.md#size">#</a> XKit.storage.**size**(_extension_id_)
 
 Returns the size of data stored by `extension_id`.

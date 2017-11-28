@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.6 **//
+//* VERSION 1.9.7 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -1016,7 +1016,7 @@ XKit.extensions.xinbox = new Object({
 				},
 				onload: function(response) {
 					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					try {
 						var responseData = $.parseJSON(response.responseText);
 					} catch (e) {

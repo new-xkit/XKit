@@ -1,13 +1,13 @@
 #xkit_soft_refresh {
 	background: rgba(0,0,0,0.10);
-	border: 1px solid rgba(0,0,0,0.22);
-	border-radius: 6px;
+	border-radius: 3px;
 	color: rgba(255,255,255,0.64);
 	padding: 0px 20px;
+	font-family: "Helvetica Neue", sans-serif;
 	font-size: 13px;
 	height: 40px;
 	text-align: center;
 	display: none;
 	margin-top: 20px;
-	line-height: 40px;	
+	line-height: 40px;
 }

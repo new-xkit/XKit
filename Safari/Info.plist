@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>New XKit Team</string>
 	<key>Builder Version</key>
-	<string>12602.1.50.0.10</string>
+	<string>13605.1.6.0.1</string>
 	<key>CFBundleDisplayName</key>
 	<string>New XKit</string>
 	<key>CFBundleIdentifier</key>
@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.7.3</string>
+	<string>7.8.1</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>7.8.1</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Database Quota</key>
@@ -39,6 +39,7 @@
 				<string>moment.js</string>
 				<string>tiptip.js</string>
 				<string>nano.js</string>
+				<string>lodash.min.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
@@ -71,7 +72,7 @@
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
-	<string>http://new-xkit.github.io/XKit/Extensions/dist/page/SafariUpdate.plist</string>
+	<string>https://new-xkit.github.io/XKit/Extensions/dist/page/SafariUpdate.plist</string>
 	<key>Website</key>
 	<string>http://new-xkit-extension.tumblr.com/</string>
 </dict>

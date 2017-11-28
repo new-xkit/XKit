@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.10.0 **//
+//* VERSION 0.11.0 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -399,7 +399,7 @@ XKit.extensions.outbox = new Object({
 			/* globals moment */
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
-			m_date = moment_val.format('hh:mm a');
+			m_date = moment_val.format('MM/DD/YY hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -447,7 +447,7 @@ XKit.extensions.outbox = new Object({
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
-			m_date = moment_val.format('hh:mm a');
+			m_date = moment_val.format('MM/DD/YY hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";
@@ -506,7 +506,7 @@ XKit.extensions.outbox = new Object({
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
-			m_date = moment_val.format('hh:mm a');
+			m_date = moment_val.format('MM/DD/YY hh:mm a');
 		} else {
 			m_day = "?";
 			m_date = "Unknown";

@@ -1,0 +1,35 @@
+{
+  "content_scripts": [ {
+    "all_frames": true,
+    "run_at": "document_end",
+    "css": [ "xkit.css" ],
+    "exclude_matches": [
+      "*://*.tumblr.com/*/audio_player_iframe/*",
+      "*://*.tumblr.com/*/photoset_iframe/*",
+      "*://assets.tumblr.com/*",
+      "*://*.media.tumblr.com/*",
+      "*://www.tumblr.com/upload/image*",
+      "*://www.tumblr.com/video/*"
+    ],
+    "js": [ "bridge.js", "lodash.min.js", "jquery.js", "tiptip.js", "moment.js", "nano.js", "xkit.js" ],
+    "matches": [ "*://*.tumblr.com/*" ]
+  } ],
+  "description": "A fork of XKit, the extension framework for Tumblr.",
+  "homepage_url": "https://github.com/new-xkit/XKit",
+  "icons": {
+    "128": "icon.png"
+  },
+  "manifest_version": 2,
+  "minimum_chrome_version": "44.0",
+  "name": "New XKit",
+  "author": "New XKit Team",
+  "permissions": ["*://*/*", "*://*/", "unlimitedStorage", "storage", "http://*.tumblr.com/", "https://*.tumblr.com/" ],
+  "version": "7.8.1",
+  "web_accessible_resources": [ "manifest.json", "editor.js" ],
+  "applications": {
+    "gecko": {
+      "id": "@new-xkit",
+      "update_url": "https://new-xkit.github.io/XKit/Extensions/dist/page/FirefoxUpdate.json"
+    }
+  }
+}

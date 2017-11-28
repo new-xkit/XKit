@@ -53,19 +53,11 @@ body {
 
 body .l-header-container {
 	top: 0px;
-	z-index: 10001;
-}
-
-.ui_peepr_glass {
-	z-index: 10002;
-}
-
-.peepr-drawer-container {
-	z-index: 10003;
+	z-index: 90;
 }
 
 body.xkit-widgets-opened {
-	padding-top: 150px;
+	padding-top: 140px;
 	-webkit-transition: padding-top 0.35s ease-in-out;
 	-moz-transition: padding-top 0.35s ease-in-out;
 	-o-transition: padding-top 0.35s ease-in-out;
@@ -111,7 +103,7 @@ body.xkit-widgets-opened {
 	height: 140px;
 	background: rgba(0,0,0,0.65);
 	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.78), 0px 1px 2px rgba(0,0,0,0.52);
-	z-index: 10000;
+	z-index: 89;
 	-webkit-transition: top 0.4s ease-in-out;
 	-moz-transition: top 0.4s ease-in-out;
 	-o-transition: top 0.4s ease-in-out;

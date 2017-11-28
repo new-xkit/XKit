@@ -526,6 +526,16 @@ var xkit_global_start = Date.now();  // log start timestamp
 					}
 				}
 			},
+			remove: function(extension_id, key) {
+				var m_storage = XKit.storage.get_all(extension_id);
+				if (!m_storage.hasOwnProperty(key)) return true;
+				delete m_storage[key];
+				// We're going to skip the storage limit checks, on the basis that:
+				//   - the previous serialisation should have fit within limits; and
+				//   - deletion shouldn't increase the size of our new serialisation.
+				var mresult = XKit.tools.set_setting("xkit_extension_storage__" + extension_id, JSON.stringify(m_storage));
+				return !mresult.errors;
+			},
 			get_all: function(extension_id) {
 				var m_data = XKit.tools.get_setting("xkit_extension_storage__" + extension_id, "");
 				if (m_data !== "") {
@@ -1074,10 +1084,10 @@ function xkit_init_special() {
 	}
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
-		if (XKit.browser().chrome === true) {
-			/* global chrome */
+		if (typeof(browser) !== 'undefined') {
+			/* global browser */
 			var xhr = new XMLHttpRequest();
-			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
+			xhr.open('GET', browser.extension.getURL('editor.js'), false);
 			xhr.send(null);
 			try {
 				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
@@ -1085,9 +1095,12 @@ function xkit_init_special() {
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			}
-		}
-		if (XKit.browser().firefox === true || XKit.browser().safari === true) {
+		} else if (XKit.extensions.xkit_editor) {
 			XKit.extensions.xkit_editor.run();
+		} else {
+			XKit.window.show("Can't launch XKit Editor",
+				"Extension platform unsupported or broken.", "error",
+				"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		}
 	}
 

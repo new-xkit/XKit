@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.4.1 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension lets you find blogs that haven't been updated in a certain amount of time. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -51,6 +51,9 @@ XKit.extensions.find_inactives = new Object({
 
 		});
 
+		$(document).on('click', '.find-inactives-blog .unfollow_button', function(e) {
+			XKit.extensions.find_inactives.unfollow_inactive_blog(e);
+		});
 	},
 
 	people_list: [],
@@ -118,9 +121,7 @@ XKit.extensions.find_inactives = new Object({
 				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
 			},
 			onload: function(response) {
-
 				try {
-
 					var perc = self.page_tracker.get_progress();
 
 					XKit.progress.value("find-inactives", perc);
@@ -138,13 +139,19 @@ XKit.extensions.find_inactives = new Object({
 
 
 						if (last_updated_days >= parseInt(XKit.extensions.find_inactives.preferences.time.value)) {
-							var m_user = {};
-							m_user.username = username;
-							m_user.days = last_updated;
+							var m_user = {
+								username: username,
+								days: last_updated,
+								days_value: last_updated_days
+							};
 
 							XKit.extensions.find_inactives.retired_people_list.push(m_user);
 						}
+					});
 
+					// Sort inactive blogs -- Oldest first
+					XKit.extensions.find_inactives.retired_people_list.sort(function(blog_a, blog_b) {
+						return blog_b.days_value - blog_a.days_value;
 					});
 
 					self.page_tracker.finished_processing_page(next_page);
@@ -277,28 +284,28 @@ XKit.extensions.find_inactives = new Object({
 
 		if (XKit.extensions.find_inactives.retired_people_list.length === 0) {
 
-			XKit.window.show("All up to date!", "I couldn't find anyone who has been gone for more than " + XKit.extensions.find_inactives.preferences.time.value + " days.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">Whee!</div>");
+			XKit.window.show("All up to date!", `I couldn't find anyone who has been gone for more than ${XKit.extensions.find_inactives.preferences.time.value} days.`, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">Whee!</div>");
 			return;
 
 		}
 
 		var m_html = '<div class="nano" id="find-inactives-window-outer"><div class="content" id="find-inactives-window">';
 
-		for (var i = 0; i < XKit.extensions.find_inactives.retired_people_list.length; i++) {
-
-			m_html = m_html + "<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
-			"<div class=\"name\">" + XKit.extensions.find_inactives.retired_people_list[i].username + "</div>" +
-			"<div class=\"days\">" + XKit.extensions.find_inactives.retired_people_list[i].days + "</div>" +
-			"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +
+		for (const blog of XKit.extensions.find_inactives.retired_people_list) {
+			const username = blog.username;
+			m_html += `<div data-url="http://${username}.tumblr.com/" class="find-inactives-blog">` +
+			`<a class="name" href="http://${username}.tumblr.com/" target="_blank">${username}</a>` +
+			`<div class="days">${blog.days}</div>` +
+			`<img src="https://api.tumblr.com/v2/blog/${username}.tumblr.com/avatar/96" class="avatar"/>` +
+			`<button class="chrome clear big unfollow_button" data-name="${username}">Unfollow</button>` +
 			"</div>";
-
 		}
 
-		m_html = m_html + "</div></div>";
+		m_html += "</div></div>";
 
 		$("body").css("overflow", "hidden");
 
-		XKit.window.show("Found " + XKit.extensions.find_inactives.retired_people_list.length + " inactive blog(s)", m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message-find-inactives\">OK</div>");
+		XKit.window.show(`Found ${XKit.extensions.find_inactives.retired_people_list.length} inactive blog(s)`, m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message-find-inactives\">OK</div>");
 
 		$("#find-inactives-window-outer").nanoScroller();
 
@@ -309,21 +316,40 @@ XKit.extensions.find_inactives = new Object({
 
 		});
 
-
 		if ($(".find-inactives-blog").length > 4) {
 
 			$(".find-inactives-blog:last-child").css("border-bottom", "0");
 
 		}
-
-		$(".find-inactives-blog").click(function() {
-
-			window.open($(this).attr('data-url'));
-
-		});
-
 	},
-
+	unfollow_inactive_blog: function(event) {
+		var username = $(event.target).data('name');
+		//make sure xkit window doesn't hide confirmation dialogue
+		$('#xkit-window-shadow').css('zIndex', 8900);
+		$('#xkit-window').css('zIndex', 9000);
+		XKit.tools.add_function(XKit.extensions.find_inactives.trigger_unfollow, true, username);
+	},
+	trigger_unfollow: function() {
+		var username = add_tag;
+		// We're gonna assume Tumblr won't permit usernames that'd lead to XSS.
+		var removalTarget = jQuery(`.find-inactives-blog[data-url="http://${username}.tumblr.com/"]`);
+		Tumblr.Dialog.confirm(`Are you sure you want to unfollow <strong>${username}</strong>?`, function() {
+			Tumblr.unfollow({
+				tumblelog: username,
+				source: "UNFOLLOW_SOURCE_FOLLOWING_PAGE"
+			}, {
+				success: function() {
+					removalTarget.hide();
+				},
+				complete: function() {
+					removalTarget.hide();
+				},
+				error: function() {
+					Tumblr.Dialog.alert("Something went wrong.");
+				}
+			});
+		});
+	},
 
 	destroy: function() {
 		this.running = false;

@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.7.7 **//
+//* VERSION 2.7.8 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -71,7 +71,13 @@ XKit.extensions.timestamps = new Object({
 
 		if (XKit.interface.where().search) {
 			this.in_search = true;
-			XKit.tools.add_css('.xtimestamp-in-search { position: absolute; top: 43px; color: white; font-size: 12px; left: 0; }', "timestamps_search");
+			XKit.tools.add_css(`
+				.xtimestamp-in-search {
+					position: absolute;
+					top: 32px;
+					color: rgb(168,177,184);
+					font-size: 10px;
+				}`, "timestamps_search");
 		}
 
 		if (this.preferences.only_inbox.value) {
@@ -125,7 +131,7 @@ XKit.extensions.timestamps = new Object({
 	add_timestamps: function() {
 		var posts = $(".posts .post").not(".xkit_timestamps");
 
-		if (posts.length === 0) {
+		if (!posts || posts.length === 0) {
 			return;
 		}
 
@@ -149,14 +155,12 @@ XKit.extensions.timestamps = new Object({
 
 			var blog_name = '';
 			if (XKit.interface.where().inbox !== true) {
-				if (post.find('.permalink').length <= 0 && post.find(".post_permalink").length <= 0) {
+				var $permalink = post.find('.permalink, .post_permalink, .post-info-tumblelog a');
+
+				if ($permalink.length <= 0) {
 					return;
 				}
-
-				var permalink = post.find(".permalink").attr('href');
-				if (post.find(".post_permalink").length > 0) {
-					permalink = post.find(".post_permalink").attr('href');
-				}
+				var permalink = $permalink.attr('href');
 
 				if (permalink) {
 					// Split permalink into sections, discarding the scheme
@@ -172,7 +176,7 @@ XKit.extensions.timestamps = new Object({
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
 				var in_search_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp-in-search xtimestamp_loading">&nbsp;</div>';
-				post.find(".post_controls_top").prepend(in_search_html);
+				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
 				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
 				post.find(".post_content").prepend(normal_html);

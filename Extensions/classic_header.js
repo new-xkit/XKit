@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.4.2 **//
+//* VERSION 2.5.0 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -30,6 +30,18 @@ XKit.extensions.classic_header = new Object({
 		},
 		"fix_color": {
 			text: "Make the tab notification bubbles red again",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		"fix_logo": {
+			text: "Display the whole \"tumblr\" logo",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		"hide_compose": {
+			text: "Hide the compose button",
 			default: false,
 			value: false,
 			desktop_only: true
@@ -100,15 +112,51 @@ XKit.extensions.classic_header = new Object({
 			XKit.extensions.classic_header.show_blogs();
 		}
 		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
-			XKit.tools.add_css(" @media screen and (min-width: 900px){.l-header {max-width: 900px!important;}}", "classic_header_fixed_width");
+			$( function() {
+				var cwidth = $(".l-content").outerWidth() + 30; // +10 to match l-container, +20 to allow for right padding
+				if (cwidth < 816) { return; } // either l-content does not exist or the screen is too small to need to do anything
+				var lpad = 1; // even with the correct width, the tumblr logo is just one pixel off lining up perfectly
+				if (XKit.extensions.tweaks.preferences.old_sidebar_width.value && $("#right_column").length > 0) {
+					lpad += 75; // # of pixels added to the dashboard's left margin by this tweak
+				}
+				XKit.tools.add_css(
+				"@media screen and (min-width: " + cwidth + "px) {" +
+					".l-header {" +
+						"max-width: " + cwidth + "px !important;" +
+						"padding-left: " + lpad + "px !important;" +
+					"}" +
+				"}",
+				"classic_header_fixed_width");
+			});
+		}
+
+		if (XKit.extensions.classic_header.preferences.fix_logo.value) {
+			XKit.tools.add_css(".logo .logo-anchor .png-logo { " +
+			"background:" +
+				"url('https://static.tumblr.com/u5hbev5/Jp3odtljk/tumblr.png') " +
+				"22px 10px/159px 34px " + 
+				"no-repeat;" +
+			"width: 159px; }",
+			"classic_header_fix_logo");
+			$(".png-logo").css("opacity", "1");
+		}
+
+		if (XKit.extensions.classic_header.preferences.hide_compose.value) {
+			XKit.tools.add_css(".compose-button { display: none; }", "classic_header_hide_compose");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fixed_position.value) {
-			XKit.tools.add_css(" .l-header-container { position: absolute !important; }", "classic_header_fixed_position");
+			XKit.tools.add_css(" .l-header-container { position: absolute !important; box-shadow: none; }" +
+								".post_avatar.post-avatar--sticky .post_avatar_wrapper { top: 15px; }" +
+								"#xwidgets-drawer, #xwidgets-opener { transform: translate(0,-52px); z-index: 91 !important; }",
+								"classic_header_fixed_position");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fix_color.value) {
-			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; } .selected .tab_notice, .tab_notice { background: #bc3333 !important; } .tab_bar .tab.selected .tab_anchor, .tab_bar .tab.active .tab_anchor {opacity: 0.5;}", "classic_header_fixed_color");
+			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; }" +
+								".selected .tab_notice, .tab_notice { background: #bc3333 !important; }" +
+								".tab_bar .tab.selected .tab_anchor::before { opacity: 0.5; }",
+								"classic_header_fixed_color");
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
@@ -226,6 +274,8 @@ XKit.extensions.classic_header = new Object({
 		XKit.tools.remove_css("classic_header_fixed_color");
 		XKit.tools.remove_css("classic_header_fixed_position");
 		XKit.tools.remove_css("classic_header_fixed_width");
+		XKit.tools.remove_css("classic_header_fix_logo");
+		XKit.tools.remove_css("classic_header_hide_compose");
 		XKit.tools.remove_css("classic_header_mobile_sticky");
 		$(".nav-item-goodbye").remove();
 		$("#xoldeheader").remove();

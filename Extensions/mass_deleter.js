@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.1.3 **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -128,7 +128,6 @@ XKit.extensions.mass_deleter = new Object({
 
 		XKit.extensions.mass_deleter.delete_drafts_page++;
 		XKit.extensions.mass_deleter.delete_next_page();
-
 
 	},
 
@@ -293,6 +292,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	unlike_next_max: 30,
 	unlike_next_current: 0,
+	unlike_next_page_url: undefined,
 
 	unlike_fail_count: 0,
 
@@ -320,6 +320,7 @@ XKit.extensions.mass_deleter = new Object({
 			XKit.extensions.mass_deleter.unlike_fail_count = 0;
 			XKit.extensions.mass_deleter.unlike_next_current = 0;
 			XKit.extensions.mass_deleter.unlike_likes_page++;
+			XKit.extensions.mass_deleter.unlike_next_page_url = $("#next_page_link").attr("href");
 			XKit.extensions.mass_deleter.unlike_next_page();
 
 		});
@@ -380,8 +381,11 @@ XKit.extensions.mass_deleter = new Object({
 
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://www.tumblr.com/likes/page/" + XKit.extensions.mass_deleter.unlike_likes_page + "?t=" + XKit.tools.random_string(),
+			url: "https://www.tumblr.com" + XKit.extensions.mass_deleter.unlike_next_page_url,
 			json: false,
+			headers: {
+				"X-Requested-With": "XMLHttpRequest",
+			},
 			onerror: function(response) {
 				XKit.window.close();
 				XKit.extensions.mass_deleter.display_error();
@@ -410,8 +414,8 @@ XKit.extensions.mass_deleter = new Object({
 				}
 
 				XKit.extensions.mass_deleter.unlike_next_current = 0;
-
-				$(".posts .post", m_div).each(function() {
+				XKit.extensions.mass_deleter.unlike_next_page_url = response.getResponseHeader("X-Next-Page");
+				$(".post_container .post", m_div).each(function() {
 					var m_post = XKit.interface.post($(this));
 					if (XKit.extensions.mass_deleter.unlike_likes_array.length >= XKit.extensions.mass_deleter.unlike_likes_limit) {
 						XKit.extensions.mass_deleter.unlike_current_array();
@@ -422,7 +426,12 @@ XKit.extensions.mass_deleter = new Object({
 						XKit.extensions.mass_deleter.unlike_likes_array.push(m_post.id + ";" + m_post.reblog_key);
 					}
 				});
-
+				if (XKit.extensions.mass_deleter.unlike_next_page_url == null) {
+					//We didn't get the next page, so we're assuming this one was the last.
+					XKit.extensions.mass_deleter.unlike_current_array();
+					stop_action = true;
+				
+				}
 				if (stop_action) { return; }
 
 				XKit.extensions.mass_deleter.unlike_likes_page++;

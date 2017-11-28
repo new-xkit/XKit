@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -104,7 +104,7 @@ XKit.extensions.mass_plus = new Object({
 				return;
 			}
 			if (m_type === "search-tags") {
-				XKit.window.show("Search by Tags", "Please enter the tag to search for: <input id=\"xkit-mass-search-tag-txt\" type=\"text\" maxlength=\"64\" class=\"xkit-textbox\" placeholder=\"Enter a tag (ie: xkit)\" /><br/>You can only search for <b>one</b> tag at a time.<br/>The first 100 results will be selected.", "question", "<div id=\"xkit-mass-search-for-tags\" class=\"xkit-button default\">Search</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+				XKit.window.show("Search by Tags", "Please enter the tag to search for: <input id=\"xkit-mass-search-tag-txt\" type=\"text\" class=\"xkit-textbox\" placeholder=\"Enter a tag (ie: xkit)\" /><br/>You can only search for <b>one</b> tag at a time.<br/>The first 100 results will be selected.", "question", "<div id=\"xkit-mass-search-for-tags\" class=\"xkit-button default\">Search</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 				$("#xkit-mass-search-for-tags").click(function() {
 					if ($.trim($("#xkit-mass-search-tag-txt").val()) === "") {
 						XKit.window.close();

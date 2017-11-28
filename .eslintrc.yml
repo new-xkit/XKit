@@ -41,6 +41,7 @@
       - before: true
         after: true
   globals:
+    _: true
     XKit: true
     XBridge: true
     Tumblr: true
