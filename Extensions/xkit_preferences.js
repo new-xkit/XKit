@@ -629,12 +629,12 @@ XKit.extensions.xkit_preferences = new Object({
 				"New extensions are regularly added to the XKit Extension Gallery, " +
 				"which you can visit by clicking on the <b>Get Extensions</b> tab on the bottom.", "info",
 				'<div class="xkit-button default" id="xkit-tour-continue-1">Continue &rarr;</div>' +
-				'<div class="xkit-button xkit-tour-cancel">Cancel Tour</div>');
+				'<div class="xkit-button xkit-tour-cancel">Cancel Tour</div>' +
+				'<div class="xkit-button" id="xkit-welcome-back">Hold up, I\'m an existing user!</div>');
 
 			$(document).on('click', '.xkit-tour-cancel', function() {
 
 				XKit.window.close();
-				XKit.extensions.xkit_preferences.close();
 
 			});
 
@@ -671,6 +671,16 @@ XKit.extensions.xkit_preferences = new Object({
 					});
 
 				});
+
+			});
+
+			$("#xkit-welcome-back").click(function() {
+
+				XKit.window.show("Welcome back!",
+					"<strong>No need for a tour if you're just reinstalling!</strong><br>" +
+					"Just log into XCloud and restore your settings or import a local backup to pick up where you left off.", "info",
+					'<div class="xkit-button default xkit-tour-cancel">OK</div>');
+				$("#xkit-cp-tab-xcloud").trigger('click');
 
 			});
 

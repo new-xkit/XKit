@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9.4 **//
+//* VERSION 6.9.5 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
@@ -16,6 +16,7 @@ XKit.extensions.xkit_installer = new Object({
 		'one_click_postage',
 		'one_click_reply',
 		'tweaks',
+		'xcloud',
 		'go_to_dash'
 	],
 
