@@ -5,7 +5,7 @@
 XKit is a small extension framework that powers tweaks for Tumblr.
 
 ## Get a release build
-Currently we support [Firefox](https://addons.mozilla.org/en-US/firefox/addon/new-xkit/) and [Chrome](https://chrome.google.com/webstore/detail/new-xkit/inobiceghmpkaklcknpniboilbjmlald) officially. 
+Currently we support [Firefox](https://new-xkit-extension.tumblr.com/firefox), [Chrome](https://new-xkit-extension.tumblr.com/chrome), and [Safari](https://new-xkit-extension.tumblr.com/safari) officially. 
 We support Opera unofficially using the same file as the Chrome extension, [which you can download here](https://github.com/new-xkit/XKit/releases).
 
 ## Support [![Discord](https://img.shields.io/badge/discord-join_support_chat-7289DA.svg)](https://new-xkit-extension.tumblr.com/discord-support)
