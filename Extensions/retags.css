@@ -34,6 +34,7 @@ label.retags .binary_switch_label {
 
 div.retags {
     white-space: normal;
+    overflow-wrap: break-word;
     margin-bottom: 10px;
     font-size: 12px;
     clear: both;
