@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.1.2 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER new-xkit **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -43,7 +43,7 @@ XKit.extensions.one_click_reply = new Object({
 			type: "separator"
 		},
 		"mention_people": {
-			text: "Use the 'mentioning' feature of Tumblr on replies (extremely experimental)",
+			text: "Use the 'mentioning' feature of Tumblr on replies",
 			default: false,
 			value: false,
 			experimental: true,

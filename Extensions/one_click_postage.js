@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.6 **//
+//* VERSION 4.3.7 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -43,7 +43,7 @@ XKit.extensions.one_click_postage = new Object({
 			experimental: true
 		},
 		"sep_5": {
-			text: "AlreadyReblogged <a id=\"xkit-alreadyreblogged-help\" href=\"#\" onclick=\"return false\">what is this?</a>",
+			text: "AlreadyReblogged&emsp;<a id=\"xkit-alreadyreblogged-help\" href=\"#\" onclick=\"return false\">what is this?</a>",
 			type: "separator",
 		},
 		"enable_alreadyreblogged": {
@@ -122,7 +122,8 @@ XKit.extensions.one_click_postage = new Object({
 			value: false
 		},
 		"allow_resize": {
-			text: "Allow resizing of the caption box vertically (experimental)",
+			text: "Allow resizing of the caption box vertically",
+			experimental: true,
 			default: false,
 			value: false
 		},

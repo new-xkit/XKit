@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.6 **//
+//* VERSION 2.5.7 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -50,15 +50,6 @@ XKit.extensions.show_more = new Object({
 			text: "Show Submit button if user has their submit box enabled",
 			default: false,
 			value: false
-		},
-		"sep2": {
-			text: "In-Dashboard Asks",
-			type: "separator",
-		},
-		"enable_anon": {
-			text: "Enable sending anonymous messages from the dashboard",
-			default: true,
-			value: true
 		}
 	},
 
@@ -655,48 +646,6 @@ XKit.extensions.show_more = new Object({
 				}, 100 + (submit_delay_count * 100));
 
 				submit_delay_count++;
-
-			});
-
-		}
-
-		if (XKit.extensions.show_more.preferences.enable_anon.value) {
-
-			var anon_delay_count = 0;
-
-			$(".post_avatar").not(".xkit-show-more-anons-done").each(function() {
-
-				$(this).addClass("xkit-show-more-anons-done");
-
-				var username = $(this).parent().attr('data-tumblelog-name');
-
-				if (typeof XKit.extensions.show_more.anon_available[username] === "boolean") {
-					return;
-				}
-
-				var m_url = "https://www.tumblr.com/ask_form/" + username + ".tumblr.com";
-
-				if (typeof username === "undefined" || username === "") {
-					return;
-				}
-
-				// Temporarily set it to false while we fetch pages.
-				XKit.extensions.show_more.anon_available[username] = false;
-
-				setTimeout(function() {
-					GM_xmlhttpRequest({
-						url: m_url,
-						onload: function(data) {
-							if ($("#ask_anonymously", data).length > 0) {
-								XKit.extensions.show_more.anon_available[username] = true;
-							} else {
-								XKit.console.add("No anon messages for " + username);
-							}
-						}
-					});
-				}, 100 + (anon_delay_count * 100));
-
-				anon_delay_count++;
 
 			});
 

@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.5 **//
+//* VERSION 7.4.6 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1421,7 +1421,7 @@ XKit.extensions.xkit_preferences = new Object({
 			var m_ext = XKit.installed.get(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
 			XKit.window.show("Uninstall " + m_ext.title + "?",
-				"This extension will be completely deleted from your computer." +
+				"This extension will be completely deleted from your computer. " +
 				"If you change your mind, you can re-download it from the extension gallery later.",
 				"question", '<div id="xkit-extension-yes-uninstall" class="xkit-button default">Yes, uninstall</div>' +
 				'<div id="xkit-close-message" class="xkit-button">Cancel</div>');

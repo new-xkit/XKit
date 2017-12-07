@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.5 **//
+//* VERSION 5.5.6 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -59,12 +59,6 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false,
 			desktop_only: true
-		},
-		"photo_replies": {
-			text: "Auto-enable photo replies on all posts I create",
-			default: false,
-			value: false,
-			experimental: true
 		},
 		"sep001": {
 			text: "Post / Post Editor tweaks",
@@ -241,7 +235,7 @@ XKit.extensions.tweaks = new Object({
 			value: true
 		},
 		"responsive_dash": {
-			text: "Make the dashboard resize with the window.",
+			text: "Make the dashboard resize with the window",
 			default: false,
 			value: false
 		},
@@ -279,12 +273,6 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
-			default: false,
-			value: false,
-			desktop_only: true
-		},
-		"hide_find_blogs": {
-			text: "Hide \"Find Blogs\" button",
 			default: false,
 			value: false,
 			desktop_only: true
@@ -449,12 +437,6 @@ XKit.extensions.tweaks = new Object({
 			$(".radar_header").parent().css("display", "none");
 		}
 
-		if (XKit.extensions.tweaks.preferences.photo_replies.value) {
-			this.run_interval = setInterval(function() {
-				$("#allow_photo_replies").attr('checked', true);
-			}, 3000);
-		}
-
 		if (XKit.extensions.tweaks.preferences.real_red.value) {
 			XKit.extensions.tweaks.add_css(" .like.liked.post_control:after { background-position: 4px 3px !important; background-size: auto auto !important; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAYAAAA/mJfHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDQzQ0MxODI5Qzc4MTFFMzg1NkE5NjNCNTgyRjU3NjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDQzQ0MxODM5Qzc4MTFFMzg1NkE5NjNCNTgyRjU3NjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENDNDQzE4MDlDNzgxMUUzODU2QTk2M0I1ODJGNTc2MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENDNDQzE4MTlDNzgxMUUzODU2QTk2M0I1ODJGNTc2MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Poem3hoAAAEdSURBVHjaYtypzQADjEBsDcQGQPweiLcD8TsGTCAExF5ALADEF4D4KBD/B0mwQBVoAPEKINZH0vQFiMuAeDqSWCYQdwExD5LYRSCOAOIbTEBCEIh3oxnEANUwDaoZBHqhfB40dfpQ/YIglxUCsQwDblAKxJZAbINHDUh/PshlPgyEgQ0RanxBhikyUAcoMjFQDzCCDHtEJcMeMUFjghpgF8iwuUD8h0KDQPrnggy7DsRTKDRsCizRgkA5EB8n06DjUP0MMMN+AbEfEJ8j0aBzUH2/kA0DgTdA7ADEa4g0aDVU/RuYAHo6+wzEoUCcBWVjA5+h8mHoanAlWlBJoQXE69DE10LFp2PThC8HPAHiYGgmXwSlQ6DiWAFAgAEALHgzuY5LA00AAAAASUVORK5CYII=);  } #tab_switching .tab_notice, #header .tab .tab_notice, .popover_blogs .tab_notice, .blog_menu .selected_blog .tab_notice { background-color: #bb2502; }", "xkit_tweaks_real_red");
 		}
@@ -568,10 +550,6 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_section_headers.value) {
 			XKit.extensions.tweaks.add_css(".controls_section li.section_header { display: none; } ", "xkit_tweaks_hide_section_headers");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value) {
-			$("a.spotlight").parent().css("display", "none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value) {
