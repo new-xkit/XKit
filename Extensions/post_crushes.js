@@ -1,7 +1,7 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0.6 **//
+//* VERSION 2.0.7 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER New-XKit **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
 //* FRAME false **//
 //* BETA false **//
@@ -70,9 +70,6 @@ XKit.extensions.post_crushes = new Object({
 	post: function() {
 
 		var blog_url = $("#search_form").find("[name='t']").val();
-		var send_url = "http://www.studioxenix.com/xkit/crushes/index.php";
-		var send_string = "?xkit=xkitnext";
-		var crush_img = [];
 		var crush_name = [];
 		var crush_url = [];
 		var crush_val = [];
@@ -83,19 +80,10 @@ XKit.extensions.post_crushes = new Object({
 		$("#xkit_post_crushes").html("Please wait...");
 
 		for (i = 1; i <= 9; i++) {
-			var crush_img_src = $("#crush_" + i).attr('style').substring($("#crush_" + i).attr('style').indexOf("url('") + 5);
-			crush_img_src = crush_img_src.substring(0, crush_img_src.indexOf("'"));
-			crush_img.push(crush_img_src);
 			crush_url.push($("#crush_" + i).attr('href'));
 			crush_name.push($("#crush_" + i).attr('data-tumblelog-name'));
 			crush_val.push($("#crush_" + i).find("span").html().replace("%", ""));
 		}
-
-		for (i = 0; i <= 8; i++) {
-			send_string = send_string + "&img" + (i + 1) + "=" + crush_img[i] + "&val" + (i + 1) + "=" + crush_val[i];
-		}
-
-		send_url = send_url + encodeURI(send_string);
 
 		var m_tags = "";
 		var send_txt = "<strong>" + XKit.extensions.post_crushes.preferences.default_title.value + ":</strong><ol>";
@@ -133,8 +121,7 @@ XKit.extensions.post_crushes = new Object({
 		m_object.detached = true;
 		m_object.reblog = false;
 
-
-		m_object["post[type]"] = "photo";
+		m_object["post[type]"] = "text";
 
 		var blog_selector_html = "<select id=\"xkit-post-crushes-blog\" style=\"margin-top: 7px; width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;  box-sizing: border-box; height: 25px;\">";
 
@@ -160,11 +147,6 @@ XKit.extensions.post_crushes = new Object({
 		}
 		m_object["post[publish_on]"] = "";
 		m_object.custom_tweet = false;
-
-		m_object["post[photoset_order]"] = "o1";
-		m_object["post[photoset_layout]"] = "1";
-		m_object["photo_src[]"] = send_url;
-		m_object["images[o1]"] = send_url;
 
 		XKit.window.show("Post Crushes", "<b>Post Caption:</b><input id=\"xkit-post-crushes-additional-text\" type=\"text\" class=\"xkit-textbox\" maxlength=\"256\" placeholder=\"optional additional text for this post\"><b>Blog to Post to:</b><br/>" + blog_selector_html + "<div style=\"margin-top: 10px; font-size: 13px; color: rgb(130,130,130);\">For additional options please check the Post Crushes control panel.</div>", "question", "<div data-status=\"0\" class=\"xkit-button default xkit-post-crushes-proceed\">Publish</div><div data-status=\"1\" class=\"xkit-button xkit-post-crushes-proceed\">Draft</div><div data-status=\"2\" class=\"xkit-button xkit-post-crushes-proceed\">Queue</div><div id=\"xkit-post-crushes-ignore\" class=\"xkit-button\">Cancel</div>");
 
