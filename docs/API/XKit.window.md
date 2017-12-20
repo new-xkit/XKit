@@ -1,4 +1,4 @@
-`XKit.window`: Disaply message dialogs to the user.
+`XKit.window`: Display message dialogs to the user.
 
 ## Methods
 
@@ -20,8 +20,8 @@ The following strings can be passed to the `icon` parameter:
 
 ## Buttons
 
-* Buttons are standard DIVs, using class `#xkit-button`
-* The "default action" should have the class `#default`
+* Buttons are standard DIVs, using class `.xkit-button`
+* The "default action" should have the class `.default`
 * `#xkit-close-message` is used internally to close the window
 
 ## Usage

@@ -6,7 +6,7 @@ These are the stylesheet classes used by Tumblr on their pages.
 
 ## Posts
 
-* Each post is wrapped around a `post_container` li.
+* Each post is wrapped around a `.post_container` li.
 * Each post has the class `.post` and `.post_full`
 
 ### Data attributes

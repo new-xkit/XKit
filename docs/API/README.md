@@ -1,5 +1,4 @@
-> :warning: Caution
-
+> :warning: Caution  
 > This section is still under construction; some pages may be missing.
 
 ### Backend
@@ -20,9 +19,5 @@
 * [XKit.window](./XKit.window.md) - Display message dialogs
 * [XKit.notifications](./XKit.notifications.md) - Show notifications for the user
 * [XKit.progress](./XKit.progress.md) - Manipulate progress bars
-
-### Debugging
-
-* [XKit.console](./XKit.console.md) - Use the XKit Console for debugging your extension
 
 > _**Note**: Even though there are more keys on this object, they are private APIs and subject to change without notice. **Do not use them in your extension**._
