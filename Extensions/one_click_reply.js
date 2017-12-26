@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.1.2 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER new-xkit **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -775,12 +775,7 @@ XKit.extensions.one_click_reply = new Object({
 			console.log(" -- Now: " + $(m_obj).attr('class'));
 			var avatar_url = $(m_obj).find(".ui_avatar_link").attr('data-avatar-url');
 
-			avatar_url = avatar_url.replace("_64.png", "_40.png");
-			avatar_url = avatar_url.replace("_64.gif", "_40.gif");
-			avatar_url = avatar_url.replace("_64.jpg", "_40.jpg");
-			avatar_url = avatar_url.replace("_128.png", "_40.png");
-			avatar_url = avatar_url.replace("_128.gif", "_40.gif");
-			avatar_url = avatar_url.replace("_128.jpg", "_40.jpg");
+			avatar_url = avatar_url.replace(/_\d+(\.\w+)$/, "_40$1");
 			// This is ugly but it works:
 			try {
 				var avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
