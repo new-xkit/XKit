@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.7 **//
+//* VERSION 1.9.8 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -13,6 +13,12 @@ XKit.extensions.xinbox = new Object({
 	reply_button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM5MzFGNzM2MzgzMTFFMzlFQTI4RjEwOUZBNDg2OEYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM5MzFGNzQ2MzgzMTFFMzlFQTI4RjEwOUZBNDg2OEYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzkzMUY3MTYzODMxMUUzOUVBMjhGMTA5RkE0ODY4RiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzkzMUY3MjYzODMxMUUzOUVBMjhGMTA5RkE0ODY4RiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmGYpQYAAAIwSURBVHjaYoyKimJABkGRyUwb1q6QOnXiaOa7N6+9Pnx4r/rnzx8OmLyAoNA9MXGJ9V6+AX1A7ktkvYzIhgEN4inKTZnw6MH9BAZU8A2IvwCxGLKgjKx874Rp82qBzF8gPhNM4vrN2yblRZnrkAyaAcSeQCwExHxALAXEbEBsBcRTQQqePH5YXJCVOB/IhLgc5LKK2hYRIPMPFM8GYmMGwiARpkdaRnbams17mRhAhJy8wiKoxGQgZmcgHkTADLR1cDZh/vXrp+TJ40fnQSUT0AOVALgCxCxAbAvE/Aya2roZUNPXMpAH5EH6Obm4XjH9/vVLHSp4l0zDHoGI79++CTH9+ftHACr4kUzDWGEMUNJ4C2Xzk2mYNlgzv8BDJgVF5WVQwSIyDUwBEZJS0itASYNFWVVtAzQSykk0qAGWNPomzxFkZmH88+/L1+8Sz589dYNmmVVEGCIKxM1AXAbiANNp4Yljhw6C0gjD3z9/2KCKfiJp0ABlVyB+DMTM0KwEMsQIiP1himTlFCr7pswFZy+wYR8/fTCHyp2CKgalvSR8TgOG9UpVdQ2Q627MnNoHFmMxtXbmWbZsGcwmGaiBYKCuqb3286ePQkxMTP+BBcwvFlaW11xc3Kc0tHQ2RMUmg3LKP5QiSEVNI+nOrRuzkAWVlFWnJ6Xl1AGZ70mJDRaG///hxZCCkvIib7+gKiDzxfPnT0hOI4zApMGVn5kQYmputScmIe0FutNJAQABBgBSobK3EYqShQAAAABJRU5ErkJggg==",
 
 	preferences: {
+		"default_inbox": {
+			text: "Default inbox",
+			type: "blog",
+			default: "",
+			value: ""
+		},
 		"sep-1": {
 			text: "Notifications",
 			type: "separator"
@@ -168,6 +174,10 @@ XKit.extensions.xinbox = new Object({
 		XKit.tools.init_css("xinbox");
 
 		XKit.extensions.xinbox.slimify_outgoing();
+
+		if (this.preferences.default_inbox.value !== "") {
+			$("#inbox_button > a").attr("href", "https://www.tumblr.com/blog/" + this.preferences.default_inbox.value + "/messages");
+		}
 
 		if (XKit.extensions.xinbox.preferences.show_new_notification.value === true) {
 			XKit.extensions.xinbox.notification_check_interval = setInterval(function() { XKit.extensions.xinbox.check_for_new(); }, 2000);
@@ -1065,6 +1075,7 @@ XKit.extensions.xinbox = new Object({
 	},
 
 	destroy: function() {
+		$("#inbox_button > a").attr("href", "https://www.tumblr.com/inbox");
 		$("#xinbox_sidebar").remove();
 		XKit.post_listener.remove("xinbox_auto_expand_fan_mail");
 		XKit.post_listener.remove("xinbox_search");
