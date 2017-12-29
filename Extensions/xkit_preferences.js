@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.6 **//
+//* VERSION 7.4.7 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1885,9 +1885,10 @@ XKit.extensions.xkit_preferences = new Object({
 						'<div class="xkit-extension text-only separator">Notifications</div>' +
 						'<div data-pname="news" class="xkit-extension text-only">News Notifications</div>' +
 						'<div data-pname="updates" class="xkit-extension text-only">Update Notifications</div>' +
-						'<div class="xkit-extension text-only separator">Advanced Settings</div>' +
+						'<div class="xkit-extension text-only separator">Developer Settings</div>' +
 						'<div data-pname="console" class="xkit-extension text-only">Console</div>' +
 						'<div data-pname="editor" class="xkit-extension text-only">XKit Editor</div>' +
+						'<div data-pname="packages" class="xkit-extension text-only">Packages</div>' +
 						'<div data-pname="internal" class="xkit-extension text-only">Internals</div>' +
 						'<div data-pname="flags" class="xkit-extension text-only" style="display: none;">Flags</div>' +
 					"</div>" +
@@ -1908,6 +1909,9 @@ XKit.extensions.xkit_preferences = new Object({
 			$("#xkit-extensions-panel-left-inner > .xkit-extension").removeClass("selected");
 			$this.addClass("selected");
 
+			if ($this.attr('data-pname') === "packages") {
+				XKit.extensions.xkit_preferences.show_others_panel_packages();
+			}
 			if ($this.attr('data-pname') === "reset") {
 				XKit.extensions.xkit_preferences.show_others_panel_reset();
 			}
@@ -2301,6 +2305,164 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		$("#xkit-extensions-panel-right").nanoScroller();
 
+	},
+
+	show_others_panel_packages: function() {
+
+		var m_html =
+				'<div class="xkit-others-panel">' +
+				'<div class="title">Extension Packages</div>' +
+				'<div class="description">' +
+					"Here, you can import and export XKit extensions as files.<br/>" +
+					"Only extensions not found in the gallery are available to export." +
+				"</div>" +
+				'<div class="bottom-part">' +
+					'<div id="import-package" class="xkit-button block">Import Extension</div>' +
+				"</div>" +
+				'<div id="packages-ui" class="bottom-part"><br/>Loading...</div>' +
+				"</div>";
+		$("#xkit-extensions-panel-right-inner").html(m_html);
+		$("#xkit-extensions-panel-right").nanoScroller();
+
+		XKit.download.page("gallery.php", function(mdata) {
+			var gallery = {};
+			for (var i = 0; i < mdata.extensions.length; i++) {
+				gallery[mdata.extensions[i].name] = mdata.extensions[i].version;
+			}
+			$("#packages-ui").html("");
+
+			var installed = XKit.installed.list();
+			for (i = 0; i < installed.length; i++) {
+				var m_extension = XKit.installed.get(installed[i]);
+				var is_internal = installed[i].substring(0, 5) === "xkit_";
+
+				if (typeof gallery[m_extension.id] == undefined || gallery[m_extension.id] >= m_extension.version) {
+					continue;
+				}
+
+				var extension_icon;
+				if (!m_extension.icon) {
+					if (is_internal === true) {
+						extension_icon = XKit.extensions.xkit_preferences.kernel_extension_icon;
+					} else {
+						extension_icon = XKit.extensions.xkit_preferences.default_extension_icon;
+					}
+				} else {
+					extension_icon = m_extension.icon;
+				}
+
+				var extension_title = m_extension.title;
+				if (extension_title === "") {
+					extension_title = m_extension.id;
+				}
+
+				var data_blob = new Blob([JSON.stringify(m_extension)], {type: "text/plain"});
+				var url = window.URL.createObjectURL(data_blob);
+
+				m_html =
+						"<a " +
+							'class="xkit-extension iconic"' +
+							'style="margin: 8px 0 0 8px;"' +
+							'href="' + url + '"' +
+							'download="' + installed[i] + '.json"' +
+							'title="' + extension_title + '"' +
+						">" +
+						'<img class="icon" src="' + extension_icon + '">' +
+						'<div class="icon-mask">&nbsp;</div>' +
+						'</a>';
+				$("#packages-ui").append(m_html);
+			}
+		});
+
+		$(".xkit-button#import-package").click(function() {
+			var element = document.createElement('input');
+			element.setAttribute('type', 'file');
+			element.setAttribute('accept', '.json');
+			element.addEventListener("change", function() {
+				var reader  = new FileReader();
+				reader.readAsText(this.files[0]);
+				reader.onload = function() {
+					try {
+						var m_object = JSON.parse(reader.result);
+					} catch (e) {
+						XKit.window.show(
+							"Could not load extension.",
+							"Please make sure you are selecting the right type of file (*.json).<br/>" + e,
+							"error",
+							"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>"
+						);
+						return;
+					}
+
+					try {
+						var ext_prompt = "Install this extension?";
+						if (XKit.installed.list().includes(m_object.id)) {
+							var existing = XKit.installed.get(m_object.id);
+							ext_prompt += " This will overwrite<br/>" + existing.title;
+							if (existing.beta) {
+								ext_prompt += " Beta ";
+							} else {
+								ext_prompt += " v";
+							}
+							ext_prompt += existing.version + " by " + existing.developer + ".";
+						}
+
+						var ext_details = m_object.title;
+
+						if (m_object.beta) {
+							ext_details += " Beta ";
+						} else {
+							ext_details += " v";
+						}
+						ext_details += m_object.version;
+						ext_details += ' by ' + m_object.developer;
+
+						if (m_object.description.length > 0) {
+							ext_details += "<br/>" + m_object.description;
+						}
+						if (m_object.details.length > 0) {
+							ext_details += "<br/><br/>" + m_object.details;
+						}
+					} catch (e) {
+						XKit.window.show(
+							"Could not verify extension.",
+							"Please ensure that this is an XKit extension you are trying to import.<br/>" + e,
+							"error",
+							"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>"
+						);
+						return;
+					}
+					XKit.window.show(
+						ext_prompt,
+						ext_details,
+						"question",
+						"<div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div> <div id=\"xkit-confirm-action\" class=\"xkit-button default\">Install - I trust the source of this extension</div>"
+					);
+
+					$("#xkit-confirm-action").click(function() {
+						XKit.window.close();
+						var m_result = XKit.tools.set_setting("extension_" + m_object.id, reader.result);
+						if (m_result.errors === false) {
+							XKit.installed.add(m_object.id);
+						} else {
+							XKit.window.show(
+								"Could not install extension.",
+									m_result.errors,
+								"error",
+								"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>"
+							);
+							return;
+						}
+						XKit.extensions.xkit_preferences.show_others_panel_packages();
+					});
+				};
+			}, false);
+			document.body.appendChild(element);
+			element.click();
+			document.body.removeChild(element);
+		});
+
+		$("#xkit-extensions-panel-right").nanoScroller();
 	},
 
 	flags: function() {

@@ -717,7 +717,7 @@
 
 }
 
-#xkit-extensions-panel-left .xkit-extension {
+#xkit-extensions-panel-left .xkit-extension, #packages-ui .xkit-extension {
 
 	height: 50px;
 	line-height: 50px;
@@ -727,7 +727,7 @@
 
 }
 
-#xkit-extensions-panel-left .xkit-extension.iconic {
+#xkit-extensions-panel-left .xkit-extension.iconic, #packages-ui .xkit-extension.iconic {
 
 	display: inline-block;
 	float: left;
@@ -747,7 +747,7 @@
 
 #xkit-extensions-panel-left .xkit-extension.iconic.selected { opacity: 1; }
 
-#xkit-extensions-panel-left .xkit-extension.iconic .icon {
+#xkit-extensions-panel-left .xkit-extension.iconic .icon, #packages-ui .xkit-extension.iconic .icon {
 
 	top: 6px; left: 6px;
 
@@ -791,7 +791,7 @@
 
 }
 
-#xkit-extensions-panel-left .xkit-extension:hover {
+#xkit-extensions-panel-left .xkit-extension:hover, #packages-ui .xkit-extension:hover {
 
 	background-color: rgb(240,240,240);
 
@@ -810,7 +810,7 @@
 
 }
 
-#xkit-extensions-panel-left .xkit-extension .icon {
+#xkit-extensions-panel-left .xkit-extension .icon, #packages-ui .xkit-extension .icon {
 
 	position: absolute;
 	top: 9px; left: 12px;
@@ -820,7 +820,7 @@
 
 }
 
-#xkit-extensions-panel-left .xkit-extension .icon-mask {
+#xkit-extensions-panel-left .xkit-extension .icon-mask, #packages-ui .xkit-extension .icon-mask {
 
 	/*position: absolute;
 	top: 9px; left: 12px;
@@ -1210,7 +1210,7 @@
 	font-weight: normal;
 }
 
-#xkit-extensions-panel-left .xkit-extension {
+#xkit-extensions-panel-left .xkit-extension, #packages-ui .xkit-extension {
 	background: white;
 	border-bottom: 0;
 }
