@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.5.10 **//
+//* VERSION 0.5.11 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -263,6 +263,8 @@ XKit.extensions.quick_tags = new Object({
 
 		if (user_tag_array.length !== 0) {
 
+			var showNumbers = for_one_click && typeof XKit.extensions.one_click_postage != "undefined" && XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value;
+		
 			for (var tag in user_tag_array) {
 
 				var m_title = user_tag_array[tag].title;
@@ -273,7 +275,16 @@ XKit.extensions.quick_tags = new Object({
 					add_data = "data-one-click-postage=\"true\"";
 				}
 
-				m_user_tags = m_user_tags + "<div " + add_data + " data-tags=\"" + m_tags + "\" class=\"xkit-tag user\"><div class=\"xkit-tag-name\">" + m_title + "</div>";
+				m_user_tags = m_user_tags + "<div " + add_data + " data-tags=\"" + m_tags + "\" class=\"xkit-tag user\"><div class=\"xkit-tag-name\">" + m_title;
+
+				if (showNumbers && tag < 10) {
+					// force javascript to treat tag as a number instead of string concatenation
+					var shortcutNumber = parseInt(tag) + 1;
+					m_user_tags = m_user_tags + "<span style=\"opacity:.7;float:right\">" +  shortcutNumber + "</span>";
+				}
+				
+				m_user_tags = m_user_tags + "</div>";
+				
 				if (for_one_click !== true) {
 					m_user_tags = m_user_tags + "<div class=\"xkit-tag-data\">" + m_tags + "</div>";
 				}
