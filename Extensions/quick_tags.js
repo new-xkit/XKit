@@ -277,7 +277,7 @@ XKit.extensions.quick_tags = new Object({
 
 				m_user_tags = m_user_tags + "<div " + add_data + " data-tags=\"" + m_tags + "\" class=\"xkit-tag user\"><div class=\"xkit-tag-name\">" + m_title;
 
-				if (showNumbers && tag < 10) {
+				if (showNumbers && tag < 9) {
 					// force javascript to treat tag as a number instead of string concatenation
 					var shortcutNumber = parseInt(tag) + 1;
 					m_user_tags = m_user_tags + "<span style=\"opacity:.7;float:right\">" +  shortcutNumber + "</span>";
