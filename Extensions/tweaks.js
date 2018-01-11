@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.7 **//
+//* VERSION 5.5.8 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -820,21 +820,21 @@ XKit.extensions.tweaks = new Object({
 
 	split_gear: function() {
 		if (!XKit.browser().mobile) { // mobile stuff
-			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
-				$(this).addClass("xkit-tweaks-split-gear-done");
+			$(".post_control.post_control_menu.creator").not(".xkit-tweaks-split-gear-done").each(function() {
+				var $gear = $(this).addClass("xkit-tweaks-split-gear-done");
 
 				// Remove captions
-				$(this).find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
-				$(this).find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
-				$(this).find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
+				$gear.find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
+				$gear.find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
+				$gear.find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
 
 				// Remove their menu-specific classes
-				$(this).find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
+				$gear.find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
 
-				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.queue").addClass("icon_queue_small").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.post_control_menu.creator").css("display", "none");
+				$gear.find(".post_control.edit").appendTo($gear.parent());
+				$gear.find(".post_control.queue").addClass("icon_queue_small").appendTo($gear.parent());
+				$gear.find(".post_control.delete").appendTo($gear.parent());
+				$gear.css("display", "none");
 			});
 		}
 
