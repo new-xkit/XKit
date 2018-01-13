@@ -27,7 +27,7 @@ XKit.extensions.one_click_postage = new Object({
 			type: "separator",
 		},
 		"enable_keyboard_shortcuts": {
-			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
+			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close, 1-9 to add a Quick Tags bundle)",
 			default: false,
 			value: false
 		},
