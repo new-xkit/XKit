@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER jesskay **//
@@ -71,7 +71,7 @@ XKit.extensions.read_posts = new Object({
 		}
 
 		read_posts.push(post_id);
-		XKit.storage.set('read_posts', 'read_posts', JSON.stringify(read_posts));
+		XKit.storage.set('read_posts', 'read_posts', JSON.stringify(read_posts), true);
 	},
 
 	post_is_read: function(post_id) {

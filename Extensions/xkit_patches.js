@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.7 **//
+//* VERSION 6.8.8 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -480,7 +480,7 @@ XKit.extensions.xkit_patches = new Object({
 			var form_key_to_save = $('meta[name=tumblr-form-key]').attr("content");
 
 			if (typeof form_key_to_save !== "undefined" && form_key_to_save !== "") {
-				XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(form_key_to_save));
+				XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(form_key_to_save), true);
 			}
 
 		}, 1000);
@@ -631,6 +631,41 @@ XKit.extensions.xkit_patches = new Object({
 		} else {
 			XKit.storage.max_area_size = 153600;
 		}
+
+		// Redefine storage.set to store a timestamp for XCloud AutoSync
+		XKit.storage.set = function(extension_id, key, value, no_ts) {
+			var m_storage = XKit.storage.get_all(extension_id);
+
+			if (typeof m_storage[key] === "undefined") {
+				m_storage[key] = {value: value};
+			} else {
+				m_storage[key].value = value;
+			}
+
+			var save_this = true;
+			if (JSON.stringify(m_storage).length >= XKit.storage.max_area_size) {
+				save_this = false;
+			}
+			if (XKit.flags.do_not_limit_extension_storage === true) {
+				save_this = true;
+			}
+			if (!save_this) {
+				XKit.storage.show_error(extension_id, JSON.stringify(m_storage).length);
+				return false;
+			} else {
+				var mresult = XKit.tools.set_setting("xkit_extension_storage__" + extension_id, JSON.stringify(m_storage));
+				if (mresult.errors === false) {
+					if (!no_ts) {
+						var storets = XKit.storage.get_all("xkit_preferences");
+						storets.last_update.value = Date.now();
+						XKit.tools.set_setting("xkit_extension_storage__xkit_preferences", JSON.stringify(storets));
+				    }
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
 
 		/**
 		 * Close the current XKit alert window. Counterpart to `XKit.window.show`
@@ -2005,7 +2040,7 @@ XKit.extensions.xkit_patches = new Object({
 					to_return = window.atob(XKit.storage.get("xkit_patches", "last_stored_form_key", ""));
 				} else {
 					// console.log(" --- XKit Interface: Got form key, storing that one.");
-					XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(to_return));
+					XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(to_return), true);
 				}
 				return to_return;
 

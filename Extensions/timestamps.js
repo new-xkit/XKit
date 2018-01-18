@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.7.8 **//
+//* VERSION 2.7.9 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -49,16 +49,16 @@ XKit.extensions.timestamps = new Object({
 		if (XKit.storage.size("timestamps") >= 800) {
 			XKit.storage.clear("timestamps");
 			if (this.preferences.only_relative.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_relative", "true");
+				XKit.storage.set("timestamps", "extension__setting__only_relative", "true", true);
 			}
 			if (this.preferences.only_inbox.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_inbox", "true");
+				XKit.storage.set("timestamps", "extension__setting__only_inbox", "true", true);
 			}
 			if (this.preferences.only_on_hover.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_on_hover", "true");
+				XKit.storage.set("timestamps", "extension__setting__only_on_hover", "true", true);
 			}
 			if (this.preferences.format.value !== "") {
-				XKit.storage.set("timestamps", "extension__setting__format", this.preferences.format.value);
+				XKit.storage.set("timestamps", "extension__setting__format", this.preferences.format.value, true);
 			}
 		}
 
@@ -242,7 +242,7 @@ XKit.extensions.timestamps = new Object({
 				}
 
 				date_element.removeClass("xtimestamp_loading");
-				XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, date.unix());
+				XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, date.unix(), true);
 			}
 		});
 	},
@@ -270,7 +270,7 @@ XKit.extensions.timestamps = new Object({
 						var date = moment(new Date(post.timestamp * 1000));
 						date_element.html(self.format_date(date));
 						date_element.removeClass("xtimestamp_loading");
-						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
+						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp, true);
 					} catch (e) {
 						XKit.console.add('Unable to load timestamp for post ' + post_id);
 						self.show_failed(date_element);

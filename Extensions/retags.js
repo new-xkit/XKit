@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.2.4 **//
+//* VERSION     1.2.5 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -157,7 +157,7 @@ XKit.extensions.retags = {
 				if (XKit.extensions.retags.should_clear_posts()) {
 					XKit.extensions.retags.clear_old_posts();
 				}
-				XKit.storage.set('retags', cache_label, tags);
+				XKit.storage.set('retags', cache_label, tags, true);
 				deferred.resolve(tags);
 			},
 			onerror: function(error) {
@@ -230,7 +230,7 @@ XKit.extensions.retags = {
 
 		// And finally write back to storage!
 		settingKeys.forEach(function(key) {
-			XKit.storage.set('retags', key, cache[key].value);
+			XKit.storage.set('retags', key, cache[key].value, true);
 		});
 	},
 
@@ -246,13 +246,13 @@ XKit.extensions.retags = {
 		}
 		$('#retags-toggle').change(function() {
 			if ($(this).prop('checked')) {
-				XKit.storage.set('retags', toggle, 'true');
+				XKit.storage.set('retags', toggle, 'true', true);
 				XKit.extensions.retags.css_toggle.appendTo('head');
 				if (XKit.browser().mobile) {
 					XKit.extensions.retags.mobile_toggle.appendTo('head');
 				}
 			} else {
-				XKit.storage.set('retags', toggle, 'false');
+				XKit.storage.set('retags', toggle, 'false', true);
 				XKit.extensions.retags.css_toggle.detach();
 			}
 		});

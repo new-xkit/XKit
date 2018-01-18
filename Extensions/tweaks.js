@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.5.8 **//
+//* VERSION 5.5.9 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -394,7 +394,7 @@ XKit.extensions.tweaks = new Object({
 						// Save this.
 							var m_to_save = $("#new_post_buttons")[0].outerHTML;
 							m_to_save = "!" + btoa(m_to_save);
-							XKit.storage.set("tweaks", "new_post_buttons_html", m_to_save);
+							XKit.storage.set("tweaks", "new_post_buttons_html", m_to_save, true);
 
 						} else {
 
