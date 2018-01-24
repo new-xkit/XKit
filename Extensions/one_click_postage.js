@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.9 **//
+//* VERSION 4.3.10 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -577,7 +577,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (this.preferences.show_reverse_ui.value) {
 			m_html = "<div id=\"x1cpostage_box\">" +
-						"<textarea id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
+						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
 						m_clear_tags_button +
 						"<textarea id=\"x1cpostage_caption\" " + m_remove_box_style + " placeholder=\"caption\"></textarea>" +
 						"<div id=\"x1cpostage_replace\" " + m_remove_box_style + "><div>&nbsp;</div>replace caption, not append</div>" +
@@ -596,7 +596,7 @@ XKit.extensions.one_click_postage = new Object({
 						"<textarea id=\"x1cpostage_caption\" " + m_remove_box_style + " placeholder=\"caption\"></textarea>" +
 						"<div id=\"x1cpostage_replace\" " + m_remove_box_style + "><div>&nbsp;</div>replace caption, not append</div>" +
 						m_remove_button +
-						"<textarea id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
+						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
 						m_clear_tags_button +
 					"</div>";
 		}
