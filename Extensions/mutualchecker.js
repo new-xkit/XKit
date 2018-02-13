@@ -1,16 +1,16 @@
 //* TITLE Mutual Checker **//
-//* VERSION 2.0.1 **//
-//* DESCRIPTION A simple way to see who follows you back **//
-//* DETAILS Adds a small icon and '[user] follows you' hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on sideblogs. **//
-//* DEVELOPER New-XKit **//
+//* VERSION 1.1.0 **//
+//* DESCRIPTION Adds an icon next to usernames to indicate if they follow you **//
+//* DETAILS Does what it says on the tin! Made from fresh, distilled Profiler juice. **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
 XKit.extensions.mutualchecker = new Object({
-	
+
 	running: false,
 	mutuals: {},
-	
+
 	preferences: {
 		"main_blog": {
 			text: "Blog to check for follow-backs on:",
@@ -19,9 +19,10 @@ XKit.extensions.mutualchecker = new Object({
 			type: "blog"
 		},
 		"put_in_front": {
-			text: "Place mutual icon before, not after usernames",
+			text: "Place mutual icon in front",
 			default: false,
-			value: false
+			value: false,
+			type: "checkbox"
 		}
 	},
 
@@ -100,14 +101,12 @@ XKit.extensions.mutualchecker = new Object({
 		}
 	},
 
-	add_label: function($name_div, user) {
-		if ($name_div.hasClass("post_info_submissions")) {
-			$name_div.html('<span class="mutuals' + ( XKit.extensions.mutualchecker.preferences.put_in_front.value ? " mutuals-front" : "") + '">' + user + '</span>' + $name_div.text().trim().substring(user.length));
+	add_label: function(name_div, user) {
+		if ($(name_div).hasClass("post_info_submissions")) {
+			name_div.html('<span class="mutuals' + ( XKit.extensions.mutualchecker.preferences.put_in_front.value ? " mutuals-front" : "") + '">' + user + '</span>' + name_div.text().trim().substring(user.length));
 		} else {
-			$name_div.addClass("mutuals").attr("title", user + " follows you");
-			if (XKit.extensions.mutualchecker.preferences.put_in_front.value) {
-				$name_div.addClass("mutuals-front");
-			}
+			name_div.addClass("mutuals").attr("title", user + " follows you");
+			if (XKit.extensions.mutualchecker.preferences.put_in_front.value) name_div.addClass("mutuals-front");
 		}
 	},
 
