@@ -1,5 +1,5 @@
 //* TITLE Mutual Checker **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Adds an icon next to usernames to indicate if they follow you **//
 //* DETAILS Does what it says on the tin! Made from fresh, distilled Profiler juice. **//
 //* DEVELOPER new-xkit **//
@@ -17,6 +17,11 @@ XKit.extensions.mutualchecker = new Object({
 			default: "",
 			value: "",
 			type: "blog"
+		},
+		"put_in_front": {
+			text: "Place mutual icon before, not after usernames",
+			default: false,
+			value: false
 		}
 	},
 
@@ -95,9 +100,10 @@ XKit.extensions.mutualchecker = new Object({
 
 	add_label: function(name_div, user) {
 		if ($(name_div).hasClass("post_info_submissions")) {
-			name_div.html('<span class="mutuals">' + user + '</span>' + name_div.text().trim().substring(user.length));
+			name_div.html('<span class="mutuals' + ( XKit.extensions.mutualchecker.preferences.put_in_front.value ? " mutuals-front" : "") + '">' + user + '</span>' + name_div.text().trim().substring(user.length));
 		} else {
 			name_div.addClass("mutuals").attr("title", user + " follows you");
+			if (XKit.extensions.mutualchecker.preferences.put_in_front.value) { name_div.addClass("mutuals-front"); }
 		}
 	},
 
@@ -105,7 +111,7 @@ XKit.extensions.mutualchecker = new Object({
 		this.running = false;
 		this.users = {};
 		XKit.post_listener.remove("mutualchecker");
-		$(".mutuals").removeAttr("title").removeClass("mutuals");
+		$(".mutuals").removeAttr("title").removeClass("mutuals").removeClass("mutuals-front");
 		$(".mutualchecker-done").removeClass("mutualchecker-done");
 		XKit.tools.remove_css("mutualchecker");
 	}
