@@ -74,26 +74,26 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 		// Check and deliver initial messages.
-		if (XKit.storage.get("xkit_preferences","initial_mail_sent","0") === "0") {
+		if (XKit.storage.get("xkit_preferences", "initial_mail_sent", "0") === "0") {
 			var initial_mail = {
 				id: "WelcomeMail.virtual",
 				title: "Welcome to XKit!",
-				message: "<h1>Welcome, and thanks for installing XKit 7!</h1> In this panel, you will receive news and updates on XKit 7. "+
-					"These include, but not limited to, new features, bug fixes and things you should do if you experience problems with your XKit."+
-					"<h2>Learn XKit</h2> Clicking on the My XKit tab will give you a list of all the extensions you have installed. "+
-					"You can read their descriptions, and click on <strong>more information</strong> link below their description (if available) "+
-					"to learn even more about them and how to use them."+
-					"<h2>Customize XKit</h2> Nearly all extensions of XKit has settings that you can customize: from appearance to custom tags, "+
-					"you can toggle and change their settings from the My XKit tab."+
-					"<h2>Expand XKit</h2> XKit automatically installs some default extensions, but if you want more, you can check the extension "+
-					"gallery for more. To do that, just click on the <strong>Get Extensions</strong> tab on the bottom of this window."+
-					"<h2>Help XKit</h2> XKit is free of charge, and we're not making any money off it in any way. "+
-					"You can also help by sharing XKit with your followers and friends, and spreading the word. "+
-					"If you know your way around JavaScript and CSS, you can support us developing XKit through <a target='_BLANK' href='https://github.com/new-xkit/XKit'>our GitHub</a> "+
-					"or get in contact with us through <a target='_BLANK' href='https://gitter.im/new-xkit/XKit'>our Gitter Channel</a>."+
-					"<h2>Need help?</h2> The New XKit team always has an open ear if you got problems. You can reach us at <a target='_BLANK' href='http://new-xkit-extension.tumblr.com/'>on our blog</a> "+
-					"or in our <a target='_BLANK' href='http://new-xkit-support.tumblr.com/support'>realtime live support chat</a>!"+
-					"<h2>Thanks for reading!</h2> Again, thanks for installing XKit, and we hope you enjoy using it!<br><br>"+
+				message: "<h1>Welcome, and thanks for installing XKit 7!</h1> In this panel, you will receive news and updates on XKit 7. " +
+					"These include, but not limited to, new features, bug fixes and things you should do if you experience problems with your XKit." +
+					"<h2>Learn XKit</h2> Clicking on the My XKit tab will give you a list of all the extensions you have installed. " +
+					"You can read their descriptions, and click on <strong>more information</strong> link below their description (if available) " +
+					"to learn even more about them and how to use them." +
+					"<h2>Customize XKit</h2> Nearly all extensions of XKit has settings that you can customize: from appearance to custom tags, " +
+					"you can toggle and change their settings from the My XKit tab." +
+					"<h2>Expand XKit</h2> XKit automatically installs some default extensions, but if you want more, you can check the extension " +
+					"gallery for more. To do that, just click on the <strong>Get Extensions</strong> tab on the bottom of this window." +
+					"<h2>Help XKit</h2> XKit is free of charge, and we're not making any money off it in any way. " +
+					"You can also help by sharing XKit with your followers and friends, and spreading the word. " +
+					"If you know your way around JavaScript and CSS, you can support us developing XKit through <a target='_BLANK' href='https://github.com/new-xkit/XKit'>our GitHub</a> " +
+					"or get in contact with us through <a target='_BLANK' href='https://gitter.im/new-xkit/XKit'>our Gitter Channel</a>." +
+					"<h2>Need help?</h2> The New XKit team always has an open ear if you got problems. You can reach us at <a target='_BLANK' href='http://new-xkit-extension.tumblr.com/'>on our blog</a> " +
+					"or in our <a target='_BLANK' href='http://new-xkit-support.tumblr.com/support'>realtime live support chat</a>!" +
+					"<h2>Thanks for reading!</h2> Again, thanks for installing XKit, and we hope you enjoy using it!<br><br>" +
 					"<em>Yours faithfully,<br>The New XKit Team</em>",
 				channels: {
 					type: "welcome_msg"
@@ -101,7 +101,7 @@ XKit.extensions.xkit_preferences = new Object({
 				version: 1
 			};
 			XKit.extensions.xkit_preferences.news.create(initial_mail);
-			XKit.storage.set("xkit_preferences","initial_mail_sent","1");
+			XKit.storage.set("xkit_preferences", "initial_mail_sent", "1");
 		}
 
 		var unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
@@ -270,7 +270,7 @@ XKit.extensions.xkit_preferences = new Object({
 						"error", '<div id="xkit-close-message" class="xkit-button default">OK</div>');
 					return;
 				}
-				for(var news_item in mdata.news) {
+				for (var news_item in mdata.news) {
 					XKit.extensions.xkit_preferences.news.create(mdata.news[news_item]);
 				}
 
@@ -354,7 +354,7 @@ XKit.extensions.xkit_preferences = new Object({
 		},
 
 		unread_count: function() {
-			var prev_objects_str = XKit.storage.get("xkit_preferences","news","");
+			var prev_objects_str = XKit.storage.get("xkit_preferences", "news", "");
 			var prev_objects = [];
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
@@ -364,7 +364,7 @@ XKit.extensions.xkit_preferences = new Object({
 				XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
 				return 0;
 			}
-			return prev_objects.filter(function (item) {
+			return prev_objects.filter(function(item) {
 				return (!item.read && !XKit.extensions.xkit_preferences.news.hide_news_entry(item));
 			}).length;
 		},
@@ -394,7 +394,7 @@ XKit.extensions.xkit_preferences = new Object({
 			for (var i = 0; i < prev_objects.length; i++) {
 
 				if (prev_objects[i].id === id) {
-					if(prev_objects[i].version >= version) {
+					if (prev_objects[i].version >= version) {
 						return 1;
 					} else {
 						return 2;
@@ -437,14 +437,14 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 				if (news_already_existing === 2) {
-					for (i=0;i<prev_objects.length;i++) {
+					for (let i = 0; i < prev_objects.length; i++) {
 						if (prev_objects[i].id === news_object.id) {
 							prev_objects.splice(i, 1);
 							break;
 						}
 					}
 				}
-			} catch(e) {
+			} catch (e) {
 				prev_objects = [];
 			}
 
@@ -475,12 +475,12 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var i = prev_objects.length;
 			var m_return = "";
-			while(i--) {
+			while (i--) {
 				if (XKit.extensions.xkit_preferences.news.hide_news_entry(prev_objects[i])) { continue; }
 				var read_class = "unread";
 				if (prev_objects[i].read) { read_class = "read"; }
 				m_return = m_return + '<div data-news-id="' + prev_objects[i].id +
-					'" class="xkit-news-item xkit-extension ' + read_class + ' text-only">'+
+					'" class="xkit-news-item xkit-extension ' + read_class + ' text-only">' +
 					'<div class="xkit-mail-icon-' + read_class + '">&nbsp;</div>' + prev_objects[i].title + '<div class="delete-news-item">✖</div></div>';
 			}
 
@@ -521,7 +521,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_object;
 
-			for (i=0;i<prev_objects.length;i++) {
+			for (let i = 0; i < prev_objects.length; i++) {
 				if (prev_objects[i].id === id) {
 					m_object = prev_objects[i];
 					prev_objects[i].read = true;
@@ -535,7 +535,7 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 
 			var m_html = '<div class="xkit-message-info"> Received on ' + XKit.extensions.xkit_preferences.convert_time(m_object.date);
-			if (typeof(m_object.author) !== "undefined") { m_html = m_html + "<br>Written by Mod " + m_object.author }
+			if (typeof(m_object.author) !== "undefined") { m_html = m_html + "<br>Written by Mod " + m_object.author; }
 			m_html = m_html + '</div><div class="xkit-message-display">' + m_object.message + "</div>";
 
 			$("#xkit-extensions-panel-right-inner").html(m_html);
@@ -553,24 +553,22 @@ XKit.extensions.xkit_preferences = new Object({
 		},
 
 		delete: function(id) {
-			var prev_objects_str = XKit.storage.get("xkit_preferences","news","");
+			var prev_objects_str = XKit.storage.get("xkit_preferences", "news", "");
 			var prev_objects;
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
-			} catch(e) {
+			} catch (e) {
 				prev_objects = [];
 			}
 
-			var m_object;
-
-			for (i=0;i<prev_objects.length;i++) {
+			for (let i = 0; i < prev_objects.length; i++) {
 				if (prev_objects[i].id === id) {
 					prev_objects[i].deleted = true;
 					break;
 				}
 			}
 
-			XKit.storage.set("xkit_preferences","news",JSON.stringify(prev_objects));
+			XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
 			console.log("Marked all news as read.");
 		},
 
@@ -2045,7 +2043,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_news: function() {
 		function toggle_setting_click_handler(setting) {
-			return function () {
+			return function() {
 				if (XKit.tools.get_setting(setting, "true") === "true") {
 					$(this).removeClass("selected");
 					XKit.tools.set_setting(setting, "false");
@@ -2058,13 +2056,13 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html = '<div class="xkit-others-panel">' +
 				'<div class="title">News Notifications</div>' +
 				'<div class="description">' +
-					'News section keeps you up to date with the latest on "What\'s going on?". '+
-					'We periodically write news items for that section to let you know when there is a new extension, '+
-					'a new feature, or when something goes wrong, such as when Tumblr changes things and breaks XKit.<br><br>'+
-					'News items are divided into two: <b>Feature Updates</b>, which alert you on bug fixes and new features/extensions '+
-					'and <b>Important Updates</b>, sent only when there is something bad going on with XKit, '+
-					'such as a Tumblr change or a bug that might cause annoyance or big problems.<br/><br/>'+
-					'You can turn off Feature Updates if you are not interested in them. You will continue receiving Important Updates '+
+					'News section keeps you up to date with the latest on "What\'s going on?". ' +
+					'We periodically write news items for that section to let you know when there is a new extension, ' +
+					'a new feature, or when something goes wrong, such as when Tumblr changes things and breaks XKit.<br><br>' +
+					'News items are divided into two: <b>Feature Updates</b>, which alert you on bug fixes and new features/extensions ' +
+					'and <b>Important Updates</b>, sent only when there is something bad going on with XKit, ' +
+					'such as a Tumblr change or a bug that might cause annoyance or big problems.<br/><br/>' +
+					'You can turn off Feature Updates if you are not interested in them. You will continue receiving Important Updates ' +
 					'if you do, since they usually have tips on how to make XKit work again if it goes berserk.' +
 				'</div>' +
 				'<div class="bottom-part">' +
@@ -2096,16 +2094,16 @@ XKit.extensions.xkit_preferences = new Object({
 		if (XKit.tools.get_setting("xkit_show_safari_news", XKit.browser().safari.toString()) === "true") {
 			$("#xkit-panel-enable-safari-news").addClass("selected");
 		}
-		if (XKit.tools.get_setting("xkit_show_information","true") === "true") {
+		if (XKit.tools.get_setting("xkit_show_information", "true") === "true") {
 			$("#xkit-panel-enable-information").addClass("selected");
 		}
-		if (XKit.tools.get_setting("xkit_show_extension_updates","true") === "true") {
+		if (XKit.tools.get_setting("xkit_show_extension_updates", "true") === "true") {
 			$("#xkit-panel-enable-extension-updates").addClass("selected");
 		}
-		if (XKit.tools.get_setting("xkit_show_weekly_news","true") === "true") {
+		if (XKit.tools.get_setting("xkit_show_weekly_news", "true") === "true") {
 			$("#xkit-panel-enable-weekly").addClass("selected");
 		}
-		if (XKit.tools.get_setting("xkit_show_developers","false") === "true") {
+		if (XKit.tools.get_setting("xkit_show_developers", "false") === "true") {
 			$("#xkit-panel-enable-developers").addClass("selected");
 		}
 

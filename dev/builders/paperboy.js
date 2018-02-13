@@ -1,4 +1,4 @@
-/* jshint node: true, strict: global */
+/* eslint-env node */
 
 /**
  * Paperboy builder module.
@@ -12,8 +12,7 @@ var gutil = require('gulp-util'),
 	through = require('through2'),
 	yaml_fm = require('yaml-front-matter');
 
-var File = gutil.File,
-	PluginError = gutil.PluginError;
+var PluginError = gutil.PluginError;
 
 var resourceUtil = require('./resource');
 
@@ -26,11 +25,11 @@ var resourceUtil = require('./resource');
 var paperboyBuilder = function() {
 	return through.obj(function(file, enc, cb) {
 		// Ignore empty files
-		if(file.isNull()) {
+		if (file.isNull()) {
 			cb();
 		}
 
-		if(file.isStream()) {
+		if (file.isStream()) {
 			this.emit('error', new PluginError('resource-builder', 'Streaming not supported'));
 			cb();
 		}
@@ -51,7 +50,7 @@ var paperboyBuilder = function() {
 		var yaml_result = yaml_fm.loadFront(file.contents.toString(), "message");
 		var mail = {};
 		mail.id = path.basename(file.path);
-		if(typeof(yaml_result.message) === "undefined" || typeof(yaml_result.title) === "undefined") {
+		if (typeof(yaml_result.message) === "undefined" || typeof(yaml_result.title) === "undefined") {
 			this.emit('error', new PluginError('resource-builder', 'Empty message or title in file ' + mail.id));
 			cb();
 		}
@@ -62,7 +61,7 @@ var paperboyBuilder = function() {
 			"weekly_news",
 			"developers",
 			"important"
-		]
+		];
 
 		mail.message = yaml_result.message.trim();
 		mail.title = yaml_result.title;
@@ -105,7 +104,7 @@ var paperboyBuilder = function() {
  * @returns {Object<stream.Transform>}
  */
 var buildGalleryFile = function(filename) {
-	if(!filename) {
+	if (!filename) {
 		throw new PluginError('resource-builder', 'Missing file option for galleryBuilder');
 	}
 

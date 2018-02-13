@@ -28,7 +28,7 @@ var paths = {
 	},
 	paperboy: [
 		'Paperboy/*',
-        '!Paperboy/Example'
+		'!Paperboy/Example'
 	],
 	vendor: [
 		'vendor/*.js',
