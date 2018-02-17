@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.8 **//
+//* VERSION 6.8.9 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1718,7 +1718,6 @@ XKit.extensions.xkit_patches = new Object({
 							" background-image: url('" + icon + "') !important;" +
 							" background-size: auto auto !important;" +
 							" margin-top: -7px !important; " +
-							" opacity: 1 !important; " +
 							"}", "xkit_interface_icon___" + class_name);
 
 					if (typeof ok_icon !== "undefined") {
