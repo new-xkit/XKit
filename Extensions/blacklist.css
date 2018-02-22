@@ -12,7 +12,7 @@
 	background-size: 24px 24px;
 	background-position: 50% 50%;
 	float: left;
-	margin-right: 6px;
+	margin: -5px 5px 0px 5px;
 	background-repeat: no-repeat;
 }
 
@@ -94,8 +94,8 @@
 }
 
 .xblacklist_excuse {
-	padding: 0; text-align: left; font-size: 12px;
-	color: rgb(130,130,130); height: 40px; line-height: 40px;
+	padding: 0; text-align: left; font-size: 13px;
+	color: rgb(130,130,130); height: 30px; line-height: 40px;
 	position: relative; margin-top: 5px;
 }
 
@@ -103,7 +103,8 @@
 	position: absolute;
 	height: 30px;
 	line-height: 30px;
-	right: 5px;
+	right: 10px;
+	top: -4px;
 }
 
 .xblacklist_open_post:active {

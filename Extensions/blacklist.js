@@ -702,7 +702,7 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		var block_excuse = '<div class="xblacklist_excuse">' +
-					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
+					'Post blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
 					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
