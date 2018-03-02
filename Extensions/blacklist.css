@@ -95,7 +95,7 @@
 
 .xblacklist_excuse {
 	padding: 0; text-align: left; font-size: 13px;
-	color: rgb(130,130,130); height: 30px; line-height: 40px;
+	color: rgb(130,130,130); height: 38px; line-height: 28px;
 	position: relative; margin-top: 5px;
 }
 
@@ -104,7 +104,7 @@
 	height: 30px;
 	line-height: 30px;
 	right: 10px;
-	top: -4px;
+	top: -5px;
 }
 
 .xblacklist_open_post:active {
