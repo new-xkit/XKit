@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.3.0 **//
+//* VERSION 0.4.0 **//
 //* DESCRIPTION Blog stats where they were **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
@@ -10,8 +10,19 @@ XKit.extensions.old_stats = new Object({
 	running: false,
 	done: false,
 
+	preferences: {
+		"iconify": {
+			text: "Put the icons back on posts/followers/etc links",
+			default: true,
+			value: true
+		}
+	},
+
 	run: function() {
 		this.running = true;
+		if (this.preferences.iconify.value) {
+			XKit.tools.init_css("old_stats");
+		}
 		if ($("#dashboard_controls_open_blog").length) {
 			return;
 		}
@@ -31,6 +42,7 @@ XKit.extensions.old_stats = new Object({
 
 	destroy: function() {
 		this.running = false;
+		XKit.tools.remove_css("old_stats");
 		if (this.done) {
 			$("#dashboard_controls_open_blog").remove();
 		}
