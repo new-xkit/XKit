@@ -1,8 +1,8 @@
 //* TITLE Classic Notifications **//
-//* VERSION 0.7.1 **//
+//* VERSION 0.7.2 **//
 //* DESCRIPTION Notifications where they were **//
-//* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/new-xkit-extension), just the way it was before Tumblr's Activity update. **//
+//* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -73,7 +73,7 @@ XKit.extensions.old_notifications = new Object({
 
 		var notification_url = $obj.find(".activity-notification__glass").attr('href');
 
-		var notification_username = $obj.attr('data-tumblelog-name');
+		var notification_username = $obj.attr('data-tumblelog-name') || $obj.find(".activity").find("a").text();
 		var notification_user_url = $obj.find(".activity").find("a").attr('href');
 		var notification_avatar = $obj.find(".ui_avatar_link").attr('data-avatar-url');
 
@@ -131,7 +131,7 @@ XKit.extensions.old_notifications = new Object({
 		}
 
 		var is_friend = $obj.hasClass("is_friend");
-		var is_reblog = $obj.hasClass("is_reblog");
+		var is_reblog = $obj.hasClass("is_reblog") || $obj.hasClass("is_reblog_naked");
 		var is_reply = $obj.hasClass("is_reply");
 		var is_answer = $obj.hasClass("is_answer");
 		var is_like = $obj.hasClass("is_like");
