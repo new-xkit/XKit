@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.9 **//
+//* VERSION 6.8.10 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1788,8 +1788,9 @@ XKit.extensions.xkit_patches = new Object({
 				var posts = [];
 
 				var selector = ".post";
+				var where = XKit.interface.where();
 
-				if (mine && !XKit.interface.where().channel) {
+				if (mine && !where.channel && !where.drafts && !where.queue) {
 					selector = ".post.is_mine";
 				}
 
