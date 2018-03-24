@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension lets you find blogs that haven't been updated in a certain amount of time. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -19,12 +19,12 @@ XKit.extensions.find_inactives = new Object({
 			value: "30",
 			type: "combo",
 			values: [
-				"1 week", "7",
-				"2 weeks", "14",
-				"A month", "30",
-				"Two months", "60",
-				"4 months", "120",
-				"A year", "365"
+				"1 week", "d7",
+				"2 weeks", "d14",
+				"A month", "d30",
+				"Two months", "d60",
+				"4 months", "d120",
+				"A year", "d365"
 			]
 		}
 	},
@@ -138,7 +138,7 @@ XKit.extensions.find_inactives = new Object({
 						}
 
 
-						if (last_updated_days >= parseInt(XKit.extensions.find_inactives.preferences.time.value)) {
+						if (last_updated_days >= parseInt(XKit.extensions.find_inactives.preferences.time.value.replace("d", ""))) {
 							var m_user = {
 								username: username,
 								days: last_updated,
@@ -284,7 +284,7 @@ XKit.extensions.find_inactives = new Object({
 
 		if (XKit.extensions.find_inactives.retired_people_list.length === 0) {
 
-			XKit.window.show("All up to date!", `I couldn't find anyone who has been gone for more than ${XKit.extensions.find_inactives.preferences.time.value} days.`, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">Whee!</div>");
+			XKit.window.show("All up to date!", `I couldn't find anyone who has been gone for more than ${XKit.extensions.find_inactives.preferences.time.value.replace("d", "")} days.`, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">Whee!</div>");
 			return;
 
 		}
