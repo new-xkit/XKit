@@ -81,3 +81,15 @@
 .xkit-interface-control-button.xkit-tagviewer:after {
 	opacity: 1 !important;
 }
+
+#tagviewer-cpanel-notice {
+	padding: 15px;
+	font-size: 14px;
+	color: rgb(80,80,80);
+}
+
+#tagviewer-cpanel-notice a {
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+}

@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.4.3 **//
+//* VERSION 0.4.4 **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -14,6 +14,38 @@ XKit.extensions.tagviewer = new Object({
 	apiKey: "5CIOyjHfcrNFlyEJl2D7vnoDTYqV30lNAUaSd4LJKoBFOZOmxp",
 
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAvBJREFUOBGlVM9L2mEYf96vaVQeWgrTOpUSaxs6yNrBdhiCRJcNL7vIQogxSErZP1CwwW5pmCNvHnbrsEOwg+07iIUjQSg3XIfGiCiTzdpaRvPXPs8XHVKzFXvh8XmfX5/3877P81WEw+ErJycnz4UQViKSIPWrCOO9Vqt9OjY2lqsPNNqLmZmZeQQfNUpgPw77pFar746Pj2fOy+MYM7pVTfKoVKrbKB6siSRJdxBbq1Qq1wqFwtu5uTlDNbehklAsOAr1sVwu38NWhtz3+XyJycnJd2DmgH1h0NNvNgE2WgBMQJTl9Xq/XQb0NOAsmP4E0mwV79KgIhAIrILVAIAG+Zr1QKf3oVBIh7d8A78V+X9tFDMscSESmlmfty5yfQaMMwgaAgIh3XmAHPsXqMRDy/SRa+Xr/C+oMjI8XzxnPG9ms/nz8PBwqqmpaQCHMONdCI/SPA5ehf6z+PBisSijzsKkWlpa+hVAzkgkEjeNRmMcTm06nT7e2toSBwcHzQaDgSwWy6+enp4SimJIfQj9o4YaDAYf47lesA0SFgWQmcGOAWR3cXHRBlt0dXVRR0cH7e3tUSaToba2torL5Sq3t7d/R24/QL9gQh5g/xL5Kuhpv98/pYJhhiHH4/Hs0tKSrbu7m1AoNBqNAtbX10d2u512dnbE8vKyhEM0Op3O63Q6JfiC9WDAIQHHh2QyeYxk29DQENlsNsJVKRqNEmI8TjQ6OkpgRisrK/w05Ha7y3q9XkQiEZHP5xVmDMaLx0a0trbeUKwL/uzv70s4THg8nkN8DNP1ZczwOhxr6+vrKlmWBbpMDoeD8J60ublJJpOJuDGxWIy2t7dpZGSEent7axj8f/kMt5iqOWpNccLxOpvNioWFBcXX2dmpNIUbwoJ55bdVrl4tLkMfQ9wAfFX1kVLMBpjaoeRSqaTe2NgQqVSKcrmcws5qtRI3i9+zuo6geT5d8KVqzjMaoFchKUgBcmZh3g7h/Ap5AlGfAYDjN8f2ldpe2/sVAAAAAElFTkSuQmCC",
+
+	preferences: {
+		"notice": {
+			text: "Notice",
+			type: "separator"
+		}
+	},
+
+	cpanel: function(obj) {
+		if (typeof XKit.extensions.retags == "undefined") {
+			$(obj).append("<div id=\"tagviewer-cpanel-notice\">Hi! This extension has no options, but you may be looking for <a id=\"install-retags-shortcut\">Retags</a>.</div>");
+			$("#install-retags-shortcut").click(function() {
+				function search_for_retags(mutations, observer) {
+					mutations.forEach(function(mutation) {
+						if ($(mutation.addedNodes).find("#xkit-gallery-search").length) {
+							$("#xkit-gallery-search").val("Retags").keyup();
+							observer.disconnect();
+							return false;
+						}
+					});
+				}
+				var gallery_observer = new MutationObserver(search_for_retags);
+				$("#xkit-cp-tab-get-extensions").click();
+				gallery_observer.observe($("#xkit-control-panel")[0], {
+					childList: true,
+					subtree: true
+				});
+			});
+		} else {
+			$(obj).append("<div id=\"tagviewer-cpanel-notice\">You might be interested in the \"Tag Crawler\" from <a href=\"/settings/labs\">Tumblr Labs</a>, which provides the same functionality as this extension.<br><br>We can't show you tags from dash-only blogs, but Tag Crawler seems to have a limit on how far back in time it can look.</div>");
+		}
+	},
 
 	frame_run: function() {
 
