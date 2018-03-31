@@ -1,7 +1,7 @@
 //* TITLE XKit Main **//
-//* VERSION 1.3.4 **//
+//* VERSION 1.3.5 **//
 //* DESCRIPTION Boots XKit up **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER New-XKit **//
 (function() {
 	if (typeof XKit.extensions.xkit_main !== "undefined") { return; }
 	XKit.extensions.xkit_main = new Object({
@@ -175,6 +175,18 @@
 
 			try {
 				eval(xkit_main.script + "\n//# sourceURL=xkit/" + extension_id + ".js");
+				if (document.location.href.indexOf("www.tumblr.com") === -1 && XKit.extensions[extension_id].onblog !== true) {
+					// Doesn't want to be run on blog page, quit.
+					if (XKit.extensions.xkit_main.disabled_extensions === "") {
+						XKit.extensions.xkit_main.disabled_extensions = extension_id + "(on blog)";
+					} else {
+						XKit.extensions.xkit_main.disabled_extensions = XKit.extensions.xkit_main.disabled_extensions + ", " + extension_id + "(on blog)";
+					}
+					if (!dont_run_next) {
+						XKit.extensions.xkit_main.run_next_extension();
+					}
+					return;
+				}
 				if (XKit.installed.enabled(extension_id) === true) {
 					if (XKit.extensions.xkit_main.enabled_extensions === "") {
 						XKit.extensions.xkit_main.enabled_extensions = extension_id;
