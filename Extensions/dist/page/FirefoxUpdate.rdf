@@ -12,7 +12,7 @@
         <!-- Each li is a different version of the same add-on -->
         <RDF:li>
           <RDF:Description>
-            <em:version>7.8.1</em:version> <!-- This is the version number of the add-on -->
+            <em:version>7.8.2</em:version> <!-- This is the version number of the add-on -->
 
             <!-- One targetApplication for each application the add-on is compatible with -->
             <em:targetApplication>
@@ -22,7 +22,7 @@
                 <em:maxVersion>*</em:maxVersion>
 
                 <!-- This is where this version of the add-on will be downloaded from -->
-                <em:updateLink>https://github.com/new-xkit/XKit/releases/download/v7.8.1/new_xkit-7.8.1.xpi</em:updateLink>
+                <em:updateLink>https://github.com/new-xkit/XKit/releases/download/v7.8.2/new_xkit-7.8.2.xpi</em:updateLink>
 
                 <!-- A page describing what is new in this updated version -->
                 <!-- <em:updateInfoURL></em:updateInfoURL> -->
@@ -37,7 +37,7 @@
                 <em:maxVersion>*</em:maxVersion>
 
                 <!-- This is where this version of the add-on will be downloaded from -->
-                <em:updateLink>https://github.com/new-xkit/XKit/releases/download/v7.8.1/new_xkit-7.8.1.xpi</em:updateLink>
+                <em:updateLink>https://github.com/new-xkit/XKit/releases/download/v7.8.2/new_xkit-7.8.2.xpi</em:updateLink>
 
                 <!-- A page describing what is new in this updated version -->
                 <!-- <em:updateInfoURL></em:updateInfoURL> -->

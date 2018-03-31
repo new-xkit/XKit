@@ -3,8 +3,8 @@
     "@new-xkit": {
       "updates": [
         {
-          "version": "7.8.1",
-          "update_link": "https://github.com/new-xkit/XKit/releases/download/v7.8.1/new_xkit-7.8.1.xpi"
+          "version": "7.8.2",
+          "update_link": "https://github.com/new-xkit/XKit/releases/download/v7.8.2/new_xkit-7.8.2.xpi"
         }
       ]
     }
