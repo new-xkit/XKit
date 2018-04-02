@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.5.1 **//
+//* VERSION 2.5.2 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -104,6 +104,7 @@ XKit.extensions.classic_header = new Object({
 	},
 
 	run: function() {
+		this.running = true;
 
 		XKit.tools.init_css("classic_header");
 		$("#xoldeheader").remove();
@@ -131,14 +132,19 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		if (XKit.extensions.classic_header.preferences.fix_logo.value) {
-			XKit.tools.add_css(".logo .logo-anchor .png-logo { " +
-			"background:" +
-				"url('https://static.tumblr.com/u5hbev5/Jp3odtljk/tumblr.png') " +
-				"22px 10px/159px 34px " + 
-				"no-repeat;" +
-			"width: 159px; }",
+			XKit.tools.add_css(`
+				.logo .logo-anchor .png-logo {
+					background:
+						url('https://static.tumblr.com/u5hbev5/Jp3odtljk/tumblr.png')
+						50%/145px
+						no-repeat;
+					width: 145px;
+					opacity: 1 !important;
+				}
+				.logo .logo-anchor .preload-container {
+					opacity: 0 !important;
+				}`,
 			"classic_header_fix_logo");
-			$(".png-logo").css("opacity", "1");
 		}
 
 		if (XKit.extensions.classic_header.preferences.hide_compose.value) {
@@ -274,6 +280,7 @@ XKit.extensions.classic_header = new Object({
 	},
 
 	destroy: function() {
+		this.running = false;
 		XKit.tools.add_function(function() {
 			var Tumblr = window.Tumblr || window.top.Tumblr;
 			Tumblr.KeyCommands.scroll_offset = 69;
