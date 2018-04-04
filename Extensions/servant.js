@@ -1248,13 +1248,10 @@ XKit.extensions.servant = new Object({
 	color_by_number: function() {
 		if ($(".servant-post-colorize").length > 0) {
 			$(".servant-post-colorize").each(function() {
-				console.log("Found a post with colors that we need to handle!");
 				var colorArray = [];
 				var classList = $(this).attr('class').split(/\s+/);
 				$.each(classList, function(index, value) {
-					console.log(value);
 					if (value.search("servant-post-color_") > -1) {
-						console.log("Color value is " + value);
 						$.each(value.match(/_([a-zA-Z0-9]){6}/g), function(iIndex, iValue) {
 							colorArray.push(iValue);
 						});
@@ -1287,7 +1284,6 @@ XKit.extensions.servant = new Object({
 
 		});
 
-		console.log("Attempting to color by number!");
 		XKit.extensions.servant.color_by_number();
 	},
 
