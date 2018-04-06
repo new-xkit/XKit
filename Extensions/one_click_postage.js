@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.10 **//
+//* VERSION 4.3.11 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -23,11 +23,11 @@ XKit.extensions.one_click_postage = new Object({
 			type: "blog",
 		},
 		"sep_0": {
-			text: "Shortcuts",
+			text: "Shortcuts&emsp;<a id=\"xkit-ocp-keyboard-legend\" style=\"cursor: pointer;\">Guide</a>",
 			type: "separator",
 		},
 		"enable_keyboard_shortcuts": {
-			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close, 1-9 to add a Quick Tags bundle)",
+			text: "Use keyboard shortcuts",
 			default: false,
 			value: false
 		},
@@ -43,7 +43,7 @@ XKit.extensions.one_click_postage = new Object({
 			experimental: true
 		},
 		"sep_5": {
-			text: "AlreadyReblogged&emsp;<a id=\"xkit-alreadyreblogged-help\" href=\"#\" onclick=\"return false\">what is this?</a>",
+			text: "AlreadyReblogged&emsp;<a id=\"xkit-alreadyreblogged-help\" style=\"cursor: pointer;\">What is this?</a>",
 			type: "separator",
 		},
 		"enable_alreadyreblogged": {
@@ -492,7 +492,32 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).append("<div id=\"one_click_postage_warning_movage\">Tagging options are moved to a separate extension called \"Auto Tagger.\"</div>");
 
 		$("#xkit-alreadyreblogged-help").click(function() {
-			XKit.window.show("AlreadyReblogged", "AlreadyReblogged keeps the track of the posts you reblog using One-Click Postage.<br/><br/>When you queue, draft or reblog a post using One-Click postage, the next time you refresh your page, the reblog button will turn green automatically.<br/><br/>Please note that this feature is experimental, and for now only keeps the last 3,000 posts.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("AlreadyReblogged", "AlreadyReblogged keeps the track of the posts you reblog using One-Click Postage.<br/><br/>When you queue, draft or reblog a post using One-Click postage, the next time you refresh your page, the reblog button will turn green automatically.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		});
+		$("#xkit-ocp-keyboard-legend").click(function() {
+			XKit.window.show(
+				"Keyboard Shortcuts", `
+				<span>Ｒ</span> Reblog<br>
+				<span>Ｑ</span> Queue<br>
+				<span>Ｄ</span> Draft<br>
+				<br>
+				<span>Ｔ</span> Tag<br>
+				<br>
+				<span>ESC</span> Close popup<br>
+				<br>
+				<span>１</span> - <span>９</span> Use a Quick Tags bundle`,
+				"info",
+				"<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>"
+			);
+			$(".xkit-window-msg span").attr("style", `
+				display: inline-block;
+				border: 1px solid black;
+				border-radius: 3px;
+				line-height: 1em;
+				padding: 5px;
+				text-align: center;
+				background: linear-gradient(#eee, #ddd);`
+			);
 		});
 	},
 
