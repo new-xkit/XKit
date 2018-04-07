@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION Blog stats where they were **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
@@ -36,13 +36,14 @@ XKit.extensions.old_stats = new Object({
 				$(".recommended_tumblelogs").before($("#dashboard_controls_open_blog", response.responseText).css("margin", "0 0 18px"));
 				$("#dashboard_controls_open_blog [data-sparkline]").prepend('<canvas id="old_stats_canvas" width="72" height="30" style="display: inline-block; width: 36px; height: 15px; vertical-align: top;">');
 				var sparkline = JSON.parse($("#dashboard_controls_open_blog [data-sparkline]").attr("data-sparkline"));
-				var sparkpx = (Math.max.apply(Math, sparkline) - Math.min.apply(Math, sparkline)) / 30;
+				var sparkmin = Math.min.apply(Math, sparkline);
+				var sparkpx = (Math.max.apply(Math, sparkline) - sparkmin) / 30;
 				var canvas = document.getElementById("old_stats_canvas").getContext("2d");
 				canvas.strokeStyle = "#FFFFFF";
 				canvas.lineWidth = 3.5;
-				canvas.moveTo(0, 30 - (sparkline[0] / sparkpx));
-				for (var i = 0; i < sparkline.length; i++) {
-					canvas.lineTo((i + 0.5) * (72 / sparkline.length), 30 - (sparkline[i] / sparkpx));
+				canvas.moveTo(0, 30 - ((sparkline[0] - sparkmin) / sparkpx));
+				for (var i = 1; i < sparkline.length; i++) {
+					canvas.lineTo(i * (72 / sparkline.length), 30 - ((sparkline[i] - sparkmin) / sparkpx));
 					canvas.stroke();
 				}
 				XKit.extensions.old_stats.done = true;
