@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.11 **//
+//* VERSION 4.4.0 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -138,6 +138,11 @@ XKit.extensions.one_click_postage = new Object({
 		},
 		"dont_show_notifications": {
 			text: "Turn off the notifications displayed when successfully reblogged/queued/drafted",
+			default: false,
+			value: false
+		},
+		"use_toasts": {
+			text: "Use tumblr-style notifications instead of XKit ones",
 			default: false,
 			value: false
 		},
@@ -1459,7 +1464,11 @@ XKit.extensions.one_click_postage = new Object({
 								}
 							}
 							if (!XKit.extensions.one_click_postage.preferences.dont_show_notifications.value) {
-								XKit.notifications.add(mdata.message, "ok");
+								if (XKit.extensions.one_click_postage.preferences.use_toasts.value) {
+									XKit.toast.add(mdata.created_post, mdata.verbiage, mdata.post_tumblelog.name_or_id, mdata.post.id, mdata.post_context_page);
+								} else {
+									XKit.notifications.add(mdata.message, "ok");
+								}
 							}
 						}
 					} else {

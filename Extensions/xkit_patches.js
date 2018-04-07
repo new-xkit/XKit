@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.11 **//
+//* VERSION 6.9.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2547,4 +2547,58 @@ XKit.installed.when_running = function(extension, onRunning, onFailure) {
 		onRunning(XKit.extensions[extension]);
 	}
 	setTimeout(check, 0);
+};
+
+XKit.toast = {
+	count: 0,
+
+	/**
+	 * Simulates a tumblr notification ("toast")
+	 * @param {Boolean} created - true if post was not queued/drafted
+	 * @param {String} action - post action description (i.e. "Reblogged to ")
+	 * @param {String} url - tumblr blog name (for both notification and API)
+	 * @param {Integer/String} id - created post id for peepr (optional)
+	 * @param {String} crumb - arbitrary class for "crumb" (optional)
+	 */
+	add: function(created, action, url, id, crumb) {
+		var toastno = XKit.toast.count;
+		XKit.toast.count++;
+
+		if (created) {
+			action = "<strong>" + action;
+		} else {
+			action += "<strong>";
+		}
+
+		var endData = "}";
+		if (typeof id !== "undefined") {
+			endData = `,"postId": ${id}}`;
+		}
+		if (typeof crumb === "undefined") {
+			crumb = "";
+		}
+
+		var toast =
+			`<li class="toast blog-sub xtoast-${toastno}" data-subview="toast" data-peepr='{"tumblelog": "${url}"${endData}'>
+				<img class="toaster avatar" src="https://api.tumblr.com/v2/blog/${url}/avatar/128">
+				<div class="crumb ${crumb}"></div>
+				<span class="toast-bread">
+					${action}${url}</strong>
+				</span>
+			</li>`;
+
+		$(".toastr").addClass("show-toast");
+		$(".multi-toasts").append(toast);
+
+		var $toast = $(".xtoast-" + toastno);
+		setTimeout(function() {
+			$toast.addClass("fade-out");
+		}, 4000);
+		setTimeout(function() {
+			$toast.remove();
+			if (!$(".toast").length) {
+				$(".toastr").removeClass("show-toast");
+			}
+		}, 5000);
+	}
 };
