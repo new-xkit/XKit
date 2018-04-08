@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.8 **//
+//* VERSION 7.4.9 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -204,14 +204,16 @@ XKit.extensions.xkit_preferences = new Object({
 
 		if (removed_list.length > 0) {
 
-			XKit.notifications.add("XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
+			XKit.notifications.add("New XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
 				"warning", true, function() {
 					XKit.window.show("Spring Cleaning",
 						"Due to them not working correctly anymore, the following obsolete extensions have been removed to speed up your computer:" +
 						XKit.extensions.xkit_preferences.spring_cleaning_m_list_html +
-						"For more information, including the reason(s) why they were removed, please click the button below.",
+						"For more information, including the reason(s) why they were removed, please send an ask to <b>new-xkit-support</b> or click the below button " +
+						"to join our live support channel.",
 						"warning", '<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-						'<a href="http://www.xkit.info/notes/spring_cleaning.php" target="_BLANK" class="xkit-button">More information</a>');
+						'<a href="https://new-xkit-support.tumblr.com/ask" target="_BLANK" class="xkit-button">Send an ask</a>' +
+						'<a href="https://new-xkit-support.tumblr.com/support" target="_BLANK" class="xkit-button">Join live support</a>');
 				});
 
 		}
