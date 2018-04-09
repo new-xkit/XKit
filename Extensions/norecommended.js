@@ -1,14 +1,15 @@
 //* TITLE No Recommended **//
-//* VERSION 2.2.4 **//
+//* VERSION 2.2.5 **//
 //* DESCRIPTION Removes recommended posts **//
 //* DETAILS This extension removes recommended posts from your dashboard. To remove Recommended Blogs on the sidebar, please use Tweaks extension. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
 
 XKit.extensions.norecommended = new Object({
 
 	running: false,
+	onblog: true,
 
 	run: function() {
 		this.running = true;

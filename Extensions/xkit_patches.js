@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.11 **//
+//* VERSION 6.8.12 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -8,6 +8,7 @@ XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
 XKit.extensions.xkit_patches = new Object({
 
 	running: false,
+	onblog: true,
 
 	preferences: {
 		debug_mode: {
