@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.9.0 **//
+//* VERSION 6.9.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1279,7 +1279,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					} else {
 
-						var m_html = "<div class=\"post_tags\"><div class=\"post_tags_inner\">" +
+						var m_html = "<div class=\"source-clear\"></div><div class=\"post_tags fadeable fadeable-source\"><div class=\"post_tags_inner\">" +
 									m_inner +
 								"</div>";
 						$(post_div).find(".post_footer").before(m_html);
