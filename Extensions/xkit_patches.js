@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.9.1 **//
+//* VERSION 6.10.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2490,6 +2490,10 @@ XKit.extensions.xkit_patches = new Object({
 		delete XKit.download.try_count;
 		delete XKit.download.max_try_count;
 
+		// Expedited fix for #1540, can be removed once the webext is updated
+		if (typeof(content) !== 'undefined' && content.XMLHttpRequest) { // eslint-disable-line
+			XMLHttpRequest = content.XMLHttpRequest; // eslint-disable-line
+		}
 	},
 
 	/**
