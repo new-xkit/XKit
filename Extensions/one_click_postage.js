@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.0 **//
+//* VERSION 4.4.1 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -265,9 +265,9 @@ XKit.extensions.one_click_postage = new Object({
 			post_type: ""
 		};
 
-		GM_xmlhttpRequest({
+		XKit.tools.Nx_XHR({
 			method: "POST",
-			url: "http://www.tumblr.com/svc/post/fetch",
+			url: "https://www.tumblr.com/svc/post/fetch",
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
@@ -292,7 +292,7 @@ XKit.extensions.one_click_postage = new Object({
 			onload: function(response) {
 				// We are done!
 				try {
-					var mdata = jQuery.parseJSON(response.responseText);
+					var mdata = JSON.parse(response.responseText);
 					if (mdata.errors === false) {
 						XKit.extensions.one_click_postage.in_blog_process(mdata, state, obj, m_object, false);
 					} else {
@@ -389,9 +389,9 @@ XKit.extensions.one_click_postage = new Object({
 				return;
 			}
 
-			GM_xmlhttpRequest({
+			XKit.tools.Nx_XHR({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
 				json: true,
 				headers: {
@@ -421,10 +421,8 @@ XKit.extensions.one_click_postage = new Object({
 					}
 				},
 				onload: function(response) {
-					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					try {
-						var mdata = jQuery.parseJSON(response.responseText);
+						var mdata = JSON.parse(response.responseText);
 						if (mdata.errors === false) {
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-done");
@@ -1229,9 +1227,9 @@ XKit.extensions.one_click_postage = new Object({
 			tags = this.add_auto_tagger_state_tags(tags, state);
 		}
 
-		GM_xmlhttpRequest({
+		XKit.tools.Nx_XHR({
 			method: "POST",
-			url: "http://www.tumblr.com/svc/post/fetch",
+			url: "https://www.tumblr.com/svc/post/fetch",
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
@@ -1255,7 +1253,7 @@ XKit.extensions.one_click_postage = new Object({
 			onload: function(response) {
 				// We are done!
 				try {
-					var mdata = jQuery.parseJSON(response.responseText);
+					var mdata = JSON.parse(response.responseText);
 
 					if (mdata.errors === false) {
 						XKit.extensions.one_click_postage.process(mdata, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, false, root_id, quick_queue_mode);
@@ -1408,9 +1406,9 @@ XKit.extensions.one_click_postage = new Object({
 				return;
 			}
 
-			GM_xmlhttpRequest({
+			XKit.tools.Nx_XHR({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
 				json: true,
 				headers: {
@@ -1435,12 +1433,9 @@ XKit.extensions.one_click_postage = new Object({
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 				},
 				onload: function(response) {
-					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
-
 					var mdata;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.one_click_postage.show_error("OCP09-J", state);
 						$(m_button).removeClass("xkit-one-click-reblog-working");

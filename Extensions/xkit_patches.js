@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.10.0 **//
+//* VERSION 6.11.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2489,11 +2489,6 @@ XKit.extensions.xkit_patches = new Object({
 		delete XKit.servers;
 		delete XKit.download.try_count;
 		delete XKit.download.max_try_count;
-
-		// Expedited fix for #1540, can be removed once the webext is updated
-		if (typeof(content) !== 'undefined' && content.XMLHttpRequest) { // eslint-disable-line
-			XMLHttpRequest = content.XMLHttpRequest; // eslint-disable-line
-		}
 	},
 
 	/**
@@ -2605,4 +2600,64 @@ XKit.toast = {
 			}
 		}, 5000);
 	}
+};
+
+// Cheat the headers we send
+XKit.tools.Nx_XHR = function(params) {
+	params.timestamp = new Date().getTime() + Math.random();
+	XKit.tools.add_function(function() {
+		var xhr = new XMLHttpRequest();
+		xhr.open(add_tag.method, add_tag.url, add_tag.async || false);
+
+		if (add_tag.json === true) {
+			xhr.setRequestHeader("Content-type", "application/json");
+		}
+		for (var x in add_tag.headers) {
+			xhr.setRequestHeader(x, add_tag.headers[x]);
+		}
+
+		function callback(result) {
+			window.postMessage({
+				response: {
+					status: xhr.status,
+					responseText: xhr.response
+				},
+				headers: xhr.getAllResponseHeaders().split("\r\n"),
+				timestamp: "xkit_" + add_tag.timestamp,
+				success: result
+			}, window.location.protocol + "//" + window.location.host);
+		}
+
+		xhr.onerror = function() { callback(false); };
+		xhr.onload = function() { callback(true); };
+
+		if (typeof add_tag.data !== "undefined") {
+			xhr.send(add_tag.data);
+		} else {
+			xhr.send();
+		}
+	}, true, params);
+	function handler(e) {
+		if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + params.timestamp) {
+			window.removeEventListener("message", handler);
+
+			var cur_headers = {}, splitter;
+			for (var x in e.data.headers) {
+				splitter = e.data.headers[x].indexOf(":");
+				if (splitter === -1) { continue; }
+				cur_headers[e.data.headers[x].substring(0, splitter).trim()] = e.data.headers[x].substring(splitter + 1).trim();
+			}
+
+			if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
+				XKit.interface.kitty.set(cur_headers["x-tumblr-kittens"]);
+			}
+
+			if (e.data.success) {
+				params.onload(e.data.response);
+			} else {
+				params.onerror(e.data.response);
+			}
+		}
+	}
+	window.addEventListener("message", handler);
 };
