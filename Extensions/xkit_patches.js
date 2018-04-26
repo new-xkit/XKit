@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.11.0 **//
+//* VERSION 6.11.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2645,7 +2645,7 @@ XKit.tools.Nx_XHR = function(params) {
 			for (var x in e.data.headers) {
 				splitter = e.data.headers[x].indexOf(":");
 				if (splitter === -1) { continue; }
-				cur_headers[e.data.headers[x].substring(0, splitter).trim()] = e.data.headers[x].substring(splitter + 1).trim();
+				cur_headers[e.data.headers[x].substring(0, splitter).trim().toLowerCase()] = e.data.headers[x].substring(splitter + 1).trim();
 			}
 
 			if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
