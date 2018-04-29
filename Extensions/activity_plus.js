@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.4.0 **//
+//* VERSION 0.4.1 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -27,7 +27,8 @@ XKit.extensions.activity_plus = new Object({
 		unfold_rollups: {
 			text: "Expand Tumblr-condensed reblog notes",
 			default: true,
-			value: true
+			value: true,
+			experimental: true
 		},
 		notes_filter: {
 			text: "Enable Filter Notes By Type",
