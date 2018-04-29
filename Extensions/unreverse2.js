@@ -1,5 +1,5 @@
 //* TITLE Unreverse **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0.3 **//
 //* DESCRIPTION Places the post buttons on top **//
 //* DETAILS This extension places the reblog/like/reply/etc buttons on the top of the post. It is unsupported, and might cause problems with your dashboard. Please use with caution. **//
 //* DEVELOPER STUDIOXENIX **//
