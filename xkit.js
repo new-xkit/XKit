@@ -9,46 +9,23 @@ var xkit_global_start = Date.now();  // log start timestamp
 		version: framework_version,
 		api_key: "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D",
 		page: {
-			standard: false,
-			ask_frame: false,
-			blog_frame: false,
-			peepr: false,
-			xkit: false
+			standard:
+				window.window === window.top &&
+				document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1,
+			ask_frame:
+				document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1,
+			blog_frame:
+				document.location.href.indexOf("://www.tumblr.com/send") !== -1 ||
+				document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1 ||
+				document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1,
+			xkit:
+				document.location.href.indexOf('://www.tumblr.com/xkit_') !== -1
 		},
 		init: function() {
-
-			// Check page then return control to init_extension.
-			if (document.location.href.indexOf('://www.tumblr.com/xkit_reset') !== -1 ||
-			document.location.href.indexOf('://www.tumblr.com/xkit_log') !== -1 ||
-			document.location.href.indexOf('://www.tumblr.com/xkit_editor') !== -1 ||
-			document.location.href.indexOf('://www.tumblr.com/xkit_update=') !== -1) {
-				XKit.page.xkit = true;
-				XKit.init_extension();
-				return;
+			if (!XKit.page.xkit) {
+				XKit.init_flags();
 			}
-
-			XKit.init_flags();
-			// If not in an iframe
-			if ((window.window === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
-				XKit.page.standard = true;
-				XKit.init_extension();
-			} else {
-				if (document.location.href.indexOf("://www.tumblr.com/send") !== -1) {
-					XKit.console.add("In Fan Mail page.");
-					XKit.page.blog_frame = true;
-				}
-				if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1 ||
-					document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
-					XKit.page.blog_frame = true;
-				}
-				if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {
-					XKit.page.peepr = true;
-				}
-				if (document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1) {
-					XKit.page.ask_frame = true;
-				}
-				XKit.init_extension();
-			}
+			$(document).ready(XKit.init_extension);
 		},
 		init_extension: function() {
 			XKit.console.add("init_extension: " + JSON.stringify(XKit.page));

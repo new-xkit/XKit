@@ -1,7 +1,7 @@
 {
   "content_scripts": [ {
     "all_frames": true,
-    "run_at": "document_end",
+    "run_at": "document_start",
     "css": [ "xkit.css" ],
     "exclude_matches": [
       "*://*.tumblr.com/*/audio_player_iframe/*",

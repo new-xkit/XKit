@@ -27,12 +27,6 @@
 	<dict>
 		<key>Scripts</key>
 		<dict>
-			<key>End</key>
-			<array>
-				<string>bridge.js</string>
-				<string>xkit.js</string>
-				<string>editor.js</string>
-			</array>
 			<key>Start</key>
 			<array>
 				<string>jquery.js</string>
@@ -40,6 +34,9 @@
 				<string>tiptip.js</string>
 				<string>nano.js</string>
 				<string>lodash.min.js</string>
+				<string>bridge.js</string>
+				<string>xkit.js</string>
+				<string>editor.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
