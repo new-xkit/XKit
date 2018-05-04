@@ -33,7 +33,7 @@ XKit.extensions.outbox = new Object({
 
 	frame_run: function() {
 
-		XKit.console.add("Outbox working on Frame mode...");
+		console.log("Outbox working on Frame mode...");
 		if (document.location.href.indexOf('/ask_form') !== -1) {
 			this.run_ask_frame();
 		}
@@ -139,7 +139,7 @@ XKit.extensions.outbox = new Object({
 		XKit.extensions.outbox.check_indash_asks();
 
 		if (XKit.interface.where().inbox !== true) {
-			XKit.console.add("Outbox -> Quitting, not in inbox");
+			console.log("Outbox -> Quitting, not in inbox");
 			return;
 		}
 

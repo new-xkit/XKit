@@ -589,7 +589,7 @@ XKit.extensions.blacklist = new Object({
 
 			} catch (e) {
 
-				// XKit.console.add("Can't parse post: " + e.message);
+				// console.error("Can't parse post: " + e.message);
 				// $(this).css("background","red");
 
 			}

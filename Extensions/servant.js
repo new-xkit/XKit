@@ -737,7 +737,7 @@ XKit.extensions.servant = new Object({
 					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 				} catch (e) {
 					m_return = false;
-					console.log("Unable to run Servant! ---> " + e.message);
+					console.error("Unable to run Servant! ---> " + e.message);
 				}
 
 				m_object.run = m_return;
@@ -1054,7 +1054,7 @@ XKit.extensions.servant = new Object({
 									XKit.installed.enable(parameter);
 									XKit.notifications.add("Enabled '" + parameter + "'", "ok");
 								} catch (e) {
-									XKit.console.add("Can not run " + parameter + ": " + e.message);
+									console.error("Can not run " + parameter + ": " + e.message);
 								}
 
 							}
@@ -1063,7 +1063,7 @@ XKit.extensions.servant = new Object({
 
 					} catch (e) {
 
-						console.log("Can't disable " + parameter + ", " + e.message);
+						console.error("Can't disable " + parameter + ", " + e.message);
 
 					}
 
@@ -1097,7 +1097,7 @@ XKit.extensions.servant = new Object({
 
 					} catch (e) {
 
-						console.log("Can't disable " + parameter + ", " + e.message);
+						console.error("Can't disable " + parameter + ", " + e.message);
 
 					}
 

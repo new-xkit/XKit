@@ -360,7 +360,7 @@ XKit.extensions.show_more = new Object({
 						json_obj.following = false;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));
 					} catch (e) {
-						// console.log("Unable to set popover obj data");
+						// console.error("Unable to set popover obj data");
 					}
 				}
 			}
@@ -455,7 +455,7 @@ XKit.extensions.show_more = new Object({
 			} catch (err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
-				XKit.console.add("show_more: Can't parse popup_data:" + e.message);
+				console.error("show_more: Can't parse popup_data:" + e.message);
 			}
 
 		} else {
@@ -472,19 +472,19 @@ XKit.extensions.show_more = new Object({
 					"X-tumblr-form-key": XKit.interface.form_key(),
 				},
 				onerror: function(response) {
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { XKit.console.add("show_more: Could not fetch data, also ID mismatch."); return; }
-					XKit.console.add("show_more: Could not fetch data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.error("show_more: Could not fetch data, also ID mismatch."); return; }
+					console.error("show_more: Could not fetch data.");
 					XKit.extensions.show_more.popup_data = {};
 					XKit.extensions.show_more.popup_data.error = true;
 				},
 				onload: function(response) {
 
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { XKit.console.add("show_more: Fetched data but ID mismatch."); return; }
-					XKit.console.add("show_more: Successfully fetched popup_data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Fetched data but ID mismatch."); return; }
+					console.log("show_more: Successfully fetched popup_data.");
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
 					} catch (err) {
-						XKit.console.add("show_more: Could not store popup_data.");
+						console.log("show_more: Could not store popup_data.");
 						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
@@ -509,7 +509,7 @@ XKit.extensions.show_more = new Object({
 		try {
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
 		} catch (err) {
-			XKit.console.add("show_more -> Can't parse popup_data");
+			console.log("show_more -> Can't parse popup_data");
 			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
 		}

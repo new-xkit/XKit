@@ -493,7 +493,7 @@ XKit.extensions.xinbox = new Object({
 		try {
 			$(".fan_mail_read_more").trigger('click');
 		} catch (e) {
-			XKit.console.add("auto_expand_fan_mail: " + e.message);
+			console.error("auto_expand_fan_mail: " + e.message);
 		}
 
 	},
@@ -754,48 +754,6 @@ XKit.extensions.xinbox = new Object({
 						asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 					}
 				}
-
-
-				/*
-
-				OBSOLETE -- Tumblr changes.
-
-				*/
-
-				/*var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
-				var respondant = $(m_parent).attr('data-tumblelog-name');
-
-				if (respondant !== "" && typeof respondant !== "undefined" && !m_parent.hasClass("post_tumblelog_")) {
-					asker = respondant;
-				} else {
-					if (typeof asker === "undefined") {
-						asker = "";
-					}
-				}*/
-
-				/* var asker = "";
-
-				if ($(m_parent).find(".post_avatar_link").length > 0) {
-
-					var avatar_json_data = $(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover');
-					if (avatar_json_data !== "" && typeof avatar_json_data !== "undefined") {
-						try {
-							var avatar_json = JSON.parse(avatar_json_data);
-							if (avatar_json.name !== "" && typeof avatar_json.name !== "undefined") {
-								asker = avatar_json.name;
-							}
-						}catch(e) {
-							XKit.console.add("Can't tag ask ---->" + e.message);
-						}
-					} else {
-						XKit.console.add("xinbox tagger -> data-tumblelog-popover data missing");
-					}
-
-				} else {
-					XKit.console.add("xinbox tagger -> post_avatar_link missing");
-				}*/
-
-				// return alert("asker = " + asker);
 
 				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
 				var private_button = $(m_parent).find('[id^="private_answer_button_"]');

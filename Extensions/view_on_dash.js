@@ -809,7 +809,7 @@ XKit.extensions.view_on_dash = new Object({
 		try {
 			XKit.extensions.show_more.remove_custom_menu("view_on_dash");
 		} catch (e) {
-			XKit.console.add("Can't remove custom menu, " + e.message);
+			console.error("Can't remove custom menu, " + e.message);
 		}
 	}
 

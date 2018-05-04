@@ -512,7 +512,7 @@ XKit.extensions.profiler = new Object({
 		try {
 			XKit.extensions.show_more.remove_custom_menu("profiler");
 		} catch (e) {
-			XKit.console.add("Can't remove custom menu, " + e.message);
+			console.error("Can't remove custom menu, " + e.message);
 		}
 	}
 

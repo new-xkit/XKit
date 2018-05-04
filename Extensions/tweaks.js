@@ -855,9 +855,9 @@ XKit.extensions.tweaks = new Object({
 
 		if (document.location.href.indexOf('/new/photo') !== -1) {
 
-			XKit.console.add("Tweaks, upload_photos: user in photo page.");
+			console.log("Tweaks, upload_photos: user in photo page.");
 			if ($("#post_content").length === 0) {
-				XKit.console.add("Tweaks, upload_photos: waiting for panel.");
+				console.log("Tweaks, upload_photos: waiting for panel.");
 				setTimeout(function() {
 					XKit.extensions.tweaks.upload_photos();
 				}, 1);
@@ -872,7 +872,7 @@ XKit.extensions.tweaks = new Object({
 			$("#post_two_image_upload").attr('id', 'post_two_image_upload');
 			$("#post_two_image_voice").attr('id', 'post_two_image_upload_voice');
 
-			XKit.console.add("Tweaks, upload_photos: done.");
+			console.log("Tweaks, upload_photos: done.");
 
 			XKit.tools.add_function(function() {
 				/* globals tinyMCE */

@@ -658,7 +658,7 @@ XKit.extensions.xcloud = new Object({
 
 			var extension_name = mext.extension;
 
-			XKit.console.add("Restoring settings of " + extension_name);
+			console.log("Restoring settings of " + extension_name);
 
 			var extension_settings = {};
 			try {
@@ -680,11 +680,11 @@ XKit.extensions.xcloud = new Object({
 			}
 
 			if (install_this) {
-				XKit.console.add(" |-- Need to install " + extension_name);
+				console.log(" |-- Need to install " + extension_name);
 				XKit.extensions.xcloud.extensions_to_download.push(extension_name);
 				XKit.extensions.xcloud.extensions_to_download_enabled.push(extension_enabled);
 			} else {
-				XKit.console.add(" |-- Skipping " + extension_name + ", already installed.");
+				console.log(" |-- Skipping " + extension_name + ", already installed.");
 			}
 
 			full_list.push(extension_name);
@@ -703,7 +703,7 @@ XKit.extensions.xcloud = new Object({
 
 				XKit.installed.remove(m_installed[i]);
 				XKit.storage.clear(m_installed[i]);
-				XKit.console.add("Removed " + m_installed[i]);
+				console.log("Removed " + m_installed[i]);
 
 			}
 
@@ -752,7 +752,7 @@ XKit.extensions.xcloud = new Object({
 		XKit.progress.value("xcloud-restore-process", perc);
 
 		if ($.inArray(m_name, XKit.extensions.xcloud.gallery_available) >= 0) {
-			XKit.console.add("XCloud restore -> " + m_name);
+			console.log("XCloud restore -> " + m_name);
 			XKit.install(m_name, function(mdata) {
 				if (mdata.server_down || mdata.errors) {
 					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + m_name);
@@ -764,7 +764,7 @@ XKit.extensions.xcloud = new Object({
 				XKit.extensions.xcloud.process_download_extension_next();
 			});
 		} else {
-			XKit.console.add("XCloud skip -> " + m_name);
+			console.log("XCloud skip -> " + m_name);
 			XKit.extensions.xcloud.extensions_upgraded = true;
 			XKit.extensions.xcloud.extensions_to_download_count++;
 			XKit.extensions.xcloud.process_download_extension_next();

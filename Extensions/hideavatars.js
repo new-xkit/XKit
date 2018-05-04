@@ -77,7 +77,7 @@ XKit.extensions.hideavatars = new Object({
 				XKit.extensions.hideavatars.blognames = JSON.parse(m_storage);
 			} catch (e) {
 				XKit.extensions.hideavatars.blognames = [];
-				XKit.console.add("Failed to parse m_storage in XKit.extensions.hideavatars.load_blogs");
+				console.error("Failed to parse m_storage in XKit.extensions.hideavatars.load_blogs");
 			}
 		} else {
 			XKit.extensions.hideavatars.blognames = [];
