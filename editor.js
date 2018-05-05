@@ -189,7 +189,7 @@ function extension_editor_finish_run() {
 
 			var default_script = "//* TITLE " + new_filename + " **//\n" +
 								 "//* VERSION 1.0.0 **//\n" +
-								 "//* DESCRIPTION	**//\n" +
+								 "//* DESCRIPTION **//\n" +
 								 "//* DEVELOPER New-XKit **//\n" +
 								 "//* FRAME false **//\n" +
 								 "//* BETA false **//\n" +
