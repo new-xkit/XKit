@@ -1295,9 +1295,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 */
 			Nx_XHR: function(details) {
 				details.timestamp = new Date().getTime() + Math.random();
+
 				XKit.tools.add_function(function() {
 					var xhr = new XMLHttpRequest();
-					xhr.open(add_tag.method, add_tag.url, add_tag.async || false);
+					xhr.open(add_tag.method, add_tag.url, add_tag.async || true);
 
 					if (add_tag.json === true) {
 						xhr.setRequestHeader("Content-type", "application/json");
@@ -1327,6 +1328,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						xhr.send();
 					}
 				}, true, details);
+
 				function handler(e) {
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
 						window.removeEventListener("message", handler);
@@ -1341,6 +1343,15 @@ var xkit_global_start = Date.now();  // log start timestamp
 						if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
 							XKit.interface.kitty.set(cur_headers["x-tumblr-kittens"]);
 						}
+
+						e.data.response.headers = cur_headers;
+						e.data.response.getResponseHeader = function(header) {
+							try {
+								return this.headers[header.toLowerCase()];
+							} catch (err) {
+								console.error(err);
+							}
+						};
 
 						if (e.data.success) {
 							details.onload(e.data.response);

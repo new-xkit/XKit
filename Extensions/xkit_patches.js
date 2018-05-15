@@ -2526,36 +2526,36 @@ XKit.extensions.xkit_patches = new Object({
 				params.timestamp = new Date().getTime() + Math.random();
 
 				XKit.tools.add_function(function() {
-				  var xhr = new XMLHttpRequest();
-				  xhr.open(add_tag.method, add_tag.url, add_tag.async || false);
+					var xhr = new XMLHttpRequest();
+					xhr.open(add_tag.method, add_tag.url, add_tag.async || true);
 
-				  if (add_tag.json === true) {
-					xhr.setRequestHeader("Content-type", "application/json");
-				  }
-				  for (var x in add_tag.headers) {
-					xhr.setRequestHeader(x, add_tag.headers[x]);
-				  }
+					if (add_tag.json === true) {
+						xhr.setRequestHeader("Content-type", "application/json");
+					}
+					for (var x in add_tag.headers) {
+						xhr.setRequestHeader(x, add_tag.headers[x]);
+					}
 
-				  function callback(result) {
-					window.postMessage({
-					  response: {
-						status: xhr.status,
-						responseText: xhr.response
-					  },
-					  headers: xhr.getAllResponseHeaders().split("\r\n"),
-					  timestamp: "xkit_" + add_tag.timestamp,
-					  success: result
-					}, window.location.protocol + "//" + window.location.host);
-				  }
+					function callback(result) {
+						window.postMessage({
+							response: {
+								status: xhr.status,
+								responseText: xhr.response
+							},
+							headers: xhr.getAllResponseHeaders().split("\r\n"),
+							timestamp: "xkit_" + add_tag.timestamp,
+							success: result
+						}, window.location.protocol + "//" + window.location.host);
+					}
 
-				  xhr.onerror = function() { callback(false); };
-				  xhr.onload = function() { callback(true); };
+					xhr.onerror = function() { callback(false); };
+					xhr.onload = function() { callback(true); };
 
-				  if (typeof add_tag.data !== "undefined") {
-					xhr.send(add_tag.data);
-				  } else {
-					xhr.send();
-				  }
+					if (typeof add_tag.data !== "undefined") {
+						xhr.send(add_tag.data);
+					} else {
+						xhr.send();
+					}
 				}, true, params);
 
 				function handler(e) {
@@ -2572,6 +2572,15 @@ XKit.extensions.xkit_patches = new Object({
 					if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
 					  XKit.interface.kitty.set(cur_headers["x-tumblr-kittens"]);
 					}
+
+					e.data.response.headers = cur_headers;
+					e.data.response.getResponseHeader = function(header) {
+						try {
+							return this.headers[header.toLowerCase()];
+						} catch (err) {
+							console.error(err);
+						}
+					};
 
 					if (e.data.success) {
 					  params.onload(e.data.response);
