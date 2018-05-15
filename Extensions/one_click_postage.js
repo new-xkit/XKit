@@ -817,7 +817,7 @@ XKit.extensions.one_click_postage = new Object({
 				XKit.extensions.one_click_postage.already_reblogged = [];
 			}
 
-			XKit.post_listener.add("already_reblogged", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
+			XKit.post_listener.add("one_click_postage", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
 			XKit.extensions.one_click_postage.check_if_alreadyreblogged();
 		}
 
@@ -826,7 +826,7 @@ XKit.extensions.one_click_postage = new Object({
 			if ($("body").hasClass("is_private_channel")) {return; }
 
 			XKit.interface.create_control_button("xkit-one-click-postage-quickqueue", this.qq_icon, "QuickQueue", "", this.qq_ok_icon);
-			XKit.post_listener.add("quick_queue_do_posts", XKit.extensions.one_click_postage.quick_queue_do_posts);
+			XKit.post_listener.add("one_click_postage", XKit.extensions.one_click_postage.quick_queue_do_posts);
 			XKit.extensions.one_click_postage.quick_queue_do_posts();
 
 			$(document).on('click', '.xkit-one-click-postage-quickqueue', XKit.extensions.one_click_postage.quick_queue_button_clicked);
@@ -890,7 +890,7 @@ XKit.extensions.one_click_postage = new Object({
 			.off('keydown', XKit.extensions.one_click_postage.process_keydown);
 		window.removeEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands);
 		XKit.tools.remove_css("one_click_postage");
-		XKit.post_listener.remove("already_reblogged");
+		XKit.post_listener.remove("one_click_postage");
 		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
 		XKit.tools.remove_css("one_click_postage_slim");

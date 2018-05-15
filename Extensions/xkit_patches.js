@@ -82,10 +82,6 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.storage.max_area_size = 153600;
 		}
 
-		if ($(".search_control.post_layout").length > 0) {
-			setTimeout(function() { XKit.post_listener.check(true); }, 400);
-		}
-
 		window.addEventListener("message", XKit.tools.blog_list_message_listener);
 
 		XKit.tools.add_function(function() {
@@ -2321,55 +2317,53 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			});
 
-			/**
-			 * Check for the existence of new posts on the page, running callbacks
-			 * if there are new posts
-			 * @param {boolean?} no_timeout - If true, do not schedule the check for
-			 *                                running in the future
-			 */
-			XKit.post_listener.check = function(no_timeout) {
-				var post_count = -1;
-				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
-					post_count = $(".post").length;
-				} else {
-					if ($(".posts").length > 0) {
-						post_count = $(".posts .post").length;
-					} else if ($("#posts").length > 0) {
-						post_count = $("#posts .post").length;
-					} else {
-						post_count = 0;
-					}
-				}
-				if (no_timeout === true) { post_count = -1; }
-				if (XKit.post_listener.count === 0) {
-					XKit.post_listener.count = post_count;
-					if (XKit.post_listener.count > 0) {
-						XKit.post_listener.run_callbacks();
-					}
-				} else {
-					if (post_count != XKit.post_listener.count) {
-						XKit.post_listener.count = post_count;
-						XKit.post_listener.run_callbacks();
-					}
-				}
-				if (no_timeout !== true) {
-					setTimeout(XKit.post_listener.check, 1000);
-				}
-			};
-
-			/**
-			 * Run all callbacks registered to run when new posts appear
-			 */
-			XKit.post_listener.run_callbacks = function() {
-				if (XKit.post_listener.callbacks.length === 0) {
-					return;
-				}
-				for (var i = 0; i < XKit.post_listener.callbacks.length; i++) {
+			XKit.post_listener = {
+				callbacks: {},
+				add: function(id, func) {
 					try {
-						XKit.post_listener.callbacks[i]();
+						if (typeof XKit.post_listener.callbacks[id] === "undefined") {
+							XKit.post_listener.callbacks[id] = new Array(func);
+						} else {
+							XKit.post_listener.callbacks[id].push(func);
+						}
 					} catch (e) {
-						console.error("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
+						console.error("Could not add function to " + id + "'s post listener callbacks: " + e.message);
 					}
+				},
+				remove: function(id, func) {
+					if (typeof func === "undefined") {
+						delete XKit.post_listener.callbacks[id];
+					} else {
+						var index = XKit.post_listener.callbacks[id].indexOf(func);
+						if (index !== -1) {
+							XKit.post_listener.callbacks[id].splice(index);
+						} else {
+							console.warn("Could not remove function from " + id + "'s post listener callbacks: not found.");
+						}
+					}
+				},
+				observer: new MutationObserver(function(mutations) {
+					for (var mutation in mutations) {
+						var $target = $(mutations[mutation].target);
+						if ($target.hasClass("posts") || $target.parent().hasClass("posts") || $(mutations[mutation].addedNodes).find(".post").length) {
+							for (var x in XKit.post_listener.callbacks) {
+								for (var i in XKit.post_listener.callbacks[x]) {
+									try {
+										XKit.post_listener.callbacks[x][i]();
+									} catch (e) {
+										console.error("Could not run callback for " + x + ": " + e.message);
+									}
+								}
+							}
+							break;
+						}
+					}
+				}),
+				check: function() {
+					XKit.post_listener.observer.observe($("body")[0], {
+						childList: true,
+						subtree: true
+					});
 				}
 			};
 

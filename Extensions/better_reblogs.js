@@ -290,7 +290,7 @@ XKit.extensions.better_reblogs = new Object({
 		}
 
 		if ($("#posts").length > 0) {
-			XKit.post_listener.add("br-colorquotes", this.do_cq);
+			XKit.post_listener.add("better_reblogs", this.do_cq);
 			this.do_cq();
 		}
 	},
@@ -423,7 +423,7 @@ XKit.extensions.better_reblogs = new Object({
 	},
 
 	destroy_cq: function() {
-		XKit.post_listener.remove("br-colorquotes");
+		XKit.post_listener.remove("better_reblogs", this.do_cq);
 		$(".xkit-color-quoted").removeClass("xkit-color-quoted");
 		XKit.tools.remove_css("colorquotes_padding");
 		$(".xkit-colorquotes-border-item").css("background", "").css("border-left-color", "");

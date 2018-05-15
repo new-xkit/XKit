@@ -2932,60 +2932,52 @@ var xkit_global_start = Date.now();  // log start timestamp
 			}
 		},
 		post_listener: {
-			callbacks: [],
-			callback_ids: [],
-			count: 0,
+			callbacks: {},
 			add: function(id, func) {
-				XKit.post_listener.callbacks.push(func);
-				XKit.post_listener.callback_ids.push(id);
-			},
-			remove: function(id) {
-				var m_id = XKit.post_listener.callback_ids.indexOf(id);
-				if (m_id !== -1) {
-					XKit.post_listener.callback_ids.splice(m_id, 1);
-					XKit.post_listener.callbacks.splice(m_id, 1);
-				}
-			},
-			check: function(no_timeout) {
-				var post_count = -1;
-				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
-					post_count = $(".post").length;
-				} else {
-					if ($(".posts").length > 0) {
-						post_count = $(".posts .post").length;
-					} else if ($("#posts").length > 0) {
-						post_count = $("#posts .post").length;
+				try {
+					if (typeof XKit.post_listener.callbacks[id] === "undefined") {
+						XKit.post_listener.callbacks[id] = [func];
 					} else {
-						post_count = 0;
+						XKit.post_listener.callbacks[id].push(func);
 					}
-				}
-				if (no_timeout === true) { post_count = -1; }
-				if (XKit.post_listener.count === 0) {
-					XKit.post_listener.count = post_count;
-					if (XKit.post_listener.count > 0) {
-						XKit.post_listener.run_callbacks();
-					}
-				} else {
-					if (post_count != XKit.post_listener.count) {
-						XKit.post_listener.count = post_count;
-						XKit.post_listener.run_callbacks();
-					}
-				}
-				if (no_timeout !== true) {
-					setTimeout(XKit.post_listener.check, 1000);
+				} catch (e) {
+					console.error("Could not add function to " + id + "'s post listener callbacks: " + e.message);
 				}
 			},
-			run_callbacks: function() {
-				if (XKit.post_listener.callbacks.length === 0) {
-					return;
-				}
-				for (var i = 0; i < XKit.post_listener.callbacks.length; i++) {
-					try {
-						XKit.post_listener.callbacks[i]();
-					} catch (e) {
-						console.error("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
+			remove: function(id, func) {
+				if (typeof func === "undefined") {
+					delete XKit.post_listener.callbacks[id];
+				} else {
+					var index = XKit.post_listener.callbacks[id].indexOf(func);
+					if (index !== -1) {
+						XKit.post_listener.callbacks[id].splice(index);
+					} else {
+						console.warn("Could not remove function from " + id + "'s post listener callbacks: not found.");
 					}
 				}
+			},
+			observer: new MutationObserver(function(mutations) {
+				for (var mutation in mutations) {
+					var $target = $(mutations[mutation].target);
+					if ($target.hasClass("posts") || $target.parent().hasClass("posts") || $(mutations[mutation].addedNodes).find(".post").length) {
+						for (var x in XKit.post_listener.callbacks) {
+							for (var i in XKit.post_listener.callbacks[x]) {
+								try {
+									XKit.post_listener.callbacks[x][i]();
+								} catch (e) {
+									console.error("Could not run callback for " + x + ": " + e.message);
+								}
+							}
+						}
+						break;
+					}
+				}
+			}),
+			check: function() {
+				XKit.post_listener.observer.observe($("body")[0], {
+					childList: true,
+					subtree: true
+				});
 			}
 		},
 		special: {

@@ -191,12 +191,12 @@ XKit.extensions.xinbox = new Object({
 			$(document).on('click', '.xkit-xinbox-pa-reply', XKit.extensions.xinbox.on_click_to_pa_reply);
 			XKit.interface.create_control_button("xkit-xinbox-pa-reply", "", "Reply to Answer", "");
 			XKit.tools.add_css(".xkit-xinbox-pa-reply::before { content: \"\\EA96\"; font-family: \"tumblr-icons\", Blank; font-weight: normal; }", "xinbox_private_reply_button");
-			XKit.post_listener.add("xinbox_show_reply_buttons", XKit.extensions.xinbox.show_reply_button);
+			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.show_reply_button);
 			XKit.extensions.xinbox.show_reply_button();
 		}
 
 		if (XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
-			XKit.post_listener.add("xinbox_init_tags", XKit.extensions.xinbox.init_tags);
+			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.init_tags);
 			XKit.extensions.xinbox.init_tags();
 		}
 
@@ -442,7 +442,7 @@ XKit.extensions.xinbox = new Object({
 
 			$(".post").parent().addClass("xkit-inbox-found");
 			XKit.tools.add_css(".post_container { display: none; } .post_container.xkit-inbox-found { display: block; } ", "xkit-inbox-search");
-			XKit.post_listener.add("xinbox_search", XKit.extensions.xinbox.search_do_posts);
+			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.search_do_posts);
 
 			$("#xinbox_sidebar").addClass("xkit_others_hidden");
 			right_column_children.slideUp('slow', function() {
@@ -470,7 +470,7 @@ XKit.extensions.xinbox = new Object({
 
 		$(".post").parent().removeClass("xkit-inbox-found");
 		XKit.tools.remove_css("xkit-inbox-search");
-		XKit.post_listener.remove("xinbox_search");
+		XKit.post_listener.remove("xinbox", XKit.extensions.xinbox.search_do_posts);
 
 		if ($("#xinbox-search-bar").length > 0) {
 			$("#xinbox-search-bar").slideUp('slow', function() { $(this).remove(); });
@@ -1032,9 +1032,7 @@ XKit.extensions.xinbox = new Object({
 	destroy: function() {
 		$("#inbox_button > a").attr("href", "https://www.tumblr.com/inbox");
 		$("#xinbox_sidebar").remove();
-		XKit.post_listener.remove("xinbox_auto_expand_fan_mail");
-		XKit.post_listener.remove("xinbox_search");
-		XKit.post_listener.remove("xinbox_show_reply_buttons");
+		XKit.post_listener.remove("xinbox");
 		$(document).off("click", "[id^='ask_answer_link_']");
 		clearInterval(XKit.extensions.xinbox.notification_check_interval);
 		XKit.tools.remove_css("xkit_inbox_slim_fan_mail");

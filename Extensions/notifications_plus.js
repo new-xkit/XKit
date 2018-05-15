@@ -73,7 +73,7 @@ XKit.extensions.notifications_plus = new Object({
 		if (XKit.interface.where().dashboard === true || XKit.interface.where().channel === true) {
 
 			if (XKit.extensions.notifications_plus.preferences.follow_glow.value === true) {
-				XKit.post_listener.add("notifications_plus_followglow", XKit.extensions.notifications_plus.follow_glow);
+				XKit.post_listener.add("notifications_plus", XKit.extensions.notifications_plus.follow_glow);
 				XKit.extensions.notifications_plus.follow_glow();
 			}
 
@@ -282,7 +282,6 @@ XKit.extensions.notifications_plus = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.post_listener.remove("notifications_plus");
-		XKit.post_listener.remove("notifications_plus_followglow");
 		XKit.tools.remove_css("notifications_plus_only_replies");
 	}
 

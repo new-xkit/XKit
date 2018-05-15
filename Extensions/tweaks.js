@@ -367,7 +367,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.old_photo_margins.value) {
-			XKit.post_listener.add("tweaks_old_photo_margins", XKit.extensions.tweaks.old_photo_margins);
+			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.old_photo_margins);
 		}
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
@@ -453,7 +453,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
 			XKit.tools.add_css(".post_controls .post_control.queue::after { background: none !important; }", "tweaks_split_gear");
-			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
+			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
 		}
 
@@ -612,7 +612,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value) {
 			XKit.extensions.tweaks.add_css("#posts .post.is_liked { display: none !important; }", "xkit_tweaks_dont_show_liked");
-			XKit.post_listener.add("tweaks_dont_show_liked", XKit.extensions.tweaks.check_for_liked_posts);
+			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.check_for_liked_posts);
 			XKit.extensions.tweaks.check_for_liked_posts();
 		}
 
@@ -928,9 +928,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_wide_sources");
 
-		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
-		XKit.post_listener.remove("tweaks_dont_show_liked");
-		XKit.post_listener.remove("tweaks_split_gear");
+		XKit.post_listener.remove("tweaks");
 
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
