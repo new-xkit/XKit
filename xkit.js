@@ -3302,7 +3302,7 @@ function install_extension(mdata, callback) {
 
 function xkit_install() {
 
-	XKit.window.show("Welcome to XKit " + framework_version + "!", "<b>Please wait while I initialize the setup. This might take a while.<br/>Please do not navigate away from this page.</b>", "info");
+	XKit.window.show("Welcome to New XKit " + framework_version + "!", "<b>Please wait while I initialize the setup. This might take a while.<br/>Please do not navigate away from this page.</b>", "info");
 	console.log("Trying to retrieve XKit Installer.");
 
 	XKit.install("xkit_installer", function(mdata) {
@@ -3311,7 +3311,7 @@ function xkit_install() {
 				show_error_installation("[Code: 401] Storage error:" + mdata.error);
 			} else {
 				if (mdata.server_down === true) {
-					show_error_installation("[Code: 101] Can't reach XKit servers");
+					show_error_installation("[Code: 101] Can't reach New XKit servers");
 				} else {
 					show_error_installation("[Code: 100] Server returned error/empty script");
 				}
@@ -3333,7 +3333,88 @@ function xkit_install() {
 
 function show_error_installation(message) {
 	// Shortcut to call when there is an installation error.
-	XKit.window.show("Can not install XKit", "<b>Generated Error message:</b><br/><p>" + message + "</p>Write down the error message above and click on the Troubleshooting Help button to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+	XKit.window.show("Can not install New XKit",
+
+		"<b>Generated Error message:</b><br/>" +
+		"<p>" + message + "</p>" +
+		"Click on the Troubleshooting button below for help resolving this issue.",
+
+		"error",
+
+		'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
+		'<div id="xkit-install-troubleshooting" class="xkit-button">Troubleshooting</div>'
+	);
+
+	$("#xkit-install-troubleshooting").click(function() {
+
+		XKit.window.show("Troubleshooting",
+
+			"<b>Part 1: The Exact Problem</b>" +
+			"<br/><br/>" +
+			"If you're reading this, New XKit failed to reach our GitHub Pages site at" +
+			"<p>https://new-xkit.github.io/XKit/</p>" +
+			"and could not install. However, we can't figure out what's gone wrong " +
+			"without your help, since a few things can cause it." +
+			"<br/><br/>" +
+			"The first thing to check is if GitHub is down. If GitHub Status reports " +
+			"100%, press continue. If not, sit tight - this outage will be temporary, " +
+			"and you can try installing again later.",
+
+			"question",
+
+			'<a class="xkit-button default" href="https://status.github.com" target="_blank">GitHub Status</a>' +
+			'<div class="xkit-button" id="xkit-install-troubleshooting-2">Continue &rarr;</div>' +
+			'<div class="xkit-button" id="xkit-close-message">Close</div>'
+		);
+
+		$("#xkit-install-troubleshooting-2").click(function() {
+
+			XKit.window.show("Troubleshooting",
+
+				"<b>Part 2: Other Browser Add-ons</b>" +
+				"<br/><br/>" +
+				"The most common source of problems is other browser extensions, " +
+				"such as ad- or script-blockers. Adblockers causing interference " +
+				"is almost always temporary, so if you have one, try updating its " +
+				"lists (through its own settings)." +
+				"<br/><br/>" +
+				"If you use a script blocker, be sure to add" +
+				"<p style='display: inline-block; margin: 0 0.5em'>new-xkit.github.io</p>" +
+				"to its whitelist." +
+				"<br/><br/>" +
+				"<b>If you've tried installing New XKit with no other add-ons enabled</b>, or would like to " +
+				"read on regardless, press continue.",
+
+				"question",
+
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+				'<div class="xkit-button" id="xkit-install-troubleshooting-3">Continue &rarr;</div>',
+
+				true
+			);
+
+			$("#xkit-install-troubleshooting-3").click(function() {
+
+				XKit.window.show("Troubleshooting",
+
+					"<b>Part 3: Security Settings and Network Problems</b>" +
+					"<br/><br/>" +
+					"Try visiting our GitHub Pages site using the link below. " +
+					"If your browser fails to display it, the error it gives you there " +
+					"is what you need to tackle." +
+					"<br/><br/>" +
+					"If that page displays normally, or if you would like help anyway, " +
+					"please get in touch with us at New XKit Support.",
+
+					"question",
+
+					'<a class="xkit-button default" href="https://new-xkit.github.io/XKit/" target="_blank">New XKit on GitHub Pages</a>' +
+					'<a class="xkit-button" href="https://new-xkit-support.tumblr.com">New XKit Support</a>' +
+					'<a class="xkit-button" id="xkit-close-message">OK</a>'
+				);
+			});
+		});
+	});
 }
 
 function show_error_script(message) {
