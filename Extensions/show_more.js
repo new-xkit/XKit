@@ -256,7 +256,7 @@ XKit.extensions.show_more = new Object({
 					setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 					$(".popover").hide();
 				} catch (err) {
-					alert(err.message);
+					console.error(err.message);
 				}
 			});
 
@@ -314,9 +314,14 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error " +
-					  response.status + ": " + response.responseText +
-					  "\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+				XKit.window.show("User Menus+ Error " + response.status,
+					"Unable to follow user:" +
+					"<p>" + response.responseText + "</p>" +
+					"Please try again later or file a bug report.",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+					'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+				);
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " followed.");
@@ -347,9 +352,14 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error " +
-					  response.status + ": \"" + response.responseText +
-					  "\"\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+				XKit.window.show("User Menus+ Error " + response.status,
+					"Unable to unfollow user:" +
+					"<p>" + response.responseText + "</p>" +
+					"Please try again later or file a bug report.",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+					'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+				);
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " unfollowed.");

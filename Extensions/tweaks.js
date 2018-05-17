@@ -850,41 +850,6 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
-	upload_photos: function() {
-
-
-		if (document.location.href.indexOf('/new/photo') !== -1) {
-
-			console.log("Tweaks, upload_photos: user in photo page.");
-			if ($("#post_content").length === 0) {
-				console.log("Tweaks, upload_photos: waiting for panel.");
-				setTimeout(function() {
-					XKit.extensions.tweaks.upload_photos();
-				}, 1);
-				return;
-			}
-
-			$("#post_two_image").css("background", "red");
-			$("#post_two_image").removeClass("mce_image");
-			$("#post_two_image").addClass("mce_image_upload");
-			$("#post_two_image").find(".mceIcon").addClass("mce_image_upload");
-			$("#post_two_image").find(".mceIcon").removeClass("mce_image");
-			$("#post_two_image_upload").attr('id', 'post_two_image_upload');
-			$("#post_two_image_voice").attr('id', 'post_two_image_upload_voice');
-
-			console.log("Tweaks, upload_photos: done.");
-
-			XKit.tools.add_function(function() {
-				/* globals tinyMCE */
-				Tumblr.Events.trigger("posts:load");
-				tinyMCE.execCommand("mceRepaint");
-				alert(JSON.stringify(tinyMCE.activeEditor.settings));
-			}, true, "");
-
-		}
-
-	},
-
 	full_width_gifs_do_first: function() {
 		$(document.body).on("click", ".post-settings", function() {
 			if (!$("#xkit-full-width-gifs").length) {

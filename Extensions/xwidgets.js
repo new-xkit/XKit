@@ -289,7 +289,6 @@ XKit.extensions.xwidgets = new Object({
 				}
 
 				data.interval = setInterval(function() { XKit.extensions.xwidgets.widgets.world_clock.tick(obj, m_storage, is_dst, data); }, 1000);
-				//alert(data.interval);
 				XKit.extensions.xwidgets.widgets.world_clock.tick(obj, m_storage, is_dst);
 
 			},
@@ -335,7 +334,6 @@ XKit.extensions.xwidgets = new Object({
 			},
 
 			destroy: function(obj, data) {
-				//alert(data.interval);
 				clearInterval(data.interval);
 			}
 

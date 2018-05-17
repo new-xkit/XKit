@@ -108,7 +108,12 @@ XKit.extensions.one_click_reply = new Object({
 			$(document).on("mouseenter", ".activity-notification", XKit.extensions.one_click_reply.enter_pn);
 			$(document).on("mouseenter", ".notification", XKit.extensions.one_click_reply.enter);
 		} catch (e) {
-			alert("Error:\n" + e.message);
+			XKit.window.show("Error",
+				"Something went wrong." +
+				"<p>" + e.message + "</p>",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 		}
 	},
 	quick_reply_error: function(error_code) {
@@ -510,7 +515,14 @@ XKit.extensions.one_click_reply = new Object({
 			XKit.interface.post_window_listener.remove("one_click_reply_fill_post");
 			XKit.tools.set_setting("xkit_one_click_reply_data", "{}");
 		} catch (e) {
-			alert("OCR: Error \"" + e.message + "\", data = " + raw_data);
+			XKit.window.show("One-Click Reply Error",
+				"Something went wrong." +
+				"<p>" + e.message + "</p>" +
+				"Data:" +
+				"<p>" + raw_data + "<p>",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 		}
 	},
 
@@ -630,7 +642,11 @@ XKit.extensions.one_click_reply = new Object({
 			return XKit.extensions.one_click_reply.make_post_dash(obj, pn_mode, event, silent_mode);
 
 		} catch (e) {
-			alert("On 102: " + e.message);
+			XKit.window.show("Error",
+				"On 102: <p>" + e.message + "</p>",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 		}
 	},
 

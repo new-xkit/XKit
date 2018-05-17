@@ -66,7 +66,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 		if (m_url === "#") { return; }
 		if (typeof $(m_box).attr('onclick') !== "undefined" || typeof $(m_box).parent().attr('onclick') !== "undefined") { return; }
 		if (typeof m_url === "undefined") { return; }
-		if ($(m_box).hasClass("photoset_photo") === true) { alert("no3"); return; }
+		if ($(m_box).hasClass("photoset_photo") === true) { return; }
 
 		try {
 			var open_new_tab = false;
@@ -97,7 +97,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 
 		} catch (err) {
 
-			//alert(e.message);
+			console.error(err.message);
 
 		}
 

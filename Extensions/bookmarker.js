@@ -329,7 +329,6 @@ XKit.extensions.bookmarker = new Object({
 		var m_index = -1;
 
 		for (var i = 0; i < XKit.extensions.bookmarker.bookmarks.length; i++) {
-			//alert(i + "\ncurrently: " + XKit.extensions.bookmarker.bookmarks[i].id + "\nwanted: " + post_id);
 			if (XKit.extensions.bookmarker.bookmarks[i].id == post_id) {
 				m_index = i;
 				break;
@@ -338,7 +337,6 @@ XKit.extensions.bookmarker = new Object({
 
 		if (m_index === -1) {
 			// Not found, don't bother trying to remove it.
-			//alert("NOT FOUND");
 			return;
 		}
 

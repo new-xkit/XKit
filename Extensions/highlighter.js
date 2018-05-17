@@ -375,35 +375,48 @@ XKit.extensions.highlighter = new Object({
 
 			$("#xkit-highlighter-add-word").click(function() {
 
-				var m_to_add = $("#xkit-highlighter-word").val();
+				var $m_to_add = $("#xkit-highlighter-word");
+				var m_to_add = $m_to_add.val();
+				function complain(problem) {
+					$m_to_add
+						.css("border-color", "red")
+						.attr("placeholder", problem)
+						.val("")
+						.click(function() {
+							$m_to_add
+								.removeAttr("style")
+								.attr("placeholder", "Enter a word here.")
+								.off("click");
+						});
+				}
 
 				if (m_to_add === "" || $.trim(m_to_add) === "") {
-					XKit.window.close();
+					complain("If you don't wanna add anything, the cancel button's right there.");
 					return;
 				}
 
 				if (m_to_add.indexOf(",") !== -1) {
-					alert("The word(s) you enter can not have commas in it.");
+					complain("The word you enter cannot have commas in it.");
 					return;
 				}
 
 				if (m_to_add.indexOf("\\") !== -1) {
-					alert("The word(s) you enter can not have backslashes in it.");
+					complain("The word you enter cannot have backslashes in it.");
 					return;
 				}
 
 				if (m_to_add.length <= 1) {
-					alert("Words must be at least two characters.");
+					complain("Words must be at least two characters.");
 					return;
 				}
 
 				if (m_to_add.substring(0, 1) === "#") {
-					alert("Please do not add hashtags to words.");
+					complain("Please do not add hashtags to words.");
 					return;
 				}
 
 				if (XKit.extensions.highlighter.check_if_exists(m_to_add) === true) {
-					alert("This word is already in the highlight list.");
+					complain(m_to_add + " is already in the highlight list.");
 					return;
 				}
 

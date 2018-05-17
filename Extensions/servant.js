@@ -1358,8 +1358,6 @@ XKit.extensions.servant = new Object({
 			// push a post object to a function that doesn't take post objects.
 			compatibility.push(XKit.extensions.servant.causes[cause.id].compatibility);
 
-			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
-
 			if (m_result.run === false || do_run === 0) {
 				do_run = 0;
 			} else {
@@ -1440,6 +1438,10 @@ XKit.extensions.servant = new Object({
 				.find(".xkit-servant-add-more")
 				.before(XKit.extensions.servant.add_field_action());
 
+			if ($(".xkit-servant-option-line-action").length === 5) {
+				$(".xkit-servant-add-more-actions").css("display", "none");
+			}
+
 			centerIt($("#xkit-window"));
 
 			XKit.extensions.servant.readjust_lines($(".xkit-servant-option-action-line-0"));
@@ -1454,12 +1456,18 @@ XKit.extensions.servant = new Object({
 			$(".xkit-servant-when")
 				.find(".xkit-servant-add-more")
 				.before(XKit.extensions.servant.add_field_cause());
+
+			if ($(".xkit-servant-option-line-cause").length === 3) {
+				$(".xkit-servant-add-more-causes").css("display", "none");
+			}
+
 			centerIt($("#xkit-window"));
 
 			XKit.extensions.servant.readjust_lines($(".xkit-servant-option-cause-line-0"));
 
 			XKit.extensions.servant.bind_actions_on_add_window();
 			XKit.extensions.servant.react_to_selection_change();
+
 
 		});
 
@@ -1477,18 +1485,44 @@ XKit.extensions.servant = new Object({
 
 		$(".xkit-servant-option-textbox").each(function() {
 
-			if ($.trim($(this).val()) === "") {
+			var $this = $(this);
+			if ($.trim($this.val()) === "") {
 				found = true;
-				return false;
+				if ($this.attr("data-old-placeholder")) { return; }
+				$this
+					.css("border-color", "red")
+					.attr("data-old-placeholder", $this.attr("placeholder"))
+					.attr("placeholder", "You can't leave this empty!")
+					.val("")
+					.click(function() {
+						$this
+							.removeAttr("style")
+							.attr("placeholder", $this.attr("data-old-placeholder"))
+							.removeAttr("data-old-placeholder")
+							.off("click");
+					});
 			}
 
 		});
 
 		$(".xkit-servant-option-listbox").each(function() {
 
-			if ($.trim($(this).val()) === "") {
+			var $this = $(this);
+			if ($.trim($this.val()) === "") {
 				found = true;
-				return false;
+				if ($this.attr("data-old-placeholder")) { return; }
+				$this
+					.css("border-color", "red")
+					.attr("data-old-placeholder", $this.attr("placeholder"))
+					.attr("placeholder", "You can't leave this empty!")
+					.val("")
+					.click(function() {
+						$this
+							.removeAttr("style")
+							.attr("placeholder", $this.attr("data-old-placeholder"))
+							.removeAttr("data-old-placeholder")
+							.off("click");
+					});
 			}
 
 		});
@@ -1532,12 +1566,7 @@ XKit.extensions.servant = new Object({
 		var when = [];
 		var action = [];
 
-		if (XKit.extensions.servant.check_if_empty_value() === true) {
-
-			alert("Please fill all the values.");
-			return;
-
-		}
+		if (XKit.extensions.servant.check_if_empty_value()) { return; }
 
 		$(".xkit-servant-option-line-cause").each(function() {
 
@@ -1906,7 +1935,18 @@ XKit.extensions.servant = new Object({
 
 			if (id === "0") { return; }
 
-			$(this).parent().fadeOut('fast', function() { var m_obj = this; $(this).remove(); XKit.extensions.servant.readjust_lines($(m_obj)); centerIt($("#xkit-window")); XKit.extensions.servant.react_to_selection_change(); });
+			$(this).parent().fadeOut('fast', function() {
+				var $obj = $(this);
+				$obj.remove();
+				if ($obj.hasClass("xkit-servant-option-line-cause")) {
+					$(".xkit-servant-add-more-causes").removeAttr("style");
+				} else {
+					$(".xkit-servant-add-more-actions").removeAttr("style");
+				}
+				XKit.extensions.servant.readjust_lines($obj);
+				centerIt($("#xkit-window"));
+				XKit.extensions.servant.react_to_selection_change();
+			});
 
 		});
 
@@ -1977,8 +2017,6 @@ XKit.extensions.servant = new Object({
 
 		var causes_html = "";
 
-		if ($(".xkit-servant-option-line-cause").length >= 3) { alert("You can only add up to 3 causes."); return ""; }
-
 		for (var obj in XKit.extensions.servant.causes) {
 
 			var dis_class = "";
@@ -2010,8 +2048,6 @@ XKit.extensions.servant = new Object({
 		var causes_html = "";
 
 		m_html = m_html + "<div data-section=\"action\" data-id=\"" + XKit.extensions.servant.add_action_count + "\" class=\"xkit-servant-help-for-line\">&nbsp;</div>";
-
-		if ($(".xkit-servant-option-line-action").length >= 5) { alert("You can only add up to 5 actions."); return ""; }
 
 		for (var obj in XKit.extensions.servant.actions) {
 

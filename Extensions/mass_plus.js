@@ -160,7 +160,11 @@ XKit.extensions.mass_plus = new Object({
 		var last_brick_classes = $(last_brick).attr('class');
 		var last_ts_start = last_brick_classes.indexOf('timestamp_');
 		if (last_ts_start === -1) {
-			alert("Error fetching tags: 100");
+			XKit.window.show("Could not fetch tags",
+				"Error: 100 - timestamp not found.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 			return;
 		}
 		var last_timestamp = last_brick_classes.substring(last_ts_start + 10);

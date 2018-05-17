@@ -49,35 +49,62 @@ XKit.extensions.tag_replacer = new Object({
 		$("#xkit-tag-replacer-append").click(function() { $(this).toggleClass("selected"); });
 
 		$("#xkit-tag-replacer-ok").click(function() {
+			var quit = false;
 
+			var $t_replace = $("#xkit-tag-replacer-replace");
 			var t_replace = "";
 
 			if (XKit.extensions.tag_replacer.case_sensitive) {
-				t_replace = $.trim($("#xkit-tag-replacer-replace").val());
+				t_replace = $.trim($t_replace.val());
 			} else {
-				t_replace = $.trim($("#xkit-tag-replacer-replace").val().toLowerCase());
+				t_replace = $.trim($t_replace.val().toLowerCase());
 			}
 
-			var t_with = $.trim($("#xkit-tag-replacer-with").val());
-
-			if (t_replace === "" && t_with === "") { XKit.window.close(); }
+			var $t_with = $("#xkit-tag-replacer-with");
+			var t_with = $.trim($t_with.val());
 
 			if (t_replace.indexOf(",") !== -1) {
-				alert("Tag to search for can not contain commas.");
-				return;
-			}
-
-			if (t_replace === "") {
-				alert("Enter the tag you want replaced.");
-				return;
+				$t_replace
+					.css("border-color", "red")
+					.attr("placeholder", "Tag to search for can not contain commas.")
+					.val("")
+					.click(function() {
+						$t_replace
+							.removeAttr("style")
+							.attr("placeholder", "Enter a tag (example: 'I like pandas')")
+							.off("click");
+					});
+				quit = true;
+			} else if (t_replace === "") {
+				$t_replace
+					.css("border-color", "red")
+					.attr("placeholder", "Enter the tag you want replaced.")
+					.click(function() {
+						$t_replace
+							.removeAttr("style")
+							.attr("placeholder", "Enter a tag (example: 'I like pandas')")
+							.off("click");
+					});
+				quit = true;
 			}
 
 			if (t_with === "" && $("#xkit-tag-replacer-append").hasClass("selected")) {
-				alert("Enter the tag you want to append.");
-				return;
+				$t_with
+					.css("border-color", "red")
+					.attr("placeholder", "Enter the tag you want to append.")
+					.val("")
+					.click(function() {
+						$t_with
+							.removeAttr("style")
+							.attr("placeholder", "Enter a tag (example: 'I still like pandas')")
+							.off("click");
+					});
+				quit = true;
 			}
 
-			XKit.extensions.tag_replacer.start(url, encodeURIComponent(t_replace), t_with, $("#xkit-tag-replacer-append").hasClass("selected"));
+			if (!quit) {
+				XKit.extensions.tag_replacer.start(url, encodeURIComponent(t_replace), t_with, $("#xkit-tag-replacer-append").hasClass("selected"));
+			}
 
 		});
 

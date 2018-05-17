@@ -233,7 +233,11 @@ XKit.extensions.one_click_postage = new Object({
 		var blog_id = "";
 
 		if (!m_blogs) {
-			alert("Unable to QuickReblog/Queue:\nCan't get list of current blogs, please visit dashboard first.");
+			XKit.window.show("Error",
+				"Can't get list of current blogs - please visit dashboard first.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 			return;
 		} else {
 			for (var i = 0; i < m_blogs.length; i++) {
@@ -272,15 +276,15 @@ XKit.extensions.one_click_postage = new Object({
 			json: true,
 			onerror: function(response) {
 				if (response.status === 401) {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP01");
+					XKit.extensions.one_click_postage.show_error("OCP01-B", state);
 				} else {
 					if (response.status === 404) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP04 [Not Found]");
+						XKit.extensions.one_click_postage.show_error("OCP02-B [Post Not Found]", state);
 					} else {
 						if (retry_mode !== true) {
 							setTimeout(function() { XKit.extensions.one_click_postage.in_blog_post(obj, state, true); }, 500);
 						} else {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP03 [Not allowed]");
+							XKit.extensions.one_click_postage.show_error("OCP03-" + response.status + "-B", state);
 						}
 					}
 				}
@@ -296,12 +300,12 @@ XKit.extensions.one_click_postage = new Object({
 					if (mdata.errors === false) {
 						XKit.extensions.one_click_postage.in_blog_process(mdata, state, obj, m_object, false);
 					} else {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP31");
+						XKit.extensions.one_click_postage.show_error("OCP05-B", state);
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					}
 				} catch (e) {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP11");
+					XKit.extensions.one_click_postage.show_error("OCP04-B", state);
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
 					return;
@@ -382,7 +386,7 @@ XKit.extensions.one_click_postage = new Object({
 				if (retry_mode !== true) {
 					XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
 				} else {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-SFORMKEYFAIL");
+					XKit.extensions.one_click_postage.show_error("INOCP109-SFORMKEYFAIL", state);
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
 				}
@@ -401,19 +405,19 @@ XKit.extensions.one_click_postage = new Object({
 				onerror: function(response) {
 					XKit.interface.kitty.set("");
 					if (response.status === 401) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP101");
+						XKit.extensions.one_click_postage.show_error("INOCP101");
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					} else {
 						if (response.status === 404) {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP104 Not Found");
+							XKit.extensions.one_click_postage.show_error("INOCP104 Not Found", state);
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-error");
 						} else {
 							if (retry_mode !== true) {
 								XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
 							} else {
-								alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-" + response.status);
+								XKit.extensions.one_click_postage.show_error("INOCP109-" + response.status, state);
 								$(obj).removeClass("xkit-button-working");
 								$(obj).addClass("xkit-button-error");
 							}
@@ -427,12 +431,12 @@ XKit.extensions.one_click_postage = new Object({
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-done");
 						} else {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP901");
+							XKit.extensions.one_click_postage.show_error("INOCP901", state);
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-error");
 						}
 					} catch (e) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP181");
+						XKit.extensions.one_click_postage.show_error("INOCP181", state);
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					}
@@ -1498,7 +1502,7 @@ XKit.extensions.one_click_postage = new Object({
 		try {
 			limit = parseInt(limit_count.substring(1));
 		} catch (e) {
-			//alert("NO");
+
 		}
 
 		if (XKit.extensions.one_click_postage.already_reblogged.length >= limit) {

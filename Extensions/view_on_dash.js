@@ -99,15 +99,26 @@ XKit.extensions.view_on_dash = new Object({
 
 		$("#xkit-view-on-dash-ok").click(function() {
 
-			var to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
+			var $to_add = $("#xkit-view-on-dash-input-url");
+			var to_add = $to_add.val().toLowerCase();
 
 			if ($.trim(to_add) === "") {
+				$to_add.attr("placeholder", "Okay, see ya.");
 				XKit.window.close();
 				return;
 			}
 
 			if (/^[a-zA-Z0-9\-]+$/.test(to_add) === false) {
-				alert("Invalid username");
+				$to_add
+					.css("border-color", "red")
+					.attr("placeholder", "Invalid username.")
+					.val("")
+					.click(function() {
+						$to_add
+							.removeAttr("style")
+							.attr("placeholder", "Enter a URL (example: new-xkit-extension)")
+							.off("click");
+					});
 				return;
 			}
 
@@ -442,7 +453,6 @@ XKit.extensions.view_on_dash = new Object({
 					"</div>" +
 					"<a class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post\"></a>";
 
-		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
 		m_html = m_html + "</div>";
 		m_html = m_html + "</li>";
 
@@ -540,7 +550,12 @@ XKit.extensions.view_on_dash = new Object({
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
 						onerror: function(_response) {
-							alert("Can't process like/unlike, please try again later or file for a bug report at http://new-xkit-extension.tumblr.com/ask.");
+							XKit.window.show("Can't process like/unlike",
+								"Please try again later or file a bug report.",
+								"error",
+								'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+								'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+							);
 							// Revert changes.
 							$(m_icon_obj).toggleClass("liked");
 						},

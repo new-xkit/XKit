@@ -386,7 +386,12 @@ XKit.extensions.xkit_patches = new Object({
 					}
 					document.body.appendChild(script);
 				} catch (e) {
-					alert(e.message);
+					XKit.window.show("Error",
+						"XKit failed to inject a script. Details:" +
+						"<p>" + e.message + "</p>",
+						"error",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
 				}
 			};
 

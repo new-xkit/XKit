@@ -573,18 +573,39 @@ XKit.extensions.quick_tags = new Object({
 
 			$("#xkit-quick-tags-create-bundle").click(function() {
 
-				var title = $("#xkit-quick-tags-add-title").val();
-				var tags = $("#xkit-quick-tags-add-tags").val();
+				var $title = $("#xkit-quick-tags-add-title");
+				var title = $title.val();
+				var $tags = $("#xkit-quick-tags-add-tags");
+				var tags = $tags.val();
+				var quit = false;
 
 				if ($.trim(title) === "") {
-					alert("Please enter a title for your bundle.");
-					return;
+					$title
+						.css("border-color", "red")
+						.attr("placeholder", "Please enter a name for your bundle.")
+						.click(function() {
+							$title
+								.removeAttr("style")
+								.attr("placeholder", "eg: Doctor Who")
+								.off("click");
+						});
+					quit = true;
 				}
 
 				if ($.trim(tags) === "") {
-					alert("Please enter the tags for your bundle.");
-					return;
+					$tags
+						.css("border-color", "red")
+						.attr("placeholder", "Please enter the tags for your bundle.")
+						.click(function() {
+							$tags
+								.removeAttr("style")
+								.attr("placeholder", "eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor")
+								.off("click");
+						});
+					quit = true;
 				}
+
+				if (quit) { return; }
 
 				XKit.extensions.quick_tags.tag_array[m_id].title = title;
 				XKit.extensions.quick_tags.tag_array[m_id].tags = tags;
@@ -639,18 +660,39 @@ XKit.extensions.quick_tags = new Object({
 
 		$("#xkit-quick-tags-create-bundle").click(function() {
 
-			var title = $("#xkit-quick-tags-add-title").val();
-			var tags = $("#xkit-quick-tags-add-tags").val();
+			var $title = $("#xkit-quick-tags-add-title");
+			var title = $title.val();
+			var $tags = $("#xkit-quick-tags-add-tags");
+			var tags = $tags.val();
+			var quit = false;
 
 			if ($.trim(title) === "") {
-				alert("Please enter a title for your bundle.");
-				return;
+				$title
+					.css("border-color", "red")
+					.attr("placeholder", "Please enter a name for your bundle.")
+					.click(function() {
+						$title
+							.removeAttr("style")
+							.attr("placeholder", "eg: Doctor Who")
+							.off("click");
+					});
+				quit = true;
 			}
 
 			if ($.trim(tags) === "") {
-				alert("Please enter the tags for your bundle.");
-				return;
+				$tags
+					.css("border-color", "red")
+					.attr("placeholder", "Please enter the tags for your bundle.")
+					.click(function() {
+						$tags
+							.removeAttr("style")
+							.attr("placeholder", "eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor")
+							.off("click");
+					});
+				quit = true;
 			}
+
+			if (quit) { return; }
 
 			var m_object = {};
 			m_object.title = title;

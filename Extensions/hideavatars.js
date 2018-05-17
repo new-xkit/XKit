@@ -92,8 +92,7 @@ XKit.extensions.hideavatars = new Object({
 			console.log(JSON.stringify(XKit.extensions.hideavatars.blognames));
 			XKit.storage.set("hideavatars", "blognames", JSON.stringify(XKit.extensions.hideavatars.blognames));
 		} catch (e) {
-			XKit.window.show("Unable to save data", "Hide Avatars could not save data<br/><br/>Error:<br/>" + e.message, "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			alert("Can't save data:\n" + e.message);
+			XKit.window.show("Unable to save data", "Hide Avatars could not save data<br/><br/>Error:<br/><p>" + e.message + "</p>", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		}
 
 	},
@@ -135,16 +134,32 @@ XKit.extensions.hideavatars = new Object({
 
 		$("#xkit-hideavatars-add-blogname").click(function() {
 
-			XKit.window.show("New blog", "<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\">", "question", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-create-blogname\">Add Blog</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Add blog", "<b>Blog URL:</b><input type=\"text\" maxlength=\"40\" placeholder=\"e.g. new-xkit-extension\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\">", "question", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-create-blogname\">Add Blog</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-hideavatars-create-blogname").click(function() {
 
-				var m_title = $("#xkit-hideavatars-blogname-add-title").val();
+				var $m_title = $("#xkit-hideavatars-blogname-add-title");
+				var m_title = $m_title.val();
+				function complain(problem) {
+					$m_title
+						.css("border-color", "red")
+						.attr("placeholder", problem)
+						.val("")
+						.click(function() {
+							$m_title
+								.removeAttr("style")
+								.attr("placeholder", "e.g. new-xkit-extension")
+								.off("click");
+						});
+				}
 
-				if ($.trim(m_title) === "") { XKit.window.close(); return; }
+				if ($.trim(m_title) === "") {
+					complain("Please enter a blog name.");
+					return;
+				}
 
 				if (XKit.extensions.hideavatars.blogname_exists(m_title)) {
-					alert("You've already added this blog!");
+					complain(`You've already added ${m_title}.`);
 					return;
 				}
 
@@ -167,7 +182,15 @@ XKit.extensions.hideavatars = new Object({
 
 			var m_cat_obj = XKit.extensions.hideavatars.get_blogname($(this).attr('data-id'));
 
-			if (m_cat_obj === false) { alert("Error HAV-136: Could not find blog name with data-id " + $(this).attr('data-id') ); return; }
+			if (m_cat_obj === false) {
+				XKit.window.show("Error",
+					"Error HAV-136: " +
+					"<p>Could not find blog name with data-id " + $(this).attr('data-id') + "</p>",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
+				return;
+			}
 
 			XKit.window.show("Edit blog name", "<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this blog, its avatar will show again", "question", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-save-blogname\">Save blogname</div><div class=\"xkit-button\" id=\"xkit-hideavatars-delete-blogname\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 

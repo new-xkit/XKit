@@ -120,8 +120,13 @@ XKit.extensions.xkit_preferences = new Object({
 						},
 						json: false,
 						onerror: function(response) {
-							alert("Well this is embarrassing.\n\nTumblr servers would not allow me to let you follow the XKit blog. " +
-								"You can try again later or go to new-xkit-extension.tumblr.com and follow it manually.");
+							XKit.window.show("Well, this is embarrassing.",
+								"Tumblr would not allow me to follow the New XKit blog for you.<br><br>" +
+								"You can follow it manually via the link below instead.",
+								"error",
+								'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com" target="_blank">New XKit Blog</a>' +
+								'<div class="xkit-button" id="xkit-close-message">OK</div>'
+							);
 						},
 						onload: function(response) {
 							// Do nothing?

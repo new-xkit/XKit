@@ -193,7 +193,7 @@ XKit.extensions.soft_refresh = new Object({
 					document.body.appendChild(script);
 					$(this).remove();
 				} catch (e) {
-					alert(e.message);
+					console.error(e.message);
 				}
 
 			});

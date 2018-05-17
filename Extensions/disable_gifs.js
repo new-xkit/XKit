@@ -220,7 +220,6 @@ XKit.extensions.disable_gifs = new Object({
 			var m_post = XKit.interface.post($(this));
 			// if (m_post.animated !== true) { return; }
 
-			//alert(XKit.extensions.disable_gifs.check_if_animated($(this)));
 			if (XKit.extensions.disable_gifs.check_if_animated($(this)) === false) {
 				return;
 			}

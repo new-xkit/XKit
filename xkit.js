@@ -1148,7 +1148,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 					}
 					document.body.appendChild(script);
 				} catch (e) {
-					alert(e.message);
+					XKit.window.show("Error",
+						"XKit failed to inject a script." +
+						"<p>" + e.message + "</p>",
+						"error",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
 				}
 			},
 			/**
@@ -3034,12 +3039,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 		}
 	};
 }());
-
-
-function xerror(message) {
-	console.error(message);
-	alert("XKit Error:\n" + message + "\n\nPlease refresh the page and try again or file a bug report at xkit.info.");
-}
 
 var centerIt = function(el /* (jQuery element) Element to center */) {
 	if (!el) {

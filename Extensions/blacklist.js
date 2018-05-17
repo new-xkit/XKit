@@ -280,10 +280,20 @@ XKit.extensions.blacklist = new Object({
 
 		$("#xkit-blacklist-add-words").click(function() {
 
-			var m_to_add = $("#xkit-blacklist-import-words").val();
+			var $m_to_add = $("#xkit-blacklist-import-words");
+			var m_to_add = $m_to_add.val();
 
 			if (m_to_add === "" || $.trim(m_to_add) === "") {
-				XKit.window.close();
+				$m_to_add
+					.css("border-color", "red")
+					.attr("placeholder", "You forgot to paste anything.")
+					.val("")
+					.click(function() {
+						$m_to_add
+							.removeAttr("style")
+							.attr("placeholder", "Paste preferences text here.")
+							.off("click");
+					});
 				return;
 			}
 
@@ -293,7 +303,13 @@ XKit.extensions.blacklist = new Object({
 				m_obj = JSON.parse(m_to_add);
 
 			} catch (e) {
-				alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
+				XKit.window.show("Invalid or corrupt data.",
+					"The JSON you inputted could not be read.<br>" +
+					"Be sure you are copy/pasting the right file in its entirety.<br><br>" +
+					"<b>Error details:</b> <p> " + e.message + "</p>",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
 				return;
 			}
 
@@ -310,7 +326,11 @@ XKit.extensions.blacklist = new Object({
 			} else {
 
 				if (m_obj.version !== supported_ver) {
-					alert("XKit Blacklist can only import words from version " + supported_ver + " of Tumblr Savior.");
+					XKit.window.show("Could not import.",
+						"XKit Blacklist can only import words from version " + supported_ver + " of Tumblr Savior.",
+						"error",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
 					return;
 				}
 
@@ -415,30 +435,43 @@ XKit.extensions.blacklist = new Object({
 
 		$("#xkit-blacklist-add-word").click(function() {
 
-			var m_to_add = $("#xkit-blacklist-word").val();
+			var $m_to_add = $("#xkit-blacklist-word");
+			var m_to_add = $m_to_add.val();
+			function complain(problem) {
+				$m_to_add
+					.css("border-color", "red")
+					.attr("placeholder", problem)
+					.val("")
+					.click(function() {
+						$m_to_add
+							.removeAttr("style")
+							.attr("placeholder", "Enter a word here.")
+							.off("click");
+					});
+			}
 
 			if (m_to_add === "" || $.trim(m_to_add) === "") {
-				XKit.window.close();
+				complain("Not even XKit can save you from ALL posts.");
 				return;
 			}
 
 			if (m_to_add.indexOf(",") !== -1) {
-				alert("The word(s) you enter can not have commas in it.");
+				complain("The word you enter cannot have commas in it.");
 				return;
 			}
 
 			if (m_to_add.indexOf("\\") !== -1) {
-				alert("The word(s) you enter can not have backslashes in it.");
+				complain("The word you enter cannot have backslashes in it.");
 				return;
 			}
 
 			if (m_to_add.length <= 1) {
-				alert("Words must be at least two characters.");
+				complain("Words must be at least two characters.");
 				return;
 			}
 
 			if (XKit.extensions.blacklist.check_if_exists(m_to_add) === true) {
-				alert("This word is already in the blacklist.");
+				complain(m_to_add + " is already in the blacklist.");
 				return;
 			}
 
@@ -505,8 +538,6 @@ XKit.extensions.blacklist = new Object({
 						tag_array.push($(this).html().replace("#", "").toLowerCase());
 					});
 				}
-
-				//alert(tag_array);
 
 				// Collect the title contents too.
 				var m_title = "";

@@ -128,7 +128,11 @@ XKit.extensions.post_crushes = new Object({
 		var m_blogs = XKit.tools.get_blogs();
 
 		if (m_blogs === "") {
-			alert("Unable to Post Crushes\nCan't get list of current blogs, please visit dashboard first.");
+			XKit.window.show("Error",
+				"Unable to Post Crushes - can't get list of current blogs. Please visit the dashboard first.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 			return;
 		} else {
 			for (i = 0; i < m_blogs.length; i++) {

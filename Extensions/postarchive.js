@@ -796,13 +796,18 @@ XKit.extensions.postarchive = {
 	render_post: function(post_id) {
 
 		var m_post = XKit.extensions.postarchive.get_from_archive(post_id);
-		if (m_post === false) { alert("Can not fetch post (error PAC-302)"); return; }
+		if (m_post === false) {
+			XKit.window.show("Can not fetch post",
+				"Error code: PAC-302",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
+			return;
+		}
 
 		var post_obj = "";
 		if (m_post.post.substring(0, 11) === "XKIT-BTOA!!") {
-			//alert("bfore: " + m_post.post);
 			var tmp_dt = m_post.post.substring(11, m_post.post.length);
-			//alert("after: " + m_post.post);
 			post_obj = JSON.parse(decodeURIComponent(escape(window.atob(tmp_dt))));
 		} else {
 			try {
@@ -1143,12 +1148,21 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-save").click(function() {
 
-			var save_title = $("#xkit-postarchive-title").val();
+			var $save_title = $("#xkit-postarchive-title");
+			var save_title = $save_title.val();
 
 			if ($(this).hasClass("disabled")) { return; }
 
 			if ($.trim(save_title) === "") {
-				alert("Please enter a title for this post.");
+				$save_title
+					.css("border-color", "red")
+					.attr("placeholder", "Please enter a title for this post.")
+					.click(function() {
+						$save_title
+							.removeAttr("style")
+							.attr("placeholder", "Enter a title (example: 'hotline phone list')")
+							.off("click");
+					});
 				return;
 			}
 
@@ -1307,16 +1321,32 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-add-category").click(function() {
 
-			XKit.window.show("New category", '<b>Category Name:</b><input type="text" maxlength="40" placeholder="eg: Recipes" class="xkit-textbox" id="xkit-postarchive-category-add-title">', "question", '<div class="xkit-button default" id="xkit-postarchive-create-category">Create Category</div><div class="xkit-button" id="xkit-close-message">Cancel</div>');
+			XKit.window.show("New category", '<b>Category Name:</b><input type="text" maxlength="40" placeholder="e.g. Recipes" class="xkit-textbox" id="xkit-postarchive-category-add-title">', "question", '<div class="xkit-button default" id="xkit-postarchive-create-category">Create Category</div><div class="xkit-button" id="xkit-close-message">Cancel</div>');
 
 			$("#xkit-postarchive-create-category").click(function() {
 
-				var m_title = $("#xkit-postarchive-category-add-title").val();
+				var $m_title = $("#xkit-postarchive-category-add-title");
+				var m_title = $m_title.val();
+				function complain(problem) {
+					$m_title
+						.css("border-color", "red")
+						.attr("placeholder", problem)
+						.val("")
+						.click(function() {
+							$m_title
+								.removeAttr("style")
+								.attr("placeholder", "e.g. Recipes")
+								.off("click");
+						});
+				}
 
-				if ($.trim(m_title) === "") { XKit.window.close(); return; }
+				if ($.trim(m_title) === "") {
+					complain("You can't create a category without a title!");
+					return;
+				}
 
 				if (XKit.extensions.postarchive.category_exists(m_title)) {
-					alert("A category with this name already exists.");
+					complain(`A category named ${m_title} already exists!`);
 					return;
 				}
 
@@ -1340,7 +1370,14 @@ XKit.extensions.postarchive = {
 
 			var m_cat_obj = XKit.extensions.postarchive.get_category($(this).attr('data-id'));
 
-			if (m_cat_obj === false) { alert("Unknown error PAS-30"); return; }
+			if (m_cat_obj === false) {
+				XKit.window.show("Unknown error",
+					"Code: PAS-30",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
+				return;
+			}
 
 			XKit.window.show("Edit category", `<b>Category Name:</b><input type="text" maxlength="40" placeholder="eg: Recipes" class="xkit-textbox" id="xkit-postarchive-category-add-title" value="${m_cat_obj.title}"><br/>If you delete this category, items saved in this category will be marked "Uncategorized."`, "question", "<div class=\"xkit-button default\" id=\"xkit-postarchive-save-category\">Save Category</div><div class=\"xkit-button\" id=\"xkit-postarchive-delete-category\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 

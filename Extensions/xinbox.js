@@ -674,11 +674,15 @@ XKit.extensions.xinbox = new Object({
 					"x-tumblr-form-key": m_key
 				},
 				onerror: function(response) {
-					alert("XInbox can not fetch the required page:\n\n" +
-				"There might be a connection problem, or the extension might need updating.\n\n" +
-				"Please try again later, and if the problem continues, disable XInbox from \n" +
-				"the XKit Control Panel (X icon > XInbox > Disable this Extension) to answer\n" +
-				"your asks while this problem is being fixed.");
+					XKit.window.show("Couldn't fetch page.",
+						"There might be a connection problem, or the extension might need updating.<br><br>" +
+						"Please try again later, and if the problem continues, disable XInbox from" +
+						"the XKit Control Panel to answer your asks while this problem is being fixed.",
+
+						"error",
+
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
 				},
 				onload: function(response) {
 					XKit.extensions.xinbox.delete_msg_index = current_msg;

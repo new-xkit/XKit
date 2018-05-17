@@ -74,7 +74,11 @@ XKit.extensions.mute = new Object({
 					//console.log("Adding user to mute list.");
 
 					if (XKit.extensions.mute.muted.length >= 101) {
-						alert("Can't mute:\n\nYou have over a hundred muted blogs.\n\nPlease remove some before muting people.");
+						XKit.window.show("Can't mute!",
+							"You have over a hundred muted blogs. Please remove some before muting people.",
+							"error",
+							'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+						);
 						return;
 					}
 
@@ -297,7 +301,6 @@ XKit.extensions.mute = new Object({
 						new_array.push(m_obj);
 					}
 					XKit.extensions.mute.muted = new_array;
-					//alert(JSON.stringify(new_array));
 					XKit.notifications.add("Mute has migrated your old muted users list to the new version.", "ok");
 					XKit.extensions.mute.save();
 				} else {
@@ -605,7 +608,25 @@ XKit.extensions.mute = new Object({
 					"<div data-type=\"video\" class=\"xkit-mute-option video " + m_video_class + "\">&nbsp;</div>" +
 				"</div>";
 
-		XKit.window.show("Muting options for " + ud, "<b>Hide the following types of posts:</b>" + m_html + "<div style=\"margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dotted rgb(190,190,190);\"><div class=\"xkit-checkbox " + m_originals_class + "\" id=\"xkit-mute-hide-originals-checkbox\"><b>&nbsp;</b>Hide original posts by this user (applies to all post types)</div><br/><div class=\"xkit-checkbox " + m_reblogs_class + "\" id=\"xkit-mute-hide-reblogs-checkbox\"><b>&nbsp;</b>Hide posts this user reblogs (applies to all post types)</div></div>Posts with the selected type will not be shown on your dashboard, without any indication that they are hidden.", "question", "<div class=\"xkit-button default\" id=\"xkit-mute-save-changes\">Save</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Muting options for " + ud,
+			"<b>Hide the following types of posts:</b>" +
+			m_html +
+			"<div style=\"margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dotted rgb(190,190,190);\"><div class=\"xkit-checkbox " + m_originals_class + "\" id=\"xkit-mute-hide-originals-checkbox\"><b>&nbsp;</b>Hide original posts by this user (applies to all post types)</div><br/>" +
+			"<div class=\"xkit-checkbox " + m_reblogs_class + "\" id=\"xkit-mute-hide-reblogs-checkbox\"><b>&nbsp;</b>Hide posts this user reblogs (applies to all post types)</div></div>" +
+			"Posts with the selected type will not be shown on your dashboard, without any indication that they are hidden.",
+
+			"question",
+
+			'<div class="xkit-button default disabled" id="xkit-mute-save-changes">Save</div>' +
+			'<div class="xkit-button" id="xkit-close-message">Cancel</div>');
+
+		function updateSaveButton() {
+			if ( $(".xkit-mute-option.selected").length <= 0 && !$("#xkit-mute-hide-originals-checkbox").hasClass("selected") && !$("#xkit-mute-hide-reblogs-checkbox").hasClass("selected")) {
+				$("#xkit-mute-save-changes").addClass("disabled");
+			} else {
+				$("#xkit-mute-save-changes").removeClass("disabled");
+			}
+		}
 
 		$("#xkit-mute-hide-reblogs-checkbox").click(function() {
 
@@ -614,6 +635,8 @@ XKit.extensions.mute = new Object({
 			if ($("#xkit-mute-hide-originals-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
 				$("#xkit-mute-hide-originals-checkbox").removeClass("selected");
 			}
+
+			updateSaveButton();
 
 		});
 
@@ -625,6 +648,8 @@ XKit.extensions.mute = new Object({
 				$("#xkit-mute-hide-reblogs-checkbox").removeClass("selected");
 			}
 
+			updateSaveButton();
+
 		});
 
 
@@ -632,12 +657,12 @@ XKit.extensions.mute = new Object({
 		$(".xkit-mute-option").click(function() {
 
 			$(this).toggleClass("selected");
+			updateSaveButton();
 
 		});
 
 		$("#xkit-mute-save-changes").click(function() {
-
-			if ( $(".xkit-mute-option.selected").length <= 0 && !$("#xkit-mute-hide-originals-checkbox").hasClass("selected") && !$("#xkit-mute-hide-reblogs-checkbox").hasClass("selected")) { alert("Please select the post types to block or check the Hide Reblogs checkbox."); return; }
+			if ($("#xkit-mute-save-changes").hasClass("disabled")) { return; }
 
 			var m_object = {};
 			m_object.username = ud;

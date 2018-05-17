@@ -164,8 +164,6 @@ XKit.extensions.separator = new Object({
 		var current_last = $(".posts .post").last();
 		var current_last_id = $(current_last).attr('data-post-id');
 
-		// alert("checking for: " + XKit.extensions.separator.check_for + "\n\n" + "current last: " + current_last_id);
-
 		if (current_last_id < XKit.extensions.separator.check_for) {
 
 			// We scrolled way too much but still there is no post.
