@@ -1,6 +1,6 @@
 //* TITLE Bubblr **//
 //* VERSION 0.0.1 **//
-//* DESCRIPTION Rotund! **//
+//* DESCRIPTION web design is my passion **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
