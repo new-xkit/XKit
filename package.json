@@ -18,7 +18,8 @@
   },
   "homepage": "http://www.xkit.info/seven/",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 8.11.2",
+    "npm": ">= 5.6.0"
   },
   "keywords": [
     "framework",
@@ -29,12 +30,13 @@
     "tweaks"
   ],
   "scripts": {
+    "dev": "gulp server",
     "test": "gulp lint:scripts"
   },
   "devDependencies": {
-    "connect": "^3.4.0",
+    "connect": "^3.6.6",
     "del": "^1.2.0",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-cached": "^1.1.0",
     "gulp-csslint": "^0.2.0",
     "gulp-eslint": "^3.0.1",
