@@ -802,7 +802,7 @@ XKit.extensions.xkit_patches = new Object({
 
 						//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
 
-						GM_xmlhttpRequest({
+						XKit.tools.Nx_XHR({
 							method: "POST",
 							url: "https://www.tumblr.com/svc/secure_form_key",
 							headers: {
@@ -811,13 +811,7 @@ XKit.extensions.xkit_patches = new Object({
 							onload: function(response) {
 								//// console.log("XKitty: YAY! Kitty request complete!");
 								XKit.interface.kitty.store_time = new Date().getTime();
-								var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
-								if (!kitty_text) {
-									kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
-								}
-								if (!kitty_text) {
-									kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
-								}
+								var kitty_text = response.headers["x-tumblr-secure-form-key"];
 								XKit.interface.kitty.stored = kitty_text;
 								m_object.kitten = XKit.interface.kitty.stored;
 								m_object.response = response;
@@ -2527,8 +2521,8 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 
-			XKit.tools.Nx_XHR = function(params) {
-				params.timestamp = new Date().getTime() + Math.random();
+			XKit.tools.Nx_XHR = function(details) {
+				details.timestamp = new Date().getTime() + Math.random();
 
 				XKit.tools.add_function(function() {
 					var xhr = new XMLHttpRequest();
@@ -2537,17 +2531,24 @@ XKit.extensions.xkit_patches = new Object({
 					if (add_tag.json === true) {
 						xhr.setRequestHeader("Content-type", "application/json");
 					}
-					for (var x in add_tag.headers) {
-						xhr.setRequestHeader(x, add_tag.headers[x]);
+					for (var header in add_tag.headers) {
+						xhr.setRequestHeader(header, add_tag.headers[header]);
 					}
 
 					function callback(result) {
+						var bare_headers = xhr.getAllResponseHeaders().split("\r\n");
+						var cur_headers = {}, splitter;
+						for (var x in bare_headers) {
+							splitter = bare_headers[x].indexOf(":");
+							if (splitter === -1) { continue; }
+							cur_headers[bare_headers[x].substring(0, splitter).trim().toLowerCase()] = bare_headers[x].substring(splitter + 1).trim();
+						}
 						window.postMessage({
 							response: {
 								status: xhr.status,
-								responseText: xhr.response
+								responseText: xhr.response,
+								headers: cur_headers
 							},
-							headers: xhr.getAllResponseHeaders().split("\r\n"),
 							timestamp: "xkit_" + add_tag.timestamp,
 							success: result
 						}, window.location.protocol + "//" + window.location.host);
@@ -2561,38 +2562,22 @@ XKit.extensions.xkit_patches = new Object({
 					} else {
 						xhr.send();
 					}
-				}, true, params);
+				}, true, details);
 
 				function handler(e) {
-				  if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + params.timestamp) {
-					window.removeEventListener("message", handler);
+					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
+						window.removeEventListener("message", handler);
 
-					var cur_headers = {}, splitter;
-					for (var x in e.data.headers) {
-					  splitter = e.data.headers[x].indexOf(":");
-					  if (splitter === -1) { continue; }
-					  cur_headers[e.data.headers[x].substring(0, splitter).trim().toLowerCase()] = e.data.headers[x].substring(splitter + 1).trim();
-					}
-
-					if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
-					  XKit.interface.kitty.set(cur_headers["x-tumblr-kittens"]);
-					}
-
-					e.data.response.headers = cur_headers;
-					e.data.response.getResponseHeader = function(header) {
-						try {
-							return this.headers[header.toLowerCase()];
-						} catch (err) {
-							console.error(err);
+						if (typeof e.data.response.headers["x-tumblr-kittens"] !== "undefined") {
+							XKit.interface.kitty.set(e.data.response.headers["x-tumblr-kittens"]);
 						}
-					};
 
-					if (e.data.success) {
-					  params.onload(e.data.response);
-					} else {
-					  params.onerror(e.data.response);
+						if (e.data.success) {
+							details.onload(e.data.response);
+						} else {
+							details.onerror(e.data.response);
+						}
 					}
-				  }
 				}
 
 				window.addEventListener("message", handler);

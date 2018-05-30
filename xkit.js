@@ -1308,17 +1308,24 @@ var xkit_global_start = Date.now();  // log start timestamp
 					if (add_tag.json === true) {
 						xhr.setRequestHeader("Content-type", "application/json");
 					}
-					for (var x in add_tag.headers) {
-						xhr.setRequestHeader(x, add_tag.headers[x]);
+					for (var header in add_tag.headers) {
+						xhr.setRequestHeader(header, add_tag.headers[header]);
 					}
 
 					function callback(result) {
+						var bare_headers = xhr.getAllResponseHeaders().split("\r\n");
+						var cur_headers = {}, splitter;
+						for (var x in bare_headers) {
+							splitter = bare_headers[x].indexOf(":");
+							if (splitter === -1) { continue; }
+							cur_headers[bare_headers[x].substring(0, splitter).trim().toLowerCase()] = bare_headers[x].substring(splitter + 1).trim();
+						}
 						window.postMessage({
 							response: {
 								status: xhr.status,
-								responseText: xhr.response
+								responseText: xhr.response,
+								headers: cur_headers
 							},
-							headers: xhr.getAllResponseHeaders().split("\r\n"),
 							timestamp: "xkit_" + add_tag.timestamp,
 							success: result
 						}, window.location.protocol + "//" + window.location.host);
@@ -1338,25 +1345,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
 						window.removeEventListener("message", handler);
 
-						var cur_headers = {}, splitter;
-						for (var x in e.data.headers) {
-							splitter = e.data.headers[x].indexOf(":");
-							if (splitter === -1) { continue; }
-							cur_headers[e.data.headers[x].substring(0, splitter).trim().toLowerCase()] = e.data.headers[x].substring(splitter + 1).trim();
+						if (typeof e.data.response.headers["x-tumblr-kittens"] !== "undefined") {
+							XKit.interface.kitty.set(e.data.response.headers["x-tumblr-kittens"]);
 						}
-
-						if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
-							XKit.interface.kitty.set(cur_headers["x-tumblr-kittens"]);
-						}
-
-						e.data.response.headers = cur_headers;
-						e.data.response.getResponseHeader = function(header) {
-							try {
-								return this.headers[header.toLowerCase()];
-							} catch (err) {
-								console.error(err);
-							}
-						};
 
 						if (e.data.success) {
 							details.onload(e.data.response);
@@ -1427,7 +1418,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 					//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
 
-					GM_xmlhttpRequest({
+					XKit.tools.Nx_XHR({
 						method: "POST",
 						url: "https://www.tumblr.com/svc/secure_form_key",
 						headers: {
@@ -1436,13 +1427,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						onload: function(response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
-							if (!kitty_text) {
-								kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
-							}
-							if (!kitty_text) {
-								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
-							}
+							var kitty_text = response.headers["x-tumblr-secure-form-key"];
 							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
 							m_object.response = response;
