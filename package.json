@@ -1,7 +1,7 @@
 {
   "name": "XKit",
   "description": "The extension framework for Tumblr.",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "main": "xkit.js",
   "repository": {
     "type": "git",
