@@ -31,9 +31,15 @@
   ],
   "scripts": {
     "dev": "gulp server",
-    "test": "gulp lint:scripts"
+    "test": "gulp lint:scripts",
+    "typecheck": "tsc"
   },
   "devDependencies": {
+    "@types/chrome": "0.0.68",
+    "@types/jquery": "^3.3.2",
+    "@types/lodash": "^4.14.109",
+    "@types/moment": "^2.11.29",
+    "@types/nanoscroller": "^0.8.2",
     "connect": "^3.6.6",
     "del": "^1.2.0",
     "gulp": "^3.9.1",
@@ -46,6 +52,7 @@
     "merge-stream": "^0.1.8",
     "morgan": "^1.6.1",
     "serve-static": "^1.10.0",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "typescript": "^2.9.1"
   }
 }
