@@ -67,7 +67,7 @@ XKit.extensions.audio_downloader = new Object({
 					if (obj.posts[0].audio_type == "tumblr") {
 						var m_url = obj.posts[0].audio_url;
 						if (m_url.indexOf('https://www.tumblr.com/audio_file/') === 0) {
-							m_url = 'http://a.tumblr.com/' + m_url.substr(m_url.lastIndexOf('/') + 1) + 'o1.mp3';
+							m_url = 'http://a.tumblr.com/' + m_url.substr(m_url.lastIndexOf('/') + 1) + 'o1.mp3?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio';
 						}
 					}
 
@@ -89,12 +89,7 @@ XKit.extensions.audio_downloader = new Object({
 
 					var m_title = m_titles[m_index];
 
-					if (XKit.browser().firefox === true || XKit.browser().safari === true) {
-						XKit.window.show(m_title, "<b>This functionality is provided in good faith.</b><br/>Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, hit Cancel now.", "warning", "<a href=\"http://www.xkit.info/seven/helpers/audioget.php?fln=" + m_url + "&id=" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-					} else {
-						m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
-						XKit.window.show(m_title, "<b>This functionality is provided in good faith.</b><br/>Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, hit Cancel now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-					}
+					XKit.window.show(m_title, "<b>This functionality is provided in good faith.</b><br/>Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, hit Cancel now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 					$("#xkit-get-audio-button-start").click(function() {
 

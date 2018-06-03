@@ -1,7 +1,7 @@
 //* TITLE XCloud **//
 //* VERSION 1.1.1 **//
 //* DESCRIPTION Sync XKit data on clouds **//
-//* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatable with STUDIOXENIX servers.**//
+//* DETAILS XCloud stores your XKit configuration on New XKit servers so you can back up your data and synchronize it with other computers and browsers easily. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
@@ -11,18 +11,9 @@ XKit.extensions.xcloud = new Object({
 	running: false,
 	username: "",
 	password: "",
-	useoldserver: true,
+	server: "https://cloud.new-xkit.com",
 	gallery_available: {},
 	extensions_upgraded: false,
-
-
-	get_xcloud_url: function() {
-		if (XKit.extensions.xcloud.useoldserver) {
-			return "https://uyjv93kxna.execute-api.us-west-2.amazonaws.com/production";
-		} else {
-			return "https://cloud.new-xkit.com";
-		}
-	},
 
 	run: function() {
 		this.running = true;
@@ -56,7 +47,6 @@ XKit.extensions.xcloud = new Object({
 							"<div class=\"xcloud-information\">" +
 								"XCloud lets you synchronize your XKit data such as your blacklisted words " +
 								"and posts, and your preferences across computers and browsers using XKit servers." +
-								'<hr> <input type="checkbox" class="xkit-checkbox" id="xcloud-use-old" /> Check to use the old XCloud servers' +
 							"</div>" +
 							"<div class=\"xcloud-welcome-buttons\">" +
 								"<div class=\"xcloud-welcome-button\" id=\"xcloud-login\">Sign In</div>" +
@@ -179,7 +169,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	panel_appended: function() {
-		var xcloud_url = this.get_xcloud_url();
+		var xcloud_url = this.server;
 		var self = this;
 
 		var exportPanel = $("#xcloud-local-export");
@@ -192,11 +182,6 @@ XKit.extensions.xcloud = new Object({
 		importPanel.unbind("click");
 		importPanel.bind("click", function() {
 			self.local_import();
-		});
-
-		$("#xcloud-use-old").unbind('change');
-		$("#xcloud-use-old").bind('change', function() {
-			XKit.extensions.xcloud.useoldserver = $(this).is(':checked');
 		});
 
 		$("#xcloud-login").unbind("click");
@@ -552,7 +537,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	start_fetch: function() {
-		var xcloud_url = this.get_xcloud_url();
+		var xcloud_url = this.server;
 		XKit.extensions.xcloud.show_overlay(true);
 
 		var m_username = XKit.extensions.xcloud.username;
@@ -889,7 +874,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	send_upload_data: function(to_send) {
-		var xcloud_url = this.get_xcloud_url();
+		var xcloud_url = this.server;
 		var m_username = encodeURIComponent(XKit.extensions.xcloud.username);
 		var m_password = encodeURIComponent(XKit.extensions.xcloud.password);
 

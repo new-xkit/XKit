@@ -15,25 +15,6 @@ XKit.extensions.xkit_patches = new Object({
 		}
 	},
 
-	check_unfollower_hater: function() {
-
-		if ($("#unfollow_button").length > 0 || $("#pageCounter").length > 0) {
-
-			if (XKit.storage.get("xkit_patches", "shown_unfollower_hater_message", "") === "true") { return; }
-
-			XKit.window.show("Unfollower Hater found", "<b>Unfollower Hater causes problems with XKit, including but not limited to TagViewer and Quick Tags not working properly, and really slow page response on tumblr.com/blog/[url] pages.</b><br/><br/>You are not required to remove it in order to use XKit, but no support will be provided to you if you don't disable it.<br/><small style=\"color: rgb(120,120,120);\">This message will not be displayed again once you click \"OK\".</small>", "error", "<div id=\"xkit-patches-unfollower-hater-ok\" class=\"xkit-button default\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/60595138775/quick-tags-tagviewer-and-unfollower-hater\" target=\"_BLANK\" class=\"xkit-button\">More information</a>");
-
-			$("#xkit-patches-unfollower-hater-ok").click(function() {
-
-				XKit.storage.set("xkit_patches", "shown_unfollower_hater_message", "true");
-				XKit.window.close();
-
-			});
-
-		}
-
-	},
-
 	run: function() {
 		this.running = true;
 
@@ -52,8 +33,6 @@ XKit.extensions.xkit_patches = new Object({
 		try {
 			XKit.retina = window.devicePixelRatio > 1;
 		} catch (e) { }
-
-		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
 
 		if (XKit.frame_mode === true) {
 			// from xkit.js
@@ -2581,6 +2560,236 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				window.addEventListener("message", handler);
+			};
+
+			XKit.tools.show_timestamps_help = function() {
+
+				XKit.window.show("Timestamp formatting",
+					"This extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>" +
+					"Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. " +
+					"In that case, just delete the text you've entered completely and XKit will revert to its default formatting.",
+
+					"info",
+
+					'<div class="xkit-button default" id="xkit-view-moment-formatting">Formatting Syntax</div>' +
+					'<div class="xkit-button" id="xkit-close-message">Close</div>'
+				);
+
+				$("#xkit-view-moment-formatting").click(function() {
+					$("#xkit-view-moment-formatting").off("click");
+					XKit.window.show("Timestamps Format",
+						"You can customize your timestamps using the syntax below.<br>XKit uses <a href=\"https://momentjs.com/\" target=\"_blank\">moment.js</a>, so it uses it's syntax." +
+						`<div class="two-column-table">
+							<div class="row header">
+								<div class="column-1">Token</div>
+								<div class="column-2">Description</div>
+								<div class="column-3">Example</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Month</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">M</div>
+								<div class="column-2">Month number</div>
+								<div class="column-3">6</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">Mo</div>
+								<div class="column-2">Month number</div>
+								<div class="column-3">6th</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">MM</div>
+								<div class="column-2">Month number with leading zeros</div>
+								<div class="column-3">06</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">MMM</div>
+								<div class="column-2">Short month name</div>
+								<div class="column-3">Dec</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">MMMM</div>
+								<div class="column-2">Long month name</div>
+								<div class="column-3">December</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Day</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">D</div>
+								<div class="column-2">Day of month</div>
+								<div class="column-3">1</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">Do</div>
+								<div class="column-2">Day of month</div>
+								<div class="column-3">1st</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">DD</div>
+								<div class="column-2">Day of month with leading zeros</div>
+								<div class="column-3">01</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Day of Week</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">d</div>
+								<div class="column-2">Day of week as a number</div>
+								<div class="column-3">0, 1, 2, .... 6</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">ddd</div>
+								<div class="column-2">Day of week as short text</div>
+								<div class="column-3">Sun, Mon, ... Fri, Sat</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">dddd</div>
+								<div class="column-2">Day of week as long text</div>
+								<div class="column-3">Sunday, ... Saturday</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Year</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">YY</div>
+								<div class="column-2">Short Year</div>
+								<div class="column-3">84, 94, 04</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">YYYY</div>
+								<div class="column-2">Long Year</div>
+								<div class="column-3">1984, 1994, 2004</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Time</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">A</div>
+								<div class="column-2">AM/PM, uppercase</div>
+								<div class="column-3">AM</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">a</div>
+								<div class="column-2">AM/PM, lowercase</div>
+								<div class="column-3">am</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">h</div>
+								<div class="column-2">Hour (12-hour)</div>
+								<div class="column-3">1, 2, ... 11, 12</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">hh</div>
+								<div class="column-2">Hour with leading zeros (12-hour)</div>
+								<div class="column-3">01, 02, ... 11, 12</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">H</div>
+								<div class="column-2">Hour (24-hour)</div>
+								<div class="column-3">0, 1, ... 22, 23</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">HH</div>
+								<div class="column-2">Hour with leading zeros (24-hour)</div>
+								<div class="column-3">00, 01 ... 22, 23</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">m</div>
+								<div class="column-2">Minute</div>
+								<div class="column-3">0, 1, ... 58, 59</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">mm</div>
+								<div class="column-2">Minute with leading zeros</div>
+								<div class="column-3">00, 01, ... 58, 59</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">s</div>
+								<div class="column-2">Second</div>
+								<div class="column-3">0, 1, ... 58, 59</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">ss</div>
+								<div class="column-2">Second with leading zeros</div>
+								<div class="column-3">00, 01, ... 58, 59</div>
+							</div>
+
+
+							<div class="row separator">
+								<div class="column-separator"> Miscellaneous </div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">[ <i>text</i> ]</div>
+								<div class="column-2">Escape text, used to add text to timestamps</div>
+								<div class="column-3">See example below</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">Z</div>
+								<div class="column-2">Timezone</div>
+								<div class="column-3">-07:00</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">X</div>
+								<div class="column-2">Unix Timestamp</div>
+								<div class="column-3">1360033296</div>
+							</div>
+							<div class="row header">
+								<div class="column-1" style="width: 50%">What to type</div>
+								<div class="column-2" style="width: 50%; text-align: center">Example</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1" style="width: 50%">MMMM Do YYYY, h:mm:ss a</div>
+								<div class="column-2" style="width: 50%; text-align: center">June 16th 2013, 1:19:00 pm</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1" style="width: 50%">dddd, h:mm:ss A</div>
+								<div class="column-2" style="width: 50%; text-align: center">Sunday, 1:19:00 PM</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1" style="width: 50%">[on the day] MMM DD [around] hh:mma</div>
+								<div class="column-2" style="width: 50%; text-align: center">on the day Jun 16 around 01:19pm</div>
+							</div>
+						</div>`, "info",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>',
+						true
+					);
+				});
 			};
 		},
 		"7.8.1": function() {

@@ -53,7 +53,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				var bridge_status = getBridgeError();
 				if (bridge_status.errors === true) {
 					// Bridge encountered an error!
-					XKit.window.show("XKit couldn't start.", "<b>Generated Error message:</b><br/><p>XKit Bridge Error<br/>" + bridge_status.error.message + "</p>Please reload the page to try again or click on the Troubleshooting Help button below to see how you can fix this error.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+					XKit.window.show("XKit couldn't start.", "<b>Generated Error message:</b><br/><p>XKit Bridge Error<br/>" + bridge_status.error.message + "</p>Please reload the page to try again or get in contact with New XKit Support.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">Support</a>");
 					return;
 				}
 
@@ -73,7 +73,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				if (m_browser.spoofed === true) {
 					// Nope, I won't be running here.
-					XKit.window.show("Your browser is pretending to be something it is not.", "Spoofing your browser name/version can cause problems not just with XKit but other websites and extensions too. Please turn off any User Agent modifier you have installed. XKit will stop running now.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+					XKit.window.show("Your browser is pretending to be something it is not.", "Spoofing your browser name/version can cause problems not just with XKit but other websites and extensions too. Please turn off any User Agent modifier you have installed. XKit will stop running now.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">Support</a>");
 					return;
 				}
 
@@ -948,9 +948,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 				}
 
 				if (m_obj.fatal === false) {
-					XKit.window.show("Potential Extension Conflicts Found", "<b>XKit found the following potential conflicts:</b>" + m_obj.html + "It is highly recommended that you disable or remove the extensions/options listed below. You can click Ignore and Continue, which will prevent XKit from showing this window again, but no support will be provided to you if something goes wrong.", "warning", "<div class=\"xkit-button default\" id=\"xkit-disable-conflict-warning\">Ignore and Continue</div>" + "<a href=\"http://xkit.info/conflicts/\" class=\"xkit-button\">Learn More</a>");
+					XKit.window.show("Potential Extension Conflicts Found", "<b>New XKit found the following potential conflicts:</b>" + m_obj.html + "It is highly recommended that you disable or remove the extensions/options listed below. You can click Ignore and Continue, which will prevent XKit from showing this window again, but no support will be provided to you if something goes wrong.", "warning", "<div class=\"xkit-button default\" id=\"xkit-disable-conflict-warning\">Ignore and Continue</div>");
 				} else {
-					XKit.window.show("Fatal Extension Conflicts Found", "<b>XKit found the following potential conflicts:</b>" + m_obj.html + "XKit can not continue loading before you disable other versions of XKit. Please check your browser's documentation on how to disable/remove extensions and remove other versions of XKit.", "warning", "<a href=\"http://xkit.info/conflicts/\" class=\"xkit-button\">Learn More</a>");
+					XKit.window.show("Fatal Extension Conflicts Found", "<b>New XKit found the following conflicts:</b>" + m_obj.html + "XKit can not continue loading before you disable other versions of XKit. Please check your browser's documentation on how to disable/remove extensions and remove other versions of XKit.", "warning");
 				}
 
 				$("#xkit-disable-conflict-warning").click(function() {
@@ -1356,7 +1356,238 @@ var xkit_global_start = Date.now();  // log start timestamp
 						}
 					}
 				}
+
 				window.addEventListener("message", handler);
+			},
+
+			show_timestamps_help: function() {
+
+				XKit.window.show("Timestamp formatting",
+					"This extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>" +
+					"Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. " +
+					"In that case, just delete the text you've entered completely and XKit will revert to its default formatting.",
+
+					"info",
+
+					'<div class="xkit-button default" id="xkit-timestamps-view-formatting">Formatting Syntax</div>' +
+					'<div class="xkit-button" id="xkit-close-message">Close</div>'
+				);
+
+				$("#xkit-timestamps-view-formatting").click(function() {
+					$("#xkit-timestamps-view-formatting").off("click");
+					XKit.window.show("Timestamps Format",
+						"You can customize your timestamps using the syntax below.<br>XKit uses <a href=\"https://momentjs.com/\" target=\"_blank\">moment.js</a>, so it uses it's syntax." +
+						`<div class="two-column-table">
+							<div class="row header">
+								<div class="column-1">Token</div>
+								<div class="column-2">Description</div>
+								<div class="column-3">Example</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Month</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">M</div>
+								<div class="column-2">Month number</div>
+								<div class="column-3">6</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">Mo</div>
+								<div class="column-2">Month number</div>
+								<div class="column-3">6th</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">MM</div>
+								<div class="column-2">Month number with leading zeros</div>
+								<div class="column-3">06</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">MMM</div>
+								<div class="column-2">Short month name</div>
+								<div class="column-3">Dec</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">MMMM</div>
+								<div class="column-2">Long month name</div>
+								<div class="column-3">December</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Day</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">D</div>
+								<div class="column-2">Day of month</div>
+								<div class="column-3">1</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">Do</div>
+								<div class="column-2">Day of month</div>
+								<div class="column-3">1st</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">DD</div>
+								<div class="column-2">Day of month with leading zeros</div>
+								<div class="column-3">01</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Day of Week</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">d</div>
+								<div class="column-2">Day of week as a number</div>
+								<div class="column-3">0, 1, 2, .... 6</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">ddd</div>
+								<div class="column-2">Day of week as short text</div>
+								<div class="column-3">Sun, Mon, ... Fri, Sat</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">dddd</div>
+								<div class="column-2">Day of week as long text</div>
+								<div class="column-3">Sunday, ... Saturday</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Year</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">YY</div>
+								<div class="column-2">Short Year</div>
+								<div class="column-3">84, 94, 04</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">YYYY</div>
+								<div class="column-2">Long Year</div>
+								<div class="column-3">1984, 1994, 2004</div>
+							</div>
+
+							<div class="row separator">
+								<div class="column-separator">Time</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">A</div>
+								<div class="column-2">AM/PM, uppercase</div>
+								<div class="column-3">AM</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">a</div>
+								<div class="column-2">AM/PM, lowercase</div>
+								<div class="column-3">am</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">h</div>
+								<div class="column-2">Hour (12-hour)</div>
+								<div class="column-3">1, 2, ... 11, 12</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">hh</div>
+								<div class="column-2">Hour with leading zeros (12-hour)</div>
+								<div class="column-3">01, 02, ... 11, 12</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">H</div>
+								<div class="column-2">Hour (24-hour)</div>
+								<div class="column-3">0, 1, ... 22, 23</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">HH</div>
+								<div class="column-2">Hour with leading zeros (24-hour)</div>
+								<div class="column-3">00, 01 ... 22, 23</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">m</div>
+								<div class="column-2">Minute</div>
+								<div class="column-3">0, 1, ... 58, 59</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">mm</div>
+								<div class="column-2">Minute with leading zeros</div>
+								<div class="column-3">00, 01, ... 58, 59</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">s</div>
+								<div class="column-2">Second</div>
+								<div class="column-3">0, 1, ... 58, 59</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">ss</div>
+								<div class="column-2">Second with leading zeros</div>
+								<div class="column-3">00, 01, ... 58, 59</div>
+							</div>
+
+
+							<div class="row separator">
+								<div class="column-separator"> Miscellaneous </div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">[ <i>text</i> ]</div>
+								<div class="column-2">Escape text, used to add text to timestamps</div>
+								<div class="column-3">See example below</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">Z</div>
+								<div class="column-2">Timezone</div>
+								<div class="column-3">-07:00</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1">X</div>
+								<div class="column-2">Unix Timestamp</div>
+								<div class="column-3">1360033296</div>
+							</div>
+							<div class="row header">
+								<div class="column-1" style="width: 50%">What to type</div>
+								<div class="column-2" style="width: 50%; text-align: center">Example</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1" style="width: 50%">MMMM Do YYYY, h:mm:ss a</div>
+								<div class="column-2" style="width: 50%; text-align: center">June 16th 2013, 1:19:00 pm</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1" style="width: 50%">dddd, h:mm:ss A</div>
+								<div class="column-2" style="width: 50%; text-align: center">Sunday, 1:19:00 PM</div>
+							</div>
+
+							<div class="row">
+								<div class="column-1" style="width: 50%">[on the day] MMM DD [around] hh:mma</div>
+								<div class="column-2" style="width: 50%; text-align: center">on the day Jun 16 around 01:19pm</div>
+							</div>
+						</div>`, "info",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>',
+						true
+					);
+				});
 			}
 		},
 		interface: {
@@ -3403,15 +3634,15 @@ function show_error_installation(message) {
 
 function show_error_script(message) {
 	// Shortcut to call when there is a javascript error.
-	XKit.window.show("XKit ran into a scripting error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>Write down the error message above and click on the Troubleshooting Help button to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+	XKit.window.show("XKit ran into a scripting error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>Write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">New XKit Support</a>");
 }
 
 function show_error_reset(message) {
 	// Shortcut to call when there is a javascript error.
-	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>It is recommended that you reset XKit. Alternatively, you can write down the error message above and click on the Troubleshooting Help button to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.tumblr.com/xkit_reset\" class=\"xkit-button\">Reset XKit</a><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>It is recommended that you reset XKit. Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.tumblr.com/xkit_reset\" class=\"xkit-button\">Reset XKit</a><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">New XKit Support</a>");
 }
 
 function show_error_update(message) {
 	// Shortcut to call when there is a javascript error.
-	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>You might need to update XKit manually. Please visit XKit Blog. Alternatively, you can write down the error message above and click on the Troubleshooting Help button to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://new-xkit-extension.tumblr.com\" class=\"xkit-button\">Go to XKit Blog</a><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>You might need to update XKit manually. Please visit the New XKit Blog. Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"https://new-xkit-extension.tumblr.com\" class=\"xkit-button\">New XKit Blog</a><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">New XKit Support</a>");
 }

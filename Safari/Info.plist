@@ -58,7 +58,6 @@
 			<array>
 				<string>*.tumblr.com</string>
 				<string>*.txmblr.com</string>
-				<string>*.xkit.info</string>
 				<string>new-xkit.github.io</string>
 			</array>
 			<key>Include Secure Pages</key>
@@ -70,6 +69,6 @@
 	<key>Update Manifest URL</key>
 	<string>https://new-xkit.github.io/XKit/Extensions/dist/page/SafariUpdate.plist</string>
 	<key>Website</key>
-	<string>http://new-xkit-extension.tumblr.com/</string>
+	<string>https://new-xkit-extension.tumblr.com/</string>
 </dict>
 </plist>

@@ -428,11 +428,7 @@ XKit.extensions.bookmarker = new Object({
 
 	cpanel: function() {
 
-		$("#xkit-bookmarks-format-help").click(function() {
-
-			XKit.window.show("Bookmark time formatting", "Bookmarks extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
-		});
+		$("#xkit-bookmarks-format-help").click(XKit.tools.show_timestamps_help);
 
 	},
 

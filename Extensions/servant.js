@@ -1427,10 +1427,17 @@ XKit.extensions.servant = new Object({
 
 		m_html = m_html + "<div class=\"xkit-servant-javascript-warning\"><b>Be very careful!</b> The \"Run Javascript Code\" option is for experts. Do not copy/paste and run code from people you don't know and trust, very bad things can happen.</div>";
 
-		XKit.window.show("Add Servant", m_html, "question", "<div class=\"xkit-button default\" id=\"xkit-servant-add\">Add Servant..</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div><a href=\"http://xkit.info/notes/servant_help.php\" target=\"_BLANK\" class=\"xkit-button float-right\">Help</a>", true);
+		XKit.window.show("Add Servant",
+			m_html,
+			"question",
+			'<div class="xkit-button default" id="xkit-servant-add">Add Servant</div>' +
+			'<div id="xkit-close-message" class="xkit-button">Cancel</div>' +
+			'<div id="xkit-servant-help" class="xkit-button float-right">Help &rarr;</div>',
+		true);
 
 		XKit.extensions.servant.bind_actions_on_add_window();
 		XKit.extensions.servant.react_to_selection_change();
+		$("#tiptip_holder").css("z-index", "99000000");
 
 		$(".xkit-servant-add-more-actions").click(function() {
 
@@ -1957,6 +1964,10 @@ XKit.extensions.servant = new Object({
 
 		});
 
+		$("#xkit-servant-help")
+			.unbind("click")
+			.bind("click", XKit.extensions.servant.show_help);
+
 	},
 
 	readjust_lines: function(obj) {
@@ -2218,6 +2229,78 @@ XKit.extensions.servant = new Object({
 
 		XKit.extensions.servant.save_servants();
 
+	},
+
+	show_help: function() {
+
+		XKit.window.show("Servant: Introduction",
+			"This extension allows you to create servants, little code snippets which run when you want them to.<br>" +
+			"You can also write your own Javascript code!<br><br>" +
+			"Each cause and action has a small &quot;i&quot; icon next to them. Select a cause or action, then hover over the icon to see what they do.",
+			"info",
+			'<div class="xkit-button default" id="xkit-servant-returns">Next &rarr;</div>' +
+			'<div class="xkit-button" id="xkit-servant-cancel-tour">Back</div>' +
+			'<div class="xkit-button" id="xkit-close-message">Close</div>');
+
+		$("#xkit-servant-cancel-tour").click(function() {
+			XKit.extensions.servant.show_add(XKit.extensions.servant.control_panel_div);
+		});
+
+		$("#xkit-servant-returns").click(function() {
+			XKit.window.show("Servant: What are returns?",
+				"Some causes &quot;return&quot; data. Here's how to use them.<br><br>" +
+				"Some servant causes have a symbol, a box with an arrow pointing out. " +
+				"Hovering over them shows what they return. Here's an example:<br>" +
+				'<img src="https://new-xkit.github.io/XKit/Extensions/dist/page/images/return_1.png" style="border: 1px solid #aaaa; border-radius: 3px;"><br>' +
+				"This basically means that if you type &quot;%1&quot; on the actions panel, that %1 will get replaced with the time.",
+				"info",
+				'<div class="xkit-button default" id="xkit-servant-js-intro">Next &rarr;</div>' +
+				'<div class="xkit-button" id="xkit-close-message">Close</div>',
+			true);
+			$("#xkit-servant-intro").click(XKit.extensions.servant.show_help);
+			$("#xkit-servant-js-intro").click(function() {
+				XKit.window.show("Servant: How to use JavaScript code?",
+					"If you are a poweruser, you can also use JavaScript code. This allows you to do things that Servant does not support. " +
+					'You have access to the <a href="https://github.com/new-xkit/XKit/wiki#api-functions" target="_blank">XKit API</a> and to jQuery.<br><br>' +
+					"<b>Be careful though, and never copy/paste code from untrustworthy sources!</b><br>" +
+					"You should never use code you didn't review. Do not use obfuscated code.",
+					"info",
+					'<div class="xkit-button default" id="xkit-servant-js-causes">Next &rarr;</div>' +
+					'<div class="xkit-button" id="xkit-close-message">Close</div>',
+				true);
+				$("#xkit-servant-js-causes").click(function() {
+					XKit.window.show("Servant: JavaScript on causes",
+						"When writing a cause Javascript code, simply return true or false and Servant will do the rest.<br><p>" +
+						"// Check if we should run.<br>" +
+						"if (XKit.interface.where().inbox === true) {<br>" +
+						"&zwnj;&emsp;&emsp;return true;<br>" +
+						"} else {<br>" +
+						"&zwnj;&emsp;&emsp;return false;<br>" +
+						"}</p>" +
+						'You can also use this to initialise your code, for example to <a href="https://github.com/new-xkit/XKit/wiki/XKit.interface#adding-buttons" target="_blank">add a control button</a>.',
+						"info",
+						'<div class="xkit-button default" id="xkit-servant-js-actions">Next &rarr;</div>' +
+						'<div class="xkit-button" id="xkit-close-message">Close</div>',
+					true);
+					$("#xkit-servant-js-actions").click(function() {
+						XKit.window.show("Servant: JavaScript on actions",
+							"If your servant runs on a post, you can access the post using the variable <b>post</b>.<p>" +
+							"// Make the said post's background red!<br>" +
+							'$(post).css("background","red");</p>' +
+							"You can also use any cause returns:<p>" +
+							'$(post).append("I made this red because it contained \"%1\"!");</p>',
+							"info",
+							'<div class="xkit-button default" id="xkit-servant-done">Got it - add a new servant!</div>' +
+							'<div class="xkit-button" id="xkit-close-message">Close</div>',
+						true);
+
+						$("#xkit-servant-done").click(function() {
+							XKit.extensions.servant.show_add(XKit.extensions.servant.control_panel_div);
+						});
+					});
+				});
+			});
+		});
 	},
 
 	destroy: function() {

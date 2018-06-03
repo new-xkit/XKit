@@ -484,14 +484,6 @@ XKit.extensions.activity_plus = new Object({
 
 	},
 
-	cpanel: function() {
-
-		$("#xkit-timestamps-format-help").click(function() {
-			XKit.window.show("Timestamp formatting", "This extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-		});
-
-	},
-
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("activity_plus_note_filter_mutual");

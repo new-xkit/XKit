@@ -521,7 +521,7 @@ XKit.extensions.stats = new Object({
 		m_text = m_text + "</ul>";
 
 		if (XKit.extensions.stats.preferences.promote.value === true) {
-			m_text = m_text + "<p><small>Generated using XStats on <a href=\"http://www.xkit.info/\">XKit</a>.</small></p>";
+			m_text = m_text + "<p><small>Generated using XStats on <a href=\"https://new-xkit-extension.tumblr.com\">New XKit</a>.</small></p>";
 		}
 
 		m_object["post[two]"] = m_text;
