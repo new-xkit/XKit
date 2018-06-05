@@ -36,7 +36,7 @@ XKit.extensions.tf2_reblogs = new Object({
 	change_icon: function() {
 		$(".reblog_icon").each(function() {
 			var iconurl = XKit.extensions.tf2_reblogs.icons[Math.floor(Math.random() * XKit.extensions.tf2_reblogs.icons.length)];
-			$(this).replaceWith('<img class="tf2_icon" src="' + iconurl + '" height="20px" style="vertical-align: top; margin: 0 5px">');
+			$(this).replaceWith('<img class="tf2_icon" src="' + iconurl + '" max-height="20px" style="vertical-align: top; margin: 0 5px">');
 		});
 	},
 
