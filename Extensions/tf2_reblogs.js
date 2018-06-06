@@ -1,5 +1,5 @@
 //* TITLE Tumblr Fortress 2 **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Replaces reblog icons with TF2 kill icons **//
 //* DEVELOPER circlejourney **//
 //* FRAME false **//
@@ -24,7 +24,7 @@ XKit.extensions.tf2_reblogs = new Object({
 			XKit.tools.add_css(`
 				.mutuals + .reblog_source .tf2_icon,
 				.mutuals + .tf2_icon {
-					background: transparent url("https://78.media.tumblr.com/becd0641fa16830002d33282e29cdd3a/tumblr_inline_p9ajigzKbk1r0r06s_75sq.png") 0 0/100% 20px no-repeat;
+					background: transparent url("https://78.media.tumblr.com/becd0641fa16830002d33282e29cdd3a/tumblr_inline_p9ajigzKbk1r0r06s_75sq.png") 0 0/100% 100% no-repeat;
 				}`,
 				"tf2_reblogs_crits"
 			);
@@ -36,7 +36,7 @@ XKit.extensions.tf2_reblogs = new Object({
 	change_icon: function() {
 		$(".reblog_icon").each(function() {
 			var iconurl = XKit.extensions.tf2_reblogs.icons[Math.floor(Math.random() * XKit.extensions.tf2_reblogs.icons.length)];
-			$(this).replaceWith('<img class="tf2_icon" src="' + iconurl + '" max-height="20px" style="vertical-align: top; margin: 0 5px">');
+			$(this).replaceWith('<img class="tf2_icon" src="' + iconurl + '" style="vertical-align: top; margin: 0 5px; max-height: 20px;">');
 		});
 	},
 
