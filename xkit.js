@@ -207,35 +207,17 @@ var xkit_global_start = Date.now();  // log start timestamp
 			XKit.flags[flag_id] = value;
 			XKit.tools.set_setting("xkit__flag__" + flag_id, value);
 		},
-		servers: {
-			list: [
-				"https://www.xkitcs.com"
-			],
-			count: 11,
-			get: function() {
-				return XKit.servers.list[XKit.servers.count];
-			},
-			next: function() {
-				XKit.servers.count++;
-				if (XKit.servers.count >= XKit.servers.list.length) {
-					XKit.servers.count = 0;
-				}
-				return XKit.servers.list[XKit.servers.count];
-			}
-		},
 		extensions: {},
 		download: {
-			try_count: 0,
-			max_try_count: 5,
 			// TODO: implement as module, lose most of this code
-			github_fetch: function(path, callback, fallback) {
+			github_fetch: function(path, callback) {
 				var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
 				GM_xmlhttpRequest({
 					method: "GET",
 					url: url,
 					onerror: function(response) {
-						XKit.console.add("Server error, falling back for download of " + path);
-						return fallback();
+						XKit.console.add("Unable to download '" + path + "'");
+						callback({errors: true, server_down: true});
 					},
 					onload: function(response) {
 						// We are done!
@@ -246,91 +228,37 @@ var xkit_global_start = Date.now();  // log start timestamp
 							// Server returned bad thingy.
 							XKit.console.add("Unable to download '" + path +
 										"', server returned non-json object." + e.message);
-							return fallback();
+							callback({errors: true, server_down: true});
+							return;
 						}
 						callback(mdata);
 					}
 				});
 			},
 			extension: function(extension_id, callback) {
-				// Downloads the extension file.
-				function fallback() {
-					return XKit.download.page("get.php?extension=" + extension_id, callback);
-				}
-
-				XKit.download.github_fetch(extension_id + '.json', callback, fallback);
+				XKit.download.github_fetch(extension_id + '.json', callback);
 			},
-			page: function(page, callback, fallingBack) {
-				// Attempt to use Github distribution
-				function fallback() {
-					return XKit.download.page(page, callback, true);
-				}
-
-				if (!fallingBack) {
-					if (page === 'list.php') {
-						XKit.download.github_fetch('page/list.json', callback, fallback);
-						return;
-					}
-					if (page === 'gallery.php') {
-						XKit.download.github_fetch('page/gallery.json', callback, fallback);
-						return;
-					}
-					if (page === 'themes/index.php') {
-						XKit.download.github_fetch('page/themes.json', callback, fallback);
-						return;
-					}
-					if (page === 'paperboy/index.php') {
-						XKit.download.github_fetch('page/paperboy.json', callback, fallback);
-						return;
-					}
-					if (page === 'framework_version.php') {
-						XKit.download.github_fetch('page/framework_version.json', callback, fallback);
-						return;
-					}
-				}
-				// Downloads page from servers.
-				if (XKit.download.try_count >= XKit.download.max_try_count) {
-					XKit.download.try_count = 0;
-					callback({errors: true, server_down: true});
+			page: function(page, callback) {
+				if (page === 'list.php') {
+					XKit.download.github_fetch('page/list.json', callback);
 					return;
 				}
-				var m_url = XKit.servers.next() + "/seven/" + page;
-				if (m_url.indexOf("?") !== -1) {
-					m_url = m_url + "&ftch_id=" + XKit.tools.random_string();
-				} else {
-					m_url = m_url + "?ftch_id=" + XKit.tools.random_string();
+				if (page === 'gallery.php') {
+					XKit.download.github_fetch('page/gallery.json', callback);
+					return;
 				}
-				XKit.console.add("Trying to fetch: " + m_url);
-				GM_xmlhttpRequest({
-					method: "GET",
-					url: m_url,
-					onerror: function(response) {
-						XKit.console.add("Server error, retrying download of page " + page);
-						XKit.download.try_count++;
-						return XKit.download.page(page, callback);
-					},
-					onload: function(response) {
-						// We are done!
-						var mdata = {};
-						try {
-							mdata = jQuery.parseJSON(response.responseText);
-						} catch (e) {
-							// Server returned bad thingy.
-							XKit.console.add("Unable to download page '" + page + "', server returned non-json object." + e.message);
-							XKit.download.try_count++;
-							return XKit.download.page(page, callback);
-						}
-						if (mdata.errors) {
-							XKit.download.try_count = 0;
-							XKit.console.add("Fetch successful, but mdata.errors is true or script is empty.");
-							callback(mdata);
-						} else {
-							XKit.download.try_count = 0;
-							XKit.console.add("Fetch successful, calling callback.");
-							callback(mdata);
-						}
-					}
-				});
+				if (page === 'themes/index.php') {
+					XKit.download.github_fetch('page/themes.json', callback);
+					return;
+				}
+				if (page === 'paperboy/index.php') {
+					XKit.download.github_fetch('page/paperboy.json', callback);
+					return;
+				}
+				if (page === 'framework_version.php') {
+					XKit.download.github_fetch('page/framework_version.json', callback);
+					return;
+				}
 			}
 		},
 		install: function(extension_id, callback) {
@@ -525,6 +453,16 @@ var xkit_global_start = Date.now();  // log start timestamp
 						return false;
 					}
 				}
+			},
+			remove: function(extension_id, key) {
+				var m_storage = XKit.storage.get_all(extension_id);
+				if (!m_storage.hasOwnProperty(key)) return true;
+				delete m_storage[key];
+				// We're going to skip the storage limit checks, on the basis that:
+				//   - the previous serialisation should have fit within limits; and
+				//   - deletion shouldn't increase the size of our new serialisation.
+				var mresult = XKit.tools.set_setting("xkit_extension_storage__" + extension_id, JSON.stringify(m_storage));
+				return !mresult.errors;
 			},
 			get_all: function(extension_id) {
 				var m_data = XKit.tools.get_setting("xkit_extension_storage__" + extension_id, "");
@@ -1074,10 +1012,10 @@ function xkit_init_special() {
 	}
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
-		if (XKit.browser().chrome === true) {
-			/* global chrome */
+		if (typeof(browser) !== 'undefined') {
+			/* global browser */
 			var xhr = new XMLHttpRequest();
-			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
+			xhr.open('GET', browser.extension.getURL('editor.js'), false);
 			xhr.send(null);
 			try {
 				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
@@ -1085,9 +1023,12 @@ function xkit_init_special() {
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			}
-		}
-		if (XKit.browser().firefox === true || XKit.browser().safari === true) {
+		} else if (XKit.extensions.xkit_editor) {
 			XKit.extensions.xkit_editor.run();
+		} else {
+			XKit.window.show("Can't launch XKit Editor",
+				"Extension platform unsupported or broken.", "error",
+				"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		}
 	}
 

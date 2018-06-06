@@ -17,8 +17,8 @@ Serving extensions and themes locally is useful for rapid development without re
   - **Note**: Ensure the above URL is copied exactly.  Malformed URLs will result in XKit falling back to the old servers.
 1. Build the XKit extension from source with `gulp build:PLATFORM`, where `PLATFORM` is one of the supported platforms.  See [`gulp build`](#gulp-build) for more information.
 1. Reload the XKit extension in the browser under test:
-  - Chrome: simply reload the unpacked extension
-  - Firefox: remove any previous versions of XKit used for development and re-install it from the `.xpi` file in `build/firefox/`
+  - Chrome: [reload the unpacked extension](https://developer.chrome.com/extensions/getstarted#unpacked)
+  - Firefox: [reload the temporary add-on](https://developer.mozilla.org/en-US/docs/Tools/about:debugging#Loading_a_temporary_add-on)
 1. Open the XKit settings menu and navigate to Other > Update All and click "Update all my extensions".
 
 > **Note**: changes to extension and theme files are not automatically propagated to the XKit extension in the browser.  Each time changes are made, XKit must be force-updated through "Update all my extensions" before the changes will be reflected.
@@ -51,13 +51,9 @@ Cleans the `build/` directory, deleting it and any subfolders.
 
 Cleans the `node_modules/` directory, deleting it and any subfolders.
 
-#### `gulp clean:chrome`
+#### `gulp clean:webext`
 
-Cleans the `build/chrome/` directory, deleting the previous build for Chrome.
-
-#### `gulp clean:firefox`
-
-Cleans the `build/firefox/` directory, deleting the previous build for Firefox.
+Cleans the `build/webext/` directory, deleting the previous build for Chrome/Firefox.
 
 #### `gulp clean:safari`
 
@@ -81,41 +77,25 @@ Lints CSS files using CSSLint and reports the output.
 
 Top-level build task.
 
-See also: [`gulp build:chrome`](#gulp-buildchrome), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp build:safari`](#gulp-buildsafari).
+See also: [`gulp build:webext`](#gulp-buildwebext), [`gulp build:safari`](#gulp-buildsafari).
 
-#### `gulp build:chrome`
+#### `gulp build:webext`
 
-Builds the Chrome browser extension from source and outputs it to `build/chrome/`.  Also creates an archive, `new-xkit-x.x.x.zip`, and outputs it to `build/chrome/`.
+Builds the Chrome/Firefox browser extension from source and outputs it to `build/webext/`.  Also creates an archive, `new-xkit-x.x.x.zip`, and outputs it to `build/webext/`.
 
-#### `gulp copy:chrome`
+#### `gulp copy:webext`
 
-Builds the Chrome browser extension from source and outputs it to `build/chrome/`.
+Builds the Chrome/Firefox browser extension from source and outputs it to `build/webext/`.
 
-See also: [`gulp build`](#gulp-build), [`gulp build:chrome`](#gulp-buildchrome), [`gulp compress:chrome`](#gulp-compresschrome).
+See also: [`gulp build`](#gulp-build), [`gulp build:webext`](#gulp-buildwebext), [`gulp compress:webext`](#gulp-compresswebext).
 
-#### `gulp compress:chrome`
+#### `gulp compress:webext`
 
-Creates an archive, `new-xkit-x.x.x.zip`, from an existing Chrome source build and outputs it to `build/chrome/`.
+Creates an archive, `new-xkit-x.x.x.zip`, from an existing Chrome/Firefox source build and outputs it to `build/webext/`.
 
-See also: [`gulp build`](#gulp-build), [`gulp build:chrome`](#gulp-buildchrome), [`gulp copy:chrome`](#gulp-copychrome).
+For releases, signed XPIs (for Firefox) are prepared by [submitting](https://developer.mozilla.org/en-US/Add-ons/Distribution) this archive to AMO.
 
-#### `gulp build:firefox`
-
-Builds the Firefox browser extension from source and outputs it to `build/firefox/`.  Also creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, and outputs it to `build/firefox/`.
-
-See also: [`gulp compress:firefox`](#gulp-compressfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
-
-#### `gulp copy:firefox`
-
-Builds the Firefox browser extension from source and outputs it to `build/firefox/`.
-
-See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp compress:firefox`](#gulp-compressfirefox).
-
-#### `gulp compress:firefox`
-
-Creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, from an existing Firefox source build and outputs it to `build/firefox/`.
-
-See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
+See also: [`gulp build`](#gulp-build), [`gulp build:webext`](#gulp-buildwebext), [`gulp copy:webext`](#gulp-copywebext).
 
 #### `gulp build:safari`
 

@@ -8,13 +8,10 @@ var cache = require('gulp-cached'),
 	csslint = require('gulp-csslint'),
 	del = require('del'),
 	eslint = require('gulp-eslint'),
-	exec = require('child_process').exec,
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	https = require('https'),
-	merge = require('merge-stream'),
-	path = require('path'),
 	zip = require('gulp-zip');
 
 var BUILD_DIR = 'build';
@@ -30,10 +27,7 @@ var paths = {
 		themes: ['Themes/**/*.css']
 	},
 	vendor: [
-		'jquery.js',
-		'moment.js',
-		'nano.js',
-		'tiptip.js'
+		'vendor/*.js',
 	]
 };
 
@@ -47,12 +41,8 @@ gulp.task('clean:modules', function(cb) {
 	del(['node_modules'], cb);
 });
 
-gulp.task('clean:chrome', function(cb) {
-	del([BUILD_DIR + '/chrome'], cb);
-});
-
-gulp.task('clean:firefox', function(cb) {
-	del([BUILD_DIR + '/firefox'], cb);
+gulp.task('clean:webext', function(cb) {
+	del([BUILD_DIR + '/webext'], cb);
 });
 
 gulp.task('clean:safari', function(cb) {
@@ -74,8 +64,7 @@ gulp.task('lint:scripts', function() {
 		paths.scripts.dev,
 		paths.scripts.core,
 		paths.scripts.extensions,
-		['Chrome/**/*.js',
-		 'Firefox/**/*.js',
+		['WebExtension/**/*.js',
 		 'Safari/**/*.js']
 	);
 
@@ -101,54 +90,24 @@ gulp.task('lint:css', function() {
 
 gulp.task('lint', ['lint:scripts']);
 
-gulp.task('copy:chrome', ['clean:chrome', 'lint'], function() {
+gulp.task('copy:webext', ['clean:webext', 'lint'], function() {
 	var src = [].concat(
 		paths.scripts.core,
 		paths.css.core,
 		paths.vendor,
-		['Chrome/**/*']
+		['WebExtension/**/*']
 	);
 
 	return gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/chrome'));
+		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
-gulp.task('compress:chrome', ['copy:chrome'], function() {
-	var chromeManifest = JSON.parse(fs.readFileSync('Chrome/manifest.json'));
+gulp.task('compress:webext', ['copy:webext'], function() {
+	var webextManifest = JSON.parse(fs.readFileSync('WebExtension/manifest.json'));
 
-	return gulp.src(BUILD_DIR + '/chrome/**/*')
-		.pipe(zip('new-xkit-' + chromeManifest.version + '.zip'))
-		.pipe(gulp.dest(BUILD_DIR + '/chrome'));
-});
-
-gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
-	var src = [].concat(
-		paths.scripts.core,
-		paths.css.core,
-		paths.vendor
-	);
-
-	var firefox = ['Firefox/**/*'];
-
-	var extension = gulp.src(firefox)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox'));
-
-	var content = gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox/data/xkit'));
-
-	return merge(extension, content);
-});
-
-gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
-	// `jpm xpi` executable must be expressed relative to `exec({cwd})`
-	exec(path.relative('build/firefox', 'node_modules/.bin/jpm xpi'),
-		 // `jpm xpi` must be executed from the extension
-		 // directory containing a `package.json`.
-		 {cwd: 'build/firefox'},
-		 function(err, stdout, stderr) {
-			if (err) { return cb(err); }
-			cb();
-		});
+	return gulp.src(BUILD_DIR + '/webext/**/*')
+		.pipe(zip('new-xkit-' + webextManifest.version + '.zip'))
+		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
 gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
@@ -164,9 +123,7 @@ gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 
 });
 
-gulp.task('build:chrome', ['compress:chrome']);
-
-gulp.task('build:firefox', ['compress:firefox']);
+gulp.task('build:webext', ['compress:webext']);
 
 gulp.task('build:safari', ['copy:safari']);
 
@@ -189,7 +146,7 @@ gulp.task('build:themes', ['clean:themes'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:chrome', 'build:firefox', 'build:safari']);
+gulp.task('build', ['build:webext', 'build:safari']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);

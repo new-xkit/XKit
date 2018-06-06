@@ -39,13 +39,12 @@
 	left: 50%;
 	transform: translateX(245px) translateY(0px);
 
-	background-color: #f8f8f8;
 	z-index: 10000;
-	width: 70px;
-	height: 70px;
-	border-radius: 35px;
-	border: 1px solid #d9d9d9;
+	width: 85px;
+	height: 85px;
+	border-radius: 42.5px;
 	display: none;
+	padding: 14px 27px;
 }
 
 .xkit-audio-plus-controls.showing {

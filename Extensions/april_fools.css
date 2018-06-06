@@ -1,0 +1,150 @@
+.tbc-frame-avatar:after {
+	background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/page/images/frame.png");
+	content: "";
+	position: absolute;
+	top: -10px;
+	bottom: 0;
+	left: -11px;
+	width: 86px;
+	height: 92px;
+	pointer-events: none;
+	background-repeat: no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio:1.3),only screen and (-webkit-min-device-pixel-ratio:1.3020833333333333),only screen and (min--moz-device-pixel-ratio:1.3),only screen and (min-resolution:1.3dppx),only screen and (min-resolution:125dpi) {
+	.tbc-frame-avatar:after {
+		background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/page/images/frame-2x.png");
+		background-size: 100% auto;
+	}
+}
+
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open {
+    border-radius: 10px 10px 0 0;
+    border-left: 3px solid #0054e3;
+    border-right: 3px solid #0054e3;
+    border-top: 2px solid #0054e3;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header {
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    background: linear-gradient(180deg,#0054e3 0,#7db9e8 2%,#0054e3 8%,#0054e3 49%,#0054e3 50%,#0084ea 89%,#1e5799);
+    font-family: Trebuchet MS,Tahoma,Sans-serif;
+    font-size: 17px;
+    text-shadow: 1px 1px #000;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .conversation-header-main {
+    padding: 11px 4px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .controls > a {
+    border: 1px solid #fff;
+    border-radius: 4px;
+    background-color: transparent;
+    background: linear-gradient(135deg,#97bdff,#0054e3 71%,#002564);
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 16px;
+    text-shadow: none;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .controls > a.more-actions:before {
+    position: relative;
+    left: 3px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .controls > a.minimize {
+    font-size: 17px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .controls > a.close {
+    font-size: 28px;
+    width: 21px;
+    background-color: red;
+    background: linear-gradient(135deg,#ffb3b3,red 71%,maroon);
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .controls > a.close:before {
+    left: 1px;
+    position: relative;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-main {
+    background-color: #ece9d8;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-main > div {
+    left: 5px;
+    right: 5px;
+    width: auto;
+    top: 5px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-main .conversation-messages {
+    background-color: #ececec;
+    border-style: inset;
+    border-color: #000 #fff #fff #000;
+    border-width: 2px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .text-input-container {
+    background-color: #ece9d8;
+    padding: 5px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .text-input-container .text-input {
+    border-style: inset;
+    border-color: #000 #fff #fff #000;
+    border-width: 2px;
+    padding: 2px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .compose-text-input-container {
+    background-color: #ece9d8;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .conversation-compose-plugins-container {
+    padding-left: 0;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .conversation-compose-plugins-container .conversation-compose-plugin {
+    text-indent: 0;
+    overflow: auto;
+    font-size: 11px;
+    font-family: Arial,Sans-serif;
+    text-shadow: 1px 1px #fff;
+    height: 47px;
+    width: 64px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .conversation-compose-plugins-container .conversation-compose-plugin:before {
+    float: none;
+    display: block;
+    font-size: 23px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .submit-button {
+    width: 31px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .submit-button .submit {
+    text-indent: 0;
+    overflow: auto;
+    font-size: 11px;
+    font-family: Arial,Sans-serif;
+    text-shadow: 1px 1px #fff;
+    height: 47px;
+    width: 64px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-compose .submit-button .submit:before {
+    float: none;
+    display: block;
+    font-size: 23px;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-main {
+	background-color: #ece9d8 !important;
+}
+.flag--aim-messenger .messaging-conversation--open .has-image.conversation-header .conversation-header-image {
+	display: none;
+}
+.flag--aim-messenger .messaging-conversation.messaging-conversation--open .conversation-header .conversation-header-main {
+	background-color: transparent;
+}
+.flag--aim-messenger .conversation-compose-plugin {
+	color: #8f8f8f !important;
+}
+.flag--aim-messenger .messaging-conversation--open .conversation-compose .compose-text-input-container .submit-button .submit {
+	color: #529ecc !important;
+}
+.flag--aim-messenger .messaging-conversation--open .conversation-main {
+	color: #444 !important;
+}
+
+.logo .logo-anchor .missing-e-logo {
+	background: url("https://new-xkit.github.io/XKit/Extensions/dist/page/images/tumbler.png") 50%/150px no-repeat;
+	padding: 6px 20px;
+	height: 40px;
+	width: 150px;
+}

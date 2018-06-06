@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3.7 **//
+//* VERSION 0.4.1 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -20,6 +20,12 @@ XKit.extensions.activity_plus = new Object({
 		},
 		condensed_notes: {
 			text: "Group notifications by post",
+			default: true,
+			value: true,
+			experimental: true
+		},
+		unfold_rollups: {
+			text: "Expand Tumblr-condensed reblog notes",
 			default: true,
 			value: true,
 			experimental: true
@@ -67,13 +73,12 @@ XKit.extensions.activity_plus = new Object({
 		var m_css = "";
 
 		try {
-
 			if (this.preferences.hide_graphs.value === true) {
 				m_css = m_css + " #user_graphs, .ui_stats { display: none; }";
 			}
 
 			if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
-				// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
+				// m_css = m_css + " .part_activity { left: 95px !important; } .activity-notification .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
 				setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
 			}
 
@@ -97,23 +102,25 @@ XKit.extensions.activity_plus = new Object({
 
 					$("#xkit-activity-plus-note-filter div").removeClass("selected");
 					$(this).addClass("selected");
+					XKit.tools.remove_css("activity_plus_note_filter_mutual");
+					XKit.tools.remove_css("activity_plus_note_filter");
+
 
 					if (m_type === "from_mutual") {
 
-						XKit.tools.add_css(".ui_note { display: none; } .ui_note.is_friend { display: block }", "activity_plus_note_filter_mutual");
+						XKit.tools.add_css(".ui_notes .activity-notification { display: none; } .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
 						return;
 
 					}
 
-					XKit.tools.remove_css("activity_plus_note_filter_mutual");
-					XKit.tools.remove_css("activity_plus_note_filter");
+
 
 					if (m_type === "") {
-						if ($(".ui_note").length >= 350) {
+						if ($(".activity-notification").length >= 350) {
 							$('html, body').animate({
 								scrollTop: 30
 							}, 600);
-							$( ".ui_note:gt(200)" ).remove();
+							$( ".activity-notification:gt(200)" ).remove();
 						}
 						XKit.extensions.activity_plus.in_type_filter = false;
 						return;
@@ -127,8 +134,12 @@ XKit.extensions.activity_plus = new Object({
 					if (m_type === "is_reply") {
 						m_type = "is_reply, .is_answer";
 					}
+					if (m_type === "is_user_mention") {
+						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
+					}
 
-					var m_filter_css = ".ui_note { display: none; } .ui_note." + m_type + " { display: block; }";
+					var m_filter_css = ".ui_notes .activity-notification { display: none; }";
+					m_filter_css += ".ui_notes .activity-notification." + m_type + " { display: flex }";
 					XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
 
 					XKit.extensions.activity_plus.undo_condense();
@@ -168,7 +179,7 @@ XKit.extensions.activity_plus = new Object({
 
 		} catch (e) {
 
-			console.log("activity_plus = " + e.message);
+			console.log("activity_plus = " + e.message, e);
 
 		}
 
@@ -179,9 +190,148 @@ XKit.extensions.activity_plus = new Object({
 	condensed_id: 0,
 	last_checked_item: "",
 
+	do_unfold: function() {
+		function getNotesCount(foldedNote) {
+			var activity = foldedNote.find(".activity-notification__activity_main > .activity")[0].textContent;
+			// Intentionally wide regex since localization exists
+			var count = activity.match(/\d+/)[0];
+			if (!count) {
+				return 1;
+			}
+			return parseInt(count) || 1;
+		}
+
+		function reblogToElement(reblog, summary, uiPostBadge) {
+			var notification = document.createElement('div');
+			notification.classList.add('activity-notification');
+			notification.dataset.timestamp = Math.round(reblog.timestamp);
+			notification.dataset.tumblelogName = reblog.blog_name;
+
+			notification.classList.add('is_reblog');
+			if (!reblog.added_text) {
+				notification.classList.add('is_reblog_naked');
+			}
+
+			var reblogUrl = reblog.blog_url + 'post/' + reblog.post_id;
+			var avatarUrl48 = reblog.avatar_url['48'];
+			var avatarUrl128 = avatarUrl48.replace(/_48\./, '_128');
+
+			var partReblogAdded = '';
+			var andAdded = '';
+			var conversational = '';
+			if (reblog.added_text) {
+				partReblogAdded = `<div class="activity-notification__activity_response is_part_reblog">
+					<blockquote>${reblog.added_text}</blockquote>
+				</div>`;
+				andAdded = ' and added:';
+				conversational = 'conversational';
+				summary = '';
+			}
+			notification.innerHTML = `
+			<div class="activity-notification__avatar">
+				<div class="ui_avatar">
+					<a href="${reblog.blog_url}" data-avatar-url="${avatarUrl128}" target="_blank" class="ui_avatar_link frame reblog" title="${reblog.blog_name}" data-peepr="{&quot;tumblelog&quot;:&quot;${reblog.blog_name}&quot;}">
+						<div class="avatar" style="background-image: url('${avatarUrl48}');">
+							<div class="inner_frame"></div>
+							<div class="avatar_glass"></div>
+							<span class="ui_avatar_tumblelog_name">thezed</span>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="activity-notification__activity">
+				<div class="activity-notification__activity_message ${conversational}">
+					<div class="activity-notification__activity_main">
+						<span class="activity">
+							<a class="js-hover-trigger-TumblelogPopover" href="${reblog.blog_url}" target="_blank" data-peepr="{&quot;tumblelog&quot;:&quot;${reblog.blog_name}&quot;}">${reblog.blog_name}</a>
+							reblogged your post${andAdded}
+						</span>
+						${summary}
+					</div>
+					${partReblogAdded}
+				</div>
+			</div>
+			<a class="activity-notification__glass" target="_blank" href="${reblogUrl}" data-peepr="{&quot;tumblelog&quot;:&quot;${reblog.blog_name}&quot;,&quot;postId&quot;:&quot;${reblog.post_id}&quot;}">
+			</a>
+			<div class="activity-notification__icon">
+				<div class="activity-notification__icon_block badge">
+				</div>
+				${uiPostBadge}
+			</div>`;
+
+			return notification;
+		}
+
+		function requestNotes(followingElt, firstKnownNote, summary, uiPostBadge, url, notesRemaining) {
+			GM_xmlhttpRequest({
+				method: 'GET',
+				url: 'https://www.tumblr.com' + url,
+				onload: function(data) {
+					try {
+						var resp = JSON.parse(data.responseText).response;
+						var reblogs = resp.notes.filter(function(note) {
+							return note.type === "reblog";
+						});
+
+						for (var i = 0; i < reblogs.length; i++) {
+							var reblog = reblogs[i];
+							if (firstKnownNote) {
+								if (firstKnownNote.blog_name !== reblog.blog_name) {
+									continue;
+								}
+								firstKnownNote = null;
+							}
+
+							var elt = reblogToElement(reblog, summary, uiPostBadge);
+							followingElt.parentNode.insertBefore(elt, followingElt);
+							notesRemaining -= 1;
+						}
+
+						if (notesRemaining > 0) {
+							if (!resp._links) {
+								console.warn('Activity+ was unable to unfold all a post\'s notes', url);
+								return;
+							}
+							var nextUrl = resp._links.next.href;
+							requestNotes(followingElt, firstKnownNote, summary, uiPostBadge, nextUrl, notesRemaining);
+						}
+					} catch (e) {
+						console.error('Activity+ error', e);
+					}
+				},
+				onerror: function(error) {
+					console.error('Activity+ unfold error:', error);
+				}
+			});
+		}
+
+		$(".activity-notification").not(".xkit-activity-plus-unfold-done").each(function() {
+			var note = $(this);
+			note.addClass("xkit-activity-plus-unfold-done");
+			if (!note.hasClass("rollup") || !note.hasClass("is_reblog")) {
+				return;
+			}
+			var peepr = JSON.parse(note.find(".activity-notification__glass")[0].dataset.peepr);
+			var notesUrl = `/svc/tumblelog/${peepr.tumblelog}/${peepr.postId}/notes?mode=all`;
+			var timestamp = parseInt(note.attr('data-timestamp')) + 1;
+			notesUrl += '&before_timestamp=' + timestamp;
+			var notesRemaining = getNotesCount(note);
+
+			var firstNotePeepr = JSON.parse(note.find(".activity > a")[0].dataset.peepr);
+			var firstKnownNote = {
+				blog_name: firstNotePeepr.tumblelog
+			};
+			var uiPostBadge = note.find(".ui_post_badge")[0].outerHTML;
+
+			var summary = note.find(".summary")[0].outerHTML;
+			requestNotes(note[0].nextSibling, firstKnownNote, summary, uiPostBadge, notesUrl, notesRemaining);
+			note.remove();
+		});
+	},
+
 	do_condensed: function() {
 
-		$(".ui_note").not(".xkit-activity-plus-condensed-done").each(function() {
+		$(".activity-notification").not(".xkit-activity-plus-condensed-done").each(function() {
 
 			$(this).addClass("xkit-activity-plus-condensed-done");
 
@@ -236,6 +386,14 @@ XKit.extensions.activity_plus = new Object({
 							}
 						}
 
+						if (this.nextSibling &&
+							this.nextSibling.classList.contains("xkit-activity-plus-condensed-done")) {
+							XKit.extensions.activity_plus.do_condensed_condense();
+							XKit.extensions.activity_plus.last_post_info = null;
+							XKit.extensions.activity_plus.condensed_count = 0;
+							XKit.extensions.activity_plus.condensed_id = XKit.tools.random_string();
+							XKit.extensions.activity_plus.last_checked_item = null;
+						}
 					} else {
 
 						XKit.extensions.activity_plus.do_condensed_condense();
@@ -299,11 +457,14 @@ XKit.extensions.activity_plus = new Object({
 			}
 		}
 
+		if (this.preferences.unfold_rollups.value) {
+			this.do_unfold();
+		}
 	},
 
 	do_timestamps: function() {
 
-		$(".ui_note").not(".xkit-activity-plus-timestamps-done").each(function() {
+		$(".activity-notification").not(".xkit-activity-plus-timestamps-done").each(function() {
 
 			$(this).addClass("xkit-activity-plus-timestamps-done");
 
@@ -337,7 +498,7 @@ XKit.extensions.activity_plus = new Object({
 		XKit.tools.remove_css("activity_plus_note_filter_mutual");
 		XKit.tools.remove_css("activity_plus");
 		XKit.tools.remove_css("activity_plus_additional");
-		$(".ui_note").removeClass("xkit-activity-plus-timestamps-done");
+		$(".activity-notification").removeClass("xkit-activity-plus-timestamps-done");
 		$(".xkit-activity-plus-timestamp").remove();
 		$("#popover_blogs").find(".blog_title").each(function() {
 			$(this).attr('href', $(this).attr('href').replace('/activity/', '/blog/'));

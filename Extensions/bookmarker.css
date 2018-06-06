@@ -67,3 +67,9 @@
 .xkit-bookmark-remover { font-size: 12px; margin-right: -3px; padding-left: 7px; padding-right: 7px; }
 .xkit-bookmark-remover:hover { color: white !important; opacity: 1 !important; }
 .xbookmark_to_slidedown { display: none; }
+
+#xkit_bookmark_no_bookmarks {
+	color: rgba(255, 255, 255, 0.5) !important;
+	padding-left: 10px;
+	height: 28px;
+}

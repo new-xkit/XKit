@@ -1,5 +1,5 @@
 //* TITLE Edible Reblogs **//
-//* VERSION 1.0.5 **//
+//* VERSION 1.0.6 **//
 //* DESCRIPTION We are serious developers... **//
 //* DETAILS ...with our priorities in order. Puts bread in literally everything. **//
 //* DEVELOPER new-xkit **//

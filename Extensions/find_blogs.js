@@ -1,6 +1,7 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION Lets you find similar blogs **//
+//* DETAILS Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -14,7 +15,8 @@ XKit.extensions.find_blogs = new Object({
 
 	preferences: {
 		"strip_following": {
-			text: "Don't show the blogs I already follow (might take a long time)",
+			text: "Don't show the blogs I already follow",
+			slow: true,
 			default: false,
 			value: false
 		},
@@ -75,7 +77,6 @@ XKit.extensions.find_blogs = new Object({
 
 		if (typeof XKit.extensions.show_more === "undefined") {
 			XKit.extensions.find_blogs.show_ump_error();
-			return;
 		}
 
 		XKit.installed.when_running("show_more", function() {
@@ -437,7 +438,7 @@ XKit.extensions.find_blogs = new Object({
 	show_ump_error: function() {
 
 		if (XKit.storage.get("find_blogs", "shown_warning_about_show_more", "") !== "yass") {
-			XKit.window.show("Oops: User Menus+ is missing.", "<b>Find Blogs requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using find_blogs.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.window.show("Oops: User Menus+ is missing.", "<b>Find Blogs requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using this extension.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			XKit.storage.set("find_blogs", "shown_warning_about_show_more", "yass");
 		}
 

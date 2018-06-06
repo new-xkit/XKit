@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.9.3 **//
+//* VERSION 2.9.7 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -43,7 +43,8 @@ XKit.extensions.blacklist = new Object({
 			value: true
 		},
 		"right_click": {
-			text: "Enable alt + click on highlighted text to add words (experimental)",
+			text: "Enable alt + click on highlighted text to add words",
+			experimental: true,
 			default: false,
 			value: false
 		},
@@ -92,7 +93,8 @@ XKit.extensions.blacklist = new Object({
 			value: false
 		},
 		"use_improved": {
-			text: "Use improved checking (might slow down your computer)",
+			text: "Use improved checking",
+			slow: true,
 			default: true,
 			value: true
 		},
@@ -508,15 +510,15 @@ XKit.extensions.blacklist = new Object({
 
 				// Collect the title contents too.
 				var m_title = "";
-				if ($(this).find(".post_title").length > 0) {
-					m_title = $(this).find(".post_title").html();
+				if ($(this).find(".post_title, .reblog-title").length > 0) {
+					m_title = $(this).find(".post_title, .reblog-title").html();
 				}
 
 				// Collect the author info, if the option is toggled.
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-						var post_info_links = $(this).find(".post_info_link").map(function() {
+						var post_info_links = $(this).find(".post_info_link, .reblog-tumblelog-name").map(function() {
 							return $(this).text();
 						});
 
@@ -556,8 +558,8 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".caption").html();
 				}
 
-				if ($(this).find(".reblog-list-item").length > 0) {
-					m_content = $(this).find(".reblog-list-item").map(function() {
+				if ($(this).find(".reblog-content").length > 0) {
+					m_content = $(this).find(".reblog-content").map(function() {
 					    return $(this).html();
 					}).get().join(" ");
 				}
@@ -639,6 +641,7 @@ XKit.extensions.blacklist = new Object({
 		$(m_div).find(".post_source").css('display', 'block');
 		$(m_div).find(".post_tags").css('display', 'block');
 		$(m_div).find(".post_footer").css('display', 'table');
+		$(m_div).find(".post-source-footer").css('display', 'block');
 
 		$(m_div).find(".post_answer").css("display", "block");
 
@@ -959,6 +962,7 @@ XKit.extensions.blacklist = new Object({
 				$(this).find(".post_source").css('display', 'block');
 				$(this).find(".post_footer").css('display', 'table');
 				$(this).find(".post_footer_links").css('display', 'block');
+				$(this).find(".post-source-footer").css('display', 'block');
 				$(this).find(".post_answer").css("display", "block");
 				$(this).find(".xblacklist_excuse").remove();
 				$(this).find(".post_content").html($(this).find(".xblacklist_old_content").html());

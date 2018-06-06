@@ -199,3 +199,12 @@
 .xkit-blacklisted-word-delete:hover {
 	color: #CC0857;
 }
+
+/* Workaround for chrome bug
+ * things that are partially transparent and position: sticky;
+ * get launched like 200 px to the left
+ */
+.xblacklist_blacklisted_post .post_avatar.post-avatar--sticky .post_avatar_wrapper {
+	position: relative;
+	top: 0;
+}

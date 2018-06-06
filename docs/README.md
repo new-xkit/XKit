@@ -22,8 +22,8 @@
 
 ## Important Links
 
-* [New XKit Extension](http://new-xkit-extension.tumblr.com/) - Main blog
-* [New XKit Support](http://new-xkit-support.tumblr.com/) - Get support
-* [New XKit Live Support](http://new-xkit-support.tumblr.com/support) - Get live support for issues with New XKit
-* [New XKit Discussion](http://new-xkit-discussion.tumblr.com/) - Ask questions, suggest ideas, ineract with the team
-* [New XKit Developer Chat](https://gitter.im/new-xkit/XKit) - Want to help out with New XKit development?  Get involved here!
+* [New XKit Extension](https://new-xkit-extension.tumblr.com/) - Main blog
+* [New XKit Support](https://new-xkit-support.tumblr.com/) - Get support
+* [New XKit Live Support](https://new-xkit-support.tumblr.com/support) - Get live support for issues with New XKit
+* [New XKit Discussion](https://new-xkit-discussion.tumblr.com/) - Ask questions, suggest ideas, interact with the team
+* [New XKit Developer Chat](https://new-xkit-extension.tumblr.com/discord) - Want to help out with New XKit development?  Get involved here!

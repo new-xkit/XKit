@@ -1,0 +1,39 @@
+.control-item.control-anchor .hide_overflow::before {
+	font-family: tumblr-icons, None;
+	font-size: 24px;
+	line-height: 0;
+	font-weight: normal;
+	position: relative;
+	top: 3px; left: 1px;
+}
+
+.control-item.control-anchor.posts .hide_overflow::before {
+	content: "\EA8B\2002";
+}
+.control-item.control-anchor.followers .hide_overflow::before {
+	content: "\EA44\2002";
+}
+.control-item.control-anchor.activity .hide_overflow::before {
+	content: "\EA01\2002";
+	left: 5px;
+	margin-right: 11px;
+}
+.control-item.control-anchor.members .hide_overflow::before {
+	content: "\EA59\2002";
+	font-size: 21px;
+	top: 2px; left: 2px;
+	margin-right: 5px;
+}
+.control-item.control-anchor.queue .hide_overflow::before {
+	content: "\EA8D\2002";
+	left: -1px;
+}
+.control-item.control-anchor.drafts .hide_overflow::before {
+	content: "\EA25\2002";
+}
+.control-item.control-anchor.processing .hide_overflow::before {
+	content: "\EA8C\2002";
+}
+.control-item.control-anchor.customize .hide_overflow::before {
+	content: "\EAB3\2002";
+}

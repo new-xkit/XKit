@@ -40,3 +40,8 @@
 	left: 10px;
 	border-radius: 4px;
 }
+
+.find-inactives-blog .unfollow_button {
+	float: right;
+	margin: 10px;
+}

@@ -38,6 +38,7 @@ XKit.extensions.pokes = {
 	},
 
 	run: function() {
+		if (!window.location.href.match(/www.tumblr.com/)) return;
 		this.running = true;
 		XKit.tools.init_css('pokes');
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);

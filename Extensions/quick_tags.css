@@ -1,14 +1,13 @@
 #xkit-quick-tags-window {
 
 	width: 210px;
-	badckground: rgba(222,224,230,0.47);
+	background: rgb(255,255,255);
 	position: absolute;
 	z-index: 100000;
 	top:30px; left:30px;
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.42), 0px 0px 7px rgba(0,0,0,0.22), inset 0px 0px 1px white;
+	box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.10);
 	border-radius: 6px;
 	display: none;
-	border: 1px solid #abafbc;
 
 }
 
@@ -54,10 +53,12 @@
 }
 
 .xkit-quick-tags-cp-tag:hover {
-	background: rgb(245,245,245);
+	background: rgb(230,239,247);
 }
 
-.xkit-quick-tags-cp-tag .xkit-tag-title { font-weight: bold; }
+.xkit-quick-tags-cp-tag .xkit-tag-title {
+	font-weight: bold;
+}
 
 
 .xkit-quick-tags-tag-delete {
@@ -81,7 +82,7 @@
 
 #xkit-quick-tags-user-tags {
 	height: 110px;
-	border-radius: 5px 5px 0px 0px;
+	border-radius: 3px 3px 0px 0px;
 }
 
 #xkit-quick-tags-user-tags.no-other-section{
@@ -115,11 +116,11 @@
 #xkit-quick-tags-window .xkit-tag,
 #xkit-quick-tags-window .xkit-tag-add {
 
-	background: rgb(228,232,238);
-	color: #7a7f8e;
+	background: rgb(255,255,255);
+	color: #444444;
 	font-size: 13px;
 	padding: 5px 9px 5px 9px;
-	border-bottom: 1px solid #abafbc;
+	border-bottom: 1.5px solid #f3f3f3;
 	cursor: pointer;
 
 }
@@ -154,40 +155,38 @@
 #xkit-quick-tags-window .xkit-tag:hover,
 #xkit-quick-tags-window .xkit-tag-add:hover {
 
-	background-color: rgba(234,239,246,1);
+	background-color: rgba(230,239,248,1);
 	color: #696d7a;
 
 }
 
 #xkit-quick-tags-window .xkit-tag-other {
 
-	background-color: #c8ced7 !important;
-	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.11);
+	background-color: #f2f2f2 !important;
 	background-image: none;
-	padding: 7px 9px;
+	border-top: 1px solid rgb(231,231,231);
+	padding: 7px 7px 10px 7px;
 	cursor: default;
 	font-size: 12px;
-	color: #696d7a !important;
+	color: #444444 !important;
 	border-bottom: 0;
 
 }
 
 #xkit-tag-input {
 
+	background-color: #f2f2f2 !important;
 	width: 100%;
-	border: 1px solid rgb(180,180,180);
-	padding: 5px 7px;
-	border-radius: 5px;
+	border: 1px solid rgb(242,242,242);
 	font-size: 13px;
 	margin-top: 4px;
-	box-shadow: 0px 1px 0px rgba(255,255,255,0.44);
 
 }
 
 #xkit-quick-tags-window .xkit-tag-data {
 
 	font-size: 11px;
-	color: #9fa3af;
+	color: #a1a1a1;
 	width: 100%;
 	height: 14px;
 	line-height: 14px;
@@ -234,4 +233,8 @@
 	font-size: 13px;
 	line-height: 22px;
 	text-align: center;
+}
+
+.xkit-interface-control-button.xkit-quick-tags:after {
+	opacity: 1 !important;
 }

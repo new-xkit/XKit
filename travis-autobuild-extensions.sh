@@ -8,10 +8,10 @@ if [ "$TRAVIS_REPO_SLUG" == "$GH_REPO" ] && [ "$TRAVIS_PULL_REQUEST" == "false" 
   git remote set-branches --add origin gh-pages
   git fetch
   git checkout -f -t -b gh-pages origin/gh-pages
-  git merge master -m "Merge master $TRAVIS_COMMIT"
+  git reset --hard master
   gulp build:extensions
   gulp build:themes
-  git add Extensions
+  git add --force Extensions
   git diff --staged --quiet Extensions || {
     git commit -m "Rebuild distribution based on $TRAVIS_COMMIT"
 	git push -fq https://"$GH_TOKEN"@github.com/"$GH_REPO" gh-pages > /dev/null

@@ -717,7 +717,6 @@ XKit.extensions.xcloud = new Object({
 
 		//Grab the gallery to check available extensions.
 		//We want to exclude unavailable extensions since the install script will make the whole thing partially succeed.
-		// Also to make this backwards compatible we need to use the page function which will go to xkitcs.com for XKit 7.5 and gh_pages for New-XKit
 		XKit.download.page('gallery.php', function(gallery_json) {
 			if (gallery_json.errors) {
 				XKit.extensions.xcloud.hide_overlay();

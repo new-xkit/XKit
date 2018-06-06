@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.5 **//
+//* VERSION 2.3.6 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER new-xkit **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -110,7 +110,7 @@ XKit.extensions.bookmarker = new Object({
 
 	init: function() {
 
-		var m_html = "";
+		var m_html = "<li id='xkit_bookmark_no_bookmarks'>You currently have no posts bookmarked.</li>";
 
 		for (var m_obj in XKit.extensions.bookmarker.bookmarks) {
 
@@ -137,11 +137,16 @@ XKit.extensions.bookmarker = new Object({
 			}
 		}
 
+
+		$("#xbookmarks").prepend("<li class=\"section_header selected\">BOOKMARKS</li>");
+		$("#xbookmarks").slideDown('fast');
+		$("#xbookmarker_small_links").slideDown('fast');
+		$(".xbookmark_to_slidedown").slideDown('fast');
+
 		if ($(".xbookmark").length > 0) {
-			$("#xbookmarks").prepend("<li class=\"section_header selected\">BOOKMARKS</li>");
-			$("#xbookmarks").slideDown('fast');
-			$("#xbookmarker_small_links").slideDown('fast');
-			$(".xbookmark_to_slidedown").slideDown('fast');
+			$('#xkit_bookmark_no_bookmarks').hide();
+		} else {
+			$('#xkit_bookmark_no_bookmarks').show();
 		}
 
 		$("#xbookmarker_help").click(function() {
@@ -187,6 +192,7 @@ XKit.extensions.bookmarker = new Object({
 			var m_object = XKit.extensions.bookmarker.retrieve_bookmark_object(post_id);
 
 			if (event.altKey) {
+				event.preventDefault();
 				// Ask for the caption.
 				XKit.window.show("Rename/Delete bookmark", "What would you like to rename this to? <input id=\"xkit-bookmark-caption\" type=\"text\" class=\"xkit-textbox\" placeholder=\"Write something short here.\">", "question", "<div class=\"xkit-button default\" id=\"xkit-bookmarker-rename-ok\">OK</div><div class=\"xkit-button\" id=\"xkit-bookmarker-delete-ok\">Delete this bookmark</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
@@ -300,7 +306,7 @@ XKit.extensions.bookmarker = new Object({
 
 		$("#xbookmarks").slideDown('fast');
 		$("#xbookmarker_small_links").slideDown('fast');
-
+		$('#xkit_bookmark_no_bookmarks').hide();
 	},
 
 	remove_all_bookmarks: function() {
@@ -312,13 +318,6 @@ XKit.extensions.bookmarker = new Object({
 		}
 
 		XKit.extensions.bookmarker.save_bookmarks();
-
-		$(".xbookmark").slideUp('fast', function() {
-			$(this).remove();
-		});
-
-		$("#xbookmarks").slideUp('slow');
-		$("#xbookmarker_small_links").slideUp('slow');
 
 	},
 
@@ -359,8 +358,9 @@ XKit.extensions.bookmarker = new Object({
 			$(this).remove();
 
 			if ($(".xbookmark").length <= 0) {
-				$("#xbookmarks").slideUp('slow');
-				$("#xbookmarker_small_links").slideUp('slow');
+				$('#xkit_bookmark_no_bookmarks').show();
+			} else {
+				$('#xkit_bookmark_no_bookmarks').hide();
 			}
 		});
 

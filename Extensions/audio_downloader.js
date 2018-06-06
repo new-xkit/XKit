@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0.3 **//
+//* VERSION 2.1.0 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -24,15 +24,10 @@ XKit.extensions.audio_downloader = new Object({
 			XKit.storage.set("audio_downloader", "shown_welcome", "true");
 		}
 
-		if ($(".posts .post").length > 0) {
-
-			XKit.interface.create_control_button("xkit-audio-downloader", this.button_icon, "Audio Downloader", "");
-			XKit.extensions.audio_downloader.init();
-			XKit.post_listener.add("audio_downloader", XKit.extensions.audio_downloader.do);
-			XKit.extensions.audio_downloader.do();
-
-		}
-
+		XKit.interface.create_control_button("xkit-audio-downloader", this.button_icon, "Audio Downloader", "");
+		XKit.extensions.audio_downloader.init();
+		XKit.post_listener.add("audio_downloader", XKit.extensions.audio_downloader.do);
+		XKit.extensions.audio_downloader.do();
 	},
 
 	init: function() {
@@ -152,7 +147,7 @@ XKit.extensions.audio_downloader = new Object({
 			$(this).addClass("xkit-audio-downloader-done");
 
 			// Check if hosted by Tumblr:
-			if ($(this).find(".audio_player").length === 0) { return; }
+			if ($(this).find(".audio-player").length === 0) { return; }
 
 			var m_post = XKit.interface.post($(this));
 

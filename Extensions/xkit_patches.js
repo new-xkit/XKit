@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.0 **//
+//* VERSION 6.11.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -94,6 +94,7 @@ XKit.extensions.xkit_patches = new Object({
 		e.data.hasOwnProperty("xkit_blogs")) {
 
 				XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+				XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
 			}
 		};
 
@@ -116,15 +117,6 @@ XKit.extensions.xkit_patches = new Object({
 			}
 
 			// Approach 2: Scrape from the dynamically-created popover element.
-
-			if (!$("[data-js-channel-list]").length) {
-				// create the popover element
-				var account_menu = $("#account_button");
-				account_menu.click();
-				setTimeout(function() {
-					account_menu.click();
-				}, 10);
-			}
 
 			var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
 			if (blog_menu_items.length) {
@@ -539,40 +531,78 @@ XKit.extensions.xkit_patches = new Object({
 			},
 
 			/**
+			 * @param  {String} name: the css class name of the button
+			 * @return {JQuery} the element for that css class name
+			 */
+			tx_button_selector: function(name) {
+				return $(`.tx-button.${name}-button, .tx-icon-button.${name}-button`);
+			},
+
+			/**
 			 * @return {JQuery} The follow button in the iframe
 			 */
 			follow_button: function() {
-				return $(".btn.follow,.tx-button.follow-button");
+				return this.tx_button_selector("follow");
 			},
 
 			/**
 			 * @return {JQuery} The unfollow button in the iframe
 			 */
 			unfollow_button: function() {
-				return $(".btn.unfollow,.tx-button.unfollow-button");
+				return this.tx_button_selector("unfollow");
 			},
 
 			/**
 			 * @return {JQuery} The delete button in the iframe
 			 */
 			delete_button: function() {
-				return $(".btn.delete,.tx-button.delete-button");
+				return this.tx_button_selector("delete");
 			},
 
 			/**
 			 * @return {JQuery} The reblog button in the iframe
 			 */
 			reblog_button: function() {
-				return $(".btn.reblog,.tx-button.reblog-button");
+				return this.tx_button_selector("reblog");
 			},
 
 			/**
 			 * @return {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
-				return $(".btn.dashboard,.tx-button.dashboard-button");
+				return this.tx_button_selector("dashboard");
 			},
 
+			/**
+			 * Uses tumblr's built-in RPC functionality to resize the in-blog iframe.
+			 * The iframe will be resized to the maximum of the current body size or
+			 * the iframe-controls-container size.
+			 *
+			 * This is the same postMessage call that happens when you click on the
+			 * profile menu, without the body classes arguments. (Tumblr also allows
+			 * for the code to set classes on the iframe element and the body of the page)
+			 */
+			size_frame_to_fit: function() {
+				var button_container = $(".iframe-controls-container")[0] || {};
+
+				var width = Math.max(
+					button_container.scrollWidth || -Infinity,
+					document.body.scrollWidth);
+
+				var height = Math.max(
+					button_container.scrollHeight || -Infinity,
+					document.body.scrollHeight);
+
+				var payload = {
+					method: "tumblr-unified-controls:IframeControls:size",
+					args: [{
+						width: width,
+						height: height
+					}]
+				};
+
+				window.top.postMessage(JSON.stringify(payload), "*");
+			}
 		};
 
 		if (XKit.frame_mode === true) {
@@ -749,7 +779,10 @@ XKit.extensions.xkit_patches = new Object({
 						onload: function(response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							}
 							if (!kitty_text) {
 								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
 							}
@@ -1246,7 +1279,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					} else {
 
-						var m_html = "<div class=\"post_tags\"><div class=\"post_tags_inner\">" +
+						var m_html = "<div class=\"source-clear\"></div><div class=\"post_tags fadeable fadeable-source\"><div class=\"post_tags_inner\">" +
 									m_inner +
 								"</div>";
 						$(post_div).find(".post_footer").before(m_html);
@@ -1502,7 +1535,7 @@ XKit.extensions.xkit_patches = new Object({
 						},
 						onload: function(response) {
 
-							XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+							XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 							try {
 								to_return.data = jQuery.parseJSON(response.responseText);
@@ -1684,7 +1717,7 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.tools.add_css("." + class_name + ":after {" +
 							" background-image: url('" + icon + "') !important;" +
 							" background-size: auto auto !important;" +
-							" margin-top: -9px !important; " +
+							" margin-top: -7px !important; " +
 							"}", "xkit_interface_icon___" + class_name);
 
 					if (typeof ok_icon !== "undefined") {
@@ -1755,8 +1788,9 @@ XKit.extensions.xkit_patches = new Object({
 				var posts = [];
 
 				var selector = ".post";
+				var where = XKit.interface.where();
 
-				if (mine && !XKit.interface.where().channel) {
+				if (mine && !where.channel && !where.drafts && !where.queue) {
 					selector = ".post.is_mine";
 				}
 
@@ -1869,7 +1903,7 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				m_return.animated = $(obj).hasClass("is_animated");
-				m_return.is_reblogged = $(obj).hasClass("is_reblog");
+				m_return.is_reblogged = $(obj).hasClass("is_reblog") || $(obj).find(".reblog_info").length > 0;
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
@@ -2182,8 +2216,8 @@ XKit.extensions.xkit_patches = new Object({
 					m_return.likes = true;
 				}
 
-				if ($('meta[name="twitter:title"]').length) {
-					m_return.user_url = $('meta[name="twitter:title"]').attr("content");
+				if ($('link[type="application/rss+xml"]').length) {
+					m_return.user_url = $('link[type="application/rss+xml"]').attr("href").replace(/\/rss.*$/, '');
 				}
 
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
@@ -2247,7 +2281,7 @@ XKit.extensions.xkit_patches = new Object({
 			is_following: function(username, blog) {
 				return $.ajax({
 					type: "GET",
-					url: "/svc/blog/followed_by",
+					url: "https://www.tumblr.com/svc/blog/followed_by",
 					data: "tumblelog=" + blog + "&query=" + username,
 					dataType: "json",
 				}).then(function(msg) {
@@ -2401,6 +2435,60 @@ XKit.extensions.xkit_patches = new Object({
 			}
 		};
 
+		// Expedited fix for #1509; revert after updated XKit extension has been widely installed.
+		XKit.download.github_fetch = function(path, callback) {
+			var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: url,
+				onerror: function(response) {
+					XKit.console.add("Unable to download '" + path + "'");
+					callback({errors: true, server_down: true});
+				},
+				onload: function(response) {
+					// We are done!
+					var mdata = {};
+					try {
+						mdata = jQuery.parseJSON(response.responseText);
+					} catch (e) {
+						// Server returned bad thingy.
+						XKit.console.add("Unable to download '" + path +
+									"', server returned non-json object." + e.message);
+						callback({errors: true, server_down: true});
+						return;
+					}
+					callback(mdata);
+				}
+			});
+		};
+		XKit.download.extension = function(extension_id, callback) {
+			XKit.download.github_fetch(extension_id + '.json', callback);
+		};
+		XKit.download.page = function(page, callback) {
+			if (page === 'list.php') {
+				XKit.download.github_fetch('page/list.json', callback);
+				return;
+			}
+			if (page === 'gallery.php') {
+				XKit.download.github_fetch('page/gallery.json', callback);
+				return;
+			}
+			if (page === 'themes/index.php') {
+				XKit.download.github_fetch('page/themes.json', callback);
+				return;
+			}
+			if (page === 'paperboy/index.php') {
+				XKit.download.github_fetch('page/paperboy.json', callback);
+				return;
+			}
+			if (page === 'framework_version.php') {
+				XKit.download.github_fetch('page/framework_version.json', callback);
+				return;
+			}
+		};
+		delete XKit.servers;
+		delete XKit.download.try_count;
+		delete XKit.download.max_try_count;
 	},
 
 	/**
@@ -2458,4 +2546,118 @@ XKit.installed.when_running = function(extension, onRunning, onFailure) {
 		onRunning(XKit.extensions[extension]);
 	}
 	setTimeout(check, 0);
+};
+
+XKit.toast = {
+	count: 0,
+
+	/**
+	 * Simulates a tumblr notification ("toast")
+	 * @param {Boolean} created - true if post was not queued/drafted
+	 * @param {String} action - post action description (i.e. "Reblogged to ")
+	 * @param {String} url - tumblr blog name (for both notification and API)
+	 * @param {Integer/String} id - created post id for peepr (optional)
+	 * @param {String} crumb - arbitrary class for "crumb" (optional)
+	 */
+	add: function(created, action, url, id, crumb) {
+		var toastno = XKit.toast.count;
+		XKit.toast.count++;
+
+		if (created) {
+			action = "<strong>" + action;
+		} else {
+			action += "<strong>";
+		}
+
+		var endData = "}";
+		if (typeof id !== "undefined") {
+			endData = `,"postId": ${id}}`;
+		}
+		if (typeof crumb === "undefined") {
+			crumb = "";
+		}
+
+		var toast =
+			`<li class="toast blog-sub xtoast-${toastno}" data-subview="toast" data-peepr='{"tumblelog": "${url}"${endData}'>
+				<img class="toaster avatar" src="https://api.tumblr.com/v2/blog/${url}/avatar/128">
+				<div class="crumb ${crumb}"></div>
+				<span class="toast-bread">
+					${action}${url}</strong>
+				</span>
+			</li>`;
+
+		$(".toastr").addClass("show-toast");
+		$(".multi-toasts").append(toast);
+
+		var $toast = $(".xtoast-" + toastno);
+		setTimeout(function() {
+			$toast.addClass("fade-out");
+		}, 4000);
+		setTimeout(function() {
+			$toast.remove();
+			if (!$(".toast").length) {
+				$(".toastr").removeClass("show-toast");
+			}
+		}, 5000);
+	}
+};
+
+// Cheat the headers we send
+XKit.tools.Nx_XHR = function(params) {
+	params.timestamp = new Date().getTime() + Math.random();
+	XKit.tools.add_function(function() {
+		var xhr = new XMLHttpRequest();
+		xhr.open(add_tag.method, add_tag.url, add_tag.async || false);
+
+		if (add_tag.json === true) {
+			xhr.setRequestHeader("Content-type", "application/json");
+		}
+		for (var x in add_tag.headers) {
+			xhr.setRequestHeader(x, add_tag.headers[x]);
+		}
+
+		function callback(result) {
+			window.postMessage({
+				response: {
+					status: xhr.status,
+					responseText: xhr.response
+				},
+				headers: xhr.getAllResponseHeaders().split("\r\n"),
+				timestamp: "xkit_" + add_tag.timestamp,
+				success: result
+			}, window.location.protocol + "//" + window.location.host);
+		}
+
+		xhr.onerror = function() { callback(false); };
+		xhr.onload = function() { callback(true); };
+
+		if (typeof add_tag.data !== "undefined") {
+			xhr.send(add_tag.data);
+		} else {
+			xhr.send();
+		}
+	}, true, params);
+	function handler(e) {
+		if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + params.timestamp) {
+			window.removeEventListener("message", handler);
+
+			var cur_headers = {}, splitter;
+			for (var x in e.data.headers) {
+				splitter = e.data.headers[x].indexOf(":");
+				if (splitter === -1) { continue; }
+				cur_headers[e.data.headers[x].substring(0, splitter).trim().toLowerCase()] = e.data.headers[x].substring(splitter + 1).trim();
+			}
+
+			if (typeof cur_headers["x-tumblr-kittens"] !== "undefined") {
+				XKit.interface.kitty.set(cur_headers["x-tumblr-kittens"]);
+			}
+
+			if (e.data.success) {
+				params.onload(e.data.response);
+			} else {
+				params.onerror(e.data.response);
+			}
+		}
+	}
+	window.addEventListener("message", handler);
 };

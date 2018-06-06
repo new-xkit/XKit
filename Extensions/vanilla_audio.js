@@ -1,7 +1,7 @@
 //* TITLE Vanilla Audio **//
-//* VERSION 0.2.0 **//
-//* DESCRIPTION	Adds a native (working) audio player to audio posts. **//
-//* DETAILS This extension adds a native HTML5 audio player to every audio post, which should always work, as well as enabling looping, downloading, and better seeking. **//
+//* VERSION 0.2.1 **//
+//* DESCRIPTION	Adds an alternative audio player to audio posts. **//
+//* DETAILS This extension adds a native HTML5 audio player to every audio post, with an option for the default volume and the ability to loop the audio. **//
 //* DEVELOPER akunohomu **//
 //* FRAME false **//
 //* BETA true **//
@@ -35,7 +35,7 @@ XKit.extensions.vanilla_audio = new Object({
 
 	add_audio: function() {
 		"use strict";
-		$(".audio_player_container").not(".xkit-audio-added").each(function(index) {
+		$(".native-audio-container").not(".xkit-audio-added").each(function(index) {
 			var $this = $(this);
 			$this.addClass("xkit-audio-added");
 			var url = $this.attr("data-stream-url");

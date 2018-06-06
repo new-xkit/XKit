@@ -1,5 +1,5 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION Customize how anons appear **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
@@ -89,7 +89,7 @@ XKit.extensions.satsukimous = new Object({
 		XKit.post_listener.add( "SATSUKI", XKit.extensions.satsukimous.satsuki );
 		XKit.extensions.satsukimous.satsuki();
 		if (XKit.extensions.satsukimous.preferences.play_scream.value) {
-			$("head").append('<audio id="matoi-sound" src="http://a.tumblr.com/tumblr_nt2vx0HIy21tgqvb3o1.mp3" type="audio/mp3"></audio>');
+			$("head").append('<audio id="matoi-sound" src="https://a.tumblr.com/tumblr_nt2vx0HIy21tgqvb3o1.mp3" type="audio/mp3"></audio>');
 		}
 	},
 

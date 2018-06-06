@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5.11 **//
+//* VERSION 0.5.12 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -968,7 +968,8 @@ XKit.extensions.servant = new Object({
 
 				for (var i = 0; i < to_pass.length; i++) {
 					if (compatibility[i] === "post") {
-						$(to_pass[i]).append("<div class=\"xkit-servant-rubber-band\" style=\"background-color: " + parameter + "\">&nbsp;</div>");
+						$(to_pass[i]).addClass("servant-post-colorize");
+						$(to_pass[i]).addClass("servant-post-color_" + parameter.replace("#", ""));
 					}
 				}
 
@@ -1240,9 +1241,33 @@ XKit.extensions.servant = new Object({
 			XKit.extensions.servant.runs_on_posts = runs_on_posts;
 			XKit.post_listener.add("servant", XKit.extensions.servant.do_posts);
 			XKit.extensions.servant.do_posts();
-
 		}
 
+	},
+
+	color_by_number: function() {
+		if ($(".servant-post-colorize").length > 0) {
+			$(".servant-post-colorize").each(function() {
+				var colorArray = [];
+				var classList = $(this).attr('class').split(/\s+/);
+				$.each(classList, function(index, value) {
+					if (value.search("servant-post-color_") > -1) {
+						$.each(value.match(/_([a-zA-Z0-9]){6}/g), function(iIndex, iValue) {
+							colorArray.push(iValue);
+						});
+					}
+				});
+				for (var i = 0; i < colorArray.length; i++) {
+					colorArray[i] = colorArray[i].replace("_", "");
+				}
+				var uniques = [...new Set(colorArray)]; //eslint-disable-line no-undef
+				var backgroundString = "";
+				for (var j = 0; j < uniques.length; j++) {
+					backgroundString += `, #${uniques[j]} ${(100 / uniques.length) * j}%, #${uniques[j]} ${(100 / uniques.length) * (j + 1)}%`;
+				}
+				$(this).append("<div class=\"xkit-servant-rubber-band\" style=\"background: linear-gradient(to right" + backgroundString + ")\">&nbsp;</div>");
+			});
+		}
 	},
 
 	do_posts: function() {
@@ -1259,6 +1284,7 @@ XKit.extensions.servant = new Object({
 
 		});
 
+		XKit.extensions.servant.color_by_number();
 	},
 
 	run_servant: function(obj, post_mode) {

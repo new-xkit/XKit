@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.3.3 **//
+//* VERSION 1.3.4 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function() {
@@ -153,6 +153,13 @@
 						eval(xkit_main.script + "\n//# sourceURL=xkit/" + extension_id + ".js");
 					} catch (e) {
 						XKit.console.add("Can't eval " + extension_id);
+					}
+					try {
+						if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
+							XKit.extensions.xkit_main.load_extension_preferences(extension_id);
+						}
+					} catch (e) {
+						XKit.console.add("Failed to load preferences for " + extension_id + ": " + e.message);
 					}
 					if (XKit.extensions.xkit_main.disabled_extensions === "") {
 						XKit.extensions.xkit_main.disabled_extensions = extension_id + "(not in frame)";

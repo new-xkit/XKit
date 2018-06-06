@@ -1,0 +1,16 @@
+.mutuals::after, .mutuals::before{
+	font-family: tumblr-icons, None;
+	font-weight: normal;
+	font-size: 1.23em;
+	line-height: 0;
+}
+
+.mutuals:not(.mutuals-front)::after{
+	content: "\EA59";
+	padding-left: 0.3em;
+}
+
+.mutuals.mutuals-front::before{
+	content: "\EA59";
+	padding-right: 0.3em;
+}

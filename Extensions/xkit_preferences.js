@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.4 **//
+//* VERSION 7.5.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -13,11 +13,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	hide_xcloud_if_not_installed: false,
 
-	showing_help_button: false,
-
 	run: function() {
-
-		console.log(XKit.storage.size("xkit_preferences"));
 
 		this.running = true;
 
@@ -30,8 +26,9 @@ XKit.extensions.xkit_preferences = new Object({
 			holiday_class = " christmas";
 		}
 
-		var m_html = '<div class="tab iconic' + holiday_class + '" id="new-xkit-control">' +
-			'<a style="margin-left: 6px; margin-right: 6px;" class="tab_anchor" href="#">XKit Control Panel</a>' +
+		var m_html = '<div class="tab iconic tab_xkit' + holiday_class + '" id="xkit_button">' +
+			'<button tabindex="7" class="tab_anchor" title="XKit Control Panel"><p class="tab_anchor_text">XKit Control Panel<p></button>' +
+			'<div class="tab_notice tab-notice--outlined xkit_notice_container"><span class="tab_notice_value">0</span></div>' +
 			'</div>';
 
 		// mobile stuff
@@ -62,8 +59,8 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.tools.add_css(mobile_control_panel, 'mobile_xkit_menu');
 		}
 
-		$(".l-header").find("#logout_button").parent().before(m_html);
-		$(".l-header").find("#account_button").before(m_html);
+		$("#account_button").before(m_html);
+		$("#account_button > button").attr("tabindex", "8");
 		$(".no-js").removeClass("no-js"); // possibly unnecessary // mobile stuff
 		$(".mobile-logo").html(mobile_html); // mobile stuff
 
@@ -71,48 +68,14 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
 		}
 
-		$("#new-xkit-control").click(function(event) {
-			XKit.extensions.xkit_preferences.open();
-			return false;
-		});
-
-		// Check and deliver initial messages.
-		if (XKit.storage.get("xkit_preferences", "initial_mail_sent", "0") === "0") {
-			var randomnumber = 1000 + Math.floor(Math.random() * 100000);
-			XKit.extensions.xkit_preferences.news.create(91111, "Welcome to XKit!",
-				"<h1>Welcome, and thanks for installing XKit 7!</h1> In this panel, you will receive news and updates on XKit 7. " +
-				"These include, but not limited to, new features, bug fixes and things you should do if you experience problems with your XKit." +
-				"<h2>Learn XKit</h2> Clicking on the My XKit tab will give you a list of all the extensions you have installed. " +
-				"You can read their descriptions, and click on <strong>more information</strong> link below their description (if available) " +
-				"to learn even more about them and how to use them." +
-				"<h2>Customize XKit</h2> Nearly all extensions of XKit has settings that you can customize: from appearance to custom tags, " +
-				"you can toggle and change their settings from the My XKit tab." +
-				"<h2>Expand XKit</h2> XKit automatically installs some default extensions, but if you want more, you can check the extension " +
-				"gallery for more. To do that, just click on the <strong>Get Extensions</strong> tab on the bottom of this window." +
-				"<h2>Help XKit</h2> XKit is free of charge, and I'm not making any money off it in any way. " +
-				"If you are using XKit for the first time, give it a try for a few days, and if you like it, " +
-				"please donate by going to the About tab on this window to support free software. " +
-				"You can also help by sharing XKit with your followers and friends, and spreading the word" +
-				"<h2>Thanks for reading!</h2> Again, thanks for installing XKit, and I hope you enjoy using it!<br><br>" +
-				"<em>Yours faithfully,<br>Xenixlet #" + randomnumber + "<br>Your Personal Xenixlet, XKit Assistant.</em>");
-			XKit.storage.set("xkit_preferences", "initial_mail_sent", "1");
-		}
+		$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
 
 		var unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
 		if (unread_mail_count > 0) {
-			// English is a weird language, innit?
-			var m_word = "messages";
-			var m_word_2 = "them";
-			if (unread_mail_count === 1) {
-				m_word = "message";
-				m_word_2 = "it";
-			}
-
-			XKit.notifications.add("<b>Unread messages</b><br/>You have <b>" + unread_mail_count + "</b> new XKit News " + m_word + " in your XKit News inbox. Click here to view " + m_word_2 + ".", "mail", true, function() {
-				XKit.extensions.xkit_preferences.open(true);
-			});
+			$(".xkit_notice_container > .tab_notice_value").html(unread_mail_count);
+			$(".xkit_notice_container").addClass("tab-notice--active");
 		}
-		XKit.extensions.xkit_preferences.news.update();
+		// XKit.extensions.xkit_preferences.news.update();
 
 		var launch_count = XKit.storage.get("xkit_preferences", "launch_count", "0");
 		launch_count++;
@@ -180,7 +143,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	spring_cleaning: function() {
 
-		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo"];
+		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself"];
 
 		var removed_list = [];
 
@@ -204,14 +167,16 @@ XKit.extensions.xkit_preferences = new Object({
 
 		if (removed_list.length > 0) {
 
-			XKit.notifications.add("XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
+			XKit.notifications.add("New XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
 				"warning", true, function() {
 					XKit.window.show("Spring Cleaning",
 						"Due to them not working correctly anymore, the following obsolete extensions have been removed to speed up your computer:" +
 						XKit.extensions.xkit_preferences.spring_cleaning_m_list_html +
-						"For more information, including the reason(s) why they were removed, please click the button below.",
+						"For more information, including the reason(s) why they were removed, please send an ask to <b>new-xkit-support</b> or click the below button " +
+						"to join our live support channel.",
 						"warning", '<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-						'<a href="http://www.xkit.info/notes/spring_cleaning.php" target="_BLANK" class="xkit-button">More information</a>');
+						'<a href="https://new-xkit-support.tumblr.com/ask" target="_BLANK" class="xkit-button">Send an ask</a>' +
+						'<a href="https://new-xkit-support.tumblr.com/support" target="_BLANK" class="xkit-button">Join live support</a>');
 				});
 
 		}
@@ -353,7 +318,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_return = 0;
 			for (var i = 0; i < prev_objects.length; i++) {
-				console.log(prev_objects[i]);
 				if (prev_objects[i].read === false) {
 					if (typeof prev_objects[i].important !== "undefined") {
 						if (show_all === false && prev_objects[i].important !== "1") {
@@ -520,11 +484,13 @@ XKit.extensions.xkit_preferences = new Object({
 			} else {
 				console.error("Can not save news_object with read flag. Storage might be full.");
 			}
-
-		},
-
-		delete: function(id) {
-
+			var unread_news_count = XKit.extensions.xkit_preferences.news.unread_count();
+			if (unread_news_count === 0) {
+				$(".xkit_notice_container").removeClass("tab-notice--active");
+				setTimeout(function() { $(".xkit_notice_container > .tab_notice_value").html("0"); }, 300);
+			} else {
+				$(".xkit_notice_container > .tab_notice_value").html(unread_news_count);
+			}
 
 		},
 
@@ -558,19 +524,20 @@ XKit.extensions.xkit_preferences = new Object({
 		$("body").append('<div id="xkit-welcoming-bubble-shadow" class="arrow-top">&nbsp;</div>' +
 			'<div id="xkit-welcoming-bubble"><strong>Welcome to XKit! Let\'s get started.</strong><br>' +
 			'Click me to customize your XKit and get more extensions.</div>');
-		var position = $("#new-xkit-control").offset();
+		var position = $("#xkit_button").offset();
 
 		$("#xkit-welcoming-bubble").css("top", position.top + 50 + "px");
 		$("#xkit-welcoming-bubble").css("left", (position.left - ($("#xkit-welcoming-bubble").width() / 2)) + 10 + "px");
 
-		$("#new-xkit-control").css('z-index', '3000');
+		$("#xkit_button").css('z-index', '3000');
 
 	},
 
 	scroll_pos: $(window).scrollTop(),
 
-	open: function(open_news) {
-
+	open: function() {
+		var open_news = $(".xkit_notice_container.tab-notice--active").length > 0;
+		$("#xkit_button").addClass("active");
 		if ($("#xkit-control-panel-shadow").length > 0) {
 			$("#xkit-control-panel-shadow").remove();
 		}
@@ -611,9 +578,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$("body").css("overflow", "hidden");
 		$("#xkit-control-panel").animate({ marginTop: '-200px', opacity: 1}, 500);
 		$("#xkit-control-panel-shadow").fadeIn('slow');
-		$("#xkit-control-panel-shadow").click(function() {
-			XKit.extensions.xkit_preferences.close();
-		});
+		$("#xkit-control-panel-shadow").click(XKit.extensions.xkit_preferences.close);
 
 		if (XKit.extensions.xkit_preferences.bubble_tour_mode === true) {
 
@@ -629,12 +594,12 @@ XKit.extensions.xkit_preferences = new Object({
 				"New extensions are regularly added to the XKit Extension Gallery, " +
 				"which you can visit by clicking on the <b>Get Extensions</b> tab on the bottom.", "info",
 				'<div class="xkit-button default" id="xkit-tour-continue-1">Continue &rarr;</div>' +
-				'<div class="xkit-button xkit-tour-cancel">Cancel Tour</div>');
+				'<div class="xkit-button xkit-tour-cancel">Cancel Tour</div>' +
+				'<div class="xkit-button" id="xkit-welcome-back">Hold up, I\'m an existing user!</div>');
 
 			$(document).on('click', '.xkit-tour-cancel', function() {
 
 				XKit.window.close();
-				XKit.extensions.xkit_preferences.close();
 
 			});
 
@@ -671,6 +636,16 @@ XKit.extensions.xkit_preferences = new Object({
 					});
 
 				});
+
+			});
+
+			$("#xkit-welcome-back").click(function() {
+
+				XKit.window.show("Welcome back!",
+					"<strong>No need for a tour if you're just reinstalling!</strong><br>" +
+					"Just log into XCloud and restore your settings or import a local backup to pick up where you left off.", "info",
+					'<div class="xkit-button default xkit-tour-cancel">OK</div>');
+				$("#xkit-cp-tab-xcloud").trigger('click');
 
 			});
 
@@ -722,10 +697,11 @@ XKit.extensions.xkit_preferences = new Object({
 			$("#xkit-cp-tab-news").trigger('click');
 		}
 
+		$(document).on('keydown', XKit.extensions.xkit_preferences.on_modal_keydown);
 	},
 
 	close: function() {
-
+		$("#xkit_button").removeClass("active");
 		$("body").css("overflow", "auto");
 		$(".l-container").css("opacity", "1");
 		$("#xkit-control-panel-shadow").fadeOut(400);
@@ -738,8 +714,15 @@ XKit.extensions.xkit_preferences = new Object({
 			$(window).scrollTop(XKit.extensions.xkit_preferences.scroll_pos);
 		}
 
+		$(document).off('keydown', XKit.extensions.xkit_preferences.on_modal_keydown);
 	},
 
+	on_modal_keydown: function(event) {
+		// Handle esc key to close preferences modal
+		if (event.keyCode == 27) {
+			XKit.extensions.xkit_preferences.close();
+		}
+	},
 
 	show_news: function() {
 
@@ -782,7 +765,6 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 	},
-
 
 	show_get: function() {
 
@@ -1266,33 +1248,21 @@ XKit.extensions.xkit_preferences = new Object({
 
 			m_html = m_html + '<div id="xkit-extension-panel-no-settings">No settings available for this extension.</div>';
 
+		} else if (XKit.installed.enabled(extension_id) === false) {
+
+			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>'; 
+			
+		} else if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
+			
+			m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
+				
 		} else {
-
-			// To-Do: Load Extension settings Here!
-			// Check if custom control panel:
-			if (typeof XKit.extensions[extension_id].cpanel === "undefined") {
-				// Yes it is.
-				m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-			} else {
-				// Check if it also has standard options:
-				if (XKit.installed.enabled(extension_id) === false) {
-
-					m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>';
-
-				} else {
-					if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-						m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-					} else {
-						m_html = m_html + '<div id="xkit-extension-panel-settings"><div style="padding: 10px">There is a problem loading the extension panel.<br/>Update the extension and again later.</div></div>';
-					}
-				}
-			}
+			
+			m_html = m_html + '<div id="xkit-extension-panel-settings"></div>';
 		}
-
 		$("#xkit-extensions-panel-right-inner").html(m_html);
-
 		// Pass control to the extension to draw custom control panel:
-		if (typeof XKit.extensions[extension_id].cpanel !== "undefined") {
+		if (typeof XKit.extensions[extension_id].cpanel !== "undefined" && XKit.installed.enabled(extension_id) !== false) {
 			// Call it:
 			XKit.extensions[extension_id].cpanel($("#xkit-extension-panel-settings"));
 		}
@@ -1414,7 +1384,7 @@ XKit.extensions.xkit_preferences = new Object({
 			var m_ext = XKit.installed.get(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
 			XKit.window.show("Uninstall " + m_ext.title + "?",
-				"This extension will be completely deleted from your computer." +
+				"This extension will be completely deleted from your computer. " +
 				"If you change your mind, you can re-download it from the extension gallery later.",
 				"question", '<div id="xkit-extension-yes-uninstall" class="xkit-button default">Yes, uninstall</div>' +
 				'<div id="xkit-close-message" class="xkit-button">Cancel</div>');
@@ -2223,7 +2193,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 	},
 
-
 	show_others_panel_flags: function() {
 
 		var m_html =
@@ -2421,7 +2390,7 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	destroy: function() {
-		$("#new-xkit-control").remove();
+		$("#xkit_button").remove();
 		XKit.tools.remove_css('mobile_xkit_menu');
 		this.running = false;
 	}
