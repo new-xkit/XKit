@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.2.2 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -8,6 +8,8 @@
 XKit.extensions.estufars_sidebar_fix = new Object({
 
 	running: false,
+
+	done: false,
 
 	preferences: {
 		"dashonly": {
@@ -20,9 +22,9 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 	run: function() {
 		this.running = true;
 
-		// Temporary hotfix for Firefox issues
-		if (XKit.browser().firefox) {
-			console.error("Refusing to run old sidebar on Firefox due to pinned-target bug");
+		var version = XKit.tools.parse_version(XKit.version);
+		if (XKit.browser().firefox && version.major === 7 && version.minor < 8) {
+			console.warn("Refusing to run Old Sidebar on pre-58 Firefox due to pinned-target bug");
 			return;
 		}
 
@@ -89,12 +91,15 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		} else {
 			movesidebar();
 		}
+
+		this.done = true;
 	},
 
 	destroy: function() {
 		XKit.tools.remove_css("estufars_sidebar_fix");
 		this.running = false;
-
+		if (!this.done) { return; }
+		this.done = false;
 		var account = document.getElementById("account_button");
 		var sidebar = document.getElementsByClassName("estufars_sidebar_fix")[0];
 		account.style.display = "inline-block";

@@ -666,11 +666,12 @@ XKit.extensions.xinbox = new Object({
 
 		setTimeout(function() {
 
-			GM_xmlhttpRequest({
+			XKit.tools.Nx_XHR({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/delete",
+				url: "https://www.tumblr.com/svc/post/delete",
 				data: "channel_id=" + channel_id + "&post_id=" + m_id,
 				headers: {
+					"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 					"x-tumblr-form-key": m_key
 				},
 				onerror: function(response) {
@@ -892,9 +893,9 @@ XKit.extensions.xinbox = new Object({
 		m_object.form_key = form_key;
 		m_object.post_type = false;
 
-		GM_xmlhttpRequest({
+		XKit.tools.Nx_XHR({
 			method: "POST",
-			url: "http://www.tumblr.com/svc/post/fetch",
+			url: "https://www.tumblr.com/svc/post/fetch",
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
@@ -971,9 +972,9 @@ XKit.extensions.xinbox = new Object({
 			}
 
 
-			GM_xmlhttpRequest({
+			XKit.tools.Nx_XHR({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
 				json: true,
 				headers: {
@@ -984,8 +985,6 @@ XKit.extensions.xinbox = new Object({
 					XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
 				},
 				onload: function(response) {
-					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					try {
 						var responseData = $.parseJSON(response.responseText);
 					} catch (e) {

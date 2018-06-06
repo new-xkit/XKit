@@ -27,7 +27,8 @@ XKit.extensions.activity_plus = new Object({
 		unfold_rollups: {
 			text: "Expand Tumblr-condensed reblog notes",
 			default: true,
-			value: true
+			value: true,
+			experimental: true
 		},
 		notes_filter: {
 			text: "Enable Filter Notes By Type",
