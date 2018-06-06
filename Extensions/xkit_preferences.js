@@ -2116,33 +2116,23 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		$("#xkit-extensions-panel-right").nanoScroller();
 
-		function update_button(el, text) {
-			if (el.hasClass("disabled")) {
-				return;
-			}
-			XKit.tools.make_gist(text).then(function(url) {
-				el.replaceWith('<input class="xkit-url-field" type="text" value="' + url + '">');
-				$('input.xkit-url-field[value="' + url + '"]')[0].setSelectionRange(0, url.length);
-			});
-			el.text("loading...");
-			el.addClass("disabled");
-		}
-
 		$("#xkit-panel-extension-info").click(function() {
 
 			var text = "XKit version " + XKit.version + "\n" +
 					"extensions:\n" + XKit.installed.list().map(function(i) {
 						return "   " + i + ": " + XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)");
 					}).join("\n");
+			var timestamp = new Date();
 
-			update_button($(this), text);
+			XKit.tools.make_file("XKit Basic Export " + timestamp.getTime() + ".txt", text);
 		});
 
 		$("#xkit-panel-full-config").click(function() {
 
 			var text = JSON.stringify(XKit.tools.dump_config());
+			var timestamp = new Date();
 
-			update_button($(this), text);
+			XKit.tools.make_file("XKit Full Export " + timestamp.getTime() + ".txt", text);
 		});
 	},
 

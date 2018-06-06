@@ -241,30 +241,30 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 
-			/**
-			 * Create an anonymous Github gist
-			 * @param {String} text - the gist's intended text
-			 * @param {String?} name - the user name to be associated with the gist
-			 * @return {Promise<String>} Promise resolved with the gist's URL
-			 */
-			XKit.tools.make_gist = function(text, name) {
+			XKit.tools.make_file = function(filename, data, options) {
+				try {
 
-				if (!name) {
-					name = "xkit-gist";
+					if (!Array.isArray(data)) {
+						data = [data];
+					}
+
+					var blob = new Blob(data, options || { type: "text/plain" });
+					var fakelink = document.createElement("a");
+					var url = window.URL.createObjectURL(blob);
+
+					fakelink.style.display = "none";
+					fakelink.href = url;
+					fakelink.download = filename || true;
+
+					document.body.appendChild(fakelink);
+					fakelink.click();
+					window.URL.revokeObjectURL(url);
+					return true;
+
+				} catch (e) {
+					console.error(e.message);
+					return false;
 				}
-				var files = {};
-				files[name] = {content: text};
-				return $.ajax({
-					url: 'https://api.github.com/gists',
-					type: 'POST',
-					data: JSON.stringify({
-						description: "automatically created by xkit",
-						public: false,
-						files: files,
-					}),
-				}).then(function(resp) {
-					return resp.html_url;
-				});
 			};
 
 			/**
@@ -397,14 +397,17 @@ XKit.extensions.xkit_patches = new Object({
 			 *                  setting value
 			 */
 			XKit.tools.dump_config = function() {
-				var values = GM_listValues();
-				if (values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
-					values = Object.keys(window.xkit_storage);
-				}
-				return values.reduce(function(obj, x) {
-					obj[x] = GM_getValue(x);
+				if (XKit.browser().safari) {
+					var obj = XBridge.storage_area;
+					for (var x in obj) {
+						obj[x] = XBridge.storage.read(x);
+					}
 					return obj;
-				}, {});
+				} else {
+					// from WebExtension/bridge.js
+					/* globals xkit_storage */
+					return xkit_storage;
+				}
 			};
 
 			/**

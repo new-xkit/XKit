@@ -453,25 +453,8 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	local_export: function() {
-		var upload_data = this.create_export_data(false)[0];
-		var data_blob = new Blob([upload_data], {type: "text/plain"});
-
-
-		var dummyLink = document.createElement("a");
-		document.body.appendChild(dummyLink);
-		dummyLink.style = "display: none";
-
-		var fileName = "xcloud_payload.txt";
-		var url = window.URL.createObjectURL(data_blob);
-		dummyLink.href = url;
-		dummyLink.download = fileName;
-		dummyLink.click();
-
-		setTimeout(function() {
-			window.URL.revokeObjectURL(url);
-			XKit.extensions.xcloud.hide_overlay();
-		}, 100);
-
+		XKit.tools.make_file("xcloud_payload.txt", this.create_export_data(false)[0]);
+		setTimeout(function() { XKit.extensions.xcloud.hide_overlay(); }, 100);
 	},
 
 	local_import: function() {
