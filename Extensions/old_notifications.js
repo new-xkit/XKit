@@ -1,5 +1,5 @@
 //* TITLE Classic Notifications **//
-//* VERSION 0.7.2 **//
+//* VERSION 0.7.3 **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/new-xkit-extension), just the way it was before Tumblr's Activity update. **//
 //* DEVELOPER New-XKit **//

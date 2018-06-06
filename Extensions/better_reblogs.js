@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.3.2 **//
+//* VERSION 1.3.3 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -141,12 +141,6 @@ XKit.extensions.better_reblogs = new Object({
 			this.run_flat();
 		}
 
-	},
-
-	frame_run: function() {
-		if (XKit.page.peepr) {
-			XKit.extensions.better_reblogs.run();
-		}
 	},
 
 	destroy: function() {

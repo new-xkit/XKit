@@ -1,7 +1,7 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.5 **//
+//* VERSION 0.1.6 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
-//* DEVELOPER dlmarquis **//
+//* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA true **//
 

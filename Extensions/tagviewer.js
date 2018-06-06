@@ -47,14 +47,6 @@ XKit.extensions.tagviewer = new Object({
 		}
 	},
 
-	frame_run: function() {
-
-		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr) {
-			XKit.extensions.tagviewer.run();
-		}
-
-	},
-
 	run: function() {
 
 		this.running = true;

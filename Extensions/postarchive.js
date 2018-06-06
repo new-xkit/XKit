@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 1.0.5 **//
+//* VERSION 1.0.6 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER new-xkit **//

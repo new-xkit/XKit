@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.7 **//
+//* VERSION 2.5.8 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -152,7 +152,7 @@ XKit.extensions.show_more = new Object({
 			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous || XKit.extensions.show_more.popup_data.anonymous_asks || XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
 				anon_status = "1";
 			}
-			if (user_url === "xkit-extension" || user_url === "new-xkit-extension") {
+			if (user_url === "new-xkit-extension") {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" target=\"_BLANK\" class=\"xkit-ask\">XKit Support</a>";
 			} else {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" data-anonymous-ask=\"" + anon_status + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-ask ask\">Ask</a>";

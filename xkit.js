@@ -39,7 +39,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				return;
 			}
 
-			if (XKit.page.ask_frame || XKit.page.blog_frame || XKit.page.peepr) {
+			if (XKit.page.ask_frame || XKit.page.blog_frame) {
 				XKit.init_frame();
 				return;
 			}
@@ -2576,41 +2576,18 @@ var xkit_global_start = Date.now();  // log start timestamp
 				XKit.interface.added_icon_icon.push(icon);
 				XKit.interface.added_icon_text.push(text);
 
-				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
+				XKit.tools.add_css("." + class_name + ":after {" +
+						" background-image: url('" + icon + "') !important;" +
+						" background-size: auto auto !important;" +
+						" margin-top: -7px !important; " +
+						"}", "xkit_interface_icon___" + class_name);
 
-					XKit.tools.add_css("." + class_name + "{" +
-							" background-image: url('" + icon + "') !important;" +
-							" background-size: auto auto !important;" +
-							" background-repeat: no-repeat !important;" +
-							" background-position: center !important;" +
-							" margin-top: 9px !important; " +
-							" opacity: 0.3;" +
-							"}", "xkit_interface_icon___" + class_name);
-
-					if (typeof ok_icon !== "undefined") {
-						XKit.tools.add_css("." + class_name + ".xkit-interface-completed {" +
-							" background-image: url('" + ok_icon + "') !important;" +
-							" background-size: auto auto !important;" +
-							" opacity: 1 !important; " +
-							"}", "xkit_interface_icon___completed___" + class_name);
-					}
-
-				} else {
-
-					XKit.tools.add_css("." + class_name + ":after {" +
-							" background-image: url('" + icon + "') !important;" +
-							" background-size: auto auto !important;" +
-							" margin-top: -7px !important; " +
-							"}", "xkit_interface_icon___" + class_name);
-
-					if (typeof ok_icon !== "undefined") {
-						XKit.tools.add_css("." + class_name + ".xkit-interface-completed:after {" +
-							" background-image: url('" + ok_icon + "') !important;" +
-							" background-size: auto auto !important;" +
-							" opacity: 1 !important; " +
-							"}", "xkit_interface_icon___completed___" + class_name);
-					}
-
+				if (typeof ok_icon !== "undefined") {
+					XKit.tools.add_css("." + class_name + ".xkit-interface-completed:after {" +
+						" background-image: url('" + ok_icon + "') !important;" +
+						" background-size: auto auto !important;" +
+						" opacity: 1 !important; " +
+						"}", "xkit_interface_icon___completed___" + class_name);
 				}
 
 				$(document).on('click', '.' + class_name, function() {

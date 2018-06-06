@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.1.0 **//
+//* VERSION 2.1.1 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({

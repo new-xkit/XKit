@@ -47,10 +47,6 @@ XKit.extensions.xkit_patches = new Object({
 
 			if (m_url === "undefined") { return; }
 
-			if (m_url === "xkit-extension") {
-				$(".btn.fan_mail").remove();
-			}
-
 		}
 
 		// Increasing storage for extensions from 50kb to 150kb.
@@ -142,6 +138,7 @@ XKit.extensions.xkit_patches = new Object({
 	},
 
 	patches: {
+		"7.9.0": function() {},
 		"7.8.2": function() {
 			XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
 
@@ -1701,41 +1698,18 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.interface.added_icon_icon.push(icon);
 					XKit.interface.added_icon_text.push(text);
 
-					if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
+					XKit.tools.add_css("." + class_name + ":after {" +
+							" background-image: url('" + icon + "') !important;" +
+							" background-size: auto auto !important;" +
+							" margin-top: -7px !important; " +
+							"}", "xkit_interface_icon___" + class_name);
 
-						XKit.tools.add_css("." + class_name + "{" +
-								" background-image: url('" + icon + "') !important;" +
-								" background-size: auto auto !important;" +
-								" background-repeat: no-repeat !important;" +
-								" background-position: center !important;" +
-								" margin-top: 9px !important; " +
-								" opacity: 0.3;" +
-								"}", "xkit_interface_icon___" + class_name);
-
-						if (typeof ok_icon !== "undefined") {
-							XKit.tools.add_css("." + class_name + ".xkit-interface-completed {" +
-								" background-image: url('" + ok_icon + "') !important;" +
-								" background-size: auto auto !important;" +
-								" opacity: 1 !important; " +
-								"}", "xkit_interface_icon___completed___" + class_name);
-						}
-
-					} else {
-
-						XKit.tools.add_css("." + class_name + ":after {" +
-								" background-image: url('" + icon + "') !important;" +
-								" background-size: auto auto !important;" +
-								" margin-top: -7px !important; " +
-								"}", "xkit_interface_icon___" + class_name);
-
-						if (typeof ok_icon !== "undefined") {
-							XKit.tools.add_css("." + class_name + ".xkit-interface-completed:after {" +
-								" background-image: url('" + ok_icon + "') !important;" +
-								" background-size: auto auto !important;" +
-								" opacity: 1 !important; " +
-								"}", "xkit_interface_icon___completed___" + class_name);
-						}
-
+					if (typeof ok_icon !== "undefined") {
+						XKit.tools.add_css("." + class_name + ".xkit-interface-completed:after {" +
+							" background-image: url('" + ok_icon + "') !important;" +
+							" background-size: auto auto !important;" +
+							" opacity: 1 !important; " +
+							"}", "xkit_interface_icon___completed___" + class_name);
 					}
 
 					$(document).on('click', '.' + class_name, function() {

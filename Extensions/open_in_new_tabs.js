@@ -1,5 +1,5 @@
 //* TITLE Open In Tabs **//
-//* VERSION 1.1.6 **//
+//* VERSION 1.1.7 **//
 //* DESCRIPTION Changes links to open in new tabs **//
 //* DETAILS Open In Tabs allows you to open links on new tabs, useful if you don't like being confined to one tab. Since some links, if opened in new tabs, can break functionality, they are not effected by this extension. **//
 //* DEVELOPER STUDIOXENIX **//

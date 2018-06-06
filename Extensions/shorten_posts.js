@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.2.3 **//
+//* VERSION 0.2.4 **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension shortens text posts. You can toggle settings to choose which types of posts to shorten. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//

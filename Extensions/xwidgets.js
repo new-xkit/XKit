@@ -1,5 +1,5 @@
 //* TITLE XWidgets **//
-//* VERSION 0.3.2 **//
+//* VERSION 0.3.3 **//
 //* DESCRIPTION Widgets for your dashboard **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//

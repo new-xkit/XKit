@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.6 **//
+//* VERSION 0.2.7 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//

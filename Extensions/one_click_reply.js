@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.1.2 **//
+//* VERSION 2.1.3 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER new-xkit **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
