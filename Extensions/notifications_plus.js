@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5.5 **//
+//* VERSION 1.5.6 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -142,11 +142,11 @@ XKit.extensions.notifications_plus = new Object({
 			$("body").append("<div id=\"xpreview-container\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");
 		}
 
-		$(document).on("mouseenter", ".notification, .ui_note", function() {
+		$(document).on("mouseenter", ".notification, .ui_note, .activity-notification", function() {
 			XKit.extensions.notifications_plus.xpreview_show($(this));
 		});
 
-		$(document).on("mouseleave", ".notification, .ui_note", function(e) {
+		$(document).on("mouseleave", ".notification, .ui_note, .activity-notification", function() {
 			$("#xpreview-container").css("display", "none");
 		});
 
@@ -161,17 +161,16 @@ XKit.extensions.notifications_plus = new Object({
 		}*/
 
 		// get post URL.
-		var post_url = $(obj).find(".preview_frame").attr('href');
-		if ($(obj).hasClass("ui_note") === true) {
-			post_url = $(obj).find(".part_glass").attr('href');
-		}
+		var link_selectors = ".part_glass, .activity-notification__glass, .preview_frame";
+		var post_url = post_url = $(obj).find(link_selectors).attr('href');
 
 		if ($(obj).hasClass("is_follower") === true) { return; }
+		if (post_url.includes("/submissions?")) { return; }
 
 		var using_preview = false;
 
 		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
-			if ($(obj).hasClass("ui_note") === true) {
+			if ($(obj).hasClass("activity-notification") === true) {
 				if ($(obj).find(".ui_post_badge").hasClass("photo")) {
 					using_preview = true;
 					var m_preview = $(obj).find(".ui_post_badge").css("background-image");
