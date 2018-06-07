@@ -1210,7 +1210,7 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="more-info" style="display: none;" id="xkit-extension-more-info">attributes</div>' +
 					'<div class="description">' + m_extension.description;
 
-		var xkit_developers = ["studioxenix", "new-xkit", "dlmarquis", "hobinjk", "thepsionic", "nightpool", "blackjackkent", "wolvan", "bvtsang", "0xazure"];
+		var xkit_developers = ["studioxenix", "new-xkit", "dlmarquis", "hobinjk", "thepsionic", "nightpool", "blackjackkent", "wolvan", "bvtsang", "0xazure", "aprilsylph"];
 		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1) {
 			m_html = m_html + '<div class="xkit-third-party-warning">third party extension</div>';
 		}
@@ -2307,33 +2307,33 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html =
 				'<div id="xkit-logo-big">&nbsp;</div>' +
 				'<div id="xkit-about-window-text">' +
-					'<div class="title">XKit Version ' + XKit.version + '</div>' +
+					'<span class="title">XKit Version ' + XKit.version + '</span>' +
+					'<span>XKit Patches v. ' + XKit.installed.version('xkit_patches') + '</span>' +
 					'<div class="subtitle">The Extension Framework for Tumblr.</div>' +
-					'<div class="copyright">&copy; 2011 - 2014 STUDIOXENIX</div>' +
-					'<div class="copyright">&copy; 2015 - 2016 the New XKit Team</div>' +
-					'<div>XKit Patches v. ' + XKit.installed.version('xkit_patches') + '</div>' +
-					'<div class="thanks">The New XKit Team would like to thank all of the myriad users and, ' +
-					'contributors who have worked to make this plugin what it is today. ' +
+					'<div class="copyright">&copy; 2011 - 2014&ensp;STUDIOXENIX</div>' +
+					'<div class="copyright">&copy; 2015 - 2018&ensp;the New XKit Team</div>' +
+					'<div class="thanks">The New XKit Team would like to thank all of the myriad users and ' +
+					'<a href="https://github.com/new-xkit/XKit/contributors" target="_blank">contributors</a> who have worked to make this plugin what it is today. ' +
 					"Above all we would like to thank Atesh, the original XKit Guy, " +
 					'without whom we all would have been lost to the outer darkness some time ago.</div>' +
 				'</div>' +
 				'<div id="xkit-about-window-links">' +
-					'<a href="https://new-xkit-extension.tumblr.com">New XKit Tumblr</a>' +
+					'<a href="https://new-xkit-extension.tumblr.com" target="_blank">New XKit Tumblr</a>' +
 					'<a href="#" id="xkit-open-credits">Credits</a>' +
-					'<a href="http://new-xkit-support.tumblr.com/support">Support</a>' +
-					'<a href="https://github.com/new-xkit/XKit/wiki">Documentation</a>' +
+					'<a href="https://new-xkit-support.tumblr.com/support" target="_blank">Support</a>' +
+					'<a href="https://github.com/new-xkit/XKit/wiki" target="_blank">Documentation</a>' +
 				'</div>';
 		$("#xkit-control-panel-inner").html(m_html);
 
 		$("#xkit-open-credits").click(function() {
 
 			XKit.window.show("Credits",
-					'XKit uses <a href="www.jquery.com">jQuery and jQuery UI</a> by jQuery Foundation, ' +
-					'<a href="https://github.com/timrwood/moment/">moment.js</a> by Tim Wood, ' +
-					'<a href="http://code.drewwilson.com/entry/tiptip-jquery-plugin">TipTip</a> by Drew Wilson and ' +
-					'<a href="http://jamesflorentino.github.io/nanoScrollerJS/">nanoScroll</a> by James Florentino. ' +
+					'XKit uses <a href="https://jquery.com/" target="_blank">jQuery and jQuery UI</a> by jQuery Foundation, ' +
+					'<a href="https://momentjs.com/" target="_blank">moment.js</a> by Tim Wood, ' +
+					'<a href="https://github.com/drewwilson/TipTip" target="_blank">TipTip</a> by Drew Wilson and ' +
+					'<a href="https://jamesflorentino.github.io/nanoScrollerJS/" target="_blank">nanoScroll</a> by James Florentino. ' +
 					'<br/><br/>' +
-					'The original XKit extension was written by <a href="http://www.studioxenix.com/">STUDIOXENIX</a>, a one-man entity.<br/><br/>' +
+					'The original XKit extension was written by STUDIOXENIX, a one-man entity.<br/><br/>' +
 					'All trademarks are the property of their respective owners.',
 				"info", '<div class="xkit-button default" id="xkit-close-message">OK</div>');
 

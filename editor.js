@@ -4,7 +4,7 @@
 	Version 1.2.1
 
 	(c) 2011 - 2014 STUDIOXENIX
-	(c) 2015 New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
+	(c) 2015 - 2018 the New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
 
 */
 
@@ -27,7 +27,7 @@ var json_changed, extension_changed;
 
 function extension_editor_run() {
 
-	var keyText = navigator.platform.match(/Mac/i) ? "Meta" : "Ctrl";
+	var keyText = navigator.platform.match(/Mac/i) ? "Cmd" : "Ctrl";
 
 	var m_html =	"<div id=\"xkit-editor-sidebar\">" +
 						"<div id=\"xkit-editor-open-file\" class=\"no-file\">No file opened</div>" +
@@ -35,7 +35,6 @@ function extension_editor_run() {
 						"<div id=\"xkit-editor-open\" class=\"xkit-button block\">Open Extension (" + keyText + " + O)</div>" +
 						"<div id=\"xkit-editor-save\" class=\"xkit-button disabled block\">Save (" + keyText + " + S)</div>" +
 						"<div id=\"xkit-editor-delete\" class=\"xkit-button disabled block\">Delete (" + keyText + " + D)</div>" +
-						"<div id=\"xkit-editor-update\" class=\"xkit-button disabled block\" style=\"display: none !important;\">Update from XKit Servers</div>" +
 					"</div>" +
 					"<div id=\"xkit-editor-area\">" +
 						"<div id=\"xkit-editor-tabs\">" +
@@ -451,7 +450,6 @@ function extension_editor_update_filename(filename) {
 		$("#xkit-editor-attributes").removeClass("disabled");
 		$("#xkit-editor-save").removeClass("disabled");
 		$("#xkit-editor-delete").removeClass("disabled");
-		$("#xkit-editor-update").removeClass("disabled");
 	} else {
 		document.title = "XKit Extension Editor";
 		$("#xkit-editor-open-file").html("No file opened");
@@ -459,7 +457,6 @@ function extension_editor_update_filename(filename) {
 		$("#xkit-editor-attributes").addClass("disabled");
 		$("#xkit-editor-save").addClass("disabled");
 		$("#xkit-editor-delete").addClass("disabled");
-		$("#xkit-editor-update").addClass("disabled");
 	}
 
 }

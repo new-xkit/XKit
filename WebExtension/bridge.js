@@ -3,7 +3,8 @@
 	Bridge2 for XKit
 	Version 2.2.1
 
-	(c) 2011 - 2013 STUDIOXENIX
+	(c) 2011 - 2014 STUDIOXENIX
+	(c) 2015 - 2018 the New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
 
 */
 
