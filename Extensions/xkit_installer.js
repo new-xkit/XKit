@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9.5 **//
+//* VERSION 6.9.6 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
