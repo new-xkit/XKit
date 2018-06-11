@@ -1,5 +1,5 @@
 //* TITLE Tumblr Fortress 2 **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION Replaces reblog icons with TF2 kill icons **//
 //* DEVELOPER circlejourney **//
 //* FRAME false **//
@@ -35,7 +35,7 @@ XKit.extensions.tf2_reblogs = new Object({
 
 	change_icon: function() {
 		$(".reblog_icon").each(function() {
-			var iconurl = XKit.extensions.tf2_reblogs.icons[Math.floor(Math.random() * XKit.extensions.tf2_reblogs.icons.length)];
+			var iconurl = XKit.extensions.tf2_reblogs.icons[$(this).parents("div.post").attr("data-post-id") % XKit.extensions.tf2_reblogs.icons.length];
 			$(this).replaceWith('<img class="tf2_icon" src="' + iconurl + '" style="vertical-align: top; margin: 0 5px; max-height: 20px;">');
 		});
 	},
