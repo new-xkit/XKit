@@ -179,3 +179,7 @@ Procfile    text
 
 ## LINGUIST
 Extensions/* linguist-generated=false
+Extensions/dist/*.json linguist-generated=true
+Extensions/dist/page/gallery.json linguist-generated=true
+Extensions/dist/page/list.json linguist-generated=true
+Extensions/dist/page/themes.json linguist-generated=true
