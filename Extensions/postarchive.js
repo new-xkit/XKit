@@ -432,8 +432,7 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-search").keyup(function() {
 
-			var m_value = $(this).val().toLowerCase();
-			m_value = $.trim(m_value);
+			var m_value = $(this).val().toString().trim().toLowerCase();
 
 			if (m_value === "") {
 
@@ -733,7 +732,7 @@ XKit.extensions.postarchive = {
 			post_tags = "<div class=\"post_tags\"><div class=\"post_tags_inner\">";
 
 			data.tags.forEach(function(tag) {
-				var fixed_tag_url = XKit.tools.replace_all(tag, + " ", "-");
+				var fixed_tag_url = XKit.tools.replace_all(tag, " ", "-");
 				post_tags += `<a class="post_tag" href="http://tumblr.com/tagged/${fixed_tag_url}">#${tag}</a>`;
 			});
 
@@ -847,9 +846,9 @@ XKit.extensions.postarchive = {
 
 			$("#xkit-postarchive-save-new-name").click(function() {
 
-				var m_title = $("#xkit-postarchive-title").val();
+				var m_title = $("#xkit-postarchive-title").val().toString().trim();
 
-				if ($.trim(m_title) === "") { XKit.window.close(); }
+				if (m_title === "") { XKit.window.close(); }
 
 				XKit.extensions.postarchive.rename_archived_post(post_id, m_title);
 
@@ -1147,13 +1146,12 @@ XKit.extensions.postarchive = {
 		XKit.window.show("Archive This Post", `<b>Title:</b><input type="text" value="${m_title}" maxlength="150" placeholder="Enter a title (example: 'hotline phone list')" class="xkit-textbox" id="xkit-postarchive-title"><b>Category:</b><br/>${m_categories}`, "question", "<div class=\"xkit-button default\" id=\"xkit-postarchive-save\">Save</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-postarchive-save").click(function() {
-
 			var $save_title = $("#xkit-postarchive-title");
-			var save_title = $save_title.val();
+			var save_title = $save_title.val().toString().trim();
 
 			if ($(this).hasClass("disabled")) { return; }
 
-			if ($.trim(save_title) === "") {
+			if (save_title === "") {
 				$save_title
 					.css("border-color", "red")
 					.attr("placeholder", "Please enter a title for this post.")
@@ -1163,6 +1161,7 @@ XKit.extensions.postarchive = {
 							.attr("placeholder", "Enter a title (example: 'hotline phone list')")
 							.off("click");
 					});
+
 				return;
 			}
 
@@ -1170,7 +1169,7 @@ XKit.extensions.postarchive = {
 
 			if ($("#xkit-postarchive-category").length > 0) {
 
-				m_category = $("#xkit-postarchive-category").val();
+				m_category = $("#xkit-postarchive-category").val().toString();
 
 			}
 
@@ -1324,9 +1323,8 @@ XKit.extensions.postarchive = {
 			XKit.window.show("New category", '<b>Category Name:</b><input type="text" maxlength="40" placeholder="e.g. Recipes" class="xkit-textbox" id="xkit-postarchive-category-add-title">', "question", '<div class="xkit-button default" id="xkit-postarchive-create-category">Create Category</div><div class="xkit-button" id="xkit-close-message">Cancel</div>');
 
 			$("#xkit-postarchive-create-category").click(function() {
-
 				var $m_title = $("#xkit-postarchive-category-add-title");
-				var m_title = $m_title.val();
+				var m_title = $m_title.val().toString().trim();
 				function complain(problem) {
 					$m_title
 						.css("border-color", "red")
@@ -1340,7 +1338,7 @@ XKit.extensions.postarchive = {
 						});
 				}
 
-				if ($.trim(m_title) === "") {
+				if (m_title === "") {
 					complain("You can't create a category without a title!");
 					return;
 				}

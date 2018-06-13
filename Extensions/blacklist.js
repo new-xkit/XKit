@@ -279,11 +279,10 @@ XKit.extensions.blacklist = new Object({
 		});
 
 		$("#xkit-blacklist-add-words").click(function() {
-
 			var $m_to_add = $("#xkit-blacklist-import-words");
-			var m_to_add = $m_to_add.val();
+			var m_to_add = $m_to_add.val().toString().trim();
 
-			if (m_to_add === "" || $.trim(m_to_add) === "") {
+			if (m_to_add === "") {
 				$m_to_add
 					.css("border-color", "red")
 					.attr("placeholder", "You forgot to paste anything.")
@@ -434,9 +433,8 @@ XKit.extensions.blacklist = new Object({
 		});
 
 		$("#xkit-blacklist-add-word").click(function() {
-
 			var $m_to_add = $("#xkit-blacklist-word");
-			var m_to_add = $m_to_add.val();
+			var m_to_add = $m_to_add.val().toString().trim();
 			function complain(problem) {
 				$m_to_add
 					.css("border-color", "red")
@@ -450,7 +448,7 @@ XKit.extensions.blacklist = new Object({
 					});
 			}
 
-			if (m_to_add === "" || $.trim(m_to_add) === "") {
+			if (m_to_add === "") {
 				complain("Not even XKit can save you from ALL posts.");
 				return;
 			}

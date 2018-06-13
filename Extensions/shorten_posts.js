@@ -172,7 +172,7 @@ XKit.extensions.shorten_posts = new Object({
 			obj = $(obj).parentsUntil(".post").parent().find(".xkit-shorten-posts-embiggen");
 		}
 
-		var m_height = $(obj).attr('data-old-height');
+		var m_height = parseInt($(obj).attr('data-old-height'));
 		var post_div = $(obj).parent();
 
 		var m_speed = 200 + (m_height / 2);

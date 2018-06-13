@@ -506,14 +506,14 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
 			XKit.extensions.tweaks.add_css(".elevator-wrapper { display: block !important; } .elevator { opacity: 1 !important; visibility: visible !important; transform: translateY(0px) translateZ(0px) !important; }", "xkit_tweaks_show_top_arrow");
 			XKit.tools.add_function(function() {
-				Tumblr.KeyCommands.elevate = function() {jQuery("html, body").stop(true).animate({scrollTop:0}, "slow");};
+				Tumblr.KeyCommands.elevate = function() {$("html, body").stop(true).animate({scrollTop:0}, "slow");};
 			}, true, "");
 		}
 
 		if (XKit.extensions.tweaks.preferences.larger_top_arrow.value) {
 			XKit.extensions.tweaks.add_css(".elevator-wrapper { transform: scale(2.5) translateZ(0px); }", "xkit_tweaks_larger_top_arrow");
 			XKit.tools.add_function(function() {
-				Tumblr.KeyCommands.elevate = function() {jQuery("html, body").stop(true).animate({scrollTop:0}, "slow");};
+				Tumblr.KeyCommands.elevate = function() {$("html, body").stop(true).animate({scrollTop:0}, "slow");};
 			}, true, "");
 		}
 
@@ -744,7 +744,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}", "tweaks_old_photo_margins");
 
 		$(".post_media_photo.image").each(function() {
-			if ($(this).attr("width") > 500 ) {
+			if (parseInt($(this).attr("width")) > 500 ) {
 				$(this).attr("style", "margin-left: 20px; width: 500px;");
 				$(this).attr("height", "auto");
 			}

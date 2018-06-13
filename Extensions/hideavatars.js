@@ -137,9 +137,8 @@ XKit.extensions.hideavatars = new Object({
 			XKit.window.show("Add blog", "<b>Blog URL:</b><input type=\"text\" maxlength=\"40\" placeholder=\"e.g. new-xkit-extension\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\">", "question", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-create-blogname\">Add Blog</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-hideavatars-create-blogname").click(function() {
-
 				var $m_title = $("#xkit-hideavatars-blogname-add-title");
-				var m_title = $m_title.val();
+				var m_title = $m_title.val().toString().trim();
 				function complain(problem) {
 					$m_title
 						.css("border-color", "red")
@@ -153,7 +152,7 @@ XKit.extensions.hideavatars = new Object({
 						});
 				}
 
-				if ($.trim(m_title) === "") {
+				if (m_title === "") {
 					complain("Please enter a blog name.");
 					return;
 				}

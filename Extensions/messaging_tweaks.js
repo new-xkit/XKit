@@ -208,7 +208,7 @@ XKit.extensions.messaging_tweaks = new Object({
 						var emoji = new Image();
 						emoji.alt = ":" + emoji_tag + ":";
 						emoji.title = ":" + emoji_tag + ":";
-						emoji.height = "22";
+						emoji.height = 22;
 						emoji.onload = img_onload.bind(this, msg_div, emojis[i].replace("+", "\\+"), emoji);
 						emoji.src = emoji_url;
 					}

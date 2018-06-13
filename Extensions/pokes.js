@@ -317,7 +317,7 @@ XKit.extensions.pokes = {
 		$(".xkit-pokes-pc-info .nickname-textbox").change(function() {
 			$(this).hide();
 			XKit.extensions.pokes.rename_poke($("div.active").attr("data-array_index"), $(this).val(), function() {
-				$("div.active").attr("data-pokenick", $(".xkit-pokes-pc-info .nickname-textbox").val());
+				$("div.active").attr("data-pokenick", $(".xkit-pokes-pc-info .nickname-textbox").val().toString());
 				$(".xkit-pokes-pc-info .nickname").show();
 				if (typeof $("div.active").attr("data-pokenick") !== "undefined" && $("div.active").attr("data-pokenick")) {
 					$(".xkit-pokes-pc-info .nickname").html("<div title='Click to nickname!'>" + $("div.active").attr("data-pokenick") + "</div>");
@@ -345,7 +345,7 @@ XKit.extensions.pokes = {
 					$(".caught").filter(function() {
 						return $(this).attr("data-array_index") > array_index;
 					}).each(function() {
-						$(this).attr("data-array_index", $(this).attr("data-array_index") - 1);
+						$(this).attr("data-array_index", parseInt($(this).attr("data-array_index").toString()) - 1);
 					});
 					$(".xkit-pokes-pc-info .caught_stats").show();
 					$(".xkit-pokes-pc-info .gender").hide();

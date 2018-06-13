@@ -131,7 +131,7 @@ XKit.extensions.postblock = new Object({
 			XKit.extensions.postblock.blacklisted.pop();
 			XKit.storage.set("postblock", "posts", XKit.extensions.postblock.blacklisted.join(","));
 
-			$("#xkit-postblock-cp-count").html((XKit.extensions.postblock.blacklisted.length - 1));
+			$("#xkit-postblock-cp-count").html((XKit.extensions.postblock.blacklisted.length - 1).toString());
 
 			if ((XKit.extensions.postblock.blacklisted.length - 1) === 0) {
 				$("#postblock-undo-last").addClass("disabled");

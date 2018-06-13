@@ -49,6 +49,9 @@ function getBridgeError() {
 	return m_object;
 }
 
+/**
+ * @returns {number}
+ */
 function getVersion() {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', browser.extension.getURL('manifest.json'), false);

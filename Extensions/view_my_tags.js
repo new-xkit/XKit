@@ -170,8 +170,8 @@ XKit.extensions.view_my_tags = new Object({
 
 			$("#xkit-view-my-tags-search").keyup(function() {
 
-				var m_value = $(this).val().toLowerCase();
-				m_value = $.trim(m_value);
+				var m_value = $(this).val().toString().trim().toLowerCase();
+
 				if (m_value === "") {
 					$(".xkit-view-my-tags-tag").removeClass("xkit-view-tags-hidden");
 				}

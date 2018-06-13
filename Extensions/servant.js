@@ -1132,7 +1132,7 @@ XKit.extensions.servant = new Object({
 					parameter_fixed = parameter_fixed.replace("%" + (i + 1), returns[i]);
 				}
 
-				var m_post = "";
+				var m_post = undefined;
 
 				for (var j = 0; j < to_pass.length; j++) {
 					if (compatibility[j] === "post") {
@@ -1140,7 +1140,7 @@ XKit.extensions.servant = new Object({
 					}
 				}
 
-				if (m_post !== "") {
+				if (m_post !== undefined) {
 					var to_run = function() {
 						eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 					};
@@ -1336,7 +1336,7 @@ XKit.extensions.servant = new Object({
 		causes.forEach(function(cause) {
 			var to_run = XKit.extensions.servant.causes[cause.id].run;
 
-			var m_result = false;
+			var m_result = undefined;
 
 			if (XKit.extensions.servant.causes[cause.id].runs_on === "post") {
 
@@ -1491,9 +1491,9 @@ XKit.extensions.servant = new Object({
 		var found = false;
 
 		$(".xkit-servant-option-textbox").each(function() {
-
 			var $this = $(this);
-			if ($.trim($this.val()) === "") {
+
+			if ($this.val().toString().trim() === "") {
 				found = true;
 				if ($this.attr("data-old-placeholder")) { return; }
 				$this
@@ -1513,9 +1513,9 @@ XKit.extensions.servant = new Object({
 		});
 
 		$(".xkit-servant-option-listbox").each(function() {
-
 			var $this = $(this);
-			if ($.trim($this.val()) === "") {
+
+			if ($this.val().toString().trim() === "") {
 				found = true;
 				if ($this.attr("data-old-placeholder")) { return; }
 				$this
@@ -1605,7 +1605,7 @@ XKit.extensions.servant = new Object({
 		m_servant.create_time = Math.round(new Date().getTime() / 1000);
 		m_servant.last_run = -1;
 
-		m_servant.title = $.trim($("#xkit-servant-add-title").val());
+		m_servant.title = $("#xkit-servant-add-title").val().toString().trim();
 
 		XKit.extensions.servant.load_servants();
 
@@ -1627,7 +1627,7 @@ XKit.extensions.servant = new Object({
 
 		var m_val = $(obj).val();
 
-		var to_return = "";
+		var to_return = undefined;
 
 		$(obj).find("option").each(function() {
 
@@ -1839,7 +1839,7 @@ XKit.extensions.servant = new Object({
 
 			$(settings_box).removeClass("xkit-servant-options-shown");
 
-			$(settings_box).parent().attr('data-last-id', $(this).val());
+			$(settings_box).parent().attr('data-last-id', $(this).val().toString());
 
 			$(settings_box).parent().find(".xkit-servant-help-for-line").attr('title', XKit.extensions.servant.add_window_option_get_real_value($(settings_box).parent().find(".xkit-servant-add-option")).attr('data-description')).tipTip({ delay: 0, defaultPosition: "right", maxWidth: "300px" });
 

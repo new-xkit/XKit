@@ -269,7 +269,7 @@ XKit.extensions.one_click_reply = new Object({
 					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var mdata = null;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.one_click_reply.quick_reply_error("106");
 					}
@@ -663,7 +663,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		var m_sentence = "";
 
-		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
+		if ($(obj).find(".notification_sentence").find(".hide_overflow").length > 0) {
 			m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
 			if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html')) {
 				var text_html = $(obj).find(".notification_sentence").attr('data-xkit-text-version-html');

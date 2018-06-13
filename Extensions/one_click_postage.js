@@ -947,7 +947,7 @@ XKit.extensions.one_click_postage = new Object({
 				if (XKit.extensions.one_click_postage.user_on_box && e.which >= 49 && e.which <= 57) { // 49-57 = 1-9
 					var index = e.which - 49;
 					var quickTags = $("#x1cpostage_quick_tags").find(".xkit-tag");
-					
+
 					if (quickTags.length > index) {
 						quickTags[index].click();
 					}
@@ -1185,7 +1185,7 @@ XKit.extensions.one_click_postage = new Object({
 		var root_id = post.root_id;
 		var m_object = {
 			channel_id: channel_id,
-			reblog_id: parseInt(post.id),
+			reblog_id: post.id,
 			reblog_key: reblog_key,
 			form_key: form_key,
 			post_type: post.type,

@@ -92,12 +92,13 @@ XKit.extensions.post_limit_checker = new Object({
 		}
 
 		var remaining = 250 - posts_since_reset;
+		var remainingText = remaining.toString();
 
 		var remaining_color = "#298a51";
 		if (remaining <= 60) { remaining_color = "#de8c00"; }
 		if (remaining <= 30) { remaining_color = "#ec0000"; }
 
-		if (remaining === 0) { remaining = "None"; }
+		if (remaining === 0) { remainingText = "None"; }
 
 		var reset_str = hours + " hours and " + minutes + " minutes";
 		if (hours === 0) {
@@ -122,7 +123,7 @@ XKit.extensions.post_limit_checker = new Object({
 				"</div>" +
 				"<div class=\"xkit-plc-division\">" +
 					"<div class=\"xkit-plc-title\">Posts Remaining</div>" +
-					"<div class=\"xkit-plc-value\" style=\"font-weight: bold; color: " + remaining_color + "\">" + remaining + "</div>" +
+					"<div class=\"xkit-plc-value\" style=\"font-weight: bold; color: " + remaining_color + "\">" + remainingText + "</div>" +
 				"</div>" +
 				"<div class=\"xkit-plc-division\">" +
 					"<div class=\"xkit-plc-title\">Next reset in</div>" +

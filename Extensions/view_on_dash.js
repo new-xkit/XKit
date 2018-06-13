@@ -98,11 +98,10 @@ XKit.extensions.view_on_dash = new Object({
 		XKit.window.show("View on Dash", "Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: new-xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-view-on-dash-ok").click(function() {
-
 			var $to_add = $("#xkit-view-on-dash-input-url");
-			var to_add = $to_add.val().toLowerCase();
+			var to_add = $to_add.val().toString().trim().toLowerCase();
 
-			if ($.trim(to_add) === "") {
+			if (to_add === "") {
 				$to_add.attr("placeholder", "Okay, see ya.");
 				XKit.window.close();
 				return;
@@ -124,10 +123,7 @@ XKit.extensions.view_on_dash = new Object({
 
 			XKit.window.close();
 			XKit.extensions.view_on_dash.view(to_add);
-
-
 		});
-
 	},
 
 	menu_clicked: function(e) {
@@ -401,7 +397,7 @@ XKit.extensions.view_on_dash = new Object({
 			post_tags = "<div class=\"post_tags\"><div class=\"post_tags_inner\">";
 
 			data.tags.forEach(function(tag) {
-				var fixed_tag_url = XKit.tools.replace_all(tag, + " ", "-");
+				var fixed_tag_url = XKit.tools.replace_all(tag, " ", "-");
 				post_tags = post_tags + "<a class=\"post_tag\" href=\"http://tumblr.com/tagged/" + fixed_tag_url + "\">#" + tag + "</a>";
 
 			});
@@ -580,10 +576,8 @@ XKit.extensions.view_on_dash = new Object({
 			success: function(data) {
 				tumblelog_key = data.response.posts[0].tumblelog_key;
 			},
-			datatype: "json"
+			dataType: "json"
 		});
-
-		//$("#view-on-dash-background,#view-on-dash-content").remove();
 
 		$("#view-on-dash-no-posts,.xkit-view-on-dash-ol").remove();
 

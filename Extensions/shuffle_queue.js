@@ -402,7 +402,7 @@ XKit.extensions.shuffle_queue = new Object({
 	},
 
 	shuffle_data: function(array) {
-		for (var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
+		for (var j, x, i = array.length; i; j = Math.floor(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
 		return array;
 	},
 

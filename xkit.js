@@ -196,7 +196,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						// We are done!
 						var mdata = {};
 						try {
-							mdata = jQuery.parseJSON(response.responseText);
+							mdata = JSON.parse(response.responseText);
 						} catch (e) {
 							// Server returned bad thingy.
 							console.error("Unable to download '" + path +
@@ -1023,7 +1023,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 					if (m_blogs.length) {
 						XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-						return m_blogs;
 					}
 				}
 

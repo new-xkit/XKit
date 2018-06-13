@@ -42,8 +42,7 @@ XKit.extensions.search_likes = new Object({
 
 			$("#xkit-search-likes-input").keyup(function() {
 
-				var m_value = $(this).val().toLowerCase();
-				m_value = $.trim(m_value);
+				var m_value = $(this).val().toString().trim().toLowerCase();
 
 				$(".xkit-search-likes-done").removeClass("xkit-search-likes-done");
 				XKit.extensions.search_likes.term = m_value;
@@ -179,8 +178,8 @@ XKit.extensions.search_likes = new Object({
 
 		}
 
-		$("#xkit-search-likes-found-count").html($(".xkit-search-likes-found").length);
-		$("#xkit-search-likes-total-count").html($(".post").length);
+		$("#xkit-search-likes-found-count").html($(".xkit-search-likes-found").length.toString());
+		$("#xkit-search-likes-total-count").html($(".post").length.toString());
 
 	},
 

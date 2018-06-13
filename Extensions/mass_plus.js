@@ -33,8 +33,8 @@ XKit.extensions.mass_plus = new Object({
 	},
 	do_headings: function() {
 		$(".heading").each(function() {
-			if ($(this).find(".xkit-mass-plus-buttons-month-inside").length > 0) { 
-				return; 
+			if ($(this).find(".xkit-mass-plus-buttons-month-inside").length > 0) {
+				return;
 			}
 			$(this).append( "<div class=\"xkit-mass-plus-buttons-month-inside\">" +
 				"<div data-type=\"month-select\" class=\"xkit-mass-link xkit-selector\">first 100 in this month</div>" +
@@ -106,7 +106,7 @@ XKit.extensions.mass_plus = new Object({
 			if (m_type === "search-tags") {
 				XKit.window.show("Search by Tags", "Please enter the tag to search for: <input id=\"xkit-mass-search-tag-txt\" type=\"text\" class=\"xkit-textbox\" placeholder=\"Enter a tag (ie: xkit)\" /><br/>You can only search for <b>one</b> tag at a time.<br/>The first 100 results will be selected.", "question", "<div id=\"xkit-mass-search-for-tags\" class=\"xkit-button default\">Search</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 				$("#xkit-mass-search-for-tags").click(function() {
-					if ($.trim($("#xkit-mass-search-tag-txt").val()) === "") {
+					if ($("#xkit-mass-search-tag-txt").val().toString().trim() === "") {
 						XKit.window.close();
 					}
 					XKit.extensions.mass_plus.search($("#xkit-mass-search-tag-txt").val());
@@ -233,7 +233,7 @@ XKit.extensions.mass_plus = new Object({
 	},
 	update_count: function(from_click) {
 		var sel_count = $("a.brick.highlighted").length;
-		$("#xkit-mass-count span").html(sel_count);
+		$("#xkit-mass-count span").html(sel_count.toString());
 		if (sel_count === 0 || from_click === true) {
 			return;
 		}

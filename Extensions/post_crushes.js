@@ -160,7 +160,7 @@ XKit.extensions.post_crushes = new Object({
 
 			m_object["post[state]"] = $(this).attr('data-status');
 
-			var m_text = $.trim($("#xkit-post-crushes-additional-text").val());
+			var m_text = $("#xkit-post-crushes-additional-text").val().toString().trim();
 
 			if (m_text !== "") {
 				m_object["post[two]"] = send_txt + "<p>" + XKit.tools.escape_html(m_text) + "</p>";
@@ -218,7 +218,7 @@ XKit.extensions.post_crushes = new Object({
 				},
 				onload: function(response) {
 					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
-					var m_obj = jQuery.parseJSON(response.responseText);
+					var m_obj = JSON.parse(response.responseText);
 					if (m_obj.errors === false) {
 						$("#xkit_post_crushes").html("Posted!");
 						XKit.window.close();

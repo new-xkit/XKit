@@ -180,7 +180,7 @@ XKit.extensions.mass_deleter = new Object({
 			},
 			onload: function(response) {
 				console.log("| --- Successfully unliked post!");
-				var percentage = 100 - parseInt((100 * XKit.extensions.mass_deleter.delete_drafts_array.length) / XKit.extensions.mass_deleter.delete_from_array_max);
+				var percentage = 100 - Math.floor((100 * XKit.extensions.mass_deleter.delete_drafts_array.length) / XKit.extensions.mass_deleter.delete_from_array_max);
 				XKit.progress.value("mass-deleter-progress", percentage);
 				$("#xkit-mass-deleter-status").html("Deleting posts.. (" + XKit.extensions.mass_deleter.delete_drafts_array.length + " posts left)");
 				setTimeout(function() { XKit.extensions.mass_deleter.delete_current_array_next(); }, 250);
@@ -366,7 +366,7 @@ XKit.extensions.mass_deleter = new Object({
 			},
 			onload: function(response) {
 				console.log("| --- Successfully unliked post!");
-				var percentage = 100 - parseInt((100 * XKit.extensions.mass_deleter.unlike_likes_array.length) / XKit.extensions.mass_deleter.unlike_from_array_max);
+				var percentage = 100 - Math.floor((100 * XKit.extensions.mass_deleter.unlike_likes_array.length) / XKit.extensions.mass_deleter.unlike_from_array_max);
 				XKit.progress.value("mass-deleter-progress", percentage);
 				$("#xkit-mass-deleter-status").html("Unliking posts.. (" + XKit.extensions.mass_deleter.unlike_likes_array.length + " posts left)");
 				setTimeout(function() { XKit.extensions.mass_deleter.unlike_current_array_next(); }, 450);
@@ -430,7 +430,7 @@ XKit.extensions.mass_deleter = new Object({
 					//We didn't get the next page, so we're assuming this one was the last.
 					XKit.extensions.mass_deleter.unlike_current_array();
 					stop_action = true;
-				
+
 				}
 				if (stop_action) { return; }
 

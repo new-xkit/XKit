@@ -374,9 +374,8 @@ XKit.extensions.highlighter = new Object({
 			XKit.window.show("Add word to highlighter", "<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-highlighter-word\"><br/>Before adding a word, please check \"Tips on Highlighting\" section.", "question", "<div class=\"xkit-button default\" id=\"xkit-highlighter-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-highlighter-add-word").click(function() {
-
 				var $m_to_add = $("#xkit-highlighter-word");
-				var m_to_add = $m_to_add.val();
+				var m_to_add = $m_to_add.val().toString().trim();
 				function complain(problem) {
 					$m_to_add
 						.css("border-color", "red")
@@ -390,7 +389,7 @@ XKit.extensions.highlighter = new Object({
 						});
 				}
 
-				if (m_to_add === "" || $.trim(m_to_add) === "") {
+				if (m_to_add === "") {
 					complain("If you don't wanna add anything, the cancel button's right there.");
 					return;
 				}

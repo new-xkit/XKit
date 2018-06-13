@@ -251,7 +251,7 @@ XKit.extensions.xinbox = new Object({
 
 		XKit.tools.add_function(function() {
 
-			var e_target = jQuery("#xinbox-reply-button-" + add_tag);
+			var e_target = $("#xinbox-reply-button-" + add_tag);
 
 			try {
 				Tumblr.Events.trigger("ask:form:open", {
@@ -320,8 +320,7 @@ XKit.extensions.xinbox = new Object({
 
 		$("#xinbox-search-box-input").keyup(function() {
 
-			var m_value = $(this).val().toLowerCase();
-			m_value = $.trim(m_value);
+			var m_value = $(this).val().toString().toLowerCase().trim();
 
 			XKit.extensions.xinbox.inbox_search_term = m_value;
 			XKit.extensions.xinbox.search_do_posts();
@@ -399,8 +398,8 @@ XKit.extensions.xinbox = new Object({
 
 		});
 
-		$("#xinbox-search-found-count").html($(".xkit-inbox-found").length);
-		$("#xinbox-search-search-count").html($(".post").length);
+		$("#xinbox-search-found-count").html($(".xkit-inbox-found").length.toString());
+		$("#xinbox-search-search-count").html($(".post").length.toString());
 
 		XKit.tools.add_function(function() {
 			Tumblr.Events.trigger("DOMEventor:updateRect");
@@ -796,7 +795,7 @@ XKit.extensions.xinbox = new Object({
 					var m_tags = "";
 
 					if ($("#" + m_box_id).length > 0) {
-						m_tags = $("#" + m_box_id).val();
+						m_tags = $("#" + m_box_id).val().toString();
 					}
 
 					if (XKit.extensions.xinbox.preferences.tag_usernames_replace_hyphens.value === true) {

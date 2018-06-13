@@ -1,4 +1,4 @@
-type XKit = {
+interface XKit {
   version: number;
 
   page: {
@@ -21,7 +21,7 @@ type XKit = {
     do_not_load_xkit_patches: boolean;
     do_not_show_news: boolean;
     allow_removal_of_internal_extensions: boolean;
-  }
+  };
 
   read_flag: (flag_id: string) => boolean;
   set_flag: (flag_id: string, value: boolean | "true" | "false" | "") => void;
@@ -34,7 +34,7 @@ type XKit = {
 
     // private
     github_fetch: (path: string, callback: Function) => void;
-    try_count? :number;
+    try_count?: number;
     max_try_count?: number;
   };
 
@@ -61,13 +61,18 @@ type XKit = {
     script: (extension_id: string) => string;
 
     // unlisted
-    when_running?: (extension_id: string, onRunning: Function, onFailure?: Function) => void;
+    when_running?: (
+      extension_id: string,
+      onRunning: Function,
+      onFailure?: Function
+    ) => void;
+    is_running?: (extension_id: string) => boolean;
   };
 
   progress: {
     add: (id: string) => string;
     value: (id: string, value: string | number) => void;
-  }
+  };
 
   storage: {
     set: (extension_id: string, key: string, default_value: any) => boolean;
@@ -84,16 +89,16 @@ type XKit = {
   };
 
   browser: () => {
-    name: string,
-    version: number,
-    chrome: boolean,
-    safari: boolean,
-    firefox: boolean,
-    opera: boolean,
+    name: string;
+    version: number;
+    chrome: boolean;
+    safari: boolean;
+    firefox: boolean;
+    opera: boolean;
 
     // private
-    spoofed: boolean,
-    mobile?: boolean
+    spoofed: boolean;
+    mobile?: boolean;
   };
 
   console: {
@@ -110,7 +115,12 @@ type XKit = {
   };
 
   notifications: {
-    add: (message: string, type?: "ok" | "warning" | "error", sticky?: boolean, callback?: Function) => void;
+    add: (
+      message: string,
+      type?: "ok" | "warning" | "error" | "info" | "mail" | "pokes",
+      sticky?: boolean,
+      callback?: Function
+    ) => void;
 
     // private
     count: number;
@@ -119,8 +129,8 @@ type XKit = {
   };
 
   conflicts: {
-    check: () => { count: number, fatal: boolean, html: string };
-    show: (m_obj: { count: number, fatal: boolean, html: string }) => void;
+    check: () => { count: number; fatal: boolean; html: string };
+    show: (m_obj: { count: number; fatal: boolean; html: string }) => void;
   };
 
   tools: {
@@ -131,17 +141,33 @@ type XKit = {
     escape_html?: (text: string) => string;
     random_string: () => string;
     add_function: (func: Function, exec: boolean, add_t?: any) => void;
-    parse_version?: (input: string) => { major: number, minor: number, patch: number };
+    parse_version?: (
+      input: string
+    ) => { major: number; minor: number; patch: number };
     getParamaterByName?: (name: string) => string;
 
     // private
-    replace_all: (txt: string | number, replace: string, with_this: string) => string;
+    replace_all: (txt: string, replace: string, with_this: string) => string;
     get_setting: (setting_name: string, default_value: any) => any;
-    set_setting: (setting_name: string, default_value: any) => { errors: boolean, error?: string, storage_error?: boolean };
-    get_extension_setting: (ext_id: string, setting_name: string, default_value: any) => any;
-    set_extension_setting: (ext_id: string, setting_name: string, new_value: any) => any;
+    set_setting: (
+      setting_name: string,
+      default_value: any
+    ) => { errors: boolean; error?: string; storage_error?: boolean };
+    get_extension_setting: (
+      ext_id: string,
+      setting_name: string,
+      default_value: any
+    ) => any;
+    set_extension_setting: (
+      ext_id: string,
+      setting_name: string,
+      new_value: any
+    ) => any;
     make_gist?: (text: string) => Promise<string>;
     dump_config?: () => any;
+
+    Nx_XHR?: any;
+    get_current_blog?: () => string;
   };
 
   post_listener: {
@@ -158,7 +184,7 @@ type XKit = {
 
   special: {
     reset: () => void;
-  }
+  };
 
   shutdown: () => void;
 
@@ -168,11 +194,22 @@ type XKit = {
 
   interface?: {
     get_posts: (without_tag?: string, mine?: boolean) => Array<any>;
-    post: (post: any) => {
+    post: (
+      post: any
+    ) => {
       id: number;
       root_id: any;
       owner: string;
-      type: "photo" | "panorama" | "photoset" | "quote" | "link" | "conversation" | "audio" | "video" | "note";
+      type:
+        | "photo"
+        | "panorama"
+        | "photoset"
+        | "quote"
+        | "link"
+        | "conversation"
+        | "audio"
+        | "video"
+        | "note";
       tags: any;
       liked: boolean;
       permalink: string;
@@ -183,10 +220,23 @@ type XKit = {
 
       reblogged?: boolean;
       tumblelog_key?: string;
+      note_count?: number;
+      reblog_key?: string;
+      animated?: boolean;
     };
     find_post: (post_id: string) => any;
-    create_control_button: (class_name: string, icon: string, text: string, func: Function | string, ok_icon?: string) => void;
-    add_control_button: (post: any, class_name: string, additional: string) => void;
+    create_control_button: (
+      class_name: string,
+      icon: string,
+      text: string,
+      func: Function | string,
+      ok_icon?: string
+    ) => void;
+    add_control_button: (
+      post: any,
+      class_name: string,
+      additional: string
+    ) => void;
     disable_control_button: (obj: any, disabled: boolean) => void;
     switch_control_button: (obj: any, working: boolean) => void;
     completed_control_button: (obj: any, will_be_green: boolean) => void;
@@ -198,7 +248,12 @@ type XKit = {
     };
 
     post_window: {
-      state: () => { publish: boolean, draft: boolean, queue: boolean, private: boolean };
+      state: () => {
+        publish: boolean;
+        draft: boolean;
+        queue: boolean;
+        private: boolean;
+      };
       add_tag: (tag_or_tags: string | Array<string>) => void;
       tag_exists: (tag: string) => boolean;
       remove_tag: (tag: string) => void;
@@ -206,18 +261,23 @@ type XKit = {
       open: () => boolean;
       switch_blog: (url: string) => boolean;
       type: () => {
-        text: boolean,
-        photo: boolean,
-        quote: boolean,
-        link: boolean,
-        chat: boolean,
-        video: boolean,
-        audio: boolean
+        text: boolean;
+        photo: boolean;
+        quote: boolean;
+        link: boolean;
+        chat: boolean;
+        video: boolean;
+        audio: boolean;
       };
-      origin: () => { is_reblog: boolean, is_original: boolean };
+      origin: () => { is_reblog: boolean; is_original: boolean };
     };
 
-    user: () => { posts: number, followers: number, drafts: number, queue: number };
+    user: () => {
+      posts: number;
+      followers: number;
+      drafts: number;
+      queue: number;
+    };
     where: () => {
       dashboard: boolean;
       inbox: boolean;
@@ -235,12 +295,15 @@ type XKit = {
       tagged: boolean;
       user_url: string;
     };
-    fetch: (post: any, callback: Function, reblog_mode: boolean) => void;
+    fetch: (post: any, callback: Function, reblog_mode?: boolean) => void;
     revision: number;
 
     // unlisted
     is_following?: (username: string, blog: string) => Promise<boolean>;
     tag_exists?: (tag: string) => boolean;
+    is_tumblr_page?: () => boolean;
+    trigger_reflow?: () => void;
+    kitty?: any;
   };
 }
 
@@ -248,6 +311,12 @@ declare var XKit: XKit;
 
 interface JQuery {
   tipTip: any;
+  ColorPicker: any;
+}
+
+interface Date {
+  stdTimezoneOffset: () => number;
+  dst: () => boolean;
 }
 
 interface Window {
@@ -260,3 +329,7 @@ declare var XBridge: any;
 declare var browser: any;
 declare var msBrowser: any;
 declare var safari: any;
+declare var add_tag: string;
+
+// Not sure where this came from
+declare var tinyMCE: any;

@@ -199,7 +199,7 @@ XKit.extensions.xkit_preferences = new Object({
 			lst_check = parseInt(lst_check);
 
 			var n_time = new Date();
-			var n_ms = parseInt(n_time.getTime());
+			var n_ms = n_time.getTime();
 
 			if (!lst_check) {
 				check_for_update = true;
@@ -262,7 +262,7 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				// This is awful but at least it works.
-				var my_version = parseFloat(XKit.tools.replace_all(XKit.version, "\\.", ""));
+				var my_version = parseFloat(XKit.tools.replace_all(XKit.version.toString(), "\\.", ""));
 				var mb_object;
 				var new_version;
 
@@ -369,7 +369,7 @@ XKit.extensions.xkit_preferences = new Object({
 			if (!date) {
 				var foo = new Date(); // Generic JS date object
 				var unixtime_ms = foo.getTime(); // Returns milliseconds since the epoch
-				date = parseInt(unixtime_ms / 1000);
+				date = Math.round(unixtime_ms / 1000);
 			}
 
 			var news_object = {};
@@ -849,8 +849,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$("#xkit-gallery-search").keyup(function() {
 
-				var m_value = $(this).val().toLowerCase();
-				m_value = $.trim(m_value);
+				var m_value = $(this).val().toString().toLowerCase().trim();
+
 				if (m_value === "") {
 					$("#xkit-extensions-panel-right-inner .xkit-gallery-extension").css("display", "");
 					$("#xkit-extensions-panel-right-inner .xkit-gallery-not-found-error").remove();
@@ -1016,8 +1016,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 		$("#xkit-extensions-panel-left-search").keyup(function() {
 
-			var m_value = $(this).val().toLowerCase();
-			m_value = $.trim(m_value);
+			var m_value = $(this).val().toString().toLowerCase().trim();
+
 			if (m_value === "") {
 				$("#xkit-extensions-panel-left-inner .xkit-extension").css("display", "block");
 				$("#xkit-extensions-panel-left-inner .xkit-not-found-error").remove();
@@ -1255,14 +1255,14 @@ XKit.extensions.xkit_preferences = new Object({
 
 		} else if (XKit.installed.enabled(extension_id) === false) {
 
-			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>'; 
-			
+			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>';
+
 		} else if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-			
+
 			m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-				
+
 		} else {
-			
+
 			m_html = m_html + '<div id="xkit-extension-panel-settings"></div>';
 		}
 		$("#xkit-extensions-panel-right-inner").html(m_html);

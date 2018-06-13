@@ -195,15 +195,15 @@ XKit.extensions.xcloud = new Object({
 		$("#xcloud-signup-do").unbind("click");
 		$("#xcloud-signup-do").bind("click", function() {
 
-			var m_username = $("#xcloud-login-username").val();
+			var m_username = $("#xcloud-login-username").val().toString().trim();
 			var m_password = XKit.extensions.xcloud.md5($("#xcloud-login-password").val());
 
-			if ($.trim(m_username) === "" || $.trim($("#xcloud-login-password").val()) === "") {
+			if (m_username === "" || $("#xcloud-login-password").val().toString().trim() === "") {
 				XKit.window.show("Hey there!", "Please enter a username and password.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
-			if ($("#xcloud-login-password").val().length <= 5) {
+			if ($("#xcloud-login-password").val().toString().length <= 5) {
 				XKit.window.show("Hey there!", "Please enter a password that is at least 6 characters long.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
@@ -225,7 +225,7 @@ XKit.extensions.xcloud = new Object({
 
 					var mdata = null;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.xcloud.hide_overlay();
 						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -286,15 +286,15 @@ XKit.extensions.xcloud = new Object({
 		$("#xcloud-login-do").unbind("click");
 		$("#xcloud-login-do").bind("click", function() {
 
-			var m_username = $("#xcloud-login-username").val();
+			var m_username = $("#xcloud-login-username").val().toString().trim();
 			var m_password = XKit.extensions.xcloud.md5($("#xcloud-login-password").val());
 
-			if ($.trim(m_username) === "" || $.trim($("#xcloud-login-password").val()) === "") {
+			if (m_username === "" || $("#xcloud-login-password").val().toString().trim() === "") {
 				XKit.window.show("Hey there!", "Please enter a username and password.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
 
-			if ($("#xcloud-login-password").val().length <= 5) {
+			if ($("#xcloud-login-password").val().toString().length <= 5) {
 				XKit.window.show("Hey there!", "Please enter a password that is at least 6 characters long.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
@@ -320,7 +320,7 @@ XKit.extensions.xcloud = new Object({
 
 					var mdata = null;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.xcloud.hide_overlay();
 						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -539,7 +539,7 @@ XKit.extensions.xcloud = new Object({
 			},
 			onload: function(response) {
 
-				var data = jQuery.parseJSON(response.responseText);
+				var data = JSON.parse(response.responseText);
 				if (data.server_down) {
 					XKit.extensions.xcloud.hide_overlay();
 					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -814,14 +814,13 @@ XKit.extensions.xcloud = new Object({
 		//Add this flag to the payload so we know we can unescape the payload.
 		to_send.use_utf8 = true;
 
-
-		to_send = JSON.stringify(to_send);
-		console.log("Original size = " + (to_send.length / 1024 / 1024) + " megabytes");
+		var to_send_string = JSON.stringify(to_send);
+		console.log("Original size = " + (to_send_string.length / 1024 / 1024) + " megabytes");
 
 		//We need to base64 encode it without utf8 support so it's compatible with the old payload.
-		to_send = "XCS" + XKit.extensions.xcloud.base64_encode(to_send) + "XCE";
+		to_send_string = "XCS" + XKit.extensions.xcloud.base64_encode(to_send_string) + "XCE";
 
-		return [to_send, skipping];
+		return [to_send_string, skipping];
 	},
 
 	start_upload: function() {
@@ -877,7 +876,7 @@ XKit.extensions.xcloud = new Object({
 
 				var mdata = null;
 				try {
-					mdata = jQuery.parseJSON(response.responseText);
+					mdata = JSON.parse(response.responseText);
 				} catch (e) {
 					XKit.extensions.xcloud.hide_overlay();
 					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -1256,16 +1255,16 @@ XKit.extensions.xcloud = new Object({
 					(c1 >> 6)        | 192,
 					( c1        & 63) | 128
 				);
-			} else if (c1 & 0xF800 != 0xD800) {
+			} else if ((c1 & 0xF800) != 0xD800) {
 				enc = String.fromCharCode(
 					(c1 >> 12)       | 224,
 					((c1 >> 6)  & 63) | 128,
 					( c1        & 63) | 128
 				);
 			} else { // surrogate pairs
-				if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + i); }
+				if ((c1 & 0xFC00) != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + i); }
 				var c2 = string.charCodeAt(++i);
-				if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (i - 1)); }
+				if ((c2 & 0xFC00) != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (i - 1)); }
 				c1 = ((c1 & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
 				enc = String.fromCharCode(
 					(c1 >> 18)       | 240,

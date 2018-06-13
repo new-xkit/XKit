@@ -399,7 +399,7 @@ XKit.extensions.profiler = new Object({
 					onload: function(next_response) {
 						var next_data = JSON.parse(next_response.responseText).response;
 						var date = new Date(next_data.posts[0].timestamp * 1000);
-						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
+						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear().toString());
 					}
 				});
 

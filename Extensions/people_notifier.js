@@ -490,9 +490,9 @@ XKit.extensions.people_notifier = new Object({
 
 			$("#xkit-people-notifier-create").click(function() {
 
-				var to_add = $("#xkit-people-notifier-add-url").val().toLowerCase();
+				var to_add = $("#xkit-people-notifier-add-url").val().toString().trim().toLowerCase();
 
-				if ($.trim(to_add) === "") {
+				if (to_add === "") {
 					XKit.window.close();
 					return;
 				}

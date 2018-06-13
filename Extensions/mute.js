@@ -159,23 +159,14 @@ XKit.extensions.mute = new Object({
 	},
 
 	add_links_wo_usermenus: function(e) {
-
-		//console.log($(".tumblelog_popover_v1").html());
-		var m_parent = "";
+		var m_parent = undefined;
 		var user_url = "";
-		if ($(".tumblelog_popover_v1").length > 0) {
-		//	user_url = $(".tumblelog_popover_v1").find(".follow_nav").find(".follow").attr('href').replace("/follow/","");
-		//	m_parent = $(".tumblelog_popover_v1").find(".tumblelog_menu_popover").find("ul");
-		} else {
-		//	user_url = $(".tumblelog_popover").find(".follow_nav").find(".follow").attr('href').replace("/follow/","");
-		//	m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
-		}
 
 		if ($(".info_popover").length > 0) {
 			m_parent = $(".info_popover").find("ul");
 			user_url = m_parent.parent().parent().parent().find(".name").html();
 		}
-		if (m_parent.find(".xkit-mute").length > 0) { return; }
+		if (m_parent === undefined || m_parent.find(".xkit-mute").length > 0) { return; }
 
 		var m_html = "";
 		console.log("===>" + user_url);
@@ -405,7 +396,7 @@ XKit.extensions.mute = new Object({
 
 		});
 
-		if (update_rects === true) {
+		if (update_rects) {
 			XKit.tools.add_function(function() {
 				Tumblr.Events.trigger("DOMEventor:updateRect");
 			}, true, "");

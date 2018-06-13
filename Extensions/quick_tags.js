@@ -277,9 +277,11 @@ XKit.extensions.quick_tags = new Object({
 
 				m_user_tags = m_user_tags + "<div " + add_data + " data-tags=\"" + m_tags + "\" class=\"xkit-tag user\"><div class=\"xkit-tag-name\">" + m_title;
 
-				if (showNumbers && tag < 9) {
+				var tagNumber = parseInt(tag);
+
+				if (showNumbers && tagNumber < 9) {
 					// force javascript to treat tag as a number instead of string concatenation
-					var shortcutNumber = parseInt(tag) + 1;
+					var shortcutNumber = tagNumber + 1;
 					m_user_tags = m_user_tags + "<span style=\"opacity:.7;float:right\">" +  shortcutNumber + "</span>";
 				}
 
@@ -572,14 +574,13 @@ XKit.extensions.quick_tags = new Object({
 			});
 
 			$("#xkit-quick-tags-create-bundle").click(function() {
-
 				var $title = $("#xkit-quick-tags-add-title");
-				var title = $title.val();
+				var title = $title.val().toString().trim();
 				var $tags = $("#xkit-quick-tags-add-tags");
-				var tags = $tags.val();
+				var tags = $tags.val().toString().trim();
 				var quit = false;
 
-				if ($.trim(title) === "") {
+				if (title === "") {
 					$title
 						.css("border-color", "red")
 						.attr("placeholder", "Please enter a name for your bundle.")
@@ -592,7 +593,7 @@ XKit.extensions.quick_tags = new Object({
 					quit = true;
 				}
 
-				if ($.trim(tags) === "") {
+				if (tags === "") {
 					$tags
 						.css("border-color", "red")
 						.attr("placeholder", "Please enter the tags for your bundle.")
@@ -660,6 +661,7 @@ XKit.extensions.quick_tags = new Object({
 
 		$("#xkit-quick-tags-create-bundle").click(function() {
 
+<<<<<<< HEAD
 			var $title = $("#xkit-quick-tags-add-title");
 			var title = $title.val();
 			var $tags = $("#xkit-quick-tags-add-tags");
@@ -690,6 +692,19 @@ XKit.extensions.quick_tags = new Object({
 							.off("click");
 					});
 				quit = true;
+=======
+			var title = $("#xkit-quick-tags-add-title").val().toString().trim();
+			var tags = $("#xkit-quick-tags-add-tags").val().toString().trim();
+
+			if (title === "") {
+				alert("Please enter a title for your bundle.");
+				return;
+			}
+
+			if (tags === "") {
+				alert("Please enter the tags for your bundle.");
+				return;
+>>>>>>> Fix errors marked by TypeScript
 			}
 
 			if (quit) { return; }

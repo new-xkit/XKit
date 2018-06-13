@@ -210,7 +210,7 @@ XKit.extensions.classic_tags = new Object({
 				var anchor = li.find(".result_link");
 				var tag_name = anchor.attr("data-tag-result");
 				if (parseInt(self.tagcounts[tag_name], 10) === self.max_posts_per_tag) {
-					return true;
+					return;
 				}
 
 				fetch_count(tag_name).then(function(count) {

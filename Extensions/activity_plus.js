@@ -468,7 +468,7 @@ XKit.extensions.activity_plus = new Object({
 
 			$(this).addClass("xkit-activity-plus-timestamps-done");
 
-			var m_timestamp = $(this).attr('data-timestamp');
+			var m_timestamp = parseInt($(this).attr('data-timestamp').toString());
 			var dtx = new Date(m_timestamp * 1000);
 			var dt = moment(dtx);
 			var m_date = dt.format("hh:mm:ss a");

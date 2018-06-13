@@ -55,13 +55,13 @@ XKit.extensions.tag_replacer = new Object({
 			var t_replace = "";
 
 			if (XKit.extensions.tag_replacer.case_sensitive) {
-				t_replace = $.trim($t_replace.val());
+				t_replace = $t_replace.val().toString().trim();
 			} else {
-				t_replace = $.trim($t_replace.val().toLowerCase());
+				t_replace = $t_replace.val().toString().trim().toLowerCase();
 			}
 
 			var $t_with = $("#xkit-tag-replacer-with");
-			var t_with = $.trim($t_with.val());
+			var t_with = $t_with.val().toString().trim();
 
 			if (t_replace.indexOf(",") !== -1) {
 				$t_replace

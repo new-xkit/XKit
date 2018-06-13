@@ -205,10 +205,10 @@ XKit.extensions.bookmarker = new Object({
 
 				$("#xkit-bookmarker-rename-ok").click(function() {
 
-					var m_value = $("#xkit-bookmark-caption").val();
+					var m_value = $("#xkit-bookmark-caption").val().toString().trim();
 					m_value = m_value.replace(/<(?:.|\n)*?>/gm, '');
 
-					if (jQuery.trim(m_value) === "") {
+					if (m_value === "") {
 						// Use date.
 						m_object.caption = "";
 					} else {
@@ -225,11 +225,12 @@ XKit.extensions.bookmarker = new Object({
 
 			} else {
 				// Go to the post!
-				post_id = parseInt(post_id);
+				var post_id_number = parseInt(post_id) + 1;
+
 				if (XKit.extensions.bookmarker.preferences.new_tab.value === true) {
-					window.open("/dashboard/100/" + (post_id + 1) + "/?bookmark=true");
+					window.open("/dashboard/100/" + (post_id_number + 1) + "/?bookmark=true");
 				} else {
-					document.location.href = "/dashboard/100/" + (post_id + 1) + "/?bookmark=true";
+					document.location.href = "/dashboard/100/" + (post_id_number + 1) + "/?bookmark=true";
 				}
 			}
 

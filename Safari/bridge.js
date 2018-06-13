@@ -66,7 +66,7 @@ if (!String.prototype.startsWith) {
 					console.log("XBridge: Warning! jQuery is not found!");
 					XBridge.init_XKit(0);
 				} else {
-					jQuery(document).ready(function() {
+					$(document).ready(function() {
 						XBridge.init_XKit(0);
 					});
 				}

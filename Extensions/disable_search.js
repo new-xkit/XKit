@@ -65,7 +65,7 @@ XKit.extensions.disable_search = {
 	do: function(e) {
 
 		e.preventDefault();  //prevent form from submitting
-		var query = $("#search_query").val();
+		var query = $("#search_query").val().toString();
 		query = encodeURIComponent(query).replace(/%20/g, '+').replace(/_/g, '-');
 
 		var url = "http://www.tumblr.com/tagged/" + query;
@@ -73,7 +73,7 @@ XKit.extensions.disable_search = {
 		if (XKit.extensions.disable_search.preferences.open_in_new_tab.value) {
 			window.open(url);
 		} else {
-			document.location = url;
+			document.location.href = url;
 		}
 
 	},

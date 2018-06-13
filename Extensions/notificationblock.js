@@ -75,7 +75,7 @@ XKit.extensions.notificationblock = new Object({
 	on_click_notification: function(obj, event) {
 
 		var post_id = "";
-		var post_url = "";
+		var post_url = undefined;
 
 		event.stopPropagation();
 		event.stopImmediatePropagation();

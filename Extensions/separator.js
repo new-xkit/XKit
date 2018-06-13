@@ -61,7 +61,7 @@ XKit.extensions.separator = new Object({
 
 				} else {
 
-					document.location = "http://www.tumblr.com/dashboard/100/" + (XKit.extensions.separator.check_for + 1);
+					document.location.href = "https://www.tumblr.com/dashboard/100/" + (XKit.extensions.separator.check_for + 1);
 
 				}
 
@@ -73,8 +73,6 @@ XKit.extensions.separator = new Object({
 		var last_loaded_post = XKit.storage.get("separator", "last_post", "");
 
 		var current_last_post = $("body").find(".posts .post").not("#tumblr_radar").not(".new_post_buttons").first();
-
-		//$(last_loaded_post).css("background","red");
 
 		if (last_loaded_post !== "") {
 
@@ -132,9 +130,9 @@ XKit.extensions.separator = new Object({
 
 		$(".posts .post").not("#new_post").each(function() {
 
-			var m_id = $(this).attr('data-post-id');
+			var m_id = parseInt($(this).attr('data-post-id').toString());
 
-			if (m_id >= XKit.extensions.separator.check_for - distance && m_id <= XKit.extensions.separator.check_for + distance) {
+			if (m_id >= parseInt(XKit.extensions.separator.check_for) - distance && m_id <= parseInt(XKit.extensions.separator.check_for) + distance) {
 
 				XKit.extensions.separator.insert($(this));
 				found_post = true;
