@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5.6 **//
+//* VERSION 1.5.7 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -87,7 +87,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	follow_glow: function() {
 
-		$(".notification").not("notifications-follow-glow-plus-done").each(function() {
+		$(".notification").not(".notifications-follow-glow-plus-done").each(function() {
 
 			$(this).addClass("notifications-follow-glow-plus-done");
 
@@ -123,7 +123,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	dedim: function() {
 
-		$(".notification_reblog").not("notifications-plus-done").each(function() {
+		$(".notification_reblog").not(".notifications-plus-done").each(function() {
 
 			$(this).addClass(".notifications-plus-done");
 			if ($(this).find("blockquote").length > 0) {
