@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.1 **//
+//* VERSION 0.5.2 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -42,7 +42,7 @@ XKit.extensions.audio_plus = {
 
 		if (XKit.extensions.audio_plus.preferences.add_volume_control.value) {
 			$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", XKit.extensions.audio_plus.slider_handle_event);
-			XKit.post_listener.add("audio_plus", XKit.extensions.audio_plus.do);
+			XKit.post_listener.add("audio_plus", function() { setTimeout(XKit.extensions.audio_plus.do, 10); });
 			setTimeout(function() { XKit.extensions.audio_plus.do(); }, 500);
 		}
 
