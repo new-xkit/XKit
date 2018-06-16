@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.0.1 **//
+//* VERSION 7.0.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -138,7 +138,70 @@ XKit.extensions.xkit_patches = new Object({
 	},
 
 	patches: {
-		"7.9.0": function() {},
+		"7.9.0": function() {
+			XKit.tools.Nx_XHR = function(details) {
+				details.timestamp = new Date().getTime() + Math.random();
+
+				XKit.tools.add_function(function() {
+					var request = add_tag;
+					var xhr = new XMLHttpRequest();
+					xhr.open(request.method, request.url, request.async || true);
+
+					if (request.json === true) {
+						xhr.setRequestHeader("Content-type", "application/json");
+					}
+					for (var header in request.headers) {
+						xhr.setRequestHeader(header, request.headers[header]);
+					}
+
+					function callback(result) {
+						var bare_headers = xhr.getAllResponseHeaders().split("\r\n");
+						var cur_headers = {}, splitter;
+						for (var x in bare_headers) {
+							splitter = bare_headers[x].indexOf(":");
+							if (splitter === -1) { continue; }
+							cur_headers[bare_headers[x].substring(0, splitter).trim().toLowerCase()] = bare_headers[x].substring(splitter + 1).trim();
+						}
+						window.postMessage({
+							response: {
+								status: xhr.status,
+								responseText: xhr.response,
+								headers: cur_headers
+							},
+							timestamp: "xkit_" + request.timestamp,
+							success: result
+						}, window.location.protocol + "//" + window.location.host);
+					}
+
+					xhr.onerror = function() { callback(false); };
+					xhr.onload = function() { callback(true); };
+
+					if (typeof request.data !== "undefined") {
+						xhr.send(request.data);
+					} else {
+						xhr.send();
+					}
+				}, true, details);
+
+				function handler(e) {
+					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
+						window.removeEventListener("message", handler);
+
+						if (typeof e.data.response.headers["x-tumblr-kittens"] !== "undefined") {
+							XKit.interface.kitty.set(e.data.response.headers["x-tumblr-kittens"]);
+						}
+
+						if (e.data.success) {
+							details.onload(e.data.response);
+						} else {
+							details.onerror(e.data.response);
+						}
+					}
+				}
+
+				window.addEventListener("message", handler);
+			};
+		},
 		"7.8.2": function() {
 			XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
 
@@ -2475,68 +2538,6 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					}, 5000);
 				}
-			};
-
-			XKit.tools.Nx_XHR = function(details) {
-				details.timestamp = new Date().getTime() + Math.random();
-
-				XKit.tools.add_function(function() {
-					var xhr = new XMLHttpRequest();
-					xhr.open(add_tag.method, add_tag.url, add_tag.async || true);
-
-					if (add_tag.json === true) {
-						xhr.setRequestHeader("Content-type", "application/json");
-					}
-					for (var header in add_tag.headers) {
-						xhr.setRequestHeader(header, add_tag.headers[header]);
-					}
-
-					function callback(result) {
-						var bare_headers = xhr.getAllResponseHeaders().split("\r\n");
-						var cur_headers = {}, splitter;
-						for (var x in bare_headers) {
-							splitter = bare_headers[x].indexOf(":");
-							if (splitter === -1) { continue; }
-							cur_headers[bare_headers[x].substring(0, splitter).trim().toLowerCase()] = bare_headers[x].substring(splitter + 1).trim();
-						}
-						window.postMessage({
-							response: {
-								status: xhr.status,
-								responseText: xhr.response,
-								headers: cur_headers
-							},
-							timestamp: "xkit_" + add_tag.timestamp,
-							success: result
-						}, window.location.protocol + "//" + window.location.host);
-					}
-
-					xhr.onerror = function() { callback(false); };
-					xhr.onload = function() { callback(true); };
-
-					if (typeof add_tag.data !== "undefined") {
-						xhr.send(add_tag.data);
-					} else {
-						xhr.send();
-					}
-				}, true, details);
-
-				function handler(e) {
-					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
-						window.removeEventListener("message", handler);
-
-						if (typeof e.data.response.headers["x-tumblr-kittens"] !== "undefined") {
-							XKit.interface.kitty.set(e.data.response.headers["x-tumblr-kittens"]);
-						}
-
-						if (e.data.success) {
-							details.onload(e.data.response);
-						} else {
-							details.onerror(e.data.response);
-						}
-					}
-				}
-
-				window.addEventListener("message", handler);
 			};
 
 			XKit.tools.show_timestamps_help = function() {
