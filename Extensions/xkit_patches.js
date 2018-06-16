@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.0.0 **//
+//* VERSION 7.0.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -22,11 +22,11 @@ XKit.extensions.xkit_patches = new Object({
 		for (var i in this.patches) {
 			to_run.unshift(i);
 			if (i === XKit.version) {
-				for (var x in to_run) {
-					this.patches[to_run[x]]();
-				}
 				break;
 			}
+		}
+		for (var x in to_run) {
+			this.patches[to_run[x]]();
 		}
 
 		// Identify retina screen displays. Unused anywhere else
