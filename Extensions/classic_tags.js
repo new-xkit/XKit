@@ -259,10 +259,8 @@ XKit.extensions.classic_tags = new Object({
 		try {
 
 			XKit.tools.init_css("classic_tags");
-			if ($("#dashboard_index").length === 0) {
-				if (document.location.href.indexOf('/tagged') === -1) {
-					return;
-				}
+			if (!XKit.interface.is_tumblr_page()) {
+				return;
 			}
 
 			if (XKit.interface.where().tagged && !location.href.match(/before=[0-9]+/i)) {
