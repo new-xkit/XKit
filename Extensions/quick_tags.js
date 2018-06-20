@@ -660,15 +660,13 @@ XKit.extensions.quick_tags = new Object({
 		XKit.window.show("Create new bundle", "<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">You have <b>" + remaining + "</b> bundle slots left.", "question", "<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-quick-tags-create-bundle").click(function() {
-
-<<<<<<< HEAD
 			var $title = $("#xkit-quick-tags-add-title");
-			var title = $title.val();
+			var title = $title.val().toString().trim();
 			var $tags = $("#xkit-quick-tags-add-tags");
-			var tags = $tags.val();
+			var tags = $tags.val().toString().trim();
 			var quit = false;
 
-			if ($.trim(title) === "") {
+			if (title === "") {
 				$title
 					.css("border-color", "red")
 					.attr("placeholder", "Please enter a name for your bundle.")
@@ -681,7 +679,7 @@ XKit.extensions.quick_tags = new Object({
 				quit = true;
 			}
 
-			if ($.trim(tags) === "") {
+			if (tags === "") {
 				$tags
 					.css("border-color", "red")
 					.attr("placeholder", "Please enter the tags for your bundle.")
@@ -692,19 +690,6 @@ XKit.extensions.quick_tags = new Object({
 							.off("click");
 					});
 				quit = true;
-=======
-			var title = $("#xkit-quick-tags-add-title").val().toString().trim();
-			var tags = $("#xkit-quick-tags-add-tags").val().toString().trim();
-
-			if (title === "") {
-				alert("Please enter a title for your bundle.");
-				return;
-			}
-
-			if (tags === "") {
-				alert("Please enter the tags for your bundle.");
-				return;
->>>>>>> Fix errors marked by TypeScript
 			}
 
 			if (quit) { return; }
