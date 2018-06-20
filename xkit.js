@@ -518,17 +518,17 @@ var xkit_global_start = Date.now();  // log start timestamp
 		 *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
 		 */
 		browser: function() {
+			var to_return = {
+				name: "UNKNOWN",
+				version: 0,
+				spoofed: false,
+				chrome: false,
+				firefox: false,
+				safari: false,
+				opera: false,
+				mobile: false
+			};
 
-			var to_return = {};
-
-			to_return.name = "UNKNOWN";
-			to_return.spoofed = false;
-			to_return.chrome = false;
-			to_return.firefox = false;
-			to_return.safari = false;
-			to_return.opera = false;
-			to_return.version = 0;
-			to_return.mobile = false;
 
 			// First, let's check if it's chrome.
 			if (window.chrome) {
@@ -583,7 +583,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 		},
 		iframe: {
-
 			/**
 			 * @return {String} Id of blog which the iframe refers to (usually
 			 *                  the blog in which the iframe is embedded)
@@ -680,7 +679,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * for the code to set classes on the iframe element and the body of the page)
 			 */
 			size_frame_to_fit: function() {
-				var button_container = $(".iframe-controls-container")[0] || {};
+				var button_container = $(".iframe-controls-container")[0] || {
+					scrollWidth: -Infinity,
+					scrollHeight: -Infinity
+				};
 
 				var width = Math.max(
 					button_container.scrollWidth || -Infinity,
@@ -838,7 +840,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * @param {Boolean} created - true if post was not queued/drafted
 			 * @param {String} action - post action description (i.e. "Reblogged to ")
 			 * @param {String} url - tumblr blog name (for both notification and API)
-			 * @param {Integer/String} id - created post id for peepr (optional)
+			 * @param {number | string} id - created post id for peepr (optional)
 			 * @param {String} crumb - arbitrary class for "crumb" (optional)
 			 */
 			add: function(created, action, url, id, crumb) {
@@ -1291,8 +1293,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 */
 			getParameterByName: function(name) {
 				// http://stackoverflow.com/a/901144/2073440
-				name = encodeURIComponent(name);
-				var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				var encodedName = encodeURIComponent(name);
+				var regex = new RegExp("[\\?&]" + encodedName + "=([^&#]*)"),
 					results = regex.exec(location.search);
 				if (results === null) {
 					return "";
@@ -1616,7 +1618,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * requests.
 			 */
 			kitty: {
-
 				stored: "",
 				store_time: 0,
 				expire_time: 600000,
@@ -1637,10 +1638,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
 				 */
 				get: function(callback) {
-
-					var m_object = {};
-					m_object.errors = false;
-					m_object.kitten = "";
+					var m_object = {
+						errors: false,
+						kitten: ""
+					};
 
 					var current_ms = new Date().getTime();
 					var kitty_diff = current_ms - XKit.interface.kitty.store_time;
@@ -1682,10 +1683,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 							callback(m_object);
 						}
 					});
-
-				},
-
-
+				}
 			},
 
 			post_window: {
@@ -1810,7 +1808,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 							var editor = window.ace.edit(editor_div[0]);
 							editor.setValue(new_content);
 							setTimeout(function() {
-								jQuery(".ace_marker-layer").empty();
+								$(".ace_marker-layer").empty();
 							}, 500);
 						}
 					}, true, [new_content, html_or_markdown]);
@@ -1899,16 +1897,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 *	private: boolean - Whether the post will be "published privately"
 				 */
 				state: function() {
-
-					var to_return = {};
-
-					to_return.publish = $("#post_state").val() == "0";
-					to_return.draft = $("#post_state").val() == "1";
-					to_return.queue = $("#post_state").val() == "2";
-					to_return.private = $("#post_state").val() == "private";
-
-					return to_return;
-
+					return {
+						publish: $("#post_state").val() == "0",
+						draft: $("#post_state").val() == "1",
+						queue: $("#post_state").val() == "2",
+						private: $("#post_state").val() == "private"
+					};
 				},
 
 				/**
@@ -1932,9 +1926,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 * @return {String} Blog making the post
 				 */
 				blog: function() {
-
-					return $("#channel_id").val();
-
+					return $("#channel_id").val().toString();
 				},
 
 				/**
@@ -1942,17 +1934,16 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 * @return {boolean} Whether the switch succeeded
 				 */
 				switch_blog: function(url) {
+					var flag = false;
 
 					$("#tumblelog_choices").find(".option").each(function() {
-
 						if ($(this).attr('data-option-value') === url) {
 							$(this).trigger('click');
-							return true;
+							flag = true;
 						}
-
 					});
 
-					return false;
+					return flag;
 
 				},
 
@@ -1960,9 +1951,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 * @return {boolean} Whether the post window is currently open
 				 */
 				open: function() {
-
 					return XKit.interface.post_window_listener_window_id !== 0;
-
 				},
 
 				/**
@@ -2102,18 +2091,13 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 *                      XKit.interface.post_window_listener.add
 				 */
 				remove: function(id) {
-
 					var m_id = XKit.interface.post_window_listener_id.indexOf(id);
 
 					if (m_id === -1) { return; }
 
 					XKit.interface.post_window_listener_id.splice(m_id, 1);
 					XKit.interface.post_window_listener_func.splice(m_id, 1);
-
-
 				}
-
-
 			},
 
 			update_view: {
@@ -2239,20 +2223,21 @@ var xkit_global_start = Date.now();  // log start timestamp
 				// Used to edit a post.
 				// Takes a Tumblr Post Object (get it using Fetch.)
 
-				var m_object = {};
+				var m_object = {
+					form_key: XKit.interface.form_key(),
+					channel_id: tumblr_object.post_tumblelog.name_or_id,
+					context_id: tumblr_object.post_tumblelog.name_or_id,
+					post_id: tumblr_object.post.id,
 
-				m_object.form_key = XKit.interface.form_key();
-				m_object.channel_id = tumblr_object.post_tumblelog.name_or_id;
-				m_object.context_id = tumblr_object.post_tumblelog.name_or_id;
-				m_object.post_id = tumblr_object.post.id;
+					edit: true,
+					safe_edit: true, // whatever the fuck this is.
+					errors: false,
+					message: "Post edited on " + m_object.channel_id,
+					silent: true,
+					post_context_page: "dashboard",
+					editor_type: "rich"
+				};
 
-				m_object.edit = true;
-				m_object.safe_edit = true; // whatever the fuck this is.
-				m_object.errors = false;
-				m_object.message = "Post edited on " + m_object.channel_id;
-				m_object.silent = true;
-				m_object.post_context_page = "dashboard";
-				m_object.editor_type = "rich";
 
 				// m_object.post = {};
 
@@ -2420,7 +2405,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 							XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 							try {
-								to_return.data = jQuery.parseJSON(response.responseText);
+								to_return.data = JSON.parse(response.responseText);
 								func(to_return);
 							} catch (e) {
 								to_return.error = true;
@@ -2462,12 +2447,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 					m_object.channel_id = post_object.owner;
 				}
 
-				var to_return = {};
-
-				to_return.error = false;
-				to_return.error_message = "";
-				to_return.status = 200;
-				to_return.data = "";
+				var to_return = {
+					error: false,
+					error_message: "",
+					status: 200,
+					data: ""
+				};
 
 				GM_xmlhttpRequest({
 					method: "POST",
@@ -2493,16 +2478,14 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 					},
 					onload: function(response) {
-
 						try {
-							to_return.data = jQuery.parseJSON(response.responseText);
+							to_return.data = JSON.parse(response.responseText);
 							func(to_return);
 						} catch (e) {
 							to_return.error = true;
 							to_return.error_message = e.message;
 							func(to_return);
 						}
-
 					}
 				});
 
@@ -2689,10 +2672,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 				} else if ($(".mh_post").length > 0) {
 					return XKit.interface.post($(".mh_post"));
 				} else {
-					var m_error = {};
-					m_error.error = true;
-					m_error.error_message = "Object not found on page.";
-					return m_error;
+					return {
+						error: true,
+						error_message: "Object not found on page."
+					};
 				}
 
 			},
@@ -2892,16 +2875,14 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 *  title: String - blog title
 			 */
 			user: function() {
-
-				var m_return = {};
-
-				// Init variables
-				m_return.posts = 0;
-				m_return.followers = 0;
-				m_return.drafts = 0;
-				m_return.processing = 0;
-				m_return.queue = 0;
-				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
+				var m_return = {
+					posts: 0,
+					followers: 0,
+					drafts: 0,
+					processing: 0,
+					queue: 0,
+					activity: '[0,0,0,0,0,0,0,0,0,0,0,0]'
+				};
 
 				// Needs to be in a variable, otherwise account button can't be clicked. (Weird as fuck)
 				var m_account = $("#account_button");

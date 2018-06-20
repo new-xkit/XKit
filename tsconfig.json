@@ -8,14 +8,13 @@
     "target": "es2015"
   },
   "include": [
-    "globals.d.ts",
+    "declarations.d.ts",
     "Extensions/**/*.js",
     "Safari/**/*.js",
     "WebExtension/**/*.js",
     "xkit.js"
   ],
   "exclude": [
-    "Extensions/**/*.icon.js",
-    "Extensions/xkit_patches.js"
+    "Extensions/**/*.icon.js"
   ]
 }
