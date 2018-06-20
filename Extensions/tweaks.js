@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.6.2 **/
+//* VERSION 5.6.3 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -337,26 +337,73 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
-			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
-			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
-			".ui_notes .activity-notification .activity-notification__activity{ transform: translate(-10px); }" +
-			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ background-color: rgba(0,0,0,0) !important; padding: 5px 0; }" +
-			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; min-width: 25px; }" +
-			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response blockquote{ margin: 10px 0 5px 5px; padding-left: 15px; border-left: 3px solid #d9d9d9; }" +
-			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular{ background-position: -784px -2px; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.quote{ background-position: -784px -30px; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.ask_answer{ background-position: -785px -171px; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link{ background-position: -785px -58px; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
-			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
-			".ui_notes .date_header, .ui_notes .date_header.date_activity{ padding: 0 10px; }" +
-			".activity-popover-notifications .ui_notes .activity-notification .activity-notification__avatar{ height: 25px; }" +
-			".activity-notification div.retags{ margin: 0 !important; padding-left: 41px !important; }" +
-			".is_retags .activity-notification__activity_message.conversational{ margin-bottom: 0 !important; }" +
-			".xkit-activity-plus-timestamp{ transform: translate(-13px) }" +
-			".xkit-reply-button-pn.xkit-notes-activity{ transform: translate(31px,-9px) }",
+			XKit.tools.add_css(
+			// Slim the height by 10px and put the icons back where they were
+			".ui_notes .activity-notification" +
+				"{ padding: 10px; }" +
+
+			// Fit the activity text back where it was
+			".ui_notes .activity-notification .activity-notification__activity" +
+				"{ transform: translate(-10px); }" +
+
+			// Remove the speech bubble from conversational notes and put it back in the right place
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational" +
+				"{ background-color: transparent !important; padding: 5px 0; }" +
+
+			// Put the nested style of additions/replies back
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response blockquote" +
+				"{ margin: 10px 0 5px 5px; padding-left: 15px; border-left: 3px solid #d9d9d9; }" +
+
+			// Let the post type icon shrink
+			".ui_notes .activity-notification .activity-notification__icon" +
+				"{ padding: 0; min-width: 25px; }" +
+
+			// Allow user avatars to use the padding too
+			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar" +
+				"{ margin: 0; }" +
+
+			// Shrink post type icons
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge" +
+				"{ width: 25px; height: 25px; }" +
+
+			// Adjust post type icons to display properly
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular" +
+				"{ background-position: -784px -2px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.quote" +
+				"{ background-position: -784px -30px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.ask_answer, " +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.note" +
+				"{ background-position: -785px -170px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link" +
+				"{ background-position: -785px -58px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation" +
+				"{ background-position: -786px -85px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio" +
+				"{ background-position: -785px -114px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.video" +
+				"{ background-position: -785px -141px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.postcard, " +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.postcard.fanmail, " +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.ask" +
+				"{ background-position: -749px -210px; }" +
+
+			// Fit the date headers in line with the slimmed notes
+			".ui_notes .date_header, .ui_notes .date_header.date_activity" +
+				"{ padding: 0 10px; }" +
+
+			// Put the block button back
+			".ui_notes .activity-notification .activity-notification__icon .activity-notification__icon_block.badge" +
+				"{ transform: translate(-13px, -5px); }" +
+
+			// Allow the activity dropdown to be slimmed properly
+			".activity-popover-notifications .ui_notes .activity-notification .activity-notification__avatar" +
+				"{ height: 25px; }" +
+
+			// Put XKit-added stuff back where it was on old notes
+			".activity-notification div.retags { margin: 0 !important; padding-left: 41px !important; }" +
+			".is_retags .activity-notification__activity_message.conversational { margin-bottom: 0 !important; }" +
+			".xkit-activity-plus-timestamp { transform: translate(-13px); }" +
+			".xkit-reply-button-pn.xkit-notes-activity { transform: translate(25px,-9px); }",
 			"tweaks_slim_activity_feed");
 		}
 
