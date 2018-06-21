@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.0.2 **//
+//* VERSION 7.0.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -200,6 +200,46 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				window.addEventListener("message", handler);
+			};
+
+			/**
+			 * Get the posts on the screen without the given tag
+			 * @param {String} without_tag - Class that the posts should not have
+			 * @param {Boolean} mine - Whether the posts must be the user's
+			 * @param {Boolean} can_edit - Whether the posts must be editable
+			 * @return {Array<Object>} The posts
+			 */
+			XKit.interface.get_posts = function(without_tag, mine, can_edit) {
+				var posts = [];
+
+				var selector = ".post";
+				var where = XKit.interface.where();
+
+				if (mine && !where.channel && !where.drafts && !where.queue) {
+					selector = ".post.is_mine";
+				}
+
+				var selection = $(selector);
+
+				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
+
+				if (typeof without_tag !== "undefined") {
+					exclusions.push("." + without_tag);
+				}
+
+				for (var i = 0; i < exclusions.length; i++) {
+					selection = selection.not(exclusions[i]);
+				}
+
+				selection.each(function() {
+					// If can_edit is requested and we don't have an edit post control,
+					// don't push the post
+					if (can_edit && $(this).find(".edit").length === 0) {
+						return;
+					}
+					posts.push($(this));
+				});
+				return posts;
 			};
 		},
 		"7.8.2": function() {
@@ -1820,46 +1860,6 @@ XKit.extensions.xkit_patches = new Object({
 					if (XKit.interface.where().search) {
 						XKit.interface.trigger_reflow();
 					}
-				},
-
-				/**
-				 * Get the posts on the screen without the given tag
-				 * @param {String} without_tag - Class that the posts should not have
-				 * @param {Boolean} mine - Whether the posts must be the user's
-				 * @param {Boolean} can_edit - Whether the posts must be editable
-				 * @return {Array<Object>} The posts
-				 */
-				get_posts: function(without_tag, mine, can_edit) {
-					var posts = [];
-
-					var selector = ".post";
-					var where = XKit.interface.where();
-
-					if (mine && !where.channel && !where.drafts && !where.queue) {
-						selector = ".post.is_mine";
-					}
-
-					var selection = $(selector);
-
-					var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
-
-					if (typeof without_tag !== "undefined") {
-						exclusions.push("." + without_tag);
-					}
-
-					for (var i = 0; i < exclusions.length; i++) {
-						selection = selection.not(exclusions[i]);
-					}
-
-					selection.each(function() {
-						// If can_edit is requested and we don't have an edit post control,
-						// don't push the post
-						if (can_edit && $(this).find(".delete").length === 0) {
-							return;
-						}
-						posts.push($(this));
-					});
-					return posts;
 				},
 
 				/**
