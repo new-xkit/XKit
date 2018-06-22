@@ -107,7 +107,8 @@ XKit.extensions.soft_refresh = new Object({
 			try {
 				postIds.forEach(function(id) {
 					var postId = "post_" + id;
-					var postElement = $(document.getElementById(postId));
+					// @ts-ignore
+					var postElement = jQuery(document.getElementById(postId));
 					var fakeView = new Tumblr.PostView({
 						el: postElement,
 						model: Tumblr.PostsView.prototype.createPostModelFromEl(postElement)

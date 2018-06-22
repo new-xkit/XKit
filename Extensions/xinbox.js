@@ -250,8 +250,8 @@ XKit.extensions.xinbox = new Object({
 		var m_post_id = $(e.target).attr('data-post-id');
 
 		XKit.tools.add_function(function() {
-
-			var e_target = $("#xinbox-reply-button-" + add_tag);
+			// @ts-ignore
+			var e_target = jQuery("#xinbox-reply-button-" + add_tag);
 
 			try {
 				Tumblr.Events.trigger("ask:form:open", {

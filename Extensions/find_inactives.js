@@ -332,7 +332,8 @@ XKit.extensions.find_inactives = new Object({
 	trigger_unfollow: function() {
 		var username = add_tag;
 		// We're gonna assume Tumblr won't permit usernames that'd lead to XSS.
-		var removalTarget = $(`.find-inactives-blog[data-url="http://${username}.tumblr.com/"]`);
+		// @ts-ignore
+		var removalTarget = jQuery(`.find-inactives-blog[data-url="http://${username}.tumblr.com/"]`);
 		Tumblr.Dialog.confirm(`Are you sure you want to unfollow <strong>${username}</strong>?`, function() {
 			Tumblr.unfollow({
 				tumblelog: username,

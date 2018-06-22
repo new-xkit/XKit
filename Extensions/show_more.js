@@ -279,7 +279,8 @@ XKit.extensions.show_more = new Object({
 			XKit.extensions.show_more.hide_classic_menu();
 			XKit.tools.add_function(function() {
 				Tumblr.FanMail.show({
-					href: "/send/" + $(".xkit-fan-mail").attr('data-tumblelog-name')
+					// @ts-ignore
+					href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
 				});
 			}, true, "");
 
@@ -811,7 +812,8 @@ XKit.extensions.show_more = new Object({
 
 		XKit.tools.add_function(function() {
 			var args = JSON.parse(add_tag);
-			var config = $("<div data-tumblelog-name='" + args.recipient + "' />");
+			// @ts-ignore
+			var config = jQuery("<div data-tumblelog-name='" + args.recipient + "' />");
 			config.data("anonymous_ask", args.anonymous_asks);
 			Tumblr.Events.trigger("ask:form:open", {
 				recipient: args.recipient,

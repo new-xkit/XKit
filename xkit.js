@@ -1808,7 +1808,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 							var editor = window.ace.edit(editor_div[0]);
 							editor.setValue(new_content);
 							setTimeout(function() {
-								$(".ace_marker-layer").empty();
+								// @ts-ignore
+								jQuery(".ace_marker-layer").empty();
 							}, 500);
 						}
 					}, true, [new_content, html_or_markdown]);
