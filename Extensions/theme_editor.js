@@ -1,5 +1,5 @@
 //* TITLE Theme Editor **//
-//* VERSION 0.1.6 **//
+//* VERSION 0.1.7 **//
 //* DESCRIPTION For theme developers **//
 //* DETAILS If you are good with CSS, hop in and make your own theme.<br><br>When installed, this extension disables the standard Themes extension, and adds a button on your sidebar on your dashboard that lets you write and load your own theme. When you are done, you can submit it to xkit-dev.tumblr.com so it can be added to the theme gallery.<br><br>This extension is <b>not recommended</b> for people without CSS/HTML experience and only provided for XKit theme developers. Please disable Themes and Yoohoo! extensions before using. For better editing, Textarea Code Formatter for Chrome or Tabinta for Firefox is recommended. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -36,7 +36,7 @@ XKit.extensions.theme_editor = new Object({
 			'<li class="no_push"><a href="#" class="customize" id="xkit-theme-editor-button">' +
 			'<div class="hide_overflow">Edit Theme</div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:eq(1)").before(xf_html);
+		$(".controls_section:eq(1)").before(xf_html);
 
 		$("#xkit-theme-editor-button").click(function() {
 

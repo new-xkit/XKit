@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.3.2 **//
+//* VERSION 0.3.3 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER new-xkit **//
@@ -25,7 +25,7 @@ XKit.extensions.post_limit_checker = new Object({
 					'</a></li>' +
 				'</ul>';
 
-		$("ul.controls_section:first").before(xf_html);
+		$(".controls_section:eq(1)").before(xf_html);
 
 		$("#post_limit_checker_view").click(function() {
 

@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.2.2 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DETAILS Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -110,11 +110,11 @@ XKit.extensions.find_blogs = new Object({
 		if (XKit.interface.where().user_url === "") { return; }
 
 		var xf_html = '<ul class="controls_section" id="find_blogs_ul">' +
-			'<li class="section_header selected">FIND BLOGS</li>' +
+			'<li class="section_header selected">Find Blogs</li>' +
 			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="find_blogs_button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Similar to ' + XKit.interface.where().user_url + '<span class="sub_control link_arrow arrow_right"></span></div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:first").before(xf_html);
+		$(".controls_section:eq(1)").before(xf_html);
 
 		$("#find_blogs_button").click(function() {
 

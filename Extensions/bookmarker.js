@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.7 **//
+//* VERSION 2.3.8 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER new-xkit **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -26,11 +26,6 @@ XKit.extensions.bookmarker = new Object({
 		sep1: {
 			text: "Displaying bookmarks",
 			type: "separator"
-		},
-		display_on_top: {
-			text: "On dashboard, show my bookmarks after my blog information",
-			default: false,
-			value: false
 		},
 		display_non_relative: {
 			text: "Instead of relative time, use the following format:",
@@ -124,19 +119,11 @@ XKit.extensions.bookmarker = new Object({
 
 		if (document.location.href.indexOf("?bookmark=true") !== -1) {
 			$("#right_column").prepend(m_html);
+			$("#xbookmarks").css("margin-top", "0");
+			$("#xbookmarker_small_links").css("margin-bottom", "18px");
 		} else {
-			if (XKit.extensions.bookmarker.preferences.display_on_top.value === true) {
-				$("ul.controls_section:first").after(m_html);
-			} else {
-				if ($("#tumblr_radar").length > 0) {
-					//$("#tumblr_radar").before(m_html);
-					$(".controls_section_radar").before(m_html);
-				} else {
-					$("#right_column").append(m_html);
-				}
-			}
+			$(".controls_section:eq(1)").before(m_html);
 		}
-
 
 		$("#xbookmarks").prepend("<li class=\"section_header selected\">BOOKMARKS</li>");
 		$("#xbookmarks").slideDown('fast');
@@ -436,6 +423,7 @@ XKit.extensions.bookmarker = new Object({
 		$("#xbookmarks").remove();
 		$("#xbookmarker_small_links").remove();
 		$(".xbookmarker_post_icon").remove();
+		$(".xbookmarker_done").removeClass("xbookmarker_done");
 		XKit.tools.remove_css("bookmarker");
 		XKit.tools.remove_css("bookmarker_new_layout");
 		XKit.post_listener.remove("bookmarker");

@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.5 **//
+//* VERSION 0.2.6 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -17,7 +17,7 @@ XKit.extensions.drafts_plus = new Object({
 		XKit.tools.init_css("drafts_plus");
 
 		var xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
-			'<li class="section_header selected">DRAFTS TOOLS</li>' +
+			'<li class="section_header selected">Drafts Tools</li>' +
 			'<li class="" id="drafts_plus_mass_edit_li"">' +
 				'<a href="#" class="customize" id="drafts_plus_mass_edit_button">' +
 					'<div class="hide_overflow">Mass Edit Mode</div>' +
@@ -30,7 +30,7 @@ XKit.extensions.drafts_plus = new Object({
 			'</li>' +
 			'</ul>';
 
-		$("ul.controls_section:eq(1)").before(xf_html);
+		$(".controls_section:eq(1)").before(xf_html);
 
 		$("#drafts_plus_mass_edit_button").click(function() {
 
