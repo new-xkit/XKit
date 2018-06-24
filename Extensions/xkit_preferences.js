@@ -508,8 +508,11 @@ XKit.extensions.xkit_preferences = new Object({
 		var year = time.getFullYear();
 		var month = months[time.getMonth()];
 		var date = time.getDate();
+		/** @type {number | string} */
 		var hour = time.getHours();
+		/** @type {number | string} */
 		var min = time.getMinutes();
+		/** @type {number | string} */
 		var sec = time.getSeconds();
 		if (hour <= 9) { hour = "0" + hour; }
 		if (min <= 9) { min = "0" + min; }

@@ -112,7 +112,7 @@ XKit.extensions.postarchive = {
 
 		if ($(".posts .post").length > 0) {
 
-			XKit.interface.create_control_button("xkit-postarchive", this.button_icon, "Archive this post", "", this.button_on);
+			XKit.interface.create_control_button("xkit-postarchive", this.button_icon, "Archive this post", undefined, this.button_on);
 			XKit.extensions.postarchive.init();
 			XKit.post_listener.add("postarchive", XKit.extensions.postarchive.do);
 			XKit.extensions.postarchive.do();
@@ -918,7 +918,7 @@ XKit.extensions.postarchive = {
 			Tumblr.Events.trigger("posts:load");
 		}, true, "");
 
-		XKit.post_listener.check(true);
+		XKit.post_listener.check();
 
 	},
 

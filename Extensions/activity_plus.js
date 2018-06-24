@@ -204,7 +204,7 @@ XKit.extensions.activity_plus = new Object({
 		function reblogToElement(reblog, summary, uiPostBadge) {
 			var notification = document.createElement('div');
 			notification.classList.add('activity-notification');
-			notification.dataset.timestamp = Math.round(reblog.timestamp);
+			notification.dataset.timestamp = Math.round(reblog.timestamp).toString();
 			notification.dataset.tumblelogName = reblog.blog_name;
 
 			notification.classList.add('is_reblog');

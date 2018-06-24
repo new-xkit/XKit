@@ -459,7 +459,7 @@ XKit.extensions.old_notifications = new Object({
 		}
 
 		// Lets see if there is sth we should be doing to these notifications.
-		setTimeout(function() { XKit.post_listener.check(true); }, 400);
+		setTimeout(function() { XKit.post_listener.check(); }, 400);
 
 	},
 

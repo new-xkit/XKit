@@ -20,7 +20,7 @@ XKit.extensions.replyviewer = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("replyviewer");
-		XKit.interface.create_control_button("xkit-replyviewer", this.button_icon, "ReplyViewer", "");
+		XKit.interface.create_control_button("xkit-replyviewer", this.button_icon, "ReplyViewer");
 		XKit.extensions.replyviewer.init();
 		XKit.post_listener.add("replyviewer", XKit.extensions.replyviewer.do);
 		if ($(".posts .post").length > 0) {
@@ -68,7 +68,7 @@ XKit.extensions.replyviewer = new Object({
 				"</div></div><div id=\"replyviewer-loader-icon\">&nbsp;</div>";
 
 		$("#replyviewer-window").unbind('scroll');
-		XKit.window.show("", m_html, "", "<div id=\"xreplyviewer-close\" class=\"xkit-button\">Close</div>");
+		XKit.window.show("", m_html, undefined, "<div id=\"xreplyviewer-close\" class=\"xkit-button\">Close</div>");
 
 		$("#xreplyviewer-close").click(function() {
 

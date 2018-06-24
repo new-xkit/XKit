@@ -266,6 +266,7 @@ XKit.extensions.blacklist = new Object({
 		$("#xkit-blacklist-share-code").nanoScroller();
 		$("#xkit-blacklist-share-code").nanoScroller({ scroll: 'top' });
 
+		// @ts-ignore : Did you mean ".select()"?
 		$("#xkit-blacklist-share-code").click(function() { $(this).selectText();});
 
 	},

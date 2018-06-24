@@ -62,7 +62,7 @@ XKit.extensions.vanilla_video = {
 		XKit.post_listener.add('vanilla_video', function() { setTimeout(XKit.extensions.vanilla_video.check, 10); });
 		XKit.extensions.vanilla_video.check();
 	},
-	
+
 	cpanel: function() {
 		$("#xkit-vanilla-video-color-help").click(function() {
 			XKit.window.show("Background color", "The Vanilla Videos extension allows you to set the background color used when videos do not fill the whole player, generally due to being very narrow. Any CSS color value works, for example: <br/><br/><ul><li>#000000</li><li>#FF0000</li><li>rgba(0, 0, 0, 0)</li></ul><br/>These would produce black, red, and transparent respectively.<br/><br/>Please be careful while customizing the color. An improper value can cause issues. In that case, just delete the text you've entered completely and XKit will revert to the default color.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -98,11 +98,14 @@ XKit.extensions.vanilla_video = {
 					return; // FIXME sometimes a page ends up with all broken videos (missing source) - not sure why. haven't seen it since I added this but might just be a coincidence
 				}
 				newVideo.controls = true;
-				newVideo.style = "width: 100%;" +
-								 "display: block;" +
-								 "margin: auto;" +
-								 "max-height: 600px;" +
-								 "background: " + XKit.extensions.vanilla_video.preferences.background_color.value + ";";
+
+				// Applies various styles
+				newVideo.style.width = '100%';
+				newVideo.style.display = 'block';
+				newVideo.style.margin = 'auto';
+				newVideo.style.maxHeight = '600px';
+				newVideo.style.backgroundColor = XKit.extensions.vanilla_video.preferences.background_color.value;
+
 				newVideo.volume = XKit.extensions.vanilla_video.preferences.default_volume.value;
 				newVideo.loop = XKit.extensions.vanilla_video.preferences.loop.value;
 				if (XKit.extensions.vanilla_video.preferences.disable_preload.value) {

@@ -708,17 +708,15 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * Show an XKit alert window
 			 * @param {String} title - Text for alert window's title bar
 			 * @param {String} msg - Text for body of window, can be HTML
-			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+			 * @param {"error"|"warning"|"question"|"info"} iconClass - Window's
 			 *   icon type, determined by CSS class `icon`.
 			 *   See also xkit_patches.css.
 			 * @param {String} buttons - The HTML to be used in the button area of the window.
 			 *                           Usually divs with class "xkit-button".
 			 * @param {boolean} wide - Whether the XKit window should be wide.
 			 */
-			show: function(title, msg, icon, buttons, wide) {
-				if (typeof icon === "undefined") {
-					icon = "";
-				}
+			show: function(title, msg, iconClass, buttons, wide) {
+				var icon = iconClass || "";
 
 				var additional_classes = "";
 
@@ -1177,7 +1175,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 					fakelink.style.display = "none";
 					fakelink.href = url;
-					fakelink.download = filename || true;
+					fakelink.download = filename || "";
 
 					document.body.appendChild(fakelink);
 					fakelink.click();
@@ -1802,9 +1800,11 @@ var xkit_global_start = Date.now();  // log start timestamp
 						/* eslint-enable no-shadow */
 						var editor_div = document.getElementsByClassName("ace_editor");
 						if (html_or_markdown === "Markdown") {
+							// @ts-ignore
 							new_content = require('to-markdown').toMarkdown(new_content);
 						}
 						if (editor_div.length === 1) {
+							// @ts-ignore
 							var editor = window.ace.edit(editor_div[0]);
 							editor.setValue(new_content);
 							setTimeout(function() {
@@ -1956,7 +1956,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {String} Type of post, see also XKit.interface.post_window.post_type
+				 * @return {"text" | "photo" | "video" | "chat" | "quote" | "audio" | "link"} Type of post, see also XKit.interface.post_window.post_type
 				 */
 				type: function() {
 					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
@@ -1964,6 +1964,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					for (var i = 0; i < types.length; i++) {
 						var type = types[i];
 						if (form.hasClass('post-form--' + type)) {
+							// @ts-ignore
 							return type;
 						}
 					}
@@ -2801,6 +2802,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				}
 
+				/** @type {number | string} */
 				var n_count = 0;
 
 				if ($(obj).find(".note_link_current").length > 0) {

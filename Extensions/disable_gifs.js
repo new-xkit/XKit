@@ -29,7 +29,7 @@ XKit.extensions.disable_gifs = new Object({
 			$(document).on('click', '.disable_gifs_button', XKit.extensions.disable_gifs.on_click);
 			//$(document).on('click','.xkit-disable-gifs-canvas-thumbnail', XKit.extensions.disable_gifs.toggle_enlarge);
 
-			XKit.interface.create_control_button("disable_gifs_button", this.button_icon, "Play Gif", "", this.on_icon);
+			XKit.interface.create_control_button("disable_gifs_button", this.button_icon, "Play Gif", undefined, this.on_icon);
 			XKit.post_listener.add("disable_gifs", XKit.extensions.disable_gifs.do);
 			XKit.extensions.disable_gifs.do();
 		}

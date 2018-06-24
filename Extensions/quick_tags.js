@@ -73,7 +73,7 @@ XKit.extensions.quick_tags = new Object({
 
 
 		XKit.interface.post_window.create_control_button("xkit-quick-tags-window", this.button_icon, "Quick Tags in a window!");
-		XKit.interface.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon);
+		XKit.interface.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", undefined, this.button_ok_icon);
 
 		$(document).on("mouseover", "#xkit-quick-tags-window", XKit.extensions.quick_tags.cancel_menu_close);
 		$(document).on("mouseout", "#xkit-quick-tags-window", XKit.extensions.quick_tags.menu_close);

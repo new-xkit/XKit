@@ -1,5 +1,5 @@
 interface XKit {
-  version: number;
+  version: number | string;
 
   api_key: string;
 
@@ -106,13 +106,17 @@ interface XKit {
     reblog_button: () => JQuery;
     dashboard_button: () => JQuery;
     size_frame_to_fit: () => void;
+
+    // dynamically defined
+    full?: () => void;
+    restore?: () => void;
   };
 
   window: {
     show: (
       title: string,
       msg: string,
-      icon: "error" | "warning" | "question" | "info",
+      icon?: "error" | "warning" | "question" | "info",
       buttons?: any,
       wide?: boolean
     ) => void;
@@ -192,13 +196,13 @@ interface XKit {
 
   interface: {
     revision: number;
-    added_icon: Array<any>;
-    added_icon_icon: Array<any>;
-    added_icon_text: Array<any>;
-    post_window_listener_id: Array<any>;
-    post_window_listener_func: Array<any>;
+    added_icon: any;
+    added_icon_icon: any;
+    added_icon_text: any;
+    post_window_listener_id: any;
+    post_window_listener_func: any;
     post_window_listener_running: boolean;
-    post_window_listener_window_id: number;
+    post_window_listener_window_id: number | string;
 
     kitty: {
       stored: string;
@@ -209,9 +213,9 @@ interface XKit {
     };
 
     post_window: {
-      added_icon: Array<any>;
-      added_icon_icon: Array<any>;
-      added_icon_text: Array<any>;
+      added_icon: any;
+      added_icon_icon: any;
+      added_icon_text: any;
       create_control_button: (
         class_name: string,
         icon: string,
@@ -285,7 +289,7 @@ interface XKit {
       additional?: string
     ) => void;
     get_posts: (
-      without_tag: string,
+      without_tag?: string,
       mine?: boolean,
       can_edit?: boolean
     ) => Array<any>;
@@ -321,7 +325,7 @@ interface XKit {
     };
     is_tumblr_page: () => boolean;
     trigger_reflow: () => void;
-    show_peepr_for: (blog: any, post: any) => void;
+    show_peepr_for: (blog: any, post?: any) => void;
     is_following: (username: string, blog: string) => Promise<boolean>;
   };
 
@@ -340,8 +344,10 @@ interface XKit {
   shutdown: () => void;
 
   // Dynamically defined
-  frame_mode: boolean;
-  blogs_from_tumblr: Array<any>;
+  frame_mode?: boolean;
+  blogs_from_tumblr?: Array<any>;
+  retina?: boolean;
+  servers?: any;
 }
 
 declare var XKit: XKit;
@@ -357,17 +363,26 @@ interface Date {
 }
 
 interface Window {
+  _: any;
+  ace: AceAjax.Ace;
+  jQuery: JQuery;
   Tumblr: any;
+  xkit_restore_fastdash: Function;
 }
 
 // Other Global Variables
-declare var Tumblr: any;
-declare var XBridge: any;
+declare var _: any;
+declare var ace: AceAjax.Ace;
+declare var add_tag: any;
 declare var browser: any;
+declare var centerIt: any;
+declare var last_object: any;
 declare var msBrowser: any;
 declare var safari: any;
-declare var add_tag: any;
-declare var last_object: any;
-
-// Not sure where this came from
 declare var tinyMCE: any;
+declare var Tumblr: any;
+declare var XBridge: any;
+
+declare function show_error_installation(msg: string);
+declare function show_error_reset(msg: string);
+declare function xkit_check_storage();

@@ -51,7 +51,7 @@ XKit.extensions.notificationblock = new Object({
 
 		if ($("#posts").length > 0 || $(".notification").length > 0 || $(".ui_note").length > 0) {
 			$(document).on('click', '.xnotificationblockbutton', XKit.extensions.notificationblock.on_click);
-			XKit.interface.create_control_button("xnotificationblockbutton", this.button_icon, "NotificationBlock", "", this.button_ok);
+			XKit.interface.create_control_button("xnotificationblockbutton", this.button_icon, "NotificationBlock", undefined, this.button_ok);
 			XKit.post_listener.add("notificationblock", XKit.extensions.notificationblock.do);
 			XKit.extensions.notificationblock.do();
 		}

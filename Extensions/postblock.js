@@ -32,7 +32,7 @@ XKit.extensions.postblock = new Object({
 
 		if ($("#posts").length > 0) {
 			$(document).on('click', '.xpostblockbutton', XKit.extensions.postblock.on_click);
-			XKit.interface.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", "");
+			XKit.interface.create_control_button("xpostblockbutton", this.button_icon, "PostBlock");
 			XKit.post_listener.add("postblock", XKit.extensions.postblock.do);
 			XKit.extensions.postblock.do();
 		}

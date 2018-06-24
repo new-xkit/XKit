@@ -87,6 +87,7 @@ XKit.extensions.xkit_patches = new Object({
 				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
 				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
 					function(wrapped, _event) {
+						// @ts-ignore
 						if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
 							if (!this.$el.find('video[src^="blob:"]').length) {
 								return true;
@@ -98,9 +99,12 @@ XKit.extensions.xkit_patches = new Object({
 
 			// unfortunately we're not fast enought to catch some
 			// CRT instances that are currently instantiated, so handle those differently
+			// @ts-ignore
 			jQuery('video').parent().each(function() {
 				this.addEventListener('loadedmetadata', function(event) {
+					// @ts-ignore
 					var $target = jQuery(event.target);
+					// @ts-ignore
 					if (!$target.is(":visible") || !jQuery.contains(document, event.target)) {
 						event.stopPropagation();
 					}
@@ -119,6 +123,7 @@ XKit.extensions.xkit_patches = new Object({
 						wrapped.call(this);
 						this.post_positions = _.pick(this.post_positions,
 							function(scroll_pos, element_id) {
+								// @ts-ignore
 								var element = jQuery("[data-pageable='" + element_id + "']");
 								return element.is(":visible") && element.height() > 0;
 							});
@@ -314,7 +319,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					fakelink.style.display = "none";
 					fakelink.href = url;
-					fakelink.download = filename || true;
+					fakelink.download = filename || "";
 
 					document.body.appendChild(fakelink);
 					fakelink.click();
@@ -684,14 +689,17 @@ XKit.extensions.xkit_patches = new Object({
 				 * for the code to set classes on the iframe element and the body of the page)
 				 */
 				size_frame_to_fit: function() {
-					var button_container = $(".iframe-controls-container")[0] || {};
+					var button_container = $(".iframe-controls-container")[0] || {
+						scrollWidth: -Infinity,
+						scrollHeight: -Infinity
+					};
 
 					var width = Math.max(
-						button_container.scrollWidth || -Infinity,
+						button_container.scrollWidth,
 						document.body.scrollWidth);
 
 					var height = Math.max(
-						button_container.scrollHeight || -Infinity,
+						button_container.scrollHeight,
 						document.body.scrollHeight);
 
 					var payload = {
@@ -726,18 +734,15 @@ XKit.extensions.xkit_patches = new Object({
 			 * Show an XKit alert window
 			 * @param {String} title - Text for alert window's title bar
 			 * @param {String} msg - Text for body of window, can be HTML
-			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+			 * @param {"error" | "warning" | "question" | "info"} iconClass - Window's
 			 *   icon type, determined by CSS class `icon`.
 			 *   See also xkit_patches.css.
 			 * @param {String} buttons - The HTML to be used in the button area of the window.
 			 *                           Usually divs with class "xkit-button".
 			 * @param {boolean} wide - Whether the XKit window should be wide.
 			 */
-			XKit.window.show = function(title, msg, icon, buttons, wide) {
-
-				if (typeof icon === "undefined") {
-					icon = "";
-				}
+			XKit.window.show = function(title, msg, iconClass, buttons, wide) {
+				var icon = iconClass || "";
 
 				var additional_classes = "";
 
@@ -784,7 +789,7 @@ XKit.extensions.xkit_patches = new Object({
 
 			};
 
-			XKit.interface = new Object({
+			XKit.interface = {
 
 				revision: 2,
 
@@ -990,12 +995,15 @@ XKit.extensions.xkit_patches = new Object({
 							/* eslint-enable no-shadow */
 							var editor_div = document.getElementsByClassName("ace_editor");
 							if (html_or_markdown === "Markdown") {
+								// @ts-ignore
 								new_content = require('to-markdown').toMarkdown(new_content);
 							}
 							if (editor_div.length === 1) {
+								// @ts-ignore
 								var editor = window.ace.edit(editor_div[0]);
 								editor.setValue(new_content);
 								setTimeout(function() {
+									// @ts-ignore
 									jQuery(".ace_marker-layer").empty();
 								}, 500);
 							}
@@ -1126,17 +1134,16 @@ XKit.extensions.xkit_patches = new Object({
 					 * @return {boolean} Whether the switch succeeded
 					 */
 					switch_blog: function(url) {
+						var flag = false;
 
 						$("#tumblelog_choices").find(".option").each(function() {
-
 							if ($(this).attr('data-option-value') === url) {
 								$(this).trigger('click');
-								return true;
+								flag = true;
 							}
-
 						});
 
-						return false;
+						return flag;
 
 					},
 
@@ -1150,7 +1157,7 @@ XKit.extensions.xkit_patches = new Object({
 					},
 
 					/**
-					 * @return {String} Type of post, see also XKit.interface.post_window.post_type
+					 * @return {"text" | "photo" | "video" | "chat" | "quote" | "audio" | "link"} Type of post, see also XKit.interface.post_window.post_type
 					 */
 					type: function() {
 						var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
@@ -1158,6 +1165,7 @@ XKit.extensions.xkit_patches = new Object({
 						for (var i = 0; i < types.length; i++) {
 							var type = types[i];
 							if (form.hasClass('post-form--' + type)) {
+								// @ts-ignore
 								return type;
 							}
 						}
@@ -2001,6 +2009,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					}
 
+					/** @type {number | string} */
 					var n_count = 0;
 
 					if ($(obj).find(".note_link_current").length > 0) {
@@ -2280,26 +2289,27 @@ XKit.extensions.xkit_patches = new Object({
 					return !!document.location.href.match(/^https?:\/\/(www\.)?tumblr\.com/);
 				},
 
-
 				/**
 				 * Tell Tumblr to reflow the page. Used to recalculate post dimensions
 				 * and j/k scrolling.
 				 */
-				trigger_reflow: XKit.tools.debounce(function() {
-					if (this.where().search) {
-						// Found by logging calls to Tumblr.Events.trigger on the search page
-						// search:post:photo_expanded is where the magic happens
-						XKit.tools.add_function(function() {
-							Tumblr.Events.trigger("post:photo_expanded");
-							Tumblr.Events.trigger("search:post:photo_expanded");
-							Tumblr.Events.trigger("search:layout:updated");
-						}, true, "");
-					} else {
-						XKit.tools.add_function(function() {
-							Tumblr.Events.trigger("DOMEventor:updateRect");
-						}, true, "");
-					}
-				}, 250),
+				trigger_reflow: function() {
+					XKit.tools.debounce(function() {
+						if (this.where().search) {
+							// Found by logging calls to Tumblr.Events.trigger on the search page
+							// search:post:photo_expanded is where the magic happens
+							XKit.tools.add_function(function() {
+								Tumblr.Events.trigger("post:photo_expanded");
+								Tumblr.Events.trigger("search:post:photo_expanded");
+								Tumblr.Events.trigger("search:layout:updated");
+							}, true, "");
+						} else {
+							XKit.tools.add_function(function() {
+								Tumblr.Events.trigger("DOMEventor:updateRect");
+							}, true, "");
+						}
+					}, 250);
+				},
 
 				show_peepr_for: function(blog, post) {
 					var payload = {
@@ -2331,7 +2341,7 @@ XKit.extensions.xkit_patches = new Object({
 						return msg.response.is_friend == 1;
 					});
 				}
-			});
+			};
 
 			XKit.post_listener = {
 				callbacks: {},
@@ -2386,7 +2396,7 @@ XKit.extensions.xkit_patches = new Object({
 			/**
 			 * Add an XKit notification popup (will appear in bottom left corner)
 			 * @param {String} message - Text of notification
-			 * @param {String} type - Desired CSS class of notification, see function
+			 * @param {"error" | "warning" | "info" | "ok" | "mail" | "pokes"} type - Desired CSS class of notification, see function
 			 *                        for possibilities.
 			 * @param {boolean} sticky - If true, the notification will not fade out over time.
 			 * @param {Function} callback - On click callback for notification
@@ -2489,11 +2499,11 @@ XKit.extensions.xkit_patches = new Object({
 
 				/**
 				 * Simulates a tumblr notification ("toast")
-				 * @param {Boolean} created - true if post was not queued/drafted
-				 * @param {String} action - post action description (i.e. "Reblogged to ")
-				 * @param {String} url - tumblr blog name (for both notification and API)
-				 * @param {Integer/String} id - created post id for peepr (optional)
-				 * @param {String} crumb - arbitrary class for "crumb" (optional)
+				 * @param {boolean} created - true if post was not queued/drafted
+				 * @param {string} action - post action description (i.e. "Reblogged to ")
+				 * @param {string} url - tumblr blog name (for both notification and API)
+				 * @param {number | string} id - created post id for peepr (optional)
+				 * @param {string} crumb - arbitrary class for "crumb" (optional)
 				 */
 				add: function(created, action, url, id, crumb) {
 					var toastno = XKit.toast.count;

@@ -825,7 +825,7 @@ XKit.extensions.one_click_postage = new Object({
 			if (XKit.interface.where().drafts === true || XKit.interface.where().queue === true) { return; }
 			if ($("body").hasClass("is_private_channel")) {return; }
 
-			XKit.interface.create_control_button("xkit-one-click-postage-quickqueue", this.qq_icon, "QuickQueue", "", this.qq_ok_icon);
+			XKit.interface.create_control_button("xkit-one-click-postage-quickqueue", this.qq_icon, "QuickQueue", undefined, this.qq_ok_icon);
 			XKit.post_listener.add("one_click_postage", XKit.extensions.one_click_postage.quick_queue_do_posts);
 			XKit.extensions.one_click_postage.quick_queue_do_posts();
 

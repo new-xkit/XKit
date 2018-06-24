@@ -308,13 +308,14 @@ XKit.extensions.xwidgets = new Object({
 				//var sec = -1.57 + Math.PI * secs / 30;
 				var mins = now.getMinutes();
 				//var min = -1.57 + Math.PI * mins / 30;
-				var hr = (isitlocal) ? now.getHours() : (now.getHours() + parseInt(ofst)) + parseInt(timezone);
+				var hr = (isitlocal) ? now.getHours() : (now.getHours() + Math.floor(ofst)) + parseInt(timezone);
 				//var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
 				if (hr < 0) hr += 24;
 				if (hr > 23) hr -= 24;
 				var ampm = (hr > 11) ? "PM" : "AM";
 				var statusampm = ampm;
 
+				/** @type {number | string} */
 				var hr2 = hr;
 				if (hr2 === 0) {
 					hr2 = 12;
@@ -506,7 +507,7 @@ XKit.extensions.xwidgets = new Object({
 				// var sec = -1.57 + Math.PI * secs / 30;
 				var mins = now.getMinutes();
 				// var min = -1.57 + Math.PI * mins / 30;
-				var hr = (isitlocal) ? now.getHours() : (now.getHours() + parseInt(ofst)) + parseInt(timezone);
+				var hr = (isitlocal) ? now.getHours() : (now.getHours() + Math.floor(ofst)) + parseInt(timezone);
 				// var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
 				if (hr < 0) hr += 24;
 				if (hr > 23) hr -= 24;
@@ -517,6 +518,7 @@ XKit.extensions.xwidgets = new Object({
 				//	hr = hr + 12;
 				}
 
+				/** @type {number | string} */
 				var hr2 = hr;
 				if (hr2 === 0) {
 					hr2 = 24;
@@ -1290,7 +1292,7 @@ XKit.extensions.xwidgets = new Object({
 				}
 			}
 
-			slot_no = parseInt(slot_no);
+			slot_no = parseInt(slot_no).toFixed(0);
 
 			XKit.window.show("Remove Widget on Slot #" + slot_no + "?", "Are you sure you want to remove the widget on this slot?", "question", "<div id=\"xkit-remove-widget\" class=\"xkit-button default\">Remove</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 

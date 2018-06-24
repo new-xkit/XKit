@@ -172,7 +172,7 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	check_if_tag_exists: function(tag) {
-		return XKit.interface.tag_exists(tag);
+		return XKit.interface.post_window.tag_exists(tag);
 	},
 
 	new_post_check: function() {

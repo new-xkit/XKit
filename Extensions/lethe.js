@@ -24,6 +24,7 @@ Lethe.prototype.run = function() {
 		return;
 	}
 	this.running = true;
+	// @ts-ignore
 	this.handleScroll = this.handleScroll.bind(this);
 	window.addEventListener('scroll', this.handleScroll, false);
 };
@@ -31,6 +32,7 @@ Lethe.prototype.run = function() {
 /**
  * Handle a scroll event, throttling to once every 100ms
  */
+// @ts-ignore
 Lethe.prototype.handleScroll = function() {
 	if (this.scrollWaiting) {
 		return;
@@ -75,7 +77,7 @@ Lethe.prototype.updatePosts = function() {
 
 /**
  * Hide a post, storing it for later
- * @param {DOMElement} post
+ * @param {Element} post
  */
 Lethe.prototype.hidePost = function(post) {
 	var rect = post.getBoundingClientRect();
@@ -98,7 +100,7 @@ Lethe.prototype.hidePost = function(post) {
 
 /**
  * Show a post, removing it from hidden posts
- * @param {DOMElement} hiddenPost
+ * @param {Element} hiddenPost
  */
 Lethe.prototype.showPost = function(hiddenPost) {
   // Overly conservative removal logic

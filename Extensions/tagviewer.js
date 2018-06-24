@@ -52,7 +52,7 @@ XKit.extensions.tagviewer = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("tagviewer");
-		XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
+		XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer");
 		XKit.extensions.tagviewer.init();
 		XKit.post_listener.add("tagviewer", XKit.extensions.tagviewer.do);
 		if ($(".posts .post").length > 0) {
@@ -98,7 +98,7 @@ XKit.extensions.tagviewer = new Object({
 					"</div></div><div id=\"tagviewer-loader-icon\">&nbsp;</div>";
 
 		$("#tagviewer-window").unbind('scroll');
-		XKit.window.show("", m_html, "", "<div id=\"xkit-close-message\" class=\"xkit-button\">Close</div>");
+		XKit.window.show("", m_html, undefined, "<div id=\"xkit-close-message\" class=\"xkit-button\">Close</div>");
 		XKit.extensions.tagviewer.load_tags();
 
 	},

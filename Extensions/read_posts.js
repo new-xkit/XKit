@@ -49,7 +49,10 @@ XKit.extensions.read_posts = new Object({
 
 	undim: function(e) {
 		XKit.extensions.read_posts.currently_undimming = true;
+
+		/** @type {HTMLElement | JQuery} */
 		var m_obj = $(e.target)[0];
+
 		if (!$(m_obj).hasClass("post")) {
 			m_obj = $(m_obj).parentsUntil('.post').parent();
 		}

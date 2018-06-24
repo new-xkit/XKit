@@ -24,7 +24,7 @@ XKit.extensions.audio_downloader = new Object({
 			XKit.storage.set("audio_downloader", "shown_welcome", "true");
 		}
 
-		XKit.interface.create_control_button("xkit-audio-downloader", this.button_icon, "Audio Downloader", "");
+		XKit.interface.create_control_button("xkit-audio-downloader", this.button_icon, "Audio Downloader");
 		XKit.extensions.audio_downloader.init();
 		XKit.post_listener.add("audio_downloader", XKit.extensions.audio_downloader.do);
 		XKit.extensions.audio_downloader.do();

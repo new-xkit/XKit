@@ -22,6 +22,7 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 	run: function() {
 		this.running = true;
 
+		// @ts-ignore
 		var version = XKit.tools.parse_version(XKit.version);
 		if (XKit.browser().firefox && version.major === 7 && version.minor < 8) {
 			console.warn("Refusing to run Old Sidebar on pre-58 Firefox due to pinned-target bug");

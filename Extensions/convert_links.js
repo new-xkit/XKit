@@ -18,7 +18,7 @@ XKit.extensions.convert_links = new Object({
 		if (XKit.interface.where().inbox !== true) { return; }
 
 		$(document).on('click', '.xkit-convert-links-button', XKit.extensions.convert_links.on_click);
-		XKit.interface.create_control_button("xkit-convert-links-button", this.button_icon, "Convert Links", "");
+		XKit.interface.create_control_button("xkit-convert-links-button", this.button_icon, "Convert Links");
 
 		XKit.post_listener.add("convert_links", XKit.extensions.convert_links.do);
 		XKit.extensions.convert_links.do();

@@ -189,7 +189,7 @@ XKit.extensions.xinbox = new Object({
 
 		if (XKit.extensions.xinbox.preferences.show_reply_button.value === true) {
 			$(document).on('click', '.xkit-xinbox-pa-reply', XKit.extensions.xinbox.on_click_to_pa_reply);
-			XKit.interface.create_control_button("xkit-xinbox-pa-reply", "", "Reply to Answer", "");
+			XKit.interface.create_control_button("xkit-xinbox-pa-reply", "", "Reply to Answer");
 			XKit.tools.add_css(".xkit-xinbox-pa-reply::before { content: \"\\EA96\"; font-family: \"tumblr-icons\", Blank; font-weight: normal; }", "xinbox_private_reply_button");
 			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.show_reply_button);
 			XKit.extensions.xinbox.show_reply_button();
