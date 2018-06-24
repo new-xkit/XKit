@@ -67,12 +67,13 @@ XKit.extensions.post_limit_checker = new Object({
 
 		// Calculate the date according to NY time.
 		// To-do: DST calculations?
+		/** @type {Date} */
 		var date = XKit.extensions.post_limit_checker.convert_timezone(Math.round(+new Date() / 1000) * 1000, - 4);
 
 		// Now we need to figure out when the next reset is.
 		var next_reset = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0);
 
-		var difference = (next_reset - date);
+		var difference = next_reset.valueOf() - date.valueOf();
 		var hours = Math.floor((difference % 86400000) / 3600000);
 		var minutes = Math.floor(((difference % 86400000) % 3600000) / 60000);
 

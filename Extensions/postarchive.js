@@ -359,6 +359,9 @@ XKit.extensions.postarchive = {
 			var blob = new Blob([JSON.stringify(m_data)], {type: 'text/plain'});
 
 			XKit.window.show("Export Archive", "Click OK to download a file with the contents of your Archive.", "info", "<a id='xkit-postarchive-download-export'><div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div></a>");
+
+			/** @type {HTMLAnchorElement} */
+			// @ts-ignore
 			var link = $('#xkit-postarchive-download-export')[0];
 			link.href = window.URL.createObjectURL(blob);
 			link.download = `PostArchive export - ${Date()}.txt`;

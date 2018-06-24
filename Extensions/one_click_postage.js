@@ -903,7 +903,7 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	/**
-	 * @param {Event} e
+	 * @param {KeyboardEvent} e
 	 * @return {boolean} Whether e corresponds to an OCP key command
 	 */
 	is_key_command: function(e) {

@@ -16,6 +16,7 @@ XKit.extensions.messaging_tweaks = new Object({
 	last_chat_title: "",
 	read_message_count: -1,
 	first_chat_open: true,
+	// @ts-ignore
 	notification: window.Notification || window.mozNotification || window.webkitNotification,
 	can_use_notifications: false,
 

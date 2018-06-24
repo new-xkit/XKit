@@ -38,7 +38,11 @@ XKit.extensions.old_stats = new Object({
 				var sparkline = JSON.parse($("#dashboard_controls_open_blog [data-sparkline]").attr("data-sparkline"));
 				var sparkmin = Math.min.apply(Math, sparkline);
 				var sparkpx = (Math.max.apply(Math, sparkline) - sparkmin) / 30;
-				var canvas = document.getElementById("old_stats_canvas").getContext("2d");
+
+				/** @type {HTMLCanvasElement} */
+				// @ts-ignore
+				var old_stats_canvas = document.getElementById("old_stats_canvas");
+				var canvas = old_stats_canvas.getContext("2d");
 				canvas.strokeStyle = "#FFFFFF";
 				canvas.lineWidth = 3.5;
 				canvas.moveTo(0, 30 - ((sparkline[0] - sparkmin) / sparkpx));

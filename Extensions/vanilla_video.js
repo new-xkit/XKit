@@ -80,9 +80,14 @@ XKit.extensions.vanilla_video = {
 				if (videoEmbed.attr('data-embed-service') !== 'tumblr_video' && !videoEmbed.hasClass('crt-video')) {
 					return;
 				}
+
+				/** @type {JQuery<HTMLSourceElement>} */
+				// @ts-ignore
 				var sources = videoEmbed.find('video > source');
 				var newVideo = document.createElement('video');
 				sources.each(function() {
+					/** @type {HTMLVideoElement} */
+					// @ts-ignore
 					var origVideo = this.parentElement;
 					var clonedSource = document.createElement('source');
 					clonedSource.type = this.type;

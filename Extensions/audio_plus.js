@@ -205,6 +205,7 @@ XKit.extensions.audio_plus = {
 		this.running = false;
 
 		XKit.tools.add_function(function() {
+			// @ts-ignore
 			clearInterval(window.xkit_audio_plus_check_current_interval);
 		}, true, "");
 		$("#xkit-audio-plus-current-player").remove();

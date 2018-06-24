@@ -315,7 +315,9 @@ XKit.extensions.timestamps = new Object({
 	parse_raw_date: function(raw_date) {
 		var date = null;
 		// Tumblr format: Jun 16th, 2013 12:42pm in the NY timezone
+		// @ts-ignore
 		if (moment.tz) {
+			// @ts-ignore
 			date = moment.tz(raw_date, "MMM DD, YYYY hh:mma", "America/New_York");
 		} else {
 			// Fall back to local timezone

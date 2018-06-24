@@ -46,7 +46,10 @@ XKit.extensions.disable_gifs = new Object({
 			var v_object = $(this).find(".xkit-disable-gifs-canvas-thumbnail");
 
 			image.onload = (function() {
-				$(v_object)[0].getContext("2d").drawImage(image, 0, 0);
+				/** @type {HTMLCanvasElement} */
+				// @ts-ignore
+				var v_object_canvas = $(v_object)[0];
+				v_object_canvas.getContext("2d").drawImage(image, 0, 0);
 
 				if ($(v_object).hasClass("xkit-disable-gifs-for-photoset")) {return; }
 
@@ -99,7 +102,10 @@ XKit.extensions.disable_gifs = new Object({
 
 			console.log("return_as_jpg for " + url + " ---> Complete loading image.");
 
-			$("#xkit-disable-gifs-canvas-for-" + post_id + "___" + img_id)[0].getContext("2d").drawImage(image, 0, 0, width, height);
+			/** @type {HTMLCanvasElement} */
+			// @ts-ignore
+			var gifCanvas = $("#xkit-disable-gifs-canvas-for-" + post_id + "___" + img_id)[0];
+			gifCanvas.getContext("2d").drawImage(image, 0, 0, width, height);
 			//var image_src = $("#xkit-disable-gifs-canvas-for-" + post_id)[0].toDataURL("image/jpg");
 
 		});
@@ -130,7 +136,10 @@ XKit.extensions.disable_gifs = new Object({
 
 			console.log("return_as_jpg for " + url + " ---> Complete loading image.");
 
-			$("#xkit-disable-gifs-canvas-for-" + post_id)[0].getContext("2d").drawImage(image, 0, 0, width, height);
+			/** @type {HTMLCanvasElement} */
+			// @ts-ignore
+			var gifCanvas = $("#xkit-disable-gifs-canvas-for-" + post_id)[0];
+			gifCanvas.getContext("2d").drawImage(image, 0, 0, width, height);
 			//var image_src = $("#xkit-disable-gifs-canvas-for-" + post_id)[0].toDataURL("image/jpg");
 
 			var m_width = $(obj).attr('data-width');
