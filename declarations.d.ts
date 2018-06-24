@@ -385,4 +385,5 @@ declare var XBridge: any;
 
 declare function show_error_installation(msg: string);
 declare function show_error_reset(msg: string);
+declare function show_error_script(msg: string);
 declare function xkit_check_storage();

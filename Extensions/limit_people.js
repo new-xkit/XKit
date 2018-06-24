@@ -48,7 +48,6 @@ XKit.extensions.limit_people = new Object({
 	},
 
 	open: function(e) {
-
 		var m_obj = $(e.target);
 
 		$($(m_obj).attr('data-to-get')).removeClass("xkit-limit-people-grouped-hidden");
@@ -65,9 +64,6 @@ XKit.extensions.limit_people = new Object({
 		$($(m_obj).attr('data-to-get') + " .post").animate({ opacity: 1}, 400);
 
 		$($(m_obj)).parent().slideUp('slow');
-
-		setTimeout(function() { XKit.post_listener.check(true); }, 300);
-
 	},
 
 	last_url: "",
@@ -87,9 +83,9 @@ XKit.extensions.limit_people = new Object({
 		var total = $(posts).length;
 
 		$(posts).each(function(index) {
-			
+
 			if ($(this).parents('.peepr-drawer').length > 0) { return; }
-			
+
 			var m_post = XKit.interface.post($(this));
 			$(this).addClass("xkit-limit-people-checked");
 

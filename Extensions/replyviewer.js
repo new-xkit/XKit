@@ -102,13 +102,10 @@ XKit.extensions.replyviewer = new Object({
 		$.ajax({
 			url: m_url,
 			dataType: 'html'
-		}).error(function() {
-
+		}).fail(function() {
 			XKit.window.close();
 			XKit.window.show("Unable to fetch required data", "ReplyViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
 		}).done(function(data, textStatus, jqXHR) {
-
 			if (m_post_id !== XKit.extensions.replyviewer.post_id || m_init_id !== XKit.extensions.replyviewer.init_id) {
 				console.log("replyviewer -> quitting, wrong post_id or init_id");
 				return;
@@ -143,7 +140,7 @@ XKit.extensions.replyviewer = new Object({
 
 			});
 
-			if (next_note > 0) {
+			if (parseInt(next_note) > 0) {
 				XKit.extensions.replyviewer.notes_url_from = next_note;
 				console.log("Another page found.");
 				if (XKit.extensions.replyviewer.found_count <= 7) {
@@ -166,9 +163,7 @@ XKit.extensions.replyviewer = new Object({
 				console.log("Last page, quitting.");
 				XKit.extensions.replyviewer.hide_loader();
 			}
-
 		});
-
 	},
 
 
