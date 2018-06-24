@@ -87,6 +87,7 @@ XKit.extensions.read_more_now = new Object({
 						}
 
 						if (XKit.interface.where().search) {
+							// @ts-ignore Expects `string` not `function`
 							post_cont.find("img").load(function() {
 								XKit.interface.trigger_reflow();
 							});

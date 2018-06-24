@@ -246,11 +246,16 @@ XKit.extensions.editable_reblogs = new Object({
 		try {
 			old_content = XKit.interface.post_window.get_content_html();
 		} catch (e) {
-			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. ' +
+			XKit.window.show(
+				'Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. ' +
 				'To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> ' +
 				'to edit your dashboard settings to use the rich text editor or HTML editor',
-				'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+				'error',
+				"<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>"
+			);
+
 			var error = new Error("Editor Type");
+			// @ts-ignore
 			error.hide_popup = true;
 			throw error;
 		}
@@ -295,7 +300,9 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var url = elements[0];
 		var is_url = url.tagName == "P" &&
+					 // @ts-ignore does not exist on type 'Node & ChildNode'
 					 url.childNodes[0].tagName == "A" &&
+					 // @ts-ignore
 					 url.childNodes[0].href.match("/post/");
 
 		var blockquote = elements[1];
@@ -604,9 +611,17 @@ XKit.extensions.editable_reblogs = new Object({
 				onerror: function(response) {
 					XKit.interface.kitty.set("");
 
-					var github_url = XKit.tools.github_issue("Editable Reblogs posting error",
-						{ "ER Version": XKit.installed.get("editable_reblogs").version,
-						 user: request.channel_id, body: request["post[two]"]}, {stack: response});
+					var err = new Error();
+					err.stack = response;
+
+					var github_url = XKit.tools.github_issue(
+						"Editable Reblogs posting error",
+						{
+							"ER Version": XKit.installed.get("editable_reblogs").version,
+							user: request.channel_id, body: request["post[two]"]
+						},
+						err
+					);
 
 					XKit.window.show("Error",
 						"Error: XER-SR.<br><br>There was an error reblogging your post. Please try again shortly. " +

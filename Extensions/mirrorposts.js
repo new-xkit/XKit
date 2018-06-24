@@ -36,11 +36,11 @@ XKit.extensions.mirrorposts = new Object({
 		XKit.post_listener.remove("archivebutton_addButton");
 		XKit.tools.remove_css("mirrorposts");
 		$(".archivebutton-button").remove();
-		
+
 		$(".archivebutton_applied .share_social_button").unbind();
 		$(".archivebutton_applied").removeClass("archivebutton_applied");
-		
-		
+
+
 		this.running = false;
 
 	},
@@ -70,7 +70,7 @@ XKit.extensions.mirrorposts = new Object({
 					window.open(archiveurl, '_blank');
 				});
 				$(".post_controls_inner", this).prepend(button);
-				
+
 			} else {
 				$(".share_social_button", this).click(function() {
 					var menuitem = $('<li class="popover_menu_item"><a class="popover_menu_item_anchor">Archive this post</a></li>');
@@ -78,6 +78,7 @@ XKit.extensions.mirrorposts = new Object({
 					$("a", menuitem).attr("target", "_blank");
 
 					setTimeout(function() { //Make sure the pop-up has popped up
+						// @ts-ignore Unusual signature call
 						$(".share_reddit", "#dashboard_index > div.popover--post-share-popover").after(menuitem);
 					}, 10);
 				});

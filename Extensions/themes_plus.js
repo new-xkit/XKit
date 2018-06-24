@@ -11,7 +11,9 @@ jQuery.fn.selectText = function() {
 	var element = this[0];
 	var range, selection;
 
+	// @ts-ignore 'createTextRange' does not exist
 	if (doc.body.createTextRange) {
+		// @ts-ignore
 		range = document.body.createTextRange();
 		range.moveToElementText(element);
 		range.select();
@@ -1153,8 +1155,10 @@ XKit.extensions.themes_plus = new Object({
 				$("#xkit-themes-plus-share-code").nanoScroller();
 				$("#xkit-themes-plus-share-code").nanoScroller({ scroll: 'top' });
 
-				$("#xkit-themes-plus-share-code").click(function() { $(this).selectText();});
-
+				$("#xkit-themes-plus-share-code").click(function() {
+					// @ts-ignore `selectText` not in `JQuery`
+					$(this).selectText();
+				});
 			});
 
 			$("#xkit-themes-plus-import-confirm").click(function() {

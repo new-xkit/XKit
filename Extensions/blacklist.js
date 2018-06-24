@@ -12,7 +12,9 @@ jQuery.fn.selectText = function() {
 	var element = this[0];
 	var range, selection;
 
+	// @ts-ignore Property 'createTextRange' does not exist on type 'HTMLElement'.
 	if (doc.body.createTextRange) {
+		// @ts-ignore
 		range = document.body.createTextRange();
 		range.moveToElementText(element);
 		range.select();
@@ -226,7 +228,9 @@ XKit.extensions.blacklist = new Object({
 
 			if (top.getSelection) {
 				text = top.getSelection().toString();
+			// @ts-ignore Property 'selection' does not exist on type 'Document'.
 			} else if (document.selection && document.selection.type != "Control") {
+				// @ts-ignore
 				text = document.selection.createRange().text;
 			}
 

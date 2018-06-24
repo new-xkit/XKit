@@ -387,6 +387,7 @@ XKit.extensions.activity_plus = new Object({
 						}
 
 						if (this.nextSibling &&
+							// @ts-ignore `classList` not on typeof `Node`
 							this.nextSibling.classList.contains("xkit-activity-plus-condensed-done")) {
 							XKit.extensions.activity_plus.do_condensed_condense();
 							XKit.extensions.activity_plus.last_post_info = null;

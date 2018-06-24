@@ -75,12 +75,12 @@ XBackground.prototype.messageHandlers = {
 	},
 
 	http_request: function(ev) {
-
 		var background = this;
 		var settings = ev.message.settings;
 		var request = new XMLHttpRequest();
 
 		// Save our settings to the XMLHttpRequest object.
+		// @ts-ignore probably fine, but not standard
 		request.xkit_request_object = ev.message;
 
 		if (settings.method === "POST") {
@@ -105,7 +105,9 @@ XBackground.prototype.messageHandlers = {
 			}
 			response.request = JSON.stringify(objRequest);
 			response.status = request.status;
+			// @ts-ignore
 			response.settings = request.settings;
+			// @ts-ignore
 			response.request_id = request.xkit_request_object.request_id;
 			response.headers = request.getAllResponseHeaders();
 

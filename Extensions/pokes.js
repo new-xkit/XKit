@@ -291,18 +291,22 @@ XKit.extensions.pokes = {
 		};
 
 		$('input:radio[name="xkit-pokes-sort"]#pokeid').change(function(e) {
+			// @ts-ignore `sort` not in `JQuery`
 			$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokeid", "pokeid"))
 									.prependTo("#xkit-loading_pokemon");
 		});
 		$('input:radio[name="xkit-pokes-sort"]#alphabetical').change(function(e) {
+			// @ts-ignore
 			$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokenick", "pokespecies"))
 									.prependTo("#xkit-loading_pokemon");
 		});
 		$('input:radio[name="xkit-pokes-sort"]#chronological').change(function(e) {
+			// @ts-ignore
 			$("#xkit-loading_pokemon div.caught").sort(sortFunction('array_index', 'array_index'))
 									.prependTo("#xkit-loading_pokemon");
 		});
 		$('.xkit-pokes-sorter#reverse-toggle').change(function(e) {
+				 // @ts-ignore
 				 $("#xkit-loading_pokemon div.caught").sort(function(i) {return 1;}).prependTo("#xkit-loading_pokemon");
 		});
 

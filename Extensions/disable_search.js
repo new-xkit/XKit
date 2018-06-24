@@ -41,6 +41,7 @@ XKit.extensions.disable_search = {
 		};
 		var mo = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
+				// @ts-ignore 'className' does not exist on type 'Node'
 				if (mutation.target.className === 'scrollable_container'
 					&& mutation.addedNodes.length > 0) {
 					for (var i = 0; i < mutation.addedNodes.length; i++) {

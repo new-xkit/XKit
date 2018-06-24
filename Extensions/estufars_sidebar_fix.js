@@ -66,12 +66,15 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		function movesidebar() {
 			var popover = $(".popover--account-popover")[0];
 			var sidebar = document.getElementById("right_column");
+			// @ts-ignore `classList` does not exist on type 'Node & ChildNode'
 			popover.childNodes[0].classList.add("estufars_sidebar_fix");
 			sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
 			var account = document.getElementById("account_button");
 			account.style.display = "none";
 			// wait and then let tumblr know the menu is no longer active
+
 			window.setTimeout(function() {
+				// @ts-ignore `click` not in type `Element`
 				document.querySelector(".tab_nav_account.active").click();
 			}, 250);
 		}

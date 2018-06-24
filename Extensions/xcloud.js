@@ -465,12 +465,14 @@ XKit.extensions.xcloud = new Object({
 			XKit.extensions.xcloud.show_overlay(true);
 			if (this.files.length === 1) {
 				var reader  = new FileReader();
+
 				reader.addEventListener('loadend', function(result) {
-					self.process_restore({"data":result.currentTarget.result});
+					// @ts-ignore `result` not in `EventTarget`
+					self.process_restore({ "data": result.currentTarget.result });
 				});
+
 				reader.readAsText(this.files[0]);
 			}
-
 		}, false);
 		document.body.appendChild(element);
 		element.click();

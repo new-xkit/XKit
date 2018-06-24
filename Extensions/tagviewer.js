@@ -130,9 +130,11 @@ XKit.extensions.tagviewer = new Object({
 			});
 
 			$(reblogs).each(function() {
-
+				// @ts-ignore `blog_name`, `post_id`, and `avatar_url` not in `HTMLElement`
 				var blog_name = this.blog_name;
+				// @ts-ignore
 				var post_id = this.post_id;
+				// @ts-ignore
 				var blog_avatar = this.avatar_url[48];
 
 				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;

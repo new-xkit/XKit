@@ -107,6 +107,8 @@ Lethe.prototype.showPost = function(hiddenPost) {
 	this.hiddenPosts = this.hiddenPosts.filter(function(post) {
 		return post !== hiddenPost;
 	});
+
+	// @ts-ignore `placeholder` and `html` not in type `Element`
 	hiddenPost.placeholder.outerHTML = hiddenPost.html;
 };
 

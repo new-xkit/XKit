@@ -223,6 +223,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		var post_id = parseInt(XKit.iframe.single_post_id());
 		var form_key = XKit.iframe.form_key();
+		// @ts-ignore pathname not in `HTMLElement`
 		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[3];
 
 		var m_blogs = XKit.tools.get_blogs();

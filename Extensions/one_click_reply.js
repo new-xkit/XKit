@@ -162,6 +162,7 @@ XKit.extensions.one_click_reply = new Object({
 			});
 
 			$("#xkit-one-click-reply-quick-reply-text").bind('input propertychange', function(event) {
+				// @ts-ignore `value` not in `HTMLElement`
 				if (!this.value.length) {
 					$("#xkit-one-click-reply-quick-reply-ok").addClass("disabled");
 				} else {
@@ -773,6 +774,7 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 
+		// @ts-ignore Unusual signature call
 		if ($(".summary", m_sentence).length > 0) {
 			var m_new = $(m_sentence);
 			$(m_new).find(".summary").html($(m_new).find(".summary").html());

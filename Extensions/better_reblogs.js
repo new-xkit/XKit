@@ -355,6 +355,7 @@ XKit.extensions.better_reblogs = new Object({
 				var author = $item.find('.reblog-tumblelog-name');
 				var reblog_data = {
 					reblog_content: reblog_content.html() || '',
+					// @ts-ignore Property 'data' does not exist on type 'HTMLElement'.
 					reblog_author: author.contents()[0].data || '',
 					reblog_url: author.attr('href') || ''
 				};

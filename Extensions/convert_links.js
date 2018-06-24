@@ -32,6 +32,7 @@ XKit.extensions.convert_links = new Object({
 
 		var m_post = XKit.interface.find_post($(obj).attr('data-ask-id'));
 
+		// @ts-ignore Unusual signature call
 		var m_content = $(".post_body", "<div>" + m_post.body + "</div>").html();
 		var m_html = m_content.substring(m_content.indexOf("<div "));
 

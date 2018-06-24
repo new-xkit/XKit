@@ -366,15 +366,18 @@ XKit.extensions.people_notifier = new Object({
 		var dragtarget;
 		$(document).on("dragstart", ".xkit-people-notifier-person", function(e) {
 			dragging = $(this);
+			// @ts-ignore `dataTransfer` not in type `Event`
 			e.originalEvent.dataTransfer.setData("application/x-kit", $(this).text().replace("☰✖", ""));
 		});
 		$(document).on("dragenter", ".xkit-people-notifier-person", function(e) {
+			// @ts-ignore
 			if (e.originalEvent.dataTransfer.types[0] === "application/x-kit") {
 				e.preventDefault();
 				dragtarget = $(this);
 			}
 		});
 		$(document).on("dragover", ".xkit-people-notifier-person", function(e) {
+			// @ts-ignore
 			if (e.originalEvent.dataTransfer.types[0] === "application/x-kit") {
 				e.preventDefault();
 			}
@@ -395,6 +398,7 @@ XKit.extensions.people_notifier = new Object({
 				var dragging_obj = XKit.extensions.people_notifier.blogs[dragging_index];
 				var top_of_target = dragtarget.offset().top;
 				dragging.detach();
+				// @ts-ignore
 				if (e.originalEvent.pageY - top_of_target > half_div_height) {
 					dragtarget.after(dragging);
 					target_index++;

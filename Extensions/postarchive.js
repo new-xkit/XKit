@@ -377,7 +377,7 @@ XKit.extensions.postarchive = {
 			});
 
 			$("#xkit-postarchive-add-words").click(function() {
-
+				// @ts-ignore `files` not in `HTMLElement`
 				var file = $("#xkit-postarchive-import-file")[0].files[0];
 				// TODO: check if import will push XKit over browser storage limit
 
