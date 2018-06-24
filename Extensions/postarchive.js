@@ -917,9 +917,6 @@ XKit.extensions.postarchive = {
 		XKit.tools.add_function(function() {
 			Tumblr.Events.trigger("posts:load");
 		}, true, "");
-
-		XKit.post_listener.check();
-
 	},
 
 	load_posts: function() {

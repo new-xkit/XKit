@@ -460,9 +460,8 @@ XKit.extensions.people_notifier = new Object({
 				} catch (e) {
 					XKit.window.show("Unable to use View On Dash to open blog.",
 						"Error message: <p>" + e.message + "</p>" +
-						"Please try again later or file a bug report." +
+						"Please try again later or file a bug report.",
 						"error",
-						undefined,
 						'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
 						'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
 					 );
