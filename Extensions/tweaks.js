@@ -500,7 +500,10 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.full_width_gifs.value) {
-			XKit.interface.post_window_listener.add("tweaks-full-width-gifs", XKit.extensions.tweaks.full_width_gifs_do_first);
+			XKit.interface.post_window_listener.add(
+				"tweaks-full-width-gifs",
+				XKit.extensions.tweaks.full_width_gifs_do_first
+			);
 		}
 
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {

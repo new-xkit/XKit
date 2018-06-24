@@ -2082,9 +2082,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 					XKit.interface.post_window_listener.run();
 
 					if (XKit.interface.post_window.open()) {
-						// This is one of the many reasons why nearly every extension uses
-						// fully qualified names
-						func.call();
+						// `func` should be properly binded if using `this` keyword
+						func();
 					}
 				},
 

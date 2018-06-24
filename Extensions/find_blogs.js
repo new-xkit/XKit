@@ -52,14 +52,9 @@ XKit.extensions.find_blogs = new Object({
 		$(".btn.dashboard").before(m_html);
 
 		$("#xkit_find_blogs_inblog_button").click(function() {
-
 			var blog_url = $("#tumblelog_name").attr('data-tumblelog-name');
 
-			XKit.iframe.full();
-
 			XKit.extensions.find_blogs.show(blog_url);
-
-
 		});
 
 	},
@@ -159,19 +154,12 @@ XKit.extensions.find_blogs = new Object({
 		var people = [];
 
 		$("#xkit-find-blogs-background").click(function() {
-
 			$("#xkit-find-blogs-background").fadeOut('slow', function() { $(this).remove(); });
 			$("#xkit-find-blogs-window").fadeOut('fast', function() { $(this).remove(); });
 			XKit.extensions.find_blogs.window_id = -1;
-
-			if (XKit.extensions.find_blogs.is_in_iframe === true) {
-				XKit.iframe.restore();
-			}
-
 		});
 
 		XKit.extensions.find_blogs.fetch(url, 0, m_window_id, people);
-
 	},
 
 	is_in_array: function(arr, username) {
@@ -409,7 +397,6 @@ XKit.extensions.find_blogs = new Object({
 	},
 
 	display_error: function(m_window_id, err_code) {
-
 		if (XKit.extensions.find_blogs.window_id !== m_window_id) {return; }
 
 		$("#xkit-find-blogs-background").remove();
@@ -418,22 +405,11 @@ XKit.extensions.find_blogs = new Object({
 		XKit.window.show("Oops.", "An error prevented Find Blogs from finding similar blogs.<br/>Please try again later.<br/>Code: \"FINB" + err_code + "\"", "error", "<div id=\"xkit-close-message-find-blogs\" class=\"xkit-button default\">OK</div>");
 
 		$("#xkit-close-message-find-blogs").click(function() {
-
 			XKit.window.close();
-
-			if (XKit.extensions.find_blogs.is_in_iframe === true) {
-				XKit.iframe.restore();
-			}
-
 		});
-
 	},
 
-	average: function(posts) {
-
-
-
-	},
+	average: function(posts) {},
 
 	show_ump_error: function() {
 

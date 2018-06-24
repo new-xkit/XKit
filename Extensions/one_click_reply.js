@@ -125,7 +125,10 @@ XKit.extensions.one_click_reply = new Object({
 	},
 	init_post_page: function() {
 		if (document.location.href.indexOf("/new/text") !== -1) {
-			XKit.interface.post_window_listener.add("one_click_reply_fill_post", XKit.extensions.one_click_reply.fill_post);
+			XKit.interface.post_window_listener.add(
+				"one_click_reply_fill_post",
+				XKit.extensions.one_click_reply.fill_post
+			);
 		}
 	},
 	init_mentions: function() {

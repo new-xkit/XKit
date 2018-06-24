@@ -106,10 +106,6 @@ interface XKit {
     reblog_button: () => JQuery;
     dashboard_button: () => JQuery;
     size_frame_to_fit: () => void;
-
-    // dynamically defined
-    full?: () => void;
-    restore?: () => void;
   };
 
   window: {
@@ -236,13 +232,14 @@ interface XKit {
         private: boolean;
       };
       post_type: () => {
-        text: boolean;
-        photo: boolean;
-        video: boolean;
-        chat: boolean;
-        quote: boolean;
         audio: boolean;
+        chat: boolean;
         link: boolean;
+        note: boolean;
+        photo: boolean;
+        quote: boolean;
+        text: boolean;
+        video: boolean;
       };
       blog: () => string;
       switch_blog: (url: string) => boolean;
@@ -262,6 +259,12 @@ interface XKit {
       run: () => void;
       set_listen: () => void;
       do: () => void;
+
+      /**
+       * Call `func` whenever a new create post window appears.
+       *
+       * *Note*: Remember to properly bind the `this` keyword, if any
+       */
       add: (id: string, func: Function) => void;
       remove: (id: string) => void;
     };

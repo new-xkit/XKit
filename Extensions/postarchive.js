@@ -55,18 +55,11 @@ XKit.extensions.postarchive = {
 		}
 
 		if (XKit.extensions.postarchive.is_post_in_archive(post_id) !== false) {
-
 			$("#xkit_postarchive_inblog_button").addClass("xkit-post-archive-inblog-button-done");
-
 		}
 
 		$("#xkit_postarchive_inblog_button").click(function() {
-
-			XKit.iframe.full();
-
 			XKit.extensions.postarchive.archive(post_id, this, true);
-
-
 		});
 
 	},
@@ -1043,40 +1036,35 @@ XKit.extensions.postarchive = {
 	},
 
 	archive: function(post_id, obj, in_blog_mode) {
-
 		XKit.extensions.postarchive.load_posts();
 
-		if (XKit.interface.where().drafts === true) { XKit.window.show("Oops", "Unfortunately, Post Archiver does not yet support archiving from the drafts, but I'm working on it. Thank you for your patience.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>"); return; }
+		if (XKit.interface.where().drafts === true) {
+			XKit.window.show("Oops", "Unfortunately, Post Archiver does not yet support archiving from the drafts, but I'm working on it. Thank you for your patience.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+
+			return;
+		}
 
 		if (XKit.extensions.postarchive.is_post_in_archive(post_id) !== false) {
 
 			XKit.window.show("Already in archive.", "Would you like to remove this post from the archive?", "question", "<div class=\"xkit-button default\" id=\"xkit-postarchive-remove-from-archive\">Yes, remove from archive</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-postarchive-remove-from-archive").click(function() {
-
 				XKit.window.close();
 
 				XKit.extensions.postarchive.remove_from_archive(post_id);
 
 				if (!in_blog_mode) {
-
 					XKit.interface.completed_control_button(obj, false);
 
 					XKit.notifications.add("Post removed from Archive.", "ok");
 
 					XKit.extensions.postarchive.update_sidebar();
-
 				} else {
-
 					$(obj).removeClass("xkit-post-archive-inblog-button-done");
-					setTimeout(function() { XKit.iframe.restore();	}, 300);
-
 				}
-
 			});
 
 			return;
-
 		}
 
 		var m_categories = "";
@@ -1201,57 +1189,42 @@ XKit.extensions.postarchive = {
 				return;
 			},
 			onload: function(response) {
-
 				try {
-
 					var data = JSON.parse(response.responseText).response;
 
-					var m_object = {};
-
-					m_object.title = title;
-
-					m_object.post = JSON.stringify(data.posts[0]);
-
-					m_object.post_id = post_id;
-					m_object.date = new Date().getTime();
-					m_object.category = m_category;
+					var m_object = {
+						title: title,
+						post: JSON.stringify(data.posts[0]),
+						post_id: post_id,
+						date: new Date().getTime(),
+						category: m_category
+					};
 
 					console.log("Fetched contents, trying to save...");
 
 					XKit.extensions.postarchive.load_posts();
 
 					setTimeout(function() {
-
 						XKit.extensions.postarchive.archived_posts.push(m_object);
 						console.log(XKit.extensions.postarchive.archived_posts);
 						XKit.extensions.postarchive.save_posts();
 
 						if (!in_blog_mode) {
-
 							XKit.interface.completed_control_button(obj, true);
 							XKit.notifications.add("Post added to Archive.", "ok");
 							XKit.extensions.postarchive.update_sidebar();
 							XKit.window.close();
-
-
 						} else {
-
 							$(obj).addClass("xkit-post-archive-inblog-button-done");
 							XKit.window.close();
-							setTimeout(function() { XKit.iframe.restore();	}, 300);
-
 						}
-
 					}, 1);
-
 				} catch (e) {
 					XKit.extensions.postarchive.show_error(`<b>Unable to read JSON received from API calls.</b><br/>Please try again later.<br/><br/>Error Code: POS-535<br>${e.message}`);
 					return;
 				}
-
 			}
 		});
-
 	},
 
 	do: function() {

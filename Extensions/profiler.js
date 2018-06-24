@@ -41,16 +41,10 @@ XKit.extensions.profiler = new Object({
 		$(".btn.dashboard").before(m_html);
 
 		$("#xkit_profiler_inblog_button").click(function() {
-
 			var blog_url = $("#tumblelog_name").attr('data-tumblelog-name');
 
-			XKit.iframe.full();
-
 			XKit.extensions.profiler.show(blog_url, true);
-
-
 		});
-
 	},
 
 	add_nicks: function() {
@@ -294,14 +288,8 @@ XKit.extensions.profiler = new Object({
 		$("body").css("overflow", "hidden");
 
 		$("#xkit-profiler-close").click(function() {
-
 			$("body").css("overflow", "auto");
 			XKit.window.close();
-
-			if (XKit.extensions.profiler.is_inframe === true) {
-				setTimeout(function() { XKit.iframe.restore();	}, 300);
-			}
-
 		});
 
 		$("#xkit-profiler-rename").click(function() {
