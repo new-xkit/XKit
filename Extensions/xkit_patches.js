@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.0.2 **//
+//* VERSION 7.1.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -57,7 +57,7 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.storage.max_area_size = 153600;
 		}
 
-		window.addEventListener("message", XKit.tools.blog_list_message_listener);
+		window.addEventListener("message", XKit.blog_listener.eventHandler);
 
 		XKit.tools.add_function(function() {
 			var blogs = [];
@@ -139,6 +139,33 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.0": function() {
+
+			XKit.blog_listener = {
+				callbacks: {},
+				done: false,
+				add: function(extension, func) {
+					if (this.done) {
+						func.call(XKit.extensions[extension]);
+					} else {
+						XKit.blog_listener.callbacks[extension] = func;
+					}
+				},
+				eventHandler: function(e) {
+					if (e.origin == window.location.protocol + "//" + window.location.host && e.data.hasOwnProperty("xkit_blogs")) {
+						window.removeEventListener("message", XKit.blog_listener.eventHandler);
+
+						XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+						XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
+
+						XKit.blog_listener.done = true;
+						var callbacks = XKit.blog_listener.callbacks;
+						for (var extension in callbacks) {
+							callbacks[extension].call(XKit.extensions[extension]);
+						}
+					}
+				}
+			};
+
 			XKit.tools.Nx_XHR = function(details) {
 				details.timestamp = new Date().getTime() + Math.random();
 
@@ -250,15 +277,6 @@ XKit.extensions.xkit_patches = new Object({
 					version.patch = parseInt(versionSplit[2]);
 				}
 				return version;
-			};
-
-			XKit.tools.blog_list_message_listener = function(e) {
-				if (e.origin == window.location.protocol + "//" + window.location.host &&
-			e.data.hasOwnProperty("xkit_blogs")) {
-
-					XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
-					XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
-				}
 			};
 
 			/**
@@ -2829,7 +2847,6 @@ XKit.extensions.xkit_patches = new Object({
 
 	destroy: function() {
 		// console.log = XKit.log_back;
-		window.removeEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 		XKit.tools.remove_css("xkit_patches");
 		this.running = false;
 	}

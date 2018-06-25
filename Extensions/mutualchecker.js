@@ -1,5 +1,5 @@
 //* TITLE Mutual Checker **//
-//* VERSION 2.0.0 **//
+//* VERSION 2.0.1 **//
 //* DESCRIPTION A simple way to see who follows you back **//
 //* DETAILS Adds a small icon and '[user] follows you' hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on sideblogs. **//
 //* DEVELOPER New-XKit **//
@@ -31,6 +31,10 @@ XKit.extensions.mutualchecker = new Object({
 
 	run: function() {
 		this.running = true;
+		XKit.blog_listener.add("mutualchecker", this.init);
+	},
+
+	init: function() {
 		var blogs = XKit.tools.get_blogs();
 		if ($.inArray(this.preferences.main_blog.value, blogs) === -1) {
 			this.preferences.main_blog.value = blogs[0];
@@ -67,7 +71,7 @@ XKit.extensions.mutualchecker = new Object({
 				}
 				XKit.extensions.mutualchecker.check(json_obj, $post.find(".post_info_submissions").first());
 			} else {
-				$post.find(".post_info_link[data-tumblelog-popover]:not(.reblog_icon + .post_info_link), .post-info-tumblelog > a[data-tumblelog-popover]").each(function() {
+				$post.find(".post_info_link[data-tumblelog-popover]:not(.reblog_icon + .post_info_link, .tf2_icon + .post_info_link), .post-info-tumblelog > a[data-tumblelog-popover]").each(function() {
 					var $link = $(this);
 					try {
 						json_obj = JSON.parse($link.attr("data-tumblelog-popover"));
