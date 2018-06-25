@@ -587,7 +587,7 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.blog_listener.add("one_click_postage", this.init);
 	},
 
-	init: function() {
+	init: function(m_blogs) {
 
 		var m_remove_button = "<div id=\"x1cpostage_remove_caption\">remove caption</div>";
 
@@ -655,7 +655,6 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 		});
 
-		var m_blogs = XKit.tools.get_blogs();
 		var m_blogselector_html = "";
 
 		XKit.extensions.one_click_postage.blogs_list = m_blogs;

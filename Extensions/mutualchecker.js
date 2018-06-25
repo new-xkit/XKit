@@ -34,8 +34,7 @@ XKit.extensions.mutualchecker = new Object({
 		XKit.blog_listener.add("mutualchecker", this.init);
 	},
 
-	init: function() {
-		var blogs = XKit.tools.get_blogs();
+	init: function(blogs) {
 		if ($.inArray(this.preferences.main_blog.value, blogs) === -1) {
 			this.preferences.main_blog.value = blogs[0];
 		}

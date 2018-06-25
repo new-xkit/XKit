@@ -145,7 +145,7 @@ XKit.extensions.xkit_patches = new Object({
 				done: false,
 				add: function(extension, func) {
 					if (this.done) {
-						func.call(XKit.extensions[extension]);
+						func.call(XKit.extensions[extension], XKit.blogs_from_tumblr);
 					} else {
 						XKit.blog_listener.callbacks[extension] = func;
 					}
@@ -160,7 +160,7 @@ XKit.extensions.xkit_patches = new Object({
 						XKit.blog_listener.done = true;
 						var callbacks = XKit.blog_listener.callbacks;
 						for (var extension in callbacks) {
-							callbacks[extension].call(XKit.extensions[extension]);
+							callbacks[extension].call(XKit.extensions[extension], XKit.blogs_from_tumblr);
 						}
 					}
 				}
