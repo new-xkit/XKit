@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.3.3 **//
+//* VERSION 1.3.4 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -146,11 +146,13 @@ XKit.extensions.better_reblogs = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("better_reblogs");
+		XKit.tools.remove_css("colorquotes_padding");
 		XKit.post_listener.remove("better_reblogs");
 		$(".xkit-better-reblogs-old").remove();
 		$(".xkit-better-reblogs-title").remove();
 		$(".xkit-better-reblogs-done").removeClass("xkit-better-reblogs-done");
-		this.destroy_cq();
+		$(".xkit-color-quoted").removeClass("xkit-color-quoted");
+		$(".xkit-colorquotes-border-item").css("background", "").css("border-left-color", "");
 	},
 
 	cpanel: function(cp) {
@@ -414,13 +416,6 @@ XKit.extensions.better_reblogs = new Object({
 
 		});
 
-	},
-
-	destroy_cq: function() {
-		XKit.post_listener.remove("better_reblogs", this.do_cq);
-		$(".xkit-color-quoted").removeClass("xkit-color-quoted");
-		XKit.tools.remove_css("colorquotes_padding");
-		$(".xkit-colorquotes-border-item").css("background", "").css("border-left-color", "");
 	},
 
 	hex_to_rgb: function(hex) {
