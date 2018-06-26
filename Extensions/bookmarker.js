@@ -228,9 +228,9 @@ XKit.extensions.bookmarker = new Object({
 				var post_id_number = parseInt(post_id) + 1;
 
 				if (XKit.extensions.bookmarker.preferences.new_tab.value === true) {
-					window.open("/dashboard/100/" + (post_id_number + 1) + "/?bookmark=true");
+					window.open("/dashboard/100/" + post_id_number + "/?bookmark=true");
 				} else {
-					document.location.href = "/dashboard/100/" + (post_id_number + 1) + "/?bookmark=true";
+					document.location.href = "/dashboard/100/" + post_id_number + "/?bookmark=true";
 				}
 			}
 

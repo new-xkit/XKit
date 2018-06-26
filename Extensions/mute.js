@@ -159,7 +159,7 @@ XKit.extensions.mute = new Object({
 	},
 
 	add_links_wo_usermenus: function(e) {
-		var m_parent = undefined;
+		var m_parent;
 		var user_url = "";
 
 		if ($(".info_popover").length > 0) {

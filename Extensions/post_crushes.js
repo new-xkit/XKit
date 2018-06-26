@@ -127,7 +127,7 @@ XKit.extensions.post_crushes = new Object({
 
 		var m_blogs = XKit.tools.get_blogs();
 
-		if (m_blogs.length === 0) {
+		if (!m_blogs.length) {
 			XKit.window.show("Error",
 				"Unable to Post Crushes - can't get list of current blogs. Please visit the dashboard first.",
 				"error",
