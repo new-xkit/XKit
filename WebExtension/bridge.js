@@ -50,7 +50,7 @@ function getBridgeError() {
 }
 
 /**
- * @returns {number}
+ * @returns {string}
  */
 function getVersion() {
 	var xhr = new XMLHttpRequest();

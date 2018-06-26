@@ -262,7 +262,7 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				// This is awful but at least it works.
-				var my_version = parseFloat(XKit.tools.replace_all(XKit.version.toString(), "\\.", ""));
+				var my_version = parseFloat(XKit.tools.replace_all(XKit.version, "\\.", ""));
 				var mb_object;
 				var new_version;
 

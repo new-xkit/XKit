@@ -349,7 +349,7 @@ XKit.extensions.pokes = {
 					$(".caught").filter(function() {
 						return $(this).attr("data-array_index") > array_index;
 					}).each(function() {
-						$(this).attr("data-array_index", parseInt($(this).attr("data-array_index").toString()) - 1);
+						$(this).attr("data-array_index", parseInt($(this).attr("data-array_index")) - 1);
 					});
 					$(".xkit-pokes-pc-info .caught_stats").show();
 					$(".xkit-pokes-pc-info .gender").hide();

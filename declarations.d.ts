@@ -1,5 +1,5 @@
 interface XKit {
-  version: number | string;
+  version: string;
 
   api_key: string;
 

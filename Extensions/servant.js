@@ -1132,7 +1132,7 @@ XKit.extensions.servant = new Object({
 					parameter_fixed = parameter_fixed.replace("%" + (i + 1), returns[i]);
 				}
 
-				var m_post = undefined;
+				var m_post;
 
 				for (var j = 0; j < to_pass.length; j++) {
 					if (compatibility[j] === "post") {
@@ -1336,7 +1336,7 @@ XKit.extensions.servant = new Object({
 		causes.forEach(function(cause) {
 			var to_run = XKit.extensions.servant.causes[cause.id].run;
 
-			var m_result = undefined;
+			var m_result;
 
 			if (XKit.extensions.servant.causes[cause.id].runs_on === "post") {
 
@@ -1627,7 +1627,7 @@ XKit.extensions.servant = new Object({
 
 		var m_val = $(obj).val();
 
-		var to_return = undefined;
+		var to_return;
 
 		$(obj).find("option").each(function() {
 

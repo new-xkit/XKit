@@ -1,5 +1,5 @@
 /* globals safari */
-var framework_version = 0;
+var framework_version = '';
 var storage_max = -1;
 var storage_used = -1;
 

@@ -52,7 +52,7 @@ XKit.extensions.outbox = new Object({
 				m_messages = XKit.storage.get("outbox", "messages", "");
 			}
 
-			var m_messages_array = undefined;
+			var m_messages_array;
 
 			try {
 				m_messages_array = JSON.parse(m_messages);
@@ -101,7 +101,7 @@ XKit.extensions.outbox = new Object({
 				m_messages = XKit.storage.get("outbox", "messages", "");
 			}
 
-			var m_messages_array = undefined;
+			var m_messages_array;
 
 			try {
 				m_messages_array = JSON.parse(m_messages);
@@ -253,7 +253,7 @@ XKit.extensions.outbox = new Object({
 				m_messages = XKit.storage.get("outbox", "messages", "");
 			}
 
-			var m_messages_array = undefined;
+			var m_messages_array;
 
 			try {
 				m_messages_array = JSON.parse(m_messages);
