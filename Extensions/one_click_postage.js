@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.4 **//
+//* VERSION 4.4.5 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -580,7 +580,8 @@ XKit.extensions.one_click_postage = new Object({
 		if (this.preferences.show_small_ui.value) {
 			this.caption_height = 50;
 			var slim_css = "#x1cpostage_caption { height: 50px; }" +
-					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
+					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }" +
+					"#x1cpostage_reblog i::before, #x1cpostage_queue i::before, #x1cpostage_draft i::before { position: static; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");
 		}
 
