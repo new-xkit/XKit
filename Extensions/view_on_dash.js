@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.12 **//
+//* VERSION 0.7.13 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -53,7 +53,7 @@ XKit.extensions.view_on_dash = new Object({
 				'<li class="no_push"><a href="#" id="view_on_dash_button">' +
 					'<div class="hide_overflow">View on Dash<span class="sub_control link_arrow arrow_right"></span></div>' +
 				'</a></li></ul>';
-			$("ul.controls_section:eq(1)").before(xf_html);
+			$(".controls_section:eq(1)").before(xf_html);
 
 			$("#view_on_dash_button").click(function() {
 

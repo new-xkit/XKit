@@ -4,7 +4,7 @@
 
 <a name="add" href="XKit.post_listener.md#add">#</a> XKit.post_listener.**add**(_extension_id_, _func_)
 
-Adds `func` to the callback list.
+Adds `func` to the extension's callback list.
 
 Example usage:
 
@@ -12,14 +12,14 @@ Example usage:
 XKit.post_listener.add("my_extension", XKit.extensions.my_extension.to_be_called);
 ```
 
-<a name="remove" href="XKit.post_listener.md#remove">#</a> XKit.post_listener.**remove**(_extension_id_)
+<a name="remove" href="XKit.post_listener.md#remove">#</a> XKit.post_listener.**remove**(_extension_id_, _func_)
 
-Removes the previously added callback.
+Removes `func` from the extension's callback list, or clears it if no function is specified.
 
 Example usage:
 
 ```javascript
-XKit.post_listener.remove("my_extension");
+XKit.post_listener.remove("my_extension", XKit.extensions.my_extension.to_be_called);
 ```
 
 ## Usage
@@ -40,14 +40,14 @@ paint_red: function() {
 },
 
 destroy: function() {
-    // Always remove the listener on destroy!
+    // Always remove all listeners on destroy!
     XKit.post_listener.remove("my_extension");
 }
 ```
 
 ## Tips
 
-* Always remove the listener when `destroy()` is called.
+* Always remove the listeners when `destroy()` is called.
 * You can have several listeners at once:
-  * `XKit.post_listener.add("my_extension_red", XKit.extensions.my_extension.paint_red);`
-  * `XKit.post_listener.add("my_extension_blue", XKit.extensions.my_extension.paint_blue);`
+  * `XKit.post_listener.add("my_extension", XKit.extensions.my_extension.paint_red);`
+  * `XKit.post_listener.add("my_extension", XKit.extensions.my_extension.paint_blue);`

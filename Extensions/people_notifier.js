@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.6.3 **//
+//* VERSION 0.6.4 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER new-xkit **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
@@ -337,21 +337,11 @@ XKit.extensions.people_notifier = new Object({
 			}
 		}
 
-		m_html = m_html + '<li id="xkit-people-notifier-new-btn" class="no_push xkit-people-notifier-new" style="height: 36px;"><a class="members"><div class="" style="color: ' + text_color + ' !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Add a new person</div></a></li>';
+		m_html = m_html + '<li id="xkit-people-notifier-new-btn" class="no_push xkit-people-notifier-new" style="height: 36px; cursor: pointer;"><a class="members"><div style="color: ' + text_color + ' !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Add a new person</div></a></li>';
 
-		m_html = '<ul class="controls_section" id="xpeoplenotifier"><li class=\"section_header selected\">TRACKED BLOGS</li>' + m_html + '</ul>';
+		m_html = '<ul class="controls_section" id="xpeoplenotifier"><li class=\"section_header selected\">Tracked Blogs</li>' + m_html + '</ul>';
 
-		if ($("ul.controls_section:first").length > 0) {
-			if ($("#xim_small_links").length > 0) {
-				$("#xim_small_links").after(m_html);
-			} else if ($(".controls_section_radar").length > 0) {
-				$(".controls_section_radar").before(m_html);
-			} else {
-				$("#right_column").append(m_html);
-			}
-		} else {
-			$("#right_column").append(m_html);
-		}
+		$(".controls_section:eq(1)").before(m_html);
 
 		$(document).on("mouseenter", ".xkit-people-notifier-person", function() {
 			$(this).find(".xkit-people-notifier.close").css("display", "");
@@ -554,6 +544,8 @@ XKit.extensions.people_notifier = new Object({
 
 	destroy: function() {
 		XKit.tools.remove_css("people_notifier");
+
+		$("#xpeoplenotifier").remove();
 
 		$(document).off("mouseenter", ".xkit-people-notifier-person");
 		$(document).off("mouseleave", ".xkit-people-notifier-person");

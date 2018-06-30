@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.11.1 **//
+//* VERSION 0.11.2 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -149,7 +149,7 @@ XKit.extensions.outbox = new Object({
 			'<li class="" style="height: 36px;"><a href="#" id="xkit-outbox-button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Outbox</div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:last").before(xf_html);
+		$(".controls_section:last").before(xf_html);
 
 		$(".controls_section.inbox").prepend("<li class=\"section_header selected\">INCOMING</li>");
 

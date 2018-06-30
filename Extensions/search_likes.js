@@ -1,5 +1,5 @@
 //* TITLE Search Likes **//
-//* VERSION 0.3.2 **//
+//* VERSION 0.3.3 **//
 //* DESCRIPTION Lets you search likes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a very experimental extension that lets you search the posts you've liked by URL or text. Just go to your likes page, then click on Search button to get started. **//
@@ -28,9 +28,9 @@ XKit.extensions.search_likes = new Object({
 					"<input type=\"text\" placeholder=\"Enter URL/text...\" id=\"xkit-search-likes-input\">" +
 				"</div>";
 
-			m_html = '<ul class="controls_section" id="xkit-search-likes-ul"><li class=\"section_header selected\">SEARCH LIKES</li>' + m_html + '</ul>';
+			m_html = '<ul class="controls_section" id="xkit-search-likes-ul"><li class=\"section_header selected\">Search Likes</li>' + m_html + '</ul>';
 
-			$("ul.controls_section:first").after(m_html);
+			$(".controls_section:eq(1)").after(m_html);
 			$("#xkit-search-likes-ul").before(x_html);
 
 			$("#xkit-search-likes-button").click(function() {

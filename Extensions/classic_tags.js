@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.4 **//
+//* VERSION 1.6.5 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -299,7 +299,7 @@ XKit.extensions.classic_tags = new Object({
 			if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value !== true) {
 
 				m_html = "<div class=\"classic-tags-too-much-tags-error\"><b>Too Many Tracked Tags:</b><br> After around 20 tags, Tumblr stops updating the status of all your tracked tags until you untrack some. Please track less than 20 tags for this extension to work.</div>";
-				m_html = '<ul class="controls_section" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
+				m_html = '<ul class="controls_section" id="xtags"><li class=\"section_header selected\">Tracked Tags</li>' + m_html + '</ul>';
 
 				if (document.location.href.indexOf('/tagged/') !== -1) {
 
@@ -309,15 +309,9 @@ XKit.extensions.classic_tags = new Object({
 
 					if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
 						$("#right_column").prepend(m_html);
-					} else if ($("ul.controls_section:eq(1)").length > 0) {
-						if ($("#xim_small_links").length > 0) {
-							$("#xim_small_links").after(m_html);
-						} else {
-							$("ul.controls_section:eq(1)").after(m_html);
-						}
+						$("#xtags").css("margin", "0 0 18px");
 					} else {
-						//$("#right_column").append(m_html);
-						$(".controls_section_radar").before(m_html);
+						$(".controls_section:eq(1)").before(m_html);
 					}
 				}
 
@@ -352,13 +346,13 @@ XKit.extensions.classic_tags = new Object({
 			m_html = '<ul class="controls_section ' + extra_class + '" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
 
 			if (document.location.href.indexOf('/tagged/') !== -1) {
-				$("#right_column").children(".tag_controls").after(m_html);
+				$("#related_tags_show_more").after(m_html);
+				$("#xtags").css("margin-bottom", "18px");
 			} else if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
-			    $("#right_column").prepend(m_html);
-			} else if ($("#xim_small_links").length > 0) {
-				$("#xim_small_links").after(m_html);
-			} else {
 				$("#right_column").prepend(m_html);
+				$("#xtags").css("margin", "0 0 18px");
+			} else {
+				$(".controls_section:eq(1)").before(m_html);
 			}
 		}
 

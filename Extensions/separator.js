@@ -1,5 +1,5 @@
 //* TITLE Separator **//
-//* VERSION 1.1.4 **//
+//* VERSION 1.1.5 **//
 //* DESCRIPTION Where were we again? **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS A simple extension that puts a divider showing where you left off on your dashboard. **//
@@ -44,11 +44,11 @@ XKit.extensions.separator = new Object({
 		if (XKit.extensions.separator.preferences.jump_to.value === true) {
 
 			var xf_html = '<ul class="controls_section" id="separator_ul">' +
-				'<li class="section_header selected">SEPARATOR</li>' +
+				'<li class="section_header selected">Separator</li>' +
 				'<li class="no_push" style="height: 36px;"><a href="#" id="separator_button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Go to last viewed post<span class="sub_control link_arrow arrow_right"></span></div>' +
 				'</a></li></ul>';
-			$("ul.controls_section:first").before(xf_html);
+			$(".controls_section:eq(1)").before(xf_html);
 
 
 			$("#separator_button").click(function() {

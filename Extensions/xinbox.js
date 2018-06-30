@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.11 **//
+//* VERSION 1.9.12 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -226,6 +226,10 @@ XKit.extensions.xinbox = new Object({
 			XKit.tools.add_css(m_css, "xkit_inbox_slim_fan_mail");
 		}
 
+		if (this.preferences.mass_editor.value || this.preferences.inbox_search.value) {
+			$(".controls_section:first").after('<ul class="controls_section" id="xinbox_sidebar"><li class="section_header selected">Inbox Tools</li></ul>');
+		}
+
 		if (XKit.extensions.xinbox.preferences.mass_editor.value === true) {
 			XKit.extensions.xinbox.init_mass_editor();
 		}
@@ -238,8 +242,6 @@ XKit.extensions.xinbox = new Object({
 		if (XKit.extensions.xinbox.preferences.inbox_search.value === true) {
 			XKit.extensions.xinbox.init_inbox_search();
 		}
-
-		$("#xinbox_sidebar").prepend("<li class=\"section_header selected\">INBOX TOOLS</li>");
 
 	},
 
@@ -296,17 +298,12 @@ XKit.extensions.xinbox = new Object({
 
 	init_inbox_search: function() {
 
-		var m_html = '<li class="" id="xinbox_search_li" style="height: 36px;">' +
+		var m_html = '<li id="xinbox_search_li" style="height: 36px;">' +
 				'<a href="#" class="customize" id="xinbox_search_button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Search Inbox..</div>' +
 				'</a>' +
 				'</li>';
-
-		if ($("#xinbox_sidebar").length > 0) {
-
-			$("#xinbox_sidebar").append(m_html);
-
-		}
+		$("#xinbox_sidebar").append(m_html);
 
 		var x_html = "<div id=\"xinbox-search-box\"><input type=\"text\" placeholder=\"Enter URL/text...\" id=\"xinbox-search-box-input\"></div>";
 		$("#xinbox_sidebar").before(x_html);
@@ -500,19 +497,14 @@ XKit.extensions.xinbox = new Object({
 
 	init_mass_editor: function() {
 
-		if (XKit.interface.where().inbox !== true) {
-			return;
-		}
-
-		var xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
+		var xf_html =
 			'<li class="" id="xinbox_mass_edit_li" style="height: 36px;">' +
 				'<a href="#" class="customize" id="xinbox_mass_edit_button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
 				'</a>' +
-			'</li>' +
-			'</ul>';
+			'</li>';
 
-		$("ul.controls_section:eq(0)").before(xf_html);
+		$("#xinbox_sidebar").append(xf_html);
 
 		$("#xinbox_mass_edit_button").click(function() {
 
@@ -1035,6 +1027,7 @@ XKit.extensions.xinbox = new Object({
 	destroy: function() {
 		$("#inbox_button > a").attr("href", "https://www.tumblr.com/inbox");
 		$("#xinbox_sidebar").remove();
+		$("#xinbox-search-box").remove();
 		XKit.post_listener.remove("xinbox");
 		$(document).off("click", "[id^='ask_answer_link_']");
 		clearInterval(XKit.extensions.xinbox.notification_check_interval);

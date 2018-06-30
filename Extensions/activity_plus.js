@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -47,15 +47,6 @@ XKit.extensions.activity_plus = new Object({
 		},
 		hide_graphs: {
 			text: "Hide the graphs (notes, new followers, etc.)",
-			default: false,
-			value: false
-		},
-		sep2: {
-			text: "Navigation",
-			type: "separator"
-		},
-		quick_switch: {
-			text: "When I switch my blog on the sidebar, go to the Activity page of that blog",
 			default: false,
 			value: false
 		}
@@ -153,14 +144,6 @@ XKit.extensions.activity_plus = new Object({
 					} else {
 						$("#xkit-activity-plus-note-filter").removeClass("center-me-up");
 					}
-				});
-
-			}
-
-			if (this.preferences.quick_switch.value === true) {
-
-				$("#popover_blogs").find(".blog_title").each(function() {
-					$(this).attr('href', $(this).attr('href').replace('/blog/', '/activity/'));
 				});
 
 			}
