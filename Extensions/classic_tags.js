@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.5 **//
+//* VERSION 1.6.6 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -345,12 +345,18 @@ XKit.extensions.classic_tags = new Object({
 			var extra_class = XKit.extensions.classic_tags.preferences.only_new_tags.value ? "hidden" : "";
 			m_html = '<ul class="controls_section ' + extra_class + '" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
 
-			if (document.location.href.indexOf('/tagged/') !== -1) {
-				$("#related_tags_show_more").after(m_html);
-				$("#xtags").css("margin-bottom", "18px");
-			} else if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
+			if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
 				$("#right_column").prepend(m_html);
 				$("#xtags").css("margin", "0 0 18px");
+			} else if (document.location.href.indexOf('/tagged/') !== -1) {
+				if ($("#related_tags_show_more").length) {
+					$("#related_tags_show_more").after(m_html);
+				} else if ($("#related_tags").length) {
+					$("#related_tags").after(m_html);
+				} else {
+					$(".tag_controls").after(m_html);
+				}
+				$("#xtags").css("margin-bottom", "18px");
 			} else {
 				$(".controls_section:eq(1)").before(m_html);
 			}
