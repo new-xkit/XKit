@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.0 **//
+//* VERSION 7.1.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -68,12 +68,11 @@ XKit.extensions.xkit_patches = new Object({
 				}).forEach(function(model) {
 					blogs.push(model.attributes.name);
 				});
-				if (blogs.length) {
-					window.postMessage({
-						xkit_blogs: blogs,
-					}, window.location.protocol + "//" + window.location.host);
-				}
-			} catch (e) {}
+			} catch (e) {} finally {
+				window.postMessage({
+					xkit_blogs: blogs
+				}, window.location.protocol + "//" + window.location.host);
+			}
 		}, true);
 
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
@@ -145,7 +144,7 @@ XKit.extensions.xkit_patches = new Object({
 				done: false,
 				add: function(extension, func) {
 					if (this.done) {
-						func.call(XKit.extensions[extension], XKit.blogs_from_tumblr);
+						func.call(XKit.extensions[extension], XKit.tools.get_blogs());
 					} else {
 						XKit.blog_listener.callbacks[extension] = func;
 					}
@@ -154,13 +153,15 @@ XKit.extensions.xkit_patches = new Object({
 					if (e.origin == window.location.protocol + "//" + window.location.host && e.data.hasOwnProperty("xkit_blogs")) {
 						window.removeEventListener("message", XKit.blog_listener.eventHandler);
 
-						XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
-						XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
+						if (e.data.xkit_blogs.length) {
+							XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+							XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
+						}
 
 						XKit.blog_listener.done = true;
-						var callbacks = XKit.blog_listener.callbacks;
+						var callbacks = XKit.blog_listener.callbacks, blogs = XKit.tools.get_blogs();
 						for (var extension in callbacks) {
-							callbacks[extension].call(XKit.extensions[extension], XKit.blogs_from_tumblr);
+							callbacks[extension].call(XKit.extensions[extension], blogs);
 						}
 					}
 				}
