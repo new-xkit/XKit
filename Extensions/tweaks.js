@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.0 **/
+//* VERSION 5.7.1 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -11,8 +11,6 @@ XKit.extensions.tweaks = new Object({
 
 	running: false,
 	slow: true,
-	run_interval: 0,
-	run_interval_2: 0,
 	hide_bubble_interval: 0,
 
 	preferences: {
@@ -316,6 +314,8 @@ XKit.extensions.tweaks = new Object({
 	run: function() {
 		this.running = true;
 		this.css_to_add = "";
+
+		if (!XKit.interface.is_tumblr_page()) { return; }
 
 		this.addShowTagsObserver.disconnect();
 		var wrap_tags_all_lines = XKit.extensions.tweaks.preferences.wrap_tags.value;
@@ -959,8 +959,6 @@ XKit.extensions.tweaks = new Object({
 
 		XKit.post_listener.remove("tweaks");
 
-		clearInterval(this.run_interval);
-		clearInterval(this.run_interval_2);
 		clearInterval(this.hide_bubble_interval);
 
 		$(".xkit-small-blog-setting-link").remove();
