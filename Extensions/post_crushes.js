@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0.8 **//
+//* VERSION 2.0.9 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER New-XKit **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -73,6 +73,7 @@ XKit.extensions.post_crushes = new Object({
 		var crush_name = [];
 		var crush_url = [];
 		var crush_val = [];
+		var crush_avi = [];
 		var i = 0;
 
 		$("#xkit_post_crushes").removeClass("xkit_button_green");
@@ -80,19 +81,28 @@ XKit.extensions.post_crushes = new Object({
 		$("#xkit_post_crushes").html("Please wait...");
 
 		for (i = 1; i <= 9; i++) {
-			crush_url.push($("#crush_" + i).attr('href'));
-			crush_name.push($("#crush_" + i).attr('data-tumblelog-name'));
-			crush_val.push($("#crush_" + i).find("span").html().replace("%", ""));
+			var $crush = $("#crush_" + i), crush_avi_css;
+
+			crush_url.push($crush.attr('href'));
+			crush_name.push($crush.attr('data-tumblelog-name'));
+			crush_val.push($crush.find("span").html().replace("%", ""));
+
+			crush_avi_css = $crush.css("background-image");
+			crush_avi.push(crush_avi_css.substring(5, crush_avi_css.length - 2).replace("_96.", "_512."));
 		}
 
 		var m_tags = "";
+		if (XKit.extensions.post_crushes.preferences.auto_tag.value) {
+			m_tags = XKit.extensions.post_crushes.preferences.auto_tag_text.value;
+		}
+
 		var send_txt = "<strong>" + XKit.extensions.post_crushes.preferences.default_title.value + ":</strong><ol>";
 
 		for (i = 0; i <= 8; i++) {
 			var perc = '<small> (' + crush_val[i] + '%)</small>';
 			if (XKit.extensions.post_crushes.preferences.show_percentage.value === false) { perc = ""; }
 			send_txt = send_txt + '<li><a href="' + crush_url[i] + '">' + crush_name[i] + '</a>' + perc + '</li>';
-			m_tags = m_tags + "," + crush_name[i];
+			m_tags += "," + crush_name[i];
 		}
 
 		send_txt = send_txt + '</ol><p> </p>';
@@ -121,7 +131,13 @@ XKit.extensions.post_crushes = new Object({
 		m_object.detached = true;
 		m_object.reblog = false;
 
-		m_object["post[type]"] = "text";
+		m_object["post[type]"] = "photo";
+		m_object["post[photoset_layout]"] = "333";
+		m_object["post[photoset_order]"] = "o1,o2,o3,o4,o5,o6,o7,o8,o9";
+
+		for (i = 1; i <= 9; i++) {
+			m_object["images[o" + i + "]"] = crush_avi[i - 1];
+		}
 
 		var blog_selector_html = "<select id=\"xkit-post-crushes-blog\" style=\"margin-top: 7px; width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;  box-sizing: border-box; height: 25px;\">";
 
