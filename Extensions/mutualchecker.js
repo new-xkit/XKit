@@ -1,7 +1,7 @@
 //* TITLE Mutual Checker **//
-//* VERSION 2.0.1 **//
+//* VERSION 3.0.0 **//
 //* DESCRIPTION A simple way to see who follows you back **//
-//* DETAILS Adds a small icon and '[user] follows you' hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on sideblogs. **//
+//* DETAILS Adds a small icon and &quot;[user] follows you&quot; hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on group blogs. **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
@@ -49,12 +49,12 @@ XKit.extensions.mutualchecker = new Object({
 		$(".follower").each(function() {
 			if (following || !$(this).find(".follow_button").length) {
 				var $name_div = $(this).find(".name-link");
-				var url = $name_div.text();
-				XKit.interface.is_following(url, XKit.extensions.mutualchecker.preferences.main_blog.value).then(function(follow) {
-					if (follow) {
-						XKit.extensions.mutualchecker.add_label($name_div, url);
-					}
-				});
+				var fake_obj = {
+					following: true,
+					customizable: false,
+					name: $name_div.text()
+				};
+				XKit.extensions.mutualchecker.check(fake_obj, $name_div);
 			}
 		});
 	},
@@ -86,18 +86,50 @@ XKit.extensions.mutualchecker = new Object({
 	check: function(json_obj, $link) {
 		if (json_obj.following && !json_obj.customizable) {
 			if (typeof this.mutuals[json_obj.name] === "undefined") {
-				XKit.interface.is_following(json_obj.name, this.preferences.main_blog.value).then(function(follow) {
-					if (follow) {
-						XKit.extensions.mutualchecker.add_label($link, json_obj.name);
-						XKit.extensions.mutualchecker.mutuals[json_obj.name] = true;
-					} else {
-						XKit.extensions.mutualchecker.mutuals[json_obj.name] = false;
+				XKit.tools.Nx_XHR({
+					method: "GET",
+					url: "https://www.tumblr.com/svc/conversations/participant_info?q=" + json_obj.name + "&participant=" + this.preferences.main_blog.value,
+					headers: {
+						"X-Requested-With": "XMLHttpRequest",
+						"X-Tumblr-Form-Key": XKit.interface.form_key()
+					},
+					onerror: function(response) {
+						XKit.extensions.mutualchecker.plain_check(json_obj, $link);
+					},
+					onload: function(response) {
+						try {
+							var raw_data = JSON.parse(response.responseText);
+							if (raw_data.errors) {
+								XKit.extensions.mutualchecker.plain_check(json_obj, $link);
+							} else {
+								var data = raw_data.response;
+								if (data.is_following_blog && data.is_blog_following_you) {
+									XKit.extensions.mutualchecker.mutuals[json_obj.name] = true;
+									XKit.extensions.mutualchecker.add_label($link, json_obj.name);
+								} else {
+									XKit.extensions.mutualchecker.mutuals[json_obj.name] = false;
+								}
+							}
+						} catch (e) {
+							XKit.extensions.mutualchecker.plain_check(json_obj, $link);
+						}
 					}
 				});
 			} else if (this.mutuals[json_obj.name]) {
 				this.add_label($link, json_obj.name);
 			}
 		}
+	},
+
+	plain_check: function(json_obj, $link) {
+		XKit.interface.is_following(json_obj.name, this.preferences.main_blog.value).then(function(follow) {
+			if (follow) {
+				XKit.extensions.mutualchecker.add_label($link, json_obj.name);
+				XKit.extensions.mutualchecker.mutuals[json_obj.name] = true;
+			} else {
+				XKit.extensions.mutualchecker.mutuals[json_obj.name] = false;
+			}
+		});
 	},
 
 	add_label: function($name_div, user) {
