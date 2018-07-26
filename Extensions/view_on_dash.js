@@ -1,8 +1,8 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.13 **//
+//* VERSION 0.8.0 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
-//* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
+//* DETAILS A shortcut to viewing any blog on your dashboard! Uses the blog sidebar (Peepr) by default, but can be configured differently. **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -22,6 +22,16 @@ XKit.extensions.view_on_dash = new Object({
 			default: true,
 			value: true
 		},
+		"sep_0": {
+			text: "Legacy Mode",
+			type: "separator"
+		},
+		"legacy": {
+			text: "Use Legacy Mode to open blogs",
+			experimental: true,
+			default: false,
+			value: false
+		}
 	},
 
 	key_down: function(e) {
@@ -64,33 +74,35 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
-		XKit.installed.when_running("show_more", function() {
-			var show_more = XKit.extensions.show_more;
-			if (show_more.preferences.use_classic_menu.value) {
-				show_more.add_custom_menu("view_on_dash", function(data) {
-					console.log(data);
-					var user_url = data.name;
+		if (this.preferences.legacy.value) {
+			XKit.installed.when_running("show_more", function() {
+				var show_more = XKit.extensions.show_more;
+				if (show_more.preferences.use_classic_menu.value) {
+					show_more.add_custom_menu("view_on_dash", function(data) {
+						console.log(data);
+						var user_url = data.name;
 
-					$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-					$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+						$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
 
-					return "<div data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard\">View on Dash</div>";
-				});
-			} else {
-				show_more.add_custom_menu("view_on_dash", function(data) {
-					var user_url = data.name;
+						return "<div data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard\">View on Dash</div>";
+					});
+				} else {
+					show_more.add_custom_menu("view_on_dash", function(data) {
+						var user_url = data.name;
 
-					$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-					$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+						$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
 
-					return "<li>" +
-						"<a data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard xkit-new-menu-fix\">" +
-							"<span class=\"hide_overflow\">View On Dash</span>" +
-						"</a>" +
-					"</li>";
-				});
-			}
-		});
+						return "<li>" +
+							"<a data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard xkit-new-menu-fix\">" +
+								"<span class=\"hide_overflow\">View On Dash</span>" +
+							"</a>" +
+						"</li>";
+					});
+				}
+			});
+		}
 	},
 
 	show_open: function() {
@@ -571,6 +583,13 @@ XKit.extensions.view_on_dash = new Object({
 
 	},
 	view: function(username, offset, page, type) {
+
+		if (!this.preferences.legacy.value) {
+			XKit.tools.add_function(function() {
+				Tumblr.Events.trigger("peepr-open-request", { tumblelog_name: add_tag });
+			}, true, username);
+			return;
+		}
 
 		var tumblelog_key = null;
 
