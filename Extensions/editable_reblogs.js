@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.9 **//
+//* VERSION 3.3.10 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -237,7 +237,7 @@ XKit.extensions.editable_reblogs = new Object({
 				if (!all_quotes_text && this.is_blockquote_reblog(data.reblog_content)) {
 					all_quotes_text = reblog_content;
 				} else {
-					all_quotes_text = "<p><a href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p>" +
+					all_quotes_text = "<p><a href='" + data.reblog_url + "'>" + data.reblog_author + "</a>\u200C:</p>" +
 					"<blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
 				}
 			}.bind(this));
