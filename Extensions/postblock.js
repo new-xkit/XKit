@@ -1,5 +1,5 @@
 //* TITLE PostBlock **//
-//* VERSION 0.2.5 **//
+//* VERSION 0.2.6 **//
 //* DESCRIPTION Block the posts you don't like **//
 //* DETAILS This is an experimental extension that blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it. **//
 //* DEVELOPER new-xkit **//
@@ -94,7 +94,7 @@ XKit.extensions.postblock = new Object({
 
 			$(this).addClass("xpostblocked");
 
-			var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.parse_post($(this));
 			if (m_post.is_mine === true) { return; }
 
 			if (XKit.extensions.postblock.blacklisted.indexOf(m_post.root_id) !== -1) {

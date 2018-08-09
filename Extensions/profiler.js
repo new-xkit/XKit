@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2.6 **//
+//* VERSION 1.2.7 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -75,7 +75,7 @@ XKit.extensions.profiler = new Object({
 
 			$(this).addClass("profiler-nicknamed");
 
-			var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.parse_post($(this));
 
 			if (XKit.interface.where().inbox !== true) {
 				if (m_post.is_mine === true) { return; }

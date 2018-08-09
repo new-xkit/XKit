@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.3.5 **//
+//* VERSION 1.3.6 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER new-xkit **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -343,7 +343,7 @@ XKit.extensions.notificationblock = new Object({
 
 				$(this).addClass("xnotificationblockchecked");
 
-				var m_post = XKit.interface.post($(this));
+				var m_post = XKit.interface.parse_post($(this));
 				if (m_post.is_mine !== true) { return; }
 
 				var this_id = m_post.id;

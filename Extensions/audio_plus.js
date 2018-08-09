@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.2 **//
+//* VERSION 0.5.3 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -150,7 +150,7 @@ XKit.extensions.audio_plus = {
 		$(posts).each(function() {
 			$(this).addClass("audio_plus_done");
 
-			var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.parse_post($(this));
 
 			if (!m_post || m_post.type !== "audio") { return; }
 

@@ -1,5 +1,5 @@
 //* TITLE Show Picture Size **//
-//* VERSION 1.0.3 **//
+//* VERSION 1.0.4 **//
 //* DESCRIPTION Shows the resolution of media post pictures in the upper right corner of the picture **//
 //* DEVELOPER TiMESPLiNTER **//
 //* FRAME false **//
@@ -34,7 +34,7 @@ XKit.extensions.show_picture_size = new Object({
 		var posts = XKit.interface.get_posts('xkit-show-picture-size');
 
 		$(posts).each(function() {
-			var post = XKit.interface.post($(this));
+			var post = XKit.interface.parse_post($(this));
 
 			if (post.type === 'photo') {
                 // Photo

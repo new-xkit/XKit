@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.5 **//
+//* VERSION 4.4.6 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -998,7 +998,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (XKit.extensions.one_click_postage.auto_tagger && typeof XKit.extensions.auto_tagger != "undefined") {
 			// Call Auto Tagger for tags. Specifies that this is a reblog
-			var post_obj = XKit.interface.post($(parent_box));
+			var post_obj = XKit.interface.parse_post($(parent_box));
 			var additional_tags = XKit.extensions.auto_tagger.return_tags(post_obj, false);
 			if (additional_tags !== "") {
 				setTimeout(function() {
@@ -1056,7 +1056,7 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).attr('title', '');
 
 		// Call Auto Tagger for tags. Will be "" if auto_tagger is disabled
-		var post_obj = XKit.interface.post($(parent_box));
+		var post_obj = XKit.interface.parse_post($(parent_box));
 		var state = 0; // reblog
 		var tags = $("#x1cpostage_tags").val();
 		if (!XKit.extensions.one_click_postage.auto_tagger_done) {
@@ -1177,7 +1177,7 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		var form_key = XKit.interface.form_key();
-		var post = XKit.interface.post(XKit.extensions.one_click_postage.last_object);
+		var post = XKit.interface.parse_post(XKit.extensions.one_click_postage.last_object);
 		var post_id = post.id;
 		var reblog_key = post.reblog_key;
 		var channel_id = post.owner;

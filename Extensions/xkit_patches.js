@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.1 **//
+//* VERSION 7.1.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1368,7 +1368,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					/**
 					 * Set the tags of a post
-					 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+					 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.parse_post
 					 * @param {String} tags - Comma-separated array of tags
 					 */
 					tags: function(post_obj, tags) {
@@ -1681,7 +1681,7 @@ XKit.extensions.xkit_patches = new Object({
 				},
 
 				/**
-				 * @param {Object} post_object - Interface Post Object provided by XKit.interface.post
+				 * @param {Object} post_object - Interface Post Object provided by XKit.interface.parse_post
 				 * @param {Function} func - Called on error or on completion with an object describing
 				 *                          the results of the fetch. The object has key error: true
 				 *                          if there is an error.
@@ -1859,7 +1859,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					var m_text = XKit.interface.added_icon_text[XKit.interface.added_icon.indexOf(class_name)];
 
-					var post_obj = XKit.interface.post(obj);
+					var post_obj = XKit.interface.parse_post(obj);
 					var post_id = post_obj.id;
 					var post_type = post_obj.type;
 					var post_permalink = post_obj.permalink;
@@ -1890,9 +1890,9 @@ XKit.extensions.xkit_patches = new Object({
 					// Return a post object based on post ID.
 
 					if ($("body").find("#post_" + post_id).length > 0) {
-						return XKit.interface.post($("#post_" + post_id));
+						return XKit.interface.parse_post($("#post_" + post_id));
 					} else if ($(".mh_post").length > 0) {
-						return XKit.interface.post($(".mh_post"));
+						return XKit.interface.parse_post($(".mh_post"));
 					} else {
 						var m_error = {};
 						m_error.error = true;

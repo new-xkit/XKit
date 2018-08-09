@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.3 **//
+//* VERSION 2.3.4 **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -386,7 +386,7 @@ XKit.extensions.mute = new Object({
 
 			$(this).addClass("xmute-done");
 
-			var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.parse_post($(this));
 			if (m_post.is_mine === true) { return; }
 
 			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }

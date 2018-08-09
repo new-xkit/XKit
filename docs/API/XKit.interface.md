@@ -36,7 +36,7 @@ $(posts).each(function() {
 });
 ```
 
-<a name="post" href="XKit.interface.md#post">#</a> XKit.interface.**post**(_post_)
+<a name="parse_post" href="XKit.interface.md#parse_post">#</a> XKit.interface.**parse_post**(_post_)
 
 Takes a post object (ie: `this`).
 
@@ -71,7 +71,7 @@ Example usage:
 var posts = XKit.interface.get_posts("quick-tags-not-done", true);
 $(posts).each(function() {
     // Do something here.
-    var post_object = XKit.interface.post(this);
+    var post_object = XKit.interface.parse_post(this);
     if (post_object.type === "regular") {
         $(this).css("background","red");
     }
@@ -82,7 +82,7 @@ This will get all the posts that is owned by the user, and turn the text posts r
 
 <a name="find_post" href="XKit.interface.md#find_post">#</a> XKit.interface.**find_post**(_post_id_)
 
-Wrapper for `XKit.interface.post()`. Supply the `post_id` , and if the post is in the dashboard, a Post Object will be returned. If not, a new object with the `error` set to `true` will be returned.
+Wrapper for `XKit.interface.parse_post()`. Supply the `post_id` , and if the post is in the dashboard, a Post Object will be returned. If not, a new object with the `error` set to `true` will be returned.
 
 Example usage:
 
@@ -318,7 +318,7 @@ if (XKit.interface.where().dashboard === true) {
 
 <a name="fetch" href="XKit.interface.md#fetch">#</a> XKit.interface.**fetch**(_post_, _callback_, _reblog_mode_)
 
-Makes a request to the Tumblr server to return their post object. `post` must be the result you get from `XKit.interface.post()` or `XKit.interface.find_post()`.
+Makes a request to the Tumblr server to return their post object. `post` must be the result you get from `XKit.interface.parse_post()` or `XKit.interface.find_post()`.
 When it's done, the callback will be called with the data or status information. `reblog_mode` **must be set to true** for posts not owned by the user.
 
 Example usage:

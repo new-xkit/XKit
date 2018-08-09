@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -112,7 +112,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		$(posts).each(function() {
 
-			var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.parse_post($(this));
 			XKit.extensions.mass_deleter.delete_drafts_array.push(m_post.id + ";" + m_post.reblog_key);
 
 		});
@@ -231,7 +231,7 @@ XKit.extensions.mass_deleter = new Object({
 				XKit.extensions.mass_deleter.delete_next_current = 0;
 
 				$(".posts .post", m_div).each(function() {
-					var m_post = XKit.interface.post($(this));
+					var m_post = XKit.interface.parse_post($(this));
 					if (XKit.extensions.mass_deleter.delete_drafts_array.length >= XKit.extensions.mass_deleter.delete_drafts_limit) {
 						XKit.extensions.mass_deleter.delete_current_array();
 						stop_action = true;
@@ -313,7 +313,7 @@ XKit.extensions.mass_deleter = new Object({
 
 			$(posts).each(function() {
 
-				var m_post = XKit.interface.post($(this));
+				var m_post = XKit.interface.parse_post($(this));
 				XKit.extensions.mass_deleter.unlike_likes_array.push(m_post.id + ";" + m_post.reblog_key);
 
 			});
@@ -417,7 +417,7 @@ XKit.extensions.mass_deleter = new Object({
 				XKit.extensions.mass_deleter.unlike_next_current = 0;
 				XKit.extensions.mass_deleter.unlike_next_page_url = response.getResponseHeader("X-Next-Page");
 				$(".post_container .post", m_div).each(function() {
-					var m_post = XKit.interface.post($(this));
+					var m_post = XKit.interface.parse_post($(this));
 					if (XKit.extensions.mass_deleter.unlike_likes_array.length >= XKit.extensions.mass_deleter.unlike_likes_limit) {
 						XKit.extensions.mass_deleter.unlike_current_array();
 						stop_action = true;

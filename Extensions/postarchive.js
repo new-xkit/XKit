@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 1.0.6 **//
+//* VERSION 1.0.7 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER new-xkit **//
@@ -1263,7 +1263,7 @@ XKit.extensions.postarchive = {
 
 			$(this).addClass("xkit-postarchive-done");
 
-			var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.parse_post($(this));
 
 			XKit.interface.add_control_button(this, "xkit-postarchive", `data-xkit-postarchive-tumblelog-key="${m_post.tumblelog_key}" data-xkit-postarchive-tumblelog-name="${m_post.owner}"`);
 

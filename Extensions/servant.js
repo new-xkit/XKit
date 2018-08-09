@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.6.0 **//
+//* VERSION 0.6.1 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -187,7 +187,7 @@ XKit.extensions.servant = new Object({
 
 				var m_object = {};
 
-				var m_post = XKit.interface.post($(obj));
+				var m_post = XKit.interface.parse_post($(obj));
 				m_object.run = false;
 
 				if (typeof m_post === "undefined") {
@@ -217,7 +217,7 @@ XKit.extensions.servant = new Object({
 
 				var m_object = {};
 
-				var m_post = XKit.interface.post($(obj));
+				var m_post = XKit.interface.parse_post($(obj));
 				m_object.run = false;
 
 				if (typeof m_post === "undefined") {
@@ -253,7 +253,7 @@ XKit.extensions.servant = new Object({
 				if (search_for === "text") { search_for = "regular"; }
 				if (search_for === "chat") { search_for = "conversation"; }
 
-				var m_post = XKit.interface.post($(obj));
+				var m_post = XKit.interface.parse_post($(obj));
 				m_object.run = false;
 
 				if (typeof m_post === "undefined") {
@@ -289,7 +289,7 @@ XKit.extensions.servant = new Object({
 
 				var m_object = {};
 
-				var m_post = XKit.interface.post($(obj));
+				var m_post = XKit.interface.parse_post($(obj));
 				m_object.run = false;
 
 				if (typeof m_post === "undefined") {
@@ -319,7 +319,7 @@ XKit.extensions.servant = new Object({
 
 				var m_object = {};
 
-				var m_post = XKit.interface.post($(obj));
+				var m_post = XKit.interface.parse_post($(obj));
 				m_object.run = false;
 
 				if (typeof m_post === "undefined") {
