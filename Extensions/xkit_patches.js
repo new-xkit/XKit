@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.2 **//
+//* VERSION 7.1.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -176,7 +176,7 @@ XKit.extensions.xkit_patches = new Object({
 					xhr.open(request.method, request.url, request.async || true);
 
 					if (request.json === true) {
-						xhr.setRequestHeader("Content-type", "application/json");
+						xhr.setRequestHeader("Content-Type", "application/json");
 					}
 					for (var header in request.headers) {
 						xhr.setRequestHeader(header, request.headers[header]);
@@ -219,7 +219,7 @@ XKit.extensions.xkit_patches = new Object({
 							XKit.interface.kitty.set(e.data.response.headers["x-tumblr-kittens"]);
 						}
 
-						if (e.data.success) {
+						if (e.data.success && e.data.response.status == 200) {
 							details.onload(e.data.response);
 						} else {
 							details.onerror(e.data.response);
