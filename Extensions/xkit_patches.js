@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.3 **//
+//* VERSION 7.2.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -485,6 +485,150 @@ XKit.extensions.xkit_patches = new Object({
 					return m_error;
 				}
 
+			};
+
+			XKit.interface.post = { /* globals Promise */
+
+				fetch: function(post) {
+					return new Promise(function(resolve, reject) {
+						XKit.tools.Nx_XHR({
+							method: "POST",
+							url: "https://www.tumblr.com/svc/post/fetch",
+							headers: {
+								"X-Tumblr-Form-Key": XKit.interface.form_key()
+							},
+							json: true, data: JSON.stringify(post),
+							onerror: function(response) {
+								reject(response);
+							},
+							onload: function(response) {
+								try {
+									resolve(JSON.parse(response.responseText));
+								} catch (e) {
+									reject(response);
+								}
+							}
+						});
+					});
+				},
+
+				update: function(post) {
+					return new Promise(function(resolve, reject) {
+						XKit.interface.kitty.get(function(kitty) {
+							if (kitty.errors) {
+								reject(kitty);
+							}
+
+							XKit.tools.Nx_XHR({
+								method: "POST",
+								url: "https://www.tumblr.com/svc/post/update",
+								headers: {
+									"X-Tumblr-Puppies": kitty.kitten,
+									"X-Tumblr-Form-Key": XKit.interface.form_key(),
+									"X-Requested-With": "XMLHttpRequest"
+								},
+								json: true, data: JSON.stringify(post),
+								onerror: function(response) {
+									reject(response);
+								},
+								onload: function(response) {
+									try {
+										resolve(JSON.parse(response.responseText));
+									} catch (e) {
+										reject(response);
+									}
+								}
+							});
+						});
+					});
+				},
+
+				delete: function(post) {
+					return new Promise(function(resolve, reject) {
+						XKit.tools.Nx_XHR({
+							method: "POST",
+							url: "https://www.tumblr.com/svc/post/delete",
+							headers: {
+								"X-Tumblr-Form-Key": XKit.interface.form_key(),
+								"X-Requested-With": "XMLHttpRequest"
+							},
+							json: true, data: JSON.stringify(post),
+							onerror: function(response) {
+								reject(response);
+							},
+							onload: function(response) {
+								try {
+									resolve(JSON.parse(response.responseText));
+								} catch (e) {
+									this.onerror(response);
+								}
+							}
+						});
+					});
+				},
+
+				like: function(post) {
+
+					return new Promise(function(resolve, reject) {
+						var encodedPost = "";
+						for (var x in post) {
+							if (encodedPost.length) { encodedPost += "&"; }
+							encodedPost += $("<div/>").text(x).html() + "=" + post[x];
+						}
+
+						XKit.tools.Nx_XHR({
+							method: "POST",
+							url: "https://www.tumblr.com/svc/like",
+							headers: {
+								"Content-Type": "application/x-www-form-urlencoded",
+								"X-Tumblr-Form-Key": XKit.interface.form_key(),
+								"X-Requested-With": "XMLHttpRequest"
+							},
+							json: false, data: encodedPost,
+							onerror: function(response) {
+								reject(response);
+							},
+							onload: function(response) {
+								try {
+									resolve(JSON.parse(response.responseText));
+								} catch (e) {
+									this.onerror(response);
+								}
+							}
+						});
+					});
+				},
+
+				unlike: function(post) {
+					return new Promise(function(resolve, reject) {
+						var encodedPost = "";
+						for (var x in post) {
+							if (encodedPost.length) { encodedPost += "&"; }
+							encodedPost += $("<div/>").text(x).html() + "=" + post[x];
+						}
+
+						XKit.tools.Nx_XHR({
+							method: "POST",
+							url: "https://www.tumblr.com/svc/unlike",
+							headers: {
+								"Content-Type": "application/x-www-form-urlencoded",
+								"X-Tumblr-Form-Key": XKit.interface.form_key(),
+								"X-Requested-With": "XMLHttpRequest"
+							},
+							json: false, data: encodedPost,
+							onerror: function(response) {
+								reject(response);
+							},
+							onload: function(response) {
+								try {
+									resolve(JSON.parse(response.responseText));
+								} catch (e) {
+									this.onerror(response);
+								}
+							}
+						});
+					});
+				}
 			};
 		},
 		"7.8.2": function() {
