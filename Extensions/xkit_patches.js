@@ -271,159 +271,131 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			/**
-			 * @param {JQuery} obj - Post element
+			 * @param {JQuery} $post - Post element
 			 * @return {Object} Interface Post Object or {error: true}
 			 */
-			XKit.interface.parse_post = function(obj) {
+			XKit.interface.parse_post = function($post) {
 
-				var m_return = {};
-
-				if (typeof $(obj).attr('data-post-id') == "undefined" && $(".mh_post_head_link").length === 0) {
+				if (typeof $post.attr("data-post-id") == "undefined" && $(".mh_post_head_link").length === 0) {
 					// Something is wrong.
-					m_return.error = true;
-
-					return;
+					return {error: true};
 
 				} else if ($(".mh_post_head_link").length > 0) {
 
-					m_return.error = false;
+					var post_type;
 
-					m_return.id = $(obj).find(".mh_post_head_link").attr('href').split('/')[4];
-
-					m_return.permalink = $(obj).find(".mh_post_head_link").attr('href');
-
-					if ($(obj).hasClass("post_type_regular")) {
-						m_return.type = 'regular';
-					} else if ($(obj).hasClass("post_type_audio")) {
-						m_return.type = 'audio';
-					} else if ($(obj).hasClass("post_type_quote")) {
-						m_return.type = 'quote';
-					} else if ($(obj).hasClass("post_type_photo")) {
-						m_return.type = 'photo';
-					} else if ($(obj).hasClass("post_type_photoset")) {
-						m_return.type = 'photoset';
-					} else if ($(obj).hasClass("post_type_video")) {
-						m_return.type = 'video';
-					} else if ($(obj).hasClass("post_type_panorama")) {
-						m_return.type = 'panorama';
+					if ($post.hasClass("post_type_regular")) {
+						post_type = "regular";
+					} else if ($post.hasClass("post_type_audio")) {
+						post_type = "audio";
+					} else if ($post.hasClass("post_type_quote")) {
+						post_type = "quote";
+					} else if ($post.hasClass("post_type_photo")) {
+						post_type = "photo";
+					} else if ($post.hasClass("post_type_photoset")) {
+						post_type = "photoset";
+					} else if ($post.hasClass("post_type_video")) {
+						post_type = "video";
+					} else if ($post.hasClass("post_type_panorama")) {
+						post_type = "panorama";
 					}
 
-					return m_return;
-				}
+					return {
+						error: false,
+						id: $post.find(".mh_post_head_link").attr("href").split("/")[4],
+						permalink: $post.find(".mh_post_head_link").attr("href"),
+						type: post_type
+					};
 
-				m_return.error = false;
-
-				m_return.id = $(obj).attr('data-post-id');
-				m_return.root_id = $(obj).attr('data-root_id');
-				m_return.reblog_key = $(obj).attr('data-reblog-key');
-				m_return.owner = $(obj).attr('data-tumblelog-name');
-				m_return.tumblelog_key = $(obj).attr('data-tumblelog-key');
-
-				m_return.liked = $(obj).find(".post_control.like").hasClass("liked");
-				m_return.permalink = $(obj).find(".post_permalink").attr('href');
-
-				m_return.type = $(obj).attr('data-type');
-
-				if ($(obj).find(".post_content_inner").length > 0) {
-					m_return.body = $(obj).find(".post_content_inner").html();
 				} else {
-					if ($(obj).find(".post_body").length > 0) {
-						m_return.body = $(obj).find(".post_body").html();
-					} else {
-						m_return.body = "";
-					}
-				}
 
-				m_return.animated = $(obj).hasClass("is_animated");
-				m_return.is_reblogged = $(obj).hasClass("is_reblog") || $(obj).find(".reblog_info").length > 0;
-				m_return.is_mine = $(obj).hasClass("is_mine");
-				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
-				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
+					var post = {
+						error: false,
+						id: $post.attr("data-post-id"),
+						type: $post.attr("data-type"),
+						root_id: $post.attr("data-root_id"),
+						owner: $post.attr("data-tumblelog-name"),
+						tumblelog_key: $post.attr("data-tumblelog-key"),
+						reblog_key:
+							$post.attr("data-reblog-key") ||
+							$post.find(".post_control.reblog").attr("href").split("/").reverse()[0],
+						liked: $post.find(".post_control.like").hasClass("liked"),
+						permalink: $post.find(".post_permalink").attr("href"),
+						body:
+							$post.find(".post_content_inner").html() ||
+							$post.find(".post_body").html() || "",
+						animated: $post.hasClass("is_animated"),
+						is_reblogged:
+							$post.hasClass("is_reblog") ||
+							$post.find(".reblog_info").length > 0,
+						is_mine: $post.hasClass("is_mine"),
+						is_following: $post.attr("data-following-tumblelog") == true,
+						can_edit: $post.find(".post_control.edit").length > 0,
+						avatar: $post.find(".post_avatar_image").attr("src")
+					};
 
-
-				if (m_return.is_reblogged && $(obj).attr('data-json')) {
-					try {
-						var json = $(obj).attr('data-json');
-						var parsedJson = JSON.parse(json);
-						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
-					} catch (e) {
-						console.log('Error retrieving data-json attribute of post');
-					}
-				} else if ($(obj).hasClass("has_source")) {
-					// Different pages (such as the sidebar) don't always have data-json defined,
-					// so fall back to checking for source elements
-					try {
-						var sourceJson = $(obj).find('.post-source-link').attr('data-peepr');
-						var parsedSourceJson = JSON.parse(sourceJson);
-						m_return.source_owner = parsedSourceJson.tumblelog;
-					} catch (e) {
-						console.log('Error retrieving data-peepr attribute of post-source-link');
-					}
-				} else if ($(obj).find(".reblog_info").length > 0) {
-					// If there is no source link but there is a reblog link, then
-					// the reblog source is the source
-					try {
-						var reblogJson = $(obj).find(".reblog_info").attr('data-peepr');
-						var parsedReblogJson = JSON.parse(reblogJson);
-						m_return.source_owner = parsedReblogJson.tumblelog;
-					} catch (e) {
-						console.log('Error retrieving data-peepr attribute of reblog_info');
-					}
-				} else {
-					// If there is no reblog or source link, consider the
-					// post owner to be the original source
-					m_return.source_owner = m_return.owner;
-				}
-
-				if (m_return.is_reblogged) {
-
-					try {
-
-						m_return.reblog_link = $(obj).find(".reblog_source").find("a").first().attr('href');
-						m_return.reblog_owner = $(obj).find(".reblog_source").find("a").first().text();
-						m_return.reblog_original_id = m_return.reblog_link.split('/')[4];
-
-					} catch (e) {
-
-
-					}
-
-				}
-
-				var n_count = 0;
-
-				if ($(obj).find(".note_link_current").length > 0) {
-					if ($(obj).find(".note_link_current").html() === "") {
-						n_count = 0;
-					} else {
-						n_count = $(obj).find(".note_link_current").html().replace(/\D/g, '');
-					}
-				}
-
-				m_return.note_count = n_count;
-
-				m_return.avatar = $(obj).find(".post_avatar_image").attr('src');
-
-				m_return.tags = "";
-				if ($(obj).find(".post_tags").length > 0) {
-					var to_return = "";
-					$(obj).find(".post_tags").find(".post_tag").each(function() {
-						if ($(this).hasClass("post_ask_me_link") === true) { return; }
-						var m_tag = $(this).text();
-						if (m_tag[0] === "#") {
-							m_tag = m_tag.substring(1);
+					if (post.is_reblogged && $post.attr("data-json")) {
+						try {
+							post.source_owner = JSON.parse($post.attr("data-json")).name;
+						} catch (e) {
+							console.error("Couldn't parse source owner of post " + post.id + "from data-json.");
 						}
-						if (to_return === "") {
-							to_return = m_tag;
-						} else {
-							to_return = to_return + "," + m_tag;
+					} else if ($post.hasClass("has_source")) {
+						// If data-json isn't present (like in peepr), fall back to source link element
+						try {
+							post.source_owner = JSON.parse($post.find(".post-source-link").attr("data-peepr")).tumblelog;
+						} catch (e) {
+							console.error("Couldn't parse source owner of post " + post.id + "from data-peepr in post-source-link.");
 						}
-					});
-					m_return.tags = to_return;
+					} else if ($post.find(".reblog_info").length) {
+						// If no source link but reblog link, assume reblog source is post source
+						try {
+							post.source_owner = JSON.parse($post.find(".reblog_info").attr("data-peepr")).tumblelog;
+						} catch (e) {
+							console.error("Couldn't parse source owner of post " + post.id + "from data-peepr in reblog_info.");
+						}
+					} else {
+						// Must be an original post.
+						post.source_owner = post.owner;
+					}
+
+					if (post.is_reblogged) {
+						try {
+							var $reblog_source_link = $post.find(".reblog_source").find("a").first();
+							post.reblog_link = $reblog_source_link.attr("href");
+							post.reblog_owner = $reblog_source_link.text();
+							post.reblog_original_id = post.reblog_link.split("/")[4];
+						} catch (e) {}
+					}
+
+
+					try {
+						post.note_count = parseInt($post.find(".note_link_current").html().replace(/\D/g, ""));
+					} catch (e) {
+						post.note_count = 0;
+					}
+
+					if ($post.find(".post_tags").length) {
+						$post.find(".post_tags .post_tag").each(function() {
+							var $tag = $(this);
+
+							if ($tag.hasClass("post_ask_me_link")) { return; }
+
+							var tag = $tag.text();
+							if (tag[0] == "#") {
+								tag = tag.substring(1);
+							}
+
+							if (!post.tags) {
+								post.tags = tag;
+							} else {
+								post.tags += "," + tag;
+							}
+						});
+					}
+
+					return post;
 				}
-
-				return m_return;
-
 			};
 
 			/**
