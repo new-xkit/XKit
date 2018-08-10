@@ -516,7 +516,7 @@ XKit.extensions.xkit_patches = new Object({
 					return new Promise(function(resolve, reject) {
 						XKit.interface.kitty.get(function(kitty) {
 							if (kitty.errors) {
-								reject(kitty);
+								reject(kitty.response);
 							}
 
 							XKit.tools.Nx_XHR({
