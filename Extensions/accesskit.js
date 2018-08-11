@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.2.4 **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER new-xkit **//
@@ -37,6 +37,11 @@ XKit.extensions.accesskit = new Object({
 		},
 		make_links_blue: {
 			text: "Make links on the posts on my dashboard blue",
+			default: true,
+			value: true
+		},
+		no_npf_colors: {
+			text: "Don't display NPF (user-set) colours in posts",
 			default: true,
 			value: true
 		},
@@ -163,6 +168,10 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.make_links_blue.value === true) {
 			m_css = m_css + " .post .post_body a, .reblog-content a { color: #2449c1 !important; font-weight: bold !important; } ";
+		}
+
+		if (this.preferences.no_npf_colors.value) {
+			m_css += ".post span { color: inherit !important; }";
 		}
 
 		if (this.preferences.contrast_sidebar.value === true) {
