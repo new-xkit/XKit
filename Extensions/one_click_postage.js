@@ -642,7 +642,7 @@ XKit.extensions.one_click_postage = new Object({
 				$("#x1cpostage_replace").slideUp('fast');
 			}
 
-			$("#x1cpostage_caption").addClass("x1cpostage_remove_caption_on");
+			$("#x1cpostage_remove_caption").addClass("x1cpostage_remove_caption_on");
 			$("#x1cpostage_tags").css("border-top", "1px solid #abafbc");
 		});
 
@@ -901,8 +901,9 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_replace").css("display", "none");
 		}
 
-		$("#x1cpostage_remove_caption").css("display", "block");
-		$("#x1cpostage_caption").removeClass("x1cpostage_remove_caption_on");
+		$("#x1cpostage_remove_caption")
+			.css("display", "block")
+			.removeClass("x1cpostage_remove_caption_on");
 		$("#x1cpostage_tags").css("border-top", "0");
 		$("#x1cpostage_caption").css("height", XKit.extensions.one_click_postage.caption_height + "px");
 
@@ -1088,7 +1089,7 @@ XKit.extensions.one_click_postage = new Object({
 			reblog_post_id: post.reblog_id,
 			reblog_key: post.reblog_key,
 			remove_reblog_tree:
-				$("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on") ||
+				$("#x1cpostage_remove_caption").hasClass("x1cpostage_remove_caption_on") ||
 				$("#x1cpostage_replace").hasClass("selected"),
 			"post[tags]": tags,
 			"post[type]": data.post.type,
@@ -1107,7 +1108,7 @@ XKit.extensions.one_click_postage = new Object({
 			caption_field = "post[three]";
 		}
 
-		if (!$("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on")) {
+		if (!$("#x1cpostage_remove_caption").hasClass("x1cpostage_remove_caption_on")) {
 			if (caption !== "" && typeof caption !== "undefined") {
 				if (this.preferences.enable_popup_html.value) {
 					full_post[caption_field] = "<p>" + caption + "</p>";
@@ -1115,6 +1116,8 @@ XKit.extensions.one_click_postage = new Object({
 					full_post[caption_field] = "<p>" + $("<div/>").text(caption).html() + "</p>";
 				}
 			}
+		} else {
+			full_post[caption_field] = "";
 		}
 
 		if (full_post[caption_field]) {
