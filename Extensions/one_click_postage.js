@@ -833,6 +833,7 @@ XKit.extensions.one_click_postage = new Object({
 						XKit.extensions.one_click_postage.user_on_box = true;
 						XKit.extensions.one_click_postage.open_menu($(this), false, true);
 						$('#x1cpostage_tags').focus();
+						break;
 					}
 				}
 
@@ -916,10 +917,9 @@ XKit.extensions.one_click_postage = new Object({
 
 		// Call Auto Tagger for tags. Will be "" if auto_tagger is disabled
 		if (!this.auto_tagger_done) {
-			var
-				post_obj = XKit.interface.parse_post($parent_box),
-				state = 0, // reblog
-				tags = $("#x1cpostage_tags").val();
+			var post_obj = XKit.interface.parse_post($parent_box);
+			var state = 0; // reblog
+			var tags = $("#x1cpostage_tags").val();
 
 			this.auto_tagger_done = true;
 			tags += (tags ? ", " : "") + this.get_auto_tagger_tags(post_obj, state, false);
@@ -1028,16 +1028,15 @@ XKit.extensions.one_click_postage = new Object({
 			return;
 		}
 
-		var
-			post = XKit.interface.parse_post(this.last_object),
-			blog_id = this.default_blog_id,
-			caption = $("#x1cpostage_caption").val() || "",
-			tags = $("#x1cpostage_tags").val() || "",
-			$button,
-			request = {
-				reblog_id: parseInt(post.id),
-				reblog_key: post.reblog_key
-			};
+		var post = XKit.interface.parse_post(this.last_object);
+		var blog_id = this.default_blog_id;
+		var caption = $("#x1cpostage_caption").val() || "";
+		var tags = $("#x1cpostage_tags").val() || "";
+		var $button;
+		var request = {
+			reblog_id: parseInt(post.id),
+			reblog_key: post.reblog_key
+		};
 
 		if (quick_queue_mode) {
 			caption = "";
