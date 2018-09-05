@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.5.1 **//
+//* VERSION 7.5.2 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -2022,12 +2022,12 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="bottom-part" style="line-height: 24px;">' +
 						"If you have recently made any changes, please refresh the page to update the storage usage counter." +
 					"</div>" +
-					'<div class="bottom-part" style="margin-top: 20px; line-height: 24px;">' +
+					'<div class="bottom-part" style="line-height: 24px;">' +
 						"Please note that the more storage you use, the longer it will take for XKit to boot up. " +
 						"You should try to keep the storage usage under 5 megabytes for the best performance. " +
 						"Disable and remove the extensions you don't use if you feel your XKit is acting sluggish." +
 					"</div>" +
-					'<div class="bottom-part" style="margin-top: 20px; line-height: 24px;">' +
+					'<div class="bottom-part" style="line-height: 24px;">' +
 						"If disabling extensions does not help, uninstall them and reset XKit after synching your data " +
 						"using XCloud to free up the unused space." +
 					"</div>" +
@@ -2106,24 +2106,31 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_config: function() {
 
-		var m_html =
-				'<div class="xkit-others-panel">' +
+		$("#xkit-extensions-panel-right-inner").html(
+
+			'<div class="xkit-others-panel">' +
 				'<div class="title">Export Configuration</div>' +
 				'<div class="description">' +
 					"This panel lets you export parts of your XKit configuration for others to view. " +
-					"Including links to one of these when you submit a bug report will help us fix your problem sooner. " +
+					"Attaching or linking to one of these when you submit a bug report will help us fix your problem sooner.<br><br>" +
+					'<strong style="font-weight: bold;">These files are for troubleshooting purposes only.</strong><br>' +
+					"They cannot be imported - use an XCloud export if you are looking to move your configuration between browsers or machines." +
 				"</div>" +
 				'<div class="bottom-part">' +
-					'Information about what extensions you have installed, almost always required: ' +
-					'<div id="xkit-panel-extension-info" class="xkit-button block">Extension Info Export</div><br>' +
-					'This link will export your entire xkit configuration data: ' +
-					'<div id="xkit-panel-full-config" class="xkit-button block">Full Configuration Export</div>' +
-					'This includes information that may be sensitive, including your tumblr urls, lists of blacklisted keywords, and more. ' +
-					'Think carefully before sharing this information.' +
+					'<p>Information about what extensions you have installed and enabled:</p>' +
+					'<div id="xkit-panel-extension-info" class="xkit-button block">Extension Info Export</div>' +
+					"Almost always required." +
 				"</div>" +
-				"</div>";
+				'<div class="bottom-part">' +
+					"<p>Your full XKit storage export:</p>" +
+					'<div id="xkit-panel-full-config" class="xkit-button block">Full Configuration Export</div>' +
+					"This includes information that may be sensitive, including your Tumblr URLs, list of blacklisted keywords, and more. " +
+					"Think carefully before sharing this information." +
+				"</div>" +
+			"</div>"
 
-		$("#xkit-extensions-panel-right-inner").html(m_html);
+		);
+
 		$("#xkit-extensions-panel-right").nanoScroller();
 
 		$("#xkit-panel-extension-info").click(function() {

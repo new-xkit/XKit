@@ -688,15 +688,21 @@
 }
 
 #xkit-extensions-panel-right .xkit-others-panel .bottom-part {
-
 	border-top: 1px dashed rgb(200,200,200);
 	padding-top: 20px;
+}
 
+#xkit-extensions-panel-right .xkit-others-panel .bottom-part:not(:last-child) {
+	margin-bottom: 20px;
 }
 
 #xkit-extensions-panel-right .xkit-others-panel .bottom-part .xkit-button {
 	text-align: center;
 	margin: 1em 0;
+}
+
+#xkit-extensions-panel-right .xkit-others-panel .bottom-part .xkit-button:first-child {
+	margin-top: calc(1em - 20px);
 }
 
 #xkit-extensions-panel-right .xkit-url-field {
@@ -1425,11 +1431,6 @@
 
 #xkit-extension-enabled {
 	bottom: 16px !important;
-}
-
-#xkit-extensions-panel-right .xkit-others-panel .bottom-part {
-	border-top: 0;
-	padding-top: 0px;
 }
 
 .xkit-extension-setting {
