@@ -467,7 +467,8 @@ XKit.extensions.xkit_patches = new Object({
 							method: "POST",
 							url: "https://www.tumblr.com/svc/post/fetch",
 							headers: {
-								"X-Tumblr-Form-Key": XKit.interface.form_key()
+								"X-Tumblr-Form-Key": XKit.interface.form_key(),
+								"X-Requested-With": "XMLHttpRequest"
 							},
 							json: true, data: JSON.stringify(post),
 							onerror: function(response) {
@@ -540,7 +541,6 @@ XKit.extensions.xkit_patches = new Object({
 				},
 
 				like: function(post) {
-
 					return new Promise(function(resolve, reject) {
 						var encodedPost = "";
 						for (var x in post) {
