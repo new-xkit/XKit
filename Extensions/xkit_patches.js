@@ -542,11 +542,6 @@ XKit.extensions.xkit_patches = new Object({
 
 				like: function(post) {
 					return new Promise(function(resolve, reject) {
-						var encodedPost = "";
-						for (var x in post) {
-							if (encodedPost.length) { encodedPost += "&"; }
-							encodedPost += $("<div/>").text(x).html() + "=" + post[x];
-						}
 
 						XKit.tools.Nx_XHR({
 							method: "POST",
@@ -556,7 +551,7 @@ XKit.extensions.xkit_patches = new Object({
 								"X-Tumblr-Form-Key": XKit.interface.form_key(),
 								"X-Requested-With": "XMLHttpRequest"
 							},
-							json: false, data: encodedPost,
+							json: false, data: $.param(post),
 							onerror: function(response) {
 								reject(response);
 							},
@@ -573,11 +568,6 @@ XKit.extensions.xkit_patches = new Object({
 
 				unlike: function(post) {
 					return new Promise(function(resolve, reject) {
-						var encodedPost = "";
-						for (var x in post) {
-							if (encodedPost.length) { encodedPost += "&"; }
-							encodedPost += $("<div/>").text(x).html() + "=" + post[x];
-						}
 
 						XKit.tools.Nx_XHR({
 							method: "POST",
@@ -587,7 +577,7 @@ XKit.extensions.xkit_patches = new Object({
 								"X-Tumblr-Form-Key": XKit.interface.form_key(),
 								"X-Requested-With": "XMLHttpRequest"
 							},
-							json: false, data: encodedPost,
+							json: false, data: $.param(post),
 							onerror: function(response) {
 								reject(response);
 							},
