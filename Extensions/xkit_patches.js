@@ -470,7 +470,8 @@ XKit.extensions.xkit_patches = new Object({
 								"X-Tumblr-Form-Key": XKit.interface.form_key(),
 								"X-Requested-With": "XMLHttpRequest"
 							},
-							json: true, data: JSON.stringify(post),
+							json: true,
+							data: JSON.stringify(post),
 							onerror: function(response) {
 								reject(response);
 							},
@@ -500,7 +501,8 @@ XKit.extensions.xkit_patches = new Object({
 									"X-Tumblr-Form-Key": XKit.interface.form_key(),
 									"X-Requested-With": "XMLHttpRequest"
 								},
-								json: true, data: JSON.stringify(post),
+								json: true,
+								data: JSON.stringify(post),
 								onerror: function(response) {
 									reject(response);
 								},
@@ -525,7 +527,8 @@ XKit.extensions.xkit_patches = new Object({
 								"X-Tumblr-Form-Key": XKit.interface.form_key(),
 								"X-Requested-With": "XMLHttpRequest"
 							},
-							json: true, data: JSON.stringify(post),
+							json: true,
+							data: JSON.stringify(post),
 							onerror: function(response) {
 								reject(response);
 							},
@@ -551,7 +554,7 @@ XKit.extensions.xkit_patches = new Object({
 								"X-Tumblr-Form-Key": XKit.interface.form_key(),
 								"X-Requested-With": "XMLHttpRequest"
 							},
-							json: false, data: $.param(post),
+							data: $.param(post),
 							onerror: function(response) {
 								reject(response);
 							},
@@ -577,7 +580,7 @@ XKit.extensions.xkit_patches = new Object({
 								"X-Tumblr-Form-Key": XKit.interface.form_key(),
 								"X-Requested-With": "XMLHttpRequest"
 							},
-							json: false, data: $.param(post),
+							data: $.param(post),
 							onerror: function(response) {
 								reject(response);
 							},
