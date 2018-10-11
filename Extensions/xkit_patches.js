@@ -459,7 +459,7 @@ XKit.extensions.xkit_patches = new Object({
 
 			};
 
-			XKit.interface.post = { /* globals Promise */
+			XKit.interface.post = {
 
 				fetch: function(post) {
 					return new Promise(function(resolve, reject) {

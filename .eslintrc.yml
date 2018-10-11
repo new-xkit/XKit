@@ -41,6 +41,8 @@
       - before: true
         after: true
   globals:
+    Promise: true
+
     _: true
     XKit: true
     XBridge: true
