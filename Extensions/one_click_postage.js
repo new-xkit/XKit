@@ -481,33 +481,35 @@ XKit.extensions.one_click_postage = new Object({
 
 		var blog_html = "";
 		for (var x in blogs) {
-			blog_html += '<option value="' + blogs[x] + '"' + (blogs[x] == this.default_blog_id ? ' selected' : '') + '>' + blogs[x] + '</option>';
+			blog_html += `<option value="${blogs[x]}" ${(blogs[x] == this.default_blog_id ? ' selected' : '')}>${blogs[x]}</option>`;
 		}
 
 		var ui_html = [
-			'<div id="x1cpostage_reblog"><i>&nbsp;</i></div>' + '<div id="x1cpostage_queue"><i>&nbsp;</i></div>' + '<div id="x1cpostage_draft"><i>&nbsp;</i></div>',
+			`<div id="x1cpostage_reblog"><i>&nbsp;</i></div>
+			<div id="x1cpostage_queue"><i>&nbsp;</i></div>
+			<div id="x1cpostage_draft"><i>&nbsp;</i></div>`,
 
 			(this.preferences.show_social.value ?
-				'<div id="xkit-1cp-social">' +
-					'<div data-site="facebook" id="xkit-1cp-social-facebook">&nbsp;</div>' +
-					'<div data-site="twitter" id="xkit-1cp-social-twitter">&nbsp;</div>' +
-				'</div>'
+				`<div id="xkit-1cp-social">
+					<div data-site="facebook" id="xkit-1cp-social-facebook">&nbsp;</div>
+					<div data-site="twitter" id="xkit-1cp-social-twitter">&nbsp;</div>
+				</div>`
 			: ''),
 
 			(this.preferences.show_blog_selector.value ?
-				'<select id="x1cpostage_blog">' + blog_html + '</select>'
+				`<select id="x1cpostage_blog">${blog_html}</select>`
 			: ''),
 
 			(this.preferences.show_caption.value ?
-				'<textarea id="x1cpostage_caption" placeholder="caption"></textarea>' +
-				'<div id="x1cpostage_replace"><div>&nbsp;</div>replace caption, not append</div>'
+				`<textarea id="x1cpostage_caption" placeholder="caption"></textarea>
+				<div id="x1cpostage_replace"><div>&nbsp;</div>replace caption, not append</div>`
 			: ''),
 
 			(this.preferences.show_caption_remover.value ?
 				'<div id="x1cpostage_remove_caption">remove caption</div>'
 			: ''),
 
-			'<div id="x1cpostage_quick_tags"' + (this.preferences.show_reverse_ui.value ? '' : ' class="xkit-no-reverse-ui"') + '></div>',
+			`<div id="x1cpostage_quick_tags"${this.preferences.show_reverse_ui.value ? '' : ' class="xkit-no-reverse-ui"'}></div>`,
 
 			'<input id="x1cpostage_tags" placeholder="tags (comma separated)"/>' +
 			(this.preferences.show_tag_remover.value ?
