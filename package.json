@@ -49,6 +49,5 @@
     "through2": "^2.0.0",
     "yaml-front-matter": "^3.2.3"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
