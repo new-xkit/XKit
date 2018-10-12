@@ -79,7 +79,7 @@ XKit.extensions.xmascot = new Object({
 		}
 		mascotDiv.find("img").attr("src", mascot.imageUrl);
 
-		XKit.tools.add_css("#xmascot img { height: " + mascot.height + "; width: " + mascot.width + "; margin-bottom: " + mascot.hOffset + "; margin-" + (!mascot.flipImage ? "right" : "left") + ": " + mascot.vOffset + "; z-index: " + mascot.zIndex + "; }", "xmascot");
+		XKit.tools.add_css("#xmascot img { height: " + mascot.height + "; width: " + mascot.width + "; margin-bottom: " + mascot.hOffset + "; margin-" + (mascot.flipSide ? "right" : "left") + ": " + mascot.vOffset + "; z-index: " + mascot.zIndex + "; }", "xmascot");
 		if (mascot.flipImage) XKit.tools.add_css("#xmascot img { -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); filter: FlipH; -ms-filter: 'FlipH'; }", "xmascot");
 		if (mascot.flipSide) XKit.tools.add_css("#xmascot img { right: 0 }", "xmascot");
 		if (mascot.downscaleOnly && mascot.width.toLowerCase() === "auto") XKit.tools.add_css("#xmascot img { max-width: 450px; }", "xmascot");
