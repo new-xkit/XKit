@@ -13,7 +13,21 @@ XKit.extensions.xmascot = new Object({
 	slow: false,
 
 	mascots: [
-
+		{
+			name: "vriska",
+			source: "https://www.homestuck.com/",
+			imageUrl: "https://i.imgur.com/wfXrgKZ.png",
+			height: "175px", // the height of the mascot
+			width: "auto", // the width of the mascot
+			downscaleOnly: false, // If width is auto it'll scale down to the sidebar size
+			vOffset: "25px", // offset from the bottom
+			hOffset: "25px", // offset from the left border
+			zIndex: "-1",
+			flipImage: true, // flip the image left to right
+			flipSide: true, // put it on the right side instead of the left
+			active: false,
+			sourceLocked: true
+		}
 	],
 	mascot: null,
 
