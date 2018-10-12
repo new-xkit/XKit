@@ -13,36 +13,7 @@ XKit.extensions.xmascot = new Object({
 	slow: false,
 
 	mascots: [
-		{
-			name: "Pinkie Pie",
-			source: "http://rapidstrike.tumblr.com/post/155013588708/this-is-the-ponk-of-high-spirits-drag-her-around",
-			imageUrl: "http://68.media.tumblr.com/76e6a0b218adbe1411ebb03b30def987/tumblr_oiu1eqHYRP1r3zufwo1_1280.png",
-			height: "auto",
-			width: "auto",
-			downscaleOnly: true,
-			vOffset: "0px",
-			hOffset: "0px",
-			zIndex: "-1",
-			flipImage: true,
-			flipSide: false,
-			active: false,
-			sourceLocked: true
-		},
-		{
-			name: "ARTward",
-			source: "Spongebob Squarepants",
-			imageUrl: "https://68.media.tumblr.com/e6cacc306152470636c406361b0f6506/tumblr_mpmwiasLDr1rh8ms6o1_250.png",
-			height: "auto",
-			width: "auto",
-			downscaleOnly: true,
-			vOffset: "5px",
-			hOffset: "5px",
-			zIndex: "-1",
-			flipImage: true,
-			flipSide: false,
-			active: true,
-			sourceLocked: true
-		}
+
 	],
 	mascot: null,
 
