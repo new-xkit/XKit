@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.1 **//
+//* VERSION 0.6.2 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -648,13 +648,6 @@ XKit.extensions.quick_tags = new Object({
 	},
 
 	add_bundle_ui: function() {
-
-		var remaining = 30 - XKit.extensions.quick_tags.tag_array.length;
-
-		if (remaining <= 0) {
-			XKit.window.show("No slots left.", "You can not add more than 30 bundles.<br/>Please delete some before adding new bundles.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			return;
-		}
 
 		XKit.window.show("Create new bundle", "<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">You have <b>" + remaining + "</b> bundle slots left.", "question", "<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
