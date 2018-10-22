@@ -27,6 +27,21 @@ XKit.extensions.xmascot = new Object({
 			flipSide: true, // put it on the right side instead of the left
 			active: false,
 			sourceLocked: true
+		},
+		{
+			name: "ARTward",
+			source: "Spongebob Squarepants",
+			imageUrl: "https://68.media.tumblr.com/e6cacc306152470636c406361b0f6506/tumblr_mpmwiasLDr1rh8ms6o1_1280.png",
+			height: "auto",
+			width: "auto",
+			downscaleOnly: true,
+			vOffset: "5px",
+			hOffset: "5px",
+			zIndex: "-1",
+			flipImage: true,
+			flipSide: false,
+			active: false,
+			sourceLocked: true
 		}
 	],
 	mascot: null,
