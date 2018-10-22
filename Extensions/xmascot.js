@@ -42,6 +42,36 @@ XKit.extensions.xmascot = new Object({
 			flipSide: false,
 			active: false,
 			sourceLocked: true
+		},
+		{
+			name: "Satsuki",
+			source: "http://dbxfanon.wikia.com/wiki/File:Satsuki_Kiryūin_Anime.png",
+			imageUrl: "https://vignette.wikia.nocookie.net/dbxfanon/images/f/f9/Satsuki_Kiryūin_Anime.png/revision/latest?cb=20180729161230&format=original",
+			height: "auto",
+			width: "auto",
+			downscaleOnly: true,
+			vOffset: "0",
+			hOffset: "-13px",
+			zIndex: "-1",
+			flipImage: false,
+			flipSide: false,
+			active: true,
+			sourceLocked: true
+		},
+		{
+			name: "Ryuko",
+			source: "http://fyeahryukomatoi.tumblr.com/post/67503438634/transparent-ryuko",
+			imageUrl: "https://66.media.tumblr.com/69d94d5bc744a5feae4e547151296936/tumblr_mwj8qw399M1slnf7ro1_1280.png",
+			height: "auto",
+			width: "auto",
+			downscaleOnly: true,
+			vOffset: "0",
+			hOffset: "0",
+			zIndex: "-1",
+			flipImage: false,
+			flipSide: false,
+			active: true,
+			sourceLocked: true
 		}
 	],
 	mascot: null,
