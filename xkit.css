@@ -163,7 +163,6 @@
 
 .xkit-interface-control-button:after {
 	content: "" !important;
-	background: none !important;
 	background-repeat: no-repeat !important;
 	background-position: 50% -1px;
 }
