@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.1 **//
+//* VERSION 7.1.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -214,15 +214,16 @@ XKit.extensions.xkit_patches = new Object({
 				function handler(e) {
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
 						window.removeEventListener("message", handler);
+						let {success, response} = e.data;
 
-						if (typeof e.data.response.headers["x-tumblr-kittens"] !== "undefined") {
-							XKit.interface.kitty.set(e.data.response.headers["x-tumblr-kittens"]);
+						if (typeof response.headers["x-tumblr-kittens"] !== "undefined") {
+							XKit.interface.kitty.set(response.headers["x-tumblr-kittens"]);
 						}
 
-						if (e.data.success) {
-							details.onload(e.data.response);
+						if (success && response.status >= 200 && response.status < 300) {
+							details.onload(response);
 						} else {
-							details.onerror(e.data.response);
+							details.onerror(response);
 						}
 					}
 				}
