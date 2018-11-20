@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.2 **//
+//* VERSION 7.1.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -19,14 +19,15 @@ XKit.extensions.xkit_patches = new Object({
 		this.running = true;
 
 		var to_run = [];
-		for (var i in this.patches) {
-			to_run.unshift(i);
-			if (i === XKit.version) {
+		for (let i of this.run_order.reverse()) {
+			to_run.push(i);
+			if (i == XKit.version) {
 				break;
 			}
 		}
-		for (var x in to_run) {
-			this.patches[to_run[x]]();
+
+		for (let x of to_run.reverse()) {
+			this.patches[x]();
 		}
 
 		// Identify retina screen displays. Unused anywhere else
@@ -135,6 +136,8 @@ XKit.extensions.xkit_patches = new Object({
 
 		}, 1000);
 	},
+
+	run_order: ["7.8.1", "7.8.2", "7.9.0"],
 
 	patches: {
 		"7.9.0": function() {
