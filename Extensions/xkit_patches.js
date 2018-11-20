@@ -7,14 +7,6 @@ XKit.extensions.xkit_patches = new Object({
 
 	running: false,
 
-	preferences: {
-		debug_mode: {
-			text: "XKit Developer Mode",
-			default: true,
-			value: true
-		}
-	},
-
 	run: function() {
 		this.running = true;
 
@@ -60,6 +52,7 @@ XKit.extensions.xkit_patches = new Object({
 
 		window.addEventListener("message", XKit.blog_listener.eventHandler);
 
+		// Scrape Tumblr's data object now that we can run add_function
 		XKit.tools.add_function(function() {
 			var blogs = [];
 			try {
@@ -496,24 +489,6 @@ XKit.extensions.xkit_patches = new Object({
 					);
 				}
 			};
-
-			// Scrape Tumblr's data object now that we can run add_function
-			XKit.tools.add_function(function() {
-				var blogs = [];
-				try {
-					var models = Tumblr.dashboardControls.allTumblelogs;
-					models.filter(function(model) {
-						return model.attributes.hasOwnProperty("is_current");
-					}).forEach(function(model) {
-						blogs.push(model.attributes.name);
-					});
-					if (blogs.length) {
-						window.postMessage({
-							xkit_blogs: blogs,
-						}, window.location.protocol + "//" + window.location.host);
-					}
-				} catch (e) {}
-			}, true);
 
 			/**
 			 * @return {Object} The elements of XKit's storage as a map from setting key to
