@@ -1,0 +1,38 @@
+.peepr-big-loader, 
+.peepr-body {
+	background-image: var(--accent-grad);
+}
+
+.peepr-body .indash_blog .post {
+	box-shadow: unset;
+}
+
+.peepr-body .indash_blog .post_tags:after {
+	background: unset;
+}
+
+.peepr-body .indash_blog .posts {
+	padding: 20px 20px 20px;
+}
+
+.peepr-body .indash_blog .post_content h2 {
+	color: var(--primary, #DDD);
+}
+
+.peepr-body .post_full .post_tags.fadeable {
+	max-height: 80px;
+}
+
+.see_all_tags {
+	background: linear-gradient(to right, transparent, var(--post, #111));
+	height: unset;
+	width: unset;
+	bottom: 6px;
+	padding: 5px 0px;
+	padding-left: 10px;
+}
+
+.peepr-body .post[data-tumblelog-name] .post_permalink {
+	border: unset;
+	box-shadow: unset;
+}

@@ -1,0 +1,197 @@
+/*https://www.tumblr.com/reblog/POST-ID*/
+.post-form .post-container {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+/*wash-out effect when submitting reblog*/
+.post-form .post-form--guard {
+	background-color: var(--post, #111);
+}
+
+.post-form button:not(.tx-button) {
+	color: var(--primary, #DDD);
+}
+
+.post-form a {
+	color: unset;
+	border-bottom: unset;
+}
+
+.post-form .post-composer_note-post .note_item, 
+.post-form .post_full.is_note .post-body .note_item {
+	background-color: var(--bubble, #222);
+	border-color: var(--bubble, #222);
+}
+
+.post-form .post-composer_note-post .note_item .nipple {
+	border-left-color: var(--bubble, #444);
+}
+
+.post-form .caption-field .editor-placeholder, 
+.post-form .caption-field .editor-plaintext, 
+.post-form .caption-field .editor-richtext {
+	background: unset;
+	color: inherit;
+}
+
+.post-form .caption-field .editor-placeholder {
+	color: var(--secondary, #888) !important;
+}
+
+.post-form .control-reblog-trail .reblog-list .reblog-list-item:last-child {
+	border-bottom-color: var(--border, #444);
+}
+
+.post-form .control-reblog-trail.removed .btn-show-trail {
+	color: var(--secondary, #888);
+	border-top-color: var(--border, #444);
+	border-bottom-color: var(--border, #444);
+}
+
+.post-form .caption-field .editor-richtext p {
+	color: var(--primary, #DDD);
+}
+
+.post-form .post-form--tag-editor {
+	padding: 5px 0px 10px 10px;
+}
+
+.post-form .post-form--tag-editor .tag-label {
+	background-color: var(--tag, #222);
+	color: var(--secondary, #888);
+	margin: 10px 10px 0px 0px;
+}
+
+.post-form .post-form--tag-editor .tag-label.hover-style, 
+.post-form .post-form--tag-editor .tag-label.selected {
+	background-color: var(--accent-hi2);
+	color: var(--accent);
+}
+
+.post-form .post-form--tag-editor .tag-input-wrapper {
+	margin-top: 10px;
+}
+
+.post-form .post-form--header .tumblelog-select * {
+	color: unset !important;
+}
+
+.popover--tumblelog-select-dropdown .pop-menu {
+	background-color: var(--popover, #111);
+}
+
+.popover--tumblelog-select-dropdown .pop-menu .item-option, 
+.popover--tumblelog-select-dropdown .pop-menu .item-option.select:after, 
+.popover--tumblelog-select-dropdown .pop-menu .ts-info, 
+.popover--tumblelog-select-dropdown .pop-menu .ts-name {
+	color: var(--primary, #DDD);
+}
+
+.popover--tumblelog-select-dropdown .pop-menu .ts-title {
+	color: var(--secondary, #888);
+}
+
+.popover--tumblelog-select-dropdown .pop-menu .item-option:hover, 
+.popover--tumblelog-select-dropdown .pop-menu .item-option.select:hover:after, 
+.popover--tumblelog-select-dropdown .pop-menu .item-option:hover .ts-info, 
+.popover--tumblelog-select-dropdown .pop-menu .item-option:hover .ts-name {
+	color: var(--primary-selected, #111);
+}
+
+.popover--post-settings-dropdown .pop-menu .form-group .group-content, 
+.popover--post-settings-dropdown .pop-menu .form-group .group-label {
+	border-top-color: var(--border, #444);
+	color: var(--primary, #DDD);
+}
+
+.popover--post-settings-dropdown .flat_select .icon {
+	color: var(--primary, #DDD);
+}
+
+.popover--post-settings-dropdown .flat_select select:focus ~ .icon {
+	color: var(--accent);
+}
+
+.popover--save-post-dropdown .pop-menu input[type=text].field, 
+.post-form input[type=text].field {
+	background-color: var(--input, #000);
+	color: var(--primary, #DDD);
+	border-color: var(--border, #444);
+}
+
+.post-form .post-form--bottom .post-form--controls {
+	border-top-color: var(--border, #444);
+}
+
+/*ios' momentum scrolling*/
+.post-form-modal {
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+/*========================================tools======================================*/
+.popover--gif-search {
+	background-color: var(--popover, #111);
+}
+
+.popover--gif-search .gif-search-input {
+	border-bottom-color:  var(--border, #444);
+}
+
+.popover--gif-search .gif-search-message {
+	background-color: var(--popover, #111);
+	color: var(--primary, #DDD);
+}
+
+.media-holder .tmblr-embed-placeholder .icon_close:before {
+	color: var(--primary, #DDD);
+}
+
+/*horizontal line*/
+.post-form hr {
+	border-top-color: var(--primary, #DDD) !important;
+}
+
+/*Keep Reading*/
+.editor .tmblr-truncated:before {
+	opacity: 1 !important;
+}
+
+.editor .tmblr-truncated .tmblr-truncated-link, 
+.editor .tmblr-truncated:after {
+	background-color: var(--post, #111) !important;
+	color: var(--primary, #DDD) !important;
+}
+
+/*when dragging Keep Reading*/
+.editor .over-bottom:after, 
+.editor .over-top:before {
+	background-color: var(--accent);
+}
+
+/*=====================================html mode=====================================*/
+.post-form .html-mode .tab {
+	color: var(--secondary, #DDD);
+}
+
+.post-form .html-mode .tab.active, 
+.post-form .html-mode .tab:hover {
+	color: var(--primary, #DDD);
+}
+
+.post-form .html-mode .src-view {
+	background-color: #000;
+	color: var(--primary, #DDD);
+}
+
+.post-form .html-mode .ace_selection {
+	filter: opacity(0.3);
+}
+
+.dropzone-tooltip-popover {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+}

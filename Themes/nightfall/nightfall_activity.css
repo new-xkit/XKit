@@ -1,0 +1,294 @@
+/*========================================page=======================================*/
+/*https://www.tumblr.com/blog/USERNAME/activity*/
+.notifications_page .section.divider {
+	background: unset;
+}
+
+.notifications_page .notification_pane {
+	background-color: var(--post, #111);
+}
+
+.notifications_page .notification_pane .popover_menu .popover_menu_item a {
+	color: var(--primary, #DDD);
+}
+
+.notifications_page .notification_pane .popover_menu .popover_menu_item:hover a {
+	color: var(--seondary, #888);
+}
+
+.notifications_page #range_controls h2.heading.arrow {
+	color: var(--primary, #DDD);
+}
+
+.notifications_page .notifications_block {
+	border-bottom-color: #000;
+}
+
+.notifications_page .ui_stats .unit.active.new_notes .button, 
+.notifications_page .ui_stats .unit.active.new_followers .button, 
+.notifications_page .ui_stats .unit.active.total_followers .button, 
+.notifications_page .ui_stats .unit .button {
+	background: linear-gradient(to bottom, #444 0%, #000 100%);
+	border-top-color: #444;
+}
+
+.notifications_page .ui_stats .unit.active.new_followers .stage, 
+.notifications_page .ui_stats .unit.active.total_followers .stage, 
+.notifications_page .ui_stats .unit.active.new_notes .stage {
+	background: linear-gradient(to bottom, #000 0%, #111 100%);
+}
+
+.notifications_page .ui_stats .unit.active.new_followers .plop:before, 
+.notifications_page .ui_stats .unit.active.total_followers .plop:before, 
+.notifications_page .ui_stats .unit.active.new_notes .plop:before {
+	border-top-color: var(--border, #444);
+}
+
+.notifications_page .ui_stats .unit .stage {
+	background-color: var(--post, #111);
+}
+
+.notifications_page .ui_stats .unit:hover .button .stage {
+	background-color: #000;
+}
+
+.notifications_page .ui_stats .plop:after {
+	border-top-color: var(--post, #111);
+}
+
+.notifications_page .ui_stats .row .unit .brag, 
+.notifications_page .ui_tops .tops_box .tops_header h1, 
+.notifications_page .ui_notes_switcher .active {
+	color: var(--primary, #DDD);
+}
+
+.notifications_page .ui_tops .tops_box.tops_post {
+	border-left-color: #000;
+}
+
+.notifications_page #user_graphs .axis-label {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+.notifications_page .ui_notes .activity-notification .activity-notification__activity_message.conversational {
+	background-color: var(--note, #444) !important;
+}
+
+.notifications_page .ui_notes .activity-notification .activity-notification__activity_main {
+	color: var(--primary, #DDD) !important;
+}
+
+.notifications_page .ui_notes .activity-notification .activity-notification__activity_main .activity {
+	color: var(--primary, #DDD) !important;
+}
+
+.notifications_page .ui_notes .activity-notification .activity-notification__activity_response blockquote {
+	color: var(--primary, #DDD) !important;
+}
+
+.notifications_page .marker_tooltip {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD) !important;
+	border-color: var(--border, #444) !important;
+}
+
+.notifications_page .marker_tooltip_header {
+	background: linear-gradient(to bottom, var(--post, #111) 0%, #000 100%);
+	color: var(--primary, #DDD);
+	border-bottom-color: var(--border, #444);
+}
+
+.notifications_page .marker_tooltip td {
+	color: var(--primary, #DDD);
+	border-top-color: var(--border, #444);
+	border-bottom-color: var(--border, #444);
+}
+
+.notifications_page #ui_activity_feed .is_sticky .sticky_float {
+	background-color: #000 !important;
+	top: 55px !important;
+}
+
+/*========================================popup======================================*/
+.popover--activity-popover .activity-popover-header .selected-blog {
+	color: var(--primary, #DDD);
+}
+
+.popover--activity-popover .blog-activity .blog-activity-content {
+	border-top-color: var(--border, #444);
+}
+
+.popover--activity-popover .blog-activity-content .date_header, 
+.popover--activity-popover .blog-activity-content .date_header.date_activity {
+	background-color: var(--menu-header, #000);
+	color: var(--primary, #DDD);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover, 
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover.is_friend {
+	background-color: var(--accent-hi);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:not(:first-child) {
+	border-top-color: var(--border, #444);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity-content 
+.activity-notification {
+	background-color: var(--popover, #111);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification .activity a {
+	color: var(--primary, #DDD);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification .activity {
+	color: var(--secondary, #888) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification .conversational {
+	background-color: var(--bubble, #444) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification .conversational .activity a {
+	color: var(--primary, #DDD);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification .conversational .activity, 
+.popover--activity-popover .blog-activity-content 
+.activity-notification .conversational .activity .is_part_reblog {
+	color: var(--secondary, #888);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover {
+	background-color: var(--accent-hi);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover .activity a {
+	color: var(--primary-selected, #111);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover .activity {
+	color: var(--secondary, #888) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover .conversational {
+	background-color: var(--special-bubble, #222) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover .conversational .activity a {
+	color: var(--primary, #DDD);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover .conversational .activity, 
+.popover--activity-popover .blog-activity-content 
+.activity-notification:hover .conversational .activity .is_part_reblog {
+	color: var(--secondary, #888);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity-content 
+.activity-notification:active {
+	background-color: var(--accent-hi2);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend {
+	background-color: var(--accent-hi-text);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend .activity a {
+	color: var(--accent-hi2);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend .activity {
+	color: var(--primary, #DDD) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend .conversational {
+	background-color: var(--special-bubble, #222) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend .conversational .activity a {
+	color: var(--accent-hi2);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend .conversational .activity, 
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend .conversational .activity .is_part_reblog {
+	color: var(--secondary, #888);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover {
+	background-color: var(--accent-hi);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .activity a {
+	color: var(--primary-selected, #111);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .activity {
+	color: var(--secondary, #888) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .conversational {
+	background-color: var(--bubble, #444) !important;
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .conversational {
+	background-color: var(--bubble, #444);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .conversational .activity a {
+	color: var(--primary, #DDD);
+}
+
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .conversational .activity, 
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:hover .conversational .activity .is_part_reblog {
+	color: var(--secondary, #888);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity-content 
+.activity-notification.is_friend:active {
+	background-color: var(--accent-hi2);
+}
+
+/*=====================================*/
+.popover--activity-popover .blog-activity .blog-activity-more {
+	background-color: var(--post, #111);
+	color: var(--secondary, #888);
+	border-top-color: var(--border, #444);
+}

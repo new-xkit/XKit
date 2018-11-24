@@ -1,0 +1,217 @@
+/*=====================================page-likes====================================*/
+/*https://www.tumblr.com/likes*/
+
+/*===================================page-following==================================*/
+/*https://www.tumblr.com/following*/
+#dashboard_useraction_following .l-content, 
+#dashboard_useraction_following #tabs {
+	background-color: var(--post, #111) !important;
+}
+
+#dashboard_useraction_following #tabs .tab.selected {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+a.tab.selected {
+	pointer-events: none;
+	background-color: unset;
+	color: var(--primary, #DDD);
+}
+
+#invite_someone {
+	background-color: var(--menu-header, #000);
+}
+
+.follower {
+	background-color: unset;
+}
+
+.follower.alt {
+	background-color: var(--post, #111);
+}
+
+.last_updated {
+	color: var(--secondary, #888);
+}
+
+.snowman-icon:before {
+	color: var(--secondary, #888);
+}
+
+.chrome.clear {
+	background-color: unset;
+	color: var(--primary, #DDD);
+	border-color: var(--border, #444);
+}
+
+.chrome.clear:active {
+	background-color: rgba(255, 255, 255, 0.1);
+	color: var(--primary, #DDD);
+}
+
+#dashboard_useraction_following #right_column {
+	background: unset;
+	padding: 0px;
+}
+
+.grey_note {
+	background-color: rgba(255, 255, 255, 0.05);
+	color: var(--secondary, #888);
+}
+
+#pagination {
+	background-color: unset;
+}
+
+/*===================================page-followers==================================*/
+/*https://www.tumblr.com/blog/USERNAME/followers*/
+#left_column.followers, 
+.white_pane, 
+.white_pane .pagination {
+	background-color: var(--post, #111);
+}
+
+.white_pane h1 {
+	color: var(--primary, #DDD);
+}
+
+.follower.alt {
+	background-color: var(--menu-header, #000);
+}
+
+input.text_field {
+	background-color: #000;
+	color: var(--primary, #DDD);
+	border-color: var(--border, #444);
+}
+
+.user-is-friend-bubble, 
+.user-is-friend-bubble .popover .popover_inner {
+	background-color: #000;
+	color: var(--primary, #DDD);
+	border-color: var(--special-border, #222);
+	box-shadow: inset 0 1px 0 var(--border, #444);
+}
+
+/*====================================page-drafts====================================*/
+/*https://www.tumblr.com/blog/USERNAME/drafts*/
+
+/*====================================page-queue=====================================*/
+/*https://www.tumblr.com/blog/USERNAME/queue*/
+.dashboard_options_form, 
+.tag_psa {
+	border: 1px solid var(--accent-hi-text);
+	color: var(--accent-hi2);
+}
+
+.dashboard_options_form .dashboard_options_form_disclaimer, 
+.dashboard_options_form .dashboard_options_form_disclaimer a {
+	color: var(--accent-hi);
+}
+
+.post_controls .post_control.post-control-icon.sort, 
+.post_controls .post_control.post-control-icon.move_to_top {
+	background-color: var(--primary, #DDD);
+}
+
+
+/*========================================popup======================================*/
+.popover--account-popover .popover_header {
+	background-color: var(--menu-header, #000);
+	border-bottom-color: var(--border, #444);
+	color: var(--primary, #DDD);
+}
+
+.popover--account-popover .popover_inner, 
+.popover--account-popover .popover_subsection {
+	background-color: var(--post, #111);
+}
+
+.popover--account-popover .popover_menu_item .popover_menu_item_anchor, 
+.popover--account-popover .popover_menu_item .popover_item_suffix {
+	color: var(--primary, #DDD) !important;
+}
+
+.popover--account-popover .popover_menu_item:hover {
+	background-color: var(--accent-hi) !important;
+	border-color: var(--border, #444) !important;
+}
+
+.popover--account-popover .popover_menu_item:active {
+	background-color: var(--accent-hi2) !important;
+}
+
+.popover--account-popover .popover_menu_item:hover .popover_menu_item_anchor, 
+.popover--account-popover .popover_menu_item:hover .popover_item_suffix, 
+.popover--account-popover .popover_menu_item:active .popover_menu_item_anchor, 
+.popover--account-popover .popover_menu_item:active .popover_item_suffix {
+	color: var(--accent-hi-text, #111) !important;
+}
+
+.popover--account-popover .popover_menu_item:hover a {
+	background-color: unset !important;
+}
+
+.popover--account-popover .popover_menu_item:last-child {
+	border-color: var(--border, #444);
+}
+
+.popover--account-popover .popover_menu_item_blog {
+	background-color: var(--post, #111);
+}
+
+.popover--account-popover .popover_menu_item_blog.popover_menu_item_blog, 
+.popover--account-popover .popover_menu_item_blog:hover:not(:first-child) {
+	border-color: var(--border, #444);
+}
+
+.popover--account-popover .blog-list-item:hover .blog-list-item-button {
+	color: var(--accent-hi-text);
+}
+
+.popover--account-popover .blog-list-item, 
+.popover--account-popover .popover_menu_item_blog_details {
+	background-color: var(--post, #111) !important;
+}
+
+.popover--account-popover .blog-list-item .blog-list-item-info-name {
+	color: var(--primary, #DDD);
+}
+
+.popover--account-popover .blog-list-item .blog-list-item-info-title {
+	color: var(--secondary, #888);
+}
+
+.popover--account-popover .blog-sub-nav-item .blog-sub-nav-item-label, 
+.popover--account-popover .blog-sub-nav-item .blog-sub-nav-item-data {
+	color: var(--primary, #DDD);
+}
+
+.popover--account-popover .blog-list-item:hover, 
+.popover--account-popover .blog-sub-nav-item:hover, 
+.popover--account-popover .blog-sub-nav-item.selected {
+	background-color: var(--accent-hi) !important;
+	box-shadow: -4px 0 0 var(--accent-hi), 10px 0 0 var(--accent-hi);
+}
+
+.popover--account-popover .blog-list-item:hover .blog-list-item-info-name, 
+.popover--account-popover .blog-list-item:hover .blog-list-item-info-title, 
+.popover--account-popover .blog-sub-nav-item:hover .blog-sub-nav-item-label, 
+.popover--account-popover .blog-sub-nav-item:hover .blog-sub-nav-item-data, 
+.popover--account-popover .blog-sub-nav-item.selected .blog-sub-nav-item-label, .popover--account-popover .blog-sub-nav-item.selected .blog-sub-nav-item-data {
+	color: var(--accent-hi-text);
+}
+
+.popover--account-popover .blog-list-item:active, 
+.popover--account-popover .blog-sub-nav-item:active {
+	background-color: var(--accent-hi2) !important;
+	box-shadow: -4px 0 0 var(--accent-hi2), 10px 0 0 var(--accent-hi2);
+}
+
+.popover--account-popover .blog-list-item:active .blog-list-item-info-name, 
+.popover--account-popover .blog-list-item:active .blog-list-item-info-title, 
+.popover--account-popover .blog-sub-nav-item:active .blog-sub-nav-item-label, 
+.popover--account-popover .blog-sub-nav-item:active .blog-sub-nav-item-data {
+	color: var(--accent-hi-text) !important;
+}

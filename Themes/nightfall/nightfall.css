@@ -1,10 +1,42 @@
 /* NAME Nightfall **/
-/* VERSION 1.0.0 **/
+/* VERSION 0.9.1 **/
 /* DESCRIPTION A theme for the more photo-sensitive / vampiric of us. **/
 /* DEVELOPER Motackt - https://github.com/motackt **/
 
-/*colour assets*/
+/*.tab_anchor = buttons in header bar*/
+/*.post_brick = small posts seen on explore and search screens*/
+/*.peepr_body = the side-drawer that opens when a blog is clicked in dash*/
+/*.rapid-recs = the 4 posts that Tumblr recommends when u rb a post*/
+/*.glass = the overlay on the rest of the page when reblogging or otherwise*/
+/*.split-button = reblog button*/
+/*.tab_notice = notification icon*/
+/*.toast = large notification u get in bottom-right that disppears automatically*/
+/*.ui_dialog_pos = when discarding a post*/
+/*.tmblr-truncated = "Keep Reading"*/
+/*.tumblelog_popover = placeholder popover that shows up when u hover over ppl's names*/
+/*.knight-rider-bar = loading tri-bar*/
+/*.icon_search = magnifying glass*/
+
+@import "nightfall_popover-general.css";
+@import "nightfall_account.css";
+@import "nightfall_activity.css";
+@import "nightfall_creating-new-blog.css";
+@import "nightfall_creating-new-post.css";
+@import "nightfall_reblogging-post.css";
+@import "nightfall_explore-search.css";
+@import "nightfall_inbox.css";
+@import "nightfall_messaging.css";
+@import "nightfall_notes.css";
+@import "nightfall_peepr.css";
+@import "nightfall_post-types.css";
+@import "nightfall_report.css";
+@import "nightfall_share.css";
+@import "nightfall_follow-pills.css";
+@import "nightfall_xkit-support.css";
+
 :root {
+	--accent-body: #5E312E ;
+	--accent-grad: repeating-linear-gradient(to bottom, #1F1C27, #5E312E 200vh, #1F1C27 400vh) !important;
 	--bg-colour: #222;
 	--post: #111;
 	--dog-ear: #888;
@@ -12,47 +44,100 @@
 	--special-border: #222;
 	--bubble: #444;
 	--special-bubble: #444;
-	--text: #DDD; /*change to more semantic "pri-text"*/
-	--dim-text: #666; /*change to more semantic "sec-text"*/
-	--selected-text: #111;
-	--disabled-text: #444;
+	--primary: #DDD;
+	--primary-selected: #111;
+	--primary-disabled: #444;
+	--secondary: #888;
+	--secondary-selected: #666;
+	--placeholder: #666;
+	--underline-colour: #888;
+	--link-bg: #000;
+	--link-bg-act: #111;
 	--popup-menu: #111;
-	--notes: #111;
+	--header: transparent;
+	--menu-header: #000;
+	--popover: #111;
+	--note: #111;
 	--thumb: #BBB;
 	--thumb-hover: #FFF;
 	--tag: #222;
 	--loading: #DDD;
-	--glass: rgba(50,53,60,0.95);
+	--glass: rgba(50, 53, 60, 0.95);
 	--accent: hsl(316, 33%, 51%);
 	--accent-hi: hsl(316, 21%, 90%);
 	--accent-hi2: hsl(315, 34%, 80%);
 	--accent-hi-text: hsl(316, 30%, 25%);
 	--accent-sel: hsl(316, 33%, 49%);
+	--accent-glass: hsla(316, 62%, 82%, 0.12);
+	--danger: #d95e40;
+	--happy: #56bc8a;
+	--input-bg: #000;
 }
 
-/*bg of whole page*/
 body {
-	background: url("https://gogetfunding.com/wp-content/uploads/2015/11/4967332/img/road-street-blur-blurred.jpg") center #000000 repeat fixed !important;
-	background-size: cover !important;
+	background-color: var(--accent-body);
+	background-image: var(--accent-grad);
+}
+
+@media (pointer: fine) {
+	body {
+		background: url("https://gogetfunding.com/wp-content/uploads/2015/11/4967332/img/road-street-blur-blurred.jpg") center repeat fixed !important;
+		background-size: cover !important;
+	}
+}
+
+a, 
+body {
+	color: var(--primary, #DDD);
+}
+
+input, 
+textarea {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
 }
 
 /*header*/
-/*bg color*/
-.l-header-container--refresh {
+.l-header-container {
 	background-color: rgba(50,53,60,0.67);
 }
 
-/*notification colors*/ /*for all notifications on tumblr?*/
-.selected .tab_notice {
-	background: var(--accent);
+.search_popover {
+	background-color: var(--menu-header, #000);
 }
 
-.tab-bar-container .tab_notice {
-	background: var(--accent);
+.search_popover .search_results_section .search_subheading {
+	background-color: var(--menu-header, #000);
+	color: var(--primary, #DDD);
+	text-shadow: unset;
 }
-/*notification colors done*/
 
-/*buttons*/
+/*magnifying glass*/
+.ui_search.active .search_form_field:before, 
+.ui_search.selected .search_form_field:before {
+	color: var(--primary, #DDD);
+}
+
+#search_query {
+	background-color: rgba(0, 0, 0, 0.15);
+	color: var(--primary, #DDD);
+}
+
+.active #search_query {
+	background-color: var(--post, #111);
+}
+
+.tab_notice {
+	background-color: var(--accent) !important;
+	background-clip: unset;
+	border-color: var(--accent) !important;
+}
+
+.tab_notice .tab_notice_value {
+	color: hsla(0, 0%, 100%, 0.6) !important;
+}
+
+
 .tab_bar .tab_anchor {
 	color: var(--compose, #FFF);
 	opacity: 0.5;
@@ -62,88 +147,49 @@ body {
 	fill: var(--compose, #FFF);
 	opacity: 0.6;
 }
-/*buttons done*/
 /*header done*/
 
-/*right column*/
-/*bg*/
-.l-container.l-container--two-column .right_column, 
-.l-container.l-container--two-column-dashboard .right_column {
-	background-color: rgba(1,1,1,0);
+.l-container.l-container--two-column .l-content, 
+.l-container.l-container--two-column-dashboard .l-content {
+	background-color: transparent;
 }
 
-/*bg of items*/
+#right_column {
+	background: linear-gradient(to bottom, transparent 0%, rgba(50, 53, 60, 0.47) 50%, transparent 100%);
+	padding: 0px 10px;
+}
+
 .controls_section li {
-	background: rgba(1,1,1,0);
+	background-color: transparent;
 }
 
-/*bg of items when hovering*/
-.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+.controls_section li:not(.section_header):not(.selected_blog):hover {
 	background-color: rgba(50,53,60,0.15);
 }
 
-/*bg just to left of Follow buttons*/
-.identity-refresh .controls_section.user_list li .follow_list_item_blog:before, 
-.identity-refresh .controls_section.user_list li:hover .follow_list_item_blog:before {
-	background: unset;
-	border-right: none;
+.controls_section.user_list li .follow_list_item_blog:before, 
+.controls_section.user_list li:hover .follow_list_item_blog:before {
+	background-image: unset !important;
+	border-right: none !important;
 }
 
-/*Follow buttons*/
 .plus-follow-button {
-	color: var(--border, #444); /*CHANGE?*/
+	background-color: hsla(0, 0%, 100%, 0.2);
+	color: #BBB;
 }
 
 .plus-follow-button:hover {
-	background: var(--accent);
-}
-/*Follow buttons done*/
-
-/*little X to right of Follow buttons*/
-.identity .controls_section .item .icon_close {
-	color: var(--border, #444); /*CHANGE?*/
+	background-color: var(--accent) !important;
 }
 
-/*the Follow buttons in the Recommended Blogs section specifically*/
-.identity .controls_section .item:hover .follow:hover {
-	background: var(--accent);
+.plus-follow-button ~ .dismiss .icon_close:before {
+	color: var(--primary, #DDD) !important;
 }
 
-/*gradient near radar avatar*/
-.identity-refresh .radar .radar_footer .radar_avatar:before {
-	background: unset;
+#left_column {
+	background-color: transparent;
 }
 
-/*gradient underneath radar post*/
-#right_column:after {
-	background: none !important;
-}
-/*right column done*/
-
-/*bg of both columns*/
-.l-container.l-container--two-column .l-content, 
-.l-container.l-container--two-column-dashboard .l-content {
-	background-color: rgba(1,1,1,0);
-}
-
-/*left column*/
-/*bg*/
-.l-container.l-container--two-column-dashboard .left_column {
-	background-color: rgba(1,1,1,0);
-}
-
-/*
-.post {
-	background: blue;
-	border-radius: 20px;
-}
-
-.post-container {
-	background: transparent;
-}
-*/
-
-/*bg of avatar column*/
 .post_avatar,
 .post_avatar .post_avatar_link {
 	background-color: transparent;
@@ -154,14 +200,15 @@ body {
 	background: transparent !important;
 }
 
-/*this isn't in html???*/
 .rapid-recs-container .rapid-recs {
-	background-image: linear-gradient(to bottom,rgba(68, 76, 88, 0)0%,rgba(44, 47, 51, 0.18) 15%,rgba(44, 47, 51, 0.18) 85%,rgba(68, 76, 88, 0)100%);
+	background-image: linear-gradient(to bottom, rgba(68, 76, 88, 0) 0%, rgba(44, 47, 51, 0.18) 15%, rgba(44, 47, 51, 0.18) 85%, rgba(68, 76, 88, 0) 100%);
 }
-/*left column done*/
 
-/*re-organise these*/
-/*when reblogging + looking at sidebar in dashboard + creating new post + discarding, change bg color to header black*/
+.rapid-recs-container .rapid-recs .micro-post-list .post_micro {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 3px;
+}
+
 .post-forms-glass, 
 .ui_peepr_glass, 
 .blue#glass_overlay, 
@@ -171,82 +218,49 @@ body {
 	background-color: var(--glass);
 }
 
-/*change reblog button to notification red*/
-.post-form--controls .controls-container .post-form--save-button .split-button, 
-.post-form--controls .controls-container .post-form--save-button .split-button .button-area, 
-.post-form--controls .controls-container .post-form--save-button .split-button .button-area.disabled, 
-.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area, 
-.post-form--controls .controls-container .post-form--save-button .split-button:active {
-	background-color: var(--accent);
-	border-color: var(--accent);
+.split-button, 
+.split-button .button-area, 
+.split-button .button-area.disabled, 
+.split-button .dropdown-area, 
+.split-button:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
 }
 
-.post-form--controls .controls-container .post-form--save-button .split-button .button-area:focus, 
-.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area:focus {
-	background-color: var(--accent-sel);
-	border-color: var(--accent-sel);
+.split-button .button-area:focus, 
+.split-button .dropdown-area:focus {
+	background-color: var(--accent-sel) !important;
+	border-color: var(--accent-sel) !important;
 }
 
-.post-form--controls .controls-container .post-form--save-button .split-button .button-area:active, 
-.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area:active {
-	background-color: var(--accent);
-	border-color: var(--accent);
+.split-button .button-area:active, 
+.split-button .dropdown-area:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
 }
 
-/*change default submit aeroplane symbol's colour AND ellipsis in bubble when u edit photos*/
-.messaging-share-post .messaging-share-post-message .compose-text-input-container .submit-button .submit, 
-.overlay-button.active .icon {
-	color: var(--accent);
-}
-
-/*making an audio post*/
-.post-form--form .audio-search-results-field .audio-result-set .result.cycled, 
-.post-form--form .audio-search-results-field .audio-result-set .result:hover {
-	background-color: var(--accent-hi);
-	color: var(--accent-hi-text);
-}
-
-/*change new messages colour to red*/
-.messaging-inbox .inbox-conversations .is-unread.inbox-conversation .name-container {
-	color: var(--accent);
-}
-
-/*change notification number colour to same white as header icons*/
-.tab_notice .tab_notice_value {
-	color: hsla(0,0%,100%,0.6);
-}
-
-/*make toasts not blue*/
 .toastr .toast {
 	background: transparent;
 }
 
-/*to get rid of section divider graphic when looking at activity page*/
-.notifications_page .section.divider {
-	background: unset;
+.notification {
+	border-radius: 3px;
 }
 
-/*for notifications from minimised chat windows*/
-.tab-notice--outlined, 
+.binary-switch input[type=checkbox]:checked ~ .binary-switch-track, 
 .binary_switch input[type="checkbox"]:checked ~ .binary_switch_track {
 	background-color: var(--accent);
 	border-color: var(--accent);
 }
 
-/*change discard button to notification red*/
-.ui_dialog .chrome.blue {
+.ui_dialog_pos .ui_button.blue {
 	background-color: var(--accent);
 	border-color: var(--accent);
 }
 
-.ui_dialog .chrome.blue:active {
+.ui_dialog_pos .ui_button.blue:active {
 	background-color: var(--accent);
 	box-shadow: none;
-}
-
-/*when sharing post via email*/
-.binary-switch input[type=checkbox]:checked~.binary-switch-track {
-	background-color: var(--accent);
 }
 
 .blue.tx-button {
@@ -266,33 +280,6 @@ body {
 	background-color: var(--accent);
 	border-color: var(--accent);
 }
-/*when sharing post via email done*/
-
-/*for answering asks*/
-.chrome.blue {
-	background-color: var(--accent);
-	border-color: var(--accent);
-}
-
-.chrome.blue[disabled], 
-.chrome.blue.disabled, 
-.chrome.blue[disabled]:active, 
-.chrome.blue.disabled:active {
-	background-color: var(--accent);
-	border-color: var(--accent);
-}
-
-.chrome.blue:active {
-	background-color: var(--accent);
-	border-color: var(--accent);
-}
-/*for answering asks done*/
-
-/*messaging pop-up conversation pill "X unread messages"*/
-.messaging-conversation--open button.themed {
-	background-color: var(--accent);
-	border-color: var(--accent);
-}
 
 /*when clicking on down arrows, adjust colour*/
 .blog-selector-container .selected-blog .caret.is-open, 
@@ -300,2621 +287,77 @@ body {
 	color: var(--accent);
 }
 
-/*down arrow when selecting text editor*/
-.flat_select select:focus ~ .icon {
-	color: var(--accent);
-}
-
-/*Keep Reading on posts*/
-.post-content-text .tmblr-truncated .tmblr-truncated-link, 
-.post-content-text .tmblr-truncated:after, 
-.post .post_body .tmblr-truncated .tmblr-truncated-link, 
-.post .post_body .tmblr-truncated:after, 
-.reblog-content .tmblr-truncated .tmblr-truncated-link, 
-.reblog-content .tmblr-truncated:after {
-	color: var(--accent);
-	border-bottom: unset;
-}
-
-/*change tick on report abuse form*/
-.form-container .form-row.checkmark-row .option-radio:checked+.option-label:after {
-	color: var(--accent);
-}
-
-/*change filtered tags shown on nsfw posts*/
-.post .post_content_inner.safemode .link, 
-.post .post_content_inner.tagfiltering .link {
-	color: var(--accent);
-}
-
-/*when hovering over pop menu items*/
-.pop-menu .item-option:hover {
-	background-color: var(--accent-hi);
-}
-
-/*highlight in pop menus*/
-.info_popover li:hover, 
-.popover_menu_item.keyboard_focus, 
-.popover_menu_item:hover, 
-.messaging-inbox .inbox-conversations .inbox-conversation:hover {
-	background-color: var(--accent-hi);
-}
-
-/*highlight text in pop menus*/
-.post-activity-actions-popover .popover-inner>ul button:hover, 
-.popover_menu_item.keyboard_focus a, 
-.popover_menu_item:hover a, 
-.share_options .popover_menu_item.keyboard_focus a.external:after, 
-.share_options .popover_menu_item:hover a.external:after {
-	color: var(--accent-hi-text);
-}
-
-/*highlight items in account pop menu when hovering*/
-.popover--account-popover .popover .popover_menu_item:hover, 
-.blog-list-item.blog-list-item--on-light:hover, 
-.blog-sub-nav-details .blog-sub-nav-item.currentItem, 
-.blog-sub-nav-details .blog-sub-nav-item.selected, 
-.blog-sub-nav-details .blog-sub-nav-item.selected .blog-sub-nav-item-link, 
-.popover_menu_item:hover .blog-sub-nav-details .blog-sub-nav-item.selected .blog-sub-nav-item-link, 
-.blog-sub-nav-details .blog-sub-nav-item:hover {
-	background-color: var(--accent-hi);
-	color: var(--accent-hi-text);
-}
-
-.blog-list-item.blog-list-item--on-light:hover, 
-.blog-sub-nav-details .blog-sub-nav-item.currentItem, 
-.blog-sub-nav-details .blog-sub-nav-item.selected, 
-.blog-sub-nav-details .blog-sub-nav-item:hover {
-	box-shadow: -4px 0 0 var(--accent-hi), 10px 0 0 var(--accent-hi);
-}
-
-/*highlight items in account pop menu when activated*/
-.popover--account-popover .popover .popover_menu_item:active, 
-.blog-list-item.blog-list-item--on-light:active, 
-.blog-sub-nav-details .blog-sub-nav-item:active, 
-.popover--account-popover .popover .blog-list-item:active, 
-.popover--account-popover .popover .blog-sub-nav-item:active, 
-.popover--account-popover .popover .popover_menu_item:not(.popover_menu_item_blog):active {
-	background-color: var(--accent-hi2);
-	color: var(--accent-hi-text);
-}
-
-.blog-list-item.blog-list-item--on-light:active, 
-.blog-sub-nav-details .blog-sub-nav-item:active, 
-.popover--account-popover .popover .blog-list-item:active, 
-.popover--account-popover .popover .blog-sub-nav-item:active {
-	box-shadow: -4px 0 0 var(--accent-hi2), 10px 0 0 var(--accent-hi2);
-}
-
-.popover--account-popover .popover .popover_menu_item:hover .popover_menu_item_anchor, 
-.popover--account-popover .popover .popover_menu_item:hover .popover_item_suffix, 
-.blog-list-item.blog-list-item--on-light:hover .blog-list-item-button, 
-.blog-list-item.blog-list-item--on-light:hover .blog-list-item-info-title, 
-.blog-list-item .blog-list-item-anchor, 
-.blog-sub-nav-details .blog-sub-nav-item.currentItem .blog-sub-nav-item-label, 
-.blog-sub-nav-details .blog-sub-nav-item.selected .blog-sub-nav-item-label, 
-.blog-sub-nav-details .blog-sub-nav-item:hover .blog-sub-nav-item-label, 
-.blog-sub-nav-details .blog-sub-nav-item.currentItem .blog-sub-nav-item-data, 
-.blog-sub-nav-details .blog-sub-nav-item.selected .blog-sub-nav-item-data, 
-.blog-sub-nav-details .blog-sub-nav-item:hover .blog-sub-nav-item-data {
-	color: inherit;
-}
-/*highlight items in account pop menu done*/
-
-/*highlight items in search screen pop menus*/
-.search_control_items .menu_item:hover {
-	background-color: var(--accent-hi);
-	color: var(--accent-hi-text);
-}
-
-/*change selection colour in html and markdown editors*/
-.ace-post-form .ace_selection {
-	background-color: var(--accent);
-	filter: opacity(0.2);
-}
-
-/*change follow and create new message button colours*/
-.reblog_follow_button .follow-text, 
-.worded-follow-button .follow-text, 
-.search-follow-button .follow-text, 
-.worded-follow-button .follow-text, 
-.messaging-inbox .inbox-compose-toggle .compose-start {
-	color: var(--accent);
-}
-
-/*hide system scroll bar*/
-.messaging-conversation-popovers .messaging-open-conversations .popover--conversation-popover .conversation-main .tx-scroll .tx-scroll-container--vertical {
-	padding-right: 20px !important;
-}
-/*re-organise these done*/
-
-/*change colour of most text to smth whiter*/
-a, 
-body, 
-.peepr-body .indash_blog .post_content h2 {
-	color: var(--text, #BBB);
-}
-
-/*underline colour for hyperlinks*/
 .post-content-text a, 
 .post .post_body a, 
 .reblog-content a {
 	background-image: unset;
 	text-decoration: underline;
-	text-decoration-color: var(--underline-colour, #888); /*MAKE VAR*/
+	text-decoration-color: var(--underline-colour, #888);
 }
 
-/*underline colour for hyperlinks when hovering*/
 .post-content-text a:hover, 
 .post .post_body a:hover, 
 .reblog-content a:hover {
 	background-image: unset;
-	text-decoration-color: var(--text, #BBB);
+	text-decoration-color: var(--primary, #DDD);
 }
 
-/*for hyperlinks that are blog names*/
-a.reblog-tumblelog-name.post_info_link,
-.post-content-text .note_wrapper .note_item .answerer .name, 
-.post-content-text .note_wrapper .note_item .asker .name, 
-.post .post_body .note_wrapper .note_item .answerer .name, 
-.post .post_body .note_wrapper .note_item .asker .name, 
-.reblog-content .note_wrapper .note_item .answerer .name, 
-.reblog-content .note_wrapper .note_item .asker .name {
-	background-image: unset;
-	text-decoration: unset;
+/*blog names*/
+.post_info_link, 
+.name {
+	background-image: unset !important;
+	text-decoration: unset !important;
 }
 
-/*post text colour (NOTE: also includes reblogger name in post headers)*/
-.post_full .post_header .post_info .post_info_link:first-child, 
-.post.new_post .new_post_label {
-	color: var(--text, #BBB);
+.ask-form .ask-question, 
+.ask-form .ask-anonymously-label {
+	color: var(--primary, #DDD);
 }
 
-/*post colour*/
-.post.post_full, 
-.new_post_buttons_container, 
-.peepr-body .indash_blog .post {
-	/*background: var(--post, #111)/*; /*note this must be bg, not bg-color, bc it replaces a gradient*/
-	background: linear-gradient(225deg, #111 0%, #111 12px, #111 12px, #111 100%);
+/*when loading tumblelog*/
+.tumblelog_popover .recent_posts {
+	background-color: var(--post, #111);
 }
 
-/*post hover colour*/
-.post.post_full:hover {
-	/*background: var(--post, #111);*/
-	background: linear-gradient(225deg, transparent 0%, transparent 12px, #111 12px, #111 100%);
-}
-
-/*post colour (for posts with no dog-ear)*/
-.post-transition-background {
-	background: var(--post, #111);
-}
-
-/*rb icon & rebloggee name in post header*/
-.post .post_info .reblog_icon, 
-.post_full .post_info .post_info_fence .reblog_source .post_info_link {
-	color: var(--dim-text, smth); /*CHANGE THIS*/
-}
-
-/*for links in posts*/
-.post_full.is_link .link-button {
-	background-color: #111; /*CHANGE THIS*/
-}
-
-/*for links in posts*/
-.post_full.is_link .link-button.link-button--default .info-container .title,
-.post_full.is_link .link-button.link-button--default .info-container .excerpt {
-	color: #888; /*MAYBE #BBB?*/ /*CHANGE THIS*/
-}
-
-/*for links in posts: url*/
-.post_full.is_link .link-button.link-button--default .info-container .publisher-container .publisher {
-	color: #888; /*MAYBE #BBB?*/ /*CHANGE THIS*/
-}
-
-/*reblog border colours*/
-.reblog-list, 
-.reblog-trail--original-post {
-	border-top: 1px solid #444;
-	border-top-color: var(--border, #444);
-}
-
-/*reblog border colours*/
-.reblog-list-item {
-	border-bottom: 1px solid #444;
-	border-bottom-color: var(--border, #444);
-}
-
-/*remove white background behind source*/
-.post .post-source-footer {
+.tumblelog_popover .popover_inner {
 	background: unset;
 }
 
-/*make changes to whatever this tag is, so it's less crowded and matches colour scheme*/
-.post-content-text pre, 
-.post .post_body pre, 
-.reblog-content pre {
-	padding: 5px;
-	color: #BBB;
-	background: #000;
-	overflow-x: auto;
+.tumblelog_popover .navigation:before {
+	border-radius: 2px 2px 0px 0px;
 }
 
-/*filtered nsfw posts*/
-/*change background colour*/
-.post .post_content_inner.safemode, 
-.post .post_content_inner.tagfiltering {
-	background: #000; /*CHANGE TO VAR*/
+.knight-rider-bar {
+	background-color: var(--loading, #DDD);
 }
 
-/*change text colour "Are you sure you want to see"*/
-.safemode span.message {
-	color: var(--dim-text, #888);
-}
-
-/*change button colours*/
-.post .post_content_inner.safemode .tx-button, 
-.post .post_content_inner.tagfiltering .tx-button {
-	background-color: transparent;
-	border-color: var(--border, #444);
-	color: var(--dim-text, #888);
-}
-
-/*filtered nsfw posts done*/
-
-/*post footer colours (source, tags, notes, icons)*/
-.post .post-source-footer, 
-.post .post-source-footer a.post-source-link, 
-.post_full .post_tags .post_tag, 
-.post_full .post_footer, 
-.post_controls .post_control:before {
-	color: var(--dim-text, #888);
-}
-
-/*messaging pop-up background and text colour, also the bubbles when sharing a post (ie Permalink, Embed, ...)*/
-/*appears "data-js-main style" is a style on the element itself, so must override with !important*/
-.messaging-conversation--open .conversation-compose, 
-.messaging-conversation--open .conversation-compose .text-input-container .text-input, 
-.messaging-conversation--open .conversation-compose .compose-text-input-container, 
-.messaging-conversation-popovers .messaging-open-conversations .popover--conversation-popover .messaging-conversation--open .conversation-main, 
-.messaging-share-post .messaging-share-post-external-networks .messaging-share-post-external-network:before {
-	background: var(--popup-menu, #111) !important;
-	color: var(--text, #BBB) !important;
-}
-
-/*message bubble background and text colour*/
-.messaging-conversation--open.theme-background-white .conversation-message .message-bubble, 
-.messaging-conversation--open .conversation-message .message-bubble {
-	background: var(--bubble, #444);
-	color: var(--text, #BBB);
-}
-
-/*share post in messaging pop-up*/
-.messaging-share-post .messaging-share-post-external-networks {
-	background: #000 !important;
-}
-
-/*sending pictures in messaging pop-up*/
-.messaging-conversation--open .conversation-preview {
-	background: var(--popup-menu, #111) !important;
-}
-
-/*ask bubbles*/
-.post_full.is_note .post_body .note_item, 
-.peepr-body .indash_blog .post_chrome.answer .post_body .note_item {
-	background: var(--bubble, #444);
-	border-color: #444;
-}
-
-/*ask bubble > bit*/
-.post_full.is_note .nipple, 
-.peepr-body .indash_blog .post_chrome.answer .nipple, 
-.post_brick.is_note .nipple {
-	border-left-color: var(--bubble, #444);
-}
-
-/*blockquote line thingy*/
-.peepr-body .indash_blog .post_content blockquote {
-	border-left-color: var(--text, #BBB);
-}
-
-/*notes popup*/
-/*Loading... when opening notes, and it's Reply button*/
-.popover_gradient>.popover_inner{
-	background: var(--notes, #111);
-	box-shadow: inset 0 1px 0 #444;
-}
-
-/*background of notes popup*/
-.post-activity-notes, 
-.post-activity-note, 
-.editor-slot, 
-.radar .radar_controls, 
-.post_controls .post_control.reblog.reblogged:after {
-	background-color: var(--post, #111);
-	color: var(--text, #BBB); /*not necessary?*/
-}
-
-/*lines around the notes popup*/
-.post-activity .header-container-inner>*, 
-.messaging-share-post .messaging-share-post-search {
-	border-bottom-color: var(--border, #444);
-}
-
-/*lines around the notes popup*/
-.post-activity-reply {
-	border-top-color: var(--border, #444);
-}
-
-/*lines around the notes popup*/
-.post-activity-popover {
-	border-color: var(--border, #444);
-}
-
-/*header*/
-/*colour of "XXX likes and XXX reblogs" text*/
-p.rollup-notes-summary {
-	color: var(--text, #111);
-}
-
-/*colour of tags-mode button*/
-.post-activity-header .return:before,
-.post-activity-header .tags-mode-button:before {
-	color: #BBB;	
-}
-
-/*inside colour of subscription-status button*/
-.post-activity-header .subscription-status .inner {
-	fill: var(--post, #111);
-}
-
-/*outline colour of subscription-status button*/
-.post-activity-header .subscription-status .outer, 
-.post-activity-header .subscription-status .bolt {
-	fill: #BBB;
-}
-
-/*inside colour of subscription-status button when subscribed*/
-.post-activity-header .subscription-status.is-subscribed .inner {
-	fill: var(--dim-text, #888);
-}
-
-/*outline colour of subscription-status button when subscribed*/
-.post-activity-header .subscription-status.is-subscribed .outer, 
-.post-activity-header .subscription-status.is-subscribed .bolt {
-	fill: #FFF;
-}
-
-/*make cursor look like a pointer, bc clicking on this brings u to another screen*.
-.post-activity-rollups {
-	cursor: pointer !important;
-}
-/*header done*/
-
-/*text when making a comment*/
-.post-activity-header .primary-message, 
-.post-activity-reply .editor-wrapper .editor-slot .editor-placeholder {
-	color: var(--text, #BBB);
-}
-
-/*text of blog names and the comments in note (not reblogged blog names though)*/
-.post-activity-note-content .note-added-tags, 
-.post-activity-note-content .note-added-text, 
-.post-activity-note-content .note-text .note-text-link {
-	color: var(--text, #BBB) !important;
-}
-
-/*scrollbar thumb in notes popup*/
 .tx-scroll .tx-scrollbar-thumb {
 	background: var(--thumb, #BBB);
 }
 
-/*scrollbar thumb when hovered over*/
 .tx-scroll .tx-scrollbar-thumb:hover, 
 .tx-scroll .tx-scrollbar-thumb:active, 
 .tx-scroll .tx-scrollbar-track--active .tx-scrollbar-thumb {
 	background: var(--thumb-hover, #FFF);
 }
 
-/*background of note bubbles*/
-.with-commentary .post-activity-note-content {
-	background-color: var(--bubble, #444);
-}
-
-/*background of those who are followed*/
-.is-followed.without-commentary.post-activity-note {
-	background-color: var(--special-bubble, #444);
-	border-top-color: var(--special-border, #222);
-	border-bottom-color: var(--special-border, #222);
-}
-/*notes popup done*/
-
-/*when looking at blog in sidebar*/
-/*loading sideblog screen and bg sideblog colour*/
-.peepr-big-loader, 
-.peepr-body {
-	background: var(--bg-colour, #222) !important;
-}
-
-/*remove dumb gradient for tags in sidebar blog posts*/
-.peepr-body .indash_blog .post_tags:after {
+.editor-slot {
 	background: unset;
 }
 
-/*add some space so --bg-colour isn't flush with blog's selected colours*/
-.peepr-body .indash_blog .posts {
-	padding: 20px 20px 20px;
-}
-
-/*fix gif attribution colours*/
-.peepr-body .indash_blog .post_content figure>p.tmblr-attribution {
-	background-color: #000;
-	color: #888;
-}
-/*when looking at blog in sidebar done*/
-
-/*when reblogging*/
-/*"post" bg and text colour*/
-.post-container {
-	background-color: var(--post, #111);
-	color: var(--text, #BBB);
-}
-
-/*asks in the reblog "post"*/
-.post-composer_note-post .note_item, 
-.post_full.is_note .post-body .note_item {
-	background-color: var(--notes, #222);
-	border-color: var(--notes, #222);
-}
-
-/*the little > bit of an ask bubble*/
-.post-composer_note-post .nipple {
-	border-left-color: var(--bubble, #444);
-}
-
-/*remove white bg of where rb text is typed*/
 .editor-placeholder, 
 .editor-plaintext, 
 .editor-richtext {
-	background: unset;
-	color: inherit; /*not necessary?*/
-}
-
-/*placeholder rb text "Add a caption, if you like", and tag placeholder "#tags"*/
-.editor-placeholder {
-	color: var(--dim-text, #444) !important;
-}
-
-/*when removing reblogs, change colours*/
-.control-reblog-trail.removed .btn-show-trail {
-	color: var(--dim-text, #444);
-	border-top-color: var(--border, #444);
-	border-bottom-color: var(--border, #444);
-}
-
-/*rb text colour*/
-.editor-richtext p {
-	color: var(--text, #BBB);
-}
-
-/*add bg-color and padding to tags so they look nicer*/
-.post-form--tag-editor .tag-label {
-	color: var(--text, #BBB);
-	background-color: #222;
-	margin: 10px 10px 0px 0px;
-}
-
-/*tag colour when they're confirmed (diff between typing it, and having pressed enter/tab)*/
-.pop-menu button:not(.tx-button), 
-.post-form button:not(.tx-button) {
-	color: var(--text, #BBB);
-}
-
-/*make padding look nice with tag modifications*/
-.post-form--tag-editor {
-	padding: 5px 0px 10px 10px;
-}
-
-/*when hovering over tags, adjust colours*/
-.post-form--tag-editor .tag-label.hover-style, 
-.post-form--tag-editor .tag-label.selected {
-	background-color: var(--accent-hi2);
-	color: var(--accent);
-}
-
-/*make margins look nice with tag modifications before adding any tags*/
-.post-form--tag-editor .tag-input-wrapper {
-	margin-top: 10px;
-}
-
-/*text in header*/
-.post-form--header .tumblelog-select * {
-	color: unset !important;
-}
-
-/*text colour of blog names, and remove underline from these hyperlinks*/
-.post-container a {
-	color: unset;
-	border-bottom: unset;
-}
-
-/*changing blog pop menu bg-color*/
-.pop-menu {
-	background-color: var(--popup-menu, #111);
-}
-
-/*text colour for items in pop menu*/
-.pop-menu .item-option, 
-.popover--tumblelog-select-dropdown .item-option.select:after, 
-.popover--tumblelog-select-dropdown .ts-info, 
-.popover--tumblelog-select-dropdown .ts-name {
-	color: var(--text, #BBB);
-}
-
-/*text colour when hovering over an item in pop menu*/
-.pop-menu .item-option:hover, 
-.popover--tumblelog-select-dropdown .item-option.select:hover:after, 
-.popover--tumblelog-select-dropdown .pop-menu .item-option:hover .ts-info, 
-.popover--tumblelog-select-dropdown .pop-menu .item-option:hover .ts-name {
-	color: var(--selected-text, #111);
-}
-
-/*may need a --selected-dim-text-colour or --secondary-text-colour smth for smaller text*/
-
-/*rb controls (settings gear in upper right) menu*/
-.post-form--controls, 
-.pop-menu .form-group .group-content, 
-.pop-menu .form-group .group-label {
-	border-top-color: var(--border, #BBB);
-	color: var(--text, #BBB);
-}
-
-/*border just below reblogs when reblogging*/
-.control-reblog-trail .reblog-list .reblog-list-item:last-child {
-	border-bottom-color: var(--border, #BBB);
-}
-
-/*squiggly line behind Keep Reading break*/
-.post-content-text .editor .tmblr-truncated:before, 
-.post .post_body .editor .tmblr-truncated:before, 
-.reblog-content .editor .tmblr-truncated:before {
-	opacity: 1;
-}
-
-/*Keep Reading break*/
-.post-content-text .editor .tmblr-truncated .tmblr-truncated-link, 
-.post-content-text .editor .tmblr-truncated:after, 
-.post .post_body .editor .tmblr-truncated .tmblr-truncated-link, 
-.post .post_body .editor .tmblr-truncated:after, 
-.reblog-content .editor .tmblr-truncated .tmblr-truncated-link, 
-.reblog-content .editor .tmblr-truncated:after {
-	background-color: var(--post, #111);
-	color: var(--text, #BBB);
-}
-
-/*horizontal line*/
-.post-content-text hr, 
-.post .post_body hr, 
-.reblog-content hr {
-	border-top-color: var(--text, #BBB);
-}
-
-/*popup when searching for gifs bg colour*/
-.popover--gif-search {
-	background-color: var(--popup-menu, #111);
-}
-
-/*gif popup borders*/
-.popover--gif-search .gif-search-input {
-	border-bottom-color:  var(--border, #444);
-}
-
-/*when nothing turns up in popup gif search*/
-.popover--gif-search .gif-search-message {
-	background-color: var(--popup-menu, #111);
-	color: var(--text, #BBB);
-}
-
-/*WHAT IS THIS*/
-.info_popover li:hover {
-	color: #444;
-}
-
-/*WHAT IS THIS*/
-.info_popover .popover_inner a {
-	color: inherit;
-}
-
-/*show clearly what is being selected in html editor*/
-.html-mode .tab {
-	color: var(--dim-text, #444);
-}
-
-/*show clearly what is being selected in html editor*/
-.html-mode .tab.active, 
-.html-mode .tab:hover {
-	color: var(--text, #BBB);
-}
-/*show clearly what is being selected in html editor done*/
-
-/*adjust tooltip colours (circle with ? to the right)*/
-.dropzone-tooltip-popover {
-	background-color: var(--post, #111);
-	color: var(--text, #BBB);
-}
-
-/*down arrow when selecting text editor*/
-.flat_select .icon {
-	color: var(--text, #BBB);
-}
-
-/*change text colour of edits in reblog post settings*/
-.pop-menu input[type=text].field, 
-.post-form input[type=text].field {
-	color: var(--text, #BBB);
-}
-
-/*change transition colour when post shows it's being uploaded*/
-.post-form--guard {
-	background-color: var(--post, #111);
-}
-/*when reblogging done*/
-
-/*search popup menu when searching on dash*/
-/*bg colour which is a border colour in this case*/
-.search_popover {
-	background-color: #000;
-}
-
-/*sub heading colours*/
-.search_popover .search_results_section .search_subheading {
-	background-color: #000;
-	color: var(--text, #BBB);
-	text-shadow: unset;
-}
-
-/*search item text colour*/
-.popover_menu_item, 
-.popover_menu_item a {
-	color: var(--text, #BBB);
-}
-
-/*WHAT IS THIS*/
-.pop-menu .header-item {
-	border-top-color: #000;
-	border-bottom-color: #000;
-	background-color: #000;
-	color: #BBB;
-}
-
-/*magnifying glass in tumblr search bar*/
-.ui_search.active .search_form_field:before, 
-.ui_search.selected .search_form_field:before {
-	color: var(--text, #BBB);
-}
-
-/*tumblr search bar*/
-.ui_search.active .search_query, 
-.ui_search.selected .search_query {
-	background-color: var(--post, #111);
-	color: var(--text, #BBB);
-}
-
-/*activity popup*/
-/*border just below blog name*/
-.blog-activity .blog-activity-content {
-	border-top-color: var(--border, #444); *#000*/
-}
-
-/*subheading bg and text colours*/
-.ui_notes .date_header, 
-.ui_notes .date_header.date_activity {
-	background-color: #000;
-	color: var(--text, #BBB);
-}
-
-/*bg of friend notifications*/
-.ui_notes .activity-notification.is_friend {
-	background-color: #111; /*COME BACK*/
-}
-
-/*bg when hovering over friend notifications*/
-.ui_notes .activity-notification:hover.is_friend, 
-.ui_notes .activity-notification:hover {
-	background-color: #000; /*COME BACK*/
-}
-
-/*borders of all notifications*/
-.ui_notes .activity-notification+.activity-notification {
-	border-top-color: #444;
-}
-
-/*See Everything tab on bottom of popup*/
-.blog-activity .blog-activity-more {
-	background-color: var(--post, #111);
-	color: var(--dim-text, #444);
-	border-top-color: var(--border, #444);
-}
-
-/*user's blog name at top of popup*/
-.blog-selector-container .selected-blog {
-	color: var(--text, #BBB);
-}
-
-/*blockquote ig???*/
-.post-content-text blockquote, 
-.post .post_body blockquote, 
-.reblog-content blockquote {
-	border-left-color: var(--text, #BBB);
-}
-
-/*match style of tags in dashboard to tags when reblogging*/
-.post_full .post_tags .post_tag, 
-.post_brick .post_tags .post_tag {
-	background-color: var(--tag, #222);
-	margin: 10px 10px 0px 0px;
-	padding: 5px;
-	line-height: 15px;
-	border-radius: 3px;
-}
-
-.post_full .post_tags.fadeable, 
-.post_full .post_tags.fadeable-source, 
-.post_brick .post_tags .post_tag {
-	margin-top: 0px !important;
-}
-
-/*get rid of annoying space between tags*/
-.post .post_tags_inner {
-	font-size: 0px;
-}
-/*match style of tags in dashboard to tags when reblogging done*/
-
-/*give "ask X a question" a fun icon*/
-a.post_tag.ask.post_ask_me_link:before {
-	content: "\EA5B";
-	font-family: tumblr-icons, blank;
-	/*font-size: 20px;*/
-	font-size: initial;
-	padding-right: 5px;
-	font-weight: normal;
-	/*vertical-align: middle;*/
-}
-
-/*fine tuning the above*/
-a.post_tag.ask.post_ask_me_link:before {
-	font-size: 145%;
-	padding-right: 5px;
-	margin-left: -2px;
-	margin-top: -0.5%;
-	vertical-align: top;
-	display: inline-block;
-}
-
-/*
-.post .recommendation-reason-link:before {
-	content: "\EA99";
-}
-
-.recommendation-reason-footer .icon_search:before {
-	content: "";
-}
-*/
-
-/*make "ask X a question" more distinctive*/
-a.post_tag.ask.post_ask_me_link {
-	font-weight: bold;
-	vertical-align: top;
-	background-color: var(--note, #444);
-	color: var(--text, #DDD);
-}
-
-/*make Sources looks like tags*/
-.post .post-source-footer {
-	background-color: var(--tag, #222);
-	margin: 15px 10px 0px 20px;
-	padding: 5px;
-	line-height: 15px;
-	border-radius: 3px;
-	font-weight: bold;
-	white-space: nowrap;
-}
-
-/*fix spacing on Sources*/
-.post .post-source-footer .post-source-name-prefix, 
-.post .post-source-footer a.post-source-link {
-	/*display: inline;*/
-	/*vertical-align: baseline;*/
-	vertical-align: top;
-}
-
-/*give Source a fun icon; note m-l being px means padding will behave, unlike with %*/
-.post-source-footer:before {
-	content: "\EA70";
-	font-family: tumblr-icons, blank;
-	font-size: 170%;
-	padding-right: 2px;
-	margin-left: -4px;
-	vertical-align: top;
-	font-weight: normal;
-	display: inline-block;
-}
-
-/*make sources look distinctive*/
-/*
-.post .post-source-footer {
-	width: 100%;
-	margin-top: 10px;
-	margin-bottom: 5px;
-}
-.post .post-source-footer, 
-.post .post-source-footer a.post-source-link {
-	background-color: var(--tag, #222);
-	colorOFF: #444;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	margin-right: 0px;
-	font-weight: bold;
-}
-*/
-/*make sources look distinctive done*/
-
-/*make Followed Tags look like tags*/
-.post .recommendation-reason-link {
-	background-color: var(--tag, #222);
-	background-color: #56bc8a;
-	color: var(--post, #DDD) !important;
-	margin: 10px 10px 0px 0px;
-	padding: 5px;
-	line-height: 15px;
-	border-radius: 3px;
-}
-
-/*make Followed Tag clear that it's a tag, and fix that stupid whitespace spacing*/
-.post .recommendation-reason-link:before {
-	content: "#";
-	margin-right: -3%;
-}
-
-/*move magnifying glass closer to middle*/
-.post .recommendation-reason-link .icon_search {
-	top: 0px;
-}
-
-/*keep colour of magnifying glass and fix spacing*/
-.recommendation-reason-footer .icon_search:before {
-	color: #56bc8a;
-}
-
-/*fix spacing on Followed Tags*/
-.post .recommendation-reason-footer {
-	line-height: 25px;
-}
-
-/*friends who say things in note summaries*/
-.is-followed.with-commentary .post-activity-note-content {
-	background-color: var(--special-bubble, #222);
-	border-color: var(--special-border, #222);
-}
-/*activity popup done*/
-
-/*sending a post to someone*/
-/*when searching for blog names*/
-.messaging-share-post .messaging-share-post-search .search-input {
-	color: var(--text, #BBB);
-}
-
-/*name colour before selection*/
-.messaging-share-post .messaging-share-post-result .name {
-	color: var(--text, #BBB);
-}
-
-/*colour behind user's avatar on bottom*/
-.messaging-share-post .messaging-share-post-message, 
-.messaging-share-post .messaging-share-post-message .compose-text-input-container input, 
-textarea { 
-	background-color: var(--post, #111);
-}
-
-/*colour of text when adding a message on bottom*/
-.messaging-share-post .messaging-share-post-message .compose-text-input-container .text-input-container .text-input {
-	color: var(--text, #BBB);
-}
-
-/*colour just underneath bubbles (ie Permalink, Embed, ...)*/
-.messaging-share-post .messaging-share-post-external-networks .messaging-share-post-external-network {
-	color: #888;
-}
-
-/*when sharing post via email*/
-/*text when entering an email and message*/
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper>.external-network-subview .external-network-form-subview .input, 
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper>.external-network-subview .external-network-form-subview .textarea {
-	color: var(--text, #BBB);
-}
-
-/*subheading colour, also does it for Embed*/
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper>.header {
-	background-color: var(--subheading-colour, #000);; /*COME BACK TO THIS*/
-}
-
-/*background colour of popup, only shows a bit thru the cracks*/
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper, 
-.messaging-share-post .messaging-share-post-message .compose-text-input-container {
-	background-color: var(--post, #111);
-}
-
-/*border around email address*/
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper>.external-network-subview .external-network-form-subview .input {
-	border-color: var(--border, #444);
-}
-
-/*bit beneath text areas*/
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper>.external-network-subview .external-network-email-subview .reply-option, 
-.messaging-share-post .messaging-share-post-external-network-subview-wrapper>.external-network-subview .external-network-form-subview .footer {
-	background-color: var(--post, #111);
-	border-top-color: var(--border, #444);
-}
-
-/*bg of textarea*/
-input, 
-textarea {
-	background-color: var(--post, #111);
-}
-/*when sharing post via email done*/
-
-/*when reporting a post*/
-/*bg of sidebar*/
-.drawer, 
-.content-preview {
-	background-color: var(--bg-colour, #222);
-	color: var(--text, #BBB);
-}
-
-/*text colour of sidebar*/
-.form-container, 
-.form-container-static, 
-.form-container-static .form-header .form-heading, 
-.form-container .form-header .form-heading, 
-.form-container-static .form-header .form-description, 
-.form-container .form-header .form-description, 
-.form-container-static .form-subheading, 
-.form-container .form-subheading {
-	color: var(--text, #BBB);
-}
-
-/*bg-colour of items when hovering over them*/
-.form-container .form-row.checkmark-row:hover, 
-.form-container .option:hover {
-	background-color: var(--select-colour, #111); /*COME BACK TO THIS*/
-}
-
-/*borders around items*/
-.form-container .form-row.checkmark-row, 
-.form-container .form-row.ignore, 
-.content-preview .content-preview-toggle, 
-.form-container .option {
-	border-top-color: var(--border, #444);
-}
-
-/*border beneath items*/
-.form-container .form-row.ignore, 
-.form-container .options {
-	border-bottom-color: var(--border, #444);
-}
-
-/*border around offending post*/
-.content-preview .post {
-	border-color: var(--border, #444);
-}
-
-/*when specifying details about the offending post*/
-.form-container-static .flat_select.attached, 
-.form-container-static input.text_field, 
-.form-container-static textarea, 
-.form-container .flat_select.attached, 
-.form-container input.text_field, 
-.form-container textarea {
-	color: var(--text, #DDD);
-	border-color: var(--border, #444);
-}
-/*when reporting a post done*/
-/*sending a post to someone done*/
-
-/*when docking a video*/
-/*docked post colour*/
-.post .dockable_video_embed.docked_post_underlay {
-	background-color: var(--post, #111);
-}
-
-/*Put it back text and dash colour on OG post*/
-.post .dockable_video_placeholder {
-	color: var(--dim-text, #444); /*make it --border?*/
-	border-color: var(--border, #444);
-}
-/*when docking a video done*/
-
-/*on explore screen*/
-/*post colours*/
-.post_brick {
-	background-color: var(--post, #111);
-	color: var(--text, #BBB);
-}
-
-.post_brick.is_conversation .post_header, 
-.post_brick.is_note .post_header, 
-.post_brick.is_quote .post_header, 
-.post_brick.is_regular .post_header {
-	background-color: #111;
-	color: #BBB;
-	border-bottom-color: #444;
-}
-
-/*colour of alpha layer over Expand on posts*/
-.post_brick .expand-post-content, 
-.post_brick.is_photo .post_media+.expand {
-	background-color: var(--post, #444);
-	background-color: #444444e6;
-}
-
-.post_brick .post_tags:after {
-	background-image: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #111 80%);
-}
-
-.post-activity-note-content .more-actions, 
-.post-activity-reply .text-input, 
-.post-activity-actions-popover .popover-inner>ul button {
-	color: #BBB;
-}
-/*on explore screen done*/
-
-/*on search screen*/
-.l-container.l-container--flex .l-content {
-	background-color: unset;
-}
-/*on search screen done*/
-
-/*for video player controls*/
-/*
-.crt-skin-default .vjs-big-play-button:before {
-	background-image: linear-gradient(transparent 80%,rgba(255, 255, 255, 0.2))
-}
-
-.post_brick.is_video .post_media.embed_supported.blank .video_poster.has_poster .video_icon_wrapper, 
-.post_brick.is_video .post_media.inline .video_icon_wrapper, 
-.crt-skin-default .vjs-big-pause-button-icon, 
-.crt-skin-default .vjs-big-play-button-icon, 
-.crt-skin-default.vjs-playing .vjs-play-control:before, 
-.vjs-duration-display, 
-.crt-skin-default .vjs-hover-slider-time, 
-.crt-skin-default .vjs-fullscreen-control:before, 
-.crt-skin-default.vjs-fullscreen .vjs-fullscreen-control:before, 
-.crt-skin-default .vjs-control-bar .vjs-control, 
-.crt-skin-default .vjs-hd-toggle:before {
-	color: #111;
-}
-
-.crt-skin-default .vjs-play-progress, 
-.crt-skin-default .vjs-load-progress,  
-.crt-skin-default .vjs-hover-handle, 
-.crt-skin-default .vjs-seek-handle, 
-.crt-skin-default .crt-progress-tooltip {
-	background-color: #111;
-}
-
-.crt-skin-default .vjs-big-play-button {
-	background-color: rgba(255, 255, 255, 0.15)
-}
-*/
-/*for video player controls done*/
-
-/*for links*/
-.post_brick.is_link .link-button {
-	background-color: #000;
-}
-
-.post_brick.is_link .link-button.link-button--default .info-container .title, 
-.post_brick.is_link .link-button.link-button--default .info-container .excerpt {
-	color: #DDD;
-}
-/*for links done*/
-
-/*for answering asks*/
-.ask-form .ask-question {
-	color: #BBB;
-}
-
-/*names in ask bubbles*/
-.post-composer_note-post .asker, 
-.post-composer_note-post .answerer, 
-.post_full.is_note .asker, 
-.post_full.is_note .answerer, 
-.post-composer_note-post .asker .name, 
-.post-composer_note-post .answerer .name, 
-.post_full.is_note .asker .name, 
-.post_full.is_note .answerer .name {
-	color: #DDD;
-}
-
-/*pop-up messaging window*/
-.popover--inbox-popover .popover-inner {
-	background-color: #111;
-}
-
-.messaging-inbox .inbox-header, 
-.messaging-inbox .inbox-conversations .inbox-conversation {
-	border-bottom-color: #444;
-}
-
-.messaging-inbox .inbox-row {
-	color: inherit;
-}
-
-.messaging-inbox .inbox-conversations .inbox-conversation:hover .info-container{
-	color: #444;
-}
-
-/*comments are shown in this bubble, also appears in activity page for friends*/
-.ui_notes .activity-notification.is_friend .activity-notification__activity .activity-notification__activity_message.conversational {
-	background-color: #000;
-}
-
-/*box on bottom where loading bar is*/
-.messaging-inbox .inbox-pagination-loader {
-	border-top-color: var(--border, #444);
-}
-
-/*make unread indicator when messaging to match bg colour*/
-.popover--blog-selector-dropdown .avatar .unread-indicator {
-	border-color: transparent;
-}
-
-/*fix border colours*/
-.popover--account-popover .popover .popover_menu_item_blog.popover_menu_item_blog, 
-.popover--account-popover .popover .popover_menu_item_blog:hover:not(:first-child) {
-	border-color: var(--border, #444);
-}
-
-/*Creating New Message in message popup*/
-.messaging-inbox .inbox-compose .inbox-compose-input .input {
-	color: var(--text, #DDD);
-}
-
-.messaging-inbox .inbox-recipients h2 {
-	background-color: var(--header, #000);
-	color: var(--text, #DDD);
-	border-color: var(--border, #444);
-}
-
-.messaging-inbox .inbox-recipients .inbox-recipient {
-	border-color: var(--border, #444);
-}
-
-.flag--messaging-new-empty-inbox .messaging-inbox .inbox-row .info-container .send-link, .messaging-inbox .flag--messaging-new-empty-inbox .inbox-row .info-container .send-link {
-	color: var(--accent);
-}
-
-.messaging-inbox .inbox-recipients .selected {
-	background-color: var(--selected-item);
-}
-
-.messaging-inbox .inbox-recipients .selected .info-container {
-	color: var(--selected-text, #111);
-}
-
-.messaging-inbox .inbox-recipients .inbox-recipient.selected .info-container {
-	color: var(--text, #DDD);
-}
-/*Creating New Message in message popup done*/
-/*pop-up messaging window done*/
-
-/*pop-up activity window*/
-.ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_main .activity {
-	color: #888;
-}
-
-.ui_notes .activity-notification.is_friend .activity-notification__activity_main .activity, .ui_notes .activity-notification.is_friend .activity-notification__activity_main .activity a {
-	color: hsl(338, 48%, 69%);
-}
-
-/*when given option to Follow*/
-.ui_notes .activity-notification .activity-notification__icon .note_follow {
-	padding: 5px 10px;
-}
-/*pop-up activity window done*/
-
-/*pop-up account window*/
-.popover_header {
-	background-color: #000;
-	border-bottom-color: #444;
-	color: #BBB;
-}
-
-.popover--account-popover .popover .popover_menu_item .popover_menu_item_anchor {
-	color: #BBB;
-}
-
-.popover--account-popover .popover .popover_menu_item_blog.popover_menu_item_blog {
-	background-color: #111;
-}
-
-.popover_menu_item_blog > .popover_menu_item:hover a {
-	color: #BBB;
-}
-
-.popover_menu_item:last-child {
-	border-color: var(--border, #444);
-}
-
-/*needs some special rules for hover colours*/
-.popover--account-popover .popover .popover_menu_item:hover a {
-	color: var(--text, #DDD);
-}
-
-.popover--account-popover .popover .popover_menu_item:hover .blog-list-item-button {
-	color: var(--post, #111);
-}
-
-.popover--account-popover .blog-list-item:hover .blog-list-item-info, 
-.popover--account-popover .blog-list-item:hover .blog-list-item-info .blog-list-item-info-name, 
-.popover--account-popover .blog-list-item:hover .blog-list-item-info .blog-list-item-info-title, 
-.blog-sub-nav-details .blog-sub-nav-item:hover .blog-sub-nav-item-label, 
-.blog-sub-nav-details .blog-sub-nav-item:hover .blog-sub-nav-item-data {
-	color: var(--accent-hi-text);
-}
-
-/*when dragging accounts around, keep colours dark*/
-.popover--account-popover .popover .popover_menu_item_blog.popover_menu_item_blog.sortable-dragging .blog-list-item.blog-list-item--on-light, 
-.popover--account-popover .popover .popover_menu_item_blog.popover_menu_item_blog.sortable-dragging .popover_menu_item_blog_details {
-	background-color: var(--post, #111);
-}
-
-/*to keep text visible, apply this and below rule*/
-.popover--account-popover .popover .popover_menu_item_blog.popover_menu_item_blog.sortable-dragging .blog-list-item.blog-list-item--on-light .blog-list-item-info-name {
-	color: var(--accent-hi-text);
-}
-
-.popover--account-popover .popover .popover_menu_item_blog.popover_menu_item_blog.sortable-dragging .blog-list-item.blog-list-item--on-light {
-	background-color: var(--accent-hi);
-}
-/*when dragging accounts around, keep colours dark done*/
-/*needs some special rules for hover colours done*/
-/*pop-up account window done*/
-
-.post_full.is_quote .post_title, 
-.post_brick.is_quote .post_title {
-	color: #BBB;
-}
-
-.post_brick.is_conversation .conversation_lines .chat_line:nth-child(2n). 
-.peepr-body .indash_blog .post_chrome.chat .conversation_lines .chat_line:nth-child(2n) {
-	background-color: #111;
-	color: #DDD;
-}
-
-/*for even-numbered quote lists*/
-.post_full.is_conversation .conversation_lines .chat_line:nth-child(even) {
-	background-color: var(--post, #111);
-}
-
-.post_brick .post-brick-source-footer {
-	color: #888;
-	border-top-color: #444;
-}
-
-.post_brick.is_note .note_item {
-	background-color: #222;
-	border-color: #222;
-}
-
-/*for search page*/
-.search_results_container .tumblelog_mask_item {
-	background-color: unset;
-}
-
-/*search options in search page*/
-.filter_popover .menu_inner {
-	background-color: #111;
-}
-
-.search_control_items .menu_inner {
-	color: #BBB;
-}
-
-.search_control_items .item_divider {
-	border-bottom-color: #444;
-}
-
-/*keep these default colourings*/
-.search_control_items .post_text_filter:hover {background: #8f8f8f !important;}
-.search_control_items .post_photo_filter:hover {background: #d95e40 !important;}
-.search_control_items .post_quote_filter:hover {background: #f2992e !important;}
-.search_control_items .post_link_filter:hover {background: #56bc8a !important;}
-.search_control_items .post_chat_filter:hover {background: #529ecc !important;}
-.search_control_items .post_audio_filter:hover {background: #a77dc2 !important;}
-.search_control_items .post_video_filter:hover {background: #748089 !important;}
-.search_control_items .post_ask_filter:hover {background: #444444 !important;}
-/*keep these default colourings done*/
-/*search options in search page done*/
-
-/*main activity page*/
-/*.l-container.l-container--two-column-dashboard .left_column, 
-.l-container.l-container--two-column .left_column*/
-#activity_actions_index .l-container.l-container--two-column .left_column .notification_pane, 
-#activity_actions_index .l-container.l-container--two-column .left_column, 
-.notifications_page .notification_pane {
-	background-color: #111;
-}
-
-.notification_pane .popover_menu .popover_menu_item a {
-	color: #BBB;
-}
-
-.notification_pane .popover_menu .popover_menu_item:hover a {
-	color: #444;
-}
-
-#range_controls h2.heading.arrow {
-	color: #BBB;
-}
-
-.ui_stats.monochrome .unit.active.new_followers .button, 
-.ui_stats.monochrome .unit.active.total_followers .button, 
-.ui_stats.monochrome .unit.active.new_notes .button, 
-.ui_stats .unit .button {
-	background: linear-gradient(to bottom, #444 0%, #000 100%);
-}
-
-.ui_stats .unit .button {
-	border-top-color: #444;
-}
-
-
-.notifications_page .notifications_block {
-	border-bottom-color: #000;
-}
-
-.ui_stats .unit .stage {
-	background-color: #111;
-}
-
-.ui_stats .unit:hover .button .stage {
-	background-color: #000;
-}
-
-.ui_stats.monochrome .unit.active.new_followers .stage, 
-.ui_stats.monochrome .unit.active.total_followers .stage, 
-.ui_stats.monochrome .unit.active.new_notes .stage {
-	background: linear-gradient(to bottom, #000 0%, #111 100%);
-}
-
-.ui_stats.monochrome .unit.active.new_followers .plop:before, 
-.ui_stats.monochrome .unit.active.total_followers .plop:before, 
-.ui_stats.monochrome .unit.active.new_notes .plop:before, 
-.ui_stats .unit.active.new_notes .plop:before {
-	border-top-color: #444;
-}
-
-.ui_stats .plop:after {
-	border-top-color: #111;
-}
-
-.ui_stats .row .unit .brag, 
-.ui_tops .tops_box .tops_header h1, 
-.ui_notes_switcher .active {
-	color: #BBB;
-}
-
-.ui_tops .tops_box.tops_post {
-	border-left-color: #000;
-}
-
-#user_graphs .axis-label {
-	background-color: #111;
-	color: #BBB;
-}
-
-.ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational {
-	background-color: #444;
-}
-
-.ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_main {
-	color: #BBB;
-}
-
-.ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_main .activity {
-	color: #BBB;
-}
-
-.ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response blockquote {
-	color: #BBB;
-}
-
-.marker_tooltip {
-	background-color: #111;
-	color: #BBB;
-	border-color: #444;
-}
-
-.marker_tooltip_header {
-	background: linear-gradient(to bottom, #111 0%, #000 100%);
-	color: #BBB;
-	border-bottom-color: #444;
-}
-
-.marker_tooltip td {
-	color: #BBB;
-	border-top-color: #444;
-	border-bottom-color: #444;
-}
-
-#ui_activity_feed .is_sticky .sticky_float .ui_notes_switcher {
-	background-color: #000;
-}
-/*main activity page done*/
-
-/*followers page*/
-#left_column.followers, 
-.white_pane, 
-.white_pane .pagination {
-	background-color: #111;
-}
-
-.white_pane h1 {
-	color: #BBB;
-}
-
-.follower {
-	background-color: #000;
-}
-
-input.text_field {
-	background-color: #000;
-	color: #BBB;
-	border-color: #444;
-}
-
-.user-is-friend-bubble {
-	background-color: #000;
-	color: #BBB;
-	border-color: #000;
-}
-/*followers page done*/
-
-/*following page*/
-#dashboard_useraction_following .l-content {
-	background-color: #111 !important;
-}
-
-#dashboard_useraction_following #tabs .tab.selected {
-	background-color: #111;
-	color: #BBB;
-}
-
-.follower.invite_someone {
-	background-color: #000;
-}
-
-.follower.alt {
-	background-color: #111;
-}
-
-.chrome.clear {
-	color: #BBB;
-}
-
-.chrome.clear:active {
-	color: #888;
-}
-
-.grey_note {
-	background-color: rgba(255, 255, 255, 0.05);
-	color: #888;
-}
-
-.l-container--two-column .pagination {
-	background-color: #111;
-}
-/*following page done*/
-
-/*highlight in pop menus*/
-.info_popover li:hover, 
-.popover_menu_item.keyboard_focus, 
-.popover_menu_item:hover, 
-.messaging-inbox .inbox-conversations .inbox-conversation:hover {
-	color: #444;
-}
-
-/*queue page*/
-.dashboard_options_form, 
-.tag_psa {
-	border: 1px solid hsla(338, 38%, 25%, 1);
-	color: hsla(338, 21%, 77%, 1);
-}
-
-.dashboard_options_form .dashboard_options_form_disclaimer, 
-.dashboard_options_form .dashboard_options_form_disclaimer a {
-	color: hsla(338, 18%, 59%, 1);
-}
-
-.post_controls .post_control.post-control-icon.sort, 
-.post_controls .post_control.post-control-icon.move_to_top {
-	background-color: #BBB;
-}
-/*queue page*/
-
-/*gif attribution*/
-.post-content-text figure>p.tmblr-attribution, 
-.post .post_body figure>p.tmblr-attribution, 
-.reblog-content figure>p.tmblr-attribution {
-	background-color: #000;
-	color: #888;
-}
-
-/*making a photo post*/
-.link-post .media-wrapper .link-editor, 
-.media-dropzone {
-	background-color: #111;
-	color: #BBB;
-	border-top-color: #444;
-	border-bottom-color: #444;
-}
-
-.media-dropzone.split-dropzone .split-cell-inner:after {
-	background-color: #444;
-}
-
-.media-dropzone.show-input, 
-.media-dropzone.show-input .media-url {
-	background-color: #111;
-}
-
-.media-dropzone .media-url {
-	color: #444;
-}
-
-@keyframes show-input {
-	0% {
-		background-color: #000
-	}
-
-	to {
-		background-color: #111
-	}
-}
-/*making a photo post*/
-
-/*making a link post*/
-.link-post .media-wrapper .media-container .editor-wrapper .editor-slot .editor {
-	background-color: #111;
-	color: #BBB;
-}
-
-.link-post .media-wrapper .link-media-body .publisher-container .publisher, 
-.link-post .media-wrapper .title .editor-wrapper .editor-slot .editor, 
-.link-post .media-wrapper .title .editor-wrapper .editor-slot .editor-placeholder, 
-.link-post .media-wrapper .summary .editor-wrapper .editor-slot .editor, 
-.link-post .media-wrapper .summary .editor-wrapper .editor-slot .editor-placeholder {
-	color: #BBB;
-}
-/*making a link post*/
-
-/*weird button in notes popup*/
-.editor-slot .inline-controls .opener, 
-.editor-slot .inline-controls .opener:hover {
-	color: #111;
-}
-
-/*xkit Read More Now! button*/
-.xkit-read-more-now.xkit-button {
-	color: #BBB;
-	background: #000;
-}
-
-/*hovering xkit Read More Now! button*/
-.xkit-button:hover {
-	color: #FFF;
-	background: #000;
-	border-color: #111;
-}
-
-/*after clicking xkit buttons*/
-/*let in-built opacity deal with making it look disabled*/
-.xkit-button.disabled {
-	color: var(--text, #BBB) !important;
-	background-color: #000 !important;
-	border-color: var(--border, #444) !important;
-}
-
-/*make text icon more clear on dark bg*/
-.new_post_label i.icon_post_text {
-	color: var(--text, #BBB);
-}
-
-/*just make text on the purple audio players more visible*/
-.audio-player, 
-.audio-player .audio-info .track-artist {
-	color: #FFF;
-}
-
-/*for editing theme in xkit*/
-#xkit-theme-editor-textarea {
-	background-color: unset;
-}
-
-/*change colour of placeholder tumblelog popover (when u hover over ppl's names) before it downloads blog content*/
-.tumblelog_popover .recent_posts {
-	background-color: var(--post, #111);
-}
-
-/*tooltip to get rid of Followed Tag post*/
-.post_full .post_dismiss .post_dismiss_tooltip, 
-.icon_close:before {
-	background: unset;
-	color: var(--dim-text, #666);
-}
-
-/*tooltip to get rid of Followed Tag post (hovered)*/
-/*
-.icon_close:hover:before {
-	color: var(--text, #DDD);
-}
-*/
-
-/*make Follow button look like an actual button*/
-/*make Follow button look distinctive (and with good spacing)*/
-.reblog_follow_button .follow-text, 
-.worded-follow-button .follow-text, 
-.search-follow-button .follow-text, 
-.messaging-inbox .inbox-compose-toggle .compose-start {
-	background-color: var(--accent, hsl(338, 71%, 45%));
-	color: var(--text, #DDD);
-	border-radius: 300px;
-	padding: 4px 10px 0px 10px;
-	margin-top: -4px;
-	height: 25px;
-	font-size: 104%;
-	vertical-align: baseline;
-	transition: unset;
-	border-left: hsla(338, 71%, 30%, 1) 2px solid;
-}
-
-/*give Follow button a fun icon*/
-.reblog_follow_button .follow-text:before, 
-.worded-follow-button .follow-text:before, 
-.search-follow-button .follow-text:before, 
-.worded-follow-button .follow-text:before, 
-.messaging-inbox .inbox-compose-toggle .compose-start:before {
-	content: "\EA45";
-	font-family: tumblr-icons, blank;
-	font-size: 140%;
-	display: inline-table;
-	padding-right: 5%;
-	margin-top: -2%;
-	vertical-align: top;
-}
-
-/*fix spacing on post headers to not cut off top of Follow button*/
-.post.post_full .post_header {
-	height: 25px;
-}
-
-/*fix spacing on post header text to not cut off top of Follow button*/
-/*and keep text vertically aligned to middle of header*/
-.post_info_fence.has_follow_button, 
-.reblog_follow_button {
-	padding-top: 4px;
-	padding-top: 2px;
-}
-
-.reblog_follow_button {
-	padding-top: 4px;
-}
-
-/*fix spacing on post header text to not cut off right of Follow button*/
-.post_full .post_info {
-	overflow: unset;
-}
-
-/*fix spacing on post header text (username + Follow) for Followed Tag posts*/
-.post_full.no_source .post_info_fence, 
-.post_full .post_action_follow {
-	padding-top: 2px;
-}
-
-.post_full .post_action_follow {
-	padding-top: 4px;
-}
-
-/*fix spacing on post header text (the tooltip for removing post) for Followed Tag posts*/
-.post_full .post_action_wrapper {
-	padding-top: 2px;
-}
-
-/*fix font size for Followed Tag posts*/
-.post_full .post_action_follow .follow_link {
-	font-size: 100%;
-}
-/*make Follow button look like an actual button done*/
-
-/*to make blog username part of Follow pill*/
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source .post_info_link, 
-.dockable_video_embed .post_header .reblog_source .post_info_link {
-	background-color: #c4215d;
-	color: #DDD;
-	padding: 5px 5px 5px 10px;
-	border-radius: 300px 0px 0px 300px;
-	height: 25px;
-	border-rightOFF: hsla(338, 71%, 30%, 1) 2px solid;
-	display: inline-block;
-	margin-top: -2px;
-}
-
-.reblog_follow_button, 
-.worded-follow-button {
-	margin-left: 0px;
-}
-
-.reblog_follow_button .follow-text, 
-.worded-follow-button .follow-text, 
-.search-follow-button .follow-text, 
-.messaging-inbox .inbox-compose-toggle .compose-start {
-	border-radius: 0px 300px 300px 0px;
-	padding: 4px 10px 0px 4px;
-}
-/*to make blog username part of Follow pill done*/
-
-/*fixing the post header's spacing and stuff, bc Tumblr doesn't know how to do anything*/
-.post.post_full, 
-.peepr-body .post .post_wrapper {
-	padding: 0px;
-}
-
-.post.post_full .post_header, 
-.peepr-body .post.post_full .post_header, 
-.post .post.dockable_video_embed .post_header {
-	margin: 0px;
-	padding: 15px 20px;
-	margin-bottom: 0px;
-	line-height: unset;
-	line-height: 15px;
-	height: unset;
-	display: inline-block;
-	width: 100%;
-}
-
-.post.post_full .post_info {
-	vertical-alignOFF: middle;
-	margin: 0px;
-	padding: 0px;
-	max-width: 85%;
-}
-
-.post_full .post_info_fence.has_follow_button {
-	margin: 0;
-	padding: 0;
-	display: inline-block;
-	text-overflow: unset;
-	max-width: 100%;
-	vertical-align: middle;
-}
-
-.post_full .post_header .post_info .post_info_link:first-child, 
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.post_full .post_info .post_info_fence .reblog_source,
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source {
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.post .post_info .reblog_icon, 
-.peepr-body .post .post_info .reblog_icon {
-	margin: 0px;
-	padding: 0px;
-	font-size: 0px;
-	vertical-align: middle;
-	display: inline;
-}
-
-.post .post_info .reblog_icon:before {
-	content: "\EA92";
-	top: -1px; /*bc icon itself is not centred in the font*/
-	left: 0px;
-	font-size: 13px;
-	vertical-align: middle;
-	display: inline-block;
-	margin: 0px;
-	transform: scale(2);
-	margin-right: 10px;
-	margin-left: 10px;
-}
-
-.peepr-body .post .post_info .reblog_icon:before {
-	margin-left: 0px;
-}
-
-.peepr-body .indash_blog a.reblog_info {
-	padding: 0px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
-
-.post_full .post_info .post_info_fence .reblog_source .post_info_link,
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source .post_info_link, 
-.dockable_video_embed .post_header .reblog_source .post_info_link {
-	margin: 0px;
-	padding-right: 10px;
-	vertical-align: middle;
-	height: unset;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	max-width: 235px;
-}
-
-/*fix spacing on the much narrower docked posts*/
-.dockable_video_embed .post_header .reblog_source .post_info_link {
-	max-width: 57px;
-}
-
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	max-width: 50px;
-}
-
-.post .post.dockable_video_embed .post_header {
-	max-width: 90%;
-}
-/*fix spacing on the much narrower docked posts done*/
-
-.reblog_follow_button {
-	vertical-align: middle;
-	padding: 0px;
-}
-
-.peepr-body .post .post_info a.reblog_follow_button {
-	margin: 0px;
-}
-
-.reblog_follow_button .follow-text, 
-.worded-follow-button .follow-text, 
-.search-follow-button .follow-text, 
-.messaging-inbox .inbox-compose-toggle .compose-start {
-	vertical-align: middle;
-	margin: 0px;
-	padding: 5px 10px 5px 5px;
-	heightOFF: unset;
-	font-size: 100%;
-}
-
-.reblog_follow_button .follow-text:before, 
-.worded-follow-button .follow-text:before, 
-.search-follow-button .follow-text:before, 
-.messaging-inbox .inbox-compose-toggle .compose-start:before {
-	font-size: 80%;
-	transform: scale(1.6);
-	display: inline-block;
-	padding-right: 8px;
-	padding-left: 5px;
-	margin-top: 0px;
-	margin-bottom: 2px;
-	vertical-align: middle;
-	text-rendering: optimizeLegibility;
-}
-
-/*fix header space on video posts bc collapsible margins r a thing*/
-.post_full .post_media {
-	margin: 0px;
-}
-
-/*fix header spacing on Followed Tag posts*/
-.post_full.no_source .post_info_fence, 
-.post_full .post_action_follow {
-	padding-top: 0px;
-	display: inline-block;
-	vertical-align: middle;
-}
-
-/*on posts where the only username in header is the one that can be followed (ie Followed Tag posts, in peepr drawer), make Follow button a standalone pill*/
-.worded-follow-button .follow-text, 
-.peepr-body .reblog_follow_button .follow-text {
-	margin-left: 10px;
-	padding: 5px 10px 5px 10px;
-	border-radius: 300px;
-	border-left: unset;
-}
-
-/*put in a hack on Followed Tag posts, bc I can't figure out how to make the username vertically align to middle
-.is_recommended.post_full .post_header .post_info .post_info_link:first-child, 
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
-*/
-
-/*for some reason ask posts have a negative margin, so get rid of that*/
-.post_full.is_note .post_body {
-	margin-top: 0px;
-}
-
-/*fix spacing on headers in Search mode*/
-.post_brick.post .post_header {
-	line-height: unset;
-}
-
-.post_brick.post .post_header .tumblelog_avatar {
-	vertical-align: middle;
-}
-
-.post_brick.post .post_header .post-info-tumblelogs {
-	vertical-align: middle;
-	height: unset;
-	line-height: unset;
-}
-
-.post_brick.post .post_header .post-info-post-tumblelog, 
-.post_brick.post .post_header .post-info-post-tumblelog .worded-follow-button {
-	display: inline-block;
-}
-
-.post_brick.post .post_header .post-info-post-tumblelog .post-info-tumblelog {
-	vertical-align: middle;
-	display: inline-block;
-	max-width: 52%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-/*fix spacing on headers in Search mode done*/
-
-/*hack to make post header the right size for now
-.post .dockable_video_embed .embed_iframe {
-	top: 58px !important;
-}
-
-
-.post .dockable_video_embed.docked_post_underlay {
-	height: 272.875px !important;
-}
-*/
-
-/*special rules for dockable post headers*/
-.post.post_full .post.dockable_video_embed .post_header {
-	grid-template-columns: auto auto auto 1fr auto;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	height: 44px;
-}
-
-/*hack to make post header the right size for now done*/
-/*fixing the post header's spacing and stuff, bc Tumblr doesn't know how to do anything done*/
-
-/*fix this weird type of radar post*/
-.radar .radar_post, 
-.radar.radar_type_regular .radar_content {
 	background: var(--post, #111);
+	color: var(--primary, #DDD);
 }
 
-.radar.radar_type_regular .header_flag {
-	background: #000;
-	border-top-color: var(--border, #444);
-	border-bottom-color: var(--border, #444);
-}
-
-.radar.radar_type_regular .radar_superglass {
+.editor-placeholder {
 	background: unset;
+	color: var(--secondary, #888);
 }
 
-.radar.radar_type_quote .radar_content, 
-.radar.radar_type_link .radar_content, 
-.radar.radar_type_converstaion .radar_content, 
-.radar.radar_type_regular .radar_content {
-	color: var(--text, #DDD);
-	padding-top: 20px;
-}
-
-.radar.radar_type_quote .radar_content:after, 
-.radar.radar_type_link .radar_content:after, 
-.radar.radar_type_converstaion .radar_content:after, 
-.radar.radar_type_regular .radar_content:after {
-	background: var(--border, #444);
-}
-/*fix this wierd type of radar post done*/
-
-/*make xkit audio slider a little more functional*/
-.audio-player {
-	padding-top: 0px;
-	padding-bottom: 25px;
-}
-
-.xkit-audio-plus-slider-container {
-	width: 455px;
-	left: 0px;
-	bottom: 0px;
-	border-radius: 0px;
-	height: 25px;
-}
-
-.xkit-audio-plus-slider {
-	width: 90%;
-}
-/*make xkit audio slider a little more functional done*/
-
-/*make xkit audio popout a little more nicer*/
-.xkit-audio-plus-controls {
-	width: 100%;
-	left: 0px;
-	bottom: 0px;
-	transform: unset;
-	padding: 5px;
-	height: 40px;
-	border-radius: 0px;
-	min-height: 0px;
-	overflow: hidden;
-}
-
-.audio-player .play-pause {
-	margin: 0px;
-	font-size: 0px;
-}
-
-.icon_play:before, 
-.icon_pause:before {
-	font-size: 30px;
-}
-
-#xkit-audio-plus-controls-undock-container {
-	bottom: 33px;
-	right: 10px;
-}
-
-/*make room for footer*/
-.has-minimized.messaging-conversation-popovers .messaging-minimized-conversations {
-	margin-bottomOFF: 40px;
-}
-/*make xkit audio popout a little more nicer done*/
-
-/*fine-tuning the Follow pill*/
-/*
-.reblog_follow_button .follow-text:before {
-	font-size: 12px;
-	font-size: 11px;
-}
-
-.reblog_follow_button .follow-text {
-	font-size: 0px;
-}
-
-.reblog_follow_button .follow-text:after {
-	content: "Follow";
-	font-size: 13px;
-	vertical-align: middle;
-	display: inline-block;
-	transform: scale(1.04);
-	transform-origin: left;
-	padding-right: 5px;
-}
-/*
-/*fine-tuning the Follow pill done*/
-
-/*give "Submitted To" a fun icon and good spacing*/
-.post_full .post_info .submission_icon {
-	vertical-align: middle;
-	display: inline-block;
-	font-size: 0px;
-}
-
-.post_full .post_info .submission_icon:before {
-	content: "\EA56\EA14";
-	font-family: tumblr-icons, blank;
-	vertical-align: middle;
-	display: inline-block;
-	font-size: 13px;
-	transform-origin: center;
-	transform: scale(1.5);
-	margin-right: 10px;
-	margin-left: 13px;
-}
-
-/*give good header spacing in Submission posts*/
-.post_full .post_header .post_info .post_info_link {
-	vertical-align: middle;
-}
-/*give "Submitted To" a fun icon and good spacing done*/
-
-/*Fix See All button spacing with new tag style*/
-/*POSSIBLE ISSUE WHEN GOING INTO SIDEBAR WITH POST THAT HAS MANY TAGS, TUMBLR DOESN'T GIVE IT A SEE-ALL BUTTON?*/
-.peepr-body .post_full .post_tags.fadeable {
-	max-height: 80px;
-}
-
-.see_all_tags {
-	background: linear-gradient(to right, transparent, var(--post, #111));
-	height: unset;
-	width: unset;
-	bottom: 6px;
-	padding: 5px 0px;
-	padding-left: 10px;
-}
-/*Fix See All button spacing with new tag style done*/
-
-/*make the Follow pill more clear that clicking username will not make u follow*/
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source .post_info_link, .dockable_video_embed .post_header .reblog_source .post_info_link {
-	background: #444;
-}
-
-.reblog_follow_button .follow-text, 
-.worded-follow-button .follow-text, 
-.search-follow-button .follow-text, 
-.messaging-inbox .inbox-compose-toggle .compose-start {
-	border-left: unset;
-}
-
-.post_full .post_info .post_info_fence .reblog_source .post_info_link, 
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source .post_info_link, 
-.dockable_video_embed .post_header .reblog_source .post_info_link {
-	padding-right: 8px;
-}
-
-/*colour of tumblr's loading bar*/
-.knight-rider-bar {
-	background-color: var(--loading, #DDD);
-}
-
-/*make blockquotes more distinguishable*/
-.post-content-text blockquote, 
-.post .post_body blockquote, 
-.reblog-content blockquote, 
-.peepr-body .indash_blog .post_content blockquote {
-	background: #444;
-	padding: 15px;
-	border-radius: 0px 3px 3px 0px;
-}
-
-/*fix this up so that alternating levels of blockquotes within blockquotes show up as alternating colours*/
-.post-content-text blockquote:nth-child(odd), 
-.post .post_body blockquote:nth-child(odd), 
-.reblog-content blockquote:nth-child(odd) {
-	backgroundOFF: #111;
-}
-/*make blockquotes more distinguishable done*/
-
-/*gotta do this: https://www.tumblr.com/about*/
-
-/*fix spacing on all headers for real this time*/
-.post.post_full.is_recommended .post_header, 
-.post.post_full .post_header, 
-.peepr-body .post.post_full .post_header, 
-.post .post.dockable_video_embed .post_header {
-	display: grid;
-	grid-template-columns: auto 1fr auto;
-	align-items: center;
-}
-
-/*due to an extra pseudo-element*/
-.peepr-body .post.post_full .post_header {
-	grid-template-columns: auto auto auto 1fr;
-}
-
-.peepr-body .indash_blog a.reblog_info {
-	height: unset;
-}
-
-.post.post_full.is_recommended .post_info, 
-.post_full .post_action_follow {
-	display: contents;
-}
-
-.post_full.is_recommended .post_header .post_info .post_info_link:first-child, 
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	max-widthOFF: 100%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.post_full .post_action_wrapper {
-	justify-self: end;
-}
-
-.post .post_info .reblog_icon:before {
-	justify-self: center;
-}
-
-.post_full .post_dismiss .post_dismiss_tooltip {
-	display: none;
-}
-
-.post_full .post_dismiss:hover .post_dismiss_tooltip {
-	display: inline-block;
-}
-/*fix spacing on all headers for real this time done*/
-
-/*when asking a question, fix one of the labels*/
-.ask-form .ask-anonymously-label {
-	color: var(--text, #DDD);
-}
-
-/*make squares in the Try These recommendations more apparent*/
-.rapid-recs-container .rapid-recs .micro-post-list .post_micro {
-	background: rgba(255, 255, 255, 0.05);
-	border-radius: 3px;
-}
-
-/*remove Follow text on dockable posts, bc they have such little width*/
-.post .dockable_video_embed.post .reblog_follow_button .follow-text {
-	padding-right: 5px;
-	font-size: 0px;
-}
-
-.post .dockable_video_embed.post .reblog_follow_button .follow-text:before {
-	font-size: 11px;
-}
-
-/*let username extend more with the free space*/
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	max-width: 93px;
-}
-/*remove Follow text on dockable posts, bc they have such little width done*/
-
-/*make the tick on reblog icon green again*/
-.post_controls .post_control.reblog.reblogged:after {
-	color: #56bc8a;
-}
-
-/*make X tooltip move a little nicer on Followed Tag post headers*/
-.post.post_full.is_recommended .post_header, 
-.post.post_full .post_header {
-	grid-template-columns: auto 1fr auto auto;
-}
-
-.post_full .post_action_wrapper, 
-.post_full .post_action_wrapper .post_action_item {
-	display: contents;
-}
-
-.post_full .post_dismiss, 
-.post_full .post_dismiss .post_dismiss_tooltip, 
-.post_full .post_header_text_link, 
-.post_full .post_dismiss .icon_close, 
-.post_full .post_dismiss .icon_closeOFF:before {
-	margin: 0px;
-	padding: 0px;
-	top: 0px;
-	right: 0px;
-	left: 0px;
-	bottom: 0px;
-	line-height: inherit;
-}
-
-.post_full .post_dismiss {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	display: contents;
-}
-
-.post_full .post_dismiss .post_dismiss_tooltip {
-	display: inline-block;
-	overflow: hidden;
-	width: 0px;
-	transition: width 0.2s ease-in-out;
-	width: 100%;
-	transition: margin 0.2s ease-in-out, opacity 0.2s ease-in-out;
-	margin-right: -300px;
-	padding-left: 10px;
-	opacity: 1;
-}
-
-.post_full .post_dismiss:hover .post_dismiss_tooltip {
-	width: 100%;
-	margin-right: 0px
-}
-
-.post_full .post_header_text_link {
-	padding-left: 10px;
-}
-/*make X text move a little nicer on Followed Tag post headers done*/
-
-/*make xkit Edit Theme button easier to press / more consistent styling*/
-#xkit-theme-editor-ul .hide_overflow {
-	padding: 10px;
-}
-
-/*"X posted this" colour (found at top of notes summary popup*/
-.is-followed .post-activity-note-content .note-text {
-	color: var(--text, #DDD);
-}
-
-/*fix up spacing on New Message button*/
-.messaging-inbox .inbox-compose-toggle {
-	display: flex;
-}
-
-.messaging-inbox .inbox-compose-toggle .compose-start {
-	padding: 5px 10px;
-	border-radius: 300px;
-	height: unset;
-	height: 15px; /*figure out why this is stuck at 16px otherwise*/
-	text-align: center;
-}
-
-.messaging-inbox .inbox-recipients .no-results>p {
-	border-color: var(--border, #444);
-}
-/*fix up spacing on New Message button done*/
-
-/*when Creating A New Blog*/
-/*bg color*/
-.l-container.l-container--full-width-gutterless .l-content, 
-.l-container.l-container--full-width .l-content {
-	background-color: var(--post, #111);
-}
-
-/*text color*/
-.l-content h1, 
-.blurb {
-	color: var(--text, #DDD);
-}
-
-/*make Cancel button get darker when active, not lighter*/
-.chrome:active {
-	background-color: rgba(255, 255, 255, 0.1);
-}
-
-/*bg color of post form*/
-#create_tumblelog div {
-	background-color: var(--post, #111) !important;
-	color: var(--text, #DDD) !important;
-	border-color: var(--border, #444) !important;
-}
-
-/*text color of post form input*/
-#create_tumblelog input {
-	color: var(--text, #DDD) !important;
-}
-
-/*bg color of input fields*/
-#validate_tumblelog_loader .text_field_wrapper, 
-#validate_tumblelog_loader .text_field_wrapper label {
-	background-color: #000;
-}
-
-/*dim text of ".tumblr.com"*/
-.text_field_wrapper label {
-	color: var(--dim-text, #888);
-}
-/*when Creating A New Blog done*/
-
-/*:active on link posts*/
-.post_full.is_link .link-button.link-button--default:active {
-	background-color: #000;
-}
-
-.post_full.is_link .link-button.link-button--default:active .info-container .title, 
-.post_full.is_link .link-button.link-button--default:active .info-container .excerpt {
-	color: #DDD;
-}
-
-.post_full.is_link .link-button.link-button--default:active .info-container .publisher-container .publisher {
-	color: #DDD; /*MAYBE #BBB?*/ /*CHANGE THIS*/
-}
-/*:active on link posts done*/
-
-/*fix max widths on headings*/
-.post.post_full.is_recommended .post_header, .post.post_full .post_header {
-	grid-template-columns: auto 1fr auto auto auto;
-}
-
-.post.post_full .post_info {
-	display: contents;
-}
-
-.post_full .post_info_fence.has_follow_button, 
-.post.post_full .post.dockable_video_embed .post_header {
-	display: flex;
-	align-items: center;
-	max-width: unset;
-	overflow: hidden;
-}
-
-.post_full .post_header .post_info .post_info_link:first-child, 
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	max-width: 80%;
-	min-width: 20%;
-}
-
-.post_full .post_info .post_info_fence .reblog_source, 
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source, 
-.post_full .post.dockable_video_embed .post_header .reblog_source {
-	display: flex;
-	align-items: center;
-	min-width: 0px; /*IMPORTANT TO MAKE FLEX WORK CORRECTLY*/
-	/*max-width: 80%;*/
-	/*min-width: 20%;*/
-}
-
-.post .post_info .reblog_icon, 
-.peepr-body .post .post_info .reblog_icon {
-	display: contents;
-}
-
-.post_full .post_info .post_info_fence .reblog_source .post_info_link, 
-.post_full .post_info .post_info_fence.has_follow_button .reblog_source .post_info_link, 
-.dockable_video_embed .post_header .reblog_source .post_info_link {
-	max-width: unset;
-	justify-self: flex-end;
-}
-/*fix max widths on headings done*/
-
-/*for that rare case when there's a gradient to the left of the tags*/
-.post.has_source .post_tags.draggable:before {
-	background-image: linear-gradient(270deg, hsla(0,0%,100%,0) 0, var(--post, #111))
-}
-
-/*fix spacing on all headers for real this time*/
-/*give regular post headers a flexbox, not a grid, to simplify things*/
-.post.post_full .post_header {
-	display: flex;
-	align-itemsOFF: baseline;
-}
-
-/*to set min width and also hide overflow on blog names in headers*/
-.post_full .post_header .post_info .post_info_link:first-child, 
-.post_full .post_header .post_info .post_info_link, 
-.post .dockable_video_embed .post_header .post_info_tumblelog {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: unset;
-	min-width: 2ch; /*to allow for the widest character: M*/
-}
-
-/*fix header spacing on Followed Tag posts*/
-.post_full.no_source .post_info_fence, 
-.post_full .post_action_follow {
-	display: contents;
-}
-
-.post_full .post_info_fence {
-	display: contents;
-}
-/*fix spacing on all headers for real this time done*/
-
-/*make new post labels lifting up when hovered over all consistently hover the same amount*/
-.new_post_label i {
-	transition-property: transform;
-}
-
-.new_post_label:hover i[class^="icon_post_"] {
-	line-height: 62px;
-	transform: translateY(-4px);
-}
-/*make new post labels lifting up when hovered over all consistently hover the same amount done*/
-
-/*ios devices need to have momentum scrolling explicitly turned on for body children*/
-/*so turn it on for when rebloggin a post so users can get to rb button faster*/
-.post-form-modal {
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	max-width: 100%;
-	overflow-x: hidden;
-}
-
-/*animate the dog-ear, while ALSO keeping transparency*/
-/*THIS TOOK LIKE HALF A YEAR TO HACK ITS FINALLY DONE WOOO*/
-/*first, change background to a linear gradient with the dog-ear part already cut off*/
-/*note that 0.707 = sin(45deg), to find the perfect distance for the gradient*/
-.post.post_full, 
-.post.post_full:hover, 
-.peepr-body .indash_blog .post {
-	background: linear-gradient(225deg, transparent 0%, transparent calc((16px/0.707)/2), #111 calc((16px/0.707)/2), #111 100%);
-}
-
-/*make sure moving parts don't leave the post wrapper itself*/
-.post_full .post_wrapper {
-	position: relative;
-	overflow: hidden;
-}
-
-/*set up stacking order for peepr posts*/
-.peepr-body .post .post_wrapper {
-	z-index: 0;
-}
-
-/*redo permalink so it's not borders, but a square with a linear gradient so it looks like a triangle*/
-.post_full .post_permalink {
-	z-index: unset !important;
-	border: unset;
-	width: 16px;
-	height: 16px;
-	background: linear-gradient(45deg, var(--dog-ear) 50%, transparent 50%);
-	/*transform-origin: top right;*/
-	/*transform: scale(0);*/
-	width: 0px;
-	height: 0px;
-	border-bottom-left-radius: 5px;
-	opacity: 1;
-}
-
-/*when hovering over post, tell permalink to grow*/
-.post_full:hover .post_permalink {
-	/*transform: scale(1);*/
-	width: 16px;
-	height: 16px;
-}
-
-/*this is the part under the permalink that always covers up the part of the post wrapper that is transparent (ie cut off*/
-.post_full .post_permalink:before {
-	content: "";
-	display: inline-block;
-	position: relative;
-	background: linear-gradient(45deg, var(--post, #111) 50%, transparent 50%);
-	width: 16px;
-	height: 16px;
-	position: absolute;
-	/*transform: scale(2);*/
-	width: 32px;
-	height: 32px;
-	top: -16px;
-	right: -16px;
-	z-index: -1;
-}
-
-/*when hovering over post, tell this part to shrink*/
-.post_full:hover .post_permalink:before {
-	/*transform: scale(1);*/
-	width: 16px;
-	height: 16px;
-	top: 0px;
-	right: 0px;
-}
-
-/*when hovering over post, adjust this part so under-part doesn't peak over permalink dog-ear*/
-.post_full:hover .post_permalink:before {
-	top: 1px;
-	right: 1px;
-}
-
-/*make sure transitions for both are exactly the same so everything lines up*/
-.post_full .post_permalink, 
-.post_full:hover .post_permalink, 
-.post_full .post_permalink:before, 
-.post_full:hover .post_permalink:before {
-	transition: transform .15s ease-in, width .15s ease-in, height .15s ease-in, top .15s ease-in, right .15s ease-in;
-}
-/*animate the dog-ear, while ALSO keeping transparency done*/
-
-/*fix spacing for has_follow_button headers on dockable posts*/
-.post.post_full .post.dockable_video_embed .post_header {
-	display: flex;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	height: 44px;
-}
-
-/*fix search form spacing*/
-#search_query {
-	padding-right: 110px !important;
-}
-
-.search-follow-button {
-	display:flex;
-}
-
-.search-follow-button .follow-text {
-	height: 15px;
-	line-height: 15px;
-	padding: 5px 10px;
-	border-radius: 300px;
-	margin: auto;
-}
-/*fix search form spacing done*/
-
-/*fix spacing on explore page*/
-.worded-follow-button .follow-text {
-	line-height: 15px;
-}
-
-/*fix color on explore page when messaging*/
-.discover {
-	color: var(--text, #DDD);
+input[type=text].field {
+	background: var(--post, #111) !important;
+	color: var(--primary, #DDD) !important;
 }

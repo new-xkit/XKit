@@ -1,0 +1,56 @@
+.popover {
+	background-color: var(--popover, #111) !important;
+}
+
+.popover > .popover_inner {
+	background: var(--popover, #111) !important;
+	color: var(--primary, #DDD) !important;
+	border-color: #222 !important;
+	box-shadow: inset 0 1px 0 var(--border, #444) !important;
+}
+
+.pop-menu {
+	background-color: var(--popover, #111) !important;
+}
+
+.popover > .popover_inner .header, 
+.pop-menu .header-item {
+	background-color: var(--menu-header, #000) !important;
+	color: var(--primary, #DDD) !important;
+	border-top-color: var(--border, #444) !important;
+	border-bottom-color: var(--border, #444) !important;
+}
+
+.popover .popover_menu_item, 
+.popover .popover_menu_item a {
+	color: var(--primary, #DDD) !important;
+}
+
+.info_popover li, 
+.popover .popover_menu_item, 
+.popover .popover_menu_item a, 
+.pop-menu .item-option {
+	color: var(--primary, #DDD) !important;;
+}
+
+.info_popover li:hover, 
+.popover .popover_menu_item:hover, 
+.popover .popover_menu_item:hover a, 
+.pop-menu .item-option:hover {
+	background-color: var(--accent-hi) !important;
+	color: var(--accent-hi-text, #111) !important;
+}
+
+.info_popover li:active, 
+.popover .popover_menu_item:active, 
+.popover .popover_menu_item:active a, 
+.popover .popover_menu_item.keyboard_focus, 
+.pop-menu .item-option:active {
+	background-color: var(--accent-hi2) !important;
+	color: var(--accent-hi-text, #111) !important;
+}
+
+.popover_menu_item:hover .delete {
+	background-color: var(--danger) !important;
+	color: var(--primary-selected) !important;
+}

@@ -1,0 +1,91 @@
+/*======================================explore======================================*/
+/*https://www.tumblr.com/explore*/
+.discover-controls-wrapper .types-tabs:before {
+	content: "\EA3B";
+	font-family: tumblr-icons, blank;
+	margin-left: 6px;
+	margin-right: 9px;
+	transform: scale(1.75);
+}
+
+/*same as .discover-controls-wrapper .types-tabs>.content-control*/
+.discover-controls-wrapper .types-tabs:before {
+	display: block;
+	float: left;
+	padding: 10px 7px;
+	font-size: 14px;
+	color: hsla(0,0%,100%,.6);
+	line-height: 1.07em;
+	text-align: center;
+}
+
+.post_brick {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+.post_brick .post_header {
+	color: var(--primary, #DDD) !important;
+	border-bottom-color: var(--border, #444) !important;
+}
+
+.post_brick .expand-post-content, 
+.post_brick.is_photo .post_media+.expand {
+	background-color: var(--post, #111);
+	background-color: #444444e6;
+}
+
+.post_brick .post_tags:after {
+	background-image: linear-gradient(90deg, transparent 0%, var(--post, #111) 80%);
+}
+
+.post_brick .post-brick-source-footer {
+	color: var(--secondary, #888);
+	border-top-color: var(--border, #444);
+}
+
+.post-activity-note-content .more-actions, 
+.post-activity-reply .text-input, 
+.post-activity-actions-popover .popover-inner>ul button {
+	color: var(--primary, #DDD);
+}
+
+/*=======================================search======================================*/
+/*https://www.tumblr.com/search/TERM*/
+.search-follow-button .follow-text {
+	color: var(--accent);
+}
+
+#search_actions_search .l-content, 
+#search_actions_search .tumblelog_mask_item {
+	background-color: unset;
+}
+
+.filter_popover .menu_inner {
+	background-color: var(--popover, #111);
+}
+
+.search_control_items .menu_inner {
+	color: var(--primary, #DDD);
+}
+
+.search_control_items .item_divider {
+	border-bottom-color: var(--border, #444);
+}
+
+.search_control_items .menu_item:hover {
+	background-color: var(--accent-hi);
+	color: var(--accent-hi-text);
+}
+
+.search_control_items .post_text_filter .icon {color: var(--primary, #DDD) !important;}
+
+/*keep default colourings*/
+.search_control_items .post_text_filter:hover {background: #8f8f8f !important;}
+.search_control_items .post_photo_filter:hover {background: #d95e40 !important;}
+.search_control_items .post_quote_filter:hover {background: #f2992e !important;}
+.search_control_items .post_link_filter:hover {background: #56bc8a !important;}
+.search_control_items .post_chat_filter:hover {background: #529ecc !important;}
+.search_control_items .post_audio_filter:hover {background: #a77dc2 !important;}
+.search_control_items .post_video_filter:hover {background: #748089 !important;}
+.search_control_items .post_ask_filter:hover {background: #444444 !important;}

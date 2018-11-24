@@ -1,0 +1,110 @@
+/*=====================================all posts=====================================*/
+#new_post_buttons {
+	background: unset;
+}
+
+#new_post_buttons .post.post_full {
+	background: var(--post, #111);
+}
+
+#new_post_buttons .new_post_label {
+	color: var(--primary, #DDD) !important;
+}
+
+#new_post_buttons .new_post_label i {
+	line-height: 62px;
+	transition-property: transform;
+}
+
+#new_post_buttons .new_post_label:hover i[class^="icon_post_"] {
+	line-height: 62px;
+	transform: translateY(-4px);
+}
+
+/*=====================================text posts====================================*/
+#new_post_buttons .new_post_label i.icon_post_text {
+	color: var(--primary, #DDD);
+}
+
+.post-form--text .editor-slot {
+	background-color: var(--post, #111);
+}
+
+.post-form--text .editor-slot .editor-plaintext {
+	background: unset;
+	color: var(--primary, #DDD);
+}
+
+.post-form--text .post-form--tag-editor .editor-slot .editor-plaintext {
+	color: var(--secondary, #888);
+}
+
+/*====================================photo posts====================================*/
+/*also works for video posts*/
+.post-form .media-dropzone {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+	border-top-color: var(--border, #444);
+	border-bottom-color: var(--border, #444);
+}
+
+.post-form .media-dropzone.split-dropzone .split-cell-inner:after {
+	background-color: var(--border, #444);
+}
+
+.post-form .media-dropzone.show-input, 
+.post-form .media-dropzone.show-input .media-url {
+	background-color: var(--post, #111);
+}
+
+/*icon to add link*/
+.post-form .overlay-button.active .icon {
+	color: var(--accent);
+}
+
+@keyframes show-input {
+	0% {
+		background-color: #000;
+	}
+
+	to {
+		background-color: var(--post, #111);
+	}
+}
+
+/*====================================quote posts====================================*/
+
+
+/*=====================================link posts====================================*/
+.post-form--link .media-wrapper .link-editor {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+	border-top-color: var(--border, #444);
+	border-bottom-color: var(--border, #444);
+}
+
+.post-form--link .media-wrapper .media-container .editor {
+	background-color: var(--post, #111) !important;
+	color: var(--primary, #DDD) !important;
+}
+
+.post-form--link .media-wrapper .link-media-body .publisher-container .publisher, 
+.post-form--link .media-wrapper .title .editor, 
+.post-form--link .media-wrapper .title .editor-placeholder, 
+.post-form--link .media-wrapper .summary .editor, 
+.post-form--link .media-wrapper .summary .editor-placeholder {
+	color: var(--primary, #DDD) !important;
+}
+
+/*=====================================chat posts====================================*/
+
+
+/*====================================audio posts====================================*/
+.post-form--audio .audio-search-results-field .audio-result-set .result.cycled, 
+.post-form--audio .audio-search-results-field .audio-result-set .result:hover {
+	background-color: var(--accent-hi);
+	color: var(--accent-hi-text);
+}
+
+/*====================================video posts====================================*/
+/*check photo posts*/

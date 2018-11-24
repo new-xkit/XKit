@@ -1,0 +1,370 @@
+/*.reblog_follow_button = next to posts in dash and peepr-body, the default; 
+always with a blogname*/
+/*.worded-follow-button = next to recommended posts in dash, post bricks; 
+always by themselves*/
+/*.search-follow-button = next to search bar in header on search screen; 
+always by itself*/
+/*.messaging-inbox .compose-start = New Message in messaging; 
+always by itself*/
+
+/*====================================post headers===================================*/
+.post.post_full, 
+.peepr-body .post.post_full .post_wrapper {
+	padding: 0px;
+}
+
+.post_header * {
+	margin: 0px;
+	padding: 0px;
+	line-height: unset;
+	height: unset;
+	max-width: unset;
+}
+
+.post.post_full .post_header, 
+.peepr-body .post.post_full .post_header {
+	display: flex;
+	align-items: center;
+	margin: 0px;
+	padding: 15px 15px 15px 20px;
+	line-height: 15px;
+	height: unset;
+	max-height: 55px;
+	width: 100%;
+}
+
+.post.post_full .post_header .post_info {
+	display: contents;
+}
+
+.post.post_full .post_info_fence, 
+.post.post_full .post_action_follow {
+	display: contents !important;
+}
+
+/*=====================================*/
+.post.post_full .post_header .post_info_fence .reblog_source,
+.post.post_full .post_header .post_info_fence.has_follow_button .reblog_source {
+	vertical-align: middle;
+}
+
+.post.post_full .post_header .reblog_icon:before {
+	content: "\EA92";
+	font-family: tumblr-icons, blank;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 13px;
+	top: -1px;
+	left: 0px;
+	margin: 0px 10px;
+	transform: scale(2);
+}
+
+.peepr-body .post.post_full .post_header .reblog_icon:before {
+	margin-left: 0px;
+}
+
+.post.post_full .post_header .reblog_icon, 
+.peepr-body .post.post_full .post_header .reblog_icon {
+	display: contents;
+}
+
+/*=====================================*/
+.post.post_full .post_header .post_info .post_info_link:first-child {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.post.post_full.is_note .post_body {
+	margin-top: 0px;
+}
+
+.post.post_full .post_info .reblog_icon:before {
+	justify-self: center;
+}
+
+.post.post_full .post_dismiss:hover .post_dismiss_tooltip {
+	display: inline-block;
+}
+
+.post.post_full .post_info .post_info_fence .reblog_source, 
+.post.post_full .post_info .post_info_fence.has_follow_button .reblog_source  {
+	display: flex;
+	align-items: center;
+	min-width: 0px;
+}
+
+/*to set min width and also hide overflow on blog names in headers*/
+.post.post_full .post_header .post_info .post_info_link:first-child, 
+.post.post_full .post_header .post_info .post_info_link {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: unset;
+	min-width: 2ch;
+}
+
+.post.post_full .post_header .post_info_fence .reblog_source .post_info_link {
+	margin: 0px;
+	vertical-align: middle;
+	height: unset;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-width: unset;
+	justify-self: flex-end;
+}
+
+.post.post_full .vendor_button {
+	top: 0px;
+	margin-left: 3px;
+}
+
+.post.post_full .vendor_button, 
+.post.post_full .vendor_button .button-area {
+	height: 25px;
+}
+
+.post.post_full .post_media {
+	margin: 0px;
+}
+
+.peepr-body .post_header a.reblog_info {
+	height: 25px;
+}
+
+/*==================================dockable videos==================================*/
+.dockable_video_embed .post_header {
+	display: flex !important;
+	align-items: center !important;
+	max-width: unset !important;
+	overflow: hidden !important;
+	line-height: 15px !important;
+	height: 44px !important;
+	width: 100% !important;
+	margin: 0px !important;
+	padding: 10px !important;
+}
+
+.dockable_video_embed .post_header .tumblelog_avatar {
+	flex-shrink: 0 !important;
+}
+
+.dockable_video_embed .post_header .post_info_tumblelog {
+	display: inline-block !important;
+	vertical-align: middle !important;
+	max-width: 290px !important;
+	min-width: 2ch !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+}
+
+.dockable_video_embed .post_header .reblog_source {
+	display: flex !important;
+	align-items: center !important;
+	min-width: 0px !important;
+}
+
+.dockable_video_embed .post_header .post_info_link {
+	display: inline-block !important;
+	vertical-align: middle !important;
+	justify-self: flex-end !important;
+	height: unset !important;
+	max-width: unset !important;
+	min-width: 2ch !important;
+	margin: 0px !important;
+	padding-right: 8px !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+}
+
+/*=================================recommended posts=================================*/
+
+
+/*====================================follow pill====================================*/
+.reblog_follow_button, 
+.worded-follow-button, 
+.search-follow-button {
+	vertical-align: middle;
+	margin: 0px;
+	padding: 0px;
+}
+
+.reblog_follow_button .follow-text:before, 
+.worded-follow-button .follow-text:before, 
+.search-follow-button .follow-text:before {
+	content: "\EA45";
+	font-family: tumblr-icons, blank;
+	text-rendering: optimizeLegibility;
+	display: inline-block;
+	vertical-align: middle;
+	color: var(--primary, #DDD);
+	margin-top: 0px;
+	margin-bottom: 2px;
+	padding-right: 8px;
+	padding-left: 5px;
+	font-size: 80%;
+	transform: scale(1.6);
+}
+
+.reblog_follow_button .follow-text, 
+.worded-follow-button .follow-text, 
+.search-follow-button .follow-text, 
+.messaging-inbox .inbox-compose-toggle .compose-start {
+	display: inline-block;
+	background-color: var(--accent);
+	color: var(--primary, #DDD);
+	border-radius: 0px 300px 300px 0px;
+	height: 25px;
+	margin: 0px;
+	padding: 5px 10px 5px 5px;
+	font-size: 100% !important;
+	transition: unset;
+}
+
+.worded-follow-button .follow-text, 
+.search-follow-button .follow-text, 
+.messaging-inbox .inbox-compose-toggle .compose-start, 
+.peepr-body .reblog_follow_button .follow-text, 
+#search_actions_search .reblog_follow_button .follow-text {
+	border-radius: 300px;
+}
+
+.worded-follow-button .follow-text, 
+.peepr-body .reblog_follow_button .follow-text, 
+#search_actions_search .reblog_follow_button .follow-text {
+	margin-left: 10px;
+	padding: 5px 10px 5px 10px;
+}
+
+.post.post_full .post_header .post_info_fence.has_follow_button .reblog_source .post_info_link, 
+.dockable_video_embed .post_header .reblog_source .post_info_link {
+	display: inline-block;
+	background-color: var(--bubble, #444);
+	color: var(--primary, #DDD);
+	padding: 5px 8px 5px 10px;
+	border-radius: 300px 0px 0px 300px;
+}
+
+.peepr-body .indash_blog a.reblog_info {
+	padding: 5px 0px;
+}
+
+.peepr-body .reblog_follow_button {
+	margin: 0px !important;
+}
+
+.dockable_video_embed .post_header .reblog_follow_button .follow-text:before {
+	font-size: 11px !important;
+}
+
+.dockable_video_embed .post_header .reblog_follow_button .follow-text {
+	padding-right: 5px !important;
+	font-size: 0px !important;
+}
+
+/*==================================messaging-inbox==================================*/
+.popover--inbox-popover .inbox-compose-toggle {
+	display: flex;
+}
+
+.popover--inbox-popover .inbox-compose-toggle .compose-start {
+	padding: 5px 10px;
+	border-radius: 300px;
+	height: 15px;
+	text-align: center;
+	font-size: 12px !important;
+}
+
+.popover--inbox-popover .inbox-recipients .no-results>p {
+	border-color: var(--border, #444);
+}
+
+/*======================================explore======================================*/
+.worded-follow-button .follow-text {
+	line-height: 15px;
+}
+
+.discover-tumblelogs .item a.has_follow_button {
+	padding-right: 100px !important;
+}
+
+.discover-tumblelogs .item .has_follow_button .hide_overflow {
+	text-overflow: ellipsis !important;
+}
+
+.discover-tumblelogs .item .follow-button-right {
+	display: flex;
+	align-items: center;
+	color: transparent;
+}
+
+.post_brick.reblog_header .post_header {
+	height: 55px !important;
+}
+
+.post_brick.reblog_header .post_content {
+	margin-top: 55px !important;
+}
+
+/*=======================================search======================================*/
+#search_query {
+	padding-right: 110px !important;
+}
+
+.search-follow-button {
+	display: flex;
+}
+
+.search-follow-button .follow-text {
+	height: 15px;
+	line-height: 15px;
+	padding: 5px 10px;
+	border-radius: 300px;
+	margin: auto;
+}
+
+.post_brick.post .post_header {
+	display: flex;
+	align-items: center;
+	height: 55px;
+	line-height: unset;
+}
+
+.post_brick .post_header .tumblelog_info {
+	display: contents;
+}
+
+.post_brick.post .post_header .tumblelog_avatar {
+	vertical-align: middle;
+}
+
+/*avatar*/
+.post_brick.post .post_header .tumblelog_info>a {
+	display: flex;
+	align-items: center;
+}
+
+/*blog name + Follow button*/
+.post_brick.post .post_header .post-info-tumblelogs, 
+.post_brick.post .post_header .tumblelog_info a {
+	vertical-align: middle;
+	height: 25px;
+	line-height: unset;
+}
+
+.post_brick.post .post_header .post-info-tumblelogs, 
+.post_brick.post .post_header .post-info-tumblelogs .worded-follow-button {
+	display: flex;
+	align-items: center;
+}
+
+.post_brick.post .post_header .post-info-tumblelogs .post-info-post-tumblelog {
+	display: contents;
+}
+
+.post_brick.post .post_header .post-info-tumblelogs .post-info-tumblelog {
+	color: var(--secondary, #888);
+	vertical-align: middle;
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

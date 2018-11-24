@@ -1,0 +1,144 @@
+/*========================================inbox======================================*/
+.popover--inbox-popover .inbox-compose-toggle .compose-start {
+		color: var(--accent);
+}
+
+.popover--inbox-popover .popover-inner {
+	background-color: var(--popover, #111);
+}
+
+.popover--inbox-popover .inbox-header, 
+.popover--inbox-popover .inbox-conversation, 
+.popover--inbox-popover .inbox-recipient, 
+.popover--inbox-popover .inbox-pagination-loader {
+	border-color: var(--border, #444) !important;
+}
+
+.popover--inbox-popover .selected-blog {
+	color: var(--primary, #DDD);
+}
+
+.popover--blog-selector-dropdown .avatar .unread-indicator {
+	border-color: transparent;
+}
+
+.popover--blog-selector-dropdown .item-option .name {
+	color: var(--primary, #DDD);
+}
+
+.popover--blog-selector-dropdown .item-option:hover .name {
+	color: var(--primary-selected, #111);
+}
+
+.popover--blog-selector-dropdown .item-option .title {
+	color: var(--secondary, #888);
+}
+
+.popover--blog-selector-dropdown .item-option:hover .title {
+	color: var(--secondary-selected, #666);
+}
+
+/*=====================================*/
+.popover--inbox-popover .inbox-conversation:hover {
+	background-color: var(--accent-hi) !important;
+}
+
+.popover--inbox-popover .inbox-conversation:active {
+	background-color: var(--accent-hi2) !important;
+}
+
+/*.name-container = blog name*/
+.popover--inbox-popover .inbox-conversation.is-unread .name-container {
+	color: var(--accent) !important;
+}
+
+.popover--inbox-popover .inbox-conversation .name-container {
+	color: var(--primary, #DDD);
+}
+
+.popover--inbox-popover .inbox-conversation:hover .name-container {
+	color: var(--primary-selected, #111);
+}
+
+/*h4 = tagline*/
+.popover--inbox-popover .inbox-conversation h4 {
+	color: var(--secondary, #888);
+}
+
+.popover--inbox-popover .inbox-conversation:hover .inbox-row h4 {
+	color: var(--secondary-selected, #666);
+}
+
+/*=====================================*/
+.popover--inbox-popover .inbox-compose .inbox-compose-input .input {
+	color: var(--primary, #DDD);
+}
+
+/*h2 = "Recently Followed"*/
+.popover--inbox-popover .inbox-compose h2 {
+	background-color: var(--menu-header, #000);
+	color: var(--primary, #DDD);
+	border-color: var(--border, #444);
+}
+
+.popover--inbox-popover .inbox-compose .inbox-recipient:hover {
+	background-color: var(--accent-hi) !important;
+}
+
+/*h3 = blog name*/
+.popover--inbox-popover .inbox-compose .inbox-recipient h3 {
+	color: var(--primary, #DDD);
+}
+
+.popover--inbox-popover .inbox-compose .inbox-recipient:hover h3 {
+	color: var(--primary-selected, #111);
+}
+
+/*h4 = tagline*/
+.popover--inbox-popover .inbox-compose .inbox-recipient h4 {
+	color: var(--secondary, #888);
+}
+
+.popover--inbox-popover .inbox-compose .inbox-recipient:hover h4 {
+	color: var(--secondary-selected, #666);
+}
+
+.popover--inbox-popover .inbox-compose .inbox-recipient .send-link {
+	color: var(--accent) !important;
+}
+
+/*========================================popup======================================*/
+.popover--conversation-popover .conversation-compose, 
+.popover--conversation-popover .conversation-compose .text-input-container .text-input, 
+.popover--conversation-popover .conversation-compose .compose-text-input-container, 
+.popover--conversation-popover .conversation-main {
+	background-color: var(--popup-menu, #111) !important;
+	color: var(--primary, #DDD) !important;
+}
+
+.popover--conversation-popover .message-bubble {
+	background-color: var(--bubble, #444) !important;
+	color: var(--primary, #BBB) !important;
+}
+
+.popover--conversation-popover .conversation-preview {
+	background: var(--popup-menu, #111) !important;
+}
+
+/*hide system scroll bar*/
+.popover--conversation-popover .conversation-main .tx-scroll-container--vertical {
+	padding-right: 20px !important;
+}
+
+.popover--conversation-popover .conversation-messages .conversation-pill button.themed {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+
+.popover--conversation-popover .popover--conversation-actions .conversation-actions li:hover > a {
+	color: var(--accent-hi-text);
+}
+
+.popover--stickers {
+	background-color: var(--popover, #111);
+}

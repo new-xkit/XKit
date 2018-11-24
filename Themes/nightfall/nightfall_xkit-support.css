@@ -1,0 +1,153 @@
+/*=================================One-Click Postage=================================*/
+#x1cpostage_box:before {
+	border-top-color: var(--border, #444);
+}
+
+#x1cpostage_box {
+	background-color: var(--border, #444);
+}
+
+#x1cpostage_box:after {
+	border-top-color: var(--popover, #111);
+}
+
+#x1cpostage_tags, 
+#x1cpostage_caption, 
+#x1cpostage_replace, 
+#x1cpostage_blog, 
+#x1cpostage_reblog, 
+#x1cpostage_queue, 
+#x1cpostage_draft {
+	background-color: var(--popover, #111);
+	color: var(--primary, #DDD);
+}
+
+#x1cpostage_caption {
+	box-shadow: unset;
+}
+
+#x1cpostage_replace div {
+	border-color: var(--primary, #DDD);
+}
+
+#x1cpostage_remove_caption {
+	background: linear-gradient(to bottom, #222 0%, #000 100%);
+	color: var(--secondary, #888);
+	border-color: var(--border, #444);
+}
+
+#x1cpostage_remove_caption:hover {
+	background: linear-gradient(to bottom, var(--popover, #111) 0%, #000 100%);
+	color: var(--secondary, #888);
+}
+
+#x1cpostage_remove_caption:active {
+	background: linear-gradient(to bottom, #000 0%, var(--popover, #111) 100%);
+	color: var(--primary, #DDD);
+}
+
+#x1cpostage_reblog, 
+#x1cpostage_queue, 
+#x1cpostage_draft {
+	color: var(--secondary, #888);
+}
+
+#x1cpostage_reblog:hover, 
+#x1cpostage_queue:hover, 
+#x1cpostage_draft:hover {
+	background-color: var(--border, #444);
+	color: var(--primary, #888);
+}
+
+#x1cpostage_box.xkit_x1cpostage_queue_hover:after {
+	border-top-color: var(--border, #444);
+}
+
+#x1cpostage_reblog:active, 
+#x1cpostage_queue:active, 
+#x1cpostage_draft:active {
+	background-color: var(--menu-header, #000);
+	color: var(--primary, #DDD);
+}
+
+#x1cpostage_box.xkit_x1cpostage_queue_press:after {
+	border-top-color: var(--menu-header, #000);
+}
+
+/*===================================Read More Now===================================*/
+.xkit-button {
+	color: var(--primary, #DDD);
+	background: var(--menu-header, #000);
+}
+
+.xkit-button:hover {
+	color: #FFF;
+	background: var(--menu-header, #000);
+	border-color: #111;
+}
+
+.xkit-button.disabled {
+	color: var(--primary, #DDD) !important;
+	background-color: var(--menu-header, #000) !important;
+	border-color: var(--border, #444) !important;
+}
+
+/*=======================================Audio+======================================*/
+.native-audio-container .audio-player, 
+.native-audio-container .audio-player .audio-info .track-artist {
+	color: #FFF;
+}
+
+.native-audio-container{
+	background-color: rgba(167, 125, 194, 0.75); /*audio purple colour*/
+}
+
+.native-audio-container .audio-player {
+	padding: 0px 10px 25px 10px;
+}
+
+.native-audio-container .audio-player .audio-info {
+	margin-left: 10px;
+	margin-right: 0px;
+}
+
+.native-audio-container .audio-player ~ .xkit-audio-plus-slider-container {
+	width: 100%;
+	left: 0px;
+	bottom: 0px;
+	border-radius: 0px;
+	height: 25px;
+}
+
+.native-audio-container .audio-player ~ .xkit-audio-plus-slider-container 
+.xkit-audio-plus-slider {
+	width: 85%;
+}
+
+.native-audio-container .audio-image {
+	width: 85px;
+}
+
+.native-audio-container .audio-player.has-art ~ .xkit-audio-plus-slider-container {
+	width: calc(100% - 85px);
+}
+
+.native-audio-container .audio-player.has-art ~ .xkit-audio-plus-slider-container 
+.xkit-audio-plus-slider {
+	width: 80%;
+}
+
+.icon_play:before, 
+.icon_pause:before {
+	font-size: 30px;
+}
+
+/*====================================Theme Editor===================================*/
+#xkit-theme-editor-textarea {
+	background-color: unset;
+	color: #111;
+}
+
+#xkit-theme-editor-ul .hide_overflow {
+	padding: 10px;
+}

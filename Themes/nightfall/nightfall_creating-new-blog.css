@@ -1,0 +1,48 @@
+/*https://www.tumblr.com/new/blog*/
+.dashboard_account_create_tumblelog .l-content {
+	background-color: var(--post, #111) !important;
+}
+
+.dashboard_account_create_tumblelog .l-content h1, 
+.dashboard_account_create_tumblelog .blurb {
+	color: var(--primary, #DDD) !important;
+}
+
+.dashboard_account_create_tumblelog #create_tumblelog div {
+	background-color: var(--post, #111) !important;
+	border-color: var(--border, #444) !important;
+}
+
+.dashboard_account_create_tumblelog #create_tumblelog .inner-left_column {
+	color: var(--primary, #DDD);
+}
+
+.dashboard_account_create_tumblelog #create_tumblelog .inner-right_column {
+	color: var(--secondary, #888);
+}
+
+.dashboard_account_create_tumblelog #new_group_title, 
+.dashboard_account_create_tumblelog #validate_tumblelog_loader, 
+.dashboard_account_create_tumblelog #new_group_password_protected {
+	color: var(--primary, #DDD) !important;
+}
+
+.dashboard_account_create_tumblelog #validate_tumblelog_loader .text_field_wrapper, 
+.dashboard_account_create_tumblelog #validate_tumblelog_loader .text_field_wrapper input, 
+.dashboard_account_create_tumblelog #validate_tumblelog_loader .text_field_wrapper label {
+	background-color: var(--input-bg, #000) !important;
+}
+
+.dashboard_account_create_tumblelog .text_field_wrapper label {
+	color: var(--secondary, #888);
+}
+
+.inner-right_column label {
+	color: var(--primary, #DDD);
+}
+
+/*make Cancel button get darker when active, not lighter*/
+.dashboard_account_create_tumblelog .chrome:active {
+	background-color: rgba(255, 255, 255, 0.1);
+	border-color: rgba(255, 255, 255, 0.1);
+}
