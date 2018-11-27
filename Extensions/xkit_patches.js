@@ -10,15 +10,15 @@ XKit.extensions.xkit_patches = new Object({
 	run: function() {
 		this.running = true;
 
-		var to_run = [];
+		var relevant_versions = [];
 		for (let i of this.run_order.reverse()) {
-			to_run.push(i);
+			relevant_versions.unshift(i);
 			if (i == XKit.version) {
 				break;
 			}
 		}
 
-		for (let x of to_run.reverse()) {
+		for (let x of relevant_versions) {
 			this.patches[x]();
 		}
 
