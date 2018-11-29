@@ -34,34 +34,61 @@
 }
 
 .xkit-audio-plus-controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	position: fixed;
-	bottom: 50px;
-	left: 50%;
-	transform: translateX(245px) translateY(0px);
-
+	width: 100%;
+	height: 45px;
+	padding: 5px;
+	bottom: -45px;
 	z-index: 10000;
-	width: 85px;
-	height: 85px;
-	border-radius: 42.5px;
-	display: none;
-	padding: 14px 27px;
 }
 
 .xkit-audio-plus-controls.showing {
-	display: block;
+	bottom: 0px;
+}
+
+.audio-player .play-pause {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 45px;
+}
+
+.xkit-audio-plus-controls.audio-player {
+	min-height: unset;
+}
+
+.xkit-audio-plus-controls .audio-info {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	margin: 0;
+}
+
+.xkit-audio-plus-controls .audio-info * {
+	display: inline-block;
+	margin-left: 10px;
+	font-size: 13px;
+}
+
+.audio-player .play-pause .icon {
+	display: contents;
 }
 
 /* The following three heavily use Tumblr's dock_button styles */
 #xkit-audio-plus-controls-undock-container {
-	position: fixed;
-	right: -1.5px;
-
-	background-color: #748089;
+	display: flex;
+	justify-self: flex-end;
+	position: relative;
+	background-color: unset;
+	width: 45px;
+	height: 45px;
 	border-radius: 100%;
 	font-size: 12px;
 	cursor: pointer;
-	height: 21px;
-	width: 21px;
 	color: #fff;
 }
 
@@ -74,17 +101,34 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-weight: 400;
-
-	margin-left: -3.5px;
-	margin-top: -3.5px;
-	position: absolute;
-	line-height: 8px;
-	height: 7px;
-	width: 7px;
-	left: 50%;
-	top: 50%;
-
 	font-size: 12px;
 	cursor: pointer;
 	color: #fff;
+	margin: auto;
+	transform: scale(2);
+}
+
+/*To push up audio player and footer elements*/
+.xkit_audio_plus_popout_showing .messaging-conversation-popovers {
+	transform: translateY(-45px) !important;
+}
+
+.xkit_audio_plus_popout_showing .pinned_sidebar_footer, 
+.xkit_audio_plus_popout_showing .messaging-open-conversations, 
+.xkit_audio_plus_popout_showing .toastr {
+	bottom: 45px !important;
+}
+
+.xkit_audio_plus_popout_showing .messaging-minimized-conversations {
+	bottom: calc(15px + 45px) !important;
+}
+
+.xkit-audio-plus-controls, 
+.xkit_audio_plus_popout_showing .pinned_sidebar_footer, 
+.xkit_audio_plus_popout_showing .messaging-open-conversations, 
+.xkit_audio_plus_popout_showing .messaging-minimized-conversations, 
+.xkit_audio_plus_popout_showing .toastr {
+	transition: 
+		bottom .15s ease-in, 
+		transform .15s ease-in !important;
 }
