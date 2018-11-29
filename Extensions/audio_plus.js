@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.2 **//
+//* VERSION 0.5.3 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -74,7 +74,26 @@ XKit.extensions.audio_plus = {
 		// Spoof audio_player class to get the Play/Pause button styles
 		controls.classList.add("audio-player");
 
+		var progress = document.createElement("div");
+		progress.classList.add("progress");
+			
+		var audio_info = document.createElement("div");
+		audio_info.classList.add("audio-info");
+		
+		var track_name = document.createElement("div");
+		track_name.classList.add("track-name");
+		
+		var track_artist = document.createElement("div");
+		track_artist.classList.add("track-artist");
+
+		var audio_image = document.createElement("div");
+		audio_image.classList.add("audio-image");
+		
+		controls.appendChild(progress);
 		controls.appendChild(playPause);
+		controls.appendChild(audio_info);
+		audio_info.appendChild(track_name);
+		audio_info.appendChild(track_artist);
 		controls.appendChild(controls_undock_container);
 
 		controls.addEventListener("click", function(event) {
@@ -86,6 +105,9 @@ XKit.extensions.audio_plus = {
 		}, false);
 
 		XKit.extensions.audio_plus.pop_out_controls = controls;
+		XKit.extensions.audio_plus.pop_out_controls_progress = progress;
+		XKit.extensions.audio_plus.pop_out_controls_track_name = track_name;
+		XKit.extensions.audio_plus.pop_out_controls_track_artist = track_artist;
 
 		document.body.appendChild(controls);
 	},
@@ -97,6 +119,7 @@ XKit.extensions.audio_plus = {
 			audio_plus.current_player.querySelector('audio').pause();
 		}
 		controls.classList.remove("showing");
+		document.body.classList.remove("xkit_audio_plus_popout_showing");
 		audio_plus.current_player = null;
 	},
 
@@ -196,8 +219,25 @@ XKit.extensions.audio_plus = {
 			return;
 		}
 
+		/*show progress in popout container*/
+		var progress = XKit.extensions.audio_plus.pop_out_controls_progress;
+		var targetNode = player.querySelector(".progress");
+		var config = {attributes: true};
+		var callback = function(mutations, observer) {
+			for (var mutation of mutations) {
+				progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
+			}
+		};
+
+		var observer = new MutationObserver(callback);
+		observer.observe(targetNode, config);
+
+		XKit.extensions.audio_plus.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
+		XKit.extensions.audio_plus.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
+
 		audio_plus.current_player = player;
 		audio_plus.pop_out_controls.classList.add("showing");
+		document.body.classList.add("xkit_audio_plus_popout_showing");
 		audio_plus.pop_out_controls.classList.add("playing");
 	},
 
