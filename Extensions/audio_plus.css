@@ -109,10 +109,6 @@
 }
 
 /*To push up audio player and footer elements*/
-.xkit_audio_plus_popout_showing .messaging-conversation-popovers {
-	transform: translateY(-45px) !important;
-}
-
 .xkit_audio_plus_popout_showing .pinned_sidebar_footer, 
 .xkit_audio_plus_popout_showing .messaging-open-conversations, 
 .xkit_audio_plus_popout_showing .toastr {
@@ -128,7 +124,5 @@
 .xkit_audio_plus_popout_showing .messaging-open-conversations, 
 .xkit_audio_plus_popout_showing .messaging-minimized-conversations, 
 .xkit_audio_plus_popout_showing .toastr {
-	transition: 
-		bottom .15s ease-in, 
-		transform .15s ease-in !important;
+	transition: bottom .15s ease-in;
 }
