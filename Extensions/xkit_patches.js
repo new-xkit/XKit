@@ -10,17 +10,11 @@ XKit.extensions.xkit_patches = new Object({
 	run: function() {
 		this.running = true;
 
-		var relevant_versions = [];
-		for (let i of this.run_order.reverse()) {
-			relevant_versions.unshift(i);
-			if (i == XKit.version) {
-				break;
-			}
-		}
-
-		for (let x of relevant_versions) {
+		this.run_order.filter(x => {
+			return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
+		}).forEach(x => {
 			this.patches[x]();
-		}
+		});
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
