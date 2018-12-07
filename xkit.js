@@ -3205,7 +3205,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				XKit.install("xkit_updates", data => {
 					if (data.errors) {
 						if (data.storage_error === true) {
-							show_error_installation("[Code: 401] Storage error:" + data.error);
+							show_error_installation("[Code: 401] Storage error: " + data.error);
 						} else {
 							if (data.server_down === true) {
 								show_error_installation("[Code: 101] Can't reach New XKit servers");
@@ -3223,7 +3223,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 							'<div id="xkit-forced-auto-updates-message">Initializing...</div>', "info");
 						XKit.extensions.xkit_updates.get_list(true);
 					} catch (e) {
-						show_error_installation("[Code: 102]" + e.message);
+						show_error_installation("[Code: 102] " + e.message);
 					}
 				});
 			},
@@ -3537,7 +3537,7 @@ function xkit_install() {
 	XKit.install("xkit_installer", function(mdata) {
 		if (mdata.errors) {
 			if (mdata.storage_error === true) {
-				show_error_installation("[Code: 401] Storage error:" + mdata.error);
+				show_error_installation("[Code: 401] Storage error: " + mdata.error);
 			} else {
 				if (mdata.server_down === true) {
 					show_error_installation("[Code: 101] Can't reach New XKit servers");
@@ -3552,7 +3552,7 @@ function xkit_install() {
 			eval(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js");
 			XKit.extensions.xkit_installer.run();
 		} catch (e) {
-			show_error_installation("[Code: 102]" + e.message);
+			show_error_installation("[Code: 102] " + e.message);
 		}
 
 	});
@@ -3657,14 +3657,14 @@ function show_error_reset(message) {
 		"XKit ran into an error.",
 
 		"<b>Generated Error message:</b><br/><p>" + message + "</p>" +
-		"It is recommended that you force-update XKit. " +
-		"Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.",
+		"It is recommended that you update XKit.<br><br>" +
+		"If you've seen this message more than once, try restarting your browser. " +
+		"If you continue to see this message after completing the update process and restarting your browser, please contact us at New XKit Support.",
 
 		"error",
 
 		'<div id="xkit-close-message" class="xkit-button">OK</div>' +
-		'<div id="xkit-force-update" class="xkit-button default">Force Update</div>' +
-		'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>' +
+		'<div id="xkit-force-update" class="xkit-button default">Update Extensions</div>' +
 		'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>'
 	);
 	$("#xkit-force-update").click(XKit.special.force_update);
