@@ -104,7 +104,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 						XKit.extensions.xkit_main.run();
 					} catch (e) {
-						show_error_reset("Can't run xkit_main:" + e.message);
+						show_error_reset("Can't run xkit_main: " + e.message);
 					}
 				} else {
 					if (xkit_main.error == "not_installed") {
@@ -144,7 +144,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					XKit.frame_mode = true;
 					XKit.extensions.xkit_main.run();
 				} catch (e) {
-					console.error("Can't run xkit_main:" + e.message);
+					console.error("Can't run xkit_main: " + e.message);
 				}
 			}
 
@@ -3201,6 +3201,33 @@ var xkit_global_start = Date.now();  // log start timestamp
 		},
 		special: {
 
+			force_update: function() {
+				XKit.install("xkit_updates", data => {
+					if (data.errors) {
+						if (data.storage_error === true) {
+							show_error_installation("[Code: 401] Storage error:" + data.error);
+						} else {
+							if (data.server_down === true) {
+								show_error_installation("[Code: 101] Can't reach New XKit servers");
+							} else {
+								show_error_installation("[Code: 100] Server returned error/empty script");
+							}
+						}
+						return;
+					}
+
+					try {
+						eval(data.script + "\n//# sourceURL=xkit/xkit_updates.js");
+						XKit.window.show("Forcing Extension Updates",
+							"Please do not navigate away from this page. Your extensions are being updated for compatibility with the latest XKit version." +
+							'<div id="xkit-forced-auto-updates-message">Initializing...</div>', "info");
+						XKit.extensions.xkit_updates.get_list(true);
+					} catch (e) {
+						show_error_installation("[Code: 102]" + e.message);
+					}
+				});
+			},
+
 			reset: function() {
 
 				XKit.window.show("Reset XKit", "Really delete all the data stored in XKit?<br/>Your settings will be lost. You can not undo this action.", "question", "<div id=\"reset-xkit-yes\" class=\"xkit-button default\">Yes, reset XKit</div><div id=\"reset-xkit-no\" class=\"xkit-button\">Cancel</div>");
@@ -3626,7 +3653,21 @@ function show_error_script(message) {
 
 function show_error_reset(message) {
 	// Shortcut to call when there is a javascript error.
-	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>It is recommended that you reset XKit. Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.tumblr.com/xkit_reset\" class=\"xkit-button\">Reset XKit</a><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">New XKit Support</a>");
+	XKit.window.show(
+		"XKit ran into an error.",
+
+		"<b>Generated Error message:</b><br/><p>" + message + "</p>" +
+		"It is recommended that you force-update XKit. " +
+		"Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.",
+
+		"error",
+
+		'<div id="xkit-close-message" class="xkit-button">OK</div>' +
+		'<div id="xkit-force-update" class="xkit-button default">Force Update</div>' +
+		'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>' +
+		'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>'
+	);
+	$("#xkit-force-update").click(XKit.special.force_update);
 }
 
 function show_error_update(message) {
