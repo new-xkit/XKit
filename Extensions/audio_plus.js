@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.2 **//
+//* VERSION 0.5.3 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -40,6 +40,13 @@ XKit.extensions.audio_plus = {
 
 		XKit.tools.init_css("audio_plus");
 
+		XKit.extensions.audio_plus.can_see_docked_posts = true;
+		try {
+			document.getElementById("right_column").hasAttribute;
+		} catch(error) {
+			XKit.extensions.audio_plus.can_see_docked_posts = false;
+		}
+
 		if (XKit.extensions.audio_plus.preferences.add_volume_control.value) {
 			$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", XKit.extensions.audio_plus.slider_handle_event);
 			XKit.post_listener.add("audio_plus", function() { setTimeout(XKit.extensions.audio_plus.do, 10); });
@@ -50,9 +57,57 @@ XKit.extensions.audio_plus = {
 			window.addEventListener("scroll", XKit.extensions.audio_plus.handle_scroll, false);
 			XKit.extensions.audio_plus.create_pop_out_controls();
 		}
+
+		//keep tabs on whether there's a docked video post
+		var audio_plus = XKit.extensions.audio_plus;
+		if (audio_plus.can_see_docked_posts) {
+			var targetNode = document.getElementById("right_column");
+			var config = {attributes: true};
+			var callback = function(mutations, observer) {
+				for (var mutation of mutations) {
+					if (mutation.target.classList.contains("has_docked_post")) {
+						var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
+						audio_plus.timeout_counter = 0;
+						audio_plus.waiting_until_dock_ready = setInterval(function() {audio_plus.waitUntilDockReady(docked_video)}, 50);
+					} else {
+						audio_plus.pop_out_controls.style.transform = "";
+					}
+				}
+			}
+			var observer_dock = new MutationObserver(callback);
+			observer_dock.observe(targetNode, config);
+		}
+	},
+
+	setProgress: function(elem, progress, event) {
+		var audio = XKit.extensions.audio_plus.current_player.querySelector('audio');
+		var x = event.offsetX;
+		var total_w = elem.offsetWidth;
+		var width_per = (x/total_w);
+		progress.style.width = width_per*100 + "%";
+		audio.currentTime = width_per*audio.duration;
+	},
+
+	scrubIfDown: function(elem, progress, event) {
+		if (XKit.extensions.audio_plus.mouseDown) {
+			var audio = XKit.extensions.audio_plus.current_player.querySelector('audio');
+			audio.pause();
+			XKit.extensions.audio_plus.scrubbing = true;
+			XKit.extensions.audio_plus.setProgress(elem, progress, event);
+		}
+	},
+
+	playAfterScrubbing: function() {
+		if (XKit.extensions.audio_plus.scrubbing && XKit.extensions.audio_plus.pop_out_controls.classList.contains("playing")) {
+			var audio = XKit.extensions.audio_plus.current_player.querySelector('audio');
+			audio.play();
+		}
+		XKit.extensions.audio_plus.scrubbing = false;
 	},
 
 	create_pop_out_controls: function() {
+		var audio_plus = XKit.extensions.audio_plus;
+
 		// Create play and pause buttons modeled after the built-in ones
 		var playPause = document.createElement("div");
 		playPause.classList.add("play-pause");
@@ -69,25 +124,85 @@ XKit.extensions.audio_plus = {
 		controls_undock_container.id = "xkit-audio-plus-controls-undock-container";
 		controls_undock_container.appendChild(controls_undock);
 
+		var psuedo_post = document.createElement("div");
+		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
+
 		var controls = document.createElement("div");
 		controls.classList.add("xkit-audio-plus-controls");
 		// Spoof audio_player class to get the Play/Pause button styles
 		controls.classList.add("audio-player");
 
-		controls.appendChild(playPause);
-		controls.appendChild(controls_undock_container);
+		var progress = document.createElement("div");
+		progress.classList.add("progress");
+		
+		var audio_info = document.createElement("div");
+		audio_info.classList.add("audio-info");
+		
+		var track_name = document.createElement("div");
+		track_name.classList.add("track-name");
+		track_name.innerHTML = "Listen";
+		
+		var track_artist = document.createElement("div");
+		track_artist.classList.add("track-artist");
 
-		controls.addEventListener("click", function(event) {
-			if (event.target === controls || event.target === playPause) {
-				XKit.extensions.audio_plus.controls_click_callback();
+		var audio_image = document.createElement("div");
+		audio_image.classList.add("audio-image");
+		
+		document.body.appendChild(psuedo_post);
+		psuedo_post.appendChild(controls);
+		controls.appendChild(progress);
+		controls.appendChild(playPause);
+		controls.appendChild(audio_info);
+		audio_info.appendChild(track_name);
+		audio_info.appendChild(track_artist);
+		psuedo_post.appendChild(controls_undock_container);
+		
+		//change progress
+		controls.addEventListener("mousedown", function(event) {
+			if (event.target === playPause) {
+				return;
 			} else {
-				XKit.extensions.audio_plus.controls_undock_click_callback();
+				audio_plus.setProgress(controls, progress, event);
 			}
 		}, false);
 
-		XKit.extensions.audio_plus.pop_out_controls = controls;
+		//scrubbing
+		audio_plus.mouseDown = false;
+		controls.onmousedown = function() { 
+			audio_plus.mouseDown = true;
+		}
+		document.body.onmouseup = function() {
+			audio_plus.mouseDown = false;
+		}
+		controls.addEventListener("mousemove", function(event) {
+			if (event.target === playPause) {
+				return;
+			} else {
+				audio_plus.scrubIfDown(controls, progress, event);
+			}
+		}, false);
 
-		document.body.appendChild(controls);
+		audio_plus.scrubbing = false;
+		controls.addEventListener("mouseup", function() {
+			if (event.target === playPause) {
+				return;
+			} else {
+				audio_plus.playAfterScrubbing();
+			}
+		}, false);
+
+		playPause.addEventListener("click", function(event) {
+			audio_plus.controls_click_callback();
+		}, false);
+
+		controls_undock_container.addEventListener("click", function(event) {
+			audio_plus.controls_undock_click_callback();
+		}, false);
+
+		audio_plus.pop_out_controls = psuedo_post;
+		audio_plus.pop_out_controls_progress = progress;
+		audio_plus.pop_out_controls_track_name = track_name;
+		audio_plus.pop_out_controls_track_artist = track_artist;
 	},
 
 	controls_undock_click_callback: function() {
@@ -97,6 +212,7 @@ XKit.extensions.audio_plus = {
 			audio_plus.current_player.querySelector('audio').pause();
 		}
 		controls.classList.remove("showing");
+		document.body.classList.remove("xkit_audio_plus_popout_showing");
 		audio_plus.current_player = null;
 	},
 
@@ -178,6 +294,34 @@ XKit.extensions.audio_plus = {
 		setTimeout(audio_plus.check_pop_out, 100);
 	},
 
+	waitUntilDockReady: function(docked_video) {
+		var audio_plus = XKit.extensions.audio_plus;
+
+		if (audio_plus.timeout_counter <= 40) { //40 * 50ms = 2s
+			++audio_plus.timeout_counter;
+			console.log(audio_plus.timeout_counter);
+		} else {
+			audio_plus.timeout_counter = 0;
+			clearInterval(audio_plus.waiting_until_dock_ready);
+		}
+
+		if (docked_video.classList.contains("velocity-animating")) {
+			//still animating
+		} else {
+			clearInterval(audio_plus.waiting_until_dock_ready);
+			audio_plus.getDockHeight(docked_video);
+			audio_plus.timeout_counter = 0;
+		}
+	},
+
+	getDockHeight: function(docked_video) {
+		var audio_plus = XKit.extensions.audio_plus;
+
+		var docked_video_height = docked_video.style.height;
+		var controls_style = window.getComputedStyle(audio_plus.pop_out_controls);
+		audio_plus.pop_out_controls.style.transform = "translateY(calc(-" + docked_video_height + " - " + controls_style.bottom + "))";
+	},
+
 	check_pop_out: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		audio_plus.scroll_waiting = false;
@@ -196,8 +340,28 @@ XKit.extensions.audio_plus = {
 			return;
 		}
 
+		//show progress in popout container
+		var progress = XKit.extensions.audio_plus.pop_out_controls_progress;
+		var targetNode = player.querySelector(".progress");
+		var config = {attributes: true};
+		var callback = function(mutations, observer) {
+			for (var mutation of mutations) {
+				progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
+			}
+		}
+		var observer_progress = new MutationObserver(callback);
+		observer_progress.observe(targetNode, config);
+
+		if (player.querySelector(".track-name").innerHTML != "") {
+			audio_plus.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
+		} else {
+			audio_plus.pop_out_controls_track_name.innerHTML = "Listen"
+		}
+		audio_plus.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
+
 		audio_plus.current_player = player;
 		audio_plus.pop_out_controls.classList.add("showing");
+		document.body.classList.add("xkit_audio_plus_popout_showing");
 		audio_plus.pop_out_controls.classList.add("playing");
 	},
 
