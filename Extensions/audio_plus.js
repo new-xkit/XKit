@@ -43,7 +43,7 @@ XKit.extensions.audio_plus = {
 		XKit.extensions.audio_plus.can_see_docked_posts = true;
 		try {
 			document.getElementById("right_column").hasAttribute;
-		} catch(error) {
+		} catch (error) {
 			XKit.extensions.audio_plus.can_see_docked_posts = false;
 		}
 
@@ -68,12 +68,12 @@ XKit.extensions.audio_plus = {
 					if (mutation.target.classList.contains("has_docked_post")) {
 						var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
 						audio_plus.timeout_counter = 0;
-						audio_plus.waiting_until_dock_ready = setInterval(function() {audio_plus.waitUntilDockReady(docked_video)}, 50);
+						audio_plus.waiting_until_dock_ready = setInterval(function() {audio_plus.waitUntilDockReady(docked_video);}, 50);
 					} else {
 						audio_plus.pop_out_controls.style.transform = "";
 					}
 				}
-			}
+			};
 			var observer_dock = new MutationObserver(callback);
 			observer_dock.observe(targetNode, config);
 		}
@@ -83,9 +83,9 @@ XKit.extensions.audio_plus = {
 		var audio = XKit.extensions.audio_plus.current_player.querySelector('audio');
 		var x = event.offsetX;
 		var total_w = elem.offsetWidth;
-		var width_per = (x/total_w);
-		progress.style.width = width_per*100 + "%";
-		audio.currentTime = width_per*audio.duration;
+		var width_per = (x / total_w);
+		progress.style.width = (width_per * 100) + "%";
+		audio.currentTime = (width_per * audio.duration);
 	},
 
 	scrubIfDown: function(elem, progress, event) {
@@ -170,10 +170,10 @@ XKit.extensions.audio_plus = {
 		audio_plus.mouseDown = false;
 		controls.onmousedown = function() { 
 			audio_plus.mouseDown = true;
-		}
+		};
 		document.body.onmouseup = function() {
 			audio_plus.mouseDown = false;
-		}
+		};
 		controls.addEventListener("mousemove", function(event) {
 			if (event.target === playPause) {
 				return;
@@ -348,14 +348,14 @@ XKit.extensions.audio_plus = {
 			for (var mutation of mutations) {
 				progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
 			}
-		}
+		};
 		var observer_progress = new MutationObserver(callback);
 		observer_progress.observe(targetNode, config);
 
 		if (player.querySelector(".track-name").innerHTML != "") {
 			audio_plus.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
 		} else {
-			audio_plus.pop_out_controls_track_name.innerHTML = "Listen"
+			audio_plus.pop_out_controls_track_name.innerHTML = "Listen";
 		}
 		audio_plus.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
 
@@ -377,5 +377,4 @@ XKit.extensions.audio_plus = {
 		XKit.post_listener.remove("audio_plus");
 		window.removeEventListener("scroll", this.handle_scroll, false);
 	}
-
 };
