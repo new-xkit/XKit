@@ -135,12 +135,12 @@ XKit.extensions.audio_plus = {
 			track_name: "'track-name'",
 			track_artist: "'track-artist'",
 			audio_image: "'audio-image'",
-		}
+		};
 		
 		const id = {
 			controls_undock_container: "'xkit-audio-plus-controls-undock-container'",
 			controls_undock: "'xkit-audio-plus-controls-undock'",
-		}
+		};
 		
 		const controls_markup = `
 			<div class=${cl.controls}>
@@ -156,7 +156,7 @@ XKit.extensions.audio_plus = {
 			<div id=${id.controls_undock_container}>
 				<div id=${id.controls_undock}></div>
 			</div>
-		`
+		`;
 		
 		var psuedo_post = document.createElement("div");
 		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
