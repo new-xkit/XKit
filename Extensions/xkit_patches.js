@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.3 **//
+//* VERSION 7.1.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -159,6 +159,22 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.tools.Nx_XHR = function(details) {
 				details.timestamp = new Date().getTime() + Math.random();
+
+				const standard_headers = {
+					"X-Requested-With": "XMLHttpRequest",
+					"X-Tumblr-Form-Key": XKit.interface.form_key()
+				};
+
+				if (details.headers == undefined) {
+					details.headers = standard_headers;
+				} else {
+					let existing = Object.keys(details.headers).map(x => x.toLowerCase());
+					for (let x of Object.keys(standard_headers)) {
+						if (!existing.includes(x.toLowerCase())) {
+							details.headers[x] = standard_headers[x];
+						}
+					}
+				}
 
 				XKit.tools.add_function(function() {
 					var request = add_tag;
