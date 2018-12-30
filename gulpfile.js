@@ -45,6 +45,10 @@ gulp.task('clean:webext', function(cb) {
 	del([BUILD_DIR + '/webext'], cb);
 });
 
+gulp.task('clean:edge', function(cb) {
+	del([BUILD_DIR + '/edge'], cb);
+});
+
 gulp.task('clean:safari', function(cb) {
 	del([BUILD_DIR + '/safari.safariextension'], cb);
 });
@@ -123,9 +127,23 @@ gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 
 });
 
+gulp.task('copy:edge', ['clean:edge', 'lint'], function() {
+	var src = [].concat(
+		paths.scripts.core,
+		paths.css.core,
+		paths.vendor,
+		['WebExtension/**/*', 'Edge/**/*']
+	);
+
+	return gulp.src(src)
+		.pipe(gulp.dest(BUILD_DIR + '/edge'));
+});
+
 gulp.task('build:webext', ['compress:webext']);
 
 gulp.task('build:safari', ['copy:safari']);
+
+gulp.task('build:edge', ['copy:edge']);
 
 gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
 	var extensionBuilder = require('./dev/builders/extension');
@@ -146,7 +164,9 @@ gulp.task('build:themes', ['clean:themes'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:webext', 'build:safari']);
+gulp.task('build', ['build:webext', 'build:safari', 'build:edge']);
+
+
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);
