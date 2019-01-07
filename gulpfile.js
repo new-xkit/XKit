@@ -26,6 +26,10 @@ var paths = {
 		extensions: ['Extensions/**/*.css'],
 		themes: ['Themes/**/*.css']
 	},
+	paperboy: [
+		'Paperboy/*',
+		'!Paperboy/Example'
+	],
 	vendor: [
 		'vendor/*.js',
 	]
@@ -57,6 +61,10 @@ gulp.task('clean:extensions', function(cb) {
 
 gulp.task('clean:themes', function(cb) {
 	del(['Extenstions/dist/page/themes.json'], cb);
+});
+
+gulp.task('clean:paperboy', function(cb) {
+	del(['Extenstions/dist/page/paperboy.json'], cb);
 });
 
 gulp.task('lint:scripts', function() {
@@ -146,6 +154,14 @@ gulp.task('build:themes', ['clean:themes'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
+gulp.task('build:paperboy', ['clean:paperboy'], function(cb) {
+	var paperboyBuilder = require('./dev/builders/paperboy');
+	return gulp.src(paths.paperboy)
+		.pipe(paperboyBuilder())
+		.pipe(paperboyBuilder.galleryBuilder('paperboy.json'))
+		.pipe(gulp.dest('Extensions/dist/page'));
+});
+
 gulp.task('build', ['build:webext', 'build:safari']);
 
 gulp.task('watch', function() {
@@ -154,7 +170,7 @@ gulp.task('watch', function() {
 });
 
 // Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
-gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
+gulp.task('server', ['build:extensions', 'build:themes', 'build:paperboy'], function(callback) {
 	var log = gutil.log;
 	var colors = gutil.colors;
 
