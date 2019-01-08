@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.5.0 **//
+//* VERSION 0.5.1 **//
 //* DESCRIPTION Blog stats where they were **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//

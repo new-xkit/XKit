@@ -30,6 +30,9 @@
 	margin-left: -2px;
 	padding-right: 2px;
 }
+.control-item.control-anchor.review .hide_overflow::before {
+	content: "\EABC";
+}
 .control-item.control-anchor.customize .hide_overflow::before {
 	content: "\EAB3";
 }
