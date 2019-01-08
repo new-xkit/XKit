@@ -19,16 +19,16 @@
 .control-item.control-anchor.members .hide_overflow::before {
 	content: "\EA59";
 }
-.control-item.control-anchor.queue .hide_overflow::before {
-	content: "\EA8D";
-	margin-left: -2px;
-	padding-right: 2px;
-}
 .control-item.control-anchor.drafts .hide_overflow::before {
 	content: "\EA25";
 }
 .control-item.control-anchor.processing .hide_overflow::before {
 	content: "\EA8C";
+}
+.control-item.control-anchor.queue .hide_overflow::before {
+	content: "\EA8D";
+	margin-left: -2px;
+	padding-right: 2px;
 }
 .control-item.control-anchor.customize .hide_overflow::before {
 	content: "\EAB3";
