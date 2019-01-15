@@ -165,7 +165,7 @@ XKit.extensions.xkit_patches = new Object({
 					"X-Tumblr-Form-Key": XKit.interface.form_key()
 				};
 
-				if (details.headers == undefined) {
+				if (details.headers === undefined) {
 					details.headers = standard_headers;
 				} else {
 					let existing = Object.keys(details.headers).map(x => x.toLowerCase());
