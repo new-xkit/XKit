@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.3 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -55,24 +55,23 @@ XKit.extensions.audio_plus = {
 
 		//keep tabs on whether there's a docked video post
 		if (this.can_see_docked_posts) {
-			var audio_plus = XKit.extensions.audio_plus;
 			var targetNode = document.getElementById("right_column");
 			var config = {attributes: true};
-			var callback = function(mutations, observer) {
-				for (var mutation of mutations) {
-					if (mutation.target.classList.contains("has_docked_post")) {
-						var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
-						audio_plus.timeout_counter = 0;
-						audio_plus.waiting_until_dock_ready = setInterval(function() {audio_plus.waitUntilDockReady(docked_video);}, 50);
-					} else {
-						audio_plus.pop_out_controls.style.transform = "";
-					}
-				}
-			};
-			this.observer_dock = new MutationObserver(callback);
-			this.observer_dock.observe(targetNode, config);
+			this.dock_observer.observe(targetNode, config);
 		}
 	},
+
+	dock_observer: new MutationObserver(function(mutations, observer) {
+		for (var mutation of mutations) {
+			if (mutation.target.classList.contains("has_docked_post")) {
+				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
+				XKit.extensions.audio_plus.timeout_counter = 0;
+				XKit.extensions.audio_plus.waiting_until_dock_ready = setInterval(function() {XKit.extensions.audio_plus.waitUntilDockReady(docked_video);}, 50);
+			} else {
+				XKit.extensions.audio_plus.pop_out_controls.style.transform = "";
+			}
+		}
+	}),
 
 	waitUntilDockReady: function(docked_video) {
 		if (this.timeout_counter <= 40) { //40 * 50ms = 2s
@@ -97,7 +96,6 @@ XKit.extensions.audio_plus = {
 		var controls_style = window.getComputedStyle(this.pop_out_controls);
 		this.pop_out_controls.style.transform = `translateY(calc(-${docked_video_height} - ${controls_style.bottom}))`;
 	},
-
 
 	setProgress: function(elem, progress, event) {
 		var audio = XKit.extensions.audio_plus.current_player.querySelector("audio");
@@ -127,36 +125,52 @@ XKit.extensions.audio_plus = {
 
 	create_pop_out_controls: function() {
 		const cl = {
-			controls: "'xkit-audio-plus-controls audio-player'",
-			progress: "'progress'",
-			playPause: "'play-pause'",
-			icon: "'icon icon_pause'",
-			audio_info: "'audio-info'",
-			track_name: "'track-name'",
-			track_artist: "'track-artist'",
-			audio_image: "'audio-image'",
-		};
+			controls: "xkit-audio-plus-controls audio-player",
+			progress: "progress",
+			playPause: "play-pause",
+			icon: "icon icon_pause",
+			audio_info: "audio-info",
+			track_name: "track-name",
+			track_artist: "track-artist",
+			audio_image: "audio-image",
+		}
 		
 		const id = {
-			controls_undock_container: "'xkit-audio-plus-controls-undock-container'",
-			controls_undock: "'xkit-audio-plus-controls-undock'",
-		};
-		
+			controls_undock_container: "xkit-audio-plus-controls-undock-container",
+			controls_undock: "xkit-audio-plus-controls-undock",
+		}
+/*
 		const controls_markup = `
-			<div class=${cl.controls}>
-				<div class=${cl.progress}></div>
-				<div class=${cl.playPause}>
-					<i class=${cl.icon}></i>
+			<div class="${cl.controls}">
+				<div class="${cl.progress}"></div>
+				<div class="${cl.playPause}">
+					<i class="${cl.icon}"></i>
 				</div>
-				<div class=${cl.audio_info}>
-					<div class=${cl.track_name}></div>
-					<div class=${cl.track_artist}></div>
+				<div class="${cl.audio_info}">
+					<div class="${cl.track_name}"></div>
+					<div class="${cl.track_artist}"></div>
 				</div>
 			</div>
-			<div id=${id.controls_undock_container}>
-				<div id=${id.controls_undock}></div>
+			<div id="${id.controls_undock_container}">
+				<div id="${id.controls_undock}"></div>
 			</div>
-		`;
+		`
+*/
+		const controls_markup = `
+			<div class="xkit-audio-plus-controls audio-player">
+				<div class="progress"></div>
+				<div class="play-pause">
+					<i class="icon icon_pause"></i>
+				</div>
+				<div class="audio-info">
+					<div class="track-name"></div>
+					<div class="track-artist"></div>
+				</div>
+			</div>
+			<div id="xkit-audio-plus-controls-undock-container">
+				<div id="xkit-audio-plus-controls-undock"></div>
+			</div>
+		`
 		
 		var psuedo_post = document.createElement("div");
 		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
@@ -222,11 +236,14 @@ XKit.extensions.audio_plus = {
 		var audio_plus = XKit.extensions.audio_plus;
 		var controls = audio_plus.pop_out_controls;
 		if (controls.classList.contains("playing")) {
-			audio_plus.current_player.querySelector('audio').pause();
+			//audio_plus.current_player.querySelector('audio').pause();
+			audio_plus.controls_click_callback();
 		}
 		controls.classList.remove("showing");
-		document.body.classList.remove("xkit_audio_plus_popout_showing");
 		audio_plus.current_player = null;
+		if (audio_plus.can_see_docked_posts && $("#right_column").classList.contains("has_docked_audio")) {
+			$("#right_column").classList.remove("has_docked_audio");
+		}
 	},
 
 	controls_click_callback: function() {
@@ -238,6 +255,7 @@ XKit.extensions.audio_plus = {
 		if (!controls.classList.contains("showing")) {
 			return;
 		}
+
 		if (controls.classList.contains("playing")) {
 			audio.pause();
 			ppIcon.classList.remove("icon_pause");
@@ -312,13 +330,21 @@ XKit.extensions.audio_plus = {
 		audio_plus.scroll_waiting = false;
 
 		var pause_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
-		if (pause_icons.length === 0) {
-			return;
+		//if (pause_icons.length === 0) {
+		//	return;
+		//}
+		if (pause_icons.length) {
+			audio_plus.show_pop_out(pause_icons);
 		}
+	},
+
+	show_pop_out: function(pause_icons) {
+		var audio_plus = XKit.extensions.audio_plus;
 
 		// Arbitrarily select the first if there are multiple
 		var player = audio_plus.audio_player_of_element(pause_icons[0]);
 		var player_bounds = player.getBoundingClientRect();
+		var pause_icon = pause_icons[0]
 
 		// If not completely off the screen
 		if (player_bounds.top > -player_bounds.height) {
@@ -326,16 +352,10 @@ XKit.extensions.audio_plus = {
 		}
 
 		//show progress in popout container
-		var progress = audio_plus.pop_out_controls_progress;
 		var targetNode = player.querySelector(".progress");
 		var config = {attributes: true};
-		var callback = function(mutations, observer) {
-			for (var mutation of mutations) {
-				progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
-			}
-		};
-		audio_plus.observer_progress = new MutationObserver(callback);
-		audio_plus.observer_progress.observe(targetNode, config);
+		audio_plus.progress_observer.observe(targetNode, config);
+		audio_plus.icon_observer.observe(pause_icon, config);
 
 		if (player.querySelector(".track-name").innerHTML != "") {
 			audio_plus.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
@@ -346,9 +366,43 @@ XKit.extensions.audio_plus = {
 
 		audio_plus.current_player = player;
 		audio_plus.pop_out_controls.classList.add("showing");
-		document.body.classList.add("xkit_audio_plus_popout_showing");
 		audio_plus.pop_out_controls.classList.add("playing");
+		var ppIcon = audio_plus.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
+		ppIcon.classList.remove("icon_play");
+		ppIcon.classList.add("icon_pause");
+		if (audio_plus.can_see_docked_posts) {
+			$("#right_column").classList.add("has_docked_audio");
+		}
 	},
+
+	progress_observer: new MutationObserver(function(mutations, observer) {
+		for (var mutation of mutations) {
+			XKit.extensions.audio_plus.pop_out_controls_progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
+			//reset when audio is finished
+			if (mutation.target.attributes.getNamedItem("style").value == "width: 0px;") {
+				XKit.extensions.audio_plus.controls_click_callback();
+			}
+		}
+	}),
+
+	icon_observer: new MutationObserver(function(mutations, observer) {
+		for (var mutation of mutations) {
+			var ppIcon = XKit.extensions.audio_plus.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
+			if (mutation.target.classList.contains("icon_play")) {
+				ppIcon.classList.remove("icon_pause");
+				ppIcon.classList.add("icon_play");
+				if (XKit.extensions.audio_plus.scrubbing == false) {
+					XKit.extensions.audio_plus.pop_out_controls.classList.remove("playing");
+				}
+			} else if (mutation.target.classList.contains("icon_pause")){
+				ppIcon.classList.remove("icon_play");
+				ppIcon.classList.add("icon_pause");
+				if (XKit.extensions.audio_plus.scrubbing == false) {
+					XKit.extensions.audio_plus.pop_out_controls.classList.add("playing");
+				}
+			}
+		}
+	}),
 
 	destroy: function() {
 		this.running = false;
@@ -362,7 +416,8 @@ XKit.extensions.audio_plus = {
 		XKit.post_listener.remove("audio_plus");
 		window.removeEventListener("scroll", this.handle_scroll, false);
 
-		this.observer_dock.disconnect();
-		this.observer_progress.disconnect();
+		this.dock_observer.disconnect();
+		this.progress_observer.disconnect();
+		this.icon_observer.disconnect();
 	}
 };
