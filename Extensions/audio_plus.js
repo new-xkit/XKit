@@ -124,38 +124,6 @@ XKit.extensions.audio_plus = {
 	},
 
 	create_pop_out_controls: function() {
-		const cl = {
-			controls: "xkit-audio-plus-controls audio-player",
-			progress: "progress",
-			playPause: "play-pause",
-			icon: "icon icon_pause",
-			audio_info: "audio-info",
-			track_name: "track-name",
-			track_artist: "track-artist",
-			audio_image: "audio-image",
-		}
-		
-		const id = {
-			controls_undock_container: "xkit-audio-plus-controls-undock-container",
-			controls_undock: "xkit-audio-plus-controls-undock",
-		}
-/*
-		const controls_markup = `
-			<div class="${cl.controls}">
-				<div class="${cl.progress}"></div>
-				<div class="${cl.playPause}">
-					<i class="${cl.icon}"></i>
-				</div>
-				<div class="${cl.audio_info}">
-					<div class="${cl.track_name}"></div>
-					<div class="${cl.track_artist}"></div>
-				</div>
-			</div>
-			<div id="${id.controls_undock_container}">
-				<div id="${id.controls_undock}"></div>
-			</div>
-		`
-*/
 		const controls_markup = `
 			<div class="xkit-audio-plus-controls audio-player">
 				<div class="progress"></div>
@@ -170,7 +138,7 @@ XKit.extensions.audio_plus = {
 			<div id="xkit-audio-plus-controls-undock-container">
 				<div id="xkit-audio-plus-controls-undock"></div>
 			</div>
-		`
+		`;
 		
 		var psuedo_post = document.createElement("div");
 		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
@@ -344,7 +312,7 @@ XKit.extensions.audio_plus = {
 		// Arbitrarily select the first if there are multiple
 		var player = audio_plus.audio_player_of_element(pause_icons[0]);
 		var player_bounds = player.getBoundingClientRect();
-		var pause_icon = pause_icons[0]
+		var pause_icon = pause_icons[0];
 
 		// If not completely off the screen
 		if (player_bounds.top > -player_bounds.height) {
@@ -394,7 +362,7 @@ XKit.extensions.audio_plus = {
 				if (XKit.extensions.audio_plus.scrubbing == false) {
 					XKit.extensions.audio_plus.pop_out_controls.classList.remove("playing");
 				}
-			} else if (mutation.target.classList.contains("icon_pause")){
+			} else if (mutation.target.classList.contains("icon_pause")) {
 				ppIcon.classList.remove("icon_play");
 				ppIcon.classList.add("icon_pause");
 				if (XKit.extensions.audio_plus.scrubbing == false) {
