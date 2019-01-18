@@ -55,6 +55,7 @@ XKit.extensions.audio_plus = {
 
 		//keep tabs on whether there's a docked video post
 		if (this.can_see_docked_posts) {
+			this.video_is_docked = false;
 			var targetNode = document.getElementById("right_column");
 			var config = {attributes: true};
 			this.dock_observer.observe(targetNode, config);
@@ -63,12 +64,17 @@ XKit.extensions.audio_plus = {
 
 	dock_observer: new MutationObserver(function(mutations, observer) {
 		for (var mutation of mutations) {
-			if (mutation.target.classList.contains("has_docked_post")) {
+			if (document.getElementById("posts").querySelector(".dockable_video_embed.docked")) {
 				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
+				XKit.extensions.audio_plus.video_is_docked = true;
 				XKit.extensions.audio_plus.timeout_counter = 0;
 				XKit.extensions.audio_plus.waiting_until_dock_ready = setInterval(function() {XKit.extensions.audio_plus.waitUntilDockReady(docked_video);}, 50);
 			} else {
+				XKit.extensions.audio_plus.video_is_docked = false;
 				XKit.extensions.audio_plus.pop_out_controls.style.transform = "";
+				if (XKit.extensions.audio_plus.pop_out_controls.classList.contains("showing")) {
+					$("#right_column").addClass("has_docked_post");
+				}
 			}
 		}
 	}),
@@ -204,13 +210,14 @@ XKit.extensions.audio_plus = {
 		var audio_plus = XKit.extensions.audio_plus;
 		var controls = audio_plus.pop_out_controls;
 		if (controls.classList.contains("playing")) {
-			//audio_plus.current_player.querySelector('audio').pause();
 			audio_plus.controls_click_callback();
 		}
 		controls.classList.remove("showing");
 		audio_plus.current_player = null;
-		if (audio_plus.can_see_docked_posts && $("#right_column").classList.contains("has_docked_audio")) {
-			$("#right_column").classList.remove("has_docked_audio");
+		if (audio_plus.can_see_docked_posts && audio_plus.video_is_docked) {
+			//do nothing
+		} else {
+			$("#right_column").removeClass("has_docked_post");
 		}
 	},
 
@@ -298,19 +305,14 @@ XKit.extensions.audio_plus = {
 		audio_plus.scroll_waiting = false;
 
 		var pause_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
-		//if (pause_icons.length === 0) {
-		//	return;
-		//}
 		if (pause_icons.length) {
 			audio_plus.show_pop_out(pause_icons);
 		}
 	},
 
 	show_pop_out: function(pause_icons) {
-		var audio_plus = XKit.extensions.audio_plus;
-
 		// Arbitrarily select the first if there are multiple
-		var player = audio_plus.audio_player_of_element(pause_icons[0]);
+		var player = this.audio_player_of_element(pause_icons[0]);
 		var player_bounds = player.getBoundingClientRect();
 		var pause_icon = pause_icons[0];
 
@@ -322,24 +324,26 @@ XKit.extensions.audio_plus = {
 		//show progress in popout container
 		var targetNode = player.querySelector(".progress");
 		var config = {attributes: true};
-		audio_plus.progress_observer.observe(targetNode, config);
-		audio_plus.icon_observer.observe(pause_icon, config);
+		this.progress_observer.observe(targetNode, config);
+		this.icon_observer.observe(pause_icon, config);
 
 		if (player.querySelector(".track-name").innerHTML != "") {
-			audio_plus.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
+			this.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
 		} else {
-			audio_plus.pop_out_controls_track_name.innerHTML = "Listen";
+			this.pop_out_controls_track_name.innerHTML = "Listen";
 		}
-		audio_plus.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
+		this.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
 
-		audio_plus.current_player = player;
-		audio_plus.pop_out_controls.classList.add("showing");
-		audio_plus.pop_out_controls.classList.add("playing");
-		var ppIcon = audio_plus.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
+		this.current_player = player;
+		this.pop_out_controls.classList.add("showing");
+		this.pop_out_controls.classList.add("playing");
+		var ppIcon = this.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
 		ppIcon.classList.remove("icon_play");
 		ppIcon.classList.add("icon_pause");
-		if (audio_plus.can_see_docked_posts) {
-			$("#right_column").classList.add("has_docked_audio");
+		if (this.can_see_docked_posts && this.video_is_docked) {
+			//do nothing
+		} else {
+			$("#right_column").addClass("has_docked_post");
 		}
 	},
 
