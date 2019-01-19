@@ -65,7 +65,7 @@
 	z-index: 99999;
 }
 
-.xkit-audio-plus-pseudo-post.showing.video_is_docked {
+.xkit-audio-plus-pseudo-post.showing {
 	bottom: 300px;
 }
 
