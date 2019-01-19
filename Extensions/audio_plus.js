@@ -64,7 +64,7 @@ XKit.extensions.audio_plus = {
 
 	dock_observer: new MutationObserver(function(mutations, observer) {
 		for (var mutation of mutations) {
-			if (document.getElementById("posts").querySelector(".dockable_video_embed.docked")) {
+			if (mutation.target.classList.contains("has_docked_post")) {
 				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
 				XKit.extensions.audio_plus.video_is_docked = true;
 				XKit.extensions.audio_plus.timeout_counter = 0;
@@ -72,9 +72,6 @@ XKit.extensions.audio_plus = {
 			} else {
 				XKit.extensions.audio_plus.video_is_docked = false;
 				XKit.extensions.audio_plus.pop_out_controls.style.transform = "";
-				if (XKit.extensions.audio_plus.pop_out_controls.classList.contains("showing")) {
-					$("#right_column").addClass("has_docked_post");
-				}
 			}
 		}
 	}),
@@ -214,11 +211,7 @@ XKit.extensions.audio_plus = {
 		}
 		controls.classList.remove("showing");
 		audio_plus.current_player = null;
-		if (audio_plus.can_see_docked_posts && audio_plus.video_is_docked) {
-			//do nothing
-		} else {
-			$("#right_column").removeClass("has_docked_post");
-		}
+		$("#right_column").removeClass("has_docked_audio")
 	},
 
 	controls_click_callback: function() {
@@ -340,11 +333,7 @@ XKit.extensions.audio_plus = {
 		var ppIcon = this.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
 		ppIcon.classList.remove("icon_play");
 		ppIcon.classList.add("icon_pause");
-		if (this.can_see_docked_posts && this.video_is_docked) {
-			//do nothing
-		} else {
-			$("#right_column").addClass("has_docked_post");
-		}
+		$("#right_column").addClass("has_docked_audio")
 	},
 
 	progress_observer: new MutationObserver(function(mutations, observer) {
