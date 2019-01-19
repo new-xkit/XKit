@@ -61,7 +61,7 @@ XKit.extensions.audio_plus = {
 		}
 	},
 
-	dock_observer: new MutationObserver(function(mutations, observer) {
+	dock_observer: new MutationObserver(mutations => {
 		for (var mutation of mutations) {
 			if (mutation.target.classList.contains("has_docked_post")) {
 				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
@@ -332,7 +332,7 @@ XKit.extensions.audio_plus = {
 		$("#right_column").addClass("has_docked_audio");
 	},
 
-	progress_observer: new MutationObserver(function(mutations, observer) {
+	progress_observer:  new MutationObserver(mutations => {
 		for (var mutation of mutations) {
 			XKit.extensions.audio_plus.pop_out_controls_progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
 			//reset when audio is finished
@@ -342,7 +342,7 @@ XKit.extensions.audio_plus = {
 		}
 	}),
 
-	icon_observer: new MutationObserver(function(mutations, observer) {
+	icon_observer:  new MutationObserver(mutations => {
 		for (var mutation of mutations) {
 			var ppIcon = XKit.extensions.audio_plus.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
 			if (mutation.target.classList.contains("icon_play")) {
