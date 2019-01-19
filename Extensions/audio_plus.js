@@ -55,7 +55,6 @@ XKit.extensions.audio_plus = {
 
 		//keep tabs on whether there's a docked video post
 		if (this.can_see_docked_posts) {
-			this.video_is_docked = false;
 			var targetNode = document.getElementById("right_column");
 			var config = {attributes: true};
 			this.dock_observer.observe(targetNode, config);
@@ -66,11 +65,9 @@ XKit.extensions.audio_plus = {
 		for (var mutation of mutations) {
 			if (mutation.target.classList.contains("has_docked_post")) {
 				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
-				XKit.extensions.audio_plus.video_is_docked = true;
 				XKit.extensions.audio_plus.timeout_counter = 0;
 				XKit.extensions.audio_plus.waiting_until_dock_ready = setInterval(function() {XKit.extensions.audio_plus.waitUntilDockReady(docked_video);}, 50);
 			} else {
-				XKit.extensions.audio_plus.video_is_docked = false;
 				XKit.extensions.audio_plus.pop_out_controls.style.transform = "";
 			}
 		}
@@ -79,7 +76,6 @@ XKit.extensions.audio_plus = {
 	waitUntilDockReady: function(docked_video) {
 		if (this.timeout_counter <= 40) { //40 * 50ms = 2s
 			this.timeout_counter++;
-			console.log(this.timeout_counter);
 		} else {
 			this.timeout_counter = 0;
 			clearInterval(this.waiting_until_dock_ready);
