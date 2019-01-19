@@ -33,7 +33,7 @@
 	border-radius: 6px;
 }
 
-.right_column.has_docked_audio {
+#right_column.has_docked_audio {
 	opacity: 0.3;
 }
 
