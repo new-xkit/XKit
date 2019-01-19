@@ -211,7 +211,7 @@ XKit.extensions.audio_plus = {
 		}
 		controls.classList.remove("showing");
 		audio_plus.current_player = null;
-		$("#right_column").removeClass("has_docked_audio")
+		$("#right_column").removeClass("has_docked_audio");
 	},
 
 	controls_click_callback: function() {
@@ -333,7 +333,7 @@ XKit.extensions.audio_plus = {
 		var ppIcon = this.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
 		ppIcon.classList.remove("icon_play");
 		ppIcon.classList.add("icon_pause");
-		$("#right_column").addClass("has_docked_audio")
+		$("#right_column").addClass("has_docked_audio");
 	},
 
 	progress_observer: new MutationObserver(function(mutations, observer) {
