@@ -33,6 +33,10 @@
 	border-radius: 6px;
 }
 
+.right_column.has_docked_audio {
+	opacity: 0.3;
+}
+
 .xkit-audio-plus-pseudo-post {
 	display: block;
 	position: fixed;
