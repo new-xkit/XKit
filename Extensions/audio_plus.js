@@ -55,9 +55,9 @@ XKit.extensions.audio_plus = {
 
 		//keep tabs on whether there's a docked video post
 		if (this.can_see_docked_posts) {
-			var targetNode = document.getElementById("right_column");
+			var targetDockNode = document.getElementById("right_column");
 			var config = {attributes: true};
-			this.dock_observer.observe(targetNode, config);
+			this.dock_observer.observe(targetDockNode, config);
 		}
 	},
 
@@ -292,18 +292,17 @@ XKit.extensions.audio_plus = {
 	check_pop_out: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		audio_plus.scroll_waiting = false;
-
-		var pause_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
-		if (pause_icons.length) {
-			audio_plus.show_pop_out(pause_icons);
+		
+		// Arbitrarily select the first if there are multiple
+		var pause_icon = document.querySelectorAll(".post_media .audio-player .icon_pause")[0];
+		if (pause_icon) {
+			audio_plus.show_pop_out(pause_icon);
 		}
 	},
 
-	show_pop_out: function(pause_icons) {
-		// Arbitrarily select the first if there are multiple
-		var player = this.audio_player_of_element(pause_icons[0]);
+	show_pop_out: function(pause_icon) {
+		var player = this.audio_player_of_element(pause_icon);
 		var player_bounds = player.getBoundingClientRect();
-		var pause_icon = pause_icons[0];
 
 		// If not completely off the screen
 		if (player_bounds.top > -player_bounds.height) {
@@ -311,9 +310,9 @@ XKit.extensions.audio_plus = {
 		}
 
 		//show progress in popout container
-		var targetNode = player.querySelector(".progress");
+		var targetProgressNode = player.querySelector(".progress");
 		var config = {attributes: true};
-		this.progress_observer.observe(targetNode, config);
+		this.progress_observer.observe(targetProgressNode, config);
 		this.icon_observer.observe(pause_icon, config);
 
 		if (player.querySelector(".track-name").innerHTML != "") {
@@ -332,7 +331,7 @@ XKit.extensions.audio_plus = {
 		$("#right_column").addClass("has_docked_audio");
 	},
 
-	progress_observer:  new MutationObserver(mutations => {
+	progress_observer: new MutationObserver(mutations => {
 		for (var mutation of mutations) {
 			XKit.extensions.audio_plus.pop_out_controls_progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
 			//reset when audio is finished
@@ -342,7 +341,7 @@ XKit.extensions.audio_plus = {
 		}
 	}),
 
-	icon_observer:  new MutationObserver(mutations => {
+	icon_observer: new MutationObserver(mutations => {
 		for (var mutation of mutations) {
 			var ppIcon = XKit.extensions.audio_plus.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
 			if (mutation.target.classList.contains("icon_play")) {
