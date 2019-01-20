@@ -65,10 +65,6 @@
 	z-index: 99999;
 }
 
-.xkit-audio-plus-pseudo-post.showing {
-	bottom: 300px;
-}
-
 .xkit-audio-plus-controls {
 	display: flex;
 	align-items: center;
