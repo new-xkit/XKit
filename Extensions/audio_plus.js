@@ -55,9 +55,9 @@ XKit.extensions.audio_plus = {
 
 		//keep tabs on whether there's a docked video post
 		if (this.can_see_docked_posts) {
-			var targetDockNode = document.getElementById("right_column");
+			var targetNode = document.getElementById("right_column");
 			var config = {attributes: true};
-			this.dock_observer.observe(targetDockNode, config);
+			this.dock_observer.observe(targetNode, config);
 		}
 	},
 
@@ -310,9 +310,9 @@ XKit.extensions.audio_plus = {
 		}
 
 		//show progress in popout container
-		var targetProgressNode = player.querySelector(".progress");
+		var progress = player.querySelector(".progress");
 		var config = {attributes: true};
-		this.progress_observer.observe(targetProgressNode, config);
+		this.progress_observer.observe(progress, config);
 		this.icon_observer.observe(pause_icon, config);
 
 		if (player.querySelector(".track-name").innerHTML != "") {
