@@ -325,7 +325,7 @@ XKit.extensions.audio_plus = {
 		this.current_player = player;
 		this.pop_out_controls.classList.add("showing");
 		this.pop_out_controls.classList.add("playing");
-		var ppIcon = this.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
+		var ppIcon = this.pop_out_controls.querySelector('.play-pause .icon');
 		ppIcon.classList.remove("icon_play");
 		ppIcon.classList.add("icon_pause");
 		$("#right_column").addClass("has_docked_audio");
@@ -343,7 +343,7 @@ XKit.extensions.audio_plus = {
 
 	icon_observer: new MutationObserver(mutations => {
 		for (var mutation of mutations) {
-			var ppIcon = XKit.extensions.audio_plus.pop_out_controls.querySelector('.play-pause').querySelector('.icon');
+			var ppIcon = XKit.extensions.audio_plus.pop_out_controls.querySelector('.play-pause .icon');
 			if (mutation.target.classList.contains("icon_play")) {
 				ppIcon.classList.remove("icon_pause");
 				ppIcon.classList.add("icon_play");
