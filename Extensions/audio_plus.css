@@ -48,7 +48,7 @@
 	left: calc(50% + 178px);
 	bottom: 15px;
 	opacity: 0;
-	z-index: -99999;
+	z-index: -1;
 	transition:
 		bottom .15s cubic-bezier(.165,.84,.44,1),
 		transform .15s cubic-bezier(.165,.84,.44,1), 
@@ -62,7 +62,12 @@
 .xkit-audio-plus-pseudo-post.showing {
 	bottom: 20px;
 	opacity: 1;
-	z-index: 99999;
+	z-index: 78;
+}
+
+.peepr .xkit-audio-plus-pseudo-post {
+	opacity: 0;
+	z-index: -1;
 }
 
 .xkit-audio-plus-controls {
@@ -75,7 +80,7 @@
 	min-height: unset;
 	padding: 5px;
 	bottom: 0px;
-	z-index: 10000;
+	z-index: 1;
 }
 
 .audio-player .play-pause {
@@ -124,7 +129,7 @@
 	font-size: 12px;
 	cursor: pointer;
 	color: #fff;
-	z-index: 99999;
+	z-index: 2;
 }
 
 #xkit-audio-plus-controls-undock::before {
