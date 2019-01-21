@@ -170,9 +170,9 @@ XKit.extensions.audio_plus = {
 		controls.onmousedown = function() {
 			audio_plus.mouseDown = true;
 		};
-		document.body.onmouseup = function() {
+		document.body.addEventListener("mouseup", function() {
 			audio_plus.mouseDown = false;
-		};
+		}, false);
 		controls.addEventListener("mousemove", function(event) {
 			if (event.target === playPause) {
 				return;
@@ -213,7 +213,7 @@ XKit.extensions.audio_plus = {
 	controls_click_callback: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		var controls = audio_plus.pop_out_controls;
-		var ppIcon = controls.querySelector('.play-pause').querySelector('.icon');
+		var ppIcon = controls.querySelector('.play-pause .icon');
 		var audio = audio_plus.current_player.querySelector('audio');
 
 		if (!controls.classList.contains("showing")) {
