@@ -8,7 +8,13 @@
 XKit.extensions.audio_plus = {
 
 	running: false,
+
 	current_player: null,
+	timeout_counter: 0,
+	waiting_until_dock_ready: null,
+	pop_out_controls: null,
+	mouseDown: false,
+	scrubbing: false,
 
 	preferences: {
 		sep0: {
@@ -51,13 +57,13 @@ XKit.extensions.audio_plus = {
 		if (XKit.extensions.audio_plus.preferences.pop_out_player.value) {
 			window.addEventListener("scroll", XKit.extensions.audio_plus.handle_scroll, false);
 			XKit.extensions.audio_plus.create_pop_out_controls();
-		}
 
-		//keep tabs on whether there's a docked video post
-		if (this.can_see_docked_posts) {
-			var targetNode = document.getElementById("right_column");
-			var config = {attributes: true};
-			this.dock_observer.observe(targetNode, config);
+			//keep tabs on whether there's a docked video post
+			if (this.can_see_docked_posts) {
+				var targetNode = document.getElementById("right_column");
+				var config = {attributes: true};
+				this.dock_observer.observe(targetNode, config);
+			}
 		}
 	},
 
@@ -65,7 +71,6 @@ XKit.extensions.audio_plus = {
 		for (var mutation of mutations) {
 			if (mutation.target.classList.contains("has_docked_post")) {
 				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
-				XKit.extensions.audio_plus.timeout_counter = 0;
 				XKit.extensions.audio_plus.waiting_until_dock_ready = setInterval(function() {XKit.extensions.audio_plus.waitUntilDockReady(docked_video);}, 50);
 			} else {
 				XKit.extensions.audio_plus.pop_out_controls.style.transform = "";
@@ -166,7 +171,6 @@ XKit.extensions.audio_plus = {
 		}, false);
 
 		//scrubbing
-		this.mouseDown = false;
 		controls.onmousedown = function() {
 			audio_plus.mouseDown = true;
 		};
@@ -181,7 +185,6 @@ XKit.extensions.audio_plus = {
 			}
 		}, false);
 
-		this.scrubbing = false;
 		controls.addEventListener("mouseup", function() {
 			if (event.target === playPause) {
 				return;
