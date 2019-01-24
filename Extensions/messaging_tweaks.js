@@ -179,10 +179,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		icons.each(function() {
 			if ($(this).parents(".conversation-compose").length !== 0) { return; }
-			if ($(this).attr("data-js-tumblelog-name") === XKit.extensions.messaging_tweaks.get_current_chat_user()) {
-				$(this).addClass("xkit-my_messaging_icon");
-				$(this).parents(".conversation-message").addClass("xkit-my_messaging_message");
-			} else if ($(this).is("div") && $(this).children("a").attr("data-js-tumblelog-name") === XKit.extensions.messaging_tweaks.get_current_chat_user()) {
+			if ($(this).parent().find("[data-js-tumblelog-name]:not(.icon)").attr("data-js-tumblelog-name") === XKit.extensions.messaging_tweaks.get_current_chat_user()) {
 				$(this).addClass("xkit-my_messaging_icon");
 				$(this).parents(".conversation-message").addClass("xkit-my_messaging_message");
 			} else {
