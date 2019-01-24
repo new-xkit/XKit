@@ -397,13 +397,13 @@ XKit.extensions.messaging_tweaks = new Object({
 			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-post .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-post .icon:before { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-post .icon::before { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 		}
 		if (XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value) {
 			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-post .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-post .icon:before { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-post .icon::before { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 		}
 
 		// There's either 1 or no messaging-conversation-popovers on extension start
