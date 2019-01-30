@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.5.3 **//
+//* VERSION 2.5.4 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -127,7 +127,7 @@ XKit.extensions.classic_header = new Object({
 						"padding-left: " + lpad + "px !important;" +
 					"}" +
 				"}",
-				"classic_header_fixed_width");
+				"classic_header");
 			});
 		}
 
@@ -144,11 +144,11 @@ XKit.extensions.classic_header = new Object({
 				.logo .logo-anchor .preload-container {
 					opacity: 0 !important;
 				}`,
-			"classic_header_fix_logo");
+			"classic_header");
 		}
 
 		if (XKit.extensions.classic_header.preferences.hide_compose.value) {
-			XKit.tools.add_css(".compose-button { display: none; }", "classic_header_hide_compose");
+			XKit.tools.add_css(".compose-button { display: none; }", "classic_header");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fixed_position.value) {
@@ -159,14 +159,14 @@ XKit.extensions.classic_header = new Object({
 			XKit.tools.add_css(" .l-header-container { position: absolute !important; box-shadow: none; }" +
 								".post_avatar.post-avatar--sticky .post_avatar_wrapper { top: 14px; }" +
 								"#xwidgets-drawer, #xwidgets-opener { transform: translate(0,-52px); z-index: 91 !important; }",
-								"classic_header_fixed_position");
+								"classic_header");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fix_color.value) {
 			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; }" +
-								".selected .tab_notice, .tab_notice { background: #bc3333 !important; }" +
-								".tab_bar .tab.selected .tab_anchor::before { opacity: 0.5; }",
-								"classic_header_fixed_color");
+								".selected .tab_notice, .tab_notice { background: #bc3333 !important; }",
+								"classic_header");
+			$(".tab.iconic.selected").addClass("was-selected").removeClass("selected");
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
@@ -203,9 +203,9 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		if (XKit.extensions.classic_header.preferences.appearance.value === "box") {
-			XKit.tools.add_css(".xoldeheader-item { border-radius: 7px !important; }", "classic_header_box");
+			XKit.tools.add_css(".xoldeheader-item { border-radius: 7px !important; }", "classic_header");
 		} else if (XKit.extensions.classic_header.preferences.appearance.value === "square") {
-			XKit.tools.add_css(".xoldeheader-item { border-radius: 0px !important; }", "classic_header_square");
+			XKit.tools.add_css(".xoldeheader-item { border-radius: 0px !important; }", "classic_header");
 		}
 
 		try {
@@ -286,16 +286,10 @@ XKit.extensions.classic_header = new Object({
 			Tumblr.KeyCommands.scroll_offset = 69;
 		}, true);
 		XKit.tools.remove_css("classic_header");
-		XKit.tools.remove_css("classic_header_fixed_color");
-		XKit.tools.remove_css("classic_header_fixed_position");
-		XKit.tools.remove_css("classic_header_fixed_width");
-		XKit.tools.remove_css("classic_header_fix_logo");
-		XKit.tools.remove_css("classic_header_hide_compose");
 		XKit.tools.remove_css("classic_header_mobile_sticky");
 		$(".nav-item-goodbye").remove();
 		$("#xoldeheader").remove();
-		XKit.tools.remove_css("classic_header_box");
-		XKit.tools.remove_css("classic_header_square");
+		$(".tab.iconic.was-selected").addClass("selected").removeClass("was-selected");
 	}
 
 });
