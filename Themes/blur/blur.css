@@ -13,41 +13,41 @@ body {
 /* Add a blue glass effect to the nav bar */ 
 .l-header-container--refresh {
     /* old pre-blur color -- background-color: rgba(50,53,60,0.67); */
-    background-color: rgba(100, 117, 154, 0.19);
+    background-color: rgba(100, 117, 154, 0.19) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
 .selected .tab_notice {
-    background: rgb(193,33,91);
+    background: rgb(193,33,91) !important;
 }
 
 .tab-bar-container .tab_notice {
-    background: rgb(193,33,91);
+    background: rgb(193,33,91) !important;
 }
 
 .tab-notice--outlined {
-    border-color: rgb(193,33,91);
+    border-color: rgb(193,33,91) !important;
 }
 
 .tab_notice .tab_notice_value {
-    color: rgb(65, 66, 68);
+    color: rgb(65, 66, 68) !important;
 }
 
 .compose-button {
-    fill: rgba(200, 203, 208, 0.7);
+    fill: rgba(200, 203, 208, 0.7) !important;
 }
 
 .l-container.l-container--two-column .right_column, .l-container.l-container--two-column-dashboard .right_column {
-    background-color: rgba(1,1,1,0);
+    background-color: rgba(1,1,1,0) !important;
 }
 
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover {
-    background-color: rgba(50,53,60,0.15);
+    background-color: rgba(50,53,60,0.15) !important;
 }
 
 .identity-refresh .controls_section.user_list li .follow_list_item_blog:before {
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0) !important;
     border-right: none;
 }
 
@@ -57,30 +57,30 @@ body {
 }
 
 .plus-follow-button {
-    color: #414244;
+    color: #414244 !important;
 }
 
 .plus-follow-button:hover {
-    background: #C12C5B;
+    background: #C12C5B !important;
 }
 .identity .controls_section .item:hover .follow:hover {
-    background: #C12C5B;
+    background: #C12C5B !important;
 }
 
 .identity-refresh .radar .radar_footer .radar_avatar:before {
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0) !important;
 }
 
 .radar .radar_footer .radar_avatar:before {
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0) !important;
 }
 
 .l-container.l-container--two-column-dashboard .left_column {
-    background-color: rgba(1,1,1,0);
+    background-color: rgba(1,1,1,0) !important;
 }
 
 .l-container.l-container--two-column .l-content, .l-container.l-container--two-column-dashboard .l-content {
-    background-color: rgba(1,1,1,0);
+    background-color: rgba(1,1,1,0) !important;
 }
 
 /*
@@ -91,7 +91,7 @@ body {
 */
 
 .post-container {
-    background: transparent;
+    background: transparent !important;
 }
 
 .post_content {
@@ -103,94 +103,98 @@ body {
 }
 
 .controls_section li {
-	background: rgba(1,1,1,0);
+	background: rgba(1,1,1,0) !important;
 }
 
 .post_avatar,
 .post_avatar .post_avatar_link {
-	background-color: transparent;
+	background-color: transparent !important;
 }
 
 .chrome {
     border-width: 0px;
-    background: rgba(200, 203, 208, 0.20);
+    background: rgba(200, 203, 208, 0.20) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
 .chrome:active {
-    background: rgba(200,203,208,0.40);
+    background: rgba(200,203,208,0.40) !important;
 }
 
 .chrome.blue {
-    background: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.35) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
 .chrome.blue:active {
-    background: #C12C5B;
+    background: #C12C5B !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
 .rapid-recs-container .rapid-recs {
-    background-image: linear-gradient(to bottom,rgba(68, 76, 88, 0)0%,rgba(44, 47, 51, 0.18) 15%,rgba(44, 47, 51, 0.18) 85%,rgba(68, 76, 88, 0)100%);
+    background-image: linear-gradient(to bottom,rgba(68, 76, 88, 0)0%,rgba(44, 47, 51, 0.18) 15%,rgba(44, 47, 51, 0.18) 85%,rgba(68, 76, 88, 0)100%) !important;
 }
 
 .post_avatar {
-    background-color: rgba(44, 47, 51, 0.18);
+    background-color: rgba(44, 47, 51, 0.18) !important;
 }
 
 .post_avatar .post_avatar_link {
-    background-color: rgba(44, 47, 51, 0.18);
+    background-color: rgba(44, 47, 51, 0.18) !important;
 }
 
 .sorry {
-    color: rgb(245,245,245);
+    color: rgb(245,245,245) !important;
 }
 
 .sorry a {
-    color: #B2FF00
+    color: #B2FF00 !important;
 }
 
 .post_avatar {
-    background-color: rgba(54, 70, 93, 0);
+    background-color: rgba(54, 70, 93, 0) !important;
+}
+
+.flag--accessibility-design-update .sidebar_link.explore_link {
+	hsla(0,0%,100%,.65);
 }
 
 .l-container.l-container--flex .l-content {
-	background-color: rgba(0,0,0,0);
+	background-color: rgba(0,0,0,0) !important;
 }
 
 /* Change Reblog Post background overlay to blue glass. */
 .post-forms-glass {
-	background-color: rgba(100, 117, 154, 0.19);
+	background-color: rgba(100, 117, 154, 0.19) !important;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 }
 
 /* Change related likes background overlay to blue glass. */
 body.flag--always-opaque-peepr .ui_peepr_glass {
-	background-color: rgba(100, 117, 154, 0.19);
+	background-color: rgba(100, 117, 154, 0.19) !important;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 }
 
 /* Add light drop-shadow to avatars */
 .post_avatar.post-avatar--sticky .post_avatar_wrapper {
-	box-shadow: 0px 2px 3px rgba(0,0,0,0.15);
+	box-shadow: 0px 2px 3px rgba(0,0,0,0.15) !important;
 }
 
 /* Dog-ear transparency code by https://motackt.tumblr.com, thanks for the help! */
 /*when hovering over post, use gradient to cut away upper-right corner.*/
 .post.post_full:hover {
-	background: linear-gradient(225deg, transparent 0%, transparent 12px, #FFF 12px, #FFF 100%);
+	background: linear-gradient(225deg, transparent 0%, transparent 12px, #FFF 12px, #FFF 100%) !important;
 }
 
 /*otherwise, use gradient to show the whole post container (this will be more useful when transitions are available for linear gradients*/
 /*and ofc make sure new post buttons never dog ear*/
 .post.post_full, .new_post_buttons_container {
-	background: linear-gradient(225deg, #FFF 0%, #FFF 12px, #FFF 12px, #FFF 100%);
+	background: linear-gradient(225deg, #FFF 0%, #FFF 12px, #FFF 12px, #FFF 100%) !important;
 }
 
 /*remove transition when going to hover over post too*/
@@ -200,7 +204,7 @@ body.flag--always-opaque-peepr .ui_peepr_glass {
 
 /*remove the dark blue border + bg-color of the dog-ear, and remove transition when post stops being hovered over, because linear gradients don't have transitions yet*/
 .post_full .post_permalink {
-	border-color: transparent transparent #d0d0d0 #d0d0d0;
+	border-color: transparent transparent #d0d0d0 #d0d0d0 !important;
 	background: transparent;
 	transition: unset;
 }
@@ -234,5 +238,9 @@ a#xkit-theme-editor-button.customize > div.hide_overflow {
 	background-color: rgba(100, 117, 154, 0.19);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
+}
+
+.notification:hover, .notification.control_hover:active {
+	backdrop-filter: blur(5px);
 }
 /* End XKit Glass */
