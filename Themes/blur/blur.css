@@ -18,18 +18,20 @@ body {
     -webkit-backdrop-filter: blur(10px);
 }
 
+/* Values for the header bar badge colours */
 .selected .tab_notice {
-    background: rgb(193,33,91) !important;
+    background: #00b8ff !important;
 }
 
 .tab-bar-container .tab_notice {
-    background: rgb(193,33,91) !important;
+    background: #00b8ff !important;
 }
 
 .tab-notice--outlined {
-    border-color: rgb(193,33,91) !important;
+    border-color: #00b8ff !important;
 }
 
+/* Value for the header bar badge font colour. */
 .tab_notice .tab_notice_value {
     color: rgb(65, 66, 68) !important;
 }
@@ -83,12 +85,6 @@ body {
     background-color: rgba(1,1,1,0) !important;
 }
 
-/*
-.post {
-	background: blue;
-	border-radius: 20px;
-}
-*/
 
 .post-container {
     background: transparent !important;
@@ -122,6 +118,7 @@ body {
     background: rgba(200,203,208,0.40) !important;
 }
 
+/* Values for (positive) button colours, unpressed and pressed respectively. */
 .chrome.blue {
     background: rgba(255,255,255,0.35) !important;
     backdrop-filter: blur(10px);
@@ -129,9 +126,10 @@ body {
 }
 
 .chrome.blue:active {
-    background: #C12C5B !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+	background: #00bcd45e !important;
+	box-shadow: 0px 0px 5px #00bcd45e !important;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
 }
 
 .rapid-recs-container .rapid-recs {
@@ -171,6 +169,32 @@ body {
 	background-color: rgba(100, 117, 154, 0.19) !important;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
+}
+
+/* Change Publish Draft Post background overlay to blue glass. */
+.flag--accessibility-design-update .ui_dialog_lock {
+	background-color: rgba(100, 117, 154, 0.19) !important;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+/* Fix Publish Draft Post text and button features. */
+.ui_dialog span.text {
+	text-shadow: 0px 2px 8px #000;
+}
+
+button.ui_button.btn_0.chrome {
+	text-shadow: 0px 2px 8px #00000073;
+	box-shadow: 0px 0px 5px #00000026;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
+button.ui_button.btn_1.chrome.blue:active {
+	background: #00bcd45e !important;
+	box-shadow: 0px 0px 5px #00bcd45e !important;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
 }
 
 /* Change related likes background overlay to blue glass. */
