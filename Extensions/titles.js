@@ -5,22 +5,21 @@
 //* FRAME false **//
 //* BETA false **//
 
-XKit.extensions.max_img_width = new Object({
+XKit.extensions.titles = new Object({
 	running: false,
-
-	// the blog being posted to can't always be inferred from the url...
-	postingTo: () => $("span.caption").innerText,
 
 	/* object mapping the first url folder component to a function which takes
 	 * an array of url components (like ['blog', 'xkit'] for '/blog/xkit') and
 	 * returns the new page title
 	 */
-	getTitle: {
+	titleFuncs: {
 		blog: url => {
 			if (url.length > 2) {
 				if (url[2] == "new") {
 					// new post
 					return "Post to " + url[1];
+				} else if (url[2] == "review") {
+					return url[1] + "’s flagged posts";
 				} else if (url[2] != "delete") {
 					// e.g. drafts, queue
 					return url[1] + "’s " + url[2];
@@ -60,38 +59,46 @@ XKit.extensions.max_img_width = new Object({
 
 		"new": url => url[1] == "blog"
 			? "Hoard a URL"
-			: "Post to " + this.postingTo(),
+			: "Post to " + XKit.interface.post_window.blog(),
 
-		reblog: url => "Reblog from " + $("span.reblog_name").innerText,
-		"mega-editor": url => "Mass editing " + url[2]
+		reblog: url => "Reblog from " + XKit.interface.post_window.reblogging_from(),
+		"mega-editor": url => "Mass editing " + url[1]
 	},
 
+	// new page title from an array of directory names
+	getTitle: function(url) {
+		return this.titleFuncs[url[0]](url);
+	},
+
+	urlComponents: () => new window.URL(document.URL).pathname
+			.split("/").filter(component => component),
+
+	// trims text after a `|` in a string; used for titles like
+	// "Dashboard | Tumblr"
 	trimPipe: txt => {
 		let pipe = txt.indexOf("|");
 		if (pipe != -1) {
 			return txt.substring(0, pipe);
 		}
-		return txt;
+		return txt.trim();
 	},
 
 	run: function() {
 		this.running = true;
 		document.title = this.trimPipe(document.title);
-		// array of non-empty directory names
-		let url = new window.URL(document.URL).pathname
-			.split("/").filter(component => component);
+		// array of non-empty directory names, like ['blog', 'new-xkit']
+		let url = this.urlComponents();
 
 		window.addEventListener("hashchange", e => {
 			if (this.running) {
-				document.title = this.getTitle[url[0]](url);
+				document.title = this.getTitle(url);
 			}
 		});
 
-		window.dispatchEvent(new window.Event("hashchange"));
+		document.title = this.getTitle(url);
 	},
 
 	destroy: function() {
 		this.running = false;
 	}
 });
-

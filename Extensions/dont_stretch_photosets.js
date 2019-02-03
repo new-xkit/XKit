@@ -5,7 +5,7 @@
 //* FRAME false **//
 //* BETA false **//
 
-XKit.extensions.max_img_width = new Object({
+XKit.extensions.dont_stretch_photosets = new Object({
 	running: false,
 
 	run: function() {

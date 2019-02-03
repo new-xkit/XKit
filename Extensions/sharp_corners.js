@@ -5,7 +5,7 @@
 //* FRAME false **//
 //* BETA false **//
 
-XKit.extensions.max_img_width = new Object({
+XKit.extensions.sharp_corners = new Object({
 	running: false,
 
 	run: function() {
