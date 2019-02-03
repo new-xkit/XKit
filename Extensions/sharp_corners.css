@@ -1,0 +1,33 @@
+*,
+*:hover,
+*:active,
+*:before,
+*:after,
+*:first-child,
+*:last-child,
+*:focus,
+html body .search_popover .search_results_container .search_results_section:last-child .popover_menu_item:last-child .result_link {
+	border-radius: 0 0 0 0 !important;
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+#vignette {
+	visibility: hidden !important;
+}
+
+#tumblr_lightbox {
+	background-color: rgba(17, 17, 17, 0.3) !important;
+}
+
+.post_permalink:before {
+	display: none !important;
+}
+
+.plexi.show.color,
+.tumblr_video_iframe html body.tumblr_video_iframe_body {
+	background: rgba(0, 25, 53, 0.3) !important;
+}
+
+.radar .radar_content .thumbnail_anchor:after {
+	background: rgba(0, 0, 0, 0.5) !important;
+}
