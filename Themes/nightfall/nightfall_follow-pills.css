@@ -28,8 +28,7 @@ always by itself*/
 	margin: 0px;
 	padding: 15px 15px 15px 20px;
 	line-height: 15px;
-	height: unset;
-	max-height: 55px;
+	height: 55px;
 	width: 100%;
 }
 
@@ -146,12 +145,16 @@ always by itself*/
 
 .dockable_video_embed .post_header .tumblelog_avatar {
 	flex-shrink: 0 !important;
+	width: 25px;
+	height: 25px;
+	margin-right: 8px;
 }
 
 .dockable_video_embed .post_header .post_info_tumblelog {
 	display: inline-block !important;
 	vertical-align: middle !important;
 	max-width: 290px !important;
+	width: calc(100% - 25px - 8px);
 	min-width: 2ch !important;
 	overflow: hidden !important;
 	text-overflow: ellipsis !important;
@@ -171,7 +174,6 @@ always by itself*/
 	max-width: unset !important;
 	min-width: 2ch !important;
 	margin: 0px !important;
-	padding-right: 8px !important;
 	overflow: hidden !important;
 	text-overflow: ellipsis !important;
 }
@@ -201,7 +203,7 @@ always by itself*/
 	margin-bottom: 2px;
 	padding-right: 8px;
 	padding-left: 5px;
-	font-size: 80%;
+	font-size: 10.8px;
 	transform: scale(1.6);
 }
 
@@ -220,12 +222,64 @@ always by itself*/
 	transition: unset;
 }
 
+.is-following.reblog_follow_button .follow-text:before, 
+.is-following.worded-follow-button .follow-text:before, 
+.is-following.reblog_follow_button .follow-text, 
+.is-following.worded-follow-button .follow-text {
+	transition: none .45s ease-in-out .15s;
+}
+
+/*after pressing Follow button*/
+.is-following.reblog_follow_button .follow-text:before, 
+.is-following.worded-follow-button .follow-text:before {
+	content: "\EA1D";
+	margin-top: -1px;
+	padding-right: 5px;
+	transform: scale(2);
+	transition-property: padding;
+}
+
+.dockable_video_embed.is_original .post_header .is-following.reblog_follow_button .follow-text:before {
+	padding-right: 8px;
+}
+
+.is-following.reblog_follow_button .follow-text, 
+.is-following.worded-follow-button .follow-text {
+	opacity: 1 !important;
+	transform: scale(1) !important;
+	color: var(--accent);
+	font-size: 0px !important;
+	transition-property: font-size; 
+}
+
+/*
 .worded-follow-button .follow-text, 
 .search-follow-button .follow-text, 
 .messaging-inbox .inbox-compose-toggle .compose-start, 
 .peepr-body .reblog_follow_button .follow-text, 
 #search_actions_search .reblog_follow_button .follow-text {
 	border-radius: 300px;
+}
+
+.worded-follow-button .follow-text, 
+.peepr-body .reblog_follow_button .follow-text, 
+#search_actions_search .reblog_follow_button .follow-text {
+	margin-left: 10px;
+	padding: 5px 10px 5px 10px;
+}
+*/
+
+.worded-follow-button .follow-text, 
+.search-follow-button .follow-text, 
+.messaging-inbox .inbox-compose-toggle .compose-start, 
+.peepr-body .reblog_follow_button .follow-text, 
+#search_actions_search .reblog_follow_button .follow-text, 
+.dockable_video_embed.is_original .post_header .reblog_follow_button .follow-text {
+	border-radius: 300px;
+}
+
+.dockable_video_embed.is_original .post_header .reblog_follow_button .follow-text {
+	padding: 5px 10px 5px 10px;
 }
 
 .worded-follow-button .follow-text, 
@@ -274,6 +328,16 @@ always by itself*/
 	font-size: 12px !important;
 }
 
+.popover--inbox-popover .inbox-compose-toggle.active .compose-cancel {
+    display: inline-block;
+    background-color: var(--bubble, #444);
+    color: var(--primary, #DDD);
+	height: 15px;
+    padding: 5px 10px 5px 10px;
+    padding-left: 10px;
+    border-radius: 300px;
+}
+
 .popover--inbox-popover .inbox-recipients .no-results>p {
 	border-color: var(--border, #444);
 }
@@ -306,20 +370,64 @@ always by itself*/
 }
 
 /*=======================================search======================================*/
-#search_query {
-	padding-right: 110px !important;
-}
-
-.search-follow-button {
+/*==================header==================*/
+#search_actions_search .ui_search.active, 
+#search_actions_search .ui_search.selected, 
+#search_actions_search .ui_search .search_form_field{
 	display: flex;
+	align-items: center;
 }
 
-.search-follow-button .follow-text {
+#search_actions_search .ui_search .search_form {
+	width: 100%;
+}
+
+#search_actions_search .ui_search.active .search_form_field:before, 
+#search_actions_search .ui_search.selected .search_form_field:before {
+	position: relative;
+	width: 17px;
+	top: 1px;
+	left: 12px;
+	margin-right: -17px;
+}
+
+#search_actions_search #search_query {
+	height: 35px;
+	padding-right: 110px !important;
+	margin: 0;
+}
+
+#search_actions_search .search-follow-button {
+	display: flex;
+	position: relative;
+	height: unset;
+	line-height: unset;
+	right: 0;
+	margin-left: -89px;
+	opacity: 0.6;
+}
+
+.active .search-follow-button {
+	opacity: 1 !important;
+}
+
+#search_actions_search .search-follow-button .follow-text {
 	height: 15px;
 	line-height: 15px;
 	padding: 5px 10px;
 	border-radius: 300px;
 	margin: auto;
+}
+
+#search_actions_search .search-follow-button .unfollow-text {
+    display: inline-block;
+    background-color: var(--bubble, #444);
+    color: var(--primary, #DDD);
+	height: 15px;
+	line-height: 15px;
+    padding: 5px 10px 5px 10px;
+    padding-left: 10px;
+    border-radius: 300px;
 }
 
 .post_brick.post .post_header {

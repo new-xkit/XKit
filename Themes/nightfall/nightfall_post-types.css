@@ -16,14 +16,20 @@
 	color: var(--secondary, #888);
 }
 
+.post_header .post_source_app_name {
+	margin-left: 10px;
+}
+
 .post-transition-background {
 	background: var(--post, #111);
 }
 
 /*no dog-ears*/
+/*
 .post.post_full.is_note {
 	background: var(--post, #111);
 }
+*/
 
 .post.post_full, 
 .peepr-body .indash_blog .post {
@@ -41,7 +47,7 @@
 .post_full .post_permalink {
 	position: absolute;
 	z-index: unset !important;
-	background: linear-gradient(45deg, var(--dog-ear) 50%, transparent 50%);
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M0 0v1h1z' fill='%23888' shape-rendering='crispEdges'/%3E%3C/svg%3E") -.1px no-repeat;
 	border: unset;
 	border-bottom-left-radius: 5px;
 	opacity: 1;
@@ -56,40 +62,75 @@
 	height: 16px;
 }
 
-.post_full .post_permalink:before {
-	content: "";
-	position: absolute;
-	z-index: -1;
-	display: inline-block;
-	background: linear-gradient(45deg, var(--post, #111) 50%, transparent 50%);
-	width: 16px;
-	height: 16px;
-	top: -16px;
-	right: -16px;
-    padding-top: 16px;
-    padding-right: 16px;
-    background-clip: content-box;
+/*for a rounded corner*/
+@supports (clip-path: polygon(0 0)) {
+	.post_full .post_permalink:before {
+		content: "";
+		position: absolute;
+		z-index: -1;
+		display: inline-block;
+		background: var(--post, #111);
+		width: 16px;
+		height: 16px;
+		top: 0px;
+		right: 0px;
+		border-top-right-radius: 3px;
+		clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0, 100% 0);
+	}
+
+	.post_full:hover .post_permalink:before {
+		clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 100%, 0 0);
+	}
+
+	.post_full .post_permalink, 
+	.post_full:hover .post_permalink, 
+	.post_full .post_permalink:before, 
+	.post_full:hover .post_permalink:before {
+		transition: none .15s ease-in;
+		transition-property: 
+			width, 
+			height, 
+			clip-path;
+	}
 }
 
-.post_full:hover .post_permalink:before {
-	background: linear-gradient(45deg, var(--post, #111) 49%, transparent 49%);
-	background-clip: content-box;
-	top: 0px;
-	right: 0px;
-	padding-top: 0px;
-	padding-right: 0px;
-}
+@supports not (clip-path: polygon(0 0)) {
+	.post_full .post_permalink:before {
+		content: "";
+		position: absolute;
+		z-index: -1;
+		display: inline-block;
+		background: linear-gradient(45deg, var(--post, #111) 50%, transparent 50%);
+		width: 16px;
+		height: 16px;
+		top: -16px;
+		right: -16px;
+		padding-top: 16px;
+		padding-right: 16px;
+		background-clip: content-box;
+	}
 
-.post_full .post_permalink, 
-.post_full:hover .post_permalink, 
-.post_full .post_permalink:before, 
-.post_full:hover .post_permalink:before {
-	transition: 
-		width .15s ease-in, 
-		height .15s ease-in, 
-		top .15s ease-in, 
-		right .15s ease-in,
-		padding .15s ease-in;
+	.post_full:hover .post_permalink:before {
+		background: linear-gradient(45deg, var(--post, #111) 49%, transparent 49%);
+		background-clip: content-box;
+		top: 0px;
+		right: 0px;
+		padding-top: 0px;
+		padding-right: 0px;
+	}
+
+	.post_full .post_permalink, 
+	.post_full:hover .post_permalink, 
+	.post_full .post_permalink:before, 
+	.post_full:hover .post_permalink:before {
+		transition: none .15s ease-in;
+		transition-property: 
+			width, 
+			height, 
+			top, 
+			right, 
+			padding;
+	}
 }
 
 .reblog_follow_button .follow-text, 
@@ -128,12 +169,25 @@ figure>p.tmblr-attribution {
 	border-color: var(--border, #444);
 }
 
+.npf-link-block a {
+	padding-bottom: 0px !important;
+}
+
+.npf-link-block .bottom {
+	background: var(--bubble, #444) !important;
+	color: var(--primary, #DDD) !important);
+}
+
 /*horizontal line*/
 .post.post_full hr {
 	border-top-color: var(--primary, #DDD) !important);
 }
 
 /*Keep Reading*/
+.tmblr-truncated {
+	margin: 15px 0;
+}
+
 .tmblr-truncated .tmblr-truncated-link, 
 .tmblr-truncated:after {
 	color: var(--accent) !important;
@@ -152,7 +206,10 @@ figure>p.tmblr-attribution {
 .post .post-source-footer, 
 .post .post-source-footer a.post-source-link, 
 .post .post_tags .post_tag, 
-.post .post_footer, 
+.post .post_footer {
+	color: var(--secondary, #888) !important;
+}
+
 .post_controls .post_control:before {
 	color: var(--secondary, #888);
 }
@@ -224,11 +281,33 @@ a.post_tag.ask.post_ask_me_link {
 	white-space: nowrap;
 }
 
+.post_animated_heart.unliked {
+	color: var(--secondary) !important;
+}
+
 /*=====================================text posts====================================*/
 
 
 /*====================================photo posts====================================*/
+/*.flipcard = looking at camera information on photos*/
+.flipcard .flipcard_back {
+	background-color: #000;
+	color: var(--primary, #DDD);
+}
 
+.flipcard .flipcard_back .photo_exif_row:not(:last-child) {
+	border-bottom: 2px solid var(--secondary, #888);
+}
+
+.flipcard .flipcard_back .photo_exif_row .label {
+	color: var(--secondary, #888);
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.flipcard .flipcard_back .photo_exif_row .data {
+	border: unset;
+}
 
 /*====================================quote posts====================================*/
 .post_full.is_quote .post_title, 
@@ -236,15 +315,22 @@ a.post_tag.ask.post_ask_me_link {
 	color: var(--primary, #DDD);
 }
 
+/*
 .post_brick.is_conversation .conversation_lines .chat_line:nth-child(2n), 
 .peepr-body .indash_blog .post_chrome.chat .conversation_lines .chat_line:nth-child(2n) {
 	background-color: unset;
 	color: var(--primary, #DDD);
 }
+*/
+
+.conversation_lines .chat_line {
+	background-color: unset !important;
+	color: var(--primary, #DDD) !important;
+}
 
 /*=====================================link posts====================================*/
 .is_link .link-button {
-	background-color: var(--post, #111) !important;
+	background-color: var(--bubble, #444) !important;
 }
 
 .is_link .link-button:active {
@@ -314,6 +400,20 @@ a.post_tag.ask.post_ask_me_link {
 }
 
 /*=====================================nsfw posts====================================*/
+/*no dog-ear*/ /*REQUIRES "nightfall_follow-pills.css"*/
+.post .post_content_inner.safemode:before, 
+.post .post_content_inner.tagfiltering:before {
+	content: "";
+	position: absolute;
+	display: inline-block;
+	background: var(--post, #111);
+	width: 17px;
+	height: 17px;
+	top: -55px;
+	right: 0px;
+	border-top-right-radius: 3px;
+}
+
 .post .post_content_inner.safemode, 
 .post .post_content_inner.tagfiltering {
 	background: var(--link-bg, #000);
@@ -333,19 +433,19 @@ a.post_tag.ask.post_ask_me_link {
 
 .safemode .link, 
 .tagfiltering .link {
-	color: var(--accent);
+	color: var(--accent) !important;
 }
 
-.safemode .link-tagfiltering-settings.link {
-	display: inline-block;
-	box-sizing: content-box;
-	background-color: var(--danger, #d95e40);
-	color: var(--primary, #DDD);
-	height: 15px;
-	line-height: 15px;
-	padding: 5px;
-	border-radius: 3px;
-	margin-top: 7px;
+.link-tagfiltering-settings.link {
+	display: inline-block !important;
+	box-sizing: content-box !important;
+	background-color: var(--danger, #d95e40) !important;
+	color: var(--primary, #DDD) !important;
+	height: 15px !important;
+	line-height: 15px !important;
+	padding: 5px !important;
+	border-radius: 3px !important;
+	margin-top: 7px !important;
 }
 
 /*====================================radar posts====================================*/
@@ -353,9 +453,10 @@ a.post_tag.ask.post_ask_me_link {
 	background-color: var(--post, #111);
 }
 
+/*to copy post-source-footer*/
 .radar .radar_controls .note_count>a, 
 .radar .radar_controls .radar_button {
-	color: var(--secondary, #666); /*not necessary?*/
+	color: var(--secondary, #666); 
 }
 
 .radar .radar_post, 
@@ -414,10 +515,16 @@ a.post_tag.ask.post_ask_me_link {
 	display: contents;
 }
 
-.post_full .post_header .post_dismiss .post_dismiss_tooltip, 
-.icon_close:before {
+
+/*.icon_close:before, */
+.post_full .post_header .post_dismiss .post_dismiss_tooltip {
 	background: unset;
 	color: var(--secondary, #666);
+}
+
+.icon_close:before {
+	background: unset;
+	color: var(--primary, #888);
 }
 
 .post_full .post_header .post_dismiss, 
@@ -465,25 +572,32 @@ a.post_tag.ask.post_ask_me_link {
 
 .recommendation-reason-footer .recommendation-reason-link:before {
 	content: "#";
-	margin-right: -3%;
+	margin-right: -3px;
 }
 
 .recommendation-reason-footer .recommendation-reason-link {
 	background-color: var(--tag, #222);
 	background-color: var(--happy, #56bc8a);
 	color: var(--post, #111) !important;
-	margin: 10px 10px 0px 0px;
+	margin: 10px 10px 0 0;
 	padding: 5px;
 	line-height: 15px;
 	border-radius: 3px;
 }
 
-.recommendation-reason-footer .icon_search:before {
+.recommendation-reason-footer .recommendation-reason-link .icon:before {
 	color: var(--happy, #56bc8a);
 }
 
-.recommendation-reason-footer .icon_search {
+
+.recommendation-reason-footer .recommendation-reason-link .icon {
+	position: relative;
+	margin: 0 3px 0 0;
 	top: -1px;
+}
+
+.recommendation-reason-footer .recommendation-reason-link .icon_rounded_play {
+	top: 4px;
 }
 
 /*=================================submission posts==================================*/

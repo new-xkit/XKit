@@ -100,12 +100,23 @@
 	color: var(--primary, #DDD) !important;
 }
 
-.post-activity-reply .editor-slot .editor-placeholder {
+/*.post-activity-reply .editor-slot .editor-placeholder {
 	color: var(--secondary, #888) !important;
-}
+}*/
 
 .post-activity-notes .post-activity-note-content .note-added-tags, 
 .post-activity-notes .post-activity-note-content .note-added-text, 
 .post-activity-notes .post-activity-note-content .note-text .note-text-link {
 	color: var(--primary, #DDD) !important;
+}
+
+.post-activity-notes .post-activity-note-content .note-added-tags .tag, 
+.post-activity-notes .post-activity-note-content .note-added-text .tag {
+	display: inline-block;
+	background-color: var(--tag, #222);
+	color: var(--secondary, #888);
+	line-height: 15px;
+	margin: 5px 5px 0 0;
+	padding: 5px;
+	border-radius: 3px;
 }

@@ -19,10 +19,6 @@
 	color: var(--primary, #DDD);
 }
 
-.peepr-body .post_full .post_tags.fadeable {
-	max-height: 80px;
-}
-
 .see_all_tags {
 	background: linear-gradient(to right, transparent, var(--post, #111));
 	height: unset;
@@ -35,4 +31,12 @@
 .peepr-body .post[data-tumblelog-name] .post_permalink {
 	border: unset;
 	box-shadow: unset;
+}
+
+.navigation .snowman-icon:before {
+	color: unset;
+}
+
+.empty-state-message-box {
+	color: var(--secondary);
 }

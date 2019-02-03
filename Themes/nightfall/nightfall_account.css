@@ -167,7 +167,7 @@ input.text_field {
 }
 
 .popover--account-popover .blog-list-item:hover .blog-list-item-button {
-	color: var(--accent-hi-text);
+	color: var(--accent-hi-text) !important;
 }
 
 .popover--account-popover .blog-list-item, 

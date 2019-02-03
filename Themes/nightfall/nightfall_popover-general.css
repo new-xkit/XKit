@@ -27,6 +27,7 @@
 }
 
 .info_popover li, 
+.info_popover li a, 
 .popover .popover_menu_item, 
 .popover .popover_menu_item a, 
 .pop-menu .item-option {
@@ -34,6 +35,7 @@
 }
 
 .info_popover li:hover, 
+.info_popover li:hover a, 
 .popover .popover_menu_item:hover, 
 .popover .popover_menu_item:hover a, 
 .pop-menu .item-option:hover {
@@ -42,6 +44,7 @@
 }
 
 .info_popover li:active, 
+.info_popover li:active a, 
 .popover .popover_menu_item:active, 
 .popover .popover_menu_item:active a, 
 .popover .popover_menu_item.keyboard_focus, 
@@ -50,7 +53,46 @@
 	color: var(--accent-hi-text, #111) !important;
 }
 
+.popover .popover_menu_item:hover, 
+.popover .popover_menu_item:hover a, 
+.popover .popover_menu_item:active, 
+.popover .popover_menu_item:active a, 
+.popover .popover_menu_item.keyboard_focus {
+	border-radius: 3px;
+}
+
 .popover_menu_item:hover .delete {
 	background-color: var(--danger) !important;
 	color: var(--primary-selected) !important;
+}
+
+/*for account-popover*/
+.popover .popover_menu_item_blog:hover, 
+.popover .popover_menu_item_blog:hover a {
+	background-color: unset !important;
+	color: unset !important;
+}
+
+.popover *:first-child .popover_menu_item:first-child:hover, 
+.popover *:first-child .popover_menu_item:first-child:hover a, 
+.popover *:first-child .popover_menu_item:first-child:active, 
+.popover *:first-child .popover_menu_item:first-child:active a {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.popover * .popover_menu_item:nth-child(n+2):hover, 
+.popover * .popover_menu_item:nth-child(n+2):hover a, 
+.popover * .popover_menu_item:nth-child(n+2):active, 
+.popover * .popover_menu_item:nth-child(n+2):active a {
+	border-radius: 0;
+
+}
+
+.popover *:last-child .popover_menu_item:last-child:hover, 
+.popover *:last-child .popover_menu_item:last-child:hover a, 
+.popover *:last-child .popover_menu_item:last-child:active, 
+.popover *:last-child .popover_menu_item:last-child:active a {
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
 }

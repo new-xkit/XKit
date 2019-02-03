@@ -28,16 +28,16 @@
 	border-left-color: var(--bubble, #444);
 }
 
-.post-form .caption-field .editor-placeholder, 
+/*.post-form .caption-field .editor-placeholder, */
 .post-form .caption-field .editor-plaintext, 
 .post-form .caption-field .editor-richtext {
 	background: unset;
 	color: inherit;
 }
 
-.post-form .caption-field .editor-placeholder {
+/*.post-form .caption-field .editor-placeholder {
 	color: var(--secondary, #888) !important;
-}
+}*/
 
 .post-form .control-reblog-trail .reblog-list .reblog-list-item:last-child {
 	border-bottom-color: var(--border, #444);
@@ -124,6 +124,13 @@
 	border-top-color: var(--border, #444);
 }
 
+.post-form .post-form--bottom .post-form--error-bar {
+	background-color: var(--danger);
+	color: var(--primary, #DDD);
+	border: unset;
+	border-radius: 0px 0px 3px 3px;
+}
+
 /*ios' momentum scrolling*/
 .post-form-modal {
 	overflow-y: scroll;
@@ -143,7 +150,7 @@
 
 .popover--gif-search .gif-search-message {
 	background-color: var(--popover, #111);
-	color: var(--primary, #DDD);
+	color: var(--secondary, #888);
 }
 
 .media-holder .tmblr-embed-placeholder .icon_close:before {

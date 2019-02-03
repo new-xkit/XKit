@@ -1,6 +1,6 @@
 /*https://www.tumblr.com/inbox*/
 #dashboard_messages_inbox .post {
-	background-color: var(-post, #111);
+	background-color: var(--post, #111);
 }
 
 .ask-form .post-container {
@@ -8,20 +8,6 @@
 	color: var(--primary, #DDD);
 }
 
-.chrome.blue {
-	background-color: var(--accent);
-	border-color: var(--accent);
-}
-
-.chrome.blue[disabled], 
-.chrome.blue.disabled, 
-.chrome.blue[disabled]:active, 
-.chrome.blue.disabled:active {
-	background-color: var(--accent);
-	border-color: var(--accent);
-}
-
-.chrome.blue:active {
-	background-color: var(--accent);
-	border-color: var(--accent);
+#xinbox-search-box-input {
+	background-color: var(--post, #111) !important;
 }

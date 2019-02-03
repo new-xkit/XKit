@@ -5,7 +5,26 @@
 }
 
 .notifications_page .notification_pane {
+	background-color: unset;
+}
+
+.notifications_page .section.first.divider, 
+.notifications_page .section.last {
 	background-color: var(--post, #111);
+	border-radius: 3px;
+}
+
+.notifications_page .section.first.divider {
+	border-bottom: 1px solid var(--border, #444);
+	border-image: linear-gradient(to right, transparent 0%, transparent 5%, var(--border, #444) 5%, var(--border, #444) 95%, transparent 95%, transparent 100%) 1 stretch;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.notifications_page .section.last {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	margin-top: unset;
 }
 
 .notifications_page .notification_pane .popover_menu .popover_menu_item a {
@@ -20,8 +39,16 @@
 	color: var(--primary, #DDD);
 }
 
-.notifications_page .notifications_block {
-	border-bottom-color: #000;
+path {
+	stroke: var(--secondary, #888);
+}
+
+.highcharts-axis {
+	opacity: 0;
+}
+
+.highcharts-axis-labels span {
+	color: var(--primary, #DDD) !important;
 }
 
 .notifications_page .ui_stats .unit.active.new_notes .button, 
@@ -71,19 +98,32 @@
 	color: var(--primary, #DDD);
 }
 
-.notifications_page .ui_notes .activity-notification .activity-notification__activity_message.conversational {
+.notifications_block {
+	border-bottom-color: #000 !important;
+	background-color: unset !important;
+}
+
+.notifications_page .ui_sticky.is_sticky .notifications_block {
+	display: none !important;
+}
+
+.activity-notification {
+	border-top-color: var(--border, #444) !important;
+}
+
+.activity-notification .activity-notification__activity_message.conversational {
 	background-color: var(--note, #444) !important;
 }
 
-.notifications_page .ui_notes .activity-notification .activity-notification__activity_main {
+.activity-notification .activity-notification__activity_main {
 	color: var(--primary, #DDD) !important;
 }
 
-.notifications_page .ui_notes .activity-notification .activity-notification__activity_main .activity {
+.activity-notification .activity-notification__activity_main .activity {
 	color: var(--primary, #DDD) !important;
 }
 
-.notifications_page .ui_notes .activity-notification .activity-notification__activity_response blockquote {
+.activity-notification .activity-notification__activity_response blockquote {
 	color: var(--primary, #DDD) !important;
 }
 
@@ -105,11 +145,6 @@
 	border-bottom-color: var(--border, #444);
 }
 
-.notifications_page #ui_activity_feed .is_sticky .sticky_float {
-	background-color: #000 !important;
-	top: 55px !important;
-}
-
 /*========================================popup======================================*/
 .popover--activity-popover .activity-popover-header .selected-blog {
 	color: var(--primary, #DDD);
@@ -119,169 +154,96 @@
 	border-top-color: var(--border, #444);
 }
 
-.popover--activity-popover .blog-activity-content .date_header, 
-.popover--activity-popover .blog-activity-content .date_header.date_activity {
-	background-color: var(--menu-header, #000);
-	color: var(--primary, #DDD);
+.date_header {
+	background-color: var(--menu-header, #000) !important;
+	color: var(--primary, #DDD) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover, 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover.is_friend {
 	background-color: var(--accent-hi);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:not(:first-child) {
 	border-top-color: var(--border, #444);
 }
 
 /*=====================================*/
-.popover--activity-popover .blog-activity-content 
 .activity-notification {
 	background-color: var(--popover, #111);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification .activity a {
 	color: var(--primary, #DDD);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification .activity {
 	color: var(--secondary, #888) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification .conversational {
 	background-color: var(--bubble, #444) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification .conversational .activity a {
 	color: var(--primary, #DDD);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification .conversational .activity, 
-.popover--activity-popover .blog-activity-content 
 .activity-notification .conversational .activity .is_part_reblog {
 	color: var(--secondary, #888);
 }
 
 /*=====================================*/
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover {
 	background-color: var(--accent-hi);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover .activity a {
 	color: var(--primary-selected, #111);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover .activity {
 	color: var(--secondary, #888) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover .conversational {
 	background-color: var(--special-bubble, #222) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover .conversational .activity a {
 	color: var(--primary, #DDD);
 }
 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover .conversational .activity, 
-.popover--activity-popover .blog-activity-content 
 .activity-notification:hover .conversational .activity .is_part_reblog {
 	color: var(--secondary, #888);
 }
 
 /*=====================================*/
-.popover--activity-popover .blog-activity-content 
 .activity-notification:active {
 	background-color: var(--accent-hi2);
 }
 
 /*=====================================*/
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend {
-	background-color: var(--accent-hi-text);
-}
-
-.popover--activity-popover .blog-activity-content 
 .activity-notification.is_friend .activity a {
-	color: var(--accent-hi2);
+	color: var(--accent) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend .activity {
-	color: var(--primary, #DDD) !important;
-}
-
-.popover--activity-popover .blog-activity-content 
 .activity-notification.is_friend .conversational {
 	background-color: var(--special-bubble, #222) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend .conversational .activity a {
-	color: var(--accent-hi2);
-}
-
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend .conversational .activity, 
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend .conversational .activity .is_part_reblog {
-	color: var(--secondary, #888);
-}
-
 /*=====================================*/
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend:hover {
-	background-color: var(--accent-hi);
-}
-
-.popover--activity-popover .blog-activity-content 
 .activity-notification.is_friend:hover .activity a {
-	color: var(--primary-selected, #111);
+	color: var(--accent) !important;
 }
 
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend:hover .activity {
-	color: var(--secondary, #888) !important;
-}
-
-.popover--activity-popover .blog-activity-content 
 .activity-notification.is_friend:hover .conversational {
-	background-color: var(--bubble, #444) !important;
-}
-
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend:hover .conversational {
-	background-color: var(--bubble, #444);
-}
-
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend:hover .conversational .activity a {
-	color: var(--primary, #DDD);
-}
-
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend:hover .conversational .activity, 
-.popover--activity-popover .blog-activity-content 
-.activity-notification.is_friend:hover .conversational .activity .is_part_reblog {
-	color: var(--secondary, #888);
+	background-color: var(--special-bubble, #222) !important;
 }
 
 /*=====================================*/
-.popover--activity-popover .blog-activity-content 
 .activity-notification.is_friend:active {
 	background-color: var(--accent-hi2);
 }
@@ -291,4 +253,8 @@
 	background-color: var(--post, #111);
 	color: var(--secondary, #888);
 	border-top-color: var(--border, #444);
+}
+
+.note_follow {
+	color: var(--accent) !important;
 }

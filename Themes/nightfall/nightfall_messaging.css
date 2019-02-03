@@ -114,6 +114,7 @@
 .popover--conversation-popover .conversation-main {
 	background-color: var(--popup-menu, #111) !important;
 	color: var(--primary, #DDD) !important;
+	border-top-color: var(--border, #444);
 }
 
 .popover--conversation-popover .message-bubble {
@@ -126,7 +127,9 @@
 }
 
 /*hide system scroll bar*/
-.popover--conversation-popover .conversation-main .tx-scroll-container--vertical {
+.popover--conversation-popover .conversation-main .tx-scroll-container--vertical, 
+.messaging-conversation-popovers .messaging-open-conversations 
+.popover--conversation-popover .conversation-main .tx-scroll .tx-scroll-container--vertical {
 	padding-right: 20px !important;
 }
 
@@ -141,4 +144,22 @@
 
 .popover--stickers {
 	background-color: var(--popover, #111);
+}
+
+/*to remove native scrollbar and replace with Tumblr scrollbar*/
+.popover--conversation-popover .conversation-main {
+	margin-right: -20px;
+}
+
+.popover--conversation-popover .tx-scroll .tx-scrollbar-track {
+	margin-right: 20px;
+	opacity: 0;
+}
+
+.popover--conversation-popover .tx-scroll:hover .tx-scrollbar-track {
+	opacity: 1 !important;
+}
+
+.popover--conversation-popover .tx-scroll .tx-scroll-container > div {
+	padding-right: calc(15px + 6px + 2px);
 }

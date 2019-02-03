@@ -84,17 +84,22 @@
 }
 
 .post-form--link .media-wrapper .media-container .editor {
-	background-color: var(--post, #111) !important;
+	background-color: var(--bubble, #444) !important;
 	color: var(--primary, #DDD) !important;
+}
+
+.post-form--link .media-wrapper .media-container .link-media-body, 
+.post-form--link .media-wrapper .media-container .link-media-body .editor{
+	background-color: var(--bubble, #444);
 }
 
 .post-form--link .media-wrapper .link-media-body .publisher-container .publisher, 
 .post-form--link .media-wrapper .title .editor, 
-.post-form--link .media-wrapper .title .editor-placeholder, 
-.post-form--link .media-wrapper .summary .editor, 
-.post-form--link .media-wrapper .summary .editor-placeholder {
+.post-form--link .media-wrapper .summary .editor {
 	color: var(--primary, #DDD) !important;
 }
+
+
 
 /*=====================================chat posts====================================*/
 

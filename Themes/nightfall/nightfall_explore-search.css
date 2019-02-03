@@ -89,3 +89,14 @@
 .search_control_items .post_audio_filter:hover {background: #a77dc2 !important;}
 .search_control_items .post_video_filter:hover {background: #748089 !important;}
 .search_control_items .post_ask_filter:hover {background: #444444 !important;}
+
+.post.post_full .post_tags.fadeable {
+	max-height: 70px;
+}
+
+.see-all-tags {
+	padding: 5px;
+	box-sizing: content-box;
+	text-align: center;
+	width: auto;
+}

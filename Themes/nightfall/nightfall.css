@@ -39,7 +39,6 @@
 	--accent-grad: repeating-linear-gradient(to bottom, #1F1C27, #5E312E 200vh, #1F1C27 400vh) !important;
 	--bg-colour: #222;
 	--post: #111;
-	--dog-ear: #888;
 	--border: #444;
 	--special-border: #222;
 	--bubble: #444;
@@ -69,8 +68,8 @@
 	--accent-hi-text: hsl(316, 30%, 25%);
 	--accent-sel: hsl(316, 33%, 49%);
 	--accent-glass: hsla(316, 62%, 82%, 0.12);
-	--danger: #d95e40;
-	--happy: #56bc8a;
+	--danger: #ff492f;
+	--happy: #00cf35;
 	--input-bg: #000;
 }
 
@@ -97,66 +96,15 @@ textarea {
 	color: var(--primary, #DDD);
 }
 
-/*header*/
-.l-header-container {
-	background-color: rgba(50,53,60,0.67);
-}
-
-.search_popover {
-	background-color: var(--menu-header, #000);
-}
-
-.search_popover .search_results_section .search_subheading {
-	background-color: var(--menu-header, #000);
-	color: var(--primary, #DDD);
-	text-shadow: unset;
-}
-
-/*magnifying glass*/
-.ui_search.active .search_form_field:before, 
-.ui_search.selected .search_form_field:before {
-	color: var(--primary, #DDD);
-}
-
-#search_query {
-	background-color: rgba(0, 0, 0, 0.15);
-	color: var(--primary, #DDD);
-}
-
-.active #search_query {
-	background-color: var(--post, #111);
-}
-
-.tab_notice {
-	background-color: var(--accent) !important;
-	background-clip: unset;
-	border-color: var(--accent) !important;
-}
-
-.tab_notice .tab_notice_value {
-	color: hsla(0, 0%, 100%, 0.6) !important;
-}
-
-
-.tab_bar .tab_anchor {
-	color: var(--compose, #FFF);
-	opacity: 0.5;
-}
-
-.compose-button {
-	fill: var(--compose, #FFF);
-	opacity: 0.6;
-}
-/*header done*/
-
 .l-container.l-container--two-column .l-content, 
 .l-container.l-container--two-column-dashboard .l-content {
-	background-color: transparent;
+	background-color: transparent !important;
 }
 
 #right_column {
 	background: linear-gradient(to bottom, transparent 0%, rgba(50, 53, 60, 0.47) 50%, transparent 100%);
 	padding: 0px 10px;
+	left: 10px;
 }
 
 .controls_section li {
@@ -186,13 +134,25 @@ textarea {
 	color: var(--primary, #DDD) !important;
 }
 
+.explore_link {
+	color: var(--accent) !important;
+	font-weight: 900;
+}
+
 #left_column {
 	background-color: transparent;
 }
 
 .post_avatar,
 .post_avatar .post_avatar_link {
-	background-color: transparent;
+	background-color: transparent !important;
+}
+
+/*when scrolled away from post, keep correct colour*/
+#posts.posts > .post_container:empty, 
+#posts.posts > .post_container:-moz-only-whitespace {
+	background-color: var(--post, #111) !important;
+	border-radius: 3px !important;
 }
 
 /*bg of post between footer and header*/
@@ -201,7 +161,7 @@ textarea {
 }
 
 .rapid-recs-container .rapid-recs {
-	background-image: linear-gradient(to bottom, rgba(68, 76, 88, 0) 0%, rgba(44, 47, 51, 0.18) 15%, rgba(44, 47, 51, 0.18) 85%, rgba(68, 76, 88, 0) 100%);
+	background-image: linear-gradient(to bottom, rgba(79, 79, 79, 0) 0%, rgba(48, 48, 48, 0.18) 15%, rgba(48, 48, 48, 0.18) 85%, rgba(79, 79, 79, 0) 100%);
 }
 
 .rapid-recs-container .rapid-recs .micro-post-list .post_micro {
@@ -215,7 +175,7 @@ textarea {
 .blue#hello_glass, 
 .blue.glass, 
 .ui_dialog_lock {
-	background-color: var(--glass);
+	background-color: var(--glass) !important;
 }
 
 .split-button, 
@@ -282,7 +242,14 @@ textarea {
 }
 
 /*when clicking on down arrows, adjust colour*/
-.blog-selector-container .selected-blog .caret.is-open, 
+.blog-selector-container .selected-blog .caret.is-open {
+	color: var(--accent) !important;
+}
+
+.post-activity-reply .submit[disabled] {
+	color: var(--secondary);
+}
+
 .post-activity-reply .submit {
 	color: var(--accent);
 }
@@ -345,7 +312,7 @@ textarea {
 	background: unset;
 }
 
-.editor-placeholder, 
+/*.editor-placeholder, */
 .editor-plaintext, 
 .editor-richtext {
 	background: var(--post, #111);
@@ -354,10 +321,47 @@ textarea {
 
 .editor-placeholder {
 	background: unset;
-	color: var(--secondary, #888);
+	color: var(--secondary, #888) !important;
 }
 
 input[type=text].field {
 	background: var(--post, #111) !important;
 	color: var(--primary, #DDD) !important;
+}
+
+.post-content-text pre, 
+.post .post_body pre, 
+.reblog-content pre {
+	padding: 5px;
+	color: #BBB;
+	background: #000;
+	overflow-x: auto;
+}
+
+.tumblelog_popover .recent_posts .post, 
+.tumblelog_popover .recent_posts .post a {
+	color: #444;
+}
+
+.external-image-wrapper {
+	border-color: var(--secondary) !important;
+	color: var(--secondary) !important;
+}
+
+.chrome.blue {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}
+
+.chrome.blue[disabled], 
+.chrome.blue.disabled, 
+.chrome.blue[disabled]:active, 
+.chrome.blue.disabled:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}
+
+.chrome.blue:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
 }
