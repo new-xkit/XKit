@@ -260,6 +260,23 @@ XKit.extensions.xkit_patches = new Object({
 				});
 				return posts;
 			};
+
+			XKit.interface.post_window.state = () => {
+				let post_state = $("#post_state").val();
+
+				return {
+					publish: post_state == "0",
+					draft:   post_state == "1",
+					queue:   post_state == "2",
+					private: post_state == "private"
+				};
+			};
+
+			XKit.interface.post_window.blog =
+				() => $("#channel_id").val() || $("span.caption").text();
+
+			XKit.interface.post_window.reblogging_from =
+				() => $("span.reblog_name").text();
 		},
 		"7.8.2": function() {
 			XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";

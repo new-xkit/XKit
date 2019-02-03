@@ -1901,14 +1901,14 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 */
 				state: function() {
 
-					let post_state = $("#post_state").val();
+					var to_return = {};
 
-					return {
-						publish: post_state == "0",
-						draft:   post_state == "1",
-						queue:   post_state == "2",
-						private: post_state == "private"
-					};
+					to_return.publish = $("#post_state").val() == "0";
+					to_return.draft = $("#post_state").val() == "1";
+					to_return.queue = $("#post_state").val() == "2";
+					to_return.private = $("#post_state").val() == "private";
+
+					return to_return;
 
 				},
 
@@ -1934,16 +1934,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				 */
 				blog: function() {
 
-					return $("#channel_id").val() || $("span.caption").text();
-
-				},
-
-				/**
-				 * @return {String} Blog being reblogged from
-				 */
-				reblogging_from: function() {
-
-					return $("span.reblog_name").text();
+					return $("#channel_id").val();
 
 				},
 
