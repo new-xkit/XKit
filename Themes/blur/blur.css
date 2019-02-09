@@ -204,6 +204,20 @@ body.flag--always-opaque-peepr .ui_peepr_glass {
 	-webkit-backdrop-filter: blur(10px);
 }
 
+/* Fix Toast Notification transparency/colours + add some glass */
+
+.flag--accessibility-design-update .toastr .toast {
+	background-color: rgba(100, 117, 154, 0.19) !important;
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+}
+
+.toastr .toast:hover {
+	background-color: rgba(100, 117, 154, 0.19) !important;
+	backdrop-filter: blur(7px);
+	-webkit-backdrop-filter: blur(7px);
+}
+
 /* Add light drop-shadow to avatars */
 .post_avatar.post-avatar--sticky .post_avatar_wrapper {
 	box-shadow: 0px 2px 3px rgba(0,0,0,0.15) !important;
