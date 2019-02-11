@@ -52,12 +52,6 @@ XKit.extensions.easy_video_links = new Object({
 		$(posts).each(function() {
 			$(this).addClass("xkit-easy-video-links-done");
 			if ($(this).hasClass("is_direct_video")) {
-				var video_source = $(this).find("source").attr("src");
-				if (video_source.indexOf("ve.media") == -1) {
-					video_source = video_source.substring(video_source.indexOf("tumblr_"));
-					video_source = video_source.substring(0, video_source.indexOf("/"));
-					video_source = "https://ve.media.tumblr.com/" + video_source + ".mp4";
-				}
 				XKit.interface.add_control_button(this, "xkit-easy-video-links-button", "data-xkit-easy-video-links-url=\"" + $(this).find("source").attr("src") + "\"");
 			}
 		});
