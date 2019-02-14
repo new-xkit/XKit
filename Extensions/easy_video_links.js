@@ -32,9 +32,9 @@ XKit.extensions.easy_video_links = new Object({
 			video_source = "https://ve.media.tumblr.com/" + video_source + ".mp4";
 		}
 		navigator.clipboard.writeText(video_source).then(function() {
-			XKit.notifications.add("Video link copied to clipboard","ok");
+			XKit.notifications.add("Video link copied to clipboard", "ok");
 		}, function() {
-			XKit.notifications.add("Failed to copy link to clipboard","error");
+			XKit.notifications.add("Failed to copy link to clipboard", "error");
 		});
 	},
 
