@@ -21,6 +21,11 @@ XKit.extensions.timestamps = new Object({
 			default: false,
 			value: false
 		},
+		below_header: {
+			text: "Show timestamps below the header",
+			default: true,
+			value: true
+		},
 		only_relative: {
 			text: "Only show relative time (eg: 5 minutes ago)",
 			default: false,
@@ -37,7 +42,7 @@ XKit.extensions.timestamps = new Object({
 			value: false
 		},
 		op_timestamps: {
-			text: "Show timestamps for the source / original post.",
+			text: "Show timestamps for the source / original post",
 			default: false,
 			value: false
 		},
@@ -104,8 +109,9 @@ XKit.extensions.timestamps = new Object({
 		this.check_quota();
 		try {
 			if (this.is_compatible()) {
-				//XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
-				//XKit.tools.add_css('#posts .post .post_wrapper .post_header { padding-top: 0px; }', "timestamps");
+				if (this.preferences.below_header.value) {
+					XKit.tools.add_css('.xtimestamp { top: -9px; margin-left: 20px; }', "timestamps");
+				}
 				XKit.post_listener.add("timestamps", this.add_timestamps);
 				this.add_timestamps();
 
@@ -151,7 +157,7 @@ XKit.extensions.timestamps = new Object({
 				return;
 			}
 
-			if (this.preferences.op_timestamps) {
+			if (XKit.extensions.timestamps.preferences.op_timestamps.value) {
 				if (post.hasClass("is_original")) {
 					var post_id = post.attr('data-post-id');
 					var blog_name = post.attr('data-tumblelog-name');
@@ -167,7 +173,7 @@ XKit.extensions.timestamps = new Object({
 					}
 				}
 			} else {
-				var post_id = post.attr('data-post-id');				if (post.hasClass("is_original")) {
+				var post_id = post.attr('data-post-id');
 				var blog_name = post.attr('data-tumblelog-name');
 			}
 
@@ -176,8 +182,11 @@ XKit.extensions.timestamps = new Object({
 				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
 				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
-				//post.find(".post_content").prepend(normal_html);
-				post.find(".post_wrapper .post_header").append(normal_html);
+				if (XKit.extensions.timestamps.preferences.below_header.value) {
+					post.find(".post_content").prepend(normal_html);
+				} else {
+					post.find(".post_wrapper .post_header").append(normal_html);
+				}
 			}
 
 			var note = $(".xkit_timestamp_" + post_id);
@@ -213,6 +222,8 @@ XKit.extensions.timestamps = new Object({
 						var post = data.response.posts[0];
 						var date = moment(new Date(post.timestamp * 1000));
 
+						XKit.extensions.timestamps.set_age(date, date_element);
+/*
 						if (date.year() == moment().year()) {
 							date_element.addClass("xtimestamp-this-year");
 						} else if (date.year() == moment().year()-5) {
@@ -220,7 +231,7 @@ XKit.extensions.timestamps = new Object({
 						} else {
 							date_element.addClass("xtimestamp-" + (moment().year() - date.year()) + "-year");
 						}
-
+*/
 						date_element.html(self.format_date(date));
 						date_element.removeClass("xtimestamp_loading");
 						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
@@ -233,6 +244,16 @@ XKit.extensions.timestamps = new Object({
 		} catch (e) {
 			console.error('Unable to load timestamp for post ' + post_id);
 			XKit.extensions.timestamps.show_failed(date_element);
+		}
+	},
+
+	set_age: function(date, date_element) {
+		if (date.year() == moment().year()) {
+			date_element.addClass("xtimestamp-this-year");
+		} else if (date.year() == moment().year()-5) {
+			date_element.addClass("xtimestamp-5plus-year");
+		} else {
+			date_element.addClass("xtimestamp-" + (moment().year() - date.year()) + "-year");
 		}
 	},
 
@@ -251,6 +272,7 @@ XKit.extensions.timestamps = new Object({
 		if (!cached_date.isValid()) {
 			return false;
 		}
+		this.set_age(moment(new Date(cached * 1000)), date_element);
 		date_element.html(this.format_date(cached_date));
 		date_element.removeClass("xtimestamp_loading");
 		return true;
