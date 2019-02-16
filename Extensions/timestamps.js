@@ -151,19 +151,24 @@ XKit.extensions.timestamps = new Object({
 				return;
 			}
 
-			if (post.hasClass("is_original")) {
-				var post_id = post.attr('data-post-id');
-				var blog_name = post.attr('data-tumblelog-name');
-			} else {
-				try {
-					var post_id = post.attr('data-root_id');
-					var blog_json = JSON.parse(post.attr('data-json'));
-					var blog_name = blog_json['tumblelog-root-data'].name;
-				} catch(e) {
-					console.error("from XKit's timestamps: " + e.name + ": " + e.message);
+			if (this.preferences.op_timestamps) {
+				if (post.hasClass("is_original")) {
 					var post_id = post.attr('data-post-id');
 					var blog_name = post.attr('data-tumblelog-name');
+				} else {
+					try {
+						var post_id = post.attr('data-root_id');
+						var blog_json = JSON.parse(post.attr('data-json'));
+						var blog_name = blog_json['tumblelog-root-data'].name;
+					} catch(e) {
+						console.error("from XKit's timestamps: " + e.name + ": " + e.message);
+						var post_id = post.attr('data-post-id');
+						var blog_name = post.attr('data-tumblelog-name');
+					}
 				}
+			} else {
+				var post_id = post.attr('data-post-id');				if (post.hasClass("is_original")) {
+				var blog_name = post.attr('data-tumblelog-name');
 			}
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
@@ -171,7 +176,6 @@ XKit.extensions.timestamps = new Object({
 				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
 				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
-				//var normal_html = '<br><div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
 				//post.find(".post_content").prepend(normal_html);
 				post.find(".post_wrapper .post_header").append(normal_html);
 			}
@@ -208,12 +212,6 @@ XKit.extensions.timestamps = new Object({
 						var data = JSON.parse(response.responseText);
 						var post = data.response.posts[0];
 						var date = moment(new Date(post.timestamp * 1000));
-						console.log(date.year());
-
-						//switch (date.year()) {
-						//	case moment().year()-1:
-						//		date_element.addClass("xtimestamp-this-year");
-						//}
 
 						if (date.year() == moment().year()) {
 							date_element.addClass("xtimestamp-this-year");
