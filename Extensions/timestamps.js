@@ -222,16 +222,8 @@ XKit.extensions.timestamps = new Object({
 						var post = data.response.posts[0];
 						var date = moment(new Date(post.timestamp * 1000));
 
-						XKit.extensions.timestamps.set_age(date, date_element);
-/*
-						if (date.year() == moment().year()) {
-							date_element.addClass("xtimestamp-this-year");
-						} else if (date.year() == moment().year()-5) {
-							date_element.addClass("xtimestamp-5plus-year");
-						} else {
-							date_element.addClass("xtimestamp-" + (moment().year() - date.year()) + "-year");
-						}
-*/
+						XKit.extensions.timestamps.add_age(date, date_element);
+
 						date_element.html(self.format_date(date));
 						date_element.removeClass("xtimestamp_loading");
 						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
@@ -247,13 +239,15 @@ XKit.extensions.timestamps = new Object({
 		}
 	},
 
-	set_age: function(date, date_element) {
-		if (date.year() == moment().year()) {
+	add_age: function(date, date_element) {
+		var this_year = moment().year();
+		
+		if (date.year() == this_year) {
 			date_element.addClass("xtimestamp-this-year");
-		} else if (date.year() == moment().year()-5) {
+		} else if (date.year() == this_year - 5) {
 			date_element.addClass("xtimestamp-5plus-year");
 		} else {
-			date_element.addClass("xtimestamp-" + (moment().year() - date.year()) + "-year");
+			date_element.addClass("xtimestamp-" + (this_year - date.year()) + "-year");
 		}
 	},
 
@@ -272,7 +266,7 @@ XKit.extensions.timestamps = new Object({
 		if (!cached_date.isValid()) {
 			return false;
 		}
-		this.set_age(moment(new Date(cached * 1000)), date_element);
+		this.add_age(moment(new Date(cached * 1000)), date_element);
 		date_element.html(this.format_date(cached_date));
 		date_element.removeClass("xtimestamp_loading");
 		return true;
