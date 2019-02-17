@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.9.0 **//
+//* VERSION 2.8.1 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -162,14 +162,35 @@ XKit.extensions.timestamps = new Object({
 					var post_id = post.attr('data-post-id');
 					var blog_name = post.attr('data-tumblelog-name');
 				} else {
+/*
 					try {
 						var post_id = post.attr('data-root_id');
-						var blog_json = JSON.parse(post.attr('data-json'));
-						var blog_name = blog_json['tumblelog-root-data'].name;
+						var op_json = JSON.parse(post.attr('data-json'));
+						var blog_name = op_json['tumblelog-root-data'].name;
 					} catch(e) {
-						console.error("from XKit's timestamps: " + e.name + ": " + e.message);
-						var post_id = post.attr('data-post-id');
-						var blog_name = post.attr('data-tumblelog-name');
+						try {
+							var post_source = post.find(".post-source-link");
+							var op_json = JSON.parse(post_source.attr("data-peepr"));
+							var post_id = op_json['postId'];
+							var blog_name = op_json['tumblelog'];
+						} catch(e2) {
+							console.error("from XKit's timestamps: " + e2.name + ": " + e2.message);
+							var post_id = post.attr('data-post-id');
+							var blog_name = post.attr('data-tumblelog-name');
+						}
+					}
+*/
+					try {
+						var post_id = post.attr('data-root_id');
+						var op_json = JSON.parse(post.attr('data-json'));
+						var blog_name = op_json['tumblelog-root-data'].name;
+					} catch(e) { //most probably in peepr
+						console.log(post);
+						peepr_data = XKit.extensions.timestamps.checkPeepr(post);
+						var post_id = peepr_data[0];
+						var blog_name = peepr_data[1];
+						console.log(post_id);
+						console.log(blog_name);
 					}
 				}
 			} else {
@@ -192,6 +213,40 @@ XKit.extensions.timestamps = new Object({
 			var note = $(".xkit_timestamp_" + post_id);
 			XKit.extensions.timestamps.fetch_timestamp(post_id, blog_name, note);
 		});
+	},
+
+	checkPeepr: function(post) {
+		if (post.find(".post-source-link").length) {
+			console.log('im in');
+			var post_source = post.find(".post-source-link");
+			if (post_source.attr("data-peepr")) {
+				var op_json = JSON.parse(post_source.attr("data-peepr"));
+				var post_id = op_json['postId'];
+				var blog_name = op_json['tumblelog'];
+			} else { //source link is a custom url
+				if (post.hasClass("is_photo")) { //last-ditch effort to get op data
+					var post_url = post.find(".post_media img").attr("data-pin-url");
+					var split_url = post_url.split("/");
+					var post_id = split_url[4];
+					var blog_url = split_url[2].split(".");
+					var blog_name = blog_url[0];
+				} else {
+					var post_id = "";
+					var blog_name = "";
+				}
+			}
+		} else if (post.find(".reblog_info").length) { //user reblogged themselves probs?
+			var post_source = post.find(".reblog_info");
+			var op_json = JSON.parse(post_source.attr("data-peepr"));
+			var post_id = op_json['postId'];
+			var blog_name = op_json['tumblelog'];
+		} else { //no source AND no reblog info = original post
+			console.log('im NOT in');
+			var post_id = post.attr('data-post-id');
+			var blog_name = post.attr('data-tumblelog-name');
+		}
+
+		return [post_id, blog_name];
 	},
 
 	fetch_timestamp: function(post_id, blog_name, date_element) {
@@ -241,10 +296,10 @@ XKit.extensions.timestamps = new Object({
 
 	add_age: function(date, date_element) {
 		var this_year = moment().year();
-		
+
 		if (date.year() == this_year) {
 			date_element.addClass("xtimestamp-this-year");
-		} else if (date.year() == this_year - 5) {
+		} else if (date.year() <= this_year - 5) {
 			date_element.addClass("xtimestamp-5plus-year");
 		} else {
 			date_element.addClass("xtimestamp-" + (this_year - date.year()) + "-year");
