@@ -1,5 +1,5 @@
 //* TITLE Addressbar Updater **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Keeps the url in its place **//
 //* DEVELOPER srsutherland **//
 //* DETAILS Sets the url to the current post on your dashboard (to keep your place during tab crashes and refreshes). **//
@@ -11,6 +11,7 @@ XKit.extensions.addressbar = new Object({
 
 	running: false,
 	intervalId: 0,
+	initialScroll: null,
 	
 	preferences: {
 		"focus_only": {
@@ -27,6 +28,9 @@ XKit.extensions.addressbar = new Object({
 
 		XKit.extensions.addressbar.intervalId = setInterval(
 			XKit.extensions.addressbar.update_address, 500);
+
+		XKit.extensions.addressbar.initialScroll = history.scrollRestoration;
+		history.scrollRestoration = "manual";
 	},
 	
 	find_top: function() {
@@ -65,4 +69,10 @@ XKit.extensions.addressbar = new Object({
 			return id;
 		}
 	},
+
+	destroy: function() {
+		this.running = false;
+		clearInterval(XKit.extensions.addressbar.intervalId);
+		history.scrollRestoration = XKit.extensions.addressbar.initialScroll;
+	}
 });
