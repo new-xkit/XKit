@@ -9,61 +9,60 @@
 
 XKit.extensions.addressbar = new Object({
 
-  running: false,
-  intervalId: 0,
-  
-  preferences: {
-    "focus_only": {
-      text: "Only run the extension when the page has focus",
-      default: true,
-      value: true
-    },
-  },
+	running: false,
+	intervalId: 0,
+	
+	preferences: {
+		"focus_only": {
+			text: "Only run the extension when the page has focus",
+			default: true,
+			value: true
+		},
+	},
 
-  run: function() {
-    this.running = true;
+	run: function() {
+		this.running = true;
 
-    if (XKit.interface.where().dashboard !== true || XKit.interface.where().endless !== true) {return; } //only useful on endless dashboard
+		if (XKit.interface.where().dashboard !== true || XKit.interface.where().endless !== true) {return; } //only useful on endless dashboard
 
-    XKit.extensions.addressbar.intervalId = setInterval(
-      XKit.extensions.addressbar.update_address, 500);
-  },
-  
-  find_top: function() {
-    var offset = 200; //place slightly below navbar to ignore reblog controls
-    var scrollPos = $(window).scrollTop() + offset;
-    var minDist = Number.MAX_SAFE_INTEGER;
-    var id = null; //check later and do nothing to history if no post qualifies
-  
-    $(".posts .post").not("#new_post").not("#tumblr_radar").not(".new_post_buttons")
-    .each(function() {
-      var dist = scrollPos - $(this).offset().top
-      //if it equals exactly 200 that's a bogus value
-      if (dist > 0 && dist !== offset && dist < minDist) {
-        minDist = dist;
-        id = $(this).attr('data-post-id');
-      }
-    });
-    return id;
-  },
-  
-  replace_address: function(postid) {
-    postid = Number(postid);
-    window.history.replaceState(
-      { id: postid }, 
-      'Tumblr - ' + postid, //title param is ignored currently
-      '/dashboard/2/' + (postid + 1) //has to be the id immediately after
-    );
-  },
+		XKit.extensions.addressbar.intervalId = setInterval(
+			XKit.extensions.addressbar.update_address, 500);
+	},
+	
+	find_top: function() {
+		var offset = 200; //place slightly below navbar to ignore reblog controls
+		var scrollPos = $(window).scrollTop() + offset;
+		var minDist = Number.MAX_SAFE_INTEGER;
+		var id = null; //check later and do nothing to history if no post qualifies
+	
+		$(".posts .post").not("#new_post").not("#tumblr_radar").not(".new_post_buttons").each(function() {
+			var dist = scrollPos - $(this).offset().top;
+			//if it equals exactly 200 that's a bogus value
+			if (dist > 0 && dist !== offset && dist < minDist) {
+				minDist = dist;
+				id = $(this).attr('data-post-id');
+			}
+		});
+		return id;
+	},
+	
+	replace_address: function(postid) {
+		postid = Number(postid);
+		window.history.replaceState(
+			{ id: postid }, 
+			'Tumblr - ' + postid, //title param is ignored currently
+			'/dashboard/2/' + (postid + 1) //has to be the id immediately after
+		);
+	},
 
-  update_address: function() {
-    if (!XKit.extensions.addressbar.focus_only || document.hasFocus()) { 
-    //do nothing if you're not in focus
-      var id = XKit.extensions.addressbar.find_top();
-      if (id !== null && id > 1e8) {
-        XKit.extensions.addressbar.replace_address(id);
-      }
-      return id;
-    }
-  },
+	update_address: function() {
+		if (!XKit.extensions.addressbar.focus_only || document.hasFocus()) { 
+		//do nothing if you're not in focus
+			var id = XKit.extensions.addressbar.find_top();
+			if (id !== null && id > 1e8) {
+				XKit.extensions.addressbar.replace_address(id);
+			}
+			return id;
+		}
+	},
 });
