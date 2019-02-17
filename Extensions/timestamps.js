@@ -163,18 +163,18 @@ XKit.extensions.timestamps = new Object({
 					var blog_name = post.attr('data-tumblelog-name');
 				} else {
 					try {
-						var post_id = post.attr('data-root_id');
+						post_id = post.attr('data-root_id');
 						var op_json = JSON.parse(post.attr('data-json'));
-						var blog_name = op_json['tumblelog-root-data'].name;
-					} catch(e) { //most probably in peepr
-						peepr_data = XKit.extensions.timestamps.checkPeepr(post);
-						var post_id = peepr_data[0];
-						var blog_name = peepr_data[1];
+						blog_name = op_json['tumblelog-root-data'].name;
+					} catch (e) { //most probably in peepr
+						var peepr_data = XKit.extensions.timestamps.checkPeepr(post);
+						post_id = peepr_data[0];
+						blog_name = peepr_data[1];
 					}
 				}
 			} else {
-				var post_id = post.attr('data-post-id');
-				var blog_name = post.attr('data-tumblelog-name');
+				post_id = post.attr('data-post-id');
+				blog_name = post.attr('data-tumblelog-name');
 			}
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
@@ -199,28 +199,28 @@ XKit.extensions.timestamps = new Object({
 			var post_source = post.find(".post-source-link");
 			if (post_source.attr("data-peepr")) {
 				var op_json = JSON.parse(post_source.attr("data-peepr"));
-				var post_id = op_json['postId'];
-				var blog_name = op_json['tumblelog'];
+				var post_id = op_json.postId;
+				var blog_name = op_json.tumblelog;
 			} else { //source link is a custom url
 				if (post.hasClass("is_photo")) { //last-ditch effort to get op data
 					var post_url = post.find(".post_media img").attr("data-pin-url");
 					var split_url = post_url.split("/");
-					var post_id = split_url[4];
+					post_id = split_url[4];
 					var blog_url = split_url[2].split(".");
-					var blog_name = blog_url[0];
+					blog_name = blog_url[0];
 				} else {
-					var post_id = "";
-					var blog_name = "";
+					post_id = "";
+					blog_name = "";
 				}
 			}
 		} else if (post.find(".reblog_info").length) { //user reblogged themselves?
-			var post_source = post.find(".reblog_info");
-			var op_json = JSON.parse(post_source.attr("data-peepr"));
-			var post_id = op_json['postId'];
-			var blog_name = op_json['tumblelog'];
+			post_source = post.find(".reblog_info");
+			op_json = JSON.parse(post_source.attr("data-peepr"));
+			post_id = op_json.postId;
+			blog_name = op_json.tumblelog;
 		} else { //no source AND no reblog info = original post
-			var post_id = post.attr('data-post-id');
-			var blog_name = post.attr('data-tumblelog-name');
+			post_id = post.attr('data-post-id');
+			blog_name = post.attr('data-tumblelog-name');
 		}
 
 		return [post_id, blog_name];
