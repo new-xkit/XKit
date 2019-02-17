@@ -162,35 +162,14 @@ XKit.extensions.timestamps = new Object({
 					var post_id = post.attr('data-post-id');
 					var blog_name = post.attr('data-tumblelog-name');
 				} else {
-/*
-					try {
-						var post_id = post.attr('data-root_id');
-						var op_json = JSON.parse(post.attr('data-json'));
-						var blog_name = op_json['tumblelog-root-data'].name;
-					} catch(e) {
-						try {
-							var post_source = post.find(".post-source-link");
-							var op_json = JSON.parse(post_source.attr("data-peepr"));
-							var post_id = op_json['postId'];
-							var blog_name = op_json['tumblelog'];
-						} catch(e2) {
-							console.error("from XKit's timestamps: " + e2.name + ": " + e2.message);
-							var post_id = post.attr('data-post-id');
-							var blog_name = post.attr('data-tumblelog-name');
-						}
-					}
-*/
 					try {
 						var post_id = post.attr('data-root_id');
 						var op_json = JSON.parse(post.attr('data-json'));
 						var blog_name = op_json['tumblelog-root-data'].name;
 					} catch(e) { //most probably in peepr
-						console.log(post);
 						peepr_data = XKit.extensions.timestamps.checkPeepr(post);
 						var post_id = peepr_data[0];
 						var blog_name = peepr_data[1];
-						console.log(post_id);
-						console.log(blog_name);
 					}
 				}
 			} else {
@@ -216,8 +195,7 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	checkPeepr: function(post) {
-		if (post.find(".post-source-link").length) {
-			console.log('im in');
+		if (post.find(".post-source-link").length) { //get op data from source link
 			var post_source = post.find(".post-source-link");
 			if (post_source.attr("data-peepr")) {
 				var op_json = JSON.parse(post_source.attr("data-peepr"));
@@ -235,13 +213,12 @@ XKit.extensions.timestamps = new Object({
 					var blog_name = "";
 				}
 			}
-		} else if (post.find(".reblog_info").length) { //user reblogged themselves probs?
+		} else if (post.find(".reblog_info").length) { //user reblogged themselves?
 			var post_source = post.find(".reblog_info");
 			var op_json = JSON.parse(post_source.attr("data-peepr"));
 			var post_id = op_json['postId'];
 			var blog_name = op_json['tumblelog'];
 		} else { //no source AND no reblog info = original post
-			console.log('im NOT in');
 			var post_id = post.attr('data-post-id');
 			var blog_name = post.attr('data-tumblelog-name');
 		}
