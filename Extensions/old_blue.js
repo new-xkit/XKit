@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 0.1.0 **//
+//* VERSION 0.1.1 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
@@ -11,7 +11,9 @@ XKit.extensions.old_blue = new Object({
 
 	run: function() {
 		this.running = true;
-		XKit.tools.init_css("old_blue");
+		if (XKit.interface.is_tumblr_page()) {
+			XKit.tools.init_css("old_blue");
+		}
 	},
 
 	destroy: function() {
