@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 0.1.1 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
