@@ -12,10 +12,12 @@ XKit.extensions.old_blue = new Object({
 
 	preferences: {
 		"note": {
-			text: `<span style="text-transform:none"><a href="https://raw.githubusercontent.com/new-xkit/XKit/master/Extensions/old_blue.css" target="_blank">CSS file</a> for usage in userstyle add-ons</span>`,
+			text: `If you would like to use this as a userstyle in a faster-loading add-on, the CSS this extension uses can be found <a href="https://raw.githubusercontent.com/new-xkit/XKit/master/Extensions/old_blue.css" target="_blank">here</a>.`,
 			type: "separator"
 		}
 	},
+
+	cpanel: () => $(".xkit-extension-setting-separator").css("margin", 0).css("text-transform", "none"),
 
 	run: function() {
 		this.running = true;
