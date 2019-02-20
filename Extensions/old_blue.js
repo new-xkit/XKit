@@ -1,6 +1,7 @@
 //* TITLE Old Blue **//
 //* VERSION 1.0.0 **//
 //* DESCRIPTION No more dark blue background! **//
+//* DETAILS Reverses the so-called accessibility update that causes so many headaches. **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
@@ -8,6 +9,13 @@
 XKit.extensions.old_blue = new Object({
 
 	running: false,
+
+	preferences: {
+		"note": {
+			text: `<span style="text-transform:none"><a href="https://raw.githubusercontent.com/new-xkit/XKit/master/Extensions/old_blue.css" target="_blank">CSS file</a> for usage in userstyle add-ons</span>`,
+			type: "separator"
+		}
+	},
 
 	run: function() {
 		this.running = true;
