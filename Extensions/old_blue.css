@@ -1044,10 +1044,10 @@ a {
 	background-color: rgba(0,25,53,0.95);
 }
 .ui_peepr_glass.opaque {
-	background-color: #36465d;
+	background-color: var(--old-blue);
 }
 body.flag--always-opaque-peepr .ui_peepr_glass {
-	background-color: #36465d;
+	background-color: var(--old-blue);
 }
 .peepr .ui_peepr_glass {
 	opacity: 1;
@@ -2692,57 +2692,169 @@ a {
 }
 
 
-/* index.build.js (approximate) */
+/* index.build.css */
 
-
-.toastr .toast .crumb.like {
-  background-color: var(--old-red);
+.promote-form .posts-form-container .icon_plus:hover {
+	color: var(--old-accent);
 }
 
-.toastr .toast .crumb.blog-subscription {
-  background-color: var(--old-orange);
+.promote-form .posts-form-container .post-list li.promoted {
+	border-color: var(--old-green);
 }
 
-.toastr .toast .crumb.reblog {
-  background-color: var(--old-green);
+.promote-form .posts-form-container .post-list li.promoted .counter {
+	background-color: var(--old-green);
 }
 
-.toastr .toast .crumb.answer {
-  background-color: var(--old-accent);
+.promote-form .campaign-container .ad-preview {
+	background-color: var(--old-blue);
 }
 
-.toastr .toast .crumb.follower {
-  background-color: var(--old-accent);
+.rapid-recs-container .rapid-recs {
+	background-image: linear-gradient(180deg,rgba(54,70,93,0) 0,var(--old-blue) 15%,var(--old-blue) 85%,rgba(54,70,93,0));
 }
 
-.toastr .toast {
-  background: var(--old-blue);
+.rapid-recs-container .rapid-recs .rapid-rec-title {
+	color: hsla(0,0%,100%,.25);
+}
+
+.remnant-units .remnant_ad .dismiss {
+	background-color: var(--old-red);
+}
+
+.sidebar_link,
+.sidebar_link.explore_link {
+	color: hsla(0,0%,100%,.6);
+}
+
+.standalone-ad-container .call-to-action {
+	color: var(--old-accent);
 }
 
 .toastr .toast .item.post {
-  background-color: var(--old-text);
+	background-color: var(--old-text);
 }
 
 .toastr .toast .item.question {
-  background-color: var(--old-text);
+	background-color: var(--old-text);
 }
 
 .toastr .toast .item.quote {
-  background-color: var(--old-orange);
+	background-color: var(--old-orange);
 }
 
 .toastr .toast .item.link {
-  background-color: var(--old-green);
+	background-color: var(--old-green);
 }
 
 .toastr .toast .item.chat {
-  background-color: var(--old-accent);
+	background-color: var(--old-accent);
 }
 
 .toastr .toast .item.audio {
-  background-color: var(--old-purple);
+	background-color: var(--old-purple);
 }
 
 .toastr .toast .item.video {
-  background-color: var(--old-vidgrey);
+	background-color: var(--old-vidgrey);
+}
+
+.toastr .toast .crumb.like {
+	background-color: var(--old-red);
+}
+
+.toastr .toast .crumb.blog-subscription {
+	background-color: var(--old-orange);
+}
+
+.toastr .toast .crumb.reblog {
+	background-color: var(--old-green);
+}
+
+.toastr .toast .crumb.answer {
+	background-color: var(--old-accent);
+}
+
+.toastr .toast .crumb.follower {
+	background-color: var(--old-accent);
+}
+
+.toastr .toast {
+	background: var(--old-blue);
+}
+
+.post_control.tour_guide_element.like:before {
+	color: var(--old-red);
+}
+
+.filter_popover .menu_heading {
+	color: var(--old-grey);
+}
+
+.search_control_items .menu_item:hover {
+	color: var(--old-blue);
+}
+
+.search_control_items .post_text_filter:hover {
+	background: var(--old-text);
+}
+
+.search_control_items .post_text_filter .icon {
+	color: var(--old-text);
+}
+
+.search_control_items .post_photo_filter:hover {
+	background: var(--old-red);
+}
+
+.search_control_items .post_photo_filter .icon {
+	color: var(--old-red);
+}
+
+.search_control_items .post_quote_filter:hover {
+	background: var(--old-orange);
+}
+
+.search_control_items .post_quote_filter .icon {
+	color: var(--old-orange);
+}
+
+.search_control_items .post_link_filter:hover {
+	background: var(--old-green);
+}
+
+.search_control_items .post_link_filter .icon {
+	color: var(--old-green);
+}
+
+.search_control_items .post_chat_filter:hover {
+	background: var(--old-accent);
+}
+
+.search_control_items .post_chat_filter .icon {
+	color: var(--old-accent);
+}
+
+.search_control_items .post_audio_filter:hover {
+	background: var(--old-purple);
+}
+
+.search_control_items .post_audio_filter .icon {
+	color: var(--old-purple);
+}
+
+.search_control_items .post_video_filter:hover {
+	background: var(--old-vidgrey);
+}
+
+.search_control_items .post_video_filter .icon {
+	color: var(--old-vidgrey);
+}
+
+.search_control_items .post_ask_filter:hover {
+	background: var(--old-text);
+}
+
+.search_control_items .post_ask_filter .icon {
+	color: var(--old-text);
 }
