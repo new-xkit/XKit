@@ -200,6 +200,11 @@ XKit.extensions.xkit_patches = new Object({
 							response: {
 								status: xhr.status,
 								responseText: xhr.response,
+								responseObj: (() => {
+									try {
+										return JSON.parse(xhr.response);
+									} catch (e) { return null; }
+								})(),
 								headers: cur_headers
 							},
 							timestamp: "xkit_" + request.timestamp,
