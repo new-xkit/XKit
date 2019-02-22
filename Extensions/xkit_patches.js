@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.4 **//
+//* VERSION 7.2.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -128,6 +128,52 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.0": function() {
+
+			XKit.svc = {
+				blog: {
+					followed_by: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/blog/followed_by?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				},
+
+				conversations: {
+					participant_info: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/conversations/participant_info?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				}
+			};
+
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @param {String} username
+			 * @param {String} blog
+			 * @return {Promise<Boolean>}
+			 */
+			XKit.interface.is_following = function(username, blog) {
+				return new Promise(resolve => {
+					XKit.svc.conversations.participant_info({
+						"q": username,
+						"participant": blog
+					})
+					.then(response => resolve(response.responseObj.response.is_blog_following_you))
+					.catch(() => XKit.svc.blog.followed_by({
+						"query": username,
+						"tumblelog": blog
+					}))
+					.then(response => resolve(response.responseObj.response.is_friend));
+				});
+			};
 
 			XKit.blog_listener = {
 				callbacks: {},
@@ -2327,24 +2373,6 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("peepr-open-request", add_tag);
 					}, true, payload);
-				},
-
-				/**
-				 * Determines whether a user is following the given blog.
-				 * The logged-in user must be a member of the given blog to determine this.
-				 * @param {String} username
-				 * @param {String} blog
-				 * @return {Promise<Boolean>}
-				 */
-				is_following: function(username, blog) {
-					return $.ajax({
-						type: "GET",
-						url: "https://www.tumblr.com/svc/blog/followed_by",
-						data: "tumblelog=" + blog + "&query=" + username,
-						dataType: "json",
-					}).then(function(msg) {
-						return msg.response.is_friend == 1;
-					});
 				}
 			});
 
