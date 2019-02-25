@@ -68,12 +68,12 @@
 }
 
 .tab_post_type .post_type_icon {
-	background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/quick_compose_sprite.png");
+	background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/old_blue/quick_compose_sprite.png");
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
 	.tab_post_type .post_type_icon {
-		background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/quick_compose_sprite_2x.png");
+		background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/old_blue/quick_compose_sprite_2x.png");
 		background-size: 200px 700px;
 	}
 }
@@ -1827,12 +1827,12 @@ a {
 }
 
 .tab-post-type .post-type-icon {
-  background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/quick_compose_sprite.png");
+  background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/old_blue/quick_compose_sprite.png");
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio:1.5),only screen and (min--moz-device-pixel-ratio:1.5),only screen and (min-resolution:1.5dppx),only screen and (min-resolution:144dpi) {
   .tab-post-type .post-type-icon {
-	background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/quick_compose_sprite_2x.png");
+	background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/old_blue/quick_compose_sprite_2x.png");
 	background-size: 200px 700px;
   }
 }
