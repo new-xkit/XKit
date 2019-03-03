@@ -166,12 +166,12 @@ XKit.extensions.xkit_patches = new Object({
 						"q": username,
 						"participant": blog
 					})
-					.then(response => resolve(response.responseJson.response.is_blog_following_you))
+					.then(response => resolve(response.json().response.is_blog_following_you))
 					.catch(() => XKit.svc.blog.followed_by({
 						"query": username,
 						"tumblelog": blog
 					}))
-					.then(response => resolve(response.responseJson.response.is_friend));
+					.then(response => resolve(response.json().response.is_friend));
 				});
 			};
 
@@ -246,11 +246,6 @@ XKit.extensions.xkit_patches = new Object({
 							response: {
 								status: xhr.status,
 								responseText: xhr.response,
-								responseJson: (() => {
-									try {
-										return JSON.parse(xhr.response);
-									} catch (e) { return null; }
-								})(),
 								headers: cur_headers
 							},
 							timestamp: "xkit_" + request.timestamp,
@@ -271,11 +266,17 @@ XKit.extensions.xkit_patches = new Object({
 				function handler(e) {
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
 						window.removeEventListener("message", handler);
-						let {success, response} = e.data;
+						let {success, response} = JSON.parse(JSON.stringify(e.data));
 
 						if (typeof response.headers["x-tumblr-kittens"] !== "undefined") {
 							XKit.interface.kitty.set(response.headers["x-tumblr-kittens"]);
 						}
+
+						response.json = function() {
+							try {
+								return JSON.parse(response.responseText);
+							} catch (err) { return null; }
+						};
 
 						if (success && response.status >= 200 && response.status < 300) {
 							details.onload(response);
