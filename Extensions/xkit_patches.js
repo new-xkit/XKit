@@ -166,11 +166,12 @@ XKit.extensions.xkit_patches = new Object({
 					"participant": blog
 				})
 				.then(response => response.json().response.is_blog_following_you)
-				.catch(() => XKit.svc.blog.followed_by({
-					"query": username,
-					"tumblelog": blog
-				})
-				.then(response => response.json().response.is_friend));
+				.catch(() =>
+					XKit.svc.blog.followed_by({
+						"query": username,
+						"tumblelog": blog
+					})
+					.then(response => response.json().response.is_friend));
 			};
 
 			XKit.blog_listener = {
