@@ -166,12 +166,12 @@ XKit.extensions.xkit_patches = new Object({
 						"q": username,
 						"participant": blog
 					})
-					.then(response => resolve(response.responseObj.response.is_blog_following_you))
+					.then(response => resolve(response.responseJson.response.is_blog_following_you))
 					.catch(() => XKit.svc.blog.followed_by({
 						"query": username,
 						"tumblelog": blog
 					}))
-					.then(response => resolve(response.responseObj.response.is_friend));
+					.then(response => resolve(response.responseJson.response.is_friend));
 				});
 			};
 
@@ -246,7 +246,7 @@ XKit.extensions.xkit_patches = new Object({
 							response: {
 								status: xhr.status,
 								responseText: xhr.response,
-								responseObj: (() => {
+								responseJson: (() => {
 									try {
 										return JSON.parse(xhr.response);
 									} catch (e) { return null; }
