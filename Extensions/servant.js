@@ -1140,8 +1140,9 @@ XKit.extensions.servant = new Object({
 					}
 				}
 
-				var post = null;
-				if(m_post !== "" && m_post.length > 0){
+				// eslint-disable-next-line no-unused-vars
+				var post;
+				if (m_post !== "" && m_post.length > 0) {
 					post = m_post[0];
 				}
 
