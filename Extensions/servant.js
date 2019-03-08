@@ -1140,15 +1140,12 @@ XKit.extensions.servant = new Object({
 					}
 				}
 
-				if (m_post !== "") {
-					var to_run = function(post) {
-						eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
-					};
-
-					to_run(m_post);
-				} else {
-					eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
+				var post = null;
+				if(m_post !== "" && m_post.length > 0){
+					post = m_post[0];
 				}
+
+				eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 
 			}
 
