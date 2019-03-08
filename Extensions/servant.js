@@ -1141,11 +1141,11 @@ XKit.extensions.servant = new Object({
 				}
 
 				if (m_post !== "") {
-					var to_run = function() {
+					var to_run = function(post) {
 						eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 					};
 
-					to_run();
+					to_run(m_post);
 				} else {
 					eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 				}
