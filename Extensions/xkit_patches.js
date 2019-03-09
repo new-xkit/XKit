@@ -271,11 +271,7 @@ XKit.extensions.xkit_patches = new Object({
 							XKit.interface.kitty.set(response.headers["x-tumblr-kittens"]);
 						}
 
-						response.json = function() {
-							try {
-								return JSON.parse(response.responseText);
-							} catch (err) { return null; }
-						};
+						response.json = () => JSON.parse(response.responseText);
 
 						if (success && response.status >= 200 && response.status < 300) {
 							details.onload(response);
