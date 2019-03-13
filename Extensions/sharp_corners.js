@@ -1,7 +1,7 @@
 //* TITLE sharplr **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION No rounded corners, anywhere. The opposite of bubblr. **//
-//* DEVELOPER Rebecca Turner **//
+//* DEVELOPER 9999years **//
 //* FRAME false **//
 //* BETA false **//
 

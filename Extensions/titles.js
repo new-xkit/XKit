@@ -1,7 +1,7 @@
 //* TITLE Tab titles **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Descriptive tab titles, rather than just “Tumblr” **//
-//* DEVELOPER Rebecca Turner **//
+//* DEVELOPER 9999years **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -63,7 +63,7 @@ XKit.extensions.titles = new Object({
 	// Gets a new page title from an array of directory names. This actually
 	// has to be a function() and not a lambda because it uses `this`.
 	getTitle: function(pathComponents) {
-		let fn = this.titleFuncs[pathComponents[0]];
+		let fn = this.titleForPath[pathComponents[0]];
 		if (fn) {
 			return fn(pathComponents);
 		} else {

@@ -1,7 +1,7 @@
 //* TITLE Show transparency **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Makes the backgrounds of images blue when you hover over them so you can see transparency without dragging the image. **//
-//* DEVELOPER Rebecca Turner **//
+//* DEVELOPER 9999years **//
 //* FRAME false **//
 //* BETA false **//
 

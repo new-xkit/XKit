@@ -1,7 +1,7 @@
 //* TITLE Don't stretch photosets **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Don't allow images in photosets to be stretched past their “natural” length. **//
-//* DEVELOPER Rebecca Turner **//
+//* DEVELOPER 9999years **//
 //* FRAME false **//
 //* BETA false **//
 
