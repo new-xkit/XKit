@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.0 **//
+//* VERSION 7.2.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -150,7 +150,16 @@ XKit.extensions.xkit_patches = new Object({
 							onerror: reject
 						});
 					})
-				}
+				},
+
+				indash_blog: data => new Promise((resolve, reject) => {
+					XKit.tools.Nx_XHR({
+						method: "GET",
+						url: "https://www.tumblr.com/svc/indash_blog?" + $.param(data),
+						onload: resolve,
+						onerror: reject
+					});
+				})
 			};
 
 			/**

@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.8.1 **//
+//* VERSION 2.8.2 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -160,41 +160,21 @@ XKit.extensions.timestamps = new Object({
 			return;
 		}
 
-		var url = "https://www.tumblr.com/svc/indash_blog?limit=1&offset=0&should_bypass_safemode=true&should_bypass_tagfiltering=true" +
-			"&tumblelog_name_or_id=" + blog_name +
-			"&post_id=" + post_id;
-		var self = this;
-
-		try {
-			XKit.tools.Nx_XHR({
-				method: "GET",
-				url: url,
-				headers: {
-					"X-Requested-With": "XMLHttpRequest",
-					"X-Tumblr-Form-Key": XKit.interface.form_key()
-				},
-				onerror: function() {
-					console.warn('Unable to load timestamp for post ' + post_id);
-					self.show_failed(date_element);
-				},
-				onload: function(response) {
-					try {
-						var data = JSON.parse(response.responseText);
-						var post = data.response.posts[0];
-						var date = moment(new Date(post.timestamp * 1000));
-						date_element.html(self.format_date(date));
-						date_element.removeClass("xtimestamp_loading");
-						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
-					} catch (e) {
-						console.error('Unable to load timestamp for post ' + post_id + ": " + e.message);
-						self.show_failed(date_element);
-					}
-				}
-			});
-		} catch (e) {
-			console.error('Unable to load timestamp for post ' + post_id);
-			XKit.extensions.timestamps.show_failed(date_element);
-		}
+		XKit.svc.indash_blog({
+			tumblelog_name_or_id: blog_name,
+			post_id: post_id,
+			limit: 1,
+			offset: 0,
+			should_bypass_safemode: true,
+			should_bypass_tagfiltering: true
+		})
+		.then(response => {
+			var timestamp = response.json().response.posts[0].timestamp;
+			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
+			date_element.removeClass("xtimestamp_loading");
+			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
+		})
+		.catch(() => this.show_failed(date_element));
 	},
 
 	fetch_from_cache: function(post_id, date_element) {
