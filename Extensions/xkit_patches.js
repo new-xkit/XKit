@@ -262,8 +262,7 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			XKit.interface.post_window.blog =
-				() => $("#channel_id").val()
-				|| $(".post-form--header [data-js-tumbleloglabel]").text();
+				() => $("#channel_id").val() || $(".post-form--header [data-js-tumbleloglabel]").text();
 
 			XKit.interface.post_window.reblogging_from =
 				() => $(".post-form--header .reblog_source .reblog_name").text();
