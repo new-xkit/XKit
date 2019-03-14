@@ -10,7 +10,7 @@
 XKit.extensions.addressbar = new Object({
 
 	running: false,
-	intervalId: 0,
+	interval: 0,
 	initialScroll: null,
 	
 	preferences: {
@@ -26,7 +26,7 @@ XKit.extensions.addressbar = new Object({
 
 		if (XKit.interface.where().dashboard !== true || XKit.interface.where().endless !== true) {return; } //only useful on endless dashboard
 
-		XKit.extensions.addressbar.intervalId = setInterval(
+		XKit.extensions.addressbar.interval = setInterval(
 			XKit.extensions.addressbar.update_address, 500);
 
 		XKit.extensions.addressbar.initialScroll = history.scrollRestoration;
@@ -72,7 +72,7 @@ XKit.extensions.addressbar = new Object({
 
 	destroy: function() {
 		this.running = false;
-		clearInterval(XKit.extensions.addressbar.intervalId);
+		clearInterval(XKit.extensions.addressbar.interval);
 		history.scrollRestoration = XKit.extensions.addressbar.initialScroll;
 	}
 });
