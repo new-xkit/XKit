@@ -312,43 +312,22 @@ XKit.extensions.tweaks = new Object({
 	}),
 
 	cpanel: function($panel) {
-		var structure = {};
-		var current_category = null;
-		for (let x of Object.keys(this.preferences)) {
-			if (this.preferences[x].type == "separator") {
-				structure[x] = [];
-				current_category = x;
-			} else if (!current_category) {
-				console.error("Tweaks Control Panel Builder could not categorise all preferences. Displaying default structure.");
-				throw new Error("Found uncategorised preference!");
-			} else {
-				structure[current_category].push(x);
-			}
-		}
-
-		var html = "";
-		const get_html = id => $panel.children(`[data-setting-id="${id}"]`)[0].outerHTML;
-		for (let x of Object.keys(structure)) {
-			html += "<details>";
-
-			let sep = $panel.find(".xkit-extension-setting-separator").first();
-			html += sep[0].outerHTML.replace(/div/g, "summary");
-			sep.remove();
-
-			for (let pref of structure[x]) {
-				html += get_html(pref);
-			}
-			html += "<div/>";
-
-			html += "</details>";
-		}
-
 		$panel
-		.html(html)
 		.find(".xkit-extension-setting-separator")
 			.css("text-transform", "none")
 			.css("margin-top", 0)
-			.css("padding", "15px");
+			.css("padding", "15px")
+			.each(function() {
+				this.outerHTML = this.outerHTML.replace(/div/g, "summary");
+			});
+
+		$panel
+		.html($panel.html()
+			.replace(/<summary/g, "</details><details><summary")
+			.replace("</details>", "")
+			+ "</details>")
+		.find("details:not(:last-child)")
+			.append("<div/>");
 	},
 
 	run: function() {
