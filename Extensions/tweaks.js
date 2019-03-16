@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.1 **/
+//* VERSION 5.8.0 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -310,6 +310,46 @@ XKit.extensions.tweaks = new Object({
 	addShowTagsObserver: new MutationObserver(function(ms) {
 		XKit.extensions.tweaks.process_wrap_tags_one_line();
 	}),
+
+	cpanel: function($panel) {
+		var structure = {};
+		var current_category = null;
+		for (let x of Object.keys(this.preferences)) {
+			if (this.preferences[x].type == "separator") {
+				structure[x] = [];
+				current_category = x;
+			} else if (!current_category) {
+				console.error("Tweaks Control Panel Builder could not categorise all preferences. Displaying default structure.");
+				throw new Error("Found uncategorised preference!");
+			} else {
+				structure[current_category].push(x);
+			}
+		}
+
+		var html = "";
+		const get_html = id => $panel.children(`[data-setting-id="${id}"]`)[0].outerHTML;
+		for (let x of Object.keys(structure)) {
+			html += "<details>";
+
+			let sep = $panel.find(".xkit-extension-setting-separator").first();
+			html += sep[0].outerHTML.replace(/div/g, "summary");
+			sep.remove();
+
+			for (let pref of structure[x]) {
+				html += get_html(pref);
+			}
+			html += "<div/>";
+
+			html += "</details>";
+		}
+
+		$panel
+		.html(html)
+		.find(".xkit-extension-setting-separator")
+			.css("text-transform", "none")
+			.css("margin-top", 0)
+			.css("padding", "15px");
+	},
 
 	run: function() {
 		this.running = true;
