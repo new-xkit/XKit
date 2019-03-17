@@ -1,6 +1,6 @@
 //* TITLE Mute! **//
 //* VERSION 2.4.0 **//
-//* DESCRIPTION Better than 'shut up!' **//
+//* DESCRIPTION Better than &quot;shut up!&quot; **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -709,14 +709,38 @@ XKit.extensions.mute = new Object({
 
 	cpanel: function(mdiv) {
 		$("#xkit-mute-user").unbind("click");
-		$("#xkit-mute-user").click(function() {
+		$("#xkit-mute-user").click(() => {
 			XKit.window.show("Mute user",
 				"Enter a username to show muting options." +
 				`<input type="text" maxlength="32" placeholder="e.g. new-xkit-discussion" class="xkit-textbox" id="xkit-muting-user">`,
 				"question",
 				`<div id="xkit-mute-continue" class="xkit-button default">Mute &rarr;</div>` +
 				`<div id="xkit-close-message" class="xkit-button">Cancel</div>`);
-			$("#xkit-mute-continue").click(() => XKit.extensions.mute.show_window($("#xkit-muting-user").val()));
+
+			function complain(reason) {
+				$("#xkit-muting-user")
+				.val("")
+				.attr("placeholder", reason)
+				.css("border-color", "red")
+				.click(function() {
+					$(this)
+					.unbind("click")
+					.removeAttr("style")
+					.attr("placeholder", "e.g. new-xkit-discussion");
+				});
+			}
+
+			$("#xkit-mute-continue").click(() => {
+				const username = $("#xkit-muting-user").val().trim().toLowerCase();
+
+				if (username.length == 0) {
+					complain("This can't be blank!");
+				} else if (username.includes(" ") || username.includes("_")) {
+					complain("Usernames are only comprised of letters, numbers and dashes.");
+				} else {
+					XKit.extensions.mute.show_window(username);
+				}
+			});
 		});
 
 		if ($("#xkit-control-panel-mute").length > 0) {
