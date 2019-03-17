@@ -248,7 +248,7 @@ XKit.extensions.tagviewer = new Object({
 		var m_html = `<div class="tagviewer-tag">` +
 						`<div class="tagviewer-by">` +
 							`<a target="_blank" href="${link}" class="tagviewer-by-link">${by}</a>` +
-							`<img class="tagviewer-by-avatar" src="https://api.tumblr.com/v2/blog/${by}/avatar">` +
+							`<img class="tagviewer-by-avatar" src="https://api.tumblr.com/v2/blog/${by}/avatar/64">` +
 						`</div>` +
 						`<div class="tagviewer-tag-tags">`;
 
