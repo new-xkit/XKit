@@ -66,7 +66,7 @@ XKit.extensions.addressbar = new Object({
 		if (!XKit.extensions.addressbar.focus_only || document.hasFocus()) { 
 		//do nothing if you're not in focus
 			var id = XKit.extensions.addressbar.find_top();
-			if (id !== null && id > 1e8) {
+			if (id !== null && id > 1) {
 				XKit.extensions.addressbar.replace_address(id);
 			}
 			return id;
