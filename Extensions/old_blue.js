@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.0.2 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DETAILS Reverses the so-called accessibility update that causes so many headaches. **//
 //* DEVELOPER New-XKit **//

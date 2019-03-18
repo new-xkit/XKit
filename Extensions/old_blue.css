@@ -2036,3 +2036,13 @@ a {
 .search_control_items .post_ask_filter .icon {
 	color: var(--old-text);
 }
+
+/* non-computed */
+
+.search_results_container .tumblelog_mask_item {
+	background-color: var(--old-blue);
+}
+
+.compose-button {
+	fill: var(--old-accent);
+}
