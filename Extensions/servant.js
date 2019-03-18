@@ -1140,10 +1140,9 @@ XKit.extensions.servant = new Object({
 					}
 				}
 
-				// eslint-disable-next-line no-unused-vars
-				var post;
 				if (m_post !== "" && m_post.length > 0) {
-					post = m_post[0];
+					// eslint-disable-next-line no-unused-vars
+					var post = m_post[0];
 				}
 
 				eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
