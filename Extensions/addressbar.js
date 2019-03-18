@@ -42,7 +42,7 @@ XKit.extensions.addressbar = new Object({
 		var minDist = Number.MAX_SAFE_INTEGER;
 		var id = null; //check later and do nothing to history if no post qualifies
 	
-		$(".posts .post").not("#new_post").not("#tumblr_radar").not(".new_post_buttons").each(function() {
+		$("[data-pageable] .post").each(function() {
 			var dist = scrollPos - $(this).offset().top;
 			//if it equals exactly 200 that's a bogus value
 			if (dist > 0 && dist !== offset && dist < minDist) {
