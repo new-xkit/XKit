@@ -10,8 +10,8 @@
 XKit.extensions.addressbar = new Object({
 
 	running: false,
-	interval: 0, //id from setInterval
-	initialScroll: null, //initial value from history.scrollRestoration
+	interval: 0,
+	initialScroll: history.scrollRestoration,
 	
 	preferences: {
 		"focus_only": {
@@ -31,7 +31,6 @@ XKit.extensions.addressbar = new Object({
 
 		this.interval = setInterval(this.update_address, 500);
 
-		this.initialScroll = history.scrollRestoration;
 		history.scrollRestoration = "manual"; //prevent page from jumping to bottom on refresh 
 	},
 	
