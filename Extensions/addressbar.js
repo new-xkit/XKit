@@ -29,10 +29,9 @@ XKit.extensions.addressbar = new Object({
 			return; //only useful on endless dashboard
 		} 
 
-		XKit.extensions.addressbar.interval = setInterval(
-			XKit.extensions.addressbar.update_address, 500);
+		this.interval = setInterval(this.update_address, 500);
 
-		XKit.extensions.addressbar.initialScroll = history.scrollRestoration;
+		this.initialScroll = history.scrollRestoration;
 		history.scrollRestoration = "manual";
 	},
 	
@@ -75,7 +74,7 @@ XKit.extensions.addressbar = new Object({
 
 	destroy: function() {
 		this.running = false;
-		clearInterval(XKit.extensions.addressbar.interval);
-		history.scrollRestoration = XKit.extensions.addressbar.initialScroll;
+		clearInterval(this.interval);
+		history.scrollRestoration = this.initialScroll;
 	}
 });
