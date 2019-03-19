@@ -24,7 +24,7 @@ XKit.extensions.addressbar = new Object({
 	run: function() {
 		this.running = true; //there's some confusion over whether this gets set to true on immediate return
 		
-		let XInterface = XKit.interface.where()
+		let XInterface = XKit.interface.where();
 		if (XInterface.dashboard !== true || XInterface.endless !== true) {
 			return; //only useful on endless dashboard
 		} 
