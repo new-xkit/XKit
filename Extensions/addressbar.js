@@ -10,8 +10,8 @@
 XKit.extensions.addressbar = new Object({
 
 	running: false,
-	interval: 0,
-	initialScroll: null,
+	interval: 0, //id from setInterval
+	initialScroll: null, //initial value from history.scrollRestoration
 	
 	preferences: {
 		"focus_only": {
@@ -32,7 +32,7 @@ XKit.extensions.addressbar = new Object({
 		this.interval = setInterval(this.update_address, 500);
 
 		this.initialScroll = history.scrollRestoration;
-		history.scrollRestoration = "manual";
+		history.scrollRestoration = "manual"; //prevent page from jumping to bottom on refresh 
 	},
 	
 	find_top: function() {
@@ -68,7 +68,7 @@ XKit.extensions.addressbar = new Object({
 			if (id !== null && id > 1) {
 				XKit.extensions.addressbar.replace_address(id);
 			}
-			return id;
+			return id; //unused/debug
 		}
 	},
 
