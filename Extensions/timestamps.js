@@ -63,23 +63,10 @@ XKit.extensions.timestamps = new Object({
 
 		if (XKit.storage.quota("timestamps") <= 1024 || XKit.storage.size("timestamps") >= 153600) {
 			XKit.storage.clear("timestamps");
-			if (this.preferences.only_relative.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_relative", "true");
-			}
-			if (this.preferences.only_inbox.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_inbox", "true");
-			}
-			if (this.preferences.only_on_hover.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_on_hover", "true");
-			}
-			if (!this.preferences.do_reblogs.value) {
-				XKit.storage.set("timestamps", "extension__setting__do_reblogs", "false");
-			}
-			if (!this.preferences.only_original.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_original", "false");
-			}
-			if (this.preferences.format.value !== "") {
-				XKit.storage.set("timestamps", "extension__setting__format", this.preferences.format.value);
+			for (let x of Object.keys(this.preferences)) {
+				if (this.preferences[x].value !== this.preferences[x].default) {
+					XKit.storage.set("timestamps", `extension__setting__${x}`, this.preferences[x].value.toString());
+				}
 			}
 		}
 
