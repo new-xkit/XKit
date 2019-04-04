@@ -61,7 +61,7 @@ XKit.extensions.timestamps = new Object({
 
 	check_quota: function() {
 
-		if (XKit.storage.quota("timestamps") <= 1024) {
+		if (XKit.storage.quota("timestamps") <= 1024 || XKit.storage.size("timestamps") >= 153600) {
 			XKit.storage.clear("timestamps");
 			if (this.preferences.only_relative.value) {
 				XKit.storage.set("timestamps", "extension__setting__only_relative", "true");
