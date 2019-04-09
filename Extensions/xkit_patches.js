@@ -129,6 +129,79 @@ XKit.extensions.xkit_patches = new Object({
 	patches: {
 		"7.9.0": function() {
 
+			XKit.interface.sidebar = {
+				init: function() {
+					const html = `<div id="xkit_sidebar"></div>`;
+					const priority = [
+						$(".small_links"),
+						$("#dashboard_controls_open_blog"),
+						$(".controls_section.inbox"),
+						$(".sidebar_link.explore_link"),
+						$(".controls_section.recommended_tumblelogs"),
+						$("#tumblr_radar")
+					];
+
+					for (let section of priority) {
+						if (section.length) {
+							section.first().after(html);
+							break;
+						}
+					}
+					if (!$("#xkit_sidebar").length) {
+						$("#right_column").append(html);
+					}
+
+					XKit.tools.add_css(`
+						.controls_section.recommended_tumblelogs:not(:first-child) {
+							margin-top: 18px !important;
+						}`,
+					"sidebar_margins_fix");
+				},
+
+				construct: function(section) {
+					section.items = section.items || [];
+					section.small = section.small || [];
+
+					var html = `<ul id="${section.id}" class="controls_section">`;
+					if (section.title) {
+						html += `<li class="section_header">${section.title}</li>`;
+					}
+					for (let item of section.items) {
+						html += `
+							<li class="controls_section_item">
+								<a id="${item.id}" class="control-anchor" style="cursor:pointer">
+									<div class="hide_overflow">
+										${item.text}
+										${(item.carrot ? '<i class="sub_control link_arrow icon_right icon_arrow_carrot_right"></i>' : "")}
+									</div>
+									<span class="count">${item.count || ""}</span>
+								</a>
+							</li>`;
+					}
+					html += "</ul>";
+
+					if (section.small.length !== 0) {
+						html += '<div class="small_links">';
+						for (let item of section.small) {
+							html += `<a id="${item.id}" style="cursor:pointer">${item.text}</a>`;
+						}
+						html += "</div>";
+					}
+
+					return html;
+				},
+
+				add: function(section) {
+					if (!$("#xkit_sidebar").length) {
+						this.init();
+					}
+
+					$("#xkit_sidebar").append(this.construct(section));
+				},
+
+				remove: id => $(`#${id}, #${id} + .small_links`).remove()
+			};
+
 			XKit.svc = {
 				blog: {
 					followed_by: data => new Promise((resolve, reject) => {
