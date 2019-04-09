@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.6 **//
+//* VERSION 0.2.7 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -16,21 +16,14 @@ XKit.extensions.drafts_plus = new Object({
 
 		XKit.tools.init_css("drafts_plus");
 
-		var xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
-			'<li class="section_header selected">Drafts Tools</li>' +
-			'<li class="" id="drafts_plus_mass_edit_li"">' +
-				'<a href="#" class="customize" id="drafts_plus_mass_edit_button">' +
-					'<div class="hide_overflow">Mass Edit Mode</div>' +
-				'</a>' +
-			'</li>' +
-			'<li class="no_push">' +
-				'<a href="#" id="xshrinkposts_button">' +
-					'<div class="hide_overflow">Shrink Posts <div class="count" style="padding-top: 8px;">off</div></div>' +
-				'</a>' +
-			'</li>' +
-			'</ul>';
-
-		$(".controls_section:eq(1)").before(xf_html);
+		XKit.interface.sidebar.add({
+			id: "drafts_plus_sidebar",
+			title: "Drafts Tools",
+			items: [
+				{ id: "drafts_plus_mass_edit_button", text: "Mass Edit Mode" },
+				{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" }
+			]
+		});
 
 		$("#drafts_plus_mass_edit_button").click(function() {
 
@@ -368,6 +361,7 @@ XKit.extensions.drafts_plus = new Object({
 
 	destroy: function() {
 		this.running = false;
+		XKit.interface.sidebar.remove("drafts_plus_sidebar");
 		XKit.extensions.drafts_plus.stop_mass_editor();
 	}
 

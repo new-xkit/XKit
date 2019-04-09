@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.5.4 **//
+//* VERSION 1.5.5 **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -73,20 +73,19 @@ XKit.extensions.cleanfeed = new Object({
 			normal_text = "Smart";
 		}
 
-
-		var xf_html = '<ul class="controls_section" id="xcleanfeed_ul">' +
-			'<li class="section_header selected">Cleanfeed</li>' +
-			'<li class="no_push" style="height: 36px;"><a href="#" id="xcleanfeed_button">' +
-			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Filtering</div>' +
-			'<div class="count" id="xcleanfeedstatus" style="padding-top: 8px;">' + XKit.extensions.cleanfeed.lbl_off + '</div>' +
-			'<div id="xcleanfeedindicator">&nbsp;</div>' +
-			'</a></li>' +
-			'<div class="small_links by-xkit-cleanfeed">' +
-				'<a id="xkit-cleanfeed-mode">Mode: ' + normal_text + '</a>' +
-				'<a id="xkit-cleanfeed-mode-change" href="#">change/help</a>' +
-			'</div>' +
-			'</ul>';
-		$(".controls_section:eq(1)").before(xf_html);
+		XKit.interface.sidebar.add({
+			id: "xcleanfeed_sidebar",
+			title: "CleanFeed",
+			items: [{
+				id: "xcleanfeed_button",
+				text: "Filtering",
+				count: this.lbl_off
+			}],
+			small: [
+				{ id: "xkit-cleanfeed-mode", text: `Mode: ${normal_text}` },
+				{ id: "xkit-cleanfeed-mode-change", text: "change/help" }
+			]
+		});
 
 		XKit.extensions.cleanfeed.update_button();
 
@@ -180,11 +179,9 @@ XKit.extensions.cleanfeed = new Object({
 	update_button: function() {
 
 		if (XKit.extensions.cleanfeed.status == "true") {
-			$("#xcleanfeedindicator").addClass("on");
-			$("#xcleanfeedstatus").html(XKit.extensions.cleanfeed.lbl_on);
+			$("#xcleanfeed_button .count").html(XKit.extensions.cleanfeed.lbl_on);
 		} else {
-			$("#xcleanfeedindicator").removeClass("on");
-			$("#xcleanfeedstatus").html(XKit.extensions.cleanfeed.lbl_off);
+			$("#xcleanfeed_button .count").html(XKit.extensions.cleanfeed.lbl_off);
 		}
 
 	},
@@ -470,7 +467,7 @@ XKit.extensions.cleanfeed = new Object({
 		this.running = false;
 		XKit.tools.remove_css("cleanfeed_on");
 		XKit.tools.remove_css("cleanfeed_full_block");
-		$("#xcleanfeed_ul").remove();
+		XKit.interface.sidebar.remove("xcleanfeed_sidebar");
 		XKit.extensions.cleanfeed.update_images(false);
 	}
 

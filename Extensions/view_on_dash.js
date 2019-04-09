@@ -58,12 +58,15 @@ XKit.extensions.view_on_dash = new Object({
 
 		if (this.preferences.show_sidebar_button.value === true) {
 
-			var xf_html = '<ul class="controls_section" id="view_on_dash_ul">' +
-				'<li class="section_header selected">View Blogs</li>' +
-				'<li class="no_push"><a href="#" id="view_on_dash_button">' +
-					'<div class="hide_overflow">View on Dash<span class="sub_control link_arrow arrow_right"></span></div>' +
-				'</a></li></ul>';
-			$(".controls_section:eq(1)").before(xf_html);
+			XKit.interface.sidebar.add({
+				id: "view_on_dash_sidebar",
+				title: "View Blogs",
+				items: [{
+					id: "view_on_dash_button",
+					text: "View on Dash",
+					carrot: true
+				}]
+			});
 
 			$("#view_on_dash_button").click(function() {
 
@@ -836,7 +839,7 @@ XKit.extensions.view_on_dash = new Object({
 	destroy: function() {
 		this.running = false;
 		$(document).off('keydown', XKit.extensions.view_on_dash.key_down);
-		$("#view_on_dash_ul").remove();
+		XKit.interface.sidebar.remove("view_on_dash_sidebar");
 		try {
 			XKit.extensions.show_more.remove_custom_menu("view_on_dash");
 		} catch (e) {
