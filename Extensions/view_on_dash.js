@@ -59,7 +59,7 @@ XKit.extensions.view_on_dash = new Object({
 		if (this.preferences.show_sidebar_button.value === true) {
 
 			var xf_html = '<ul class="controls_section" id="view_on_dash_ul">' +
-				'<li class="section_header selected">VIEW BLOGS</li>' +
+				'<li class="section_header selected">View Blogs</li>' +
 				'<li class="no_push"><a href="#" id="view_on_dash_button">' +
 					'<div class="hide_overflow">View on Dash<span class="sub_control link_arrow arrow_right"></span></div>' +
 				'</a></li></ul>';
