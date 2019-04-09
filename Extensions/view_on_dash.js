@@ -79,7 +79,6 @@ XKit.extensions.view_on_dash = new Object({
 				var show_more = XKit.extensions.show_more;
 				if (show_more.preferences.use_classic_menu.value) {
 					show_more.add_custom_menu("view_on_dash", function(data) {
-						console.log(data);
 						var user_url = data.name;
 
 						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
