@@ -169,7 +169,7 @@ XKit.extensions.xkit_patches = new Object({
 					for (let item of section.items) {
 						html += `
 							<li class="controls_section_item">
-								<a id="${item.id}" class="control-anchor" style="cursor:pointer">
+								<a id="${item.id}" class="control-item control-anchor" style="cursor:pointer">
 									<div class="hide_overflow">
 										${item.text}
 										${(item.carrot ? '<i class="sub_control link_arrow icon_right icon_arrow_carrot_right"></i>' : "")}
