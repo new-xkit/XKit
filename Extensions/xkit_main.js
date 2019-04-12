@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -12,11 +12,14 @@
 
 		run: function() {
 
-			if (typeof document.location.href !== "undefined") {
-				if (document.location.href.indexOf("://www.tumblr.com/login") !== -1 || document.location.href.indexOf("://www.tumblr.com/settings") !== -1) {
-					console.log("Refusing to run XKit, login or settings page!");
-					return;
-				}
+			if (location.href.includes("://www.tumblr.com/login") || location.href.includes("://www.tumblr.com/settings")) {
+				console.log("Refusing to run XKit, login or settings page!");
+				return;
+			}
+
+			if ($.isXMLDoc(document)) {
+				console.log("Refusing to run XKit, on RSS page!");
+				return;
 			}
 
 			if (XKit.extensions.xkit_main.running === true) {
