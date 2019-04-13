@@ -72,9 +72,14 @@ XKit.extensions.soft_refresh = new Object({
 		this.loading = true;
 
 		$("html, body").animate({ scrollTop: 0 }, "slow");
-		$("#new_post").after(`<div id="xkit_soft_refresh">Checking for new posts</div>`);
+
+		$("#new_post").after('<div id="xkit_soft_refresh">Checking for new posts</div>');
 		$("#xkit_soft_refresh").slideDown("fast");
-		$("#new_post_notice_container").attr("style", "transform: scale(0); opacity: 0;");
+
+		$("#new_post_notice_container").css({
+			transform: "scale(0)",
+			opacity: 0
+		});
 
 		this.top_post = $("#posts > li.post_container:not(#new_post_buttons)").first();
 		this.request("");
