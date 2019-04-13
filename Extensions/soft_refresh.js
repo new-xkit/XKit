@@ -166,7 +166,7 @@ XKit.extensions.soft_refresh = new Object({
 		XKit.window.show(
 			"Can't get new posts",
 
-			"I could not fetch the page requested." +
+			"I could not fetch the page requested.<br>" +
 			"There might be a problem with Tumblr servers, please try again later or try refreshing manually.",
 
 			"error",
