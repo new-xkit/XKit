@@ -113,8 +113,10 @@ XKit.extensions.soft_refresh = new Object({
 					}
 
 					if ($this.attr("data-pageable") !== undefined) {
-						exists = !!$("#" + $this.attr("data-pageable")).length;
-						exists || XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
+						exists = !!$("[data-pageable=" + $this.attr("data-pageable") + "]").length;
+						if (!exists) {
+							XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
+						}
 					}
 
 					if (!exists) {
