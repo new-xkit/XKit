@@ -39,7 +39,7 @@ XKit.extensions.soft_refresh = new Object({
 		this.running = true;
 		XKit.tools.init_css("soft_refresh");
 
-		if (window.location.pathname !== "/dashboard") {
+		if (location.pathname !== "/dashboard") {
 			return; // Don't run outside of dashboard or on secondary dashboard pages
 		}
 
