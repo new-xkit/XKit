@@ -158,6 +158,22 @@ XKit.extensions.xkit_patches = new Object({
 					"sidebar_margins_fix");
 				},
 
+				/**
+				 * Constructs HTML to add to the sidebar.
+				 * Primarily used by add, but can be used directly for custom positioning.
+				 * @param {Object} section
+				 * @param {String} section.id - The element ID for the whole sidebar section
+				 * @param {String} [section.title] - Visible header text of the sidebar section
+				 * @param {Object[]} [section.items] - Array of objects containing button data
+				 * @param {String} section.items[].id - Button element ID
+				 * @param {String} section.items[].text - Visible button text
+				 * @param {Number/String} [section.items[].count] - Text to be displayed as a counter on the button
+				 * @param {Boolean} [section.items[].carrot] - Whether to put a right-facing arrow on the button (shouldn't be combined with count)
+				 * @param {Object[]} [section.small] - Array of objects containing small link data (shouldn't contain more than two)
+				 * @param {String} section.small[].id - Button element ID
+				 * @param {String} section.small[].text - Visible button text
+				 * @return {String} Plug-ready sidebar controls section HTML
+				 */
 				construct: function(section) {
 					section.items = section.items || [];
 					section.small = section.small || [];
@@ -191,6 +207,10 @@ XKit.extensions.xkit_patches = new Object({
 					return html;
 				},
 
+				/**
+				 * Shortcut command for constructing and applying controls sections
+				 * @param {Object} section - see construct's documentation
+				 */
 				add: function(section) {
 					if (!$("#xkit_sidebar").length) {
 						this.init();
