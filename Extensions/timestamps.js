@@ -206,7 +206,12 @@ XKit.extensions.timestamps = new Object({
 			should_bypass_tagfiltering: true
 		})
 		.then(response => {
-			var timestamp = response.json().response.posts[0].timestamp;
+			var responseData = response.json().response;
+			if (responseData.post_not_found_message !== undefined) {
+				throw 404;
+			}
+
+			var timestamp = responseData.posts[0].timestamp;
 			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
 			date_element.removeClass("xtimestamp_loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
