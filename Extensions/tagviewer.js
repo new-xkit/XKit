@@ -245,18 +245,18 @@ XKit.extensions.tagviewer = new Object({
 
 		$("#tagviewer-loading").slideUp('slow', function() { $(this).remove(); });
 
-		var m_html = `<div class="tagviewer-tag">` +
-						`<div class="tagviewer-by">` +
+		var m_html = '<div class="tagviewer-tag">' +
+						'<div class="tagviewer-by">' +
 							`<a target="_blank" href="${link}" class="tagviewer-by-link">${by}</a>` +
 							`<img class="tagviewer-by-avatar" src="https://api.tumblr.com/v2/blog/${by}/avatar/64">` +
-						`</div>` +
-						`<div class="tagviewer-tag-tags">`;
+						'</div>' +
+						'<div class="tagviewer-tag-tags">';
 
 		for (let tag of tags) {
 			m_html += `<a target="_blank" href="http://www.tumblr.com/tagged/${tag.replace(/ /g, "-")}" class="tagviewer-tag-tag">#${tag}</a>`;
 		}
 
-		m_html += `</div></div>`;
+		m_html += '</div></div>';
 
 		if ($("#tagviever-mini-loader").length > 0) {
 			$("#tagviewer-window").before(m_html);
