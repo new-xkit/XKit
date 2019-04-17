@@ -113,7 +113,7 @@ XKit.extensions.classic_header = new Object({
 			XKit.extensions.classic_header.show_blogs();
 		}
 		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
-			let containerWidth = $(".l-container").css("width");
+			let containerWidth = $(".l-container:not(.l-container--flex)").css("width");
 			let contentSidePad = $(".l-content").css("padding-left");
 			let logoLeftPad = $(".png-logo").css("padding-left");
 
