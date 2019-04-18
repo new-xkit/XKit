@@ -89,6 +89,7 @@ XKit.extensions.timestamps = new Object({
 
 		for (let key of order) {
 			let current = XKit.storage.get("timestamps", `extension__setting__${key}`, "");
+			XKit.storage.remove("timestamps", `extension__setting__${key}`);
 			if (current !== "true") {
 				continue;
 			}
