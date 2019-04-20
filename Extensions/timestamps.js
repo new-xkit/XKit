@@ -74,31 +74,18 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	convert_preferences: function() {
-		const conversion = {
-			only_relative: {show_absolute: false},
-			only_inbox: {inbox: true, posts: false},
-			do_reblogs: {op: true, reblogs: true},
-			only_original: {reblogs: false}
-		};
-		const order = [
-			"only_relative",
-			"only_inbox",
-			"do_reblogs",
-			"only_original"
-		];
-
-		for (let key of order) {
-			let current = XKit.storage.get("timestamps", `extension__setting__${key}`, "");
-			XKit.storage.remove("timestamps", `extension__setting__${key}`);
-			if (current !== "true") {
-				continue;
-			}
-
-			for (let x of Object.keys(conversion[key])) {
-				XKit.storage.set("timestamps", `extension__setting__${x}`, conversion[key][x].toString());
-				this.preferences[x].value = conversion[key][x];
-			}
-		}
+		[
+			["only_inbox", "false", {inbox: true, posts: false}],
+			["do_reblogs", "true", {op: true, reblogs: true}],
+			["only_original", "true", {reblogs: false}]
+		]
+		.filter(([preference, isDefault]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, isDefault) === "true")
+		.forEach(([preference, isDefault, conversion]) => {
+			Object.entries(conversion).forEach(([key, value]) => {
+				XKit.storage.set("timestamps", `extension__setting__${key}`, value.toString());
+				this.preferences[key].value = value;
+			});
+		});
 
 		XKit.storage.set("timestamps", "preference_conversion", "done");
 	},
