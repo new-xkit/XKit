@@ -27,7 +27,7 @@ XKit.extensions.timestamps = new Object({
 			value: true
 		},
 		op: {
-			text: "Show timestamps on reblogged original posts",
+			text: "On reblogs, show the timestamp of the original post",
 			default: true,
 			value: true
 		},
