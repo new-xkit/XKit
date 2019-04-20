@@ -41,11 +41,6 @@ XKit.extensions.timestamps = new Object({
 			text: "Display options",
 			type: "separator"
 		},
-		show_absolute: {
-			text: "Display the absolute time",
-			default: true,
-			value: true
-		},
 		format: {
 			text: 'Timestamp format (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
 			type: "text",
@@ -54,6 +49,11 @@ XKit.extensions.timestamps = new Object({
 		},
 		only_on_hover: {
 			text: "Hide timestamps until I hover over a post",
+			default: false,
+			value: false
+		},
+		only_relative: {
+			text: "Display timestamps in relative form",
 			default: false,
 			value: false
 		}
@@ -289,10 +289,10 @@ XKit.extensions.timestamps = new Object({
 
 	format_date: function(date) {
 		var relative = date.from(moment());
-		if (this.preferences.show_absolute.value) {
-			return date.format(this.preferences.format.value) + " &middot; " + relative;
-		} else {
+		if (this.preferences.only_relative.value) {
 			return relative;
+		} else {
+			return date.format(this.preferences.format.value) + " &middot; " + relative;
 		}
 	},
 
