@@ -26,15 +26,16 @@ XKit.extensions.timestamps = new Object({
 			default: true,
 			value: true
 		},
-		op: {
-			text: "On reblogs, show the timestamp of the original post",
-			default: true,
-			value: true
-		},
 		reblogs: {
-			text: "Show timestamps on reblog comments",
-			default: false,
-			value: false
+			text: "Reblog timestamps",
+			type: "combo",
+			values: [
+				"Don't display any", "off",
+				"Display only on the original post", "op",
+				"Display on all comments", "all"
+			],
+			default: "op",
+			value: "op"
 		},
 
 		display_title: {
@@ -76,8 +77,8 @@ XKit.extensions.timestamps = new Object({
 	convert_preferences: function() {
 		[
 			["only_inbox", "false", {inbox: true, posts: false}],
-			["do_reblogs", "true", {op: true, reblogs: true}],
-			["only_original", "true", {reblogs: false}]
+			["do_reblogs", "true", {reblogs: "all"}],
+			["only_original", "true", {reblogs: "op"}]
 		]
 		.filter(([preference, isDefault]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, isDefault) === "true")
 		.forEach(([preference, isDefault, conversion]) => {
@@ -129,7 +130,7 @@ XKit.extensions.timestamps = new Object({
 					this.add_timestamps();
 				}
 
-				if (this.preferences.op.value || this.preferences.reblogs.value) {
+				if (this.preferences.reblogs.value !== "off") {
 					XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
 					this.add_reblog_timestamps();
 				}
@@ -192,13 +193,9 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	add_reblog_timestamps: function() {
-		var preferences = XKit.extensions.timestamps.preferences;
 		var selector = ".reblog-list-item";
-
-		if (!preferences.reblogs.value) {
+		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
 			selector += ".original-reblog-content";
-		} else if (!preferences.op.value) {
-			selector += ":not(.original-reblog-content)";
 		}
 
 		$(selector).not(".xkit_timestamps")
