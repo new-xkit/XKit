@@ -272,11 +272,13 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	format_date: function(date) {
-		var relative = date.from(moment());
+		const absolute = date.format(this.preferences.format.value)
+		const relative = date.from(moment());
+
 		if (this.preferences.only_relative.value) {
-			return relative;
+			return `<span title="${absolute}">${relative}</span>`;
 		} else {
-			return date.format(this.preferences.format.value) + " &middot; " + relative;
+			return `${absolute} &middot; ${relative}`;
 		}
 	},
 
