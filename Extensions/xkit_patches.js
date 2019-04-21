@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.0 **//
+//* VERSION 7.2.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -129,6 +129,99 @@ XKit.extensions.xkit_patches = new Object({
 	patches: {
 		"7.9.0": function() {
 
+			XKit.interface.sidebar = {
+				init: function() {
+					const html = `<div id="xkit_sidebar"></div>`;
+					const priority = [
+						$(".small_links"),
+						$("#dashboard_controls_open_blog"),
+						$(".controls_section.inbox"),
+						$(".sidebar_link.explore_link"),
+						$(".controls_section.recommended_tumblelogs"),
+						$("#tumblr_radar")
+					];
+
+					for (let section of priority) {
+						if (section.length) {
+							section.first().after(html);
+							break;
+						}
+					}
+					if (!$("#xkit_sidebar").length) {
+						$("#right_column").append(html);
+					}
+
+					XKit.tools.add_css(`
+						.controls_section.recommended_tumblelogs:not(:first-child) {
+							margin-top: 18px !important;
+						}`,
+					"sidebar_margins_fix");
+				},
+
+				/**
+				 * Constructs HTML to add to the sidebar.
+				 * Primarily used by add, but can be used directly for custom positioning.
+				 * @param {Object} section
+				 * @param {String} section.id - The element ID for the whole sidebar section
+				 * @param {String} [section.title] - Visible header text of the sidebar section
+				 * @param {Object[]} [section.items] - Array of objects containing button data
+				 * @param {String} section.items[].id - Button element ID
+				 * @param {String} section.items[].text - Visible button text
+				 * @param {Number/String} [section.items[].count] - Text to be displayed as a counter on the button
+				 * @param {Boolean} [section.items[].carrot] - Whether to put a right-facing arrow on the button (shouldn't be combined with count)
+				 * @param {Object[]} [section.small] - Array of objects containing small link data (shouldn't contain more than two)
+				 * @param {String} section.small[].id - Button element ID
+				 * @param {String} section.small[].text - Visible button text
+				 * @return {String} Plug-ready sidebar controls section HTML
+				 */
+				construct: function(section) {
+					section.items = section.items || [];
+					section.small = section.small || [];
+
+					var html = `<ul id="${section.id}" class="controls_section">`;
+					if (section.title) {
+						html += `<li class="section_header">${section.title}</li>`;
+					}
+					for (let item of section.items) {
+						html += `
+							<li class="controls_section_item">
+								<a id="${item.id}" class="control-item control-anchor" style="cursor:pointer">
+									<div class="hide_overflow">
+										${item.text}
+										${(item.carrot ? '<i class="sub_control link_arrow icon_right icon_arrow_carrot_right"></i>' : "")}
+									</div>
+									<span class="count">${item.count || ""}</span>
+								</a>
+							</li>`;
+					}
+					html += "</ul>";
+
+					if (section.small.length !== 0) {
+						html += '<div class="small_links">';
+						for (let item of section.small) {
+							html += `<a id="${item.id}" style="cursor:pointer">${item.text}</a>`;
+						}
+						html += "</div>";
+					}
+
+					return html;
+				},
+
+				/**
+				 * Shortcut command for constructing and applying controls sections
+				 * @param {Object} section - see construct's documentation
+				 */
+				add: function(section) {
+					if (!$("#xkit_sidebar").length) {
+						this.init();
+					}
+
+					$("#xkit_sidebar").append(this.construct(section));
+				},
+
+				remove: id => $(`#${id}, #${id} + .small_links`).remove()
+			};
+
 			XKit.svc = {
 				blog: {
 					followed_by: data => new Promise((resolve, reject) => {
@@ -150,7 +243,16 @@ XKit.extensions.xkit_patches = new Object({
 							onerror: reject
 						});
 					})
-				}
+				},
+
+				indash_blog: data => new Promise((resolve, reject) => {
+					XKit.tools.Nx_XHR({
+						method: "GET",
+						url: "https://www.tumblr.com/svc/indash_blog?" + $.param(data),
+						onload: resolve,
+						onerror: reject
+					});
+				})
 			};
 
 			/**

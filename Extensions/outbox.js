@@ -145,13 +145,16 @@ XKit.extensions.outbox = new Object({
 
 		XKit.tools.init_css("outbox");
 
-		var xf_html = '<ul class="controls_section" id="xkit_outbox_ul"><li class="section_header selected">OUTGOING</li>' +
-			'<li class="" style="height: 36px;"><a href="#" id="xkit-outbox-button">' +
-				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Outbox</div>' +
-			'</a></li></ul>';
-		$(".controls_section:last").before(xf_html);
+		XKit.interface.sidebar.add({
+			id: "xkit_outbox_sidebar",
+			title: "Outgoing",
+			items: [{
+				id: "xkit-outbox-button",
+				text: "My Outbox"
+			}]
+		});
 
-		$(".controls_section.inbox").prepend("<li class=\"section_header selected\">INCOMING</li>");
+		$(".controls_section.inbox").prepend('<li class="section_header">Incoming</li>');
 
 		$("#xkit-outbox-button").click(function() {
 
@@ -558,7 +561,7 @@ XKit.extensions.outbox = new Object({
 		$(".no_posts_found").remove();
 		$("#posts").before(
 			"<div id=\"xkit-outbox-no-posts\" class=\"no_posts_found\" style=\"padding-top: 234px; padding-bottom: 234px;\">" +
-				"<i class=\"icon_mail\"></i>" +
+				"<i class=\"sprite_icon_mail\"></i>" +
 				m_error  +
 			"</div>"
 		);
@@ -580,6 +583,7 @@ XKit.extensions.outbox = new Object({
 
 	destroy: function() {
 		this.running = false;
+		XKit.interface.sidebar.remove("xkit_outbox_sidebar");
 		XKit.extensions.outbox.end();
 		$("[id^='ask_answer_link_']").off("click", XKit.extensions.outbox.save_activate);
 		XKit.post_listener.remove("outbox_init");

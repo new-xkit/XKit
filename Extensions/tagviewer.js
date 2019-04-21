@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.4.4 **//
+//* VERSION 0.4.5 **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -135,7 +135,6 @@ XKit.extensions.tagviewer = new Object({
 
 				var blog_name = this.blog_name;
 				var post_id = this.post_id;
-				var blog_avatar = this.avatar_url[48];
 
 				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;
 
@@ -160,7 +159,7 @@ XKit.extensions.tagviewer = new Object({
 
 							if (typeof post.tags !== "undefined") {
 								if (post.tags.length > 0) {
-									XKit.extensions.tagviewer.add_tags(blog_name, post.tags, post.post_url, blog_avatar);
+									XKit.extensions.tagviewer.add_tags(blog_name, post.tags, post.post_url);
 									XKit.extensions.tagviewer.found_count++;
 								}
 							}
@@ -242,23 +241,22 @@ XKit.extensions.tagviewer = new Object({
 
 	},
 
-	add_tags: function(by, tags, link, avatar) {
+	add_tags: function(by, tags, link) {
 
 		$("#tagviewer-loading").slideUp('slow', function() { $(this).remove(); });
 
-		var m_html = "<div class=\"tagviewer-tag\">" +
-				"<div class=\"tagviewer-by\">" +
-					"<a target=\"_blank\" href=\"" + link + "\" class=\"tagviewer-by-link\">" + by + "</a>" +
-					"<img class=\"tagviewer-by-avatar\" src=\"" + avatar + "\">" +
-				"</div>" +
-				"<div class=\"tagviewer-tag-tags\">";
+		var m_html = '<div class="tagviewer-tag">' +
+						'<div class="tagviewer-by">' +
+							`<a target="_blank" href="${link}" class="tagviewer-by-link">${by}</a>` +
+							`<img class="tagviewer-by-avatar" src="https://api.tumblr.com/v2/blog/${by}/avatar/64">` +
+						'</div>' +
+						'<div class="tagviewer-tag-tags">';
 
-		for (var i = 0; i < tags.length; i++) {
-			var formatted_tag = XKit.tools.replace_all(tags[i], " ", "+");
-			m_html = m_html + "<a target=\"_blank\" href=\"http://www.tumblr.com/tagged/" + formatted_tag + "/\" class=\"tagviewer-tag-tag\">#" + tags[i] + "</a>";
+		for (let tag of tags) {
+			m_html += `<a target="_blank" href="http://www.tumblr.com/tagged/${tag.replace(/ /g, "-")}" class="tagviewer-tag-tag">#${tag}</a>`;
 		}
 
-		m_html = m_html + "</div></div>";
+		m_html += '</div></div>';
 
 		if ($("#tagviever-mini-loader").length > 0) {
 			$("#tagviewer-window").before(m_html);
