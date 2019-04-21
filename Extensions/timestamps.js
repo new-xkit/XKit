@@ -80,8 +80,8 @@ XKit.extensions.timestamps = new Object({
 			["do_reblogs", "true", {reblogs: "all"}],
 			["only_original", "true", {reblogs: "op"}]
 		]
-		.filter(([preference, isDefault]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, isDefault) === "true")
-		.forEach(([preference, isDefault, conversion]) => {
+		.filter(([preference, defaultValue]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, defaultValue) === "true")
+		.forEach(([preference, _, conversion]) => {
 			Object.entries(conversion).forEach(([key, value]) => {
 				XKit.storage.set("timestamps", `extension__setting__${key}`, value.toString());
 				this.preferences[key].value = value;
