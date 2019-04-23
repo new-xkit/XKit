@@ -57,7 +57,12 @@ XKit.extensions.read_more_now = new Object({
 					should_bypass_tagfiltering: true
 				}))
 				.then(response => {
-					let comment = response.json().response.posts[0].reblog.comment;
+					let responseData = response.json().response;
+					if (responseData.post_not_found_message !== undefined) {
+						return;
+					}
+
+					let comment = responseData.posts[0].reblog.comment;
 					let readmore = comment.substring(comment.indexOf("[[MORE]]") + 8).replace(/\[\[MORE\]\]/g, "");
 					XKit.extensions.read_more_now.cache[postID] = readmore;
 					XKit.extensions.read_more_now.transform_link($link.parent(), readmore);
