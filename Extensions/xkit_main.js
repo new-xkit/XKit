@@ -17,8 +17,8 @@
 				return;
 			}
 
-			if ($.isXMLDoc(document)) {
-				console.log("Refusing to run XKit, on RSS page!");
+			if (!document.doctype || document.doctype.name !== "html") {
+				console.log("Refusing to run XKit, not an HTML document!");
 				return;
 			}
 
