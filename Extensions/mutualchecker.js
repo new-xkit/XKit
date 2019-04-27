@@ -1,7 +1,7 @@
 //* TITLE Mutual Checker **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION A simple way to see who follows you back **//
-//* DETAILS Adds a small icon and '[user] follows you' hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on sideblogs. **//
+//* DETAILS Adds a small icon and &quot;[user] follows you&quot; hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on group blogs. **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//

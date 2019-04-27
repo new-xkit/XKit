@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.2 **//
+//* VERSION 7.2.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -7,27 +7,14 @@ XKit.extensions.xkit_patches = new Object({
 
 	running: false,
 
-	preferences: {
-		debug_mode: {
-			text: "XKit Developer Mode",
-			default: true,
-			value: true
-		}
-	},
-
 	run: function() {
 		this.running = true;
 
-		var to_run = [];
-		for (var i in this.patches) {
-			to_run.unshift(i);
-			if (i === XKit.version) {
-				break;
-			}
-		}
-		for (var x in to_run) {
-			this.patches[to_run[x]]();
-		}
+		this.run_order.filter(x => {
+			return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
+		}).forEach(x => {
+			this.patches[x]();
+		});
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
@@ -59,6 +46,7 @@ XKit.extensions.xkit_patches = new Object({
 
 		window.addEventListener("message", XKit.blog_listener.eventHandler);
 
+		// Scrape Tumblr's data object now that we can run add_function
 		XKit.tools.add_function(function() {
 			var blogs = [];
 			try {
@@ -136,8 +124,157 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
+	run_order: ["7.8.1", "7.8.2", "7.9.0"],
+
 	patches: {
 		"7.9.0": function() {
+
+			XKit.interface.sidebar = {
+				init: function() {
+					const html = `<div id="xkit_sidebar"></div>`;
+					const priority = [
+						$(".small_links"),
+						$("#dashboard_controls_open_blog"),
+						$(".controls_section.inbox"),
+						$(".sidebar_link.explore_link"),
+						$(".controls_section.recommended_tumblelogs"),
+						$("#tumblr_radar")
+					];
+
+					for (let section of priority) {
+						if (section.length) {
+							section.first().after(html);
+							break;
+						}
+					}
+					if (!$("#xkit_sidebar").length) {
+						$("#right_column").append(html);
+					}
+
+					XKit.tools.add_css(`
+						.controls_section.recommended_tumblelogs:not(:first-child) {
+							margin-top: 18px !important;
+						}`,
+					"sidebar_margins_fix");
+				},
+
+				/**
+				 * Constructs HTML to add to the sidebar.
+				 * Primarily used by add, but can be used directly for custom positioning.
+				 * @param {Object} section
+				 * @param {String} section.id - The element ID for the whole sidebar section
+				 * @param {String} [section.title] - Visible header text of the sidebar section
+				 * @param {Object[]} [section.items] - Array of objects containing button data
+				 * @param {String} section.items[].id - Button element ID
+				 * @param {String} section.items[].text - Visible button text
+				 * @param {Number/String} [section.items[].count] - Text to be displayed as a counter on the button
+				 * @param {Boolean} [section.items[].carrot] - Whether to put a right-facing arrow on the button (shouldn't be combined with count)
+				 * @param {Object[]} [section.small] - Array of objects containing small link data (shouldn't contain more than two)
+				 * @param {String} section.small[].id - Button element ID
+				 * @param {String} section.small[].text - Visible button text
+				 * @return {String} Plug-ready sidebar controls section HTML
+				 */
+				construct: function(section) {
+					section.items = section.items || [];
+					section.small = section.small || [];
+
+					var html = `<ul id="${section.id}" class="controls_section">`;
+					if (section.title) {
+						html += `<li class="section_header">${section.title}</li>`;
+					}
+					for (let item of section.items) {
+						html += `
+							<li class="controls_section_item">
+								<a id="${item.id}" class="control-item control-anchor" style="cursor:pointer">
+									<div class="hide_overflow">
+										${item.text}
+										${(item.carrot ? '<i class="sub_control link_arrow icon_right icon_arrow_carrot_right"></i>' : "")}
+									</div>
+									<span class="count">${item.count || ""}</span>
+								</a>
+							</li>`;
+					}
+					html += "</ul>";
+
+					if (section.small.length !== 0) {
+						html += '<div class="small_links">';
+						for (let item of section.small) {
+							html += `<a id="${item.id}" style="cursor:pointer">${item.text}</a>`;
+						}
+						html += "</div>";
+					}
+
+					return html;
+				},
+
+				/**
+				 * Shortcut command for constructing and applying controls sections
+				 * @param {Object} section - see construct's documentation
+				 */
+				add: function(section) {
+					if (!$("#xkit_sidebar").length) {
+						this.init();
+					}
+
+					$("#xkit_sidebar").append(this.construct(section));
+				},
+
+				remove: id => $(`#${id}, #${id} + .small_links`).remove()
+			};
+
+			XKit.svc = {
+				blog: {
+					followed_by: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/blog/followed_by?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				},
+
+				conversations: {
+					participant_info: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/conversations/participant_info?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				},
+
+				indash_blog: data => new Promise((resolve, reject) => {
+					XKit.tools.Nx_XHR({
+						method: "GET",
+						url: "https://www.tumblr.com/svc/indash_blog?" + $.param(data),
+						onload: resolve,
+						onerror: reject
+					});
+				})
+			};
+
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @param {String} username
+			 * @param {String} blog
+			 * @return {Promise<Boolean>}
+			 */
+			XKit.interface.is_following = function(username, blog) {
+				return XKit.svc.conversations.participant_info({
+					"q": username,
+					"participant": blog
+				})
+				.then(response => response.json().response.is_blog_following_you)
+				.catch(() =>
+					XKit.svc.blog.followed_by({
+						"query": username,
+						"tumblelog": blog
+					})
+					.then(response => response.json().response.is_friend));
+			};
 
 			XKit.blog_listener = {
 				callbacks: {},
@@ -169,6 +306,22 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.tools.Nx_XHR = function(details) {
 				details.timestamp = new Date().getTime() + Math.random();
+
+				const standard_headers = {
+					"X-Requested-With": "XMLHttpRequest",
+					"X-Tumblr-Form-Key": XKit.interface.form_key()
+				};
+
+				if (details.headers === undefined) {
+					details.headers = standard_headers;
+				} else {
+					let existing = Object.keys(details.headers).map(x => x.toLowerCase());
+					for (let x of Object.keys(standard_headers)) {
+						if (!existing.includes(x.toLowerCase())) {
+							details.headers[x] = standard_headers[x];
+						}
+					}
+				}
 
 				XKit.tools.add_function(function() {
 					var request = add_tag;
@@ -214,11 +367,13 @@ XKit.extensions.xkit_patches = new Object({
 				function handler(e) {
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
 						window.removeEventListener("message", handler);
-						let {success, response} = e.data;
+						let {success, response} = JSON.parse(JSON.stringify(e.data));
 
 						if (typeof response.headers["x-tumblr-kittens"] !== "undefined") {
 							XKit.interface.kitty.set(response.headers["x-tumblr-kittens"]);
 						}
+
+						response.json = () => JSON.parse(response.responseText);
 
 						if (success && response.status >= 200 && response.status < 300) {
 							details.onload(response);
@@ -270,6 +425,12 @@ XKit.extensions.xkit_patches = new Object({
 				});
 				return posts;
 			};
+
+			XKit.interface.post_window.blog =
+				() => $("#channel_id").val() || $(".post-form--header [data-js-tumbleloglabel]").text();
+
+			XKit.interface.post_window.reblogging_from =
+				() => $(".post-form--header .reblog_source .reblog_name").text();
 		},
 		"7.8.2": function() {
 			XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
@@ -493,24 +654,6 @@ XKit.extensions.xkit_patches = new Object({
 					);
 				}
 			};
-
-			// Scrape Tumblr's data object now that we can run add_function
-			XKit.tools.add_function(function() {
-				var blogs = [];
-				try {
-					var models = Tumblr.dashboardControls.allTumblelogs;
-					models.filter(function(model) {
-						return model.attributes.hasOwnProperty("is_current");
-					}).forEach(function(model) {
-						blogs.push(model.attributes.name);
-					});
-					if (blogs.length) {
-						window.postMessage({
-							xkit_blogs: blogs,
-						}, window.location.protocol + "//" + window.location.host);
-					}
-				} catch (e) {}
-			}, true);
 
 			/**
 			 * @return {Object} The elements of XKit's storage as a map from setting key to
@@ -2334,24 +2477,6 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("peepr-open-request", add_tag);
 					}, true, payload);
-				},
-
-				/**
-				 * Determines whether a user is following the given blog.
-				 * The logged-in user must be a member of the given blog to determine this.
-				 * @param {String} username
-				 * @param {String} blog
-				 * @return {Promise<Boolean>}
-				 */
-				is_following: function(username, blog) {
-					return $.ajax({
-						type: "GET",
-						url: "https://www.tumblr.com/svc/blog/followed_by",
-						data: "tumblelog=" + blog + "&query=" + username,
-						dataType: "json",
-					}).then(function(msg) {
-						return msg.response.is_friend == 1;
-					});
 				}
 			});
 

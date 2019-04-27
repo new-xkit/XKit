@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.1 **/
+//* VERSION 5.7.2 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -289,12 +289,6 @@ XKit.extensions.tweaks = new Object({
 			text: "Hide Recommended blogs",
 			default: false,
 			value: false,
-			desktop_only: true
-		},
-		"show_customize": {
-			text: "Show Mass Post Editor and Blog Settings buttons",
-			default: true,
-			value: true,
 			desktop_only: true
 		},
 		"hide_follower_count": {
@@ -724,54 +718,6 @@ XKit.extensions.tweaks = new Object({
 						"#new_post.xkit-new-post-scrolls:hover { opacity: 1; }" +
 						"#new_post.xkit-new-post-scrolls #post_buttons { top: -5px !important; }" +
 						"#new_post.xkit-new-post-scrolls .post_avatar { display: none; }", "xkit_tweaks_scroll_new_posts");
-			}
-		}
-
-		if (XKit.extensions.tweaks.preferences.show_customize.value) {
-			var user_url = XKit.tools.get_current_blog();
-
-			if (typeof user_url === "undefined") {
-				XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
-				return;
-			}
-
-			// Patch for custom domains.
-			if ($("#popover_blogs > .popover_inner").length > 0) {
-				user_url = $("#popover_blogs > .popover_inner").children(".item:first-child").attr('id').substring(9);
-			}
-
-			var add_mega_link = true;
-			if ($(".small_links").length > 0) {
-				try {
-					$(".small_links a").each(function() {
-						var m_link = $(this).attr('href');
-						if (m_link.indexOf('/mega-editor') !== -1) {
-							add_mega_link = false;
-							return false;
-						}
-					});
-				} catch (e) {
-					// Meh.
-				}
-			}
-
-			var x_html = '<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/", "") + '/settings/" target="_blog_settings">Blog Settings</a>';
-			if (add_mega_link) {
-				x_html = '<div class="small_links by-xkit">' +
-											'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
-											'<a href="/blog/' + user_url.replace("/", "") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
-						'</div>';
-			}
-			if ($(".small_links").length > 0 && !add_mega_link) {
-				$(".small_links:first").append(x_html);
-			} else {
-				if ($("#dashboard_controls_open_blog").length > 0) {
-					// If using Old Stats, append there
-					$("#dashboard_controls_open_blog").after(x_html);
-				} else {
-					// Otherwise just tack it onto the end of the right column's controls
-					$(".controls_section:last").after(x_html);
-				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.0.0 **//
+//* VERSION 2.0.1 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -26,10 +26,8 @@
 
 			console.log("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
-			var installed = XKit.installed.list();
-
-			for (var x in installed) {
-				var extension = XKit.installed.get(installed[x]);
+			for (let x of XKit.installed.list()) {
+				var extension = XKit.installed.get(x);
 
 				if (extension.id === "xkit_main") {
 					continue;

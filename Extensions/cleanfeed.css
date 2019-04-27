@@ -1,10 +1,3 @@
-#xcleanfeed_button:after {
-	background: no-repeat 4px 8px url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzY3NTJBMjMzNkVEMTFFM0E0MTFDNDE2OTFDMzA4QzciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzY3NTJBMjQzNkVEMTFFM0E0MTFDNDE2OTFDMzA4QzciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OEQ2MjM5ODM2RTcxMUUzQTQxMUM0MTY5MUMzMDhDNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3Njc1MkEyMjM2RUQxMUUzQTQxMUM0MTY5MUMzMDhDNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgG6Gu8AAACHSURBVHjaYvz//z8DNQETA5XB0DcwEogvAfF3KL4IxAF4dYAiBQeO/Q8Bn4B4ExSD2P+AOBCXPnwG3oQaaI8kZg8Vu4RLHyOeZPMXGiQsUDYIMAPxHyifBZsmfAbCJBiJFMcbKafRDEDGMHCKFBcSm30YR3MK/Qw8QoTeI6Smw9FIIQ4ABBgAYEyjBlW7gmAAAAAASUVORK5CYII=);
-	content: "A";
-	font-size: 0px;
-	opacity: 0.42;
-}
-
 #xkit-cleanfeed-mode-warning {
 	margin-top: 10px;
 	padding-top: 10px;
@@ -13,18 +6,5 @@
 }
 
 #xkit-cleanfeed-mode {
-	color: rgba(255,255,255,0.37) !important;
-	cursor: default;
-}
-
-#xcleanfeedindicator {
-	border: 1px solid rgba(0,0,0,0.52); opacity: 0.66;
-	position: absolute; width: 4px; height: 4px;
-	border-radius: 8px; background: red;
-	top: 50%; margin-top: -4px; left: 4px;
-	box-shadow: 0px 1px 0px rgba(255,255,255,0.33);
-}
-
-#xcleanfeedindicator.on {
-	background: green;
+	cursor: default !important;
 }

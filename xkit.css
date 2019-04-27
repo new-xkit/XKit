@@ -163,9 +163,8 @@
 
 .xkit-interface-control-button:after {
 	content: "" !important;
-	background: none !important;
 	background-repeat: no-repeat !important;
-	background-position: 50% -1px;
+	background-position: 50% 0 !important;
 }
 
 #xkit-interface-buttons .xkit-interface-control-button:hover {

@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.2 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -8,7 +8,13 @@
 XKit.extensions.audio_plus = {
 
 	running: false,
+
 	current_player: null,
+	timeout_counter: 0,
+	waiting_until_dock_ready: null,
+	pop_out_controls: null,
+	mouseDown: false,
+	scrubbing: false,
 
 	preferences: {
 		sep0: {
@@ -26,6 +32,8 @@ XKit.extensions.audio_plus = {
 			default: true
 		}
 	},
+
+	can_see_docked_posts: $("#right_column").length != 0,
 
 	run: function() {
 		this.running = true;
@@ -49,66 +57,172 @@ XKit.extensions.audio_plus = {
 		if (XKit.extensions.audio_plus.preferences.pop_out_player.value) {
 			window.addEventListener("scroll", XKit.extensions.audio_plus.handle_scroll, false);
 			XKit.extensions.audio_plus.create_pop_out_controls();
+
+			//keep tabs on whether there's a docked video post
+			if (this.can_see_docked_posts) {
+				var targetNode = document.getElementById("right_column");
+				var config = {attributes: true};
+				this.dock_observer.observe(targetNode, config);
+			}
 		}
 	},
 
-	create_pop_out_controls: function() {
-		// Create play and pause buttons modeled after the built-in ones
-		var playPause = document.createElement("div");
-		playPause.classList.add("play-pause");
-
-		var icon = document.createElement("i");
-		icon.classList.add("icon");
-		icon.classList.add("icon_pause");
-		playPause.appendChild(icon);
-
-		var controls_undock = document.createElement("div");
-		controls_undock.id = "xkit-audio-plus-controls-undock";
-
-		var controls_undock_container = document.createElement("div");
-		controls_undock_container.id = "xkit-audio-plus-controls-undock-container";
-		controls_undock_container.appendChild(controls_undock);
-
-		var controls = document.createElement("div");
-		controls.classList.add("xkit-audio-plus-controls");
-		// Spoof audio_player class to get the Play/Pause button styles
-		controls.classList.add("audio-player");
-
-		controls.appendChild(playPause);
-		controls.appendChild(controls_undock_container);
-
-		controls.addEventListener("click", function(event) {
-			if (event.target === controls || event.target === playPause) {
-				XKit.extensions.audio_plus.controls_click_callback();
+	dock_observer: new MutationObserver(mutations => {
+		for (var mutation of mutations) {
+			if (mutation.target.classList.contains("has_docked_post")) {
+				var docked_video = document.getElementById("posts").querySelector(".dockable_video_embed.docked");
+				XKit.extensions.audio_plus.waiting_until_dock_ready = setInterval(function() {XKit.extensions.audio_plus.waitUntilDockReady(docked_video);}, 50);
 			} else {
-				XKit.extensions.audio_plus.controls_undock_click_callback();
+				XKit.extensions.audio_plus.pop_out_controls.style.transform = "";
+			}
+		}
+	}),
+
+	waitUntilDockReady: function(docked_video) {
+		if (this.timeout_counter <= 40) { //40 * 50ms = 2s
+			this.timeout_counter++;
+		} else {
+			this.timeout_counter = 0;
+			clearInterval(this.waiting_until_dock_ready);
+		}
+
+		if (docked_video.classList.contains("velocity-animating")) {
+			//still animating
+		} else {
+			clearInterval(this.waiting_until_dock_ready);
+			this.getDockHeight(docked_video);
+			this.timeout_counter = 0;
+		}
+	},
+
+	getDockHeight: function(docked_video) {
+		var docked_video_height = docked_video.style.height;
+		var controls_style = window.getComputedStyle(this.pop_out_controls);
+		this.pop_out_controls.style.transform = `translateY(calc(-${docked_video_height} - ${controls_style.bottom}))`;
+	},
+
+	setProgress: function(elem, progress, event) {
+		var audio = XKit.extensions.audio_plus.current_player.querySelector("audio");
+		var x = event.offsetX;
+		var total_w = elem.offsetWidth;
+		var width_per = (x / total_w);
+		progress.style.width = (width_per * 100) + "%";
+		audio.currentTime = (width_per * audio.duration);
+	},
+
+	scrubIfDown: function(elem, progress, event) {
+		if (XKit.extensions.audio_plus.mouseDown) {
+			var audio = XKit.extensions.audio_plus.current_player.querySelector('audio');
+			audio.pause();
+			XKit.extensions.audio_plus.scrubbing = true;
+			XKit.extensions.audio_plus.setProgress(elem, progress, event);
+		}
+	},
+
+	playAfterScrubbing: function() {
+		if (XKit.extensions.audio_plus.scrubbing && XKit.extensions.audio_plus.pop_out_controls.classList.contains("playing")) {
+			var audio = XKit.extensions.audio_plus.current_player.querySelector('audio');
+			audio.play();
+		}
+		XKit.extensions.audio_plus.scrubbing = false;
+	},
+
+	create_pop_out_controls: function() {
+		const controls_markup = `
+			<div class="xkit-audio-plus-controls audio-player">
+				<div class="progress"></div>
+				<div class="play-pause">
+					<i class="icon icon_pause"></i>
+				</div>
+				<div class="audio-info">
+					<div class="track-name"></div>
+					<div class="track-artist"></div>
+				</div>
+			</div>
+			<div id="xkit-audio-plus-controls-undock-container">
+				<div id="xkit-audio-plus-controls-undock"></div>
+			</div>
+		`;
+		
+		var psuedo_post = document.createElement("div");
+		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
+		psuedo_post.innerHTML = controls_markup;
+		document.body.appendChild(psuedo_post);
+		
+		this.pop_out_controls = psuedo_post;
+		this.pop_out_controls_progress = psuedo_post.querySelector(".progress");
+		this.pop_out_controls_track_name = psuedo_post.querySelector(".track-name");
+		this.pop_out_controls_track_artist = psuedo_post.querySelector(".track-artist");
+		
+		//event listeners
+		var audio_plus = XKit.extensions.audio_plus;
+		var controls = psuedo_post.querySelector(".xkit-audio-plus-controls");
+		var progress = psuedo_post.querySelector(".progress");
+		var playPause = psuedo_post.querySelector(".play-pause");
+		var controls_undock_container = psuedo_post.querySelector("#xkit-audio-plus-controls-undock-container");
+		
+		//change progress
+		controls.addEventListener("mousedown", function(event) {
+			if (event.target === playPause) {
+				return;
+			} else {
+				audio_plus.setProgress(controls, progress, event);
 			}
 		}, false);
 
-		XKit.extensions.audio_plus.pop_out_controls = controls;
+		//scrubbing
+		controls.onmousedown = function() {
+			audio_plus.mouseDown = true;
+		};
+		document.body.addEventListener("mouseup", function() {
+			audio_plus.mouseDown = false;
+		}, false);
+		controls.addEventListener("mousemove", function(event) {
+			if (event.target === playPause) {
+				return;
+			} else {
+				audio_plus.scrubIfDown(controls, progress, event);
+			}
+		}, false);
 
-		document.body.appendChild(controls);
+		controls.addEventListener("mouseup", function() {
+			if (event.target === playPause) {
+				return;
+			} else {
+				audio_plus.playAfterScrubbing();
+			}
+		}, false);
+
+		playPause.addEventListener("click", function(event) {
+			audio_plus.controls_click_callback();
+		}, false);
+
+		controls_undock_container.addEventListener("click", function(event) {
+			audio_plus.controls_undock_click_callback();
+		}, false);
 	},
 
 	controls_undock_click_callback: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		var controls = audio_plus.pop_out_controls;
 		if (controls.classList.contains("playing")) {
-			audio_plus.current_player.querySelector('audio').pause();
+			audio_plus.controls_click_callback();
 		}
 		controls.classList.remove("showing");
 		audio_plus.current_player = null;
+		$("#right_column").removeClass("has_docked_audio");
 	},
 
 	controls_click_callback: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		var controls = audio_plus.pop_out_controls;
-		var ppIcon = controls.querySelector('.play-pause').querySelector('.icon');
+		var ppIcon = controls.querySelector('.play-pause .icon');
 		var audio = audio_plus.current_player.querySelector('audio');
 
 		if (!controls.classList.contains("showing")) {
 			return;
 		}
+
 		if (controls.classList.contains("playing")) {
 			audio.pause();
 			ppIcon.classList.remove("icon_pause");
@@ -181,14 +295,16 @@ XKit.extensions.audio_plus = {
 	check_pop_out: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		audio_plus.scroll_waiting = false;
-
-		var pause_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
-		if (pause_icons.length === 0) {
-			return;
-		}
-
+		
 		// Arbitrarily select the first if there are multiple
-		var player = audio_plus.audio_player_of_element(pause_icons[0]);
+		var pause_icon = document.querySelectorAll(".post_media .audio-player .icon_pause")[0];
+		if (pause_icon) {
+			audio_plus.show_pop_out(pause_icon);
+		}
+	},
+
+	show_pop_out: function(pause_icon) {
+		var player = this.audio_player_of_element(pause_icon);
 		var player_bounds = player.getBoundingClientRect();
 
 		// If not completely off the screen
@@ -196,10 +312,56 @@ XKit.extensions.audio_plus = {
 			return;
 		}
 
-		audio_plus.current_player = player;
-		audio_plus.pop_out_controls.classList.add("showing");
-		audio_plus.pop_out_controls.classList.add("playing");
+		//show progress in popout container
+		var progress = player.querySelector(".progress");
+		var config = {attributes: true};
+		this.progress_observer.observe(progress, config);
+		this.icon_observer.observe(pause_icon, config);
+
+		if (player.querySelector(".track-name").innerHTML != "") {
+			this.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
+		} else {
+			this.pop_out_controls_track_name.innerHTML = "Listen";
+		}
+		this.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
+
+		this.current_player = player;
+		this.pop_out_controls.classList.add("showing");
+		this.pop_out_controls.classList.add("playing");
+		var ppIcon = this.pop_out_controls.querySelector('.play-pause .icon');
+		ppIcon.classList.remove("icon_play");
+		ppIcon.classList.add("icon_pause");
+		$("#right_column").addClass("has_docked_audio");
 	},
+
+	progress_observer: new MutationObserver(mutations => {
+		for (var mutation of mutations) {
+			XKit.extensions.audio_plus.pop_out_controls_progress.setAttribute("style", mutation.target.attributes.getNamedItem("style").value);
+			//reset when audio is finished
+			if (mutation.target.attributes.getNamedItem("style").value == "width: 0px;") {
+				XKit.extensions.audio_plus.controls_click_callback();
+			}
+		}
+	}),
+
+	icon_observer: new MutationObserver(mutations => {
+		for (var mutation of mutations) {
+			var ppIcon = XKit.extensions.audio_plus.pop_out_controls.querySelector('.play-pause .icon');
+			if (mutation.target.classList.contains("icon_play")) {
+				ppIcon.classList.remove("icon_pause");
+				ppIcon.classList.add("icon_play");
+				if (XKit.extensions.audio_plus.scrubbing == false) {
+					XKit.extensions.audio_plus.pop_out_controls.classList.remove("playing");
+				}
+			} else if (mutation.target.classList.contains("icon_pause")) {
+				ppIcon.classList.remove("icon_play");
+				ppIcon.classList.add("icon_pause");
+				if (XKit.extensions.audio_plus.scrubbing == false) {
+					XKit.extensions.audio_plus.pop_out_controls.classList.add("playing");
+				}
+			}
+		}
+	}),
 
 	destroy: function() {
 		this.running = false;
@@ -212,6 +374,9 @@ XKit.extensions.audio_plus = {
 		document.body.removeChild(this.pop_out_controls);
 		XKit.post_listener.remove("audio_plus");
 		window.removeEventListener("scroll", this.handle_scroll, false);
-	}
 
+		this.dock_observer.disconnect();
+		this.progress_observer.disconnect();
+		this.icon_observer.disconnect();
+	}
 };

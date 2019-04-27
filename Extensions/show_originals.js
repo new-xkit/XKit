@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.4 **//
+//* VERSION 1.2.5 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -54,14 +54,15 @@ XKit.extensions.show_originals = new Object({
 
 		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
 
-		var xf_html = '<ul class="controls_section" id="xshow_originals_ul">' +
-			'<li class="section_header selected">Show Originals</li>' +
-			'<li class="no_push" style="height:36px;"><a href="#" id="xshoworiginals_button">' +
-			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Originals Only</div>' +
-			'<div class="count" id="xshoworiginalsstatus" style="padding-top: 8px;">' + XKit.extensions.show_originals.lbl_off + '</div>' +
-			'<div id="xshoworiginalsindicator">&nbsp;</div>' +
-			'</a></li></ul>';
-		$(".controls_section:eq(1)").before(xf_html);
+		XKit.interface.sidebar.add({
+			id: "xshow_originals_sidebar",
+			title: "Show Originals",
+			items: [{
+				id: "xshoworiginals_button",
+				text: "Originals Only",
+				count: XKit.extensions.show_originals.lbl_off
+			}]
+		});
 
 		XKit.extensions.show_originals.update_button();
 
@@ -79,11 +80,9 @@ XKit.extensions.show_originals = new Object({
 	update_button: function() {
 
 		if (XKit.extensions.show_originals.status == "true") {
-			$("#xshoworiginalsindicator").addClass("on");
-			$("#xshoworiginalsstatus").html(XKit.extensions.show_originals.lbl_on);
+			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_on);
 		} else {
-			$("#xshoworiginalsindicator").removeClass("on");
-			$("#xshoworiginalsstatus").html(XKit.extensions.show_originals.lbl_off);
+			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_off);
 		}
 
 	},
@@ -132,7 +131,7 @@ XKit.extensions.show_originals = new Object({
 		this.running = false;
 		XKit.tools.remove_css("show_originals");
 		XKit.tools.remove_css("show_originals_on");
-		$("#xshow_originals_ul").remove();
+		XKit.interface.sidebar.remove("xshow_originals_sidebar");
 	}
 
 });

@@ -22,8 +22,6 @@ XKit.extensions.mass_deleter = new Object({
 	run: function() {
 		this.running = true;
 
-		XKit.tools.init_css("mass_deleter");
-
 		if (XKit.interface.where().likes === true) {
 			if (XKit.extensions.mass_deleter.preferences.enable_mass_unlike.value === true) {
 				XKit.extensions.mass_deleter.init_likes();
@@ -38,39 +36,14 @@ XKit.extensions.mass_deleter = new Object({
 
 	init_drafts: function() {
 
-		if ($("#drafts_plus_sidebar").length > 0) {
-
-			var xf_html = '<li class="no_push">' +
-					'<a href="#" class="customize xkit-mass-deleter" id="xkit-mass-deleter-100">' +
-						'<div class="hide_overflow">Delete 100 Drafts</div>' +
-					'</a>' +
-				'</li>' +
-				'<li class="no_push">' +
-					'<a href="#" class="customize xkit-mass-deleter" id="xkit-mass-deleter-1000">' +
-						'<div class="hide_overflow">Delete 1,000 Drafts</div>' +
-					'</a>' +
-				'</li>';
-
-			$("#drafts_plus_sidebar").append(xf_html);
-
-		} else {
-
-			xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' +
-				'<li class="section_header selected">Mass Deleter</li>' +
-				'<li class="no_push">' +
-					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
-						'<div class="hide_overflow">Delete 100 Drafts</div>' +
-					'</a>' +
-				'</li>' +
-				'<li class="no_push">' +
-					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-1000">' +
-						'<div class="hide_overflow">Delete 1,000 Drafts</div>' +
-					'</a>' +
-				'</li>' +
-				'</ul>';
-			$(".controls_section:eq(1)").before(xf_html);
-
-		}
+		XKit.interface.sidebar.add({
+			id: "xkit-mass-deleter-sidebar",
+			title: "Mass Deleter",
+			items: [
+				{ id: "xkit-mass-deleter-100", text: "Delete 100 Drafts" },
+				{ id: "xkit-mass-deleter-1000", text: "Delete 1000 Drafts" }
+			]
+		});
 
 		$("#xkit-mass-deleter-100").click(function() {
 			XKit.extensions.mass_deleter.delete_drafts(100);
@@ -259,20 +232,14 @@ XKit.extensions.mass_deleter = new Object({
 
 	init_likes: function() {
 
-		var xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' +
-			'<li class="no_push">' +
-				'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
-					'<div class="hide_overflow">Unlike 100 Likes</div>' +
-				'</a>' +
-			'</li>' +
-			'<li class="no_push">' +
-				'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-1000">' +
-					'<div class="hide_overflow">Unlike 1,000 Likes</div>' +
-				'</a>' +
-			'</li>' +
-			'</ul>';
-		$(".controls_section:eq(1)").before(xf_html);
-		$("#xkit-mass-deleter-ul").css("margin", "18px 0");
+		XKit.interface.sidebar.add({
+			id: "xkit-mass-deleter-sidebar",
+			title: "Mass Unliker",
+			items: [
+				{ id: "xkit-mass-deleter-100", text: "Unlike 100 Likes" },
+				{ id: "xkit-mass-deleter-1000", text: "Unlike 1,000 Likes" }
+			]
+		});
 
 		$("#xkit-mass-deleter-100").click(function() {
 			XKit.extensions.mass_deleter.unlike_likes(100);
@@ -451,7 +418,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	destroy: function() {
 		this.running = false;
-		$("#xkit-mass-deleter-ul").remove();
+		XKit.interface.sidebar.remove("xkit-mass-deleter-sidebar");
 	}
 
 });

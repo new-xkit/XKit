@@ -1,3 +1,5 @@
+.post_full .post_media { position: relative; }
+
 .xkit-audio-plus-slider-container {
 	position: absolute;
 	bottom: 7px;
@@ -8,11 +10,9 @@
 	border-radius: 6px;
 	padding-left: 35px;
 	padding-right: 5px;
-	z-index: 89;
+	z-index: 77;
 	opacity: 0.65;
 }
-
-.post_full .post_media { position: relative; }
 
 .xkit-audio-plus-slider-container:hover {
 	opacity: 1;
@@ -33,36 +33,103 @@
 	border-radius: 6px;
 }
 
-.xkit-audio-plus-controls {
-	position: fixed;
-	bottom: 50px;
-	left: 50%;
-	transform: translateX(245px) translateY(0px);
-
-	z-index: 10000;
-	width: 85px;
-	height: 85px;
-	border-radius: 42.5px;
-	display: none;
-	padding: 14px 27px;
+#right_column.has_docked_audio {
+	opacity: 0.3;
 }
 
-.xkit-audio-plus-controls.showing {
+.xkit-audio-plus-pseudo-post {
 	display: block;
+	position: fixed;
+	background: white;
+	height: auto;
+	width: 300px;
+	border-radius: 3px;
+	padding: 15px 0;
+	left: calc(50% + 178px);
+	bottom: 15px;
+	opacity: 0;
+	z-index: -1;
+	transition:
+		bottom .15s cubic-bezier(.165,.84,.44,1),
+		transform .15s cubic-bezier(.165,.84,.44,1), 
+		opacity .15s cubic-bezier(.165,.84,.44,1);
+}
+
+#search_actions_search .xkit-audio-plus-pseudo-post {
+	left: calc(50% + 289px);
+}
+
+.xkit-audio-plus-pseudo-post.showing {
+	bottom: 20px;
+	opacity: 1;
+	z-index: 78;
+}
+
+.peepr .xkit-audio-plus-pseudo-post {
+	opacity: 0;
+	z-index: -1;
+}
+
+.xkit-audio-plus-controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	height: 85px;
+	min-height: unset;
+	padding: 5px;
+	bottom: 0px;
+	z-index: 1;
+}
+
+.audio-player .play-pause {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 45px;
+}
+
+.xkit-audio-plus-controls .audio-info {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	margin: 0;
+	user-select: none;
+}
+
+.xkit-audio-plus-controls .audio-info * {
+	display: inline-block;
+	margin-left: 10px;
+	font-size: 13px;
+}
+
+.xkit-audio-plus-controls .audio-info .track-name {
+	font-size: 15px;
+}
+
+.audio-player .play-pause .icon {
+	display: contents;
 }
 
 /* The following three heavily use Tumblr's dock_button styles */
 #xkit-audio-plus-controls-undock-container {
-	position: fixed;
-	right: -1.5px;
-
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	justify-self: flex-end;
+	position: absolute;
 	background-color: #748089;
-	border-radius: 100%;
+	width: 21px;
+	height: 21px;
+	top: -10px;
+	right: -10px;
+	border-radius: 50%;
 	font-size: 12px;
 	cursor: pointer;
-	height: 21px;
-	width: 21px;
 	color: #fff;
+	z-index: 2;
 }
 
 #xkit-audio-plus-controls-undock::before {
@@ -74,16 +141,6 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-weight: 400;
-
-	margin-left: -3.5px;
-	margin-top: -3.5px;
-	position: absolute;
-	line-height: 8px;
-	height: 7px;
-	width: 7px;
-	left: 50%;
-	top: 50%;
-
 	font-size: 12px;
 	cursor: pointer;
 	color: #fff;

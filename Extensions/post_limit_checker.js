@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.3.3 **//
+//* VERSION 0.3.4 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER new-xkit **//
@@ -18,14 +18,14 @@ XKit.extensions.post_limit_checker = new Object({
 
 		if (XKit.interface.where().dashboard !== true && XKit.interface.where().channel !== true) { return; }
 
-		var xf_html = '<ul class="controls_section" id="post_limit_checker_ul">' +
-					'<li class="section_header selected">Post Limit</li>' +
-					'<li class="no_push" style="height: 36px;"><a href="#" id="post_limit_checker_view">' +
-						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Check Post Limit</div>' +
-					'</a></li>' +
-				'</ul>';
-
-		$(".controls_section:eq(1)").before(xf_html);
+		XKit.interface.sidebar.add({
+			id: "post_limit_checker_sidebar",
+			title: "Post Limit",
+			items: [{
+				id: "post_limit_checker_view",
+				text: "Check Post Limit"
+			}]
+		});
 
 		$("#post_limit_checker_view").click(function() {
 
@@ -227,7 +227,7 @@ XKit.extensions.post_limit_checker = new Object({
 	},
 
 	destroy: function() {
-		$("#post_limit_checker_ul").remove();
+		XKit.interface.sidebar.remove("post_limit_checker_sidebar");
 		$("#post_limit_checker_view").remove();
 		this.running = false;
 	}

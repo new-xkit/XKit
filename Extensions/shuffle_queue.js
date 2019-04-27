@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0.7 **//
+//* VERSION 2.0.8 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -16,29 +16,21 @@ XKit.extensions.shuffle_queue = new Object({
 			return;
 		}
 
-		XKit.tools.init_css("shuffle_queue");
-
 		this.running = true;
 
-		var xf_html = '<ul class="controls_section" id="queue_plus_ul">' +
-					'<li class="section_header selected">Queue+</li>' +
-					'<li class="no_push" style="height: 36px;"><a href="#" id="xshufflequeue_button">' +
-						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shuffle Queue <div class="count" style="padding-top: 8px;">&nbsp;</div> </div>' +
-					'</a></li>' +
-					'<li class="no_push" style="height: 36px;"><a class="" href="#" id="xdeletequeue_button">' +
-						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Clear Queue</div>' +
-					'</a></li>' +
-					'<li class="no_push" style="height: 36px;"><a href="#" id="xshrinkposts_button">' +
-						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shrink Posts <div class="count" style="padding-top: 8px;">off</div> </div>' +
-					'</a></li>' +
-					'<li class="no_push" style="height: 36px;"><a class="" href="#" id="xqueueoptions_button">' +
-						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Queue Options <div class="count" style="padding-top: 8px;">on</div> </div>' +
-					'</a></li>' +
-				'</ul>';
+		XKit.interface.sidebar.add({
+			id: "queue_plus_sidebar",
+			title: "Queue+",
+			items: [
+				{ id: "xshufflequeue_button", text: "Shuffle Queue" },
+				{ id: "xdeletequeue_button", text: "Clear Queue" },
+				{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
+				{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
+			]
+		});
+
 
 		setTimeout(function() {
-
-			$(".controls_section:eq(1)").before(xf_html);
 
 			$("#xshufflequeue_button").click(function(event) {
 				XKit.extensions.shuffle_queue.shuffle();
@@ -395,10 +387,9 @@ XKit.extensions.shuffle_queue = new Object({
 	},
 
 	destroy: function() {
-		XKit.tools.remove_css("shuffle_queue");
 		XKit.tools.remove_css("shuffle_queue_mini_posts");
 		XKit.tools.remove_css("shuffle_queue_hide_options");
-		$("#queue_plus_ul").remove();
+		XKit.interface.sidebar.remove("queue_plus_sidebar");
 		this.running = false;
 	}
 
