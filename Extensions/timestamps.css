@@ -30,6 +30,8 @@
 
 .xtimestamp {
 	position: relative;
+	border-radius: 3px;
+	padding: 0 5px;
 	top: -9px;
 	color: rgb(168,177,184);
 	text-align: left;
@@ -37,6 +39,34 @@
 	font-size: 11px;
 	margin-bottom: 10px;
 	margin-left: 20px;
+}
+
+.xtimestamp-this-year {
+	padding: 0;
+}
+
+ .xtimestamp-1-year {
+	background-color: #EEE;
+}
+
+ .xtimestamp-2-year {
+	background-color: #DDD;
+	color: hsl(206, 10%, 50%);
+}
+
+ .xtimestamp-3-year {
+	background-color: #CCC;
+	color: hsl(206, 10%, 50%);
+}
+
+ .xtimestamp-4-year {
+	background-color: #BBB;
+	color: hsl(206, 10%, 50%);
+}
+
+ .xtimestamp-5plus-year {
+	background-color: #AAA;
+	color: hsl(206, 10%, 100%);
 }
 
 .xtimestamp.xtimestamp_loading {
