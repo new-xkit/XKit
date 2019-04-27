@@ -134,7 +134,7 @@ XKit.extensions.timestamps = new Object({
 		this.check_quota();
 		try {
 			if (this.is_compatible()) {
-					if (this.preferences.beside_header.value) {
+				if (this.preferences.beside_header.value) {
 					XKit.tools.add_css('.xtimestamp { display: inline-block; top: 0; margin: 0; }', "timestamps");
 				}
 				XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
@@ -252,7 +252,7 @@ XKit.extensions.timestamps = new Object({
 			}
 
 			var date = moment(new Date(responseData.posts[0].timestamp * 1000));
- 			XKit.extensions.timestamps.add_age(date, date_element);
+			XKit.extensions.timestamps.add_age(date, date_element);
 
 			var timestamp = responseData.posts[0].timestamp;
 			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
@@ -265,7 +265,7 @@ XKit.extensions.timestamps = new Object({
 	add_age: function(date, date_element) {
 		var this_year = moment().year();
 
- 		if (date.year() == this_year) {
+		if (date.year() == this_year) {
 			date_element.addClass("xtimestamp-this-year");
 		} else if (date.year() <= this_year - 5) {
 			date_element.addClass("xtimestamp-5plus-year");
