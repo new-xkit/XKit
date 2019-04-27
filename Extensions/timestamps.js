@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.10.1 **//
+//* VERSION 2.11.0 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -23,6 +23,16 @@ XKit.extensions.timestamps = new Object({
 		},
 		posts: {
 			text: "Show timestamps on posts",
+			default: true,
+			value: true
+		},
+		beside_header: {
+			text: "Show timestamps beside header",
+			default: false,
+			value: false
+		},
+		show_age: {
+			text: "Show timestamps age",
 			default: true,
 			value: true
 		},
@@ -124,6 +134,9 @@ XKit.extensions.timestamps = new Object({
 		this.check_quota();
 		try {
 			if (this.is_compatible()) {
+					if (this.preferences.beside_header.value) {
+					XKit.tools.add_css('.xtimestamp { display: inline-block; top: 0; margin: 0; }', "timestamps");
+				}
 				XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
 				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
 					XKit.post_listener.add("timestamps", this.add_timestamps);
@@ -184,7 +197,11 @@ XKit.extensions.timestamps = new Object({
 				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
 				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
-				post.find(".post_content").prepend(normal_html);
+				if (XKit.extensions.timestamps.preferences.beside_header.value) {
+					post.find(".post_wrapper .post_header").append(normal_html);
+				} else {
+					post.find(".post_content").prepend(normal_html);
+				}
 			}
 
 			var note = $(".xkit_timestamp_" + post_id);
@@ -234,12 +251,27 @@ XKit.extensions.timestamps = new Object({
 				throw 404;
 			}
 
+			var date = moment(new Date(responseData.posts[0].timestamp * 1000));
+ 			XKit.extensions.timestamps.add_age(date, date_element);
+
 			var timestamp = responseData.posts[0].timestamp;
 			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
 			date_element.removeClass("xtimestamp_loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
 		})
 		.catch(() => this.show_failed(date_element));
+	},
+
+	add_age: function(date, date_element) {
+		var this_year = moment().year();
+
+ 		if (date.year() == this_year) {
+			date_element.addClass("xtimestamp-this-year");
+		} else if (date.year() <= this_year - 5) {
+			date_element.addClass("xtimestamp-5plus-year");
+		} else {
+			date_element.addClass("xtimestamp-" + (this_year - date.year()) + "-year");
+		}
 	},
 
 	fetch_from_cache: function(post_id, date_element) {
@@ -257,6 +289,7 @@ XKit.extensions.timestamps = new Object({
 		if (!cached_date.isValid()) {
 			return false;
 		}
+		this.add_age(moment(new Date(cached * 1000)), date_element);
 		date_element.html(this.format_date(cached_date));
 		date_element.removeClass("xtimestamp_loading");
 		return true;
@@ -278,7 +311,7 @@ XKit.extensions.timestamps = new Object({
 		if (this.preferences.only_relative.value) {
 			return `<span title="${absolute}">${relative}</span>`;
 		} else {
-			return `${absolute} &middot; ${relative}`;
+			return `${absolute}`;
 		}
 	},
 
