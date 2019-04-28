@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.10.1 **//
+//* VERSION 2.10.2 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -122,40 +122,28 @@ XKit.extensions.timestamps = new Object({
 		}
 
 		this.check_quota();
-		try {
-			if (this.is_compatible()) {
-				XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
-				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
-					XKit.post_listener.add("timestamps", this.add_timestamps);
-					this.add_timestamps();
-				}
-
-				if (this.preferences.reblogs.value !== "off") {
-					XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
-					this.add_reblog_timestamps();
-				}
-
-				$(document).on("click", ".xkit-timestamp-failed-why", function() {
-					XKit.window.show("Timestamp loading failed.", "This might be caused by several reasons, such as the post being removed, becoming private, or the Tumblr server having a problem that it can't return the page required by XKit to load you the timestamp.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
-				});
-			}
-		} catch (e) {
-			// defined in xkit.js
-			/* globals show_error_script */
-			show_error_script("Timestamps: " + e.message);
+		XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
+		if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
+			XKit.post_listener.add("timestamps", this.add_timestamps);
+			this.add_timestamps();
 		}
+
+		if (this.preferences.reblogs.value !== "off") {
+			XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
+			this.add_reblog_timestamps();
+		}
+
+		$(document).on("click", ".xkit-timestamp-failed-why", function() {
+			XKit.window.show("Timestamp loading failed.", "This might be caused by several reasons, such as the post being removed, becoming private, or the Tumblr server having a problem that it can't return the page required by XKit to load you the timestamp.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
+		});
 
 		if (this.preferences.only_on_hover.value) {
 			XKit.tools.add_css(" .xtimestamp {display: none; } .post:hover .xtimestamp {display: block; }", "timestamps_on_hover");
 		}
 	},
 
-	is_compatible: function() {
-		return !(XKit.interface.where().queue || XKit.interface.where().drafts);
-	},
-
 	add_timestamps: function() {
-		var posts = $(".posts .post").not(".xkit_timestamps");
+		var posts = $(".posts .post:not(.queued)").not(".xkit_timestamps");
 
 		if (!posts || posts.length === 0) {
 			return;
