@@ -152,7 +152,7 @@ XKit.extensions.soft_refresh = new Object({
 				}
 			});
 		})
-		.catch(this.show_error);
+		.catch(() => this.show_error());
 	},
 
 	hit_triggers: function() {
@@ -162,6 +162,9 @@ XKit.extensions.soft_refresh = new Object({
 
 	show_error: function() {
 		$("#new_post_notice_container").removeAttr("style");
+		$("#xkit_soft_refresh").slideUp("fast", function() { $(this).remove(); });
+		this.post_ids = [];
+		this.loading = false;
 
 		XKit.window.show(
 			"Can't get new posts",
