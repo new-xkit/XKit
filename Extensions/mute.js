@@ -735,7 +735,7 @@ XKit.extensions.mute = new Object({
 
 				if (username.length == 0) {
 					complain("This can't be blank!");
-				} else if (username.includes(" ") || username.includes("_")) {
+				} else if (!/^[A-Za-z0-9-]+$/.test(username)) {
 					complain("Usernames are only comprised of letters, numbers and dashes.");
 				} else {
 					XKit.extensions.mute.show_window(username);
