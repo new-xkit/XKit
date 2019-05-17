@@ -85,11 +85,6 @@ body {
     background-color: rgba(1,1,1,0) !important;
 }
 
-
-.post-container {
-    background: transparent !important;
-}
-
 .post_content {
 	background: transparent !important;
 }
@@ -197,11 +192,25 @@ button.ui_button.btn_1.chrome.blue:active {
 	-webkit-backdrop-filter: none;
 }
 
+button.ui_button.btn_1.chrome.blue {
+	background: #00bcd45e !important;
+	box-shadow: 0px 0px 5px #00bcd45e !important;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
 /* Change related likes background overlay to blue glass. */
 body.flag--always-opaque-peepr .ui_peepr_glass {
 	background-color: rgba(100, 117, 154, 0.19) !important;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
+}
+
+/* Add glass to confirmation dialogues to discard posts. */
+div.ui_dialog_lock.opaque {
+    background: rgba(100, 117, 154, 0.19);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 /* Fix Toast Notification transparency/colours + add some glass */
