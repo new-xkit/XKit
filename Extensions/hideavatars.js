@@ -1,5 +1,5 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.6 **//
+//* VERSION 0.1.7 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
@@ -31,12 +31,12 @@ XKit.extensions.hideavatars = new Object({
 			//Regular avatars
 			XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
 				$(".post_avatar_link").filter(function() {
-					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
+					return $(this).attr("href").split("//")[1].split(".")[0] === blogname.title;
 				}).attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 
 			//Avatars in notifications
 				$(".notification a").filter(function() {
-					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
+					return $(this).attr("href").split("//")[1].split(".")[0] === blogname.title;
 				}).find(".avatar").attr("src", hidden_avatar).attr("style", "opacity: 0.5");
 			});
 		}
@@ -44,11 +44,11 @@ XKit.extensions.hideavatars = new Object({
 		if (XKit.interface.where().inbox) {
 			XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
 				$(".post_avatar_link").filter(function() {
-					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
+					return $(this).attr("href").split("//")[1].split(".")[0] === blogname.title;
 				}).find(".post_avatar_image").attr("src", hidden_avatar);
 
 				$(".post_avatar_link").filter(function() {
-					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
+					return $(this).attr("href").split("//")[1].split(".")[0] === blogname.title;
 				}).attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 			});
 		}
