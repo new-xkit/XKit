@@ -196,8 +196,8 @@ XKit.extensions.activity_plus = new Object({
 			}
 
 			var reblogUrl = reblog.blog_url + 'post/' + reblog.post_id;
-			var avatarUrl48 = reblog.avatar_url['48'];
-			var avatarUrl128 = avatarUrl48.replace(/_48\./, '_128');
+			var avatarUrl64 = reblog.avatar_url['64'];
+			var avatarUrl128 = avatarUrl64.replace(/_64\./, '_128');
 
 			var partReblogAdded = '';
 			var andAdded = '';
@@ -214,7 +214,7 @@ XKit.extensions.activity_plus = new Object({
 			<div class="activity-notification__avatar">
 				<div class="ui_avatar">
 					<a href="${reblog.blog_url}" data-avatar-url="${avatarUrl128}" target="_blank" class="ui_avatar_link frame reblog" title="${reblog.blog_name}" data-peepr="{&quot;tumblelog&quot;:&quot;${reblog.blog_name}&quot;}">
-						<div class="avatar" style="background-image: url('${avatarUrl48}');">
+						<div class="avatar" style="background-image: url('${avatarUrl64}');">
 							<div class="inner_frame"></div>
 							<div class="avatar_glass"></div>
 							<span class="ui_avatar_tumblelog_name">thezed</span>
