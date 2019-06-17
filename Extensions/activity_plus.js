@@ -128,6 +128,9 @@ XKit.extensions.activity_plus = new Object({
 					if (m_type === "is_user_mention") {
 						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
 					}
+					if (m_type === "is_reblog") {
+						m_type += ", .ui_notes .activity-notification.is_reblog_naked";
+					}
 
 					var m_filter_css = ".ui_notes .activity-notification { display: none; }";
 					m_filter_css += ".ui_notes .activity-notification." + m_type + " { display: flex }";
