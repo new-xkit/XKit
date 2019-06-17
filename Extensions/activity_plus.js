@@ -192,11 +192,7 @@ XKit.extensions.activity_plus = new Object({
 			notification.classList.add('activity-notification');
 			notification.dataset.timestamp = Math.round(reblog.timestamp);
 			notification.dataset.tumblelogName = reblog.blog_name;
-
-			notification.classList.add('is_reblog');
-			if (!reblog.added_text) {
-				notification.classList.add('is_reblog_naked');
-			}
+			notification.classList.add('is_reblog_naked');
 
 			var reblogUrl = reblog.blog_url + 'post/' + reblog.post_id;
 			var avatarUrl64 = reblog.avatar_url['64'];
