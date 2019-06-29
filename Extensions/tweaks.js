@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.2 **/
+//* VERSION 5.7.3 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -358,7 +358,8 @@ XKit.extensions.tweaks = new Object({
 				"{ padding: 0; min-width: 25px; }" +
 
 			// Allow user avatars to use the padding too
-			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar" +
+			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar," +
+			".ui_notes .activity-notification .activity-notification__avatar .flagged-post" +
 				"{ margin: 0; }" +
 
 			// Shrink post type icons
