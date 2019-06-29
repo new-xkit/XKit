@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.13 **//
+//* VERSION 1.9.14 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -594,7 +594,6 @@ XKit.extensions.xinbox = new Object({
 			XKit.extensions.xinbox.delete_msg_index = 0;
 			XKit.extensions.xinbox.mass_editor_working = true;
 
-			XKit.extensions.xinbox.delete_key = $("input[name='form_key']").attr('value');
 			XKit.extensions.xinbox.mass_editor_delete();
 
 		});
@@ -629,7 +628,6 @@ XKit.extensions.xinbox = new Object({
 	mass_editor_working: false,
 	delete_msg_index: 0,
 	delete_msg_count: 0,
-	delete_key: "",
 
 	mass_editor_delete: function() {
 
@@ -648,7 +646,6 @@ XKit.extensions.xinbox = new Object({
 			return;
 		}
 
-		var m_key = XKit.extensions.xinbox.delete_key;
 		$("#xkit_delete_selected").html(button_working.replace("%m", msg_count).replace("%s", current_msg));
 
 		$(".xpost-selected:eq(0)").addClass("xpost-working");
@@ -658,31 +655,26 @@ XKit.extensions.xinbox = new Object({
 
 		setTimeout(function() {
 
-			XKit.tools.Nx_XHR({
-				method: "POST",
-				url: "https://www.tumblr.com/svc/post/delete",
-				data: "channel_id=" + channel_id + "&post_id=" + m_id,
-				headers: {
-					"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-					"x-tumblr-form-key": m_key
-				},
-				onerror: function(response) {
-					XKit.window.show("Couldn't fetch page.",
-						"There might be a connection problem, or the extension might need updating.<br><br>" +
-						"Please try again later, and if the problem continues, disable XInbox from" +
-						"the XKit Control Panel to answer your asks while this problem is being fixed.",
+			XKit.svc.post.delete({
+				channel_id: channel_id,
+				post_id: m_id
+			})
+			.then(() => {
+				XKit.extensions.xinbox.delete_msg_index = current_msg;
+				var post_div = $(".xpost-selected:eq(0)");
+				$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
+				setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
+			})
+			.catch(() => {
+				XKit.window.show("Couldn't fetch page.",
+					"There might be a connection problem, or the extension might need updating.<br><br>" +
+					"Please try again later, and if the problem continues, disable XInbox from " +
+					"the XKit Control Panel to answer your asks while this problem is being fixed.",
 
-						"error",
+					"error",
 
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-					);
-				},
-				onload: function(response) {
-					XKit.extensions.xinbox.delete_msg_index = current_msg;
-					var post_div = $(".xpost-selected:eq(0)");
-					$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
-					setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
-				}
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
 			});
 
 		}, 700);
@@ -885,30 +877,25 @@ XKit.extensions.xinbox = new Object({
 		m_object.form_key = form_key;
 		m_object.post_type = false;
 
-		XKit.tools.Nx_XHR({
-			method: "POST",
-			url: "https://www.tumblr.com/svc/post/fetch",
-			data: JSON.stringify(m_object),
-			json: true,
-			onerror: function(response) {
-				XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
+		XKit.svc.post.fetch(m_object)
+		.then(response => {
+			var responseData = null;
+
+			try {
+				responseData = response.json();
+			} catch (e) {
+				this.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 				return;
-			},
-			onload: function(response) {
-				// We are done!
-				var mdata = null;
-				try {
-					mdata = $.parseJSON(response.responseText);
-				} catch (e) {
-					XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
-					return;
-				}
-				if (mdata.errors === false) {
-					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state);
-				} else {
-					XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
-				}
 			}
+
+			if (responseData.errors === false) {
+				this.send_publish_request(responseData, answer, tags, post_div, form_key, post_id, state);
+			} else {
+				this.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
+			}
+		})
+		.catch(() => {
+			this.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
 		});
 
 	},
@@ -948,55 +935,45 @@ XKit.extensions.xinbox = new Object({
 		m_object["post[publish_on]"] = "";
 		m_object["post[state]"] = state;
 
-		XKit.interface.kitty.get(function(kitty_data) {
+		XKit.interface.kitty.get(kitty_data => {
 
 			if (kitty_data.errors === true) {
 
 				// We fucked up. Let's try again.
 				if (retry_mode === false) {
-					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state, true);
+					this.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state, true);
 				} else {
-					XKit.extensions.xinbox.show_error("Could not authorize post request.");
+					this.show_error("Could not authorize post request.");
 				}
 
 				return;
 
 			}
 
-
-			XKit.tools.Nx_XHR({
-				method: "POST",
-				url: "https://www.tumblr.com/svc/post/update",
-				data: JSON.stringify(m_object),
-				json: true,
-				headers: {
-					"X-tumblr-puppies": kitty_data.kitten,
-					"X-tumblr-form-key": XKit.interface.form_key(),
-				},
-				onerror: function(response) {
-					XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
-				},
-				onload: function(response) {
-					try {
-						var responseData = $.parseJSON(response.responseText);
-					} catch (e) {
-						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
-						return;
-					}
-					if (responseData.errors === false) {
-						$(post_div).fadeOut('slow', function() {
-							$(post_div).parent().remove();
-							XKit.tools.add_function(function() {
-								Tumblr.Events.trigger("DOMEventor:updateRect");
-							}, true, "");
-						});
-						if (state === "" || state === "0") { XKit.notifications.add("Published ask.", "ok"); }
-						if (state === "1") { XKit.notifications.add("Drafted ask.", "ok"); }
-						if (state === "2") { XKit.notifications.add("Queued ask.", "ok"); }
-					} else {
-						XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
-					}
+			XKit.svc.post.update(m_object, kitty_data.kitten)
+			.then(response => {
+				try {
+					var responseData = response.json();
+				} catch (e) {
+					this.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
+					return;
 				}
+				if (responseData.errors === false) {
+					$(post_div).fadeOut('slow', function() {
+						$(post_div).parent().remove();
+						XKit.tools.add_function(function() {
+							Tumblr.Events.trigger("DOMEventor:updateRect");
+						}, true, "");
+					});
+					if (state === "" || state === "0") { XKit.notifications.add("Published ask.", "ok"); }
+					if (state === "1") { XKit.notifications.add("Drafted ask.", "ok"); }
+					if (state === "2") { XKit.notifications.add("Queued ask.", "ok"); }
+				} else {
+					this.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
+				}
+			})
+			.catch(() => {
+				XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
 			});
 
 		});

@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.2 **//
+//* VERSION 7.2.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -252,7 +252,43 @@ XKit.extensions.xkit_patches = new Object({
 						onload: resolve,
 						onerror: reject
 					});
-				})
+				}),
+
+				post: {
+					fetch: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/post/fetch?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					}),
+					update: (data, kitty) => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "POST",
+							url: "https://www.tumblr.com/svc/post/update",
+							headers: {
+								"X-Tumblr-Puppies": kitty
+							},
+							json: true,
+							data: JSON.stringify(data),
+							onload: resolve,
+							onerror: reject
+						});
+					}),
+					delete: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "POST",
+							url: "https://www.tumblr.com/svc/post/delete",
+							headers: {
+								"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+							},
+							data: $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				}
 			};
 
 			/**
