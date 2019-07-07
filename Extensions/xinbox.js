@@ -659,23 +659,23 @@ XKit.extensions.xinbox = new Object({
 				channel_id: channel_id,
 				post_id: m_id
 			})
-			.then(() => {
-				XKit.extensions.xinbox.delete_msg_index = current_msg;
-				var post_div = $(".xpost-selected:eq(0)");
-				$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
-				setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
-			})
-			.catch(() => {
-				XKit.window.show("Couldn't fetch page.",
-					"There might be a connection problem, or the extension might need updating.<br><br>" +
-					"Please try again later, and if the problem continues, disable XInbox from " +
-					"the XKit Control Panel to answer your asks while this problem is being fixed.",
+				.then(() => {
+					XKit.extensions.xinbox.delete_msg_index = current_msg;
+					var post_div = $(".xpost-selected:eq(0)");
+					$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
+					setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
+				})
+				.catch(() => {
+					XKit.window.show("Couldn't fetch page.",
+						"There might be a connection problem, or the extension might need updating.<br><br>" +
+						"Please try again later, and if the problem continues, disable XInbox from " +
+						"the XKit Control Panel to answer your asks while this problem is being fixed.",
 
-					"error",
+						"error",
 
-					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-				);
-			});
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
+				});
 
 		}, 700);
 
@@ -878,25 +878,25 @@ XKit.extensions.xinbox = new Object({
 		m_object.post_type = false;
 
 		XKit.svc.post.fetch(m_object)
-		.then(response => {
-			var responseData = null;
+			.then(response => {
+				var responseData = null;
 
-			try {
-				responseData = response.json();
-			} catch (e) {
-				this.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
-				return;
-			}
+				try {
+					responseData = response.json();
+				} catch (e) {
+					this.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
+					return;
+				}
 
-			if (responseData.errors === false) {
-				this.send_publish_request(responseData, answer, tags, post_div, form_key, post_id, state);
-			} else {
-				this.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
-			}
-		})
-		.catch(() => {
-			this.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
-		});
+				if (responseData.errors === false) {
+					this.send_publish_request(responseData, answer, tags, post_div, form_key, post_id, state);
+				} else {
+					this.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
+				}
+			})
+			.catch(() => {
+				this.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
+			});
 
 	},
 
@@ -951,30 +951,30 @@ XKit.extensions.xinbox = new Object({
 			}
 
 			XKit.svc.post.update(m_object, kitty_data.kitten)
-			.then(response => {
-				try {
-					var responseData = response.json();
-				} catch (e) {
-					this.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
-					return;
-				}
-				if (responseData.errors === false) {
-					$(post_div).fadeOut('slow', function() {
-						$(post_div).parent().remove();
-						XKit.tools.add_function(function() {
-							Tumblr.Events.trigger("DOMEventor:updateRect");
-						}, true, "");
-					});
-					if (state === "" || state === "0") { XKit.notifications.add("Published ask.", "ok"); }
-					if (state === "1") { XKit.notifications.add("Drafted ask.", "ok"); }
-					if (state === "2") { XKit.notifications.add("Queued ask.", "ok"); }
-				} else {
-					this.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
-				}
-			})
-			.catch(() => {
-				XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
-			});
+				.then(response => {
+					try {
+						var responseData = response.json();
+					} catch (e) {
+						this.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
+						return;
+					}
+					if (responseData.errors === false) {
+						$(post_div).fadeOut('slow', function() {
+							$(post_div).parent().remove();
+							XKit.tools.add_function(function() {
+								Tumblr.Events.trigger("DOMEventor:updateRect");
+							}, true, "");
+						});
+						if (state === "" || state === "0") { XKit.notifications.add("Published ask.", "ok"); }
+						if (state === "1") { XKit.notifications.add("Drafted ask.", "ok"); }
+						if (state === "2") { XKit.notifications.add("Queued ask.", "ok"); }
+					} else {
+						this.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
+					}
+				})
+				.catch(() => {
+					XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
+				});
 
 		});
 

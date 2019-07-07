@@ -266,38 +266,38 @@ XKit.extensions.one_click_postage = new Object({
 		};
 
 		XKit.svc.post.fetch(m_object)
-		.then(response => {
-			try {
-				let responseData = response.json();
-				if (responseData.errors === false) {
-					this.in_blog_process(responseData, state, obj, m_object, false);
-				} else {
-					this.show_error("OCP05-B", state);
+			.then(response => {
+				try {
+					let responseData = response.json();
+					if (responseData.errors === false) {
+						this.in_blog_process(responseData, state, obj, m_object, false);
+					} else {
+						this.show_error("OCP05-B", state);
+						$(obj).removeClass("xkit-button-working");
+						$(obj).addClass("xkit-button-error");
+					}
+				} catch (e) {
+					this.show_error("OCP04-B", state);
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
 				}
-			} catch (e) {
-				this.show_error("OCP04-B", state);
-				$(obj).removeClass("xkit-button-working");
-				$(obj).addClass("xkit-button-error");
-			}
-		})
-		.catch(response => {
-			switch (response.status) {
-			case 401:
-				this.show_error("OCP01-B", state);
-				break;
-			case 404:
-				this.show_error("OCP02-B [Post Not Found]", state);
-				break;
-			default:
-				if (retry_mode !== true) {
-					setTimeout(function() { XKit.extensions.one_click_postage.in_blog_post(obj, state, true); }, 500);
-				} else {
-					this.show_error("OCP03-" + response.status + "-B", state);
+			})
+			.catch(response => {
+				switch (response.status) {
+				case 401:
+					this.show_error("OCP01-B", state);
+					break;
+				case 404:
+					this.show_error("OCP02-B [Post Not Found]", state);
+					break;
+				default:
+					if (retry_mode !== true) {
+						setTimeout(function() { XKit.extensions.one_click_postage.in_blog_post(obj, state, true); }, 500);
+					} else {
+						this.show_error("OCP03-" + response.status + "-B", state);
+					}
 				}
-			}
-		});
+			});
 	},
 
 	in_blog_process: function(data, state, obj, _m_object, retry_mode) {
@@ -380,47 +380,47 @@ XKit.extensions.one_click_postage = new Object({
 			}
 
 			XKit.svc.post.update(m_object, kitty_data.kitten)
-			.then(response => {
-				try {
-					let responseData = response.json();
-					if (responseData.errors === false) {
-						$(obj).removeClass("xkit-button-working");
-						$(obj).addClass("xkit-button-done");
-					} else {
-						this.show_error("INOCP901", state);
+				.then(response => {
+					try {
+						let responseData = response.json();
+						if (responseData.errors === false) {
+							$(obj).removeClass("xkit-button-working");
+							$(obj).addClass("xkit-button-done");
+						} else {
+							this.show_error("INOCP901", state);
+							$(obj).removeClass("xkit-button-working");
+							$(obj).addClass("xkit-button-error");
+						}
+					} catch (e) {
+						this.show_error("INOCP181", state);
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					}
-				} catch (e) {
-					this.show_error("INOCP181", state);
-					$(obj).removeClass("xkit-button-working");
-					$(obj).addClass("xkit-button-error");
-				}
-			})
-			.catch(response => {
-				XKit.interface.kitty.set("");
+				})
+				.catch(response => {
+					XKit.interface.kitty.set("");
 
-				switch (response.status) {
-				case 401:
-					this.show_error("INOCP101");
-					$(obj).removeClass("xkit-button-working");
-					$(obj).addClass("xkit-button-error");
-					break;
-				case 404:
-					this.show_error("INOCP104 Not Found", state);
-					$(obj).removeClass("xkit-button-working");
-					$(obj).addClass("xkit-button-error");
-					break;
-				default:
-					if (retry_mode !== true) {
-						this.in_blog_process(data, state, obj, m_object, true);
-					} else {
-						this.show_error("INOCP109-" + response.status, state);
+					switch (response.status) {
+					case 401:
+						this.show_error("INOCP101");
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
+						break;
+					case 404:
+						this.show_error("INOCP104 Not Found", state);
+						$(obj).removeClass("xkit-button-working");
+						$(obj).addClass("xkit-button-error");
+						break;
+					default:
+						if (retry_mode !== true) {
+							this.in_blog_process(data, state, obj, m_object, true);
+						} else {
+							this.show_error("INOCP109-" + response.status, state);
+							$(obj).removeClass("xkit-button-working");
+							$(obj).addClass("xkit-button-error");
+						}
 					}
-				}
-			});
+				});
 		});
 	},
 
@@ -1216,37 +1216,37 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		XKit.svc.post.fetch(m_object)
-		.then(response => {
-			try {
-				let responseData = response.json();
+			.then(response => {
+				try {
+					let responseData = response.json();
 
-				if (responseData.errors === false) {
-					this.process(responseData, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, false, root_id, quick_queue_mode);
-				} else {
-					this.show_error("OCP05", state);
+					if (responseData.errors === false) {
+						this.process(responseData, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, false, root_id, quick_queue_mode);
+					} else {
+						this.show_error("OCP05", state);
+						$(m_button).removeClass("xkit-one-click-reblog-working");
+					}
+				} catch (e) {
+					this.show_error("OCP04", state);
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 				}
-			} catch (e) {
-				this.show_error("OCP04", state);
-				$(m_button).removeClass("xkit-one-click-reblog-working");
-			}
-		})
-		.catch(response => {
-			switch (response.status) {
-			case 401:
-				this.show_error("OCP01", state);
-				break;
-			case 404:
-				this.show_error("OCP02 [Post Not Found]", state);
-				break;
-			default:
-				if (retry_mode !== true) {
-					setTimeout(function() { XKit.extensions.one_click_postage.post(state, true, quick_queue_mode); }, 500);
-				} else {
-					this.show_error(`OCP03-${response.status}`, state);
+			})
+			.catch(response => {
+				switch (response.status) {
+				case 401:
+					this.show_error("OCP01", state);
+					break;
+				case 404:
+					this.show_error("OCP02 [Post Not Found]", state);
+					break;
+				default:
+					if (retry_mode !== true) {
+						setTimeout(function() { XKit.extensions.one_click_postage.post(state, true, quick_queue_mode); }, 500);
+					} else {
+						this.show_error(`OCP03-${response.status}`, state);
+					}
 				}
-			}
-		});
+			});
 	},
 
 	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode, root_id, quick_queue_mode) {
@@ -1386,65 +1386,65 @@ XKit.extensions.one_click_postage = new Object({
 			}
 
 			XKit.svc.post.update(m_object, kitty_data.kitten)
-			.then(response => {
-				try {
-					let responseData = response.json();
+				.then(response => {
+					try {
+						let responseData = response.json();
 
-					if (responseData.errors === false) {
-						$(m_button).removeClass("xkit-one-click-reblog-working");
-						if (responseData.message === "" || typeof responseData.message === "undefined") {
-							// No message
+						if (responseData.errors === false) {
+							$(m_button).removeClass("xkit-one-click-reblog-working");
+							if (responseData.message === "" || typeof responseData.message === "undefined") {
+								// No message
+							} else {
+								if (this.preferences.enable_alreadyreblogged.value) {
+									this.add_to_alreadyreblogged(root_id);
+								}
+								if (this.preferences.enable_alreadyreblogged.value || this.preferences.dim_posts_after_reblog.value) {
+									if (quick_queue_mode !== true) {
+										this.make_button_reblogged(m_button);
+									} else {
+										XKit.interface.switch_control_button($(m_button), false);
+										XKit.interface.completed_control_button($(m_button), true);
+									}
+								}
+								if (!this.preferences.dont_show_notifications.value) {
+									if (this.preferences.use_toasts.value) {
+										XKit.toast.add(
+											responseData.created_post,
+											responseData.verbiage,
+											responseData.post_tumblelog.name_or_id,
+											responseData.post.id,
+											responseData.post_context_page
+										);
+									} else {
+										XKit.notifications.add(responseData.message, "ok");
+									}
+								}
+							}
 						} else {
-							if (this.preferences.enable_alreadyreblogged.value) {
-								this.add_to_alreadyreblogged(root_id);
-							}
-							if (this.preferences.enable_alreadyreblogged.value || this.preferences.dim_posts_after_reblog.value) {
-								if (quick_queue_mode !== true) {
-									this.make_button_reblogged(m_button);
-								} else {
-									XKit.interface.switch_control_button($(m_button), false);
-									XKit.interface.completed_control_button($(m_button), true);
-								}
-							}
-							if (!this.preferences.dont_show_notifications.value) {
-								if (this.preferences.use_toasts.value) {
-									XKit.toast.add(
-										responseData.created_post,
-										responseData.verbiage,
-										responseData.post_tumblelog.name_or_id,
-										responseData.post.id,
-										responseData.post_context_page
-									);
-								} else {
-									XKit.notifications.add(responseData.message, "ok");
-								}
-							}
+							XKit.extensions.one_click_postage.show_error("OCP10", state);
+							$(m_button).removeClass("xkit-one-click-reblog-working");
 						}
-					} else {
-						XKit.extensions.one_click_postage.show_error("OCP10", state);
+					} catch (e) {
+						XKit.extensions.one_click_postage.show_error("OCP09-J", state);
 						$(m_button).removeClass("xkit-one-click-reblog-working");
 					}
-				} catch (e) {
-					XKit.extensions.one_click_postage.show_error("OCP09-J", state);
-					$(m_button).removeClass("xkit-one-click-reblog-working");
-				}
-			})
-			.catch(response => {
-				switch (response.status) {
-				case 401:
-					this.show_error("OCP06", state);
-					break;
-				case 404:
-					this.show_error("OCP07", state);
-					break;
-				default:
-					if (retry_mode !== true) {
-						this.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
-					} else {
-						this.show_error("OCP08-" + response.status, state);
+				})
+				.catch(response => {
+					switch (response.status) {
+					case 401:
+						this.show_error("OCP06", state);
+						break;
+					case 404:
+						this.show_error("OCP07", state);
+						break;
+					default:
+						if (retry_mode !== true) {
+							this.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
+						} else {
+							this.show_error("OCP08-" + response.status, state);
+						}
 					}
-				}
-			});
+				});
 		});
 	},
 
