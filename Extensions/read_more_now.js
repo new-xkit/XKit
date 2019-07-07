@@ -1,7 +1,7 @@
 //* TITLE Read More Now **//
 //* VERSION 2.0.0 **//
 //* DESCRIPTION Read Mores in your dash **//
-//* DETAILS This extension changes &quot;Keep Reading&quot; links into collapsible elements for easy viewing. **//
+//* DETAILS This extension allows you to read &quot;Keep Reading&quot; posts without leaving your dash. Just click on the &quot;Read More Now!&quot; button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
@@ -16,17 +16,21 @@ XKit.extensions.read_more_now = new Object({
 		XKit.tools.init_css("read_more_now");
 		XKit.post_listener.add("read_more_now", this.find_links);
 		this.find_links();
+
+		$(document).on("click", ".xreadmore:not(.disabled)", function() {
+			XKit.extensions.read_more_now.add_content($(this));
+		});
 	},
 
 	find_links: function() {
 		$("a.tmblr-truncated-link:not(.xreadmore-done)")
 			.addClass("xreadmore-done")
 			.each(function() {
-				XKit.extensions.read_more_now.process_link($(this));
+				XKit.extensions.read_more_now.add_button($(this));
 			});
 	},
 
-	process_link: function($link) {
+	add_button: function($link) {
 		const href = $link.attr("href");
 		let url;
 		let postID;
@@ -48,30 +52,13 @@ XKit.extensions.read_more_now = new Object({
 			}
 		}
 
-		let cached_content = this.cache[postID];
-		if (cached_content === undefined) {
-			this.get_username(url)
-				.then(username => XKit.svc.indash_blog({
-					tumblelog_name_or_id: username,
-					post_id: postID,
-					limit: 1,
-					should_bypass_safemode: true,
-					should_bypass_tagfiltering: true
-				}))
-					.then(response => {
-						let responseData = response.json().response;
-						if (responseData.post_not_found_message !== undefined) {
-							return;
-						}
-
-						let comment = responseData.posts[0].reblog.comment;
-						let readmore = comment.substring(comment.indexOf("[[MORE]]") + 8);
-						this.cache[postID] = readmore;
-						this.transform_link($link.parent(), readmore);
-					});
-		} else {
-			this.transform_link($link.parent(), cached_content);
-		}
+		this.get_username(url).then(username =>
+			$link.parent().after(
+				`<div class="xkit-button default xreadmore block" style="text-align:center" xreadmore-url="${username}" xreadmore-id="${postID}">
+					Read More Now!
+				</div>`
+			)
+		);
 	},
 
 	get_username: url => {
@@ -85,21 +72,50 @@ XKit.extensions.read_more_now = new Object({
 		}
 	},
 
-	transform_link: function($container, content) {
-		$container.before(`
-			<details class="tmblr-truncated read_more_container">
-				<summary class="tmblr-truncated-link read_more">${$container.find("a.tmblr-truncated-link").text().trim()}</summary>
-				${content}
-			</details>
-		`);
+	add_content: function($button) {
+		$button.addClass("disabled");
+		let username = $button.attr("xreadmore-url");
+		let postID = $button.attr("xreadmore-id");
+
+		if (this.cache[postID] !== undefined) {
+			$button
+				.attr("style", "display: none !important")
+				.after(this.cache[postID]);
+		} else {
+			$button.text("Loading...");
+
+			XKit.svc.indash_blog({
+				tumblelog_name_or_id: username,
+				post_id: postID,
+				limit: 1,
+				should_bypass_safemode: true,
+				should_bypass_tagfiltering: true
+			})
+				.then(response => {
+					let responseData = response.json().response;
+					if (responseData.post_not_found_message) {
+						throw 404;
+					}
+
+					let comment = responseData.posts[0].reblog.comment;
+					let readmore = comment.substring(comment.indexOf("[[MORE]]") + 8);
+					this.cache[postID] = readmore;
+					$button
+						.attr("style", "display: none !important")
+						.after(readmore);
+				})
+				.catch(() =>
+					$button.text("Couldn't load! Maybe it's deleted?")
+				);
+		}
 	},
 
 	destroy: function() {
 		this.running = false;
-		$("details.tmblr-truncated").remove();
-		$(".xreadmore-done").removeClass("xreadmore-done");
+		$(document).off("click", ".xreadmore:not(.disabled)");
 		XKit.post_listener.remove("read_more_now");
-		XKit.tools.remove_css("read_more_now");
+		$(".xreadmore-done").removeClass("xreadmore-done");
+		$(".xreadmore, .xreadmore ~ *").remove();
 	}
 
 });
