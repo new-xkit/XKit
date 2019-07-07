@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.3 **/
+//* VERSION 5.7.4 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -344,6 +344,10 @@ XKit.extensions.tweaks = new Object({
 			// Fit the activity text back where it was
 			".ui_notes .activity-notification .activity-notification__activity" +
 				"{ transform: translate(-10px); }" +
+
+			// Remove ask responses (currently always blank, and messes up the activity dropdown)
+			".ui_notes .activity-notification .activity-notification__activity_response.is_part_answer" +
+				"{ display: none; }" +
 
 			// Remove the speech bubble from conversational notes and put it back in the right place
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational" +
