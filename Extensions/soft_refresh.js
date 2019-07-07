@@ -45,17 +45,17 @@ XKit.extensions.soft_refresh = new Object({
 
 		if (this.preferences.use_logo.value) {
 			$(".logo-anchor")
-			.attr("data-old-href", $(".logo-anchor").attr("href"))
-			.css("cursor", "pointer")
-			.removeAttr("href")
-			.click(this.clicked);
+				.attr("data-old-href", $(".logo-anchor").attr("href"))
+				.css("cursor", "pointer")
+				.removeAttr("href")
+				.click(this.clicked);
 		}
 
 		if (this.preferences.use_home_button.value) {
 			$("#home_button > a")
-			.attr("data-old-href", $("#home_button > a").attr("href"))
-			.removeAttr("href")
-			.click(this.clicked);
+				.attr("data-old-href", $("#home_button > a").attr("href"))
+				.removeAttr("href")
+				.click(this.clicked);
 		}
 	},
 
@@ -100,37 +100,37 @@ XKit.extensions.soft_refresh = new Object({
 					$("#new_post_notice_container .tab_notice_value").html("0");
 					document.title = this.default_page_title;
 					$("#new_post_notice_container")
-					.removeClass("tab-notice--active")
-					.removeAttr("style");
+						.removeClass("tab-notice--active")
+						.removeAttr("style");
 					// Remove every notification between the new post buttons and the first existing post
 					$("#posts > li.notification:not(.post_container:not(#new_post_buttons) ~ .notification)").remove();
 				}
 
 				$("#posts > li", responseText)
-				.not("#new_post_buttons")
-				.not(".standalone-ad-container")
-				.each(function() {
-					const $this = $(this);
-					let exists = false;
+					.not("#new_post_buttons")
+					.not(".standalone-ad-container")
+					.each(function() {
+						const $this = $(this);
+						let exists = false;
 
-					if ($this.find("[data-sponsored], [data-is_recommended]").length) {
-						return;
-					}
-
-					if ($this.attr("data-pageable") !== undefined) {
-						exists = !!$("[data-pageable=" + $this.attr("data-pageable") + "]").length;
-						if (!exists) {
-							XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
+						if ($this.find("[data-sponsored], [data-is_recommended]").length) {
+							return;
 						}
-					}
 
-					if (!exists) {
-						XKit.extensions.soft_refresh.top_post.before($this);
-					} else {
-						end = true;
-						return false;
-					}
-				});
+						if ($this.attr("data-pageable") !== undefined) {
+							exists = !!$("[data-pageable=" + $this.attr("data-pageable") + "]").length;
+							if (!exists) {
+								XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
+							}
+						}
+
+						if (!exists) {
+							XKit.extensions.soft_refresh.top_post.before($this);
+						} else {
+							end = true;
+							return false;
+						}
+					});
 
 				if (!end) {
 					this.request(`/2/${this.post_ids[0]}`);
@@ -182,13 +182,13 @@ XKit.extensions.soft_refresh = new Object({
 
 	destroy: function() {
 		$(".logo-anchor")
-		.attr("href", $(".logo-anchor").attr("data-old-href"))
-		.removeAttr("style")
-		.off("click");
+			.attr("href", $(".logo-anchor").attr("data-old-href"))
+			.removeAttr("style")
+			.off("click");
 
 		$("#home_button > a")
-		.attr('href', $("#home_button > a").attr('data-old-href'))
-		.off("click");
+			.attr('href', $("#home_button > a").attr('data-old-href'))
+			.off("click");
 
 		XKit.tools.remove_css("soft_refresh");
 		this.running = false;
