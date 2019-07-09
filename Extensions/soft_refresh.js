@@ -87,72 +87,72 @@ XKit.extensions.soft_refresh = new Object({
 
 	request: function(page) {
 		fetch(`https://www.tumblr.com/dashboard${page}`)
-		.then(response => {
-			if (!response.ok) {
-				this.show_error(response);
-				return;
-			}
-
-			let end = false;
-
-			response.text().then(responseText => {
-				if (page === "") {
-					$("#new_post_notice_container .tab_notice_value").html("0");
-					document.title = this.default_page_title;
-					$("#new_post_notice_container")
-						.removeClass("tab-notice--active")
-						.removeAttr("style");
-					// Remove every notification between the new post buttons and the first existing post
-					$("#posts > li.notification:not(.post_container:not(#new_post_buttons) ~ .notification)").remove();
+			.then(response => {
+				if (!response.ok) {
+					this.show_error(response);
+					return;
 				}
 
-				$("#posts > li", responseText)
-					.not("#new_post_buttons")
-					.not(".standalone-ad-container")
-					.each(function() {
-						const $this = $(this);
-						let exists = false;
+				let end = false;
 
-						if ($this.find("[data-sponsored], [data-is_recommended]").length) {
-							return;
-						}
+				response.text().then(responseText => {
+					if (page === "") {
+						$("#new_post_notice_container .tab_notice_value").html("0");
+						document.title = this.default_page_title;
+						$("#new_post_notice_container")
+							.removeClass("tab-notice--active")
+							.removeAttr("style");
+						// Remove every notification between the new post buttons and the first existing post
+						$("#posts > li.notification:not(.post_container:not(#new_post_buttons) ~ .notification)").remove();
+					}
 
-						if ($this.attr("data-pageable") !== undefined) {
-							exists = !!$("[data-pageable=" + $this.attr("data-pageable") + "]").length;
+					$("#posts > li", responseText)
+						.not("#new_post_buttons")
+						.not(".standalone-ad-container")
+						.each(function() {
+							const $this = $(this);
+							let exists = false;
+
+							if ($this.find("[data-sponsored], [data-is_recommended]").length) {
+								return;
+							}
+
+							if ($this.attr("data-pageable") !== undefined) {
+								exists = !!$("[data-pageable=" + $this.attr("data-pageable") + "]").length;
+								if (!exists) {
+									XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
+								}
+							}
+
 							if (!exists) {
-								XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
+								XKit.extensions.soft_refresh.top_post.before($this);
+							} else {
+								end = true;
+								return false;
+							}
+						});
+
+					if (!end) {
+						this.request(`/2/${this.post_ids[0]}`);
+					} else {
+						if (this.post_ids.length === 0) {
+							if (this.preferences.show_notifications.value) {
+								XKit.notifications.add("No new posts found.", "info");
+							}
+						} else {
+							XKit.tools.add_function(this.hit_triggers, true);
+							if (this.preferences.show_notifications.value) {
+								XKit.notifications.add(`Added ${this.post_ids.length} new ${(this.post_ids.length === 1 ? "post" : "posts")}.`, "ok");
 							}
 						}
 
-						if (!exists) {
-							XKit.extensions.soft_refresh.top_post.before($this);
-						} else {
-							end = true;
-							return false;
-						}
-					});
-
-				if (!end) {
-					this.request(`/2/${this.post_ids[0]}`);
-				} else {
-					if (this.post_ids.length === 0) {
-						if (this.preferences.show_notifications.value) {
-							XKit.notifications.add("No new posts found.", "info");
-						}
-					} else {
-						XKit.tools.add_function(this.hit_triggers, true);
-						if (this.preferences.show_notifications.value) {
-							XKit.notifications.add(`Added ${this.post_ids.length} new ${(this.post_ids.length === 1 ? "post" : "posts")}.`, "ok");
-						}
+						$("#xkit_soft_refresh").slideUp("fast", function() { $(this).remove(); });
+						this.post_ids = [];
+						this.loading = false;
 					}
-
-					$("#xkit_soft_refresh").slideUp("fast", function() { $(this).remove(); });
-					this.post_ids = [];
-					this.loading = false;
-				}
-			});
-		})
-		.catch(() => this.show_error());
+				});
+			})
+			.catch(() => this.show_error());
 	},
 
 	hit_triggers: function() {
