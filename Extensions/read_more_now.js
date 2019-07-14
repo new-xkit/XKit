@@ -36,7 +36,7 @@ XKit.extensions.read_more_now = new Object({
 		let postID;
 
 		if (!href.includes("t.umblr.com")) {
-			[url,, postID] = href.split("://")[1].split("/");
+			[url, /* discard */, postID] = href.split("://")[1].split("/");
 		} else {
 			let $user_link = $link.parents(".reblog-list-item").find(".reblog-tumblelog-name");
 			if (!$user_link.hasClass("inactive") && $user_link.attr("data-peepr")) {
@@ -68,7 +68,7 @@ XKit.extensions.read_more_now = new Object({
 		} else {
 			return fetch(`https://www.tumblr.com/api/v2/blog/${url}/info?api_key=${XKit.api_key}`)
 				.then(response => response.json())
-					.then(responseData => responseData.response.blog.name);
+				.then(responseData => responseData.response.blog.name);
 		}
 	},
 
