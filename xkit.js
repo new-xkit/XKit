@@ -196,7 +196,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						// We are done!
 						var mdata = {};
 						try {
-							mdata = jQuery.parseJSON(response.responseText);
+							mdata = JSON.parse(response.responseText);
 						} catch (e) {
 							// Server returned bad thingy.
 							console.error("Unable to download '" + path +
@@ -2421,7 +2421,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 							XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 							try {
-								to_return.data = jQuery.parseJSON(response.responseText);
+								to_return.data = JSON.parse(response.responseText);
 								func(to_return);
 							} catch (e) {
 								to_return.error = true;
@@ -2496,7 +2496,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					onload: function(response) {
 
 						try {
-							to_return.data = jQuery.parseJSON(response.responseText);
+							to_return.data = JSON.parse(response.responseText);
 							func(to_return);
 						} catch (e) {
 							to_return.error = true;

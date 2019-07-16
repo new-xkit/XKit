@@ -269,7 +269,7 @@ XKit.extensions.one_click_reply = new Object({
 					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var mdata = null;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.one_click_reply.quick_reply_error("106");
 					}

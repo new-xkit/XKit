@@ -898,7 +898,7 @@ XKit.extensions.xinbox = new Object({
 				// We are done!
 				var mdata = null;
 				try {
-					mdata = $.parseJSON(response.responseText);
+					mdata = JSON.parse(response.responseText);
 				} catch (e) {
 					XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 					return;
@@ -978,7 +978,7 @@ XKit.extensions.xinbox = new Object({
 				},
 				onload: function(response) {
 					try {
-						var responseData = $.parseJSON(response.responseText);
+						var responseData = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 						return;

@@ -234,7 +234,7 @@ XKit.extensions.post_crushes = new Object({
 				},
 				onload: function(response) {
 					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
-					var m_obj = jQuery.parseJSON(response.responseText);
+					var m_obj = JSON.parse(response.responseText);
 					if (m_obj.errors === false) {
 						$("#xkit_post_crushes").html("Posted!");
 						XKit.window.close();

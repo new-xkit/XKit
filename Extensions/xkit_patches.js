@@ -1809,7 +1809,7 @@ XKit.extensions.xkit_patches = new Object({
 								XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 								try {
-									to_return.data = jQuery.parseJSON(response.responseText);
+									to_return.data = JSON.parse(response.responseText);
 									func(to_return);
 								} catch (e) {
 									to_return.error = true;
@@ -1884,7 +1884,7 @@ XKit.extensions.xkit_patches = new Object({
 						onload: function(response) {
 
 							try {
-								to_return.data = jQuery.parseJSON(response.responseText);
+								to_return.data = JSON.parse(response.responseText);
 								func(to_return);
 							} catch (e) {
 								to_return.error = true;
@@ -2929,7 +2929,7 @@ XKit.extensions.xkit_patches = new Object({
 						// We are done!
 						var mdata = {};
 						try {
-							mdata = jQuery.parseJSON(response.responseText);
+							mdata = JSON.parse(response.responseText);
 						} catch (e) {
 							// Server returned bad thingy.
 							console.log("Unable to download '" + path +
