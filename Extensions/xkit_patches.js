@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.2 **//
+//* VERSION 7.2.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -128,6 +128,13 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.0": function() {
+
+			// Override "Search Page Brick Post Fix" from xkit.css
+			XKit.tools.add_css(
+				`.post_brick .post_controls .post_controls_inner {
+					white-space: nowrap;
+				}`,
+			"xkit_patches");
 
 			XKit.interface.sidebar = {
 				init: function() {
