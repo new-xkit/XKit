@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.3 **//
+//* VERSION 7.2.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -15,6 +15,41 @@ XKit.extensions.xkit_patches = new Object({
 		}).forEach(x => {
 			this.patches[x]();
 		});
+
+		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
+			let version = XKit.tools.parse_version(XKit.version);
+			if (version.major === 7 && version.minor >= 8) {
+				fetch(browser.extension.getURL("manifest.json")) // eslint-disable-line no-undef
+					.then(response => response.json())
+					.then(responseData => {
+						if (responseData.applications.gecko.id === "@new-xkit-w") {
+							XKit.window.show(
+								"W Edition warning",
+								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +
+								"We, the New XKit team, are not in contact with the publisher, and cannot guarantee that you will receive updates to the core addon.<br>" +
+								"We recommend installing the official distribution of New XKit from GitHub for the latest features and security patches.<br><br>" +
+								"Please note that installing New XKit will not overwrite W Edition; you will have to uninstall it yourself.",
+
+								"warning",
+
+								'<a href="https://github.com/new-xkit/XKit/releases/latest" target="_blank" class="xkit-button default">New XKit installation page &rarr;</a>' +
+								'<div id="xkit-close-message" class="xkit-button">Close</div>' +
+								`<div id="dismiss-warning" class="xkit-button">Don't show this again</div>`
+							);
+
+							$("#dismiss-warning").click(() => {
+								XKit.window.close();
+								XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+							});
+						} else {
+							XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+						}
+					})
+					.catch(console.error);
+			} else {
+				XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+			}
+		}
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
