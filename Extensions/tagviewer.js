@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.4.6 **//
+//* VERSION 0.5.0 **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -11,7 +11,6 @@ XKit.extensions.tagviewer = new Object({
 
 	running: false,
 	slow: false,
-	apiKey: "5CIOyjHfcrNFlyEJl2D7vnoDTYqV30lNAUaSd4LJKoBFOZOmxp",
 
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAvBJREFUOBGlVM9L2mEYf96vaVQeWgrTOpUSaxs6yNrBdhiCRJcNL7vIQogxSErZP1CwwW5pmCNvHnbrsEOwg+07iIUjQSg3XIfGiCiTzdpaRvPXPs8XHVKzFXvh8XmfX5/3877P81WEw+ErJycnz4UQViKSIPWrCOO9Vqt9OjY2lqsPNNqLmZmZeQQfNUpgPw77pFar746Pj2fOy+MYM7pVTfKoVKrbKB6siSRJdxBbq1Qq1wqFwtu5uTlDNbehklAsOAr1sVwu38NWhtz3+XyJycnJd2DmgH1h0NNvNgE2WgBMQJTl9Xq/XQb0NOAsmP4E0mwV79KgIhAIrILVAIAG+Zr1QKf3oVBIh7d8A78V+X9tFDMscSESmlmfty5yfQaMMwgaAgIh3XmAHPsXqMRDy/SRa+Xr/C+oMjI8XzxnPG9ms/nz8PBwqqmpaQCHMONdCI/SPA5ehf6z+PBisSijzsKkWlpa+hVAzkgkEjeNRmMcTm06nT7e2toSBwcHzQaDgSwWy6+enp4SimJIfQj9o4YaDAYf47lesA0SFgWQmcGOAWR3cXHRBlt0dXVRR0cH7e3tUSaToba2torL5Sq3t7d/R24/QL9gQh5g/xL5Kuhpv98/pYJhhiHH4/Hs0tKSrbu7m1AoNBqNAtbX10d2u512dnbE8vKyhEM0Op3O63Q6JfiC9WDAIQHHh2QyeYxk29DQENlsNsJVKRqNEmI8TjQ6OkpgRisrK/w05Ha7y3q9XkQiEZHP5xVmDMaLx0a0trbeUKwL/uzv70s4THg8nkN8DNP1ZczwOhxr6+vrKlmWBbpMDoeD8J60ublJJpOJuDGxWIy2t7dpZGSEent7axj8f/kMt5iqOWpNccLxOpvNioWFBcXX2dmpNIUbwoJ55bdVrl4tLkMfQ9wAfFX1kVLMBpjaoeRSqaTe2NgQqVSKcrmcws5qtRI3i9+zuo6geT5d8KVqzjMaoFchKUgBcmZh3g7h/Ap5AlGfAYDjN8f2ldpe2/sVAAAAAElFTkSuQmCC",
 
@@ -42,8 +41,6 @@ XKit.extensions.tagviewer = new Object({
 					subtree: true
 				});
 			});
-		} else {
-			$(obj).append("<div id=\"tagviewer-cpanel-notice\">You might be interested in the \"Tag Crawler\" from <a href=\"/settings/labs\">Tumblr Labs</a>, which provides the same functionality as this extension.<br><br>We can't show you tags from dash-only blogs, but Tag Crawler seems to have a limit on how far back in time it can look.</div>");
 		}
 	},
 
@@ -87,7 +84,7 @@ XKit.extensions.tagviewer = new Object({
 		XKit.extensions.tagviewer.post_id = post_id;
 		XKit.extensions.tagviewer.last_page = false;
 		XKit.extensions.tagviewer.loading_more = false;
-		XKit.extensions.tagviewer.notes_url = "https://www.tumblr.com/svc/tumblelog/" + tumblelog_name + "/" + post_id + "/notes?mode=rollup"; //"http://www.tumblr.com/dashboard/notes/" + post_id + "/" + tumblelog_key + "/" + tumblelog_name;
+		XKit.extensions.tagviewer.notes_url = `https://www.tumblr.com/svc/tumblelog/${tumblelog_name}/${post_id}/notes?mode=reblogs_with_tags`;
 
 		console.log("tagviewer -> init_id is " + XKit.extensions.tagviewer.init_id);
 
@@ -105,99 +102,59 @@ XKit.extensions.tagviewer = new Object({
 
 	load_tags: function() {
 
-		// Load the next set of notes and tags.
+		let init_id = this.init_id;
+		let post_id = this.post_id;
 
-		var m_url = XKit.extensions.tagviewer.notes_url;
-		var m_init_id = XKit.extensions.tagviewer.init_id;
+		fetch(this.notes_url)
+			.then(response => {
+				if (post_id !== this.post_id || init_id !== this.init_id) {
+					console.log("[TagViewer] Quitting, wrong post ID or init ID");
+					return;
+				}
 
-		var m_post_id = XKit.extensions.tagviewer.post_id;
+				if (!response.ok) {
+					throw response.status;
+				}
 
-		$.ajax({
-			url: m_url,
-			dataType: "json"
-		}).fail(function() {
-
-			XKit.window.close();
-			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
-		}).done(function(data, textStatus, jqXHR) {
-
-			if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
-				console.log("tagviewer -> quitting, wrong post_id or init_id");
-				return;
-			}
-
-			var reblogs = data.response.notes.filter(function(item) {
-				return item.type === "reblog";
-			});
-
-			$(reblogs).each(function() {
-
-				var blog_name = this.blog_name;
-				var post_id = this.post_id;
-
-				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;
-
-				GM_xmlhttpRequest({
-					method: "GET",
-					url: api_url,
-					json: true,
-					onerror: function(response) {
-						console.error("tagviewer -> Can't fetch page " + api_url);
-					},
-					onload: function(response) {
-
-						if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
-							console.log("tagviewer -> quitting, wrong post_id or init_id");
-							return;
-						}
-
-						try {
-
-							var responseData = JSON.parse(response.responseText);
-							var post = responseData.response.posts[0];
-
-							if (typeof post.tags !== "undefined") {
-								if (post.tags.length > 0) {
-									XKit.extensions.tagviewer.add_tags(blog_name, post.tags, post.post_url);
-									XKit.extensions.tagviewer.found_count++;
-								}
-							}
-
-						} catch (e) {
-							console.error("tagviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
-						}
-
+				response.json().then(responseData => {
+					let reblogs = responseData.response.notes.filter(note => note.tags && note.tags.length !== 0);
+					for (let reblog of reblogs) {
+						this.add_tags(reblog.blog_name, reblog.tags, `${reblog.blog_url}post/${reblog.post_id}`, reblog.avatar_url["64"]);
+						this.found_count++;
 					}
-				});
 
-			});
+					if (responseData.response._links) {
+						this.notes_url = "https://www.tumblr.com" + responseData.response._links.next.href;
+						if (this.found_count <= 7) {
+							// Not enough posts with tags loaded to fill the window
+							this.show_loader();
+							this.load_tags();
+						} else {
+							// Window filled, wait for user to scroll down
+							this.hide_loader();
+							this.loading_more = false;
+							this.activate_endless_scroll();
+						}
+					} else {
+						this.last_page = true;
+						this.hide_loader();
+						if (this.found_count === 0) {
+							$("#tagviewer-loading").html("No posts with tags found.");
+						}
+					}
+				})
+				.catch(console.error);
+			})
+			.catch(() => XKit.window.show(
+				"Unable to fetch required data",
+				"TagViewer could not get the required data from the Tumblr servers.<br><br>" +
+				"Please try again later or file a bug at the New XKit blog.",
 
-			if (data.response._links) {
-				XKit.extensions.tagviewer.notes_url = "https://www.tumblr.com" + data.response._links.next.href;
-				console.log("Another page found.");
-				if (XKit.extensions.tagviewer.found_count <= 7) {
-					console.log(" -- Not enough posts loaded, auto-loading..");
-					setTimeout(function() {
-						XKit.extensions.tagviewer.load_tags();
-					}, 1400);
-					XKit.extensions.tagviewer.show_loader();
-				} else {
-					XKit.extensions.tagviewer.hide_loader();
-					XKit.extensions.tagviewer.loading_more = false;
-					console.log(" -- Enough loaded, waiting for user to scroll down.");
-					XKit.extensions.tagviewer.activate_endless_scroll();
-				}
-			} else {
-				if (XKit.extensions.tagviewer.found_count === 0) {
-					$("#tagviewer-loading").html("No posts with tags found.");
-				}
-				XKit.extensions.tagviewer.last_page = true;
-				console.log("Last page, quitting.");
-				XKit.extensions.tagviewer.hide_loader();
-			}
+				"error",
 
-		});
+				'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
+				'<a href="https://new-xkit-extension.tumblr.com" target="_blank" class="xkit-button">New XKit blog</a>'
+			));
 
 	},
 
@@ -241,19 +198,19 @@ XKit.extensions.tagviewer = new Object({
 
 	},
 
-	add_tags: function(by, tags, link) {
+	add_tags: function(by, tags, link, avi) {
 
 		$("#tagviewer-loading").slideUp('slow', function() { $(this).remove(); });
 
 		var m_html = '<div class="tagviewer-tag">' +
 						'<div class="tagviewer-by">' +
 							`<a target="_blank" href="${link}" class="tagviewer-by-link">${by}</a>` +
-							`<img class="tagviewer-by-avatar" src="https://api.tumblr.com/v2/blog/${by}/avatar/64">` +
+							`<img class="tagviewer-by-avatar" src="${avi}">` +
 						'</div>' +
 						'<div class="tagviewer-tag-tags">';
 
 		for (let tag of tags) {
-			m_html += `<a target="_blank" href="http://www.tumblr.com/tagged/${tag.replace(/ /g, "-")}" class="tagviewer-tag-tag">#${tag}</a>`;
+			m_html += `<a target="_blank" href="https://www.tumblr.com/tagged/${tag.replace(/ /g, "-")}" class="tagviewer-tag-tag">#${tag}</a>`;
 		}
 
 		m_html += '</div></div>';
