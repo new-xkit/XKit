@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.4.6 **//
+//* VERSION 0.5.1 **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
