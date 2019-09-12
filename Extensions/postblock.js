@@ -1,7 +1,7 @@
 //* TITLE PostBlock **//
-//* VERSION 0.2.5 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Block the posts you don't like **//
-//* DETAILS This is an experimental extension that blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it. **//
+//* DETAILS This extension lets you blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it.<br><br>Tip: hold down ALT to skip the blocking confirmation! **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* SLOW true **//
@@ -16,103 +16,79 @@ XKit.extensions.postblock = new Object({
 
 	run: function() {
 		this.running = true;
+		XKit.tools.init_css("postblock");
 
-		if (XKit.interface.where().inbox === true) {
-			return;
-		}
+		this.blacklisted = XKit.storage.get("postblock", "posts", "").split(",");
 
-		XKit.tools.add_css(".postblock-cp { text-align: center; padding-top: 48px; } .postblock-cp small { color: rgb(128,128,128); }", "xkit-postblock-cp");
-
-		var m_blacklist = XKit.storage.get("postblock", "posts", "").split(",");
-		if (m_blacklist !== "") {
-			this.blacklisted = m_blacklist;
-		}
-
-		console.log("total of " + this.blacklisted.length + " posts blocked");
-
-		if ($("#posts").length > 0) {
-			$(document).on('click', '.xpostblockbutton', XKit.extensions.postblock.on_click);
-			XKit.interface.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", "");
-			XKit.post_listener.add("postblock", XKit.extensions.postblock.do);
-			XKit.extensions.postblock.do();
-		}
-	},
-
-	on_click: function(e) {
-
-		var obj = e.target || e.srcElement;
-		var parent = $(obj).parentsUntil("#search_posts, #posts");
-
-		if (e.altKey) {
-			$(parent).fadeOut('slow', function() {
-				$(parent).remove();
-				XKit.extensions.postblock.call_tumblr_resize();
-			});
-			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
-				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
-				XKit.storage.set("postblock", "posts", XKit.extensions.postblock.blacklisted.join(","));
-			}
-			return;
-		}
-
-		XKit.window.show("Block this post?", "This post (including reblogs) will be blocked from your dashboard forever, without any indication that it was blocked.", "question", "<div class=\"xkit-button default\" id=\"xkit-post-block-ok\">Block Post</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
-
-		$("#xkit-post-block-ok").click(function() {
-
-			XKit.window.close();
-			$(parent).fadeOut('slow', function() {
-				$(parent).remove();
-				XKit.extensions.postblock.call_tumblr_resize();
-			});
-			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
-				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
-				XKit.storage.set("postblock", "posts", XKit.extensions.postblock.blacklisted.join(","));
-			}
-
+		$(document).on('click', '.xpostblockbutton', function(e) {
+			XKit.extensions.postblock.block($(this), e.altKey);
 		});
-
-
+		XKit.interface.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", "");
+		XKit.post_listener.add("postblock", XKit.extensions.postblock.process_posts);
+		XKit.extensions.postblock.process_posts();
 	},
 
-	call_tumblr_resize: function() {
-
-		XKit.extensions.postblock.do();
-
-		XKit.tools.add_function(function() {
-			Tumblr.Events.trigger("DOMEventor:updateRect");
-		}, true, "");
-
+	save: function() {
+		XKit.storage.set("postblock", "posts", this.blacklisted.join(","));
 	},
 
-	do: function() {
+	remove: function($post, postID) {
+		$post.parents(".post_container").remove();
+		$post.remove();
 
-		var size_changed = false;
+		if (postID !== undefined) {
+			$(`[data-root_id="${postID}"]`).each(function() {
+				$(this).parents(".post_container").remove();
+				$(this).remove();
+			});
+		}
+	},
 
-		var posts = XKit.interface.get_posts("xpostblocked");
+	block: function($button, altKey) {
+		const $post = $button.parents(".post");
+		const postID = $post.attr("data-root_id");
 
-		$(posts).each(function() {
+		if (altKey) {
+			$post.fadeOut("slow", () => this.remove($post, postID));
+			this.blacklisted.push(postID);
+			this.save();
+		} else {
+			XKit.window.show(
+				"Block this post?",
+				"This post (including reblogs) will be blocked from your dashboard forever, " +
+				"without any indication that it was blocked.",
 
-			$(this).addClass("xpostblocked");
+				"question",
 
-			var m_post = XKit.interface.post($(this));
-			if (m_post.is_mine === true) { return; }
+				'<div class="xkit-button default" id="xkit-post-block-ok">Block Post</div>' +
+				'<div class="xkit-button" id="xkit-close-message">Cancel</div>'
+			);
 
-			if (XKit.extensions.postblock.blacklisted.indexOf(m_post.root_id) !== -1) {
-				$(this).parent().remove();
-				size_changed = true;
+			$("#xkit-post-block-ok").click(() => {
+				XKit.window.close();
+				$post.fadeOut("slow", () => this.remove($post, postID));
+				this.blacklisted.push(postID);
+				this.save();
+			});
+		}
+	},
+
+	process_posts: function() {
+		let blacklist = XKit.extensions.postblock.blacklisted;
+
+		$(XKit.interface.get_posts("xpostblock-done"))
+		.each(function() {
+			const $post = $(this).addClass("xpostblock-done");
+			if ($post.attr("data-root_id") == undefined) {
 				return;
 			}
 
-			var this_id = m_post.root_id;
-			XKit.interface.add_control_button(this, "xpostblockbutton", "data-root_id=\"" + this_id + "\"");
-
+			if (blacklist.includes($post.attr("data-root_id"))) {
+				XKit.extensions.postblock.remove($post);
+			} else {
+				XKit.interface.add_control_button(this, "xpostblockbutton");
+			}
 		});
-
-		if (size_changed) {
-
-			XKit.extensions.postblock.call_tumblr_resize();
-
-		}
 	},
 
 	cpanel: function(m_div) {
@@ -144,6 +120,8 @@ XKit.extensions.postblock = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.post_listener.remove("postblock");
+		XKit.tools.remove_css("postblock");
+		$(document).off("click", ".xpostblockbutton");
 		$(".xpostblockbutton").remove();
 	}
 
