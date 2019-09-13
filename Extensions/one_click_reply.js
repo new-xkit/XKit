@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.1.3 **//
+//* VERSION 2.1.4 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER new-xkit **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -132,7 +132,7 @@ XKit.extensions.one_click_reply = new Object({
 		if (this.preferences.mention_people.value === true) {
 			// This is a terrible way of doing this isn't it?
 			for (var obj in this.sentences) {
-				this.sentences[obj] = this.sentences[obj].replace("<p><a href=\"%l\">%u</a>", "<p><a class=\"tumblelog\">%u</a>");
+				this.sentences[obj] = this.sentences[obj].replace("<p><a href=\"%l\">%u</a>", "<p><a class=\"tumblelog\">@%u</a>");
 			}
 		}
 	},
@@ -185,6 +185,7 @@ XKit.extensions.one_click_reply = new Object({
 				if (typeof $(this).attr('href') !== "undefined") {
 					if ($(this).attr('href').indexOf('/post/') === -1) {
 						$(this).removeAttr('href').removeAttr('class').addClass("tumblelog");
+						$(this).text("@" + $(this).text());
 					}
 				}
 			});
@@ -501,6 +502,7 @@ XKit.extensions.one_click_reply = new Object({
 					if (typeof $(this).attr('href') !== "undefined") {
 						if ($(this).attr('href').indexOf('/post/') === -1) {
 							$(this).removeAttr('href').removeAttr('class').addClass("tumblelog");
+							$(this).text("@" + $(this).text());
 						}
 					}
 				});
