@@ -171,7 +171,7 @@ XKit.extensions.mass_plus = new Object({
 		if (last_timestamp.indexOf(" ") !== -1) {
 			last_timestamp = last_timestamp.substring(0, last_timestamp.indexOf(" "));
 		}
-		var blog_shortname = location.pathname.split("/").slice(-1)[0];
+		var blog_shortname = location.pathname.split("/")[3];
 		if (blog_shortname .indexOf("/") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("/")); }
 		if (blog_shortname .indexOf("?") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("?")); }
 		if (blog_shortname .indexOf("#") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("#")); }
