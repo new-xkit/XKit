@@ -253,12 +253,12 @@ if (!String.prototype.startsWith) {
 				}
 
 				switch (type) {
-				case 'b':
-					return value === 'true';
-				case 'n':
-					return Number(value);
-				default:
-					return value;
+					case 'b':
+						return value === 'true';
+					case 'n':
+						return Number(value);
+					default:
+						return value;
 				}
 
 			},

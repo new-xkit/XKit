@@ -358,21 +358,21 @@ XKit.extensions.editable_reblogs = new Object({
 		try {
 			var post_types = this.post_types;
 			switch (post_types[this.selected_post_type]) {
-			case post_types.PUBLISH:
-				this.send_post_request(event);
-				break;
-			case post_types.QUEUE:
-				this.send_queue_request(event);
-				break;
-			case post_types.DRAFT:
-				this.send_draft_request(event);
-				break;
-			case post_types.PRIVATE:
-				this.send_private_request(event);
-				break;
-			case post_types.SCHEDULE:
-				this.send_schedule_request(event);
-				break;
+				case post_types.PUBLISH:
+					this.send_post_request(event);
+					break;
+				case post_types.QUEUE:
+					this.send_queue_request(event);
+					break;
+				case post_types.DRAFT:
+					this.send_draft_request(event);
+					break;
+				case post_types.PRIVATE:
+					this.send_private_request(event);
+					break;
+				case post_types.SCHEDULE:
+					this.send_schedule_request(event);
+					break;
 			}
 
 			this.state = "finished";

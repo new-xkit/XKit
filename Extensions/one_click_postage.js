@@ -958,23 +958,23 @@ XKit.extensions.one_click_postage = new Object({
 					}
 				} else {
 					switch (e.which) {
-					case 68: // 68 = D
-						XKit.extensions.one_click_postage.open_menu($(this), true);
-						XKit.extensions.one_click_postage.post(1, false);
-						break;
-					case 81: // 81 = Q
-						XKit.extensions.one_click_postage.open_menu($(this), true);
-						XKit.extensions.one_click_postage.post(2, false);
-						break;
-					case 82: // 82 = R
-						XKit.extensions.one_click_postage.open_menu($(this), true);
-						XKit.extensions.one_click_postage.post(0, false);
-						break;
-					case 84: // 84 = T
-						XKit.extensions.one_click_postage.user_on_box = true;
-						XKit.extensions.one_click_postage.open_menu($(this), false, true);
-						$('#x1cpostage_tags').focus();
-						break;
+						case 68: // 68 = D
+							XKit.extensions.one_click_postage.open_menu($(this), true);
+							XKit.extensions.one_click_postage.post(1, false);
+							break;
+						case 81: // 81 = Q
+							XKit.extensions.one_click_postage.open_menu($(this), true);
+							XKit.extensions.one_click_postage.post(2, false);
+							break;
+						case 82: // 82 = R
+							XKit.extensions.one_click_postage.open_menu($(this), true);
+							XKit.extensions.one_click_postage.post(0, false);
+							break;
+						case 84: // 84 = T
+							XKit.extensions.one_click_postage.user_on_box = true;
+							XKit.extensions.one_click_postage.open_menu($(this), false, true);
+							$('#x1cpostage_tags').focus();
+							break;
 					}
 				}
 

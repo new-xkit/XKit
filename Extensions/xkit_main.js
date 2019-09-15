@@ -79,13 +79,13 @@
 					this.disabled_extensions.push(extension.id + " (error)");
 
 					switch (extension.id) {
-					case "xkit_patches":
-					case "xkit_preferences":
-					case "xkit_updates":
-						// defined in xkit.js
-						/* globals show_error_reset */
-						show_error_reset("Can't run " + extension.id + ": " + e.message);
-						fatal = true;
+						case "xkit_patches":
+						case "xkit_preferences":
+						case "xkit_updates":
+							// defined in xkit.js
+							/* globals show_error_reset */
+							show_error_reset("Can't run " + extension.id + ": " + e.message);
+							fatal = true;
 					}
 
 					if (fatal) {
@@ -111,16 +111,16 @@
 				}
 
 				switch (XKit.extensions[extension_id].preferences[pref].type) {
-				case "text":
-					break;
-				case "blog":
-					XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value.substring(1, XKit.extensions[extension_id].preferences[pref].value.length - 1);
-					break;
-				case undefined:
-				case "checkbox":
-					if (typeof XKit.extensions[extension_id].preferences[pref].value !== "boolean") {
-						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value === "true";
-					}
+					case "text":
+						break;
+					case "blog":
+						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value.substring(1, XKit.extensions[extension_id].preferences[pref].value.length - 1);
+						break;
+					case undefined:
+					case "checkbox":
+						if (typeof XKit.extensions[extension_id].preferences[pref].value !== "boolean") {
+							XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value === "true";
+						}
 				}
 
 			}
