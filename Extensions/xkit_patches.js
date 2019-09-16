@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.4 **//
+//* VERSION 7.2.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -26,6 +26,7 @@ XKit.extensions.xkit_patches = new Object({
 							XKit.window.show(
 								"W Edition warning",
 								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +
+								"This upload is in clear violation of Mozilla's policies for listed add-ons and is in danger of being banned at any time, deleting your local XKit data.<br>" +
 								"We, the New XKit team, are not in contact with the publisher, and cannot guarantee that you will receive updates to the core addon.<br>" +
 								"We recommend installing the official distribution of New XKit from GitHub for the latest features and security patches.<br><br>" +
 								"Please note that installing New XKit will not overwrite W Edition; you will have to uninstall it yourself.",
