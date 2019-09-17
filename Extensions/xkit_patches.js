@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.5 **//
+//* VERSION 7.2.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -26,16 +26,17 @@ XKit.extensions.xkit_patches = new Object({
 							XKit.window.show(
 								"W Edition warning",
 								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +
-								"This upload is in clear violation of Mozilla's policies for listed add-ons and is in danger of being banned at any time, deleting your local XKit data.<br>" +
-								"We, the New XKit team, are not in contact with the publisher, and cannot guarantee that you will receive updates to the core addon.<br>" +
-								"We recommend installing the official distribution of New XKit from GitHub for the latest features and security patches.<br><br>" +
-								"Please note that installing New XKit will not overwrite W Edition; you will have to uninstall it yourself.",
+								'Due to how XKit\'s extension gallery works, this upload violates <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews#Development_Practices" target="_blank">Mozilla\'s policy on remote code execution</a> ' +
+								"for listed add-ons, and is in danger of being banned at any time; potentially deleting your local XKit data.<br><br>" +
+								"We recommend installing the official distribution of New XKit from GitHub to avoid this possibility.<br><br>" +
+								"Be sure to upload or export your configuration using XCloud before uninstalling W Edition. " +
+								"Also, since the two versions conflict, you should uninstall W Edition before re-installing from GitHub.",
 
 								"warning",
 
 								'<a href="https://github.com/new-xkit/XKit/releases/latest" target="_blank" class="xkit-button default">New XKit installation page &rarr;</a>' +
 								'<div id="xkit-close-message" class="xkit-button">Close</div>' +
-								`<div id="dismiss-warning" class="xkit-button">Don't show this again</div>`
+								`<div id="dismiss-warning" class="xkit-button float-right">Don't show this again</div>`
 							);
 
 							$("#dismiss-warning").click(() => {
@@ -2628,7 +2629,7 @@ XKit.extensions.xkit_patches = new Object({
 					}, 5000);
 				}
 			};
-					
+
 			/**
 			 * @param {String} extension
 			 * @return {Boolean} Whether the extension is running
