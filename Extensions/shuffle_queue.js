@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0.8 **//
+//* VERSION 2.1.0 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -29,92 +29,132 @@ XKit.extensions.shuffle_queue = new Object({
 			]
 		});
 
+		$("#xshufflequeue_button").click(() => this.shuffle());
+		$("#xdeletequeue_button").click(() => this.clear());
+		$("#xshrinkposts_button").click(function() {
+			if (XKit.installed.is_running("shorten_posts")) {
+				XKit.window.show(
+					"Unable to turn on Shrink Posts",
+					"Using the Shrink Posts option and Shorten Posts together creates a small mess that no one really wants to see. " +
+					"If you still want to use the Shrink Posts functionality of Enhanced Queue, disable the Shorten Posts extension first.",
 
-		setTimeout(function() {
+					"error",
 
-			$("#xshufflequeue_button").click(function(event) {
-				XKit.extensions.shuffle_queue.shuffle();
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
+			} else {
+				let $button = $(this).toggleClass("xkit-queue-option-button-on");
+				if ($button.hasClass("xkit-queue-option-button-on")) {
+					$button.find(".count").html("on");
+					XKit.storage.set("shuffle_queue", "shrink_posts", "true");
+					XKit.tools.add_css(
+						".post_header { display: none; }" +
+						".post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; }" +
+						".post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); }",
 
-				return false;
-			});
-
-			$("#xqueueoptions_button").click(function() {
-
-				$(this).toggleClass("xkit-queue-option-button-on");
-
-				if ($(this).hasClass("xkit-queue-option-button-on")) {
-
-					$(this).find(".count").html("off");
-
-					XKit.storage.set("shuffle_queue", "hide_options", "true");
-
-					XKit.tools.add_css(" .dashboard_options_form { display: none; }", "shuffle_queue_hide_options");
-
+						"shuffle_queue_mini_posts"
+					);
 				} else {
-
-					$(this).find(".count").html("on");
-
-					XKit.storage.set("shuffle_queue", "hide_options", "false");
-
-					XKit.tools.remove_css("shuffle_queue_hide_options");
-
+					$button.find(".count").html("off");
+					XKit.storage.set("shuffle_queue", "shrink_posts", "false");
+					XKit.tools.remove_css("shuffle_queue_mini_posts");
 				}
+			}
+		});
+		$("#xqueueoptions_button").click(function() {
+			let $button = $(this).toggleClass("xkit-queue-option-button-on");
 
-				return false;
-			});
+			if ($button.hasClass("xkit-queue-option-button-on")) {
+				$button.find(".count").html("off");
+				XKit.storage.set("shuffle_queue", "hide_options", "true");
+				XKit.tools.add_css(" .dashboard_options_form { display: none; }", "shuffle_queue_hide_options");
+			} else {
+				$button.find(".count").html("on");
+				XKit.storage.set("shuffle_queue", "hide_options", "false");
+				XKit.tools.remove_css("shuffle_queue_hide_options");
+			}
+		});
 
-			$("#xshrinkposts_button").click(function() {
-				//Check if Shorten Posts is enabled
-				if (!XKit.installed.is_running("shorten_posts")) {
-					//Shorten Posts is not enabled, no issues there
-					$(this).toggleClass("xkit-queue-option-button-on");
+		var shrink_posts = XKit.storage.get("shuffle_queue", "shrink_posts", "false");
+		if (shrink_posts === "true" || shrink_posts === true) {
+			$("#xshrinkposts_button").click();
+		}
 
-					if ($(this).hasClass("xkit-queue-option-button-on")) {
+		var hide_options = XKit.storage.get("shuffle_queue", "hide_options", "false");
+		if (hide_options === "true" || hide_options === true) {
+			$("#xqueueoptions_button").click();
+		}
 
-						$(this).find(".count").html("on");
+	},
 
-						XKit.storage.set("shuffle_queue", "shrink_posts", "true");
+	shuffle: function() {
 
-						XKit.tools.add_css(" .post_header { display: none; }  .post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; } .post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); } ", "shuffle_queue_mini_posts");
+		XKit.window.show(
+			"Shuffle Queue",
+			"Would you like to shuffle your queue?<br>" +
+			"Please note that only loaded posts can be shuffled. " +
+			"To shuffle your entire queue, scroll down until your whole queue is loaded.",
 
-					} else {
+			"question",
 
-						$(this).find(".count").html("off");
+			'<div id="xshufflequeue_confirm" class="xkit-button default">Shuffle!</div>' +
+			'<div id="xkit-close-message" class="xkit-button">Cancel</div>'
+		);
 
-						XKit.storage.set("shuffle_queue", "shrink_posts", "false");
-
-						XKit.tools.remove_css("shuffle_queue_mini_posts");
-
-					}
-				} else {
-					//Shorten Posts IS enabled, use that to shrink posts rather than Enhanced Queue.
-					//If the two of them were to be combined, strange things would happen.
-					XKit.window.show("Unable to turn on Shrink Posts", "Using the Shrink Posts option and Shorten Posts together creates a small mess that no one really wants to see. If you still want to use the Shrink Posts functionality of Enhanced Queue, disable the Shorten Posts extension first.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-				}
-
-				return false;
-			});
-
-			$("#xdeletequeue_button").click(function() {
-
-				XKit.extensions.shuffle_queue.clear();
-
-				return false;
-			});
-
-			var shrink_posts = XKit.storage.get("shuffle_queue", "shrink_posts", "false");
-			if (shrink_posts === "true" || shrink_posts === true) {
-				$("#xshrinkposts_button").trigger('click');
+		$("#xshufflequeue_confirm").click(() => {
+			if ($("#xshufflequeue_confirm").hasClass("disabled")) {
+				return;
 			}
 
-			var hide_options = XKit.storage.get("shuffle_queue", "hide_options", "");
-			if (hide_options === "true" || hide_options === true) {
-				//$("#xqueueoptions_button").addClass("xkit-queue-option-button-on");
-				$("#xqueueoptions_button").trigger('click');
+			$("#xshufflequeue_confirm")
+				.addClass("disabled")
+				.text("Shuffling...");
+
+			let postIDs = [];
+			$("#posts [data-pageable]").each(function() {
+				let [ /* "post" */, postID] = $(this).attr("data-pageable").split("_");
+				postIDs.push(postID);
+			});
+
+			// https://stackoverflow.com/a/12646864
+			for (let i = postIDs.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[postIDs[i], postIDs[j]] = [postIDs[j], postIDs[i]];
 			}
 
-		}, 800);
+			let blogname = XKit.interface.where().user_url;
 
+			XKit.tools.Nx_XHR({
+				method: "POST",
+				url: `https://www.tumblr.com/blog/${blogname}/order_post_queue`,
+				headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+				data: $.param({
+					"form_key": XKit.interface.form_key(),
+					"post_ids": postIDs.join(",")
+				}),
+				onload: response => {
+					XKit.window.show(
+						"Queue shuffled!",
+						`All done! Shuffled ${postIDs.length} posts. Please refresh the page to see the result.`,
+
+						"info",
+
+						'<div id="xshufflequeue_done" class="xkit-button default">Okay!</div>'
+					);
+					$("#xshufflequeue_done").click(() => location.reload(true));
+				},
+				onerror: response => {
+					XKit.window.show(
+						"Unable to save queue.",
+						"Something went wrong. Please try again later.",
+
+						"error",
+
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>'
+					);
+				}
+			});
+		});
 	},
 
 	posts_to_delete: [],
@@ -263,127 +303,6 @@ XKit.extensions.shuffle_queue = new Object({
 			}
 		});
 
-	},
-
-	shuffle: function() {
-
-		if ($("#xshufflequeue_button").hasClass("disabled") === true) {
-			return;
-		}
-
-		var new_post_html = "";
-
-		if ($("#new_post").length > 0) {
-			new_post_html = $("#new_post").parent()[0].outerHTML;
-		}
-
-		$("#posts").html(XKit.extensions.shuffle_queue.shuffle_data($("#posts").children().not("#new_post_buttons").get()));
-		$("#posts").prepend(new_post_html);
-		$("#xshufflequeue_button").addClass("disabled");
-		$("#xshufflequeue_button").find(".count").html("saving");
-
-		var m_url = XKit.interface.where().user_url;
-
-		var IDs = [];
-		$("#posts").find(".post").not("#next_post").each(function() {
-			if ($(this).attr('data-post-id') !== "" && typeof $(this).attr('data-post-id') !== "undefined") {
-				IDs.push($(this).attr('data-post-id'));
-			}
-		});
-
-		if (IDs.length <= 5) {
-
-			console.log("Less than 5 posts, submitting!");
-			XKit.extensions.shuffle_queue.submit_shuffle_data(IDs, false, m_url);
-
-		} else {
-
-			console.log("More than 5 posts, submitting part by part.!");
-			XKit.extensions.shuffle_queue.submit_shuffle_data(IDs, true, m_url);
-
-		}
-
-		setTimeout(function() { $("#xshufflequeue_button").parent().removeClass("selected"); }, 10);
-
-	},
-
-	submit_shuffle_data: function(IDs, multi_mode, m_url) {
-
-		var form_key = XKit.interface.form_key();
-
-		multi_mode = false;
-
-		if (multi_mode !== true) {
-
-			var to_send_single = encodeURIComponent(IDs.join(","));
-
-			GM_xmlhttpRequest({
-				method: "POST",
-				url: "http://www.tumblr.com/blog/" + m_url + "/order_post_queue/",
-				data: "post_ids=" + to_send_single + "&form_key=" + form_key,
-				json: false,
-				onerror: function(response) {
-					XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					$("#xshufflequeue_button").find(".count").html("&nbsp;");
-					$("#xshufflequeue_button").removeClass("disabled");
-				},
-				onload: function(response) {
-					$("#xshufflequeue_button").find(".count").html("&nbsp;");
-					$("#xshufflequeue_button").removeClass("disabled");
-					if (response.status !== 200) {
-						XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					}
-
-				}
-			});
-
-		} else {
-
-			if (IDs.length === 0) {
-				$("#xshufflequeue_button").find(".count").html("&nbsp;");
-				$("#xshufflequeue_button").removeClass("disabled");
-				return;
-			}
-
-			var temp_ids = [];
-			for (var i = 0; i < 5; i++) {
-				temp_ids.push(IDs.shift());
-			}
-
-			var to_send_multi = encodeURIComponent(temp_ids.join(","));
-
-			console.log(" -- " + IDs.length + " items left...");
-
-			GM_xmlhttpRequest({
-				method: "POST",
-				url: "http://www.tumblr.com/blog/" + m_url + "/order_post_queue/",
-				data: "post_ids=" + to_send_multi + "&form_key=" + form_key,
-				json: false,
-				onerror: function(response) {
-					XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					$("#xshufflequeue_button").find(".count").html("&nbsp;");
-					$("#xshufflequeue_button").removeClass("disabled");
-				},
-				onload: function(response) {
-
-					if (response.status !== 200) {
-						XKit.window.show("Unable to save queue", "I was unable to save the current order of the queue.<br/>Please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-						$("#xshufflequeue_button").find(".count").html("&nbsp;");
-						$("#xshufflequeue_button").removeClass("disabled");
-					} else {
-						XKit.extensions.shuffle_queue.submit_shuffle_data(IDs, true);
-					}
-
-				}
-			});
-
-		}
-
-	},
-
-	shuffle_data: function(array) {
-		for (var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
-		return array;
 	},
 
 	destroy: function() {
