@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.1.0 **//
+//* VERSION 2.1.1 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -116,6 +116,12 @@ XKit.extensions.shuffle_queue = new Object({
 				postIDs.push(postID);
 			});
 
+			if (postIDs.length === 0) {
+				XKit.window.close();
+				XKit.notifications.add("Didn't find any posts to shuffle!", "error");
+				return;
+			}
+
 			// https://stackoverflow.com/a/12646864
 			for (let i = postIDs.length - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
@@ -133,20 +139,16 @@ XKit.extensions.shuffle_queue = new Object({
 					"post_ids": postIDs.join(",")
 				}),
 				onload: response => {
-					XKit.window.show(
-						"Queue shuffled!",
-						`All done! Shuffled ${postIDs.length} posts. Please refresh the page to see the result.`,
-
-						"info",
-
-						'<div id="xshufflequeue_done" class="xkit-button default">Okay!</div>'
-					);
-					$("#xshufflequeue_done").click(() => location.reload(true));
+					postIDs.reverse().forEach(postID => {
+						$("#new_post_buttons").after($(`[data-pageable="post_${postID}"]`));
+					});
+					XKit.window.close();
+					XKit.notifications.add(`Shuffled ${postIDs.length} posts!`, "ok");
 				},
 				onerror: response => {
 					XKit.window.show(
 						"Unable to save queue.",
-						"Something went wrong. Please try again later.",
+						`Something went wrong: HTTP ${response.status}. Please try again later.`,
 
 						"error",
 
