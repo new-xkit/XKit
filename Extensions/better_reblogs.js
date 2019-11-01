@@ -284,7 +284,7 @@ XKit.extensions.better_reblogs = new Object({
 			this.run_cq();
 		}
 		if (this.preferences.decrease_padding.value === true) {
-			XKit.tools.add_css(".xkit-better-reblogs-old blockquote.reblog-quote {padding-left: 8px; margin-top: 6px;} .xkit-better-reblogs-old p.reblog-user {margin-bottom: 6px;}", 'better_reblogs_decrease_padding');
+			XKit.tools.add_css(".xkit-better-reblogs-old blockquote.reblog-quote { padding-left: 8px; margin-top: 6px; } .xkit-better-reblogs-old p.reblog-user { margin-bottom: 6px; }", 'better_reblogs');
 		}
 	},
 
