@@ -659,23 +659,23 @@ XKit.extensions.xinbox = new Object({
 				channel_id: channel_id,
 				post_id: m_id
 			})
-				.then(() => {
-					XKit.extensions.xinbox.delete_msg_index = current_msg;
-					var post_div = $(".xpost-selected:eq(0)");
-					$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
-					setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
-				})
-				.catch(() => {
-					XKit.window.show("Couldn't fetch page.",
-						"There might be a connection problem, or the extension might need updating.<br><br>" +
-						"Please try again later, and if the problem continues, disable XInbox from " +
-						"the XKit Control Panel to answer your asks while this problem is being fixed.",
+			.then(() => {
+				XKit.extensions.xinbox.delete_msg_index = current_msg;
+				var post_div = $(".xpost-selected:eq(0)");
+				$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
+				setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
+			})
+			.catch(() => {
+				XKit.window.show("Couldn't fetch page.",
+					"There might be a connection problem, or the extension might need updating.<br><br>" +
+					"Please try again later, and if the problem continues, disable XInbox from " +
+					"the XKit Control Panel to answer your asks while this problem is being fixed.",
 
-						"error",
+					"error",
 
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-					);
-				});
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
+			});
 
 		}, 700);
 

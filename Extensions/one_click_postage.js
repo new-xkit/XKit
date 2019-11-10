@@ -292,7 +292,7 @@ XKit.extensions.one_click_postage = new Object({
 					break;
 				default:
 					if (retry_mode !== true) {
-						setTimeout(function() { XKit.extensions.one_click_postage.in_blog_post(obj, state, true); }, 500);
+						setTimeout(() => this.in_blog_post(obj, state, true), 500);
 					} else {
 						this.show_error("OCP03-" + response.status + "-B", state);
 					}
@@ -403,23 +403,21 @@ XKit.extensions.one_click_postage = new Object({
 					switch (response.status) {
 					case 401:
 						this.show_error("INOCP101");
-						$(obj).removeClass("xkit-button-working");
-						$(obj).addClass("xkit-button-error");
 						break;
 					case 404:
 						this.show_error("INOCP104 Not Found", state);
-						$(obj).removeClass("xkit-button-working");
-						$(obj).addClass("xkit-button-error");
 						break;
 					default:
 						if (retry_mode !== true) {
 							this.in_blog_process(data, state, obj, m_object, true);
-						} else {
-							this.show_error("INOCP109-" + response.status, state);
-							$(obj).removeClass("xkit-button-working");
-							$(obj).addClass("xkit-button-error");
+							return;
 						}
+
+						this.show_error("INOCP109-" + response.status, state);
 					}
+
+					$(obj).removeClass("xkit-button-working");
+					$(obj).addClass("xkit-button-error");
 				});
 		});
 	},
@@ -935,7 +933,7 @@ XKit.extensions.one_click_postage = new Object({
 				if (XKit.extensions.one_click_postage.user_on_box && e.which >= 49 && e.which <= 57) { // 49-57 = 1-9
 					var index = e.which - 49;
 					var quickTags = $("#x1cpostage_quick_tags").find(".xkit-tag");
-					
+
 					if (quickTags.length > index) {
 						quickTags[index].click();
 					}
@@ -1241,7 +1239,7 @@ XKit.extensions.one_click_postage = new Object({
 					break;
 				default:
 					if (retry_mode !== true) {
-						setTimeout(function() { XKit.extensions.one_click_postage.post(state, true, quick_queue_mode); }, 500);
+						setTimeout(() => XKit.extensions.one_click_postage.post(state, true, quick_queue_mode), 500);
 					} else {
 						this.show_error(`OCP03-${response.status}`, state);
 					}
