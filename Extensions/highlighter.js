@@ -1,5 +1,5 @@
 //* TITLE Highlighter **//
-//* VERSION 0.1.5 **//
+//* VERSION 0.1.6 **//
 //* DESCRIPTION Don't miss things **//
 //* DETAILS The cousin of Blacklister, this extension highlights posts depending on the words you decide. When a word you add is found on a post, the post will get a yellow-ish background. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -92,19 +92,7 @@ XKit.extensions.highlighter = new Object({
 			}
 
 			// Collect the content.
-			var m_content = "";
-
-			if ($(this).find(".post_text_wrapper").length > 0) {
-				m_content = $(this).find(".post_text_wrapper").html();
-			}
-
-			if ($(this).find(".post_body").length > 0) {
-				m_content = $(this).find(".post_body").html();
-			}
-
-			if ($(this).find(".caption").length > 0) {
-				m_content = $(this).find(".caption").html();
-			}
+			var m_content = $(this).find(".post_content_inner").html() || "";
 
 			m_content = m_content + " " + m_title + " " + m_tags;
 			m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");

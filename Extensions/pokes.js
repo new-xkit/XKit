@@ -135,11 +135,13 @@ XKit.extensions.pokes = {
 			}
 
 			if (XKit.extensions.pokes.preferences.allow_fullwidth.value) {
-				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokesortid="' + poke_sortid + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
-				'<img src="' + poke_sprite + '" alt="' + poke_name + '"/>' + '</div>';
+				poke_html = `<div class="poke ${poke_class}${shiny_class}" data-pokeid="${db_nr}" data-pokesortid="${poke_sortid}" data-pokename="${poke_name}" data-pokegender="${poke_gender}" style="left:${xpos}px; margin-top:${ypos}px;">` +
+					`<img src="${poke_sprite}" alt="${poke_name}"/>` + 
+				'</div>';
 			} else {
-				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokesortid="' + poke_sortid + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
-				'<img src="' + poke_sprite + '" alt="' + poke_name + '"/>' + '</div>';
+				poke_html = `<div class="poke fixed ${poke_class}${shiny_class}" data-pokeid="${db_nr}" data-pokesortid="${poke_sortid}" data-pokename="${poke_name}" data-pokegender="${poke_gender}" style="margin-top:${ypos}px;">` +
+					`<img src="${poke_sprite}" alt="${poke_name}"/>` + 
+				'</div>';
 			}
 
 			pokedThing.after(poke_html);
@@ -204,7 +206,7 @@ XKit.extensions.pokes = {
 	},
 
 	pokeGen: function() {
-		return Math.floor(Math.random() * 889);
+		return Math.floor(Math.random() * 1018);
 	},
 
 	destroy: function() {

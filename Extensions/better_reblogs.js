@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.3.4 **//
+//* VERSION 1.3.5 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -119,7 +119,13 @@ XKit.extensions.better_reblogs = new Object({
 			default: false,
 			value: false,
 			style: "nested",
-		}
+		},
+		"decrease_padding": {
+			text: "Decrease left padding so large reblog chains are somewhat readable",
+			default: false,
+			value: false,
+			style: "nested",
+		},
 	},
 
 	colors: {
@@ -276,6 +282,9 @@ XKit.extensions.better_reblogs = new Object({
 		XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_nested);
 		if (this.preferences.color_quotes.value) {
 			this.run_cq();
+		}
+		if (this.preferences.decrease_padding.value === true) {
+			XKit.tools.add_css(".xkit-better-reblogs-old blockquote.reblog-quote { padding-left: 8px; margin-top: 6px; } .xkit-better-reblogs-old p.reblog-user { margin-bottom: 6px; }", 'better_reblogs');
 		}
 	},
 

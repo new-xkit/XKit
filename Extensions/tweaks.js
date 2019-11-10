@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.2 **/
+//* VERSION 5.7.5 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -345,6 +345,10 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__activity" +
 				"{ transform: translate(-10px); }" +
 
+			// Remove ask responses (currently always blank, and messes up the activity dropdown)
+			".ui_notes .activity-notification .activity-notification__activity_response.is_part_answer" +
+				"{ display: none; }" +
+
 			// Remove the speech bubble from conversational notes and put it back in the right place
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational" +
 				"{ background-color: transparent !important; padding: 5px 0; }" +
@@ -358,7 +362,8 @@ XKit.extensions.tweaks = new Object({
 				"{ padding: 0; min-width: 25px; }" +
 
 			// Allow user avatars to use the padding too
-			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar" +
+			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar," +
+			".ui_notes .activity-notification .activity-notification__avatar .flagged-post" +
 				"{ margin: 0; }" +
 
 			// Shrink post type icons
@@ -406,7 +411,7 @@ XKit.extensions.tweaks = new Object({
 			"tweaks_slim_activity_feed");
 		}
 
-		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
+		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value && !XKit.interface.where().following) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
 			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
 			"tweaks_old_sidebar_width");

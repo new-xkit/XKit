@@ -280,38 +280,38 @@ function extension_editor_finish_run() {
 	$(document).on('keydown', function(event) {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
-			case "s":
-				event.preventDefault();
-				$("#xkit-editor-save").click();
-				break;
-			case "o":
-				event.preventDefault();
-				$("#xkit-editor-open").click();
-				break;
-			case "e":
-				event.preventDefault();
-				$("#xkit-editor-new").click();
-				break;
-			case "d":
-				event.preventDefault();
-				$("#xkit-editor-delete").click();
-				break;
-			case "1":
-				event.preventDefault();
-				$("#xkit-editor-switch-to-script").click();
-				break;
-			case "2":
-				event.preventDefault();
-				$("#xkit-editor-switch-to-css").click();
-				break;
-			case "3":
-				event.preventDefault();
-				$("#xkit-editor-switch-to-icon").click();
-				break;
-			case "4":
-				event.preventDefault();
-				$("#xkit-editor-switch-to-object").click();
-				break;
+				case "s":
+					event.preventDefault();
+					$("#xkit-editor-save").click();
+					break;
+				case "o":
+					event.preventDefault();
+					$("#xkit-editor-open").click();
+					break;
+				case "e":
+					event.preventDefault();
+					$("#xkit-editor-new").click();
+					break;
+				case "d":
+					event.preventDefault();
+					$("#xkit-editor-delete").click();
+					break;
+				case "1":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-script").click();
+					break;
+				case "2":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-css").click();
+					break;
+				case "3":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-icon").click();
+					break;
+				case "4":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-object").click();
+					break;
 			}
 		}
 	});

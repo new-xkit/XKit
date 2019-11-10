@@ -27,7 +27,7 @@
         requireParamDescription: false
         requireReturnDescription: false
 
-    indent: [error, tab]
+    indent: [error, tab, {SwitchCase: 1}]
     semi: error
     brace-style: [error, 1tbs, allowSingleLine: true]
     linebreak-style: [error, unix]

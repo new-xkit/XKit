@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.5.3 **//
+//* VERSION 7.5.4 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -927,9 +927,12 @@ XKit.extensions.xkit_preferences = new Object({
 
 					try {
 						eval(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js");
-						XKit.extensions[m_extension_id].run();
+						XKit.extensions.xkit_main.load_extension_preferences(m_extension_id);
+						if (XKit.installed.enabled(m_extension_id)) {
+							XKit.extensions[m_extension_id].run();
+						}
 					} catch (e) {
-
+						console.error("[XKit Preferences] Could not run " + m_extension_id + ": " + e.message);
 					}
 
 				});
@@ -1255,14 +1258,14 @@ XKit.extensions.xkit_preferences = new Object({
 
 		} else if (XKit.installed.enabled(extension_id) === false) {
 
-			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>'; 
-			
+			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>';
+
 		} else if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-			
+
 			m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-				
+
 		} else {
-			
+
 			m_html = m_html + '<div id="xkit-extension-panel-settings"></div>';
 		}
 		$("#xkit-extensions-panel-right-inner").html(m_html);
@@ -1388,11 +1391,28 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_ext = XKit.installed.get(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
-			XKit.window.show("Uninstall " + m_ext.title + "?",
-				"This extension will be completely deleted from your computer. " +
-				"If you change your mind, you can re-download it from the extension gallery later.",
-				"question", '<div id="xkit-extension-yes-uninstall" class="xkit-button default">Yes, uninstall</div>' +
-				'<div id="xkit-close-message" class="xkit-button">Cancel</div>');
+			XKit.window.show(
+				`Uninstall ${m_ext.title}?`,
+				"This extension will be deleted from your computer. " +
+				"If you change your mind, you can re-download it from the extension gallery later.<br><br>" +
+				"You can also choose to purge this extension completely. " +
+				"This will delete any data stored by it, including your preferences.<br>" +
+				'<div class="xkit-checkbox" id="xkit-purge-extension"><b>&nbsp;</b>Delete ALL data stored by this extension</div>',
+
+				"question",
+
+				'<div id="xkit-extension-yes-uninstall" class="xkit-button default">Yes, uninstall</div>' +
+				'<div id="xkit-close-message" class="xkit-button">Cancel</div>'
+			);
+
+			$("#xkit-purge-extension").click(function() {
+				$(this).toggleClass("selected");
+				if ($(this).hasClass("selected")) {
+					$("#xkit-extension-yes-uninstall").text("Purge this extension");
+				} else {
+					$("#xkit-extension-yes-uninstall").text("Yes, uninstall");
+				}
+			});
 
 			$("#xkit-extension-yes-uninstall").click(function() {
 
@@ -1404,6 +1424,9 @@ XKit.extensions.xkit_preferences = new Object({
 				XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
+					if ($("#xkit-purge-extension").hasClass("selected")) {
+						XKit.storage.clear(XKit.extensions.xkit_preferences.current_open_extension_panel);
+					}
 					XKit.installed.remove(XKit.extensions.xkit_preferences.current_open_extension_panel);
 					XKit.window.close();
 					XKit.extensions.xkit_preferences.current_panel = "";

@@ -251,35 +251,35 @@ XKit.extensions.xwidgets = new Object({
 				var m_caption = "";
 
 				switch (m_storage) {
-				case 4:
-					m_caption = "Baku";
-					break;
-				case 3:
-					m_caption = "Kuwait";
-					break;
-				case 2:
-					m_caption = "Istanbul";
-					break;
-				case 1:
-					m_caption = "Vienna";
-					break;
-				case 0:
-					m_caption = "London";
-					break;
-				case -2:
-					m_caption = "Buenos Aires";
-					break;
-				case -5:
-					m_caption = "Eastern Time";
-					break;
-				case -6:
-					m_caption = "Central Time";
-					break;
-				case -8:
-					m_caption = "Pacific Time";
-					break;
-				default:
-					m_caption = "GMT " + m_storage;
+					case 4:
+						m_caption = "Baku";
+						break;
+					case 3:
+						m_caption = "Kuwait";
+						break;
+					case 2:
+						m_caption = "Istanbul";
+						break;
+					case 1:
+						m_caption = "Vienna";
+						break;
+					case 0:
+						m_caption = "London";
+						break;
+					case -2:
+						m_caption = "Buenos Aires";
+						break;
+					case -5:
+						m_caption = "Eastern Time";
+						break;
+					case -6:
+						m_caption = "Central Time";
+						break;
+					case -8:
+						m_caption = "Pacific Time";
+						break;
+					default:
+						m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);
@@ -448,35 +448,35 @@ XKit.extensions.xwidgets = new Object({
 				var m_caption = "";
 
 				switch (m_storage) {
-				case 4:
-					m_caption = "Baku";
-					break;
-				case 3:
-					m_caption = "Kuwait";
-					break;
-				case 2:
-					m_caption = "Istanbul";
-					break;
-				case 1:
-					m_caption = "Vienna";
-					break;
-				case 0:
-					m_caption = "London";
-					break;
-				case -2:
-					m_caption = "Buenos Aires";
-					break;
-				case -5:
-					m_caption = "Eastern Time";
-					break;
-				case -6:
-					m_caption = "Central Time";
-					break;
-				case -8:
-					m_caption = "Pacific Time";
-					break;
-				default:
-					m_caption = "GMT " + m_storage;
+					case 4:
+						m_caption = "Baku";
+						break;
+					case 3:
+						m_caption = "Kuwait";
+						break;
+					case 2:
+						m_caption = "Istanbul";
+						break;
+					case 1:
+						m_caption = "Vienna";
+						break;
+					case 0:
+						m_caption = "London";
+						break;
+					case -2:
+						m_caption = "Buenos Aires";
+						break;
+					case -5:
+						m_caption = "Eastern Time";
+						break;
+					case -6:
+						m_caption = "Central Time";
+						break;
+					case -8:
+						m_caption = "Pacific Time";
+						break;
+					default:
+						m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);

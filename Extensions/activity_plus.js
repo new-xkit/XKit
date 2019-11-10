@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.4.3 **//
+//* VERSION 0.4.5 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -68,7 +68,7 @@ XKit.extensions.activity_plus = new Object({
 				m_css = m_css + " #user_graphs, .ui_stats { display: none; }";
 			}
 
-			if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
+			if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true || this.preferences.unfold_rollups.value) {
 				// m_css = m_css + " .part_activity { left: 95px !important; } .activity-notification .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
 				setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
 			}
@@ -127,6 +127,9 @@ XKit.extensions.activity_plus = new Object({
 					}
 					if (m_type === "is_user_mention") {
 						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
+					}
+					if (m_type === "is_reblog") {
+						m_type += ", .ui_notes .activity-notification.is_reblog_naked";
 					}
 
 					var m_filter_css = ".ui_notes .activity-notification { display: none; }";
@@ -189,15 +192,11 @@ XKit.extensions.activity_plus = new Object({
 			notification.classList.add('activity-notification');
 			notification.dataset.timestamp = Math.round(reblog.timestamp);
 			notification.dataset.tumblelogName = reblog.blog_name;
-
-			notification.classList.add('is_reblog');
-			if (!reblog.added_text) {
-				notification.classList.add('is_reblog_naked');
-			}
+			notification.classList.add('is_reblog_naked');
 
 			var reblogUrl = reblog.blog_url + 'post/' + reblog.post_id;
-			var avatarUrl48 = reblog.avatar_url['48'];
-			var avatarUrl128 = avatarUrl48.replace(/_48\./, '_128');
+			var avatarUrl64 = reblog.avatar_url['64'];
+			var avatarUrl128 = avatarUrl64.replace(/_64\./, '_128');
 
 			var partReblogAdded = '';
 			var andAdded = '';
@@ -214,7 +213,7 @@ XKit.extensions.activity_plus = new Object({
 			<div class="activity-notification__avatar">
 				<div class="ui_avatar">
 					<a href="${reblog.blog_url}" data-avatar-url="${avatarUrl128}" target="_blank" class="ui_avatar_link frame reblog" title="${reblog.blog_name}" data-peepr="{&quot;tumblelog&quot;:&quot;${reblog.blog_name}&quot;}">
-						<div class="avatar" style="background-image: url('${avatarUrl48}');">
+						<div class="avatar" style="background-image: url('${avatarUrl64}');">
 							<div class="inner_frame"></div>
 							<div class="avatar_glass"></div>
 							<span class="ui_avatar_tumblelog_name">thezed</span>
@@ -440,8 +439,8 @@ XKit.extensions.activity_plus = new Object({
 			}
 		}
 
-		if (this.preferences.unfold_rollups.value) {
-			this.do_unfold();
+		if (XKit.extensions.activity_plus.preferences.unfold_rollups.value) {
+			XKit.extensions.activity_plus.do_unfold();
 		}
 	},
 

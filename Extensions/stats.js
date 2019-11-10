@@ -550,7 +550,7 @@ XKit.extensions.stats = new Object({
 					XKit.extensions.stats.post_error("Can't post stats", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
 				},
 				onload: function(response) {
-					var m_obj = jQuery.parseJSON(response.responseText);
+					var m_obj = JSON.parse(response.responseText);
 					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					XKit.window.close();
 					if (m_obj.errors === false) {

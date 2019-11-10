@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.5.4 **//
+//* VERSION 2.6.0 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -113,22 +113,35 @@ XKit.extensions.classic_header = new Object({
 			XKit.extensions.classic_header.show_blogs();
 		}
 		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
-			$( function() {
-				var cwidth = $(".l-content").outerWidth() + 30; // +10 to match l-container, +20 to allow for right padding
-				if (cwidth < 816) { return; } // either l-content does not exist or the screen is too small to need to do anything
-				var lpad = 1; // even with the correct width, the tumblr logo is just one pixel off lining up perfectly
-				if (XKit.extensions.tweaks.preferences.old_sidebar_width.value && $("#right_column").length > 0) {
-					lpad += 75; // # of pixels added to the dashboard's left margin by this tweak
-				}
-				XKit.tools.add_css(
-				"@media screen and (min-width: " + cwidth + "px) {" +
-					".l-header {" +
-						"max-width: " + cwidth + "px !important;" +
-						"padding-left: " + lpad + "px !important;" +
-					"}" +
-				"}",
+			let containerWidth = $(".l-container:not(.l-container--flex)").css("width");
+			let contentSidePad = $(".l-content").css("padding-left");
+			let logoLeftPad = $(".png-logo").css("padding-left");
+
+			if (containerWidth && contentSidePad && logoLeftPad) {
+
+				XKit.tools.add_css(`
+					.l-header {
+						max-width: ${containerWidth} !important;
+						padding: 0 ${contentSidePad} !important;
+					}
+					.logo {
+						margin-left: -${logoLeftPad};
+					}`,
 				"classic_header");
-			});
+
+				XKit.installed.when_running("tweaks", function() {
+					let mainLeftMargin = $("#left_column").css("margin-left");
+
+					if (mainLeftMargin && mainLeftMargin !== "0px") {
+						XKit.tools.add_css(`
+							.l-header {
+								max-width: calc(${containerWidth} - ${mainLeftMargin}) !important;
+								transform: translateX(calc(${mainLeftMargin} / 2));
+							}`,
+						"classic_header");
+					}
+				});
+			}
 		}
 
 		if (XKit.extensions.classic_header.preferences.fix_logo.value) {

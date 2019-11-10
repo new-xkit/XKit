@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.3 **//
+//* VERSION 7.2.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -15,6 +15,43 @@ XKit.extensions.xkit_patches = new Object({
 		}).forEach(x => {
 			this.patches[x]();
 		});
+
+		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
+			let version = XKit.tools.parse_version(XKit.version);
+			if (version.major === 7 && version.minor >= 8) {
+				fetch(browser.extension.getURL("manifest.json")) // eslint-disable-line no-undef
+					.then(response => response.json())
+					.then(responseData => {
+						if (responseData.applications.gecko.id === "@new-xkit-w") {
+							XKit.window.show(
+								"W Edition warning",
+								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +
+								'Due to how XKit\'s extension gallery works, this upload violates <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews#Development_Practices" target="_blank">Mozilla\'s policy on remote code execution</a> ' +
+								"for listed add-ons, and is in danger of being banned at any time; potentially deleting your local XKit data.<br><br>" +
+								"We recommend installing the official distribution of New XKit from GitHub to avoid this possibility.<br><br>" +
+								"Be sure to upload or export your configuration using XCloud before uninstalling W Edition. " +
+								"Also, since the two versions conflict, you should uninstall W Edition before re-installing from GitHub.",
+
+								"warning",
+
+								'<a href="https://github.com/new-xkit/XKit/releases/latest" target="_blank" class="xkit-button default">New XKit installation page &rarr;</a>' +
+								'<div id="xkit-close-message" class="xkit-button">Close</div>' +
+								`<div id="dismiss-warning" class="xkit-button float-right">Don't show this again</div>`
+							);
+
+							$("#dismiss-warning").click(() => {
+								XKit.window.close();
+								XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+							});
+						} else {
+							XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+						}
+					})
+					.catch(console.error);
+			} else {
+				XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+			}
+		}
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
@@ -128,6 +165,13 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.0": function() {
+
+			// Override "Search Page Brick Post Fix" from xkit.css
+			XKit.tools.add_css(
+				`.post_brick .post_controls .post_controls_inner {
+					white-space: nowrap;
+				}`,
+			"xkit_patches");
 
 			XKit.interface.sidebar = {
 				init: function() {
@@ -1845,7 +1889,7 @@ XKit.extensions.xkit_patches = new Object({
 								XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 								try {
-									to_return.data = jQuery.parseJSON(response.responseText);
+									to_return.data = JSON.parse(response.responseText);
 									func(to_return);
 								} catch (e) {
 									to_return.error = true;
@@ -1920,7 +1964,7 @@ XKit.extensions.xkit_patches = new Object({
 						onload: function(response) {
 
 							try {
-								to_return.data = jQuery.parseJSON(response.responseText);
+								to_return.data = JSON.parse(response.responseText);
 								func(to_return);
 							} catch (e) {
 								to_return.error = true;
@@ -2621,7 +2665,7 @@ XKit.extensions.xkit_patches = new Object({
 					}, 5000);
 				}
 			};
-					
+
 			/**
 			 * @param {String} extension
 			 * @return {Boolean} Whether the extension is running
@@ -2965,7 +3009,7 @@ XKit.extensions.xkit_patches = new Object({
 						// We are done!
 						var mdata = {};
 						try {
-							mdata = jQuery.parseJSON(response.responseText);
+							mdata = JSON.parse(response.responseText);
 						} catch (e) {
 							// Server returned bad thingy.
 							console.log("Unable to download '" + path +

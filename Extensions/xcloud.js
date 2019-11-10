@@ -225,7 +225,7 @@ XKit.extensions.xcloud = new Object({
 
 					var mdata = null;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.xcloud.hide_overlay();
 						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -320,7 +320,7 @@ XKit.extensions.xcloud = new Object({
 
 					var mdata = null;
 					try {
-						mdata = jQuery.parseJSON(response.responseText);
+						mdata = JSON.parse(response.responseText);
 					} catch (e) {
 						XKit.extensions.xcloud.hide_overlay();
 						XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -539,7 +539,7 @@ XKit.extensions.xcloud = new Object({
 			},
 			onload: function(response) {
 
-				var data = jQuery.parseJSON(response.responseText);
+				var data = JSON.parse(response.responseText);
 				if (data.server_down) {
 					XKit.extensions.xcloud.hide_overlay();
 					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -877,7 +877,7 @@ XKit.extensions.xcloud = new Object({
 
 				var mdata = null;
 				try {
-					mdata = jQuery.parseJSON(response.responseText);
+					mdata = JSON.parse(response.responseText);
 				} catch (e) {
 					XKit.extensions.xcloud.hide_overlay();
 					XKit.window.show("Can't connect to server", "XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
