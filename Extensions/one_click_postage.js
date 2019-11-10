@@ -284,18 +284,18 @@ XKit.extensions.one_click_postage = new Object({
 			})
 			.catch(response => {
 				switch (response.status) {
-				case 401:
-					this.show_error("OCP01-B", state);
-					break;
-				case 404:
-					this.show_error("OCP02-B [Post Not Found]", state);
-					break;
-				default:
-					if (retry_mode !== true) {
-						setTimeout(() => this.in_blog_post(obj, state, true), 500);
-					} else {
-						this.show_error("OCP03-" + response.status + "-B", state);
-					}
+					case 401:
+						this.show_error("OCP01-B", state);
+						break;
+					case 404:
+						this.show_error("OCP02-B [Post Not Found]", state);
+						break;
+					default:
+						if (retry_mode !== true) {
+							setTimeout(() => this.in_blog_post(obj, state, true), 500);
+						} else {
+							this.show_error("OCP03-" + response.status + "-B", state);
+						}
 				}
 			});
 	},
@@ -401,19 +401,19 @@ XKit.extensions.one_click_postage = new Object({
 					XKit.interface.kitty.set("");
 
 					switch (response.status) {
-					case 401:
-						this.show_error("INOCP101");
-						break;
-					case 404:
-						this.show_error("INOCP104 Not Found", state);
-						break;
-					default:
-						if (retry_mode !== true) {
-							this.in_blog_process(data, state, obj, m_object, true);
-							return;
-						}
+						case 401:
+							this.show_error("INOCP101");
+							break;
+						case 404:
+							this.show_error("INOCP104 Not Found", state);
+							break;
+						default:
+							if (retry_mode !== true) {
+								this.in_blog_process(data, state, obj, m_object, true);
+								return;
+							}
 
-						this.show_error("INOCP109-" + response.status, state);
+							this.show_error("INOCP109-" + response.status, state);
 					}
 
 					$(obj).removeClass("xkit-button-working");
@@ -1231,18 +1231,18 @@ XKit.extensions.one_click_postage = new Object({
 			})
 			.catch(response => {
 				switch (response.status) {
-				case 401:
-					this.show_error("OCP01", state);
-					break;
-				case 404:
-					this.show_error("OCP02 [Post Not Found]", state);
-					break;
-				default:
-					if (retry_mode !== true) {
-						setTimeout(() => XKit.extensions.one_click_postage.post(state, true, quick_queue_mode), 500);
-					} else {
-						this.show_error(`OCP03-${response.status}`, state);
-					}
+					case 401:
+						this.show_error("OCP01", state);
+						break;
+					case 404:
+						this.show_error("OCP02 [Post Not Found]", state);
+						break;
+					default:
+						if (retry_mode !== true) {
+							setTimeout(() => XKit.extensions.one_click_postage.post(state, true, quick_queue_mode), 500);
+						} else {
+							this.show_error(`OCP03-${response.status}`, state);
+						}
 				}
 			});
 	},
@@ -1429,18 +1429,18 @@ XKit.extensions.one_click_postage = new Object({
 				})
 				.catch(response => {
 					switch (response.status) {
-					case 401:
-						this.show_error("OCP06", state);
-						break;
-					case 404:
-						this.show_error("OCP07", state);
-						break;
-					default:
-						if (retry_mode !== true) {
-							this.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
-						} else {
-							this.show_error("OCP08-" + response.status, state);
-						}
+						case 401:
+							this.show_error("OCP06", state);
+							break;
+						case 404:
+							this.show_error("OCP07", state);
+							break;
+						default:
+							if (retry_mode !== true) {
+								this.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
+							} else {
+								this.show_error("OCP08-" + response.status, state);
+							}
 					}
 				});
 		});
