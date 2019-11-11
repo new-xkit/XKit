@@ -1432,10 +1432,12 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (error.status) {
 			// HTTP error: response object
-			message = `The server returned HTTP ${error.status}.<br><br>`;
-			switch (error.status) {
+			let response = error;
+
+			message = `The server returned HTTP ${response.status}.<br>`;
+			switch (response.status) {
 				case 200:
-					// Tumblr provided errors
+					message += "However, Tumblr has indicated that something is wrong.";
 					break;
 				case 401:
 					message += "This usually means your browser is not sending Referer headers.";
@@ -1447,20 +1449,20 @@ XKit.extensions.one_click_postage = new Object({
 					message += `The post you are trying to ${verb} has been deleted.`;
 					break;
 				default:
-					message += "We're not sure what this means.<br>Hopefully, Tumblr has provided an error message.";
+					message += "We're not sure what this means.<br>Please consider reporting this to us!";
 			}
 
 			message += "<br><br>";
 
 			try {
-				let data = error.json();
+				let data = response.json();
 				if (data.errors !== undefined) {
-					message += `Tumblr provided this error message: <p>${JSON.stringify(data.errors)}</p>`;
+					message += `Tumblr provided this error message: <p style="overflow-x:scroll">${JSON.stringify(data.errors)}</p>`;
 				} else if (data.error !== undefined) {
 					message += `<p>${data.error}</p>`;
 				}
 			} catch (e) {
-				message += "Tumblr provided a generic HTTP error page. Please ensure you are logged in.";
+				message += "Tumblr returned a generic HTTP error page. Please ensure you are logged in.";
 			}
 		} else {
 			// exception: error object
