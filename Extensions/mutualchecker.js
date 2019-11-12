@@ -1,16 +1,16 @@
 //* TITLE Mutual Checker **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION A simple way to see who follows you back **//
-//* DETAILS Adds a small icon and &quot;[user] follows you&quot; hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and doesn't work on group blogs. **//
+//* DETAILS Adds a small icon and &quot;[user] follows you&quot; hovertext to URLs you see in post headers (when appropriate).<br><br>Only checks the URL when the person directly made/reblogged/submitted/published the post, and can only check main blogs. **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
 
 XKit.extensions.mutualchecker = new Object({
-	
+
 	running: false,
 	mutuals: {},
-	
+
 	preferences: {
 		"main_blog": {
 			text: "Blog to check for follow-backs on:",
