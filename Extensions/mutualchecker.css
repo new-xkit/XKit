@@ -14,3 +14,11 @@
 	content: "\EA59";
 	padding-right: 0.3em;
 }
+
+body.xkit-april-fools .mutuals:not(.mutuals-front)::after{
+	content: "\EAA7";
+}
+
+body.xkit-april-fools .mutuals.mutuals-front::before{
+	content: "\EAA7";
+}
