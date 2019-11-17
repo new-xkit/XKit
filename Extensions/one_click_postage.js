@@ -1431,7 +1431,6 @@ XKit.extensions.one_click_postage = new Object({
 		let message = "";
 
 		if (error.status) {
-			// HTTP error: response object
 			let response = error;
 
 			message = `The server returned HTTP ${response.status}.<br>`;
@@ -1440,7 +1439,8 @@ XKit.extensions.one_click_postage = new Object({
 					message += "However, Tumblr has indicated that something is wrong.";
 					break;
 				case 401:
-					message += "This usually means your browser is not sending Referer headers.";
+					message += "This usually means your browser is not sending Referer headers.<br>";
+					message += "Please contact support if you don't know what this means.";
 					break;
 				case 403:
 					message += `This usually means you've been blocked by the owner of the post.`;
@@ -1462,14 +1462,14 @@ XKit.extensions.one_click_postage = new Object({
 					message += `<p>${data.error}</p>`;
 				}
 			} catch (e) {
-				message += "Tumblr returned a generic HTTP error page. Please ensure you are logged in.";
+				message += "Tumblr returned a generic HTTP error page. Please refresh the page and try again.";
 			}
 		} else {
-			// exception: error object
+			console.error(error);
 			message =
 				`An internal error occurred.<br>
 				Please ensure you are logged in and try again.<br><br>
-				Error message: <p>${error.message}</p>`;
+				<p>${error}</p>`;
 		}
 
 		XKit.window.show(
@@ -1480,8 +1480,8 @@ XKit.extensions.one_click_postage = new Object({
 			"error",
 
 			'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
-			'<a href="https://new-xkit-extension.tumblr.com/" class="xkit-button">Visit the New XKit Blog</a>' +
-			'<a href="https://new-xkit-extension.tumblr.com/ask" class="xkit-button">Send an ask</a>'
+			'<a href="https://new-xkit-extension.tumblr.com/" target="_blank" class="xkit-button">Visit the New XKit Blog</a>' +
+			'<a href="https://new-xkit-extension.tumblr.com/discord-support" target="_blank" class="xkit-button">Live support</a>'
 		);
 	}
 });
