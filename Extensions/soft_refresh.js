@@ -40,7 +40,8 @@ XKit.extensions.soft_refresh = new Object({
 		XKit.tools.init_css("soft_refresh");
 
 		const where = XKit.interface.where();
-		if (where.dashboard === false || where.endless === false) {
+		const paginated = where.endless === false && location.pathname !== "/dashboard";
+		if (where.dashboard === false || paginated === true) {
 			return;
 		}
 
