@@ -368,13 +368,13 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.svc.post.update(m_object, kitty_data.kitten)
 				.then(response => {
 					let responseData = response.json();
-					$(obj).removeClass("xkit-button-working");
 
-					if (responseData.errors === false) {
-						$(obj).addClass("xkit-button-done");
-					} else {
+					if (responseData.errors) {
 						throw response;
 					}
+
+					$(obj).removeClass("xkit-button-working");
+					$(obj).addClass("xkit-button-done");
 				})
 				.catch(error => {
 					XKit.interface.kitty.set("");
@@ -1343,38 +1343,39 @@ XKit.extensions.one_click_postage = new Object({
 				.then(response => {
 					let responseData = response.json();
 
-					if (responseData.errors === false) {
-						$(m_button).removeClass("xkit-one-click-reblog-working");
-						if (responseData.message === "" || typeof responseData.message === "undefined") {
-							// No message
-						} else {
-							if (this.preferences.enable_alreadyreblogged.value) {
-								this.add_to_alreadyreblogged(root_id);
-							}
-							if (this.preferences.enable_alreadyreblogged.value || this.preferences.dim_posts_after_reblog.value) {
-								if (quick_queue_mode !== true) {
-									this.make_button_reblogged(m_button);
-								} else {
-									XKit.interface.switch_control_button($(m_button), false);
-									XKit.interface.completed_control_button($(m_button), true);
-								}
-							}
-							if (!this.preferences.dont_show_notifications.value) {
-								if (this.preferences.use_toasts.value) {
-									XKit.toast.add(
-										responseData.created_post,
-										responseData.verbiage,
-										responseData.post_tumblelog.name_or_id,
-										responseData.post.id,
-										responseData.post_context_page
-									);
-								} else {
-									XKit.notifications.add(responseData.message, "ok");
-								}
+					if (responseData.errors) {
+						throw response;
+					}
+
+					$(m_button).removeClass("xkit-one-click-reblog-working");
+					
+					if (responseData.message === "" || typeof responseData.message === "undefined") {
+						// No message
+					} else {
+						if (this.preferences.enable_alreadyreblogged.value) {
+							this.add_to_alreadyreblogged(root_id);
+						}
+						if (this.preferences.enable_alreadyreblogged.value || this.preferences.dim_posts_after_reblog.value) {
+							if (quick_queue_mode !== true) {
+								this.make_button_reblogged(m_button);
+							} else {
+								XKit.interface.switch_control_button($(m_button), false);
+								XKit.interface.completed_control_button($(m_button), true);
 							}
 						}
-					} else {
-						throw response;
+						if (!this.preferences.dont_show_notifications.value) {
+							if (this.preferences.use_toasts.value) {
+								XKit.toast.add(
+									responseData.created_post,
+									responseData.verbiage,
+									responseData.post_tumblelog.name_or_id,
+									responseData.post.id,
+									responseData.post_context_page
+								);
+							} else {
+								XKit.notifications.add(responseData.message, "ok");
+							}
+						}
 					}
 				})
 				.catch(error => {
