@@ -40,7 +40,7 @@ XKit.extensions.soft_refresh = new Object({
 		XKit.tools.init_css("soft_refresh");
 
 		const where = XKit.interface.where();
-		const paginated = where.endless === false && location.pathname !== "/dashboard";
+		const paginated = location.pathname !== "/dashboard";
 		if (where.dashboard === false || paginated === true) {
 			return;
 		}
@@ -87,16 +87,15 @@ XKit.extensions.soft_refresh = new Object({
 		this.request("");
 	},
 
-	request: function(page) {
-		fetch(`https://www.tumblr.com/dashboard${page}`)
-		.then(response => {
+	request: function(after_post_id) {
+		fetch(`https://www.tumblr.com/dashboard/2/${after_post_id}`).then(response => {
 			if (!response.ok) {
 				this.show_error();
 				return;
 			}
 
 			response.text().then(responseText => {
-				if (page === "") {
+				if (after_post_id === "") {
 					$("#new_post_notice_container .tab_notice_value").html("0");
 					document.title = this.default_page_title;
 					$("#new_post_notice_container")
@@ -126,7 +125,7 @@ XKit.extensions.soft_refresh = new Object({
 					});
 
 				if (!end) {
-					this.request(`/2/${this.post_ids[0]}`);
+					this.request(this.post_ids[0]);
 				} else {
 					if (this.post_ids.length === 0) {
 						if (this.preferences.show_notifications.value) {
