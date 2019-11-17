@@ -39,8 +39,9 @@ XKit.extensions.soft_refresh = new Object({
 		this.running = true;
 		XKit.tools.init_css("soft_refresh");
 
-		if (location.pathname !== "/dashboard") {
-			return; // Don't run outside of dashboard or on secondary dashboard pages
+		const where = XKit.interface.where();
+		if (where.dashboard === false || where.endless === false) {
+			return;
 		}
 
 		if (this.preferences.use_logo.value) {
@@ -71,7 +72,7 @@ XKit.extensions.soft_refresh = new Object({
 		if (this.loading) { return; }
 		this.loading = true;
 
-		$("html, body").animate({ scrollTop: 0 }, "slow");
+		$("html, body").animate({scrollTop:0}, "slow");
 
 		$("#new_post").after('<div id="xkit_soft_refresh">Checking for new posts</div>');
 		$("#xkit_soft_refresh").slideDown("fast");
@@ -87,75 +88,65 @@ XKit.extensions.soft_refresh = new Object({
 
 	request: function(page) {
 		fetch(`https://www.tumblr.com/dashboard${page}`)
-			.then(response => {
-				if (!response.ok) {
-					this.show_error();
-					return;
+		.then(response => {
+			if (!response.ok) {
+				this.show_error();
+				return;
+			}
+
+			response.text().then(responseText => {
+				if (page === "") {
+					$("#new_post_notice_container .tab_notice_value").html("0");
+					document.title = this.default_page_title;
+					$("#new_post_notice_container")
+						.removeClass("tab-notice--active")
+						.removeAttr("style");
+					$("#posts > li.notification:not(.post_container:not(#new_post_buttons) ~ .notification)").remove();
 				}
 
 				let end = false;
 
-				response.text().then(responseText => {
-					if (page === "") {
-						$("#new_post_notice_container .tab_notice_value").html("0");
-						document.title = this.default_page_title;
-						$("#new_post_notice_container")
-							.removeClass("tab-notice--active")
-							.removeAttr("style");
-						// Remove every notification between the new post buttons and the first existing post
-						$("#posts > li.notification:not(.post_container:not(#new_post_buttons) ~ .notification)").remove();
-					}
+				$("#posts > li", responseText)
+					.not("#new_post_buttons")
+					.not(".standalone-ad-container")
+					.not(":has([data-sponsored], [data-is_recommended])")
+					.each(function() {
+						const $this = $(this);
 
-					$("#posts > li", responseText)
-						.not("#new_post_buttons")
-						.not(".standalone-ad-container")
-						.each(function() {
-							const $this = $(this);
-							let exists = false;
-
-							if ($this.find("[data-sponsored], [data-is_recommended]").length) {
-								return;
-							}
-
-							if ($this.attr("data-pageable") !== undefined) {
-								exists = !!$("[data-pageable=" + $this.attr("data-pageable") + "]").length;
-								if (!exists) {
-									XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
-								}
-							}
-
-							if (!exists) {
-								XKit.extensions.soft_refresh.top_post.before($this);
-							} else {
+						if ($this.attr("data-pageable") !== undefined) {
+							if ($(`[data-pageable="${$this.attr("data-pageable")}"]`).length) {
 								end = true;
 								return false;
 							}
-						});
-
-					if (!end) {
-						this.request(`/2/${this.post_ids[0]}`);
-					} else {
-						if (this.post_ids.length === 0) {
-							if (this.preferences.show_notifications.value) {
-								XKit.notifications.add("No new posts found.", "info");
-							}
-						} else {
-							XKit.tools.add_function(this.hit_triggers, true);
-							if (this.preferences.show_notifications.value) {
-								XKit.notifications.add(`Added ${this.post_ids.length} new ${(this.post_ids.length === 1 ? "post" : "posts")}.`, "ok");
-							}
+							XKit.extensions.soft_refresh.post_ids.unshift($this.attr("data-pageable").replace("post_", ""));
 						}
 
-						$("#xkit_soft_refresh").slideUp("fast", function() { $(this).remove(); });
-						this.post_ids = [];
-						this.loading = false;
+						XKit.extensions.soft_refresh.top_post.before($this);
+					});
+
+				if (!end) {
+					this.request(`/2/${this.post_ids[0]}`);
+				} else {
+					if (this.post_ids.length === 0) {
+						if (this.preferences.show_notifications.value) {
+							XKit.notifications.add("No new posts found.", "info");
+						}
+					} else {
+						XKit.tools.add_function(this.trigger_tumblr_events, true);
+						if (this.preferences.show_notifications.value) {
+							XKit.notifications.add(`Added ${this.post_ids.length} new ${(this.post_ids.length === 1 ? "post" : "posts")}.`, "ok");
+						}
 					}
-				});
-			})
-			.catch(() => this.show_error());
+
+					$("#xkit_soft_refresh").slideUp("fast", function() { $(this).remove(); });
+					this.post_ids = [];
+					this.loading = false;
+				}
+			});
+		}).catch(() => this.show_error());
 	},
 
-	hit_triggers: function() {
+	trigger_tumblr_events: function() {
 		Tumblr.Events.trigger("posts:load");
 		Tumblr.Events.trigger("DOMEventor:updateRect");
 	},
