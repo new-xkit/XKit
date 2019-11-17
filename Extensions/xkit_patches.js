@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.7 **//
+//* VERSION 7.2.8 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -268,69 +268,45 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.svc = {
 				blog: {
-					followed_by: data => new Promise((resolve, reject) => {
-						XKit.tools.Nx_XHR({
-							method: "GET",
-							url: "https://www.tumblr.com/svc/blog/followed_by?" + $.param(data),
-							onload: resolve,
-							onerror: reject
-						});
+					followed_by: data => XKit.tools.Nx_XHR({
+						method: "GET",
+						url: "https://www.tumblr.com/svc/blog/followed_by?" + $.param(data)
 					})
 				},
 
 				conversations: {
-					participant_info: data => new Promise((resolve, reject) => {
-						XKit.tools.Nx_XHR({
-							method: "GET",
-							url: "https://www.tumblr.com/svc/conversations/participant_info?" + $.param(data),
-							onload: resolve,
-							onerror: reject
-						});
+					participant_info: data => XKit.tools.Nx_XHR({
+						method: "GET",
+						url: "https://www.tumblr.com/svc/conversations/participant_info?" + $.param(data)
 					})
 				},
 
-				indash_blog: data => new Promise((resolve, reject) => {
-					XKit.tools.Nx_XHR({
-						method: "GET",
-						url: "https://www.tumblr.com/svc/indash_blog?" + $.param(data),
-						onload: resolve,
-						onerror: reject
-					});
+				indash_blog: data => XKit.tools.Nx_XHR({
+					method: "GET",
+					url: "https://www.tumblr.com/svc/indash_blog?" + $.param(data)
 				}),
 
 				post: {
-					fetch: data => new Promise((resolve, reject) => {
-						XKit.tools.Nx_XHR({
-							method: "GET",
-							url: "https://www.tumblr.com/svc/post/fetch?" + $.param(data),
-							onload: resolve,
-							onerror: reject
-						});
+					fetch: data => XKit.tools.Nx_XHR({
+						method: "GET",
+						url: "https://www.tumblr.com/svc/post/fetch?" + $.param(data)
 					}),
-					update: (data, kitty) => new Promise((resolve, reject) => {
-						XKit.tools.Nx_XHR({
-							method: "POST",
-							url: "https://www.tumblr.com/svc/post/update",
-							headers: {
-								"X-Tumblr-Puppies": kitty
-							},
-							json: true,
-							data: JSON.stringify(data),
-							onload: resolve,
-							onerror: reject
-						});
+					update: (data, kitty) => XKit.tools.Nx_XHR({
+						method: "POST",
+						url: "https://www.tumblr.com/svc/post/update",
+						headers: {
+							"X-Tumblr-Puppies": kitty
+						},
+						json: true,
+						data: JSON.stringify(data)
 					}),
-					delete: data => new Promise((resolve, reject) => {
-						XKit.tools.Nx_XHR({
-							method: "POST",
-							url: "https://www.tumblr.com/svc/post/delete",
-							headers: {
-								"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-							},
-							data: $.param(data),
-							onload: resolve,
-							onerror: reject
-						});
+					delete: data => XKit.tools.Nx_XHR({
+						method: "POST",
+						url: "https://www.tumblr.com/svc/post/delete",
+						headers: {
+							"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+						},
+						data: $.param(data)
 					})
 				}
 			};
@@ -384,8 +360,11 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 
-			XKit.tools.Nx_XHR = function(details) {
+			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
+
+				if (details.onload) { resolve = details.onload; }
+				if (details.onerror) { reject = details.onerror; }
 
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
@@ -403,7 +382,7 @@ XKit.extensions.xkit_patches = new Object({
 					}
 				}
 
-				XKit.tools.add_function(function() {
+				function send() {
 					var request = add_tag;
 					var xhr = new XMLHttpRequest();
 					xhr.open(request.method, request.url, request.async || true);
@@ -442,11 +421,11 @@ XKit.extensions.xkit_patches = new Object({
 					} else {
 						xhr.send();
 					}
-				}, true, details);
+				}
 
-				function handler(e) {
+				function receive(e) {
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
-						window.removeEventListener("message", handler);
+						window.removeEventListener("message", receive);
 						let {success, response} = JSON.parse(JSON.stringify(e.data));
 
 						if (typeof response.headers["x-tumblr-kittens"] !== "undefined") {
@@ -456,15 +435,17 @@ XKit.extensions.xkit_patches = new Object({
 						response.json = () => JSON.parse(response.responseText);
 
 						if (success && response.status >= 200 && response.status < 300) {
-							details.onload(response);
+							resolve(response);
 						} else {
-							details.onerror(response);
+							reject(response);
 						}
 					}
 				}
 
-				window.addEventListener("message", handler);
-			};
+				window.addEventListener("message", receive);
+				XKit.tools.add_function(send, true, details);
+
+			});
 
 			/**
 			 * Get the posts on the screen without the given tag
