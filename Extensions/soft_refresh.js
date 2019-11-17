@@ -89,7 +89,7 @@ XKit.extensions.soft_refresh = new Object({
 		fetch(`https://www.tumblr.com/dashboard${page}`)
 			.then(response => {
 				if (!response.ok) {
-					this.show_error(response);
+					this.show_error();
 					return;
 				}
 
