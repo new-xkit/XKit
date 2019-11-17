@@ -95,7 +95,7 @@ XKit.extensions.soft_refresh = new Object({
 			}
 
 			response.text().then(responseText => {
-				if (after_post_id === "") {
+				if (!after_post_id) {
 					$("#new_post_notice_container .tab_notice_value").html("0");
 					document.title = this.default_page_title;
 					$("#new_post_notice_container")
