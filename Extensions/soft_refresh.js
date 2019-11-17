@@ -84,11 +84,11 @@ XKit.extensions.soft_refresh = new Object({
 		});
 
 		this.top_post = $("#posts > li.post_container:not(#new_post_buttons)").first();
-		this.request("");
+		this.request();
 	},
 
 	request: function(after_post_id) {
-		fetch(`https://www.tumblr.com/dashboard/2/${after_post_id}`).then(response => {
+		fetch("https://www.tumblr.com/dashboard" + (after_post_id ? `/2/${after_post_id}` : "")).then(response => {
 			if (!response.ok) {
 				this.show_error();
 				return;
