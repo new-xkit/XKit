@@ -73,7 +73,7 @@ XKit.extensions.soft_refresh = new Object({
 		if (this.loading) { return; }
 		this.loading = true;
 
-		$("html, body").animate({scrollTop:0}, "slow");
+		$("html, body").animate({scrollTop: 0}, "slow");
 
 		$("#new_post").after('<div id="xkit_soft_refresh">Checking for new posts</div>');
 		$("#xkit_soft_refresh").slideDown("fast");
