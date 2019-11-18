@@ -1322,6 +1322,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 						xhr.setRequestHeader(header, add_tag.headers[header]);
 					}
 
+					xhr.setRequestHeader('X-XKit-Version', XKit.version);
+
 					function callback(result) {
 						var bare_headers = xhr.getAllResponseHeaders().split("\r\n");
 						var cur_headers = {}, splitter;
@@ -3145,6 +3147,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 					url: "https://www.tumblr.com/svc/blog/followed_by",
 					data: "tumblelog=" + blog + "&query=" + username,
 					dataType: "json",
+					headers: {
+						"X-XKit-Version": XKit.version,
+					},
 				}).then(function(msg) {
 					return msg.response.is_friend == 1;
 				});

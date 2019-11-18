@@ -114,7 +114,10 @@ XKit.extensions.tagviewer = new Object({
 
 		$.ajax({
 			url: m_url,
-			dataType: "json"
+			dataType: "json",
+			headers: {
+				"X-XKit-Version": XKit.version,
+			},
 		}).fail(function() {
 
 			XKit.window.close();

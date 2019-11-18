@@ -601,7 +601,10 @@ XKit.extensions.view_on_dash = new Object({
 			success: function(data) {
 				tumblelog_key = data.response.posts[0].tumblelog_key;
 			},
-			datatype: "json"
+			datatype: "json",
+			headers: {
+				"X-XKit-Version": XKit.version,
+			},
 		});
 
 		//$("#view-on-dash-background,#view-on-dash-content").remove();
