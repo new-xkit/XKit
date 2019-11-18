@@ -389,7 +389,8 @@ XKit.extensions.xkit_patches = new Object({
 
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
-					"X-Tumblr-Form-Key": XKit.interface.form_key()
+					"X-Tumblr-Form-Key": XKit.interface.form_key(),
+					"X-XKit-Version": XKit.version
 				};
 
 				if (details.headers === undefined) {
