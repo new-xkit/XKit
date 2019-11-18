@@ -265,6 +265,8 @@ function GM_xmlhttpRequest(settings) {
 				}
 			}
 
+			request.setRequestHeader('X-XKit-Version', XKit.version);
+
 			if (settings.method === "POST") {
 				if (settings.json === true) {
 					request.setRequestHeader('Content-Type', "application/json");
