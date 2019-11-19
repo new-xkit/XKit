@@ -214,14 +214,6 @@ if (!String.prototype.startsWith) {
 				delete toSend.settings.onload;
 				delete toSend.settings.onerror;
 
-				if (typeof toSend.settings.headers !== "undefined") {
-					toSend.settings.headers["X-XKit-Version"] = XKit.version;
-				} else {
-					toSend.settings.headers = {
-						"X-XKit-Version": XKit.version,
-					};
-				}
-
 				toSend.settings.headers = JSON.stringify(toSend.settings.headers);
 
 				XBridge.dispatchMessage("http_request", toSend);
