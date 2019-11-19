@@ -213,6 +213,7 @@ if (!String.prototype.startsWith) {
 				// Safari does not like us passing functions.
 				delete toSend.settings.onload;
 				delete toSend.settings.onerror;
+
 				toSend.settings.headers = JSON.stringify(toSend.settings.headers);
 
 				XBridge.dispatchMessage("http_request", toSend);

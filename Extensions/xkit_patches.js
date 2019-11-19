@@ -166,6 +166,13 @@ XKit.extensions.xkit_patches = new Object({
 	patches: {
 		"7.9.0": function() {
 
+			GM_xmlhttpRequest = _.wrap(GM_xmlhttpRequest,
+				(original, settings) => original(_.merge({}, settings, {
+					headers: {
+						"X-XKit-Version": XKit.version,
+					}
+				})));
+
 			// Override "Search Page Brick Post Fix" from xkit.css
 			XKit.tools.add_css(
 				`.post_brick .post_controls .post_controls_inner {
@@ -368,7 +375,8 @@ XKit.extensions.xkit_patches = new Object({
 
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
-					"X-Tumblr-Form-Key": XKit.interface.form_key()
+					"X-Tumblr-Form-Key": XKit.interface.form_key(),
+					"X-XKit-Version": XKit.version
 				};
 
 				if (details.headers === undefined) {

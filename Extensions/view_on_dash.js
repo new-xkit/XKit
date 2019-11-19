@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.8.0 **//
+//* VERSION 0.8.1 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
 //* DETAILS A shortcut to viewing any blog on your dashboard! Uses the blog sidebar (Peepr) by default, but can be configured differently. **//
@@ -601,7 +601,10 @@ XKit.extensions.view_on_dash = new Object({
 			success: function(data) {
 				tumblelog_key = data.response.posts[0].tumblelog_key;
 			},
-			datatype: "json"
+			datatype: "json",
+			headers: {
+				"X-XKit-Version": XKit.version,
+			},
 		});
 
 		//$("#view-on-dash-background,#view-on-dash-content").remove();
