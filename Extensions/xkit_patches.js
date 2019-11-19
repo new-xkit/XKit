@@ -166,11 +166,12 @@ XKit.extensions.xkit_patches = new Object({
 	patches: {
 		"7.9.0": function() {
 
-			window.GM_xmlhttpRequest = _.wrap(window.GM_xmlhttpRequest, (original, settings) =>
-				original({...settings, headers: {
-					"X-XKit-Version": XKit.version,
-					...(settings.headers || {})
-				}}));
+			window.GM_xmlhttpRequest = _.wrap(window.GM_xmlhttpRequest,
+				(original, settings) => original(_.merge({}, settings, {
+					headers: {
+						"X-XKit-Version": XKit.version,
+					}
+			})));
 
 			// Override "Search Page Brick Post Fix" from xkit.css
 			XKit.tools.add_css(
