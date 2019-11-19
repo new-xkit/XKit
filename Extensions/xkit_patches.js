@@ -171,7 +171,7 @@ XKit.extensions.xkit_patches = new Object({
 					headers: {
 						"X-XKit-Version": XKit.version,
 					}
-			})));
+				})));
 
 			// Override "Search Page Brick Post Fix" from xkit.css
 			XKit.tools.add_css(
