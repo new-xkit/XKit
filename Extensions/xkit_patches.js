@@ -166,7 +166,7 @@ XKit.extensions.xkit_patches = new Object({
 	patches: {
 		"7.9.0": function() {
 
-			window.GM_xmlhttpRequest = _.wrap(window.GM_xmlhttpRequest,
+			GM_xmlhttpRequest = _.wrap(GM_xmlhttpRequest,
 				(original, settings) => original(_.merge({}, settings, {
 					headers: {
 						"X-XKit-Version": XKit.version,
