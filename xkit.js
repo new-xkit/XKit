@@ -96,6 +96,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 					return;
 				}
 
+				// Before we run main--if patches is a broken version,
+				// we need to force an update.
+				if (XKit.installed.version('xkit_patches') === '7.2.8') {
+					XKit.special.force_update();
+				}
+
 				// It exists! Great.
 				var xkit_main = XKit.installed.get("xkit_main");
 				if (!xkit_main.errors && xkit_main.script) {
@@ -1321,8 +1327,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 					for (var header in add_tag.headers) {
 						xhr.setRequestHeader(header, add_tag.headers[header]);
 					}
-
-					xhr.setRequestHeader('X-XKit-Version', XKit.version);
 
 					function callback(result) {
 						var bare_headers = xhr.getAllResponseHeaders().split("\r\n");
@@ -3147,9 +3151,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 					url: "https://www.tumblr.com/svc/blog/followed_by",
 					data: "tumblelog=" + blog + "&query=" + username,
 					dataType: "json",
-					headers: {
-						"X-XKit-Version": XKit.version,
-					},
 				}).then(function(msg) {
 					return msg.response.is_friend == 1;
 				});
