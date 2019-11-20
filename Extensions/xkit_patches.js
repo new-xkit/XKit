@@ -363,9 +363,6 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
 
-				if (details.onload) { resolve = details.onload; }
-				if (details.onerror) { reject = details.onerror; }
-
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
 					"X-Tumblr-Form-Key": XKit.interface.form_key(),
@@ -436,8 +433,10 @@ XKit.extensions.xkit_patches = new Object({
 						response.json = () => JSON.parse(response.responseText);
 
 						if (success && response.status >= 200 && response.status < 300) {
+							if (details.onload) { response = details.onload(response); }
 							resolve(response);
 						} else {
+							if (details.onerror) { response = details.onerror(response); }
 							reject(response);
 						}
 					}
