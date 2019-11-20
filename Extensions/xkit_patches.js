@@ -161,10 +161,10 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.8.1", "7.8.2", "7.9.0"],
+	run_order: ["7.8.1", "7.8.2", "7.9.1"],
 
 	patches: {
-		"7.9.0": function() {
+		"7.9.1": function() {
 
 			// Override "Search Page Brick Post Fix" from xkit.css
 			XKit.tools.add_css(

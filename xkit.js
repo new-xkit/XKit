@@ -96,6 +96,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 					return;
 				}
 
+				// Before we run main--if patches is a broken version,
+				// we need to force an update.
+				if (XKit.installed.version('xkit_patches') === '7.2.8') {
+					XKit.special.force_update();
+				}
+
 				// It exists! Great.
 				var xkit_main = XKit.installed.get("xkit_main");
 				if (!xkit_main.errors && xkit_main.script) {
