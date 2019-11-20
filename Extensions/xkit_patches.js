@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.10 **//
+//* VERSION 7.2.11 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -319,17 +319,10 @@ XKit.extensions.xkit_patches = new Object({
 			 * @return {Promise<Boolean>}
 			 */
 			XKit.interface.is_following = function(username, blog) {
-				return XKit.svc.conversations.participant_info({
-					"q": username,
-					"participant": blog
-				})
-				.then(response => response.json().response.is_blog_following_you)
-				.catch(() =>
-					XKit.svc.blog.followed_by({
-						"query": username,
-						"tumblelog": blog
-					})
-					.then(response => response.json().response.is_friend));
+				return XKit.svc.blog.followed_by({
+					"query": username,
+					"tumblelog": blog
+				}).then(response => response.json().response.is_friend);
 			};
 
 			XKit.blog_listener = {
