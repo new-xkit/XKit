@@ -161,7 +161,7 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.8.1", "7.8.2", "7.9.1"],
+	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1"],
 
 	patches: {
 		"7.9.1": function() {
@@ -512,6 +512,9 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.interface.post_window.reblogging_from =
 				() => $(".post-form--header .reblog_source .reblog_name").text();
 		},
+
+		"7.9.0": function() {},
+
 		"7.8.2": function() {
 			XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
 
