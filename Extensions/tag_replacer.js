@@ -166,19 +166,12 @@ XKit.extensions.tag_replacer = new Object({
 
 				this.fetch_posts(++page);
 			},
-			onerror: response => {
-				XKit.window.show(
-					"Can't fetch posts.",
+			onerror: () => this.show_error(
+				"Can't fetch posts",
 
-					"Tag Replacer could not fetch a list of tagged posts. This is usually due to your blog being private.<br>" +
-					"Please check your blog settings and try again.",
-
-					"error",
-
-					'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-					'<a href="https://new-xkit-support.tumblr.com/" target="_blank" class="xkit-button">New XKit support</a>'
-				);
-			}
+				"Tag Replacer could not fetch a list of tagged posts. This is usually due to your blog being private.<br>" +
+				"Please check your blog settings and try again."
+			)
 		});
 	},
 
