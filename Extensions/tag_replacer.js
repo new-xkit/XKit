@@ -182,9 +182,9 @@ XKit.extensions.tag_replacer = new Object({
 			XKit.window.show(
 				"Nothing for me to do.",
 
-				"Tag Replacer could not find any posts containing the tag you were searching for.",
+				`Tag Replacer could not find any posts tagged <br><b>#${this.replace}</b>.`,
 
-				"error",
+				"info",
 
 				'<div id="xkit-close-message" class="xkit-button default">OK</div>'
 			);
@@ -194,9 +194,9 @@ XKit.extensions.tag_replacer = new Object({
 		XKit.window.show(
 			"Working...",
 
-			"Tag Replacer is replacing tags." +
-			XKit.progress.add("tag-replacer-progress") +
-			"This might take a long, long, long time.",
+			`Tag Replacer is ${this.append_mode ? "appending" : "replacing"} tags.
+			${XKit.progress.add("tag-replacer-progress")}
+			This might take a long, long, long time.`,
 
 			"info"
 		);
