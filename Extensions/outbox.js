@@ -236,7 +236,6 @@ XKit.extensions.outbox = new Object({
 		var m_to = $(m_parent).attr('data-tumblelog-name');
 
 		var post_id = $(m_parent).attr('data-post-id');
-		XKit.extensions.outbox.poke_tinymce(post_id);
 
 		if (m_message.indexOf("<div id=\"ask_answer_") !== -1) {
 
@@ -287,21 +286,6 @@ XKit.extensions.outbox = new Object({
 
 		}, 1);
 
-	},
-
-	poke_tinymce: function(post_id) {
-		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
-						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
-				 " } ";
-
-		if ('function' == typeof source) {
-			source = '(' + source + ')();';
-		}
-
-		var script = document.createElement('script');
-		script.setAttribute("type", "application/javascript");
-		script.textContent = source;
-		document.body.appendChild(script);
 	},
 
 	start: function() {
