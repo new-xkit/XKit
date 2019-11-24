@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.14 **//
+//* VERSION 1.9.15 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -810,7 +810,6 @@ XKit.extensions.xinbox = new Object({
 						m_state = "0";
 					}
 
-					XKit.extensions.xinbox.poke_tinymce(post_id);
 					setTimeout(function() {
 						XKit.extensions.xinbox.publish_ask(this_obj, post_id, m_tags, m_state);
 					}, 200);
@@ -847,8 +846,6 @@ XKit.extensions.xinbox = new Object({
 	},
 
 	publish_ask: function(post_div, post_id, tags, state) {
-
-		XKit.extensions.xinbox.poke_tinymce(post_id);
 
 		var answer = $('#ask_answer_field_' + post_id).val();
 
@@ -984,21 +981,6 @@ XKit.extensions.xinbox = new Object({
 
 		XKit.window.show("Can't publish ask", "Something went wrong and prevented XKit from publishing this ask. You might want to disable XInbox (or at least the tagging options of XInbox) if this is related to a recent Tumblr change.<br/><p>" + msg + "</p>Try refreshing the page and trying again, or disable XInbox extension and file a bug report.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
-	},
-
-	poke_tinymce: function(post_id) {
-		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
-						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
-						" } ";
-
-		if ('function' == typeof source) {
-			source = '(' + source + ')();';
-		}
-
-		var script = document.createElement('script');
-		script.setAttribute("type", "application/javascript");
-		script.textContent = source;
-		document.body.appendChild(script);
 	},
 
 	destroy: function() {
