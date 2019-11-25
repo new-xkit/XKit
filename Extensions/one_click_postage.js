@@ -610,13 +610,10 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.extensions.one_click_postage.default_blog_id = m_blogs[0];
 
 		if (this.preferences.show_blog_selector.value) {
-			let m_blogselector_html = '<select id="x1cpostage_blog">';
-
-			for (let blog of m_blogs) {
-				m_blogselector_html += `<option value="${blog}">${blog}</option>`;
-			}
-
-			m_blogselector_html += '</select>';
+			const m_blogselector_html = `
+				<select id="x1cpostage_blog">
+					${m_blogs.map(blog => `<option value="${blog}">${blog}</option>`)}
+				</select>`;
 
 			if (this.preferences.show_reverse_ui.value) {
 				$("#x1cpostage_reblog").before(m_blogselector_html);
