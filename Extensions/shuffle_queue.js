@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.2.0 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -160,152 +160,112 @@ XKit.extensions.shuffle_queue = new Object({
 	},
 
 	posts_to_delete: [],
-	delete_page: 0,
 	posts_to_delete_count: 0,
 
 	clear: function() {
 
-		XKit.window.show("Clear Queue?", "Delete all the posts in your queue?", "question", "<div class=\"xkit-button default\" id=\"xkit-clear-queue-confirm\">Yes</div>	<div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show(
+			"Clear Queue?",
+			"Delete all the posts in your queue?",
 
-		$("#xkit-clear-queue-confirm").click(function() {
+			"question",
 
-			XKit.extensions.shuffle_queue.posts_to_delete = [];
-			XKit.extensions.shuffle_queue.delete_page = 0;
+			'<div class="xkit-button default" id="xkit-clear-queue-confirm">Yes</div>' +
+			'<div class="xkit-button" id="xkit-close-message">Cancel</div>'
+		);
 
-			XKit.window.show("Please wait...", "<span id=\"xkit-shuffle-queue-progress\">Please wait, gathering posts to delete...</span>" + XKit.progress.add("shuffle-queue-delete"), "info");
+		$("#xkit-clear-queue-confirm").click(() => {
 
-			XKit.extensions.shuffle_queue.clear_collect_next();
+			XKit.window.show(
+				"Please wait...",
 
+				'<span id="xkit-shuffle-queue-progress">Please wait, gathering posts to delete...</span>' +
+				XKit.progress.add("shuffle-queue-delete"),
+
+				"info"
+			);
+
+			this.posts_to_delete = [];
+			this.posts_to_delete_count = 0;
+			this.clear_collect_next();
 		});
 
 	},
 
-	clear_collect_next: function() {
+	clear_collect_next: function(page = 1) {
+		const username = XKit.interface.where().user_url;
 
-		XKit.extensions.shuffle_queue.delete_page++;
-
-
-		var m_url = XKit.interface.where().user_url;
-
-
-		GM_xmlhttpRequest({
+		XKit.tools.Nx_XHR({
 			method: "GET",
-			url: "http://www.tumblr.com/blog/" + m_url + "/queue?page=" + XKit.extensions.shuffle_queue.delete_page + "&xfetchid=" + XKit.tools.random_string() + XKit.tools.random_string(),
-			json: false,
-			headers: {
-				"X-Requested-With": "XMLHttpRequest"
-			},
-			onerror: function(response) {
-				XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-200)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			},
-			onload: function(response) {
-
-				if ($(".no_posts_found", response.responseText).length > 0) {
-
-					XKit.extensions.shuffle_queue.posts_to_delete_count = XKit.extensions.shuffle_queue.posts_to_delete.length;
-					XKit.extensions.shuffle_queue.clear_delete_next(); return;
-
-				}
-
-				var start_deleting = false;
-
-				$(".post", response.responseText).each(function() {
-
-					if (XKit.extensions.shuffle_queue.posts_to_delete.indexOf(parseInt($(this).attr('data-post-id'))) === -1) {
-
-						XKit.extensions.shuffle_queue.posts_to_delete.push(parseInt($(this).attr('data-post-id')));
-
-					} else {
-
-						start_deleting = true;
-						return false;
-
-					}
-
-				});
-
-				$("#xkit-shuffle-queue-progress").html("Please wait, gathering posts to delete... (" + XKit.extensions.shuffle_queue.posts_to_delete.length + " so far..)");
-
-				if (!start_deleting) {
-					XKit.extensions.shuffle_queue.clear_collect_next();
-				} else {
-					XKit.extensions.shuffle_queue.posts_to_delete_count = XKit.extensions.shuffle_queue.posts_to_delete.length;
-					XKit.extensions.shuffle_queue.clear_delete_next();
-				}
-
+			url: `https://www.tumblr.com/blog/${username}/queue?page=${page}`
+		}).then(response => {
+			if ($(".no_posts_found", response.responseText).length) {
+				$("#xkit-shuffle-queue-progress")
+					.text(`Mass-deleting ${this.posts_to_delete.length} posts...`);
+				this.posts_to_delete_count = this.posts_to_delete.length;
+				this.clear_delete_next();
+				return;
 			}
-		});
 
+			$("#posts .post", response.responseText).each((i, post) => {
+				const $post = $(post);
+				const post_id = parseInt($post.attr("data-post-id"));
+				this.posts_to_delete.push(post_id);
+			});
+
+			$("#xkit-shuffle-queue-progress")
+				.text(`Please wait, gathering posts to delete... (${this.posts_to_delete.length} so far..)`);
+
+			this.clear_collect_next(++page);
+		}).catch(response =>
+			this.clear_error("Couldn't gather posts to delete.", response.status)
+		);
 	},
 
 	clear_delete_next: function() {
-
-		if (XKit.extensions.shuffle_queue.posts_to_delete.length === 0) {
-
-			var sarcasm = "";
-
-			if (XKit.extensions.shuffle_queue.posts_to_delete_count === 0) {
-				sarcasm = "<br>But it's not like you had a lot of queued posts anyway.";
-			}
-
-			XKit.window.show("Cleared Queue.", "Queue+ deleted " + XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm, "info", "<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
-
-			$("#xkit-queue-refresh").click(function() {
-
-				location.reload();
-
-			});
-
+		if (this.posts_to_delete.length === 0) {
+			this.clear_done();
 			return;
-
 		}
 
-		var post_id = XKit.extensions.shuffle_queue.posts_to_delete.pop();
+		XKit.interface.mass_edit(this.posts_to_delete.splice(0, 100), {"mode": "delete"})
+		.then(() => {
+			const done = this.posts_to_delete_count - this.posts_to_delete.length;
+			const percent = Math.round((done * 100) / this.posts_to_delete_count);
+			XKit.progress.value("shuffle-queue-delete", percent);
 
-		var xin = XKit.extensions.shuffle_queue.posts_to_delete_count - XKit.extensions.shuffle_queue.posts_to_delete.length;
-
-		var perc = ( xin * 100) / XKit.extensions.shuffle_queue.posts_to_delete_count;
-
-		XKit.progress.value("shuffle-queue-delete", perc);
-
-		$("#xkit-shuffle-queue-progress").html("Deleting posts, please wait.. (post " + xin + " of " + XKit.extensions.shuffle_queue.posts_to_delete_count + ")");
-
-		var m_object = {};
-		m_object.post_id = post_id;
-		m_object.channel_id = XKit.interface.where().user_url;
-		var form_key = XKit.interface.form_key();
-
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/delete",
-			data: $.param(m_object),
-			headers: {
-				"X-Requested-With": "XMLHttpRequest",
-				"x-tumblr-form-key": form_key,
-			},
-			onerror: function(response) {
-				XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-150)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			},
-			onload: function(response) {
-
-				try {
-
-					var m_obj = JSON.parse(response.responseText);
-
-					if (m_obj.response.success === true) {
-						XKit.extensions.shuffle_queue.clear_delete_next();
-					} else {
-						XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-130)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					}
-
-				} catch (e) {
-					XKit.window.show("Unable to clear queue", "I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-100)", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-				}
-
-			}
-		});
-
+			this.clear_delete_next();
+		}).catch(response =>
+			this.clear_error("Couldn't mass-delete posts.", response.status)
+		);
 	},
+
+	clear_done: function() {
+		XKit.window.show(
+			"Done!",
+
+			`Queue+ deleted ${this.posts_to_delete_count} posts from your queue.`,
+
+			"info",
+
+			'<div id="xkit-queue-refresh" class="xkit-button default">Refresh</div>'
+		);
+
+		$("#xkit-queue-refresh").click(() => location.reload(true));
+	},
+
+	clear_error: (message, status) => XKit.window.show(
+			"Unable to clear queue.",
+
+			`${message}<br>
+			The server responded with HTTP ${status}.<br>
+			Please try again later, or file a bug report if this keeps occurring.`,
+
+			"error",
+
+			'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+			'<a href="https://new-xkit-support.tumblr.com/" target="_blank" class="xkit-button">New XKit support</a>'
+	),
 
 	destroy: function() {
 		XKit.tools.remove_css("shuffle_queue_mini_posts");
