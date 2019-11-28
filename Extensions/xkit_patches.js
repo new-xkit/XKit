@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.11 **//
+//* VERSION 7.2.12 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -165,6 +165,40 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
+
+			/**
+			 * Edit up to 100 posts at a time via Mass Post Editor
+			 * @param {Object[]} post_ids - array of post IDs to edit
+			 * @param {Object[]} config - settings object
+			 * @param {String} config.mode - "add", "remove", or "delete"
+			 * @param {Object[]} [config.tags] - array of tags to add or remove
+			 * @return {Promise}
+			 */
+			XKit.interface.mass_edit = function(post_ids, config) {
+			    const path = {
+			        "add": "add_tags_to_posts",
+			        "remove": "remove_tags_from_posts",
+			        "delete": "delete_posts"
+			    }[config.mode];
+
+			    let payload = {
+			        "post_ids": post_ids.join(","),
+			        "form_key": XKit.interface.form_key()
+			    };
+
+			    if (config.mode !== "delete") {
+			        payload.tags = config.tags.join(",");
+			    }
+
+			    return XKit.tools.Nx_XHR({
+			        method: "POST",
+			        url: `https://www.tumblr.com/${path}`,
+			        headers: {
+			            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+			        },
+			        data: $.param(payload)
+			    });
+			};
 
 			// Override "Search Page Brick Post Fix" from xkit.css
 			XKit.tools.add_css(
