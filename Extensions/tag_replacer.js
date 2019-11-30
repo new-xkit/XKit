@@ -30,14 +30,42 @@ XKit.extensions.tag_replacer = new Object({
 			}]
 		});
 
-		$("#tag_replacer_button").click(function() {
-			var m_url = $(".open_blog_link").attr('href').replace(/https?:\/\//gi, "");
-			if (m_url.substring(m_url.length - 1) === "/") { m_url = m_url.substring(0, m_url.length - 1); }
-			XKit.extensions.tag_replacer.show(m_url);
+		$("#tag_replacer_button").click(() => {
+			const url = XKit.interface.where().user_url;
+			const shown_warning = XKit.storage.get("tag_replacer", "shown_warning", "false");
 
-			return false;
+			if (shown_warning !== "true") {
+				this.warning(url);
+			} else {
+				this.show(url);
+			}
 		});
 
+	},
+
+	warning: function(url) {
+		XKit.window.show(
+			"Important Notice",
+
+			"Usage of Tag Replacer has reportedly caused some accounts to be temporarily terminated. " +
+			"We aren't sure exactly why this is or what we can do to fix it, but using special characters in your tags might be a factor.<br><br>" +
+			"<b>Please only use this tool if you understand that, in the event that your usage of it triggers Tumblr's spam detector, " +
+			"you will have to contact Tumblr support to restore your account.</b><br><br>" +
+			"We have provided a link below to Tumblr's support form for you to bookmark. " +
+			"(The link opens in a new tab.)<br><br>" +
+			"If you accept this risk, this warning will not be shown again.",
+
+			"warning",
+
+			'<div id="xkit-tag-replacer-accept-risk" class="xkit-button default">I understand</div>' +
+			'<div id="xkit-close-message" class="xkit-button">Cancel</div>' +
+			'<a href="https://www.tumblr.com/support" target="_blank" class="xkit-button">Tumblr support &rarr;</a>'
+		);
+
+		$("#xkit-tag-replacer-accept-risk").click(() => {
+			XKit.storage.set("tag_replacer", "shown_warning", "true");
+			this.show(url);
+		});
 	},
 
 	show: function(url) {
