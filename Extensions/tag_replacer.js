@@ -43,7 +43,7 @@ XKit.extensions.tag_replacer = new Object({
 	show: function(url) {
 
 		XKit.window.show(
-			"Tag Replacer",
+			'Tag Replacer',
 
 			'<b>Replace this tag:</b>' +
 			'<input type="text" maxlength="150" placeholder="Enter a tag (example: &quot;I like pandas&quot;)" class="xkit-textbox" id="xkit-tag-replacer-replace">' +
@@ -54,9 +54,9 @@ XKit.extensions.tag_replacer = new Object({
 			'<div class="xkit-checkbox" id="xkit-tag-replacer-append"><b>&nbsp;</b>Don\'t replace the tag but append the tag above</div>' +
 			'<div class="xkit-tag-replacer-separator">&nbsp;</div>' +
 			'<small>You can replace only one tag at a time.<br/>' +
-			"Due to technical reasons, you can't edit tags containing dashes or slashes.</small>",
+			'Due to technical reasons, you can\'t edit tags containing dashes or slashes.</small>',
 
-			"question",
+			'question',
 
 			'<div class="xkit-button default" id="xkit-tag-replacer-ok">Go!</div>' +
 			'<div class="xkit-button" id="xkit-close-message">Cancel</div>'
@@ -133,12 +133,12 @@ XKit.extensions.tag_replacer = new Object({
 		});
 
 		XKit.window.show(
-			"Working...",
+			'Working...',
 
-			"Tag Replacer is trying to find posts with the tag you've entered, please wait. This might take a while." +
+			'Tag Replacer is trying to find posts with the tag you\'ve entered, please wait. This might take a while.' +
 			'<div id="xkit-tag-replacer-loaded">Initializing...</div>',
 
-			"info"
+			'info'
 		);
 
 		this.fetch_posts();
@@ -180,11 +180,11 @@ XKit.extensions.tag_replacer = new Object({
 
 		if (this.post_count === 0) {
 			XKit.window.show(
-				"Nothing for me to do.",
+				'Nothing for me to do.',
 
 				`Tag Replacer could not find any posts tagged <br><b>#${this.replace}</b>.`,
 
-				"info",
+				'info',
 
 				'<div id="xkit-close-message" class="xkit-button default">OK</div>'
 			);
@@ -192,13 +192,13 @@ XKit.extensions.tag_replacer = new Object({
 		}
 
 		XKit.window.show(
-			"Working...",
+			'Working...',
 
 			`Tag Replacer is ${this.append_mode ? "appending" : "replacing"} tags.
 			${XKit.progress.add("tag-replacer-progress")}
 			This might take a long, long, long time.`,
 
-			"info"
+			'info'
 		);
 
 		this.replace_tag();
@@ -282,12 +282,12 @@ XKit.extensions.tag_replacer = new Object({
 		}
 
 		XKit.window.show(
-			"All done!",
+			'All done!',
 
 			`Tag Replacer successfully ${this.append_mode ? "appended" : "replaced"} tags on <b>${this.success_count}</b> posts.<br>
 			(Failed: ${this.fail_count})`,
 
-			"info",
+			'info',
 
 			'<div id="xkit-close-message" class="xkit-button default">Yay!</div>'
 		);
@@ -296,7 +296,7 @@ XKit.extensions.tag_replacer = new Object({
 	show_error: (title, message) => XKit.window.show(
 		title, message,
 
-		"error",
+		'error',
 
 		'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
 		'<a href="https://new-xkit-support.tumblr.com/" target="_blank" class="xkit-button">New XKit support</a>'
