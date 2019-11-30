@@ -164,7 +164,7 @@ XKit.extensions.tag_replacer = new Object({
 				data.response.posts.forEach(post => this.post_ids.push(post.id));
 				$("#xkit-tag-replacer-loaded").html(`Loaded ${this.post_ids.length} tagged posts...`);
 
-				this.fetch_posts(++page);
+				this.fetch_posts(page + 1);
 			},
 			onerror: () => this.show_error(
 				"Can't fetch posts",
