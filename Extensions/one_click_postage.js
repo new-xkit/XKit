@@ -612,7 +612,7 @@ XKit.extensions.one_click_postage = new Object({
 		if (this.preferences.show_blog_selector.value) {
 			const m_blogselector_html = `
 				<select id="x1cpostage_blog">
-					${m_blogs.map(blog => `<option value="${blog}">${blog}</option>`)}
+					${m_blogs.map(blog => `<option value="${blog}">${blog}</option>`).join("")}
 				</select>`;
 
 			if (this.preferences.show_reverse_ui.value) {
