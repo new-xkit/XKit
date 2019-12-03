@@ -216,7 +216,7 @@ XKit.extensions.shuffle_queue = new Object({
 			$("#xkit-shuffle-queue-progress")
 				.text(`Please wait, gathering posts to delete... (${this.posts_to_delete.length} so far..)`);
 
-			this.clear_collect_next(++page);
+			this.clear_collect_next(page + 1);
 		}).catch(response =>
 			this.clear_error("Couldn't gather posts to delete.", response.status)
 		);
