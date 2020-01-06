@@ -28,11 +28,9 @@ XKit.extensions.read_more_now = new Object({
 
 	find_links: function() {
 		$("a.tmblr-truncated-link:not(.xreadmore-done)")
+			.not("[contenteditable] a")
 			.addClass("xreadmore-done")
 			.each(function() {
-				if ($(this).parents("[contenteditable]").length) {
-					return;
-				}
 				XKit.extensions.read_more_now.add_button($(this));
 			});
 	},
