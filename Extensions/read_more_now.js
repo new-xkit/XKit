@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read &quot;Keep Reading&quot; posts without leaving your dash. Just click on the &quot;Read More Now!&quot; button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -30,6 +30,9 @@ XKit.extensions.read_more_now = new Object({
 		$("a.tmblr-truncated-link:not(.xreadmore-done)")
 			.addClass("xreadmore-done")
 			.each(function() {
+				if ($(this).parents("[contenteditable]").length) {
+					return;
+				}
 				XKit.extensions.read_more_now.add_button($(this));
 			});
 	},
