@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.5.4 **//
+//* VERSION 7.5.5 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1214,8 +1214,8 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="description">' + m_extension.description;
 
 		var xkit_developers = ["studioxenix", "new-xkit", "dlmarquis", "hobinjk", "thepsionic", "nightpool", "blackjackkent", "wolvan", "bvtsang", "0xazure", "aprilsylph"];
-		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1) {
-			m_html = m_html + '<div class="xkit-third-party-warning">third party extension</div>';
+		if (xkit_developers.includes(m_extension.developer.toLowerCase()) === false) {
+			m_html = m_html + '<div class="xkit-third-party">third party extension</div>';
 		}
 
 		if (m_extension.details !== "" && typeof m_extension.details !== "undefined") {
@@ -1275,16 +1275,25 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.extensions[extension_id].cpanel($("#xkit-extension-panel-settings"));
 		}
 
-		$(".xkit-third-party-warning").click(function() {
+		$(".xkit-third-party").click(function() {
 
-			XKit.window.show("Third Party Extension",
-				"This extension was not created by the New XKit Team. Since it is not developed by me, I can not make any guarantees about it, " +
-				"nor provide support for this extension, accept bug reports or feature requests." +
-				'<div style="border: 1px solid rgb(200,200,200); background: rgb(235,235,235); margin: 15px 0px; padding: 10px; ' +
-				'color: rgb(100,100,100); text-align: center; border-radius: 4px; box-shadow: inset 0px 1px 0px white, 0px 1px 2px rgba(0,0,0,0.22); ">' +
-				'This extension was developed by <a style="text-decoration: underline;" href="http://github.com/' + m_extension.developer + '">' +
-				m_extension.developer + "</a></div>Please contact the developer using the link provided below for questions, bug reports and feature requests.",
-				"warning", '<div id="xkit-close-message" class="xkit-button default">OK</div>');
+			XKit.window.show(
+				"Third Party Extension",
+
+				"This extension was created by a developer not part of the New XKit team." +
+				`<div class="xkit-third-party-credit">
+					This extension was developed by
+					<a href="https://github.com/${m_extension.developer}" target="_blank">
+						${m_extension.developer}
+					</a>
+				</div>` +
+				"All extensions contributed to the XKit Extension Gallery are reviewed and " +
+				"maintained by us. Feel free to send us bug reports or feature requests for them.",
+
+				"info",
+
+				'<div id="xkit-close-message" class="xkit-button default">OK</div>'
+			);
 
 		});
 
