@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER new-xkit **//
@@ -48,7 +48,7 @@ XKit.extensions.tag_replacer = new Object({
 			"Important Notice",
 
 			"Usage of Tag Replacer has reportedly caused some accounts to be temporarily terminated. " +
-			"We aren't sure exactly why this is or what we can do to fix it, but using special characters in your tags might be a factor.<br><br>" +
+			"We aren't sure exactly why this is or what we can do to fix it.<br><br>" +
 			"<b>Please only use this tool if you understand that, in the event that your usage of it triggers Tumblr's spam detector, " +
 			"you will have to contact Tumblr support to restore your account.</b><br><br>" +
 			"We have provided a link below to Tumblr's support form for you to bookmark. " +
@@ -289,7 +289,7 @@ XKit.extensions.tag_replacer = new Object({
 				}
 
 				this.update_progress();
-				this.replace_tag();
+				setTimeout(() => this.replace_tag(), 5000);
 			});
 		});
 	},
