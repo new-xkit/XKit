@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.6 **//
+//* VERSION 4.4.7 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -221,7 +221,7 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).removeClass("xkit-button-done");
 		$(obj).addClass("xkit-button-working");
 
-		var post_id = parseInt(XKit.iframe.single_post_id());
+		var post_id = XKit.iframe.single_post_id();
 		var form_key = XKit.iframe.form_key();
 		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[3];
 
@@ -295,7 +295,7 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.detached = true;
 
 		m_object.reblog = true;
-		m_object.reblog_id = parseInt(_m_object.reblog_id);
+		m_object.reblog_id = _m_object.reblog_id;
 		m_object.reblog_key = _m_object.reblog_key;
 
 		m_object.errors = false;
@@ -1140,7 +1140,7 @@ XKit.extensions.one_click_postage = new Object({
 		var root_id = post.root_id;
 		var m_object = {
 			channel_id: channel_id,
-			reblog_id: parseInt(post.id),
+			reblog_id: post.id,
 			reblog_key: reblog_key,
 			form_key: form_key,
 			post_type: post.type,
@@ -1232,7 +1232,7 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.detached = true;
 
 		m_object.reblog = true;
-		m_object.reblog_id = parseInt(post_id);
+		m_object.reblog_id = post_id;
 		m_object.reblog_key = reblog_key;
 
 		m_object.errors = false;
@@ -1348,7 +1348,7 @@ XKit.extensions.one_click_postage = new Object({
 					}
 
 					$(m_button).removeClass("xkit-one-click-reblog-working");
-					
+
 					if (responseData.message === "" || typeof responseData.message === "undefined") {
 						// No message
 					} else {
