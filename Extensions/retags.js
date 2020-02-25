@@ -200,14 +200,6 @@ XKit.extensions.retags = {
 		return XKit.extensions.retags.count_cached_posts() > XKit.extensions.retags.POST_CACHE_CLEAR_THRESHOLD || XKit.storage.quota('retags') < 100;
 	},
 
-	sortable_key: function(id) {
-		if (typeof(BigInt) !== 'undefined') {
-			return BigInt(id);
-		} else {
-			return id.padStart(20, '0');
-		}
-	},
-
 	clear_old_posts: function() {
 		// There's no API call to delete specific keys from the storage, so we'll
 		// clear all of them and then restore the ones we want to keep.
@@ -220,16 +212,17 @@ XKit.extensions.retags = {
 		Object.keys(cache).forEach(function(key) {
 			var id_match;
 			if ((id_match = key.match(/^post_([0-9]+)$/))) {
-				postIds.push(this.sortable_key(id_match[1]));
+				postIds.push(id_match[1]);
 			} else {
 				settingKeys.push(key);
 			}
 		});
 
-		postIds.sort();
+		postIds.map(id => id.padStart(20, '0')).sort();
 		postIds = postIds.slice(-this.POST_CACHE_CLEAR_PRESERVED);
 		postIds.forEach(function(id) {
-			settingKeys.push('post_' + id);
+			const idWithoutPadding = id.match(/^0*(\d+)/)[1];
+			settingKeys.push('post_' + idWithoutPadding);
 		});
 
 		// And finally write back to storage!
