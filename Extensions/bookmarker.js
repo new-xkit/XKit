@@ -66,13 +66,10 @@ XKit.extensions.bookmarker = new Object({
 
 		var str = document.location.href.toLowerCase().split("/");
 		if (str.length < 5) { return; }
-
 		if (str[3] !== "dashboard") { return; }
+		if (!str[5]) { return; }
 
-		var post_id = BigInt(str[5]);
-		if (isNaN(post_id) || post_id === 0) { return; }
-
-		post_id = post_id - BigInt(1);
+		var post_id = BigInt(str[5]) - BigInt(1);
 
 		if ($("#xkit_bookmark_" + post_id).length <= 0) { return; }
 
