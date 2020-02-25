@@ -69,7 +69,7 @@ XKit.extensions.bookmarker = new Object({
 
 		if (str[3] !== "dashboard") { return; }
 
-		var post_id = parseInt(str[5]);
+		var post_id = BigInt(str[5]);
 		if (isNaN(post_id) || post_id === 0) { return; }
 
 		post_id = post_id - 1;
@@ -212,7 +212,7 @@ XKit.extensions.bookmarker = new Object({
 
 			} else {
 				// Go to the post!
-				post_id = parseInt(post_id);
+				post_id = BigInt(post_id);
 				if (XKit.extensions.bookmarker.preferences.new_tab.value === true) {
 					window.open("/dashboard/100/" + (post_id + 1) + "/?bookmark=true");
 				} else {

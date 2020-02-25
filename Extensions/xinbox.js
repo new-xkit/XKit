@@ -683,9 +683,9 @@ XKit.extensions.xinbox = new Object({
 
 	resize_text_area: function(post_id) {
 
-		if ($("#ask_answer_field_" + (+post_id) + "_tbl").length > 0) {
+		if ($("#ask_answer_field_" + post_id + "_tbl").length > 0) {
 
-			$("#ask_answer_field_" + (+post_id) + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height", "220px");
+			$("#ask_answer_field_" + post_id + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height", "220px");
 
 		} else {
 

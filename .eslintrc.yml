@@ -42,6 +42,7 @@
       - before: true
         after: true
   globals:
+    BigInt: false,
     _: true
     XKit: true
     XBridge: true
