@@ -28,16 +28,15 @@
 
 			if (XKit.page.react === undefined) {
 				XKit.page.react = Boolean($("link[href*='/pop/']").length);
-				const waitUntilReactInitialized = () => {
-					if ($('[data-rh]').length === 0) {
-						this.run();
-					} else {
-						setTimeout(waitUntilReactInitialized, 100);
-					}
-				};
 				if (XKit.page.react) {
 					$("body").addClass('xkit--react');
-					return waitUntilReactInitialized();
+					const waitUntilReactLoaded = setInterval(() => {
+						if ($('[data-rh]').length === 0) {
+							clearInterval(waitUntilReactLoaded);
+							this.run();
+						}
+					}, 100);
+					return;
 				}
 			}
 

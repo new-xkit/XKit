@@ -1495,13 +1495,17 @@
 	justify-content: center;
 	margin: 0 16px;
 	position: relative;
+	opacity: .65;
 }
-.xkit--react .tab_anchor p {
-	margin: 0;
+
+.xkit--react #xkit_button.active {
+	opacity: 1;
 }
-.xkit--react .tab_anchor_text {
+
+.xkit--react #xkit_button button {
 	font-size: 0;
 }
+
 .xkit--react .xkit_notice_container {
 	display: none;
 }
