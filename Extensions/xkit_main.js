@@ -28,7 +28,6 @@
 
 			if (XKit.page.react === undefined) {
 				XKit.page.react = Boolean($("link[href*='/pop/']").length);
-				$("body").addClass('xkit--react');
 				const waitUntilReactInitialized = () => {
 					if ($('[data-rh]').length === 0) {
 						this.run();
@@ -37,6 +36,7 @@
 					}
 				};
 				if (XKit.page.react) {
+					$("body").addClass('xkit--react');
 					return waitUntilReactInitialized();
 				}
 			}
