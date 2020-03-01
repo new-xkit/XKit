@@ -61,6 +61,9 @@ XKit.extensions.xkit_preferences = new Object({
 
 		$("#account_button").before(m_html);
 		$("#account_button > button").attr("tabindex", "8");
+		$("header div div:has([aria-label='Account'])").before(m_html);
+		$(".xkit--react #xkit_button").attr('tabindex', '0');
+
 		$(".no-js").removeClass("no-js"); // possibly unnecessary // mobile stuff
 		$(".mobile-logo").html(mobile_html); // mobile stuff
 

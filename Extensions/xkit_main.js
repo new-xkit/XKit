@@ -25,6 +25,22 @@
 			if (XKit.extensions.xkit_main.running === true) {
 				return;
 			}
+
+			if (XKit.page.react === undefined) {
+				XKit.page.react = Boolean($("link[href*='/pop/']").length);
+				$("body").addClass('xkit--react');
+				const waitUntilReactInitialized = () => {
+					if ($('[data-rh]').length === 0) {
+						this.run();
+					} else {
+						setTimeout(waitUntilReactInitialized, 100);
+					}
+				};
+				if (XKit.page.react) {
+					return waitUntilReactInitialized();
+				}
+			}
+
 			this.running = true;
 
 			console.log("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
