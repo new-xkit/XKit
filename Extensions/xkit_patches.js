@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.12 **//
+//* VERSION 7.2.14 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
