@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.13 **//
+//* VERSION 7.2.12 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -165,43 +165,6 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
-
-			/**
-			 * Copies a function from the addon context into the page context. This
-			 * function will be serialized to a string, and then injected as a script tag
-			 * into the page.
-			 * @param {Function} func
-			 * @param {boolean} exec - Whether to execute the function immediately
-			 * @param {Object} addt - The desired contents of the global variable
-			 *                        `add_tag`. Only useful if `exec` is true
-			 */
-			XKit.tools.add_function = function(func, exec, addt) {
-				if (!XKit.tools.add_function_nonce) {
-					for (const script of document.querySelectorAll('script')) {
-						if (script.nonce) {
-							XKit.tools.add_function_nonce = script.nonce;
-							break;
-						}
-					}
-				}
-
-				try {
-					var script = document.createElement("script");
-					script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
-					script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
-					if (XKit.tools.add_function_nonce) {
-						script.setAttribute('nonce', XKit.tools.add_function_nonce);
-					}
-					document.body.appendChild(script);
-				} catch (e) {
-					XKit.window.show("Error",
-						"XKit failed to inject a script. Details:" +
-						"<p>" + e.message + "</p>",
-						"error",
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-					);
-				}
-			};
 
 			/**
 			 * Edit up to 100 posts at a time via Mass Post Editor
@@ -743,6 +706,45 @@ XKit.extensions.xkit_patches = new Object({
 			 * Cached nonce for use in script injection to overcome CSP
 			 */
 			XKit.tools.add_function_nonce = "";
+
+			/**
+			 * Copies a function from the addon context into the page context. This
+			 * function will be serialized to a string, and then injected as a script tag
+			 * into the page.
+			 * @param {Function} func
+			 * @param {boolean} exec - Whether to execute the function immediately
+			 * @param {Object} addt - The desired contents of the global variable
+			 *                        `add_tag`. Only useful if `exec` is true
+			 */
+			XKit.tools.add_function = function(func, exec, addt) {
+				if (!XKit.tools.add_function_nonce) {
+					var scripts = document.querySelectorAll('script');
+					for (var i = 0; i < scripts.length; i++) {
+						var nonce = scripts[i].getAttribute('nonce');
+						if (nonce) {
+							XKit.tools.add_function_nonce = nonce;
+							break;
+						}
+					}
+				}
+
+				try {
+					var script = document.createElement("script");
+					script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
+					script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
+					if (XKit.tools.add_function_nonce) {
+						script.setAttribute('nonce', XKit.tools.add_function_nonce);
+					}
+					document.body.appendChild(script);
+				} catch (e) {
+					XKit.window.show("Error",
+						"XKit failed to inject a script. Details:" +
+						"<p>" + e.message + "</p>",
+						"error",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
+				}
+			};
 
 			/**
 			 * @return {Object} The elements of XKit's storage as a map from setting key to
