@@ -718,11 +718,9 @@ XKit.extensions.xkit_patches = new Object({
 			 */
 			XKit.tools.add_function = function(func, exec, addt) {
 				if (!XKit.tools.add_function_nonce) {
-					var scripts = document.querySelectorAll('script');
-					for (var i = 0; i < scripts.length; i++) {
-						var nonce = scripts[i].getAttribute('nonce');
-						if (nonce) {
-							XKit.tools.add_function_nonce = nonce;
+					for (const script of document.querySelectorAll('script')) {
+						if (script.nonce) {
+							XKit.tools.add_function_nonce = script.nonce;
 							break;
 						}
 					}
