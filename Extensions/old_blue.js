@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 1.0.2 **//
+//* VERSION 1.0.3 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DETAILS Reverses the so-called accessibility update that causes so many headaches. **//
 //* DEVELOPER New-XKit **//
@@ -21,7 +21,7 @@ XKit.extensions.old_blue = new Object({
 
 	run: function() {
 		this.running = true;
-		if (XKit.interface.is_tumblr_page()) {
+		if (XKit.interface.is_tumblr_page() && $('link[href*="/pop/"]').length === 0) {
 			XKit.tools.init_css("old_blue");
 		}
 	},
