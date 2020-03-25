@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.16 **//
+//* VERSION 7.2.17 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -165,6 +165,47 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
+
+			/**
+			 * Gets redpop translation strings for selecting elements via aria labels
+			 * @param {String} key - en_US string to translate
+			 * @return {Promise} - resolves with the translated key
+			 */
+			XKit.interface.translate = key => new Promise(resolve => {
+				function grabLanguageData() {
+					const waitForTumblrObject = setInterval(() => {
+						if (window.tumblr) {
+							clearInterval(waitForTumblrObject);
+							window.postMessage({
+								languageData: window.tumblr.languageData
+							}, `${location.protocol}//${location.host}`);
+						}
+					}, 100);
+				}
+
+				function receiveLanguageData(e) {
+					if (e.origin === `${location.protocol}//${location.host}` && e.data.languageData !== undefined) {
+						window.removeEventListener("message", receiveLanguageData);
+
+						if (e.data.languageData.code === "en_US") {
+							XKit.interface.translations = null;
+							resolve(key);
+						} else {
+							XKit.interface.translations = e.data.languageData.translations;
+							resolve(XKit.interface.translations[key]);
+						}
+					}
+				}
+
+				if (XKit.interface.translations === null) {
+					resolve(key);
+				} else if (XKit.interface.translations !== undefined) {
+					resolve(XKit.interface.translations[key]);
+				} else {
+					window.addEventListener("message", receiveLanguageData);
+					XKit.tools.add_function(grabLanguageData, true);
+				}
+			});
 
 			/**
 			 * Copies a function from the addon context into the page context. This
