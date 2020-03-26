@@ -82,6 +82,7 @@ XKit.extensions.xkit_patches = new Object({
 		}
 
 		window.addEventListener("message", XKit.blog_listener.eventHandler);
+		window.addEventListener("message", XKit.css_map.eventHandler);
 
 		// Scrape Tumblr's data object now that we can run add_function
 		const blog_scraper = XKit.page.react ?
@@ -118,6 +119,22 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 		XKit.tools.add_function(blog_scraper, true);
+
+		// Scrape Tumblr's css map
+		XKit.tools.add_function(function() {
+			if (!window.tumblr) {
+				window.postMessage({
+					cssMap: null,
+				}, window.location.protocol + "//" + window.location.host);
+				return;
+			}
+			window.tumblr.getCssMap().then((cssMap) => {
+				window.postMessage({
+					cssMap,
+				}, window.location.protocol + "//" + window.location.host);
+			});
+		}, true);
+
 
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
 
@@ -615,6 +632,39 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					}
 				}
+			};
+
+			XKit.css_map = {
+				callbacks: {},
+				done: false,
+				cssMap: null,
+				add_callback: function(extension, func) {
+					if (this.done) {
+						func.call(XKit.extensions[extension], this.cssMap);
+					} else {
+						this.callbacks[extension] = func;
+					}
+				},
+				eventHandler: function(e) {
+					console.log('event time', e);
+					if (e.origin == window.location.protocol + "//" + window.location.host && e.data.hasOwnProperty('cssMap')) {
+						window.removeEventListener('message', XKit.css_map.eventHandler);
+
+						if (!e.data.cssMap) {
+							console.warn('Unable to retrieve css map', e.data);
+						} else {
+							XKit.css_map.cssMap = e.data.cssMap;
+						}
+						XKit.css_map.done = true;
+						const callbacks = XKit.css_map.callbacks;
+						for (const extension in callbacks) {
+							callbacks[extension].call(XKit.extensions[extension], this.cssMap);
+						}
+					}
+				},
+				keyToCss: function(key) {
+					return this.cssMap[key].map(cls => '.' + cls).join(', ');
+				},
 			};
 
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {

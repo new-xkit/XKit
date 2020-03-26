@@ -94,21 +94,21 @@
 }
 
 .xblacklist_excuse {
-	padding: 0; text-align: left; font-size: 12px;
+	padding: 15px 0 23px 0;
+	text-align: left; font-size: 12px;
 	color: rgb(130,130,130); height: 40px; line-height: 40px;
 	position: relative; margin-top: 5px;
 }
 
 .xblacklist_open_post {
-	position: absolute;
+	position: absolute !important;
 	height: 30px;
 	line-height: 30px;
 	right: 5px;
 }
 
 .xblacklist_open_post:active {
-	position: absolute !important;
-	right: 5px !important;
+	top: auto !important;
 }
 
 .xblacklist_hidden_post {
