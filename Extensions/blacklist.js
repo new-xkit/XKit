@@ -906,9 +906,9 @@ XKit.extensions.blacklist = new Object({
 							for (var j = 0; j < m_p_words.length; j++) {
 								if (m_p_words[j].indexOf(m_word) !== -1) {
 									var mp_word = m_p_words[j].replace(/\./g, '');
-									mp_word = mp_word.replace(/\,/g, '');
+									mp_word = mp_word.replace(/,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
-									mp_word = mp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
+									mp_word = mp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
 									//// console.log('%c  mp_word = ' + mp_word, 'background: #a5edae; color: black');
 									if (m_word === mp_word) {
 										if (tag_search_mode) {
