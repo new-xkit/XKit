@@ -295,7 +295,7 @@ XKit.extensions.xkit_patches = new Object({
 					})(add_tag)`;
 
 					async_callbacks[callback_nonce] = (data) => {
-						if ('return_value' in event.data) {
+						if ('return_value' in data) {
 							resolve(data.return_value);
 						} else {
 							const original_exception = data.exception && JSON.parse(data.exception);
