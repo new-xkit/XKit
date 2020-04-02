@@ -1146,7 +1146,6 @@ XKit.extensions.one_click_postage = new Object({
 			reblog_id: post.id,
 			reblog_key: reblog_key,
 			form_key: form_key,
-			post_type: post.type,
 		};
 		var blog_id = XKit.extensions.one_click_postage.default_blog_id;
 
