@@ -1366,7 +1366,7 @@ XKit.extensions.one_click_postage = new Object({
 							}
 						}
 						if (!this.preferences.dont_show_notifications.value) {
-							if (this.preferences.use_toasts.value) {
+							if (this.preferences.use_toasts.value && !XKit.page.react) {
 								XKit.toast.add(
 									responseData.created_post,
 									responseData.verbiage,
