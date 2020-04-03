@@ -186,7 +186,7 @@ XKit.extensions.xkit_patches = new Object({
 		"7.9.1": function() {
 
 			XKit.post_listener.observer = new MutationObserver(mutations => {
-				const criteria = XKit.page.react ? "[data-id]" : ".post, .post_container";
+				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
 				const new_posts = mutations.find(({addedNodes}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
 						const addedNode = addedNodes[i];
