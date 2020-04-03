@@ -700,20 +700,6 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			XKit.interface.react = {
-				api_fetch: async function(path, options = {}) {
-					// eslint-disable-next-line no-shadow
-					return XKit.tools.async_add_function(({path, options, xkit_version}) => {
-						/* globals tumblr */
-						return tumblr.apiFetch(path, {
-							headers: {
-								"X-XKit-Version": xkit_version,
-								...(options.headers)
-							},
-							...options
-						});
-					}, {path, options, xkit_version: XKit.version});
-				},
-
 				post_props: async function(post_id) {
 					// eslint-disable-next-line no-shadow
 					return XKit.tools.async_add_function(({post_id}) => {
