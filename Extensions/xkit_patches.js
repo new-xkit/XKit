@@ -184,6 +184,23 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
+
+			XKit.post_listener.observer = new MutationObserver(mutations => {
+				const criteria = XKit.page.react ? "[data-id]" : ".post, .post_container";
+				const new_posts = mutations.find(({addedNodes}) => {
+					for (const addedNode of addedNodes) {
+						if ($(addedNode).is(criteria) || $(addedNode).find(criteria).length) {
+							return true;
+						}
+					}
+				}) !== undefined;
+
+				if (new_posts) {
+					const all_callbacks = [].concat.apply([], Object.values(XKit.post_listener.callbacks));
+					all_callbacks.forEach(i => i());
+				}
+			});
+
 			XKit.tools.normalize_indentation = (level, string) => {
 				const lines = string.split("\n");
 				const indentation_level = _.minBy(
@@ -2779,23 +2796,6 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					}
 				},
-				observer: new MutationObserver(function(mutations) {
-					for (var mutation in mutations) {
-						var $target = $(mutations[mutation].target);
-						if ($target.hasClass("posts") || $target.parent().hasClass("posts") || $(mutations[mutation].addedNodes).find(".post").length) {
-							for (var x in XKit.post_listener.callbacks) {
-								for (var i in XKit.post_listener.callbacks[x]) {
-									try {
-										XKit.post_listener.callbacks[x][i]();
-									} catch (e) {
-										console.error("Could not run callback for " + x + ": " + e.message);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}),
 				check: function() {
 					XKit.post_listener.observer.observe($("body")[0], {
 						childList: true,
