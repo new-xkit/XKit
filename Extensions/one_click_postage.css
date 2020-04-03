@@ -350,10 +350,7 @@
 }
 
 #x1cpostage_box input,
-#x1cpostage_box textarea {
-	font-size: 13px;
-}
-
+#x1cpostage_box textarea,
 #x1cpostage_box select {
 	font-size: 14px;
 }
