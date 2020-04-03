@@ -349,6 +349,12 @@
 	padding: 1px;
 }
 
+#x1cpostage_box input,
+#x1cpostage_box textarea,
+#x1cpostage_box select {
+	font-size: 12px;
+}
+
 #x1cpostage_box:after, #x1cpostage_box:before {
 	top: 100%;
 	border: solid transparent;
