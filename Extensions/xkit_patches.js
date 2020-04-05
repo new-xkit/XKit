@@ -761,7 +761,6 @@ XKit.extensions.xkit_patches = new Object({
 			 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
 			 */
 			XKit.interface.kitty.get = async function(callback) {
-
 				var m_object = {
 					errors: false,
 					kitten: ''
