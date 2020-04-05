@@ -1,7 +1,7 @@
 //* TITLE Vanilla Videos **//
-//* VERSION 0.2.1 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Make the video player unexciting **//
-//* DETAILS Use the browser's native video player. Only affects Tumblr's player. **//
+//* DETAILS Use the browser's native video controls. Only affects Tumblr's player. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA true **//
@@ -54,15 +54,35 @@ XKit.extensions.vanilla_video = {
 	},
 
 	running: false,
+
 	run: function() {
 		this.running = true;
+
 		if (this.preferences.background_color.value === "") {
 			this.preferences.background_color.value = "#000000";
 		}
+
+		if (XKit.page.react) {
+			XKit.tools.add_css("video + div {display: none !important;}");
+			XKit.post_listener.add('vanilla_video', this.add_controls);
+			this.add_controls();
+			return;
+		}
+
 		XKit.post_listener.add('vanilla_video', function() { setTimeout(XKit.extensions.vanilla_video.check, 10); });
 		XKit.extensions.vanilla_video.check();
 	},
-	
+
+	add_controls: function() {
+		$("video:not([controls])")
+			.attr({
+				"controls": true,
+				"loop": this.preferences.loop.value ? "true" : null,
+				"preload": this.preferences.disable_preload.value ? "none" : null,
+			})
+			.css({"background-color": this.preferences.background_color.value});
+	},
+
 	cpanel: function() {
 		$("#xkit-vanilla-video-color-help").click(function() {
 			XKit.window.show("Background color", "The Vanilla Videos extension allows you to set the background color used when videos do not fill the whole player, generally due to being very narrow. Any CSS color value works, for example: <br/><br/><ul><li>#000000</li><li>#FF0000</li><li>rgba(0, 0, 0, 0)</li></ul><br/>These would produce black, red, and transparent respectively.<br/><br/>Please be careful while customizing the color. An improper value can cause issues. In that case, just delete the text you've entered completely and XKit will revert to the default color.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -118,6 +138,13 @@ XKit.extensions.vanilla_video = {
 
 	destroy: function() {
 		this.running = false;
+		XKit.tools.remove_css('vanilla_video');
 		XKit.post_listener.remove('vanilla_video');
+		$("video[controls]").attr({
+			"controls": null,
+			"loop": true,
+			"preload": null,
+			"style": null,
+		});
 	}
 };
