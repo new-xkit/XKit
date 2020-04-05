@@ -748,11 +748,11 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.interface.async_form_key = async function() {
 				const request = await fetch('https://www.tumblr.com/settings/dashboard');
 				const meta_tag = (await request.text()).match(
-					/tumblr-form-key[^>]*content=("[^"]+"|'[^']+')/
+					/tumblr-form-key[^>]*content=("([^"]+)"|'([^']+)')/
 				);
 
 				if (meta_tag) {
-					const form_key = meta_tag[1];
+					const form_key = meta_tag[2] || meta_tag[3];
 					XKit.storage.set('xkit_patches', 'last_stored_form_key', window.btoa(form_key));
 					return form_key;
 				}
