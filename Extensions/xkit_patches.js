@@ -189,8 +189,8 @@ XKit.extensions.xkit_patches = new Object({
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
 				const new_posts = mutations.find(({addedNodes}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
-						const addedNode = addedNodes[i];
-						if ($(addedNode).is(criteria) || $(addedNode).find(criteria).length) {
+						const $addedNode = $(addedNodes[i]);
+						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
 							return true;
 						}
 					}
