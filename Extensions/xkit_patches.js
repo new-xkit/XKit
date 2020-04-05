@@ -742,7 +742,67 @@ XKit.extensions.xkit_patches = new Object({
 						avatar: post.blog.avatar[post.blog.avatar.length - 1].url,
 						tags: post.tags.join(","),
 					};
+				},
+			};
+
+			XKit.interface.async_form_key = async function() {
+				const request = await fetch('https://www.tumblr.com/settings/dashboard');
+				const meta_tag = (await request.text()).match(
+					/tumblr-form-key[^<]*content=["']?(\w+)["']?/
+				);
+
+				const form_key = meta_tag && meta_tag[1];
+				XKit.storage.set('xkit_patches', 'last_stored_form_key', window.btoa(form_key));
+				return form_key;
+			};
+
+			/**
+			 * Get the secure_form_key through a request using the current form_key
+			 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+			 */
+			XKit.interface.kitty.get = async function(callback) {
+
+				var m_object = {
+					errors: false,
+					kitten: ''
+				};
+
+				var kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
+
+				if (XKit.interface.kitty.stored !== "") {
+					if (kitty_diff <= XKit.interface.kitty.expire_time && kitty_diff > 0) {
+						m_object.kitten = XKit.interface.kitty.stored;
+						callback(m_object);
+						return;
+					}
 				}
+
+				if (!XKit.interface.form_key()) {
+					await XKit.interface.async_form_key();
+				}
+
+				XKit.tools.Nx_XHR({
+					method: "POST",
+					url: "https://www.tumblr.com/svc/secure_form_key",
+					headers: {
+						"X-tumblr-form-key": XKit.interface.form_key(),
+					},
+					onload: function(response) {
+						XKit.interface.kitty.store_time = new Date().getTime();
+						var kitty_text = response.headers["x-tumblr-secure-form-key"];
+						XKit.interface.kitty.stored = kitty_text;
+						m_object.kitten = XKit.interface.kitty.stored;
+						m_object.response = response;
+						callback(m_object);
+					},
+					onerror: function(response) {
+						m_object.errors = true;
+						m_object.kitten = "";
+						m_object.response = response;
+						XKit.interface.kitty.stored = "";
+						callback(m_object);
+					}
+				});
 			};
 		},
 
@@ -1297,61 +1357,6 @@ XKit.extensions.xkit_patches = new Object({
 						XKit.interface.kitty.stored = kitty;
 
 					},
-
-					/**
-					 * Get the secure_form_key through a request using the current form_key
-					 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
-					 */
-					get: function(callback) {
-
-						var m_object = {};
-						m_object.errors = false;
-						m_object.kitten = "";
-
-						var current_ms = new Date().getTime();
-						var kitty_diff = current_ms - XKit.interface.kitty.store_time;
-
-						if (XKit.interface.kitty.stored !== "") {
-							if (kitty_diff >= XKit.interface.kitty.expire_time || kitty_diff < 0) {
-								//// console.log("XKitty: Kitty expired? Let's try again.");
-							} else {
-								//// console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
-								m_object.kitten = XKit.interface.kitty.stored;
-								callback(m_object);
-								return;
-							}
-						}
-
-						//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
-
-						XKit.tools.Nx_XHR({
-							method: "POST",
-							url: "https://www.tumblr.com/svc/secure_form_key",
-							headers: {
-								"X-tumblr-form-key": XKit.interface.form_key(),
-							},
-							onload: function(response) {
-								//// console.log("XKitty: YAY! Kitty request complete!");
-								XKit.interface.kitty.store_time = new Date().getTime();
-								var kitty_text = response.headers["x-tumblr-secure-form-key"];
-								XKit.interface.kitty.stored = kitty_text;
-								m_object.kitten = XKit.interface.kitty.stored;
-								m_object.response = response;
-								callback(m_object);
-							},
-							onerror: function(response) {
-								//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
-								m_object.errors = true;
-								m_object.kitten = "";
-								m_object.response = response;
-								XKit.interface.kitty.stored = "";
-								callback(m_object);
-							}
-						});
-
-					},
-
-
 				},
 
 				post_window: {
