@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.1 **//
+//* VERSION 7.3.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -751,9 +751,11 @@ XKit.extensions.xkit_patches = new Object({
 					/tumblr-form-key[^<]*content=["']?(\w+)["']?/
 				);
 
-				const form_key = meta_tag && meta_tag[1];
-				XKit.storage.set('xkit_patches', 'last_stored_form_key', window.btoa(form_key));
-				return form_key;
+				if (meta_tag) {
+					const form_key = meta_tag[1];
+					XKit.storage.set('xkit_patches', 'last_stored_form_key', window.btoa(form_key));
+					return form_key;
+				}
 			};
 
 			/**
