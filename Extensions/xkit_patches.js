@@ -187,14 +187,14 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
-				const new_posts = mutations.find(({addedNodes}) => {
+				const new_posts = mutations.some(({addedNodes}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
 						const $addedNode = $(addedNodes[i]);
 						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
 							return true;
 						}
 					}
-				}) !== undefined;
+				});
 
 				if (new_posts) {
 					const all_callbacks = [].concat.apply([], Object.values(XKit.post_listener.callbacks));
