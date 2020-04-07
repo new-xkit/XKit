@@ -198,7 +198,13 @@ XKit.extensions.xkit_patches = new Object({
 
 				if (new_posts) {
 					const all_callbacks = [].concat.apply([], Object.values(XKit.post_listener.callbacks));
-					all_callbacks.forEach(i => i());
+					all_callbacks.forEach(callback => {
+						try {
+							callback();
+						} catch (e) {
+							console.error(e);
+						}
+					});
 				}
 			});
 
