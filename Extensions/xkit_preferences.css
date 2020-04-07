@@ -1473,6 +1473,10 @@
 	border-color: #238ec4;
 }
 
+#xkit_button svg {
+	fill: #fff;
+}
+
 .xkit--react #xkit_button {
 	display: flex;
 	justify-content: center;
@@ -1487,6 +1491,10 @@
 
 .xkit--react #xkit_button button {
 	font-size: 0;
+}
+
+.xkit--react #xkit_button svg {
+	fill: var(--white-on-dark);
 }
 
 .xkit--react .xkit_notice_container {
