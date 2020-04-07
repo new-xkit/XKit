@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.1 **//
+//* VERSION 7.6.2 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -19,17 +19,37 @@ XKit.extensions.xkit_preferences = new Object({
 
 		XKit.tools.init_css("xkit_preferences");
 
-		var holiday_class = ""; var tmp_date = new Date();
-		if (tmp_date.getDate() === 31 && tmp_date.getMonth() === 9) {
-			holiday_class = " halloween";
-		} else if ((tmp_date.getDate() >= 24 && tmp_date.getDate() <= 26) && tmp_date.getMonth() === 11) {
-			holiday_class = " christmas";
+		const button_paths = {
+			normal: 'M.5 0a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5zM.15.316H.23l.31.368H.459L.423.641.386.684H.305L.382.592.345.55.231.684H.15L.304.5zm.155 0h.081l.31.368H.613zm.154 0h.082l.036.043.037-.043h.081L.618.408.655.45.769.316H.85L.695.5.85.684H.77z',
+			halloween: 'M.545 0C.514.002.488.034.475.062.458.104.444.167.476.199c.012.012.037.01.05 0C.547.18.53.137.543.11.558.083.609.073.606.042.603.017.569-.002.545.001zM.337.204C.129.204 0 .373 0 .58s.169.377.377.377C.39.958.305.894.297.857.333.89.437.954.448.95A.29.29 0 0 0 .5.937c.017.006.034.011.052.014a.589.589 0 0 0 .15-.094C.696.894.61.958.623.958A.377.377 0 0 0 1 .581C1 .373.871.204.663.204c-.01 0 .066.02.077.089A.512.512 0 0 0 .604.208a.293.293 0 0 0-.027.005c-.004.001.045.024.054.07a.18.18 0 0 0-.1-.057L.5.238A2.361 2.361 0 0 0 .468.226a.179.179 0 0 0-.1.058c.01-.047.06-.07.055-.07L.396.207A.524.524 0 0 0 .26.293c.011-.07.087-.09.077-.09zM.159.4h.08l.3.36H.46L.425.718.389.761h-.08L.386.67.349.628.24.761h-.08l.15-.18zm.15 0h.08l.301.36H.611zm.151 0h.08l.035.043L.611.4h.08l-.076.09.036.043L.76.4h.08l-.15.18.15.18h-.08z',
+			christmas: 'M.467 0v.087L.405.026.358.072.436.15H.27L.188.294.159.187.095.205l.022.084L.042.245.009.303l.075.043L0 .37l.017.064.107-.028L.04.548l.083.143L.017.663 0 .727.084.75.009.793l.033.058.075-.044-.022.085.064.017.029-.107.082.144h.166l-.078.077.047.048.062-.062v.087h.066v-.087l.062.062.047-.048L.564.946H.73L.812.802.841.91.905.892.883.807l.075.044L.99.793.916.75 1 .727.983.663.876.69.96.548.876.405l.107.028L1 .37.916.346.99.303.958.245.883.29.905.205.841.187.812.294.73.15H.564L.642.073.595.025.533.087V0zM.165.371h.078l.296.354H.461L.426.683.39.725H.313L.387.636.352.595l-.11.13H.166L.313.548zm.148 0H.39l.296.354H.61zm.148 0h.078l.035.042L.61.371h.078L.613.46l.035.042.11-.13h.077L.687.547l.148.177H.757z'
+		};
+
+		let holiday = "normal";
+		const date = (new Date()).getDate();
+		const month = (new Date()).getMonth() + 1;
+
+		if (date === 31 && month === 10) {
+			holiday = "halloween";
+		} else if (date >= 24 && date <= 26 && month === 12) {
+			holiday = "christmas";
 		}
 
-		var m_html = '<div class="tab iconic tab_xkit' + holiday_class + '" id="xkit_button">' +
-			'<button tabindex="7" class="tab_anchor" title="XKit Control Panel"><p class="tab_anchor_text">XKit Control Panel<p></button>' +
-			'<div class="tab_notice tab-notice--outlined xkit_notice_container"><span class="tab_notice_value">0</span></div>' +
-			'</div>';
+		var m_html =
+			`<div id="xkit_button" class="tab iconic tab_xkit">
+				<button class="tab_anchor" title="XKit Control Panel" tabindex="7">
+					<p class="tab_anchor_text">XKit Control Panel</p>
+					<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' width="22">
+						<path
+							d='${button_paths[holiday]}'
+							fill='${XKit.page.react ? "var(--white-on-dark)" : "#fff"}'
+						/>
+					</svg>
+				</button>
+				<div class="tab_notice tab-notice--outlined xkit_notice_container">
+					<span class="tab_notice_value">0</span>
+				</div>
+			</div>`;
 
 		// mobile stuff
 		var mobile_html = '<div class="tab iconic" id="new-xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
