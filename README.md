@@ -33,6 +33,8 @@ In your clone of this repository run:
 npm install
 ```
 
+Use Node 8 for best compatibility. Some commands, such as `npm test`, will fail on Node 10+.
+
 To build XKit from source, run:
 
 ```sh
