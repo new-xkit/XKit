@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.2 **//
+//* VERSION 7.3.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -184,6 +184,67 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
+			/**
+			 * Show an XKit alert window
+			 * @param {String} title - Text for alert window's title bar
+			 * @param {String} msg - Text for body of window, can be HTML
+			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+			 *   icon type, determined by CSS class `icon`.
+			 *   See also xkit_patches.css.
+			 * @param {String} buttons - The HTML to be used in the button area of the window.
+			 *                           Usually divs with class "xkit-button".
+			 * @param {boolean} wide - Whether the XKit window should be wide.
+			 */
+			XKit.window.show = function(title, msg, icon, buttons, wide) {
+
+				if (typeof icon === "undefined") {
+					icon = "";
+				}
+
+				var additional_classes = "";
+
+				if (wide) {
+					additional_classes = "xkit-wide-window";
+				}
+
+				if ($("#xkit-window").length > 0) {
+					$("#xkit-window").attr('id', "xkit-window-old");
+					$("#xkit-window-old").fadeOut('fast', function() {
+						$(this).remove();
+					});
+				}
+
+				var m_html = "<div id=\"xkit-window\" class=\"" + icon + " " + additional_classes + "\" style=\"display: none;\">" +
+									"<div class=\"xkit-window-title\">" + title + "</div>" +
+									"<div class=\"xkit-window-msg\">" + msg + "</div>";
+
+				if (typeof buttons !== "undefined") {
+					m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
+				}
+
+				if ($("#xkit-window-shadow").length === 0) {
+					m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
+				}
+
+				$("body").prepend(m_html);
+
+				$("#tiptip_holder").css("z-index", "99000000");
+
+				centerIt($("#xkit-window"));
+				$("#xkit-window").fadeIn('fast');
+				$("#xkit-window").keydown(event => event.stopPropagation());
+
+				$("#xkit-close-message").click(function() {
+					$("#xkit-window-shadow").fadeOut('fast', function() {
+						$(this).remove();
+					});
+					$("#xkit-window").fadeOut('fast', function() {
+						$(this).remove();
+					});
+				});
+
+			};
+
 			XKit.tools.normalize_indentation = (level, string) => {
 				const lines = string.split("\n");
 				const indentation_level = _.minBy(
@@ -1259,67 +1320,6 @@ XKit.extensions.xkit_patches = new Object({
 					$(this).remove();
 					$("#xkit-window-shadow").remove();
 					$("#xkit-window-old").remove();
-				});
-
-			};
-
-			/**
-			 * Show an XKit alert window
-			 * @param {String} title - Text for alert window's title bar
-			 * @param {String} msg - Text for body of window, can be HTML
-			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
-			 *   icon type, determined by CSS class `icon`.
-			 *   See also xkit_patches.css.
-			 * @param {String} buttons - The HTML to be used in the button area of the window.
-			 *                           Usually divs with class "xkit-button".
-			 * @param {boolean} wide - Whether the XKit window should be wide.
-			 */
-			XKit.window.show = function(title, msg, icon, buttons, wide) {
-
-				if (typeof icon === "undefined") {
-					icon = "";
-				}
-
-				var additional_classes = "";
-
-				if (wide) {
-					additional_classes = "xkit-wide-window";
-				}
-
-				if ($("#xkit-window").length > 0) {
-					$("#xkit-window").attr('id', "xkit-window-old");
-					$("#xkit-window-old").fadeOut('fast', function() {
-						$(this).remove();
-					});
-				}
-
-				var m_html = "<div id=\"xkit-window\" class=\"" + icon + " " + additional_classes + "\" style=\"display: none;\">" +
-									"<div class=\"xkit-window-title\">" + title + "</div>" +
-									"<div class=\"xkit-window-msg\">" + msg + "</div>";
-
-				if (typeof buttons !== "undefined") {
-					m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
-				}
-
-				if ($("#xkit-window-shadow").length === 0) {
-					m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
-				}
-
-				$("body").prepend(m_html);
-
-				$("#tiptip_holder").css("z-index", "99000000");
-
-				centerIt($("#xkit-window"));
-				$("#xkit-window").fadeIn('fast');
-				$("#xkit-window").keydown(event => event.stopPropagation());
-
-				$("#xkit-close-message").click(function() {
-					$("#xkit-window-shadow").fadeOut('fast', function() {
-						$(this).remove();
-					});
-					$("#xkit-window").fadeOut('fast', function() {
-						$(this).remove();
-					});
 				});
 
 			};
