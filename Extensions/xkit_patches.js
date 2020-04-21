@@ -1309,10 +1309,9 @@ XKit.extensions.xkit_patches = new Object({
 
 				$("#tiptip_holder").css("z-index", "99000000");
 
-				// from xkit.js
-				/* globals centerIt */
 				centerIt($("#xkit-window"));
 				$("#xkit-window").fadeIn('fast');
+				$("#xkit-window").keydown(event => event.stopPropagation());
 
 				$("#xkit-close-message").click(function() {
 					$("#xkit-window-shadow").fadeOut('fast', function() {
