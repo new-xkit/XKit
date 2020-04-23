@@ -82,7 +82,6 @@ XKit.extensions.xkit_patches = new Object({
 		}
 
 		window.addEventListener("message", XKit.blog_listener.eventHandler);
-		window.addEventListener("message", XKit.css_map.eventHandler);
 
 		// Scrape Tumblr's data object now that we can run add_function
 		const blog_scraper = XKit.page.react ?
@@ -645,21 +644,13 @@ XKit.extensions.xkit_patches = new Object({
 						this.callbacks[extension] = func;
 					}
 				},
-				eventHandler: function(e) {
-					console.log('event time', e);
-					if (e.origin == window.location.protocol + "//" + window.location.host && e.data.hasOwnProperty('cssMap')) {
-						window.removeEventListener('message', XKit.css_map.eventHandler);
+				setCssMap: function(cssMap) {
+					this.done = true;
+					this.cssMap = cssMap;
 
-						if (!e.data.cssMap) {
-							console.warn('Unable to retrieve css map', e.data);
-						} else {
-							XKit.css_map.cssMap = e.data.cssMap;
-						}
-						XKit.css_map.done = true;
-						const callbacks = XKit.css_map.callbacks;
-						for (const extension in callbacks) {
-							callbacks[extension].call(XKit.extensions[extension], this.cssMap);
-						}
+					const callbacks = this.callbacks;
+					for (const extension in callbacks) {
+						callbacks[extension].call(XKit.extensions[extension], this.cssMap);
 					}
 				},
 				keyToCss: function(key) {
@@ -669,6 +660,15 @@ XKit.extensions.xkit_patches = new Object({
 					return this.cssMap[key].map(cls => '.' + cls).join(', ');
 				},
 			};
+
+			XKit.tools.async_add_function(async() => {
+				if (!window.tumblr) {
+					return null;
+				}
+				return await window.tumblr.getCssMap();
+			}).then(cssMap => {
+				XKit.css_map.setCssMap(cssMap);
+			});
 
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
