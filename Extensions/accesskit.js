@@ -114,7 +114,7 @@ XKit.extensions.accesskit = new Object({
 		XKit.tools.init_css('accesskit');
 
 		if (XKit.page.react) {
-			const {font, make_links_blue, increase_post_margins} = this.preferences;
+			const {font, make_links_blue, no_npf_colors, increase_post_margins} = this.preferences;
 
 			const font_families = {
 				'sans-serif': '"Palatino Linotype", "Book Antiqua", Palatino, serif',
@@ -130,6 +130,13 @@ XKit.extensions.accesskit = new Object({
 			if (make_links_blue.value) {
 				XKit.tools.add_css(
 					'article p a { color: var(--blue); }',
+					'accesskit'
+				);
+			}
+
+			if (no_npf_colors.value) {
+				XKit.tools.add_css(
+					'article span[style^="color:"] { color: var(--black) !important; }',
 					'accesskit'
 				);
 			}
