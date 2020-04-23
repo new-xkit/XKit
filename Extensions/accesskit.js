@@ -42,28 +42,28 @@ XKit.extensions.accesskit = new Object({
 		},
 		no_npf_colors: {
 			text: "Don't display NPF (user-set) colours in posts",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		contrast_icons: {
 			text: "Increase the contrast of dashboard icons and text",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		contrast_sidebar: {
 			text: "Increase the contrast of sidebar icons and text",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		contrast_notifications: {
 			text: "Increase the contrast of notifications",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		increase_font_size: {
 			text: "Increase the size of the text",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		increase_post_margins: {
 			text: "Increase the space between posts",
@@ -76,13 +76,13 @@ XKit.extensions.accesskit = new Object({
 		},
 		xkit_disable_counter: {
 			text: "Disable XKit extensions/settings that might have a negative effect on accessibility",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		xkit_contrast_icons: {
 			text: "Increase the contrast of XKit user interface",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		"sep-1": {
 			text: "Color Adjustments",
