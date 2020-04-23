@@ -114,7 +114,8 @@ XKit.extensions.accesskit = new Object({
 		XKit.tools.init_css('accesskit');
 
 		if (XKit.page.react) {
-			const {font} = this.preferences;
+			const {font, make_links_blue, increase_post_margins} = this.preferences;
+
 			const font_families = {
 				'sans-serif': '"Palatino Linotype", "Book Antiqua", Palatino, serif',
 				'opendyslexic': 'open-dyslexic'
@@ -124,6 +125,36 @@ XKit.extensions.accesskit = new Object({
 					`article { --font-family: ${font_families[font.value]};}`,
 					'accesskit'
 				);
+			}
+
+			if (make_links_blue.value) {
+				XKit.tools.add_css(
+					'article p a { color: var(--blue); }',
+					'accesskit'
+				);
+			}
+
+			if (increase_post_margins.value) {
+				XKit.tools.add_css(
+					'article { margin-bottom: 40px; }',
+					'accesskit'
+				);
+			}
+
+			const {invert, grayscale} = this.preferences;
+			if (invert.value || grayscale.value) {
+				const do_invert = invert.value ? "invert(100%)" : "";
+				const do_grayscale = grayscale.value ? "grayscale(100%)" : "";
+				XKit.tools.add_css(`
+					html {
+						height: 100%;
+					}
+					body {
+						height: 100%;
+						filter: ${do_invert} ${do_grayscale};
+					}
+				`,
+				'accesskit');
 			}
 
 			return;
