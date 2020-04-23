@@ -108,8 +108,26 @@ XKit.extensions.accesskit = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
+
+		XKit.tools.init_css('accesskit');
+
+		if (XKit.page.react) {
+			const {font} = this.preferences;
+			const font_families = {
+				'sans-serif': '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+				'opendyslexic': 'open-dyslexic'
+			};
+			if (font.value !== 'default') {
+				XKit.tools.add_css(
+					`article { --font-family: ${font_families[font.value]};}`,
+					'accesskit'
+				);
+			}
+
+			return;
+		}
 
 		var m_css = "";
 
