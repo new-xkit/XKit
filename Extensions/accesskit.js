@@ -114,7 +114,7 @@ XKit.extensions.accesskit = new Object({
 		XKit.tools.init_css('accesskit');
 
 		if (XKit.page.react) {
-			const {font, make_links_blue, no_npf_colors, increase_post_margins} = this.preferences;
+			const {font, make_links_blue, no_npf_colors, increase_post_margins, xkit_contrast_icons} = this.preferences;
 
 			const font_families = {
 				'sans-serif': '"Palatino Linotype", "Book Antiqua", Palatino, serif',
@@ -146,6 +146,10 @@ XKit.extensions.accesskit = new Object({
 					'article { margin-bottom: 40px; }',
 					'accesskit'
 				);
+			}
+
+			if (xkit_contrast_icons.value) {
+				XKit.tools.add_css(this.xkit_contrast_icons_css, 'accesskit');
 			}
 
 			const {invert, grayscale} = this.preferences;
@@ -324,41 +328,7 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.xkit_contrast_icons.value === true) {
 
-			m_css = m_css + " .xkit-extension-setting, .xkit-extension-setting-separator { color: black !important; border-bottom: 1px solid rgb(100,100,100); } " +
-					" .xkit-extension-setting-separator { background: rgb(230,230,230); }" +
-					" #xkit-extensions-panel-top { border-bottom: 1px solid black; } " +
-					" #xkit-extensions-panel-right, #xkit-extensions-panel-left, #xkit-extensions-panel-left-search { border-color: black; } " +
-					" #xkit-extensions-panel-left .xkit-extension {color: black; border-color: black; } " +
-					" .xkit-button { border-color: black; color: black; } " +
-					" .xkit-button:hover { border-color: black; color: black; text-decoration: underline; } " +
-					" #xkit-extensions-panel-top .description, #xkit-extensions-panel-top .description .details { color: black; } " +
-					" .xkit-checkbox, .xkit-change-ext-setting-checkbox { color: black } .xkit-change-ext-setting-checkbox:hover, .xkit-checkbox:hover { text-decoration: underline; } " +
-					" .xkit-extension-setting.checkbox .xkit-checkbox, .xkit-extension-setting .title { color: black; } " +
-					" .xkit-checkbox.selected b { background-color: #184e98; } " +
-					" .xkit-checkbox b { border: 1px solid black; } " +
-					" #xkit-extensions-panel-right .xkit-others-panel .description { color: black; } " +
-					" .xkit-progress-bar { border: 1px solid black; box-shadow: none; } " +
-					" .xkit-progress-bar-inner { background: #154389; } " +
-					" #xkit-about-window-text .subtitle, #xkit-about-window-links a {color: black; } " +
-					" #xkit-extensions-panel-left .xkit-extension .title { color: black; }" +
-					" #xkit-extensions-panel-left .xkit-extension.text-only.selected, #xkit-extensions-panel-left .xkit-extension.selected .title { color: black; font-weight: bold; text-decoration: underline; } " +
-					" #xkit-extensions-display-type-iconic, #xkit-extensions-display-type-normal { border-color: black; } " +
-					" #xkit-extensions-panel-left .xkit-extension.text-only { color: black; }" +
-					" #xkit-extensions-panel-left .xkit-extension.text-only.selected { text-decoration: underline; } " +
-					" #xkit-extensions-panel-right .xkit-message-display { color: black; } " +
-					" #xkit-extensions-panel-right .xkit-message-info { color: black; border-bottom: 1px solid black; } " +
-					" #xkit-extensions-panel-right.xkit-wide-panel { border-left: 1px solid black; background: white; } " +
-					" .xkit-gallery-extension, #xkit-gallery-toolbar, #xkit-gallery-search { color: black; border-color: black; } " +
-					" .xkit-gallery-extension .xkit-button { border-top: 1px solid black !important; }" +
-					" #xkit-control-panel-tabs div { color: black; border-color: black; } " +
-					" #xkit-control-panel-tabs { background: rgb(200,200,200); } " +
-					" #xkit-about-window-links {border-top: 1px solid black; } " +
-					" .notes .note > *, .notes .note blockquote { font-size: 14px; line-height: 22px; } " +
-					" .notes_outer_container.popover .note blockquote { font-size: 14px !important; } " +
-					" .xkit-notification {background-color: white !important; color: black; } " +
-					" .xkit-notification:hover { text-decoration: underline; } " +
-					" #xkit-window-shadow { background-color: rgba(0,0,0,0.77); } " +
-					" .xkit-window-buttons { border-top: 1px solid black; } ";
+			m_css += this.xkit_contrast_icons_css;
 		}
 
 		if (XKit.interface.where().inbox) {
@@ -368,6 +338,42 @@ XKit.extensions.accesskit = new Object({
 		XKit.tools.add_css(m_css, "accesskit");
 
 	},
+
+	xkit_contrast_icons_css: `
+		.xkit-extension-setting, .xkit-extension-setting-separator { color: black !important; border-bottom: 1px solid rgb(100,100,100); }
+		.xkit-extension-setting-separator { background: rgb(230,230,230); }
+		#xkit-extensions-panel-top { border-bottom: 1px solid black; }
+		#xkit-extensions-panel-right, #xkit-extensions-panel-left, #xkit-extensions-panel-left-search { border-color: black; }
+		#xkit-extensions-panel-left .xkit-extension {color: black; border-color: black; }
+		.xkit-button { border-color: black; color: black; }
+		.xkit-button:hover { border-color: black; color: black; text-decoration: underline; }
+		#xkit-extensions-panel-top .description, #xkit-extensions-panel-top .description .details { color: black; }
+		.xkit-checkbox, .xkit-change-ext-setting-checkbox { color: black } .xkit-change-ext-setting-checkbox:hover, .xkit-checkbox:hover { text-decoration: underline; }
+		.xkit-extension-setting.checkbox .xkit-checkbox, .xkit-extension-setting .title { color: black; }
+		.xkit-checkbox.selected b { background-color: #184e98; }
+		.xkit-checkbox b { border: 1px solid black; }
+		#xkit-extensions-panel-right .xkit-others-panel .description { color: black; }
+		.xkit-progress-bar { border: 1px solid black; box-shadow: none; }
+		.xkit-progress-bar-inner { background: #154389; }
+		#xkit-about-window-text .subtitle, #xkit-about-window-links a {color: black; }
+		#xkit-extensions-panel-left .xkit-extension .title { color: black; }
+		#xkit-extensions-panel-left .xkit-extension.text-only.selected, #xkit-extensions-panel-left .xkit-extension.selected .title { color: black; font-weight: bold; text-decoration: underline; }
+		#xkit-extensions-display-type-iconic, #xkit-extensions-display-type-normal { border-color: black; }
+		#xkit-extensions-panel-left .xkit-extension.text-only { color: black; }
+		#xkit-extensions-panel-left .xkit-extension.text-only.selected { text-decoration: underline; }
+		#xkit-extensions-panel-right .xkit-message-display { color: black; }
+		#xkit-extensions-panel-right .xkit-message-info { color: black; border-bottom: 1px solid black; }
+		#xkit-extensions-panel-right.xkit-wide-panel { border-left: 1px solid black; background: white; }
+		.xkit-gallery-extension, #xkit-gallery-toolbar, #xkit-gallery-search { color: black; border-color: black; }
+		.xkit-gallery-extension .xkit-button { border-top: 1px solid black !important; }
+		#xkit-control-panel-tabs div { color: black; border-color: black; }
+		#xkit-control-panel-tabs { background: rgb(200,200,200); }
+		#xkit-about-window-links {border-top: 1px solid black; }
+		.xkit-notification {background-color: white !important; color: black; }
+		.xkit-notification:hover { text-decoration: underline; }
+		#xkit-window-shadow { background-color: rgba(0,0,0,0.77); }
+		.xkit-window-buttons { border-top: 1px solid black; }
+	`,
 
 	vis_caps: function() {
 
