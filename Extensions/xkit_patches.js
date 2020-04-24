@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.2 **//
+//* VERSION 7.3.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -184,7 +184,6 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
-
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
 				const new_posts = mutations.some(({addedNodes}) => {
@@ -206,6 +205,52 @@ XKit.extensions.xkit_patches = new Object({
 					}));
 				}
 			});
+      
+			/**
+			 * Show an XKit alert window
+			 * @param {String} title - Text for alert window's title bar
+			 * @param {String} msg - Text for body of window, can be HTML
+			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+			 *   icon type, determined by CSS class `icon`.
+			 * @param {String} buttons - The HTML to be used in the button area of the window.
+			 *                           Usually divs with class "xkit-button".
+			 * @param {boolean} wide - Whether the XKit window should be wide.
+			 */
+			XKit.window.show = function(title, msg, icon = "", buttons = "", wide) {
+				const wide_class = wide ? "xkit-wide-window" : "";
+
+				$("#xkit-window").fadeOut('fast', function() {
+					$(this).remove();
+				});
+
+				let window_html = `
+					<div id="xkit-window" class="${icon} ${wide_class}" style="display:none">
+						<div class="xkit-window-title">${title}</div>
+						<div class="xkit-window-msg">"${msg}</div>
+						<div class="xkit-window-buttons">${buttons}</div>
+					</div>`;
+
+				if ($("#xkit-window-shadow").length === 0) {
+					window_html += '<div id="xkit-window-shadow"></div>';
+				}
+
+				$("body").prepend(window_html);
+				$("#tiptip_holder").css("z-index", "99000000");
+				centerIt($("#xkit-window"));
+
+				$("#xkit-window")
+					.fadeIn('fast')
+					.keydown(event => event.stopPropagation());
+
+				$("#xkit-close-message").click(function() {
+					$("#xkit-window-shadow").fadeOut('fast', function() {
+						$(this).remove();
+					});
+					$("#xkit-window").fadeOut('fast', function() {
+						$(this).remove();
+					});
+				});
+			};
 
 			XKit.tools.normalize_indentation = (level, string) => {
 				const lines = string.split("\n");
@@ -765,7 +810,68 @@ XKit.extensions.xkit_patches = new Object({
 						avatar: post.blog.avatar[post.blog.avatar.length - 1].url,
 						tags: post.tags.join(","),
 					};
+				},
+			};
+
+			XKit.interface.async_form_key = async function() {
+				const request = await fetch('https://www.tumblr.com/settings/dashboard');
+				const meta_tag = (await request.text()).match(
+					/tumblr-form-key[^>]*content=("([^"]+)"|'([^']+)')/
+				);
+
+				if (meta_tag) {
+					const form_key = meta_tag[2] || meta_tag[3];
+					XKit.storage.set('xkit_patches', 'last_stored_form_key', window.btoa(form_key));
+					return form_key;
 				}
+			};
+
+			/**
+			 * Get the secure_form_key through a request using the current form_key
+			 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+			 */
+			XKit.interface.kitty.get = async function(callback) {
+				var m_object = {
+					errors: false,
+					kitten: ''
+				};
+
+				var kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
+
+				if (XKit.interface.kitty.stored !== "") {
+					if (kitty_diff <= XKit.interface.kitty.expire_time && kitty_diff > 0) {
+						m_object.kitten = XKit.interface.kitty.stored;
+						callback(m_object);
+						return;
+					}
+				}
+
+				if (!XKit.interface.form_key()) {
+					await XKit.interface.async_form_key();
+				}
+
+				XKit.tools.Nx_XHR({
+					method: "POST",
+					url: "https://www.tumblr.com/svc/secure_form_key",
+					headers: {
+						"X-tumblr-form-key": XKit.interface.form_key(),
+					},
+					onload: function(response) {
+						XKit.interface.kitty.store_time = new Date().getTime();
+						var kitty_text = response.headers["x-tumblr-secure-form-key"];
+						XKit.interface.kitty.stored = kitty_text;
+						m_object.kitten = XKit.interface.kitty.stored;
+						m_object.response = response;
+						callback(m_object);
+					},
+					onerror: function(response) {
+						m_object.errors = true;
+						m_object.kitten = "";
+						m_object.response = response;
+						XKit.interface.kitty.stored = "";
+						callback(m_object);
+					}
+				});
 			};
 		},
 
@@ -1225,68 +1331,6 @@ XKit.extensions.xkit_patches = new Object({
 
 			};
 
-			/**
-			 * Show an XKit alert window
-			 * @param {String} title - Text for alert window's title bar
-			 * @param {String} msg - Text for body of window, can be HTML
-			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
-			 *   icon type, determined by CSS class `icon`.
-			 *   See also xkit_patches.css.
-			 * @param {String} buttons - The HTML to be used in the button area of the window.
-			 *                           Usually divs with class "xkit-button".
-			 * @param {boolean} wide - Whether the XKit window should be wide.
-			 */
-			XKit.window.show = function(title, msg, icon, buttons, wide) {
-
-				if (typeof icon === "undefined") {
-					icon = "";
-				}
-
-				var additional_classes = "";
-
-				if (wide) {
-					additional_classes = "xkit-wide-window";
-				}
-
-				if ($("#xkit-window").length > 0) {
-					$("#xkit-window").attr('id', "xkit-window-old");
-					$("#xkit-window-old").fadeOut('fast', function() {
-						$(this).remove();
-					});
-				}
-
-				var m_html = "<div id=\"xkit-window\" class=\"" + icon + " " + additional_classes + "\" style=\"display: none;\">" +
-									"<div class=\"xkit-window-title\">" + title + "</div>" +
-									"<div class=\"xkit-window-msg\">" + msg + "</div>";
-
-				if (typeof buttons !== "undefined") {
-					m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
-				}
-
-				if ($("#xkit-window-shadow").length === 0) {
-					m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
-				}
-
-				$("body").prepend(m_html);
-
-				$("#tiptip_holder").css("z-index", "99000000");
-
-				// from xkit.js
-				/* globals centerIt */
-				centerIt($("#xkit-window"));
-				$("#xkit-window").fadeIn('fast');
-
-				$("#xkit-close-message").click(function() {
-					$("#xkit-window-shadow").fadeOut('fast', function() {
-						$(this).remove();
-					});
-					$("#xkit-window").fadeOut('fast', function() {
-						$(this).remove();
-					});
-				});
-
-			};
-
 			XKit.interface = new Object({
 
 				revision: 2,
@@ -1320,61 +1364,6 @@ XKit.extensions.xkit_patches = new Object({
 						XKit.interface.kitty.stored = kitty;
 
 					},
-
-					/**
-					 * Get the secure_form_key through a request using the current form_key
-					 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
-					 */
-					get: function(callback) {
-
-						var m_object = {};
-						m_object.errors = false;
-						m_object.kitten = "";
-
-						var current_ms = new Date().getTime();
-						var kitty_diff = current_ms - XKit.interface.kitty.store_time;
-
-						if (XKit.interface.kitty.stored !== "") {
-							if (kitty_diff >= XKit.interface.kitty.expire_time || kitty_diff < 0) {
-								//// console.log("XKitty: Kitty expired? Let's try again.");
-							} else {
-								//// console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
-								m_object.kitten = XKit.interface.kitty.stored;
-								callback(m_object);
-								return;
-							}
-						}
-
-						//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
-
-						XKit.tools.Nx_XHR({
-							method: "POST",
-							url: "https://www.tumblr.com/svc/secure_form_key",
-							headers: {
-								"X-tumblr-form-key": XKit.interface.form_key(),
-							},
-							onload: function(response) {
-								//// console.log("XKitty: YAY! Kitty request complete!");
-								XKit.interface.kitty.store_time = new Date().getTime();
-								var kitty_text = response.headers["x-tumblr-secure-form-key"];
-								XKit.interface.kitty.stored = kitty_text;
-								m_object.kitten = XKit.interface.kitty.stored;
-								m_object.response = response;
-								callback(m_object);
-							},
-							onerror: function(response) {
-								//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
-								m_object.errors = true;
-								m_object.kitten = "";
-								m_object.response = response;
-								XKit.interface.kitty.stored = "";
-								callback(m_object);
-							}
-						});
-
-					},
-
-
 				},
 
 				post_window: {
