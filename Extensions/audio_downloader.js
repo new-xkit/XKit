@@ -30,14 +30,17 @@ XKit.extensions.audio_downloader = new Object({
 			});
 
 			$(document).on("click", ".audio_downloader", function() {
-				fetch(this.getAttribute('data-src'))
+				const src = this.getAttribute('data-src');
+				const filename = (new URL(src)).pathname.replace("/", "");
+
+				fetch(src)
 				.then(response => response.blob())
 				.then(blob => {
 					const blob_url = window.URL.createObjectURL(blob);
 					const download_link = Object.assign(document.createElement('a'), {
 						style: { display: 'none' },
 						href: blob_url,
-						download: '',
+						download: filename,
 					});
 					document.body.appendChild(download_link);
 					download_link.click();
