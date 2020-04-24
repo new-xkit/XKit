@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.3 **//
+//* VERSION 7.3.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -204,7 +204,7 @@ XKit.extensions.xkit_patches = new Object({
 				let window_html = `
 					<div id="xkit-window" class="${icon} ${wide_class}" style="display:none">
 						<div class="xkit-window-title">${title}</div>
-						<div class="xkit-window-msg">"${msg}</div>
+						<div class="xkit-window-msg">${msg}</div>
 						<div class="xkit-window-buttons">${buttons}</div>
 					</div>`;
 
