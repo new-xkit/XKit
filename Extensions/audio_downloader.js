@@ -25,8 +25,8 @@ XKit.extensions.audio_downloader = new Object({
 			})
 			.then(({audioBlock}) => {
 				this.audioBlockClass = `.${audioBlock[0]}`;
-				this.react_process();
-				XKit.post_listener.add('audio_downloader', this.react_process);
+				this.react_add_buttons();
+				XKit.post_listener.add('audio_downloader', this.react_add_buttons);
 			});
 
 			$(document).on("click", ".audio_downloader", function() {
@@ -65,7 +65,7 @@ XKit.extensions.audio_downloader = new Object({
 		XKit.extensions.audio_downloader.do();
 	},
 
-	react_process: function() {
+	react_add_buttons: function() {
 		const {audioBlockClass} = XKit.extensions.audio_downloader;
 
 		$("audio > source[src]:not(.xkit-audio-downloader-done)").each(function() {
