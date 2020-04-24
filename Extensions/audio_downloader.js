@@ -33,16 +33,16 @@ XKit.extensions.audio_downloader = new Object({
 				fetch(this.getAttribute('data-src'))
 				.then(response => response.blob())
 				.then(blob => {
-			        const blob_url = window.URL.createObjectURL(blob);
-			        const download_link = Object.assign(document.createElement('a'), {
-			            style: { display: 'none' },
-			            href: blob_url,
-			            download: '',
-			        });
-			        document.body.appendChild(download_link);
-			        download_link.click();
-			        download_link.parentElement.removeChild(download_link);
-			        window.URL.revokeObjectURL(blob_url);
+					const blob_url = window.URL.createObjectURL(blob);
+					const download_link = Object.assign(document.createElement('a'), {
+						style: { display: 'none' },
+						href: blob_url,
+						download: '',
+					});
+					document.body.appendChild(download_link);
+					download_link.click();
+					download_link.parentElement.removeChild(download_link);
+					window.URL.revokeObjectURL(blob_url);
 				});
 			});
 
