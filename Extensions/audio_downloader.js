@@ -213,6 +213,7 @@ XKit.extensions.audio_downloader = new Object({
 		$(".xgetaudiobutton").remove();
 		$(".xkit-audio-downloader-done").removeClass("xkit-audio-downloader-done");
 		$("button.audio_downloader").parent().remove();
+		$(document).off("click", ".audio_downloader");
 	}
 
 });
