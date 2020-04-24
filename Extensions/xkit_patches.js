@@ -226,7 +226,7 @@ XKit.extensions.xkit_patches = new Object({
 				let window_html = `
 					<div id="xkit-window" class="${icon} ${wide_class}" style="display:none">
 						<div class="xkit-window-title">${title}</div>
-						<div class="xkit-window-msg">"${msg}</div>
+						<div class="xkit-window-msg">${msg}</div>
 						<div class="xkit-window-buttons">${buttons}</div>
 					</div>`;
 
