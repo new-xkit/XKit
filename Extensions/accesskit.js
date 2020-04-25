@@ -108,7 +108,7 @@ XKit.extensions.accesskit = new Object({
 		}
 	},
 
-	run: async function() {
+	run: function() {
 		this.running = true;
 
 		XKit.tools.init_css('accesskit');
