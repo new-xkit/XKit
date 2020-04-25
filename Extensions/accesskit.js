@@ -154,8 +154,8 @@ XKit.extensions.accesskit = new Object({
 
 			const {invert, grayscale} = this.preferences;
 			if (invert.value || grayscale.value) {
-				const do_invert = invert.value ? "invert(100%)" : "";
-				const do_grayscale = grayscale.value ? "grayscale(100%)" : "";
+				const do_invert = invert.value ? 'invert(100%)' : '';
+				const do_grayscale = grayscale.value ? 'grayscale(100%)' : '';
 				XKit.tools.add_css(`
 					html {
 						height: 100%;
