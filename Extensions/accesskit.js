@@ -108,6 +108,24 @@ XKit.extensions.accesskit = new Object({
 		}
 	},
 
+	cpanel: function() {
+		if (!XKit.page.react) {
+			return;
+		}
+
+		const deprecated_options = [
+			'visible_captions',
+			'contrast_sidebar',
+			'contrast_icons',
+			'contrast_notifications',
+			'increase_font_size',
+			'xkit_disable_counter',
+			'contrast'
+		].map(x => `[data-setting-id="${x}"]`).join(',');
+
+		$(deprecated_options).remove();
+	},
+
 	run: function() {
 		this.running = true;
 
