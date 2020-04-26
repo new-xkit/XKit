@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.4 **//
+//* VERSION 7.3.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -180,10 +180,10 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1"],
+	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1", "7.9.2"],
 
 	patches: {
-		"7.9.1": function() {
+		"7.9.2": function() {
 			/**
 			 * Show an XKit alert window
 			 * @param {String} title - Text for alert window's title bar
@@ -852,6 +852,8 @@ XKit.extensions.xkit_patches = new Object({
 				});
 			};
 		},
+
+		"7.9.1": function() {},
 
 		"7.9.0": function() {},
 
