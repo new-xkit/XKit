@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.2.11 **//
+//* VERSION 7.3.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -84,21 +84,40 @@ XKit.extensions.xkit_patches = new Object({
 		window.addEventListener("message", XKit.blog_listener.eventHandler);
 
 		// Scrape Tumblr's data object now that we can run add_function
-		XKit.tools.add_function(function() {
-			var blogs = [];
-			try {
-				var models = Tumblr.dashboardControls.allTumblelogs;
-				models.filter(function(model) {
-					return model.attributes.hasOwnProperty("is_current");
-				}).forEach(function(model) {
-					blogs.push(model.attributes.name);
+		const blog_scraper = XKit.page.react ?
+			function() {
+				/* globals tumblr */
+				let blogs = [];
+				Promise.race([
+					new Promise((resolve) => setTimeout(resolve, 30000)),
+					(async() => {
+						const {response} = await tumblr.apiFetch("/v2/user/info", {
+							queryParams: {'fields[blogs]': 'name'},
+						});
+						blogs = response.user.blogs.map(blog => blog.name);
+					})()
+				]).finally(() => {
+					window.postMessage({
+						xkit_blogs: blogs
+					}, window.location.protocol + "//" + window.location.host);
 				});
-			} catch (e) {} finally {
-				window.postMessage({
-					xkit_blogs: blogs
-				}, window.location.protocol + "//" + window.location.host);
-			}
-		}, true);
+			} :
+			function() {
+				var blogs = [];
+				try {
+					var models = Tumblr.dashboardControls.allTumblelogs;
+					models.filter(function(model) {
+						return model.attributes.hasOwnProperty("is_current");
+					}).forEach(function(model) {
+						blogs.push(model.attributes.name);
+					});
+				} catch (e) {} finally {
+					window.postMessage({
+						xkit_blogs: blogs
+					}, window.location.protocol + "//" + window.location.host);
+				}
+			};
+		XKit.tools.add_function(blog_scraper, true);
 
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
 
@@ -165,6 +184,251 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.1": function() {
+			XKit.post_listener.observer = new MutationObserver(mutations => {
+				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
+				const new_posts = mutations.some(({addedNodes}) => {
+					for (let i = 0; i < addedNodes.length; i++) {
+						const $addedNode = $(addedNodes[i]);
+						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
+							return true;
+						}
+					}
+				});
+
+				if (new_posts) {
+					Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
+						try {
+							callback();
+						} catch (e) {
+							console.error(e);
+						}
+					}));
+				}
+			});
+      
+			/**
+			 * Show an XKit alert window
+			 * @param {String} title - Text for alert window's title bar
+			 * @param {String} msg - Text for body of window, can be HTML
+			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+			 *   icon type, determined by CSS class `icon`.
+			 * @param {String} buttons - The HTML to be used in the button area of the window.
+			 *                           Usually divs with class "xkit-button".
+			 * @param {boolean} wide - Whether the XKit window should be wide.
+			 */
+			XKit.window.show = function(title, msg, icon = "", buttons = "", wide) {
+				const wide_class = wide ? "xkit-wide-window" : "";
+
+				$("#xkit-window").fadeOut('fast', function() {
+					$(this).remove();
+				});
+
+				let window_html = `
+					<div id="xkit-window" class="${icon} ${wide_class}" style="display:none">
+						<div class="xkit-window-title">${title}</div>
+						<div class="xkit-window-msg">${msg}</div>
+						<div class="xkit-window-buttons">${buttons}</div>
+					</div>`;
+
+				if ($("#xkit-window-shadow").length === 0) {
+					window_html += '<div id="xkit-window-shadow"></div>';
+				}
+
+				$("body").prepend(window_html);
+				$("#tiptip_holder").css("z-index", "99000000");
+				centerIt($("#xkit-window"));
+
+				$("#xkit-window")
+					.fadeIn('fast')
+					.keydown(event => event.stopPropagation());
+
+				$("#xkit-close-message").click(function() {
+					$("#xkit-window-shadow").fadeOut('fast', function() {
+						$(this).remove();
+					});
+					$("#xkit-window").fadeOut('fast', function() {
+						$(this).remove();
+					});
+				});
+			};
+
+			XKit.tools.normalize_indentation = (level, string) => {
+				const lines = string.split("\n");
+				const indentation_level = _.minBy(
+					lines.map(line => line.match(/^[ \t]+/)),
+					i => i ? i[0].length : Infinity
+				) || '';
+
+				const leading_indentation = new RegExp(`^${indentation_level}`);
+				return lines.map(line => line.replace(leading_indentation, level)).join("\n");
+			};
+
+			/**
+			 * Gets redpop translation strings for selecting elements via aria labels
+			 * @param {String} key - en_US string to translate
+			 * @return {Promise} - resolves with the translated key
+			 */
+			XKit.interface.translate = key => new Promise(resolve => {
+				function grabLanguageData() {
+					const waitForTumblrObject = setInterval(() => {
+						if (window.tumblr) {
+							clearInterval(waitForTumblrObject);
+							window.postMessage({
+								languageData: window.tumblr.languageData
+							}, `${location.protocol}//${location.host}`);
+						}
+					}, 100);
+				}
+
+				function receiveLanguageData(e) {
+					if (e.origin === `${location.protocol}//${location.host}` && e.data.languageData !== undefined) {
+						window.removeEventListener("message", receiveLanguageData);
+
+						if (e.data.languageData.code === "en_US") {
+							XKit.interface.translations = null;
+							resolve(key);
+						} else {
+							XKit.interface.translations = e.data.languageData.translations;
+							resolve(XKit.interface.translations[key]);
+						}
+					}
+				}
+
+				if (XKit.interface.translations === null) {
+					resolve(key);
+				} else if (XKit.interface.translations !== undefined) {
+					resolve(XKit.interface.translations[key]);
+				} else {
+					window.addEventListener("message", receiveLanguageData);
+					XKit.tools.add_function(grabLanguageData, true);
+				}
+			});
+
+			/**
+			 * Copies a function from the addon context into the page context. This
+			 * function will be serialized to a string, and then injected as a script tag
+			 * into the page.
+			 * @param {Function} func
+			 * @param {boolean} exec - Whether to execute the function immediately
+			 * @param {Object} addt - The desired contents of the global variable
+			 *                        `add_tag`. Only useful if `exec` is true
+			 */
+			XKit.tools.add_function = function(func, exec, addt) {
+				if (!XKit.tools.add_function_nonce) {
+					const scripts = document.querySelectorAll('script');
+					for (let i = 0; i < scripts.length; i++) {
+						var nonce = scripts[i].getAttribute('nonce') || scripts[i].nonce;
+						if (nonce) {
+							XKit.tools.add_function_nonce = nonce;
+							break;
+						}
+					}
+				}
+
+				try {
+					var script = document.createElement("script");
+					script.textContent = "var add_tag = " + JSON.stringify(addt) + ";\n";
+					script.textContent = script.textContent +
+						(exec ? "(" : "") +
+						XKit.tools.normalize_indentation('', func.toString()) +
+						(exec ? ")();" : "");
+					if (XKit.tools.add_function_nonce) {
+						script.setAttribute('nonce', XKit.tools.add_function_nonce);
+					}
+					document.body.appendChild(script);
+				} catch (e) {
+					XKit.window.show("Error",
+						"XKit failed to inject a script. Details:" +
+						"<p>" + e.message + "</p>",
+						"error",
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
+				}
+			};
+
+			const async_callbacks = {};
+			window.addEventListener('message', event => {
+				const target_origin = window.location.protocol + "//" + window.location.host;
+				if (event.origin === target_origin && event.data.xkit_callback_nonce) {
+					async_callbacks[event.data.xkit_callback_nonce](event.data);
+					delete async_callbacks[event.data.xkit_callback_nonce];
+				}
+			});
+
+			XKit.tools.async_add_function = function(func, arguments) {
+				return new Promise((resolve, reject) => {
+					const callback_nonce = Math.random();
+
+					const add_func = `(async ({callback_nonce, arguments}) => {
+						try {
+							const return_value = await (${
+								XKit.tools.normalize_indentation("\t".repeat(7), func.toString())
+							})(arguments);
+
+							window.postMessage({
+								xkit_callback_nonce: callback_nonce,
+								return_value,
+							}, window.location.protocol + "//" + window.location.host);
+						} catch (exception) {
+							window.postMessage({
+								xkit_callback_nonce: callback_nonce,
+								exception: {
+									...exception,
+									message: exception.message,
+									stack: exception.stack,
+								},
+							})
+						}
+					})(add_tag)`;
+
+					async_callbacks[callback_nonce] = (data) => {
+						if ('return_value' in data) {
+							resolve(data.return_value);
+						} else {
+							const original_exception = data.exception && JSON.parse(data.exception);
+							const error = new Error(`Error in injected function (${original_exception.message})`);
+							error.cause = original_exception;
+							reject();
+						}
+					};
+
+					XKit.tools.add_function(add_func, false, {callback_nonce, arguments});
+				});
+			};
+
+			/**
+			 * Edit up to 100 posts at a time via Mass Post Editor
+			 * @param {Object[]} post_ids - array of post IDs to edit
+			 * @param {Object[]} config - settings object
+			 * @param {String} config.mode - "add", "remove", or "delete"
+			 * @param {Object[]} [config.tags] - array of tags to add or remove
+			 * @return {Promise}
+			 */
+			XKit.interface.mass_edit = function(post_ids, config) {
+			    const path = {
+			        "add": "add_tags_to_posts",
+			        "remove": "remove_tags_from_posts",
+			        "delete": "delete_posts"
+			    }[config.mode];
+
+			    let payload = {
+			        "post_ids": post_ids.join(","),
+			        "form_key": XKit.interface.form_key()
+			    };
+
+			    if (config.mode !== "delete") {
+			        payload.tags = config.tags.join(",");
+			    }
+
+			    return XKit.tools.Nx_XHR({
+			        method: "POST",
+			        url: `https://www.tumblr.com/${path}`,
+			        headers: {
+			            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+			        },
+			        data: $.param(payload)
+			    });
+			};
 
 			// Override "Search Page Brick Post Fix" from xkit.css
 			XKit.tools.add_css(
@@ -485,6 +749,130 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.interface.post_window.reblogging_from =
 				() => $(".post-form--header .reblog_source .reblog_name").text();
+
+			/**
+			 * @param {JQuery} obj - Post element
+			 * @return {Promise<Object>} Resolves to an interface Post Object or rejects
+			 */
+			XKit.interface.async_post = function(obj) {
+				if ($(obj).attr('data-id') && XKit.page.react) {
+					return XKit.interface.react.post(obj);
+				} else {
+					const post_object = XKit.interface.post(obj);
+					if (post_object.error) {
+						return Promise.reject(post_object);
+					} else {
+						return Promise.resolve(post_object);
+					}
+				}
+			};
+
+			XKit.interface.react = {
+				post_props: async function(post_id) {
+					// eslint-disable-next-line no-shadow
+					return XKit.tools.async_add_function(({post_id}) => {
+						const keyStartsWith = (obj, prefix) =>
+							Object.keys(obj).find(key => key.startsWith(prefix));
+						const element = document.querySelector(`[data-id="${post_id}"]`);
+						let fiber = element[keyStartsWith(element, '__reactInternalInstance')];
+
+						while (fiber.memoizedProps.timelineObject === undefined) {
+							fiber = fiber.return;
+						}
+						return fiber.memoizedProps.timelineObject;
+					}, {post_id});
+				},
+
+				post: async function($element) {
+					const id = $element.data('id');
+					const post = await this.post_props(id);
+
+					return {
+						id: id,
+						root_id: post.rebloggedRootId,
+						reblog_key: post.reblogKey,
+						owner: post.blogName,
+						get tumblelog_key() { throw new Error('not supported'); },
+						liked: post.liked,
+						permalink: post.postUrl,
+						type: 'regular',
+						body: $element.find("header + div").html(),
+						get animated() { throw new Error('not supported'); },
+						is_reblogged: !!post.rebloggedFromUuid,
+						is_mine: post.canEdit,
+						is_following: post.followed,
+						can_edit: post.canEdit,
+						source_owner: post.rebloggedRootName,
+						reblog_link: post.rebloggedFromUrl,
+						reblog_owner: post.rebloggedFromName,
+						reblog_original_id: post.rebloggedFromId,
+						note_count: post.noteCount,
+						avatar: post.blog.avatar[post.blog.avatar.length - 1].url,
+						tags: post.tags.join(","),
+					};
+				},
+			};
+
+			XKit.interface.async_form_key = async function() {
+				const request = await fetch('https://www.tumblr.com/settings/dashboard');
+				const meta_tag = (await request.text()).match(
+					/tumblr-form-key[^>]*content=("([^"]+)"|'([^']+)')/
+				);
+
+				if (meta_tag) {
+					const form_key = meta_tag[2] || meta_tag[3];
+					XKit.storage.set('xkit_patches', 'last_stored_form_key', window.btoa(form_key));
+					return form_key;
+				}
+			};
+
+			/**
+			 * Get the secure_form_key through a request using the current form_key
+			 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+			 */
+			XKit.interface.kitty.get = async function(callback) {
+				var m_object = {
+					errors: false,
+					kitten: ''
+				};
+
+				var kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
+
+				if (XKit.interface.kitty.stored !== "") {
+					if (kitty_diff <= XKit.interface.kitty.expire_time && kitty_diff > 0) {
+						m_object.kitten = XKit.interface.kitty.stored;
+						callback(m_object);
+						return;
+					}
+				}
+
+				if (!XKit.interface.form_key()) {
+					await XKit.interface.async_form_key();
+				}
+
+				XKit.tools.Nx_XHR({
+					method: "POST",
+					url: "https://www.tumblr.com/svc/secure_form_key",
+					headers: {
+						"X-tumblr-form-key": XKit.interface.form_key(),
+					},
+					onload: function(response) {
+						XKit.interface.kitty.store_time = new Date().getTime();
+						var kitty_text = response.headers["x-tumblr-secure-form-key"];
+						XKit.interface.kitty.stored = kitty_text;
+						m_object.kitten = XKit.interface.kitty.stored;
+						m_object.response = response;
+						callback(m_object);
+					},
+					onerror: function(response) {
+						m_object.errors = true;
+						m_object.kitten = "";
+						m_object.response = response;
+						XKit.interface.kitty.stored = "";
+						callback(m_object);
+					}
+				});
+			};
 		},
 
 		"7.9.0": function() {},
@@ -672,45 +1060,6 @@ XKit.extensions.xkit_patches = new Object({
 			 * Cached nonce for use in script injection to overcome CSP
 			 */
 			XKit.tools.add_function_nonce = "";
-
-			/**
-			 * Copies a function from the addon context into the page context. This
-			 * function will be serialized to a string, and then injected as a script tag
-			 * into the page.
-			 * @param {Function} func
-			 * @param {boolean} exec - Whether to execute the function immediately
-			 * @param {Object} addt - The desired contents of the global variable
-			 *                        `add_tag`. Only useful if `exec` is true
-			 */
-			XKit.tools.add_function = function(func, exec, addt) {
-				if (!XKit.tools.add_function_nonce) {
-					var scripts = document.querySelectorAll('script');
-					for (var i = 0; i < scripts.length; i++) {
-						var nonce = scripts[i].getAttribute('nonce');
-						if (nonce) {
-							XKit.tools.add_function_nonce = nonce;
-							break;
-						}
-					}
-				}
-
-				try {
-					var script = document.createElement("script");
-					script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
-					script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
-					if (XKit.tools.add_function_nonce) {
-						script.setAttribute('nonce', XKit.tools.add_function_nonce);
-					}
-					document.body.appendChild(script);
-				} catch (e) {
-					XKit.window.show("Error",
-						"XKit failed to inject a script. Details:" +
-						"<p>" + e.message + "</p>",
-						"error",
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-					);
-				}
-			};
 
 			/**
 			 * @return {Object} The elements of XKit's storage as a map from setting key to
@@ -982,68 +1331,6 @@ XKit.extensions.xkit_patches = new Object({
 
 			};
 
-			/**
-			 * Show an XKit alert window
-			 * @param {String} title - Text for alert window's title bar
-			 * @param {String} msg - Text for body of window, can be HTML
-			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
-			 *   icon type, determined by CSS class `icon`.
-			 *   See also xkit_patches.css.
-			 * @param {String} buttons - The HTML to be used in the button area of the window.
-			 *                           Usually divs with class "xkit-button".
-			 * @param {boolean} wide - Whether the XKit window should be wide.
-			 */
-			XKit.window.show = function(title, msg, icon, buttons, wide) {
-
-				if (typeof icon === "undefined") {
-					icon = "";
-				}
-
-				var additional_classes = "";
-
-				if (wide) {
-					additional_classes = "xkit-wide-window";
-				}
-
-				if ($("#xkit-window").length > 0) {
-					$("#xkit-window").attr('id', "xkit-window-old");
-					$("#xkit-window-old").fadeOut('fast', function() {
-						$(this).remove();
-					});
-				}
-
-				var m_html = "<div id=\"xkit-window\" class=\"" + icon + " " + additional_classes + "\" style=\"display: none;\">" +
-									"<div class=\"xkit-window-title\">" + title + "</div>" +
-									"<div class=\"xkit-window-msg\">" + msg + "</div>";
-
-				if (typeof buttons !== "undefined") {
-					m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
-				}
-
-				if ($("#xkit-window-shadow").length === 0) {
-					m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
-				}
-
-				$("body").prepend(m_html);
-
-				$("#tiptip_holder").css("z-index", "99000000");
-
-				// from xkit.js
-				/* globals centerIt */
-				centerIt($("#xkit-window"));
-				$("#xkit-window").fadeIn('fast');
-
-				$("#xkit-close-message").click(function() {
-					$("#xkit-window-shadow").fadeOut('fast', function() {
-						$(this).remove();
-					});
-					$("#xkit-window").fadeOut('fast', function() {
-						$(this).remove();
-					});
-				});
-
-			};
-
 			XKit.interface = new Object({
 
 				revision: 2,
@@ -1077,61 +1364,6 @@ XKit.extensions.xkit_patches = new Object({
 						XKit.interface.kitty.stored = kitty;
 
 					},
-
-					/**
-					 * Get the secure_form_key through a request using the current form_key
-					 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
-					 */
-					get: function(callback) {
-
-						var m_object = {};
-						m_object.errors = false;
-						m_object.kitten = "";
-
-						var current_ms = new Date().getTime();
-						var kitty_diff = current_ms - XKit.interface.kitty.store_time;
-
-						if (XKit.interface.kitty.stored !== "") {
-							if (kitty_diff >= XKit.interface.kitty.expire_time || kitty_diff < 0) {
-								//// console.log("XKitty: Kitty expired? Let's try again.");
-							} else {
-								//// console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
-								m_object.kitten = XKit.interface.kitty.stored;
-								callback(m_object);
-								return;
-							}
-						}
-
-						//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
-
-						XKit.tools.Nx_XHR({
-							method: "POST",
-							url: "https://www.tumblr.com/svc/secure_form_key",
-							headers: {
-								"X-tumblr-form-key": XKit.interface.form_key(),
-							},
-							onload: function(response) {
-								//// console.log("XKitty: YAY! Kitty request complete!");
-								XKit.interface.kitty.store_time = new Date().getTime();
-								var kitty_text = response.headers["x-tumblr-secure-form-key"];
-								XKit.interface.kitty.stored = kitty_text;
-								m_object.kitten = XKit.interface.kitty.stored;
-								m_object.response = response;
-								callback(m_object);
-							},
-							onerror: function(response) {
-								//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
-								m_object.errors = true;
-								m_object.kitten = "";
-								m_object.response = response;
-								XKit.interface.kitty.stored = "";
-								callback(m_object);
-							}
-						});
-
-					},
-
-
 				},
 
 				post_window: {
@@ -2562,23 +2794,6 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					}
 				},
-				observer: new MutationObserver(function(mutations) {
-					for (var mutation in mutations) {
-						var $target = $(mutations[mutation].target);
-						if ($target.hasClass("posts") || $target.parent().hasClass("posts") || $(mutations[mutation].addedNodes).find(".post").length) {
-							for (var x in XKit.post_listener.callbacks) {
-								for (var i in XKit.post_listener.callbacks[x]) {
-									try {
-										XKit.post_listener.callbacks[x][i]();
-									} catch (e) {
-										console.error("Could not run callback for " + x + ": " + e.message);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}),
 				check: function() {
 					XKit.post_listener.observer.observe($("body")[0], {
 						childList: true,

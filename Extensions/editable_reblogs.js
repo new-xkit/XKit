@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.10 **//
+//* VERSION 3.3.11 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -174,7 +174,7 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 
 		var post_fetch_request = {
-			id: parseInt(location_items[1]),
+			id: location_items[1],
 			form_key: XKit.interface.form_key(),
 			post_type: false
 		};
@@ -469,10 +469,10 @@ XKit.extensions.editable_reblogs = new Object({
 		request.reblog = location_items[0] === "reblog";
 
 		if (location_items[0] === "reblog") {
-			request.reblog_id = parseInt(location_items[1]);
+			request.reblog_id = location_items[1];
 		}
 		if (location_items[0] === "edit") {
-			request.post_id = parseInt(location_items[1]);
+			request.post_id = location_items[1];
 		}
 
 		request.reblog_key = location_items[2];

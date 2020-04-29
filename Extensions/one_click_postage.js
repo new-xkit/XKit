@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.6 **//
+//* VERSION 4.4.12 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -221,7 +221,7 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).removeClass("xkit-button-done");
 		$(obj).addClass("xkit-button-working");
 
-		var post_id = parseInt(XKit.iframe.single_post_id());
+		var post_id = XKit.iframe.single_post_id();
 		var form_key = XKit.iframe.form_key();
 		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[3];
 
@@ -295,7 +295,7 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.detached = true;
 
 		m_object.reblog = true;
-		m_object.reblog_id = parseInt(_m_object.reblog_id);
+		m_object.reblog_id = _m_object.reblog_id;
 		m_object.reblog_key = _m_object.reblog_key;
 
 		m_object.errors = false;
@@ -657,20 +657,27 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.storage.set("one_click_postage", "share_on_" + $(this).attr('data-site'), m_value);
 		});
 
-		$(document).on("mouseover", ".reblog_button,.post_control.reblog", function(event) {
+		const reblog_buttons = [
+			'.reblog_button',
+			'.post_control.reblog',
+			'button[aria-label="Reblog"]',
+			'a[role="button"][href*="/reblog/"]'
+		].join(',');
+
+		$(document).on("mouseover", reblog_buttons, function(event) {
 			if ($(this).hasClass("radar_button") === true) {return; }
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
 			XKit.extensions.one_click_postage.open_menu($(this));
 		});
 
-		$(document).on("mouseout mouseleave", ".reblog_button,.post_control.reblog", function() {
+		$(document).on("mouseout mouseleave", reblog_buttons, function() {
 			if ($(this).hasClass("radar_button") === true) {return; }
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
 
-		$(document).on("click", ".reblog_button,.post_control.reblog", function() {
+		$(document).on("click", reblog_buttons, function() {
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
@@ -837,7 +844,11 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	make_button_reblogged: function(m_button) {
-		m_button.addClass("reblogged");
+		if (XKit.page.react) {
+			m_button.find("svg").attr("fill", "var(--green)");
+		} else {
+			m_button.addClass("reblogged");
+		}
 	},
 
 	destroy: function() {
@@ -909,21 +920,25 @@ XKit.extensions.one_click_postage = new Object({
 				} else {
 					switch (e.which) {
 						case 68: // 68 = D
-							XKit.extensions.one_click_postage.open_menu($(this), true);
-							XKit.extensions.one_click_postage.post(1, false);
+							XKit.extensions.one_click_postage.open_menu($(this), true).then(() => {
+								XKit.extensions.one_click_postage.post(1, false);
+							});
 							break;
 						case 81: // 81 = Q
-							XKit.extensions.one_click_postage.open_menu($(this), true);
-							XKit.extensions.one_click_postage.post(2, false);
+							XKit.extensions.one_click_postage.open_menu($(this), true).then(() => {
+								XKit.extensions.one_click_postage.post(2, false);
+							});
 							break;
 						case 82: // 82 = R
-							XKit.extensions.one_click_postage.open_menu($(this), true);
-							XKit.extensions.one_click_postage.post(0, false);
+							XKit.extensions.one_click_postage.open_menu($(this), true).then(() => {
+								XKit.extensions.one_click_postage.post(0, false);
+							});
 							break;
 						case 84: // 84 = T
 							XKit.extensions.one_click_postage.user_on_box = true;
-							XKit.extensions.one_click_postage.open_menu($(this), false, true);
-							$('#x1cpostage_tags').focus();
+							XKit.extensions.one_click_postage.open_menu($(this), false, true).then(() => {
+								$('#x1cpostage_tags').focus();
+							});
 							break;
 					}
 				}
@@ -958,20 +973,19 @@ XKit.extensions.one_click_postage = new Object({
 		}
 	},
 
-	open_menu: function(obj, hide_ui, force_on_screen) {
+	open_menu: async function(obj, hide_ui, force_on_screen) {
 		if ($(obj).attr('x1cpostage_disabled') === "true" || $(obj).hasClass("xkit-one-click-reblog-working") === true) {
 			// we are!
 			return;
 		}
 
 		// Get the box ID.
-		var parent_box = $(obj).parentsUntil(".post").parent();
-		var box_id = $(parent_box).attr('data-post-id');
-		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('data-post-id');
+		var parent_box = $(obj).parentsUntil(".post,[data-id]").parent();
+		var box_id = $(parent_box).attr('data-post-id') || $(parent_box).attr('data-id');
 
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
-		if (box_id !== previous_id) {
+		if (box_id !== this.last_post_id) {
 			// It is not! Hide it.
 			// Also, change all the settings.
 			$("#x1cpostage_box").css('display', 'none');
@@ -1006,22 +1020,22 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).attr('title', '');
 
 		// Call Auto Tagger for tags. Will be "" if auto_tagger is disabled
-		var post_obj = XKit.interface.post($(parent_box));
+		var post_obj = await XKit.interface.async_post($(parent_box));
 		var state = 0; // reblog
 		var tags = $("#x1cpostage_tags").val();
-		if (!XKit.extensions.one_click_postage.auto_tagger_done) {
-			XKit.extensions.one_click_postage.auto_tagger_done = true;
+		if (!this.auto_tagger_done) {
+			this.auto_tagger_done = true;
 			tags = tags + (tags ? ", " : "") + this.get_auto_tagger_tags(post_obj, state, false);
 		}
 		$("#x1cpostage_tags").val(tags);
 
 		// Quick Tags?
 		$("#x1cpostage_quick_tags").remove();
-		if (XKit.extensions.one_click_postage.quick_tags === true && typeof XKit.extensions.quick_tags != "undefined") {
+		if (this.quick_tags === true && typeof XKit.extensions.quick_tags != "undefined") {
 			// Call Quick Tags to render our box.
 			if (XKit.extensions.quick_tags.preferences.show_in_one_click_postage.value) {
 				var m_html = "<div id=\"x1cpostage_quick_tags\">" + XKit.extensions.quick_tags.return_for_one_click_postage() + "</div>";
-				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
+				if (this.preferences.show_reverse_ui.value) {
 					$("#x1cpostage_caption").before(m_html);
 				} else {
 					$("#x1cpostage_tags").before(m_html);
@@ -1065,9 +1079,9 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		}
 
-		XKit.extensions.one_click_postage.last_object = parent_box;
-		XKit.extensions.one_click_postage.last_icon_object = obj;
-		XKit.extensions.one_click_postage.last_post_id = $(parent_box).attr('data-post-id');
+		this.last_object = parent_box;
+		this.last_icon_object = obj;
+		this.last_post_id = box_id;
 	},
 
 	reset_box: function() {
@@ -1083,12 +1097,7 @@ XKit.extensions.one_click_postage = new Object({
 	close_menu: function(obj, force) {
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 
-		// I don't know what this is doing
-		// but I don't want to break its current behavior
-		/* eslint-disable no-undef */
-
 		if (force === true) {
-			last_object = null;
 			XKit.extensions.one_click_postage.user_on_box = false;
 			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
 				$("#x1cpostage_box").fadeOut('fast');
@@ -1100,7 +1109,6 @@ XKit.extensions.one_click_postage = new Object({
 
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
-				last_object = null;
 				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
 					$("#x1cpostage_box").fadeOut('fast');
 				} else {
@@ -1119,7 +1127,7 @@ XKit.extensions.one_click_postage = new Object({
 	 * @param {boolean} quick_queue_mode - If this is from a Quick Queue button
 	 *                                     instead of the OCP ui (I think)
 	 */
-	post: function(state, retry_mode, quick_queue_mode) {
+	post: async function(state, retry_mode, quick_queue_mode) {
 		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
 			$("#x1cpostage_box").fadeOut('fast');
 		} else {
@@ -1127,7 +1135,7 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		var form_key = XKit.interface.form_key();
-		var post = XKit.interface.post(XKit.extensions.one_click_postage.last_object);
+		var post = await XKit.interface.async_post(XKit.extensions.one_click_postage.last_object);
 		var post_id = post.id;
 		var reblog_key = post.reblog_key;
 		var channel_id = post.owner;
@@ -1140,10 +1148,9 @@ XKit.extensions.one_click_postage = new Object({
 		var root_id = post.root_id;
 		var m_object = {
 			channel_id: channel_id,
-			reblog_id: parseInt(post.id),
+			reblog_id: post.id,
 			reblog_key: reblog_key,
 			form_key: form_key,
-			post_type: post.type,
 		};
 		var blog_id = XKit.extensions.one_click_postage.default_blog_id;
 
@@ -1166,7 +1173,7 @@ XKit.extensions.one_click_postage = new Object({
 			$(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog").addClass("xkit-one-click-reblog-working");
 		}
 
-		var m_button = $(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog");
+		var m_button = $(XKit.extensions.one_click_postage.last_object).find('.reblog_button, .post_control.reblog, button[aria-label="Reblog"], a[role="button"][href*="/reblog/"]');
 
 		if (quick_queue_mode) {
 			m_button = $(XKit.extensions.one_click_postage.last_object).find(".xkit-one-click-postage-quickqueue");
@@ -1232,7 +1239,7 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.detached = true;
 
 		m_object.reblog = true;
-		m_object.reblog_id = parseInt(post_id);
+		m_object.reblog_id = post_id;
 		m_object.reblog_key = reblog_key;
 
 		m_object.errors = false;
@@ -1348,7 +1355,7 @@ XKit.extensions.one_click_postage = new Object({
 					}
 
 					$(m_button).removeClass("xkit-one-click-reblog-working");
-					
+
 					if (responseData.message === "" || typeof responseData.message === "undefined") {
 						// No message
 					} else {
@@ -1364,7 +1371,7 @@ XKit.extensions.one_click_postage = new Object({
 							}
 						}
 						if (!this.preferences.dont_show_notifications.value) {
-							if (this.preferences.use_toasts.value) {
+							if (this.preferences.use_toasts.value && !XKit.page.react) {
 								XKit.toast.add(
 									responseData.created_post,
 									responseData.verbiage,
