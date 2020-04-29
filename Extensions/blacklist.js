@@ -122,12 +122,10 @@ XKit.extensions.blacklist = new Object({
 	blacklisted: [],
 	whitelisted: [],
 
-	run: function() {
+	run: async function() {
 		this.running = true;
-		XKit.css_map.add_callback('blacklist', this.actuallyRun);
-	},
 
-	actuallyRun: function() {
+		await XKit.css_map.getCssMapPromise;
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 			if (this.preferences.dont_on_inbox.value) {
@@ -157,7 +155,8 @@ XKit.extensions.blacklist = new Object({
 		$(document).on('click', ".xblacklist_open_post", XKit.extensions.blacklist.unhide_post);
 
 		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
-		const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
+		const postContentClasses = XKit.css_map.keyToClasses('post') || ['.post_content'];
+		const blacklistedPostContentSel = postContentClasses.map(cls => `.xblacklist_blacklisted_post ${cls}`).join(', ');
 
 		if (this.preferences.mini_block.value === true) {
 
@@ -167,7 +166,7 @@ XKit.extensions.blacklist = new Object({
 						" position: absolute; top: 0; left: 0; width: 100%; " +
 						" color: rgba(255,255,255,.43); height: 27px !important; padding: 0px; !important; " +
 						" line-height: 27px !important; padding-left: 15px; !important; } " +
-					` .xblacklist_blacklisted_post ${postContentSel} { ` +
+					` ${blacklistedPostContentSel} { ` +
 						" background: transparent; color: rgba(255,255,255,.43); } " +
 					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { " +
 						"display: inline-block; height: unset; line-height: initial;} " +

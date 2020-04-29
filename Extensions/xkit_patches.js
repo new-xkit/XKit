@@ -119,22 +119,6 @@ XKit.extensions.xkit_patches = new Object({
 			};
 		XKit.tools.add_function(blog_scraper, true);
 
-		// Scrape Tumblr's css map
-		XKit.tools.add_function(function() {
-			if (!window.tumblr) {
-				window.postMessage({
-					cssMap: null,
-				}, window.location.protocol + "//" + window.location.host);
-				return;
-			}
-			window.tumblr.getCssMap().then((cssMap) => {
-				window.postMessage({
-					cssMap,
-				}, window.location.protocol + "//" + window.location.host);
-			});
-		}, true);
-
-
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
 
 			if (!window._ || !window.jQuery) {
@@ -634,41 +618,29 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			XKit.css_map = {
-				callbacks: {},
-				done: false,
 				cssMap: null,
-				add_callback: function(extension, func) {
-					if (this.done) {
-						func.call(XKit.extensions[extension], this.cssMap);
-					} else {
-						this.callbacks[extension] = func;
+				getCssMapPromise: XKit.tools.async_add_function(async() => {
+					if (!window.tumblr) {
+						return null;
 					}
-				},
-				setCssMap: function(cssMap) {
-					this.done = true;
-					this.cssMap = cssMap;
-
-					const callbacks = this.callbacks;
-					for (const extension in callbacks) {
-						callbacks[extension].call(XKit.extensions[extension], this.cssMap);
-					}
-				},
-				keyToCss: function(key) {
+					const cssMap = await window.tumblr.getCssMap();
+					XKit.css_map.cssMap = cssMap;
+					return cssMap;
+				}),
+				keyToClasses: function(key) {
 					if (!this.cssMap || !this.cssMap.hasOwnProperty(key)) {
 						return;
 					}
-					return this.cssMap[key].map(cls => '.' + cls).join(', ');
+					return this.cssMap[key];
+				},
+				keyToCss: function(key) {
+					const classes = this.keyToClasses(key);
+					if (!classes) {
+						return;
+					}
+					return classes.map(cls => '.' + cls).join(', ');
 				},
 			};
-
-			XKit.tools.async_add_function(async() => {
-				if (!window.tumblr) {
-					return null;
-				}
-				return await window.tumblr.getCssMap();
-			}).then(cssMap => {
-				XKit.css_map.setCssMap(cssMap);
-			});
 
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
