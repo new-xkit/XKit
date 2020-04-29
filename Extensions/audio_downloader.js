@@ -73,7 +73,7 @@ XKit.extensions.audio_downloader = new Object({
 			const src = $source.attr('src');
 
 			$source.parents(audioBlockClass).append(`
-				<div style="padding: 10px 20px;">
+				<div style="margin: 10px 0; padding: 0 20px;">
 					<button class="audio_downloader" data-src="${src}" style="color: var(--purple); text-decoration: underline;">
 						(Download)
 					</button>
