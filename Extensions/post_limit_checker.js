@@ -109,9 +109,9 @@ XKit.extensions.post_limit_checker = new Object({
 	next: function(blog, page = 0) {
 
 		XKit.svc.indash_blog({
-			"tumblelog_name_or_id": blog,
-			"limit": 50,
-			"offset": page * 50
+			tumblelog_name_or_id: blog,
+			limit: 50,
+			offset: page * 50
 		}).then(response => {
 			const posts = response.json().response.posts;
 
