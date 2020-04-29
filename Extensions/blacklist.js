@@ -107,12 +107,6 @@ XKit.extensions.blacklist = new Object({
 			default: false,
 			value: false
 		},
-		"hide_by_default": {
-			text: "Hide newly loaded posts until Blacklist makes sure they aren't blocked",
-			default: false,
-			value: false,
-			experimental: true
-		},
 		"sep3": {
 			text: "Blacklisted Words",
 			type: "separator"
@@ -180,18 +174,6 @@ XKit.extensions.blacklist = new Object({
 
 			XKit.tools.add_css(mini_ui, "xkit_blacklist_mini_ui");
 
-		}
-
-		if (this.preferences.hide_by_default.value) {
-			// Set opacity of all post content to 0, upon Blacklist's
-			// completion set it back to 1
-			XKit.tools.add_css(
-				`${postContentSel} { opacity: 0; } ` +
-				`${postSel}.xblacklist-done ${postContentSel} { opacity: 1; } ` +
-				`${postSel} .post_header::after { content: "Hidden by Blacklist"; }` +
-				`${postSel}.xblacklist-done .post_header::after { content: ""; }`,
-				"xkit_blacklist_hide_by_default"
-			);
 		}
 
 		if ($(postSel).length > 0) {
@@ -1033,7 +1015,6 @@ XKit.extensions.blacklist = new Object({
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);
 		XKit.tools.remove_css("xkit_blacklist_mini_ui");
-		XKit.tools.remove_css("xkit_blacklist_hide_by_default");
 		XKit.tools.remove_css("blacklist");
 	},
 
