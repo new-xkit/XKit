@@ -94,7 +94,8 @@
 }
 
 .xblacklist_excuse {
-	padding: 0; text-align: left; font-size: 12px;
+	padding: 15px 0 23px 0;
+	text-align: left; font-size: 12px;
 	color: rgb(130,130,130);
 	height: 50px;
 	line-height: 50px;
