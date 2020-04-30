@@ -119,7 +119,7 @@ XKit.extensions.blacklist = new Object({
 	run: async function() {
 		this.running = true;
 
-		await XKit.css_map.getCssMapPromise;
+		await XKit.css_map.getCssMap();
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 			if (this.preferences.dont_on_inbox.value) {

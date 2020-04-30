@@ -619,14 +619,21 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.css_map = {
 				cssMap: null,
-				getCssMapPromise: XKit.tools.async_add_function(async() => {
-					if (!window.tumblr) {
-						return null;
+
+				getCssMap: async function() {
+					if (this.cssMap) {
+						return this.cssMap;
 					}
-					const cssMap = await window.tumblr.getCssMap();
-					XKit.css_map.cssMap = cssMap;
-					return cssMap;
-				}),
+
+					this.cssMap = await XKit.tools.async_add_function(async() => {
+						if (!window.tumblr) {
+							return null;
+						}
+						const cssMap = await window.tumblr.getCssMap();
+						return cssMap;
+					});
+					return this.cssMap;
+				},
 				keyToClasses: function(key) {
 					if (!this.cssMap || !this.cssMap.hasOwnProperty(key)) {
 						return;
