@@ -840,7 +840,7 @@ XKit.extensions.xkit_patches = new Object({
 					}
 				}
 
-				if (!XKit.interface.form_key() || retry_mode) {
+				if (!XKit.interface.form_key()) {
 					await XKit.interface.async_form_key();
 				}
 
@@ -855,6 +855,7 @@ XKit.extensions.xkit_patches = new Object({
 					},
 					onerror: function(response) {
 						XKit.interface.kitty.stored = "";
+						XKit.storage.set("xkit_patches", "last_stored_form_key", "");
 
 						if (!retry_mode) {
 							XKit.interface.kitty.get(callback, true);
