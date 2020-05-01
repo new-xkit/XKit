@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.5 **//
+//* VERSION 7.3.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -205,7 +205,7 @@ XKit.extensions.xkit_patches = new Object({
 					}));
 				}
 			});
-      
+
 			/**
 			 * Show an XKit alert window
 			 * @param {String} title - Text for alert window's title bar
@@ -828,48 +828,39 @@ XKit.extensions.xkit_patches = new Object({
 
 			/**
 			 * Get the secure_form_key through a request using the current form_key
-			 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+			 * @param {Function} callback - invoked with `{errors: Boolean, kitten: String}`
+			 * @param {Boolean} retry_mode - whether to retry using a new form_key
 			 */
-			XKit.interface.kitty.get = async function(callback) {
-				var m_object = {
-					errors: false,
-					kitten: ''
-				};
-
-				var kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
-
+			XKit.interface.kitty.get = async function(callback, retry_mode = false) {
 				if (XKit.interface.kitty.stored !== "") {
+					const kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
 					if (kitty_diff <= XKit.interface.kitty.expire_time && kitty_diff > 0) {
-						m_object.kitten = XKit.interface.kitty.stored;
-						callback(m_object);
+						callback({errors: false, kitten: XKit.interface.kitty.stored});
 						return;
 					}
 				}
 
-				if (!XKit.interface.form_key()) {
+				if (!XKit.interface.form_key() || retry_mode) {
 					await XKit.interface.async_form_key();
 				}
 
 				XKit.tools.Nx_XHR({
 					method: "POST",
 					url: "https://www.tumblr.com/svc/secure_form_key",
-					headers: {
-						"X-tumblr-form-key": XKit.interface.form_key(),
-					},
 					onload: function(response) {
 						XKit.interface.kitty.store_time = new Date().getTime();
-						var kitty_text = response.headers["x-tumblr-secure-form-key"];
-						XKit.interface.kitty.stored = kitty_text;
-						m_object.kitten = XKit.interface.kitty.stored;
-						m_object.response = response;
-						callback(m_object);
+						XKit.interface.kitty.stored = response.headers["x-tumblr-secure-form-key"];
+
+						callback({errors: false, kitten: XKit.interface.kitty.stored, response});
 					},
 					onerror: function(response) {
-						m_object.errors = true;
-						m_object.kitten = "";
-						m_object.response = response;
 						XKit.interface.kitty.stored = "";
-						callback(m_object);
+
+						if (!retry_mode) {
+							XKit.interface.kitty.get(callback, true);
+						} else {
+							callback({errors: true, kitten: "", response});
+						}
 					}
 				});
 			};
