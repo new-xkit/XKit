@@ -34,7 +34,7 @@ XKit.extensions.panaroma = new Object({
 				/* globals tumblr */
 				return await tumblr.getCssMap();
 			})
-			.then(({bluespaceLayout, container, main}) => {
+			.then(({bluespaceLayout, container, main, audioBlock}) => {
 				const containerSelector = container.map(x => `.${bluespaceLayout[0]} > .${x}`).join(',');
 				const mainSelector = main.map(x => `.${x}`).join(',');
 
@@ -57,7 +57,8 @@ XKit.extensions.panaroma = new Object({
 					}
 					.xkit--react main,
 					.xkit--react main article,
-					.xkit--react main article > * {
+					.xkit--react main article > *,
+					.xkit--react .${audioBlock[0]} {
 						max-width: ${new_inner_main_max_width}px;
 					}
 				`, 'panorama');
