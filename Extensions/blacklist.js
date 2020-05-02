@@ -176,6 +176,16 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
+		if (XKit.page.react) {
+			const react_css =
+				'.xblacklist_excuse { ' +
+				'padding: 15px 0 23px 0;' +
+				'height: 50px;' +
+				'background-color: white;' +
+				'}';
+			XKit.tools.add_css(react_css, 'xkit_blacklist_react');
+		}
+
 		if ($(postSel).length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
@@ -682,8 +692,6 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		$(m_div).find(".xblacklist_excuse").remove();
-		const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
-		$(m_div).find(postContentSel).html($(m_div).find(".xblacklist_old_content").html());
 
 		// Fix for canvases on Disable Gifs:
 		if ($(m_div).hasClass("disable-gifs-checked")) {
@@ -714,11 +722,6 @@ XKit.extensions.blacklist = new Object({
 			$(obj).addClass("xblacklist_hidden_post");
 			return;
 		}
-
-		const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
-
-		var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
-					$(obj).find(postContentSel).html() + '</div>';
 
 		var to_add_type = "";
 
@@ -753,7 +756,7 @@ XKit.extensions.blacklist = new Object({
 		$(obj).addClass("xblacklist_blacklisted_post");
 		$(obj).find(".post_info").css("display", "none");
 		$(obj).find(".post_controls").css("display", "none");
-		$(obj).find(postContentSel).html(old_content + block_excuse);
+		$(obj).prepend(block_excuse);
 		$(obj).find(".post_footer_links").css('display', 'none');
 		$(obj).find(".post_source").css('display', 'none');
 		$(obj).find(".post-source-footer").css('display', 'none');
@@ -1015,6 +1018,7 @@ XKit.extensions.blacklist = new Object({
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);
 		XKit.tools.remove_css("xkit_blacklist_mini_ui");
+		XKit.tools.remove_css('xkit_blacklist_react');
 		XKit.tools.remove_css("blacklist");
 	},
 
