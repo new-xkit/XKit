@@ -943,22 +943,14 @@ XKit.extensions.blacklist = new Object({
 								tmp_word = tmp_word + " " + m_p_words[m_i + 6];
 							}
 
-							const thisCodeIsBadAndTheFollowingEscapeIsGarbage = tmp_word;
+							const unsanitized = tmp_word;
 
 							tmp_word = tmp_word.replace(/,/g, '').replace(/\u2026/g, '');
 							tmp_word = tmp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
 
 							// // console.log("--------- " + tmp_word);
 
-							if (tmp_word.indexOf(m_word) !== -1) {
-								if (tag_search_mode) {
-									return "#" + m_word;
-								} else {
-									return m_word;
-								}
-							}
-
-							if (thisCodeIsBadAndTheFollowingEscapeIsGarbage.includes(m_word)) {
+							if (tmp_word.includes(m_word) || unsanitized.includes(m_word)) {
 								if (tag_search_mode) {
 									return "#" + m_word;
 								} else {
