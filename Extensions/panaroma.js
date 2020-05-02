@@ -22,7 +22,6 @@ XKit.extensions.panaroma = new Object({
 
 	run: function() {
 		this.running = true;
-		XKit.tools.init_css("panaroma");
 
 		if (XKit.page.react) {
 			const header_max_width = 1580;
@@ -62,11 +61,13 @@ XKit.extensions.panaroma = new Object({
 					.xkit--react .${videoBlock[0]} {
 						max-width: ${new_inner_main_max_width}px;
 					}
-				`, 'panorama');
+				`, 'panaroma');
 			});
 
 			return;
 		}
+
+		XKit.tools.init_css("panaroma");
 
 		if (XKit.extensions.panaroma.preferences.stretch_images.value === true) {
 
