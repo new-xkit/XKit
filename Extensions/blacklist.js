@@ -176,16 +176,6 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		if (XKit.page.react) {
-			const react_css =
-				'.xblacklist_excuse { ' +
-				'padding: 15px 0 23px 0;' +
-				'height: 50px;' +
-				'background-color: white;' +
-				'}';
-			XKit.tools.add_css(react_css, 'xkit_blacklist_react');
-		}
-
 		if ($(postSel).length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
@@ -1018,7 +1008,6 @@ XKit.extensions.blacklist = new Object({
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);
 		XKit.tools.remove_css("xkit_blacklist_mini_ui");
-		XKit.tools.remove_css('xkit_blacklist_react');
 		XKit.tools.remove_css("blacklist");
 	},
 

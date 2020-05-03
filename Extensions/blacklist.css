@@ -213,4 +213,29 @@
 
 .xblacklist_excuse ~ * {
 	display: none;
-j}
+}
+
+.xkit--react .xblacklist_blacklisted_post {
+    opacity: 1;
+    padding: 0 !important;
+}
+
+.xkit--react .xblacklist_excuse {
+    padding: var(--post-header-vertical-padding) var(--post-padding);
+    margin: 0;
+    height: 50px;
+    background-color: var(--white);
+    color: var(--black);
+}
+
+.xkit--react .xkit-blacklist-post-type {
+    display: none;
+}
+
+.xkit--react .xblacklist_open_post {
+    height: 40px;
+    line-height: 42px;
+    margin: 0;
+    top: var(--post-header-vertical-padding) !important;
+    right: var(--post-padding) !important;
+}
