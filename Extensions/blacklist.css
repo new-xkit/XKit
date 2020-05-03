@@ -98,6 +98,9 @@
 	color: rgb(130,130,130);
 	line-height: 50px;
 	position: relative; margin-top: 5px;
+}
+
+.xblacklist_excuse_container {
 	border-radius: 3px;
 }
 
@@ -211,8 +214,12 @@
 	top: 0;
 }
 
-.xblacklist_excuse ~ * {
+.xblacklist_excuse_container ~ * {
 	display: none;
+}
+
+.xblacklist_excuse_container > .post_tags {
+	padding-bottom: 1rem;
 }
 
 .xkit--react .xblacklist_blacklisted_post {
@@ -223,6 +230,9 @@
 .xkit--react .xblacklist_excuse {
     padding: var(--post-header-vertical-padding) var(--post-padding);
     margin: 0;
+}
+
+.xkit--react .xblacklist_excuse_container {
     background-color: var(--white);
     color: var(--black);
 }

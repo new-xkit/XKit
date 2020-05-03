@@ -672,7 +672,7 @@ XKit.extensions.blacklist = new Object({
 			$(m_div).css("height", pre_hidden_height);
 		}
 
-		$(m_div).find(".xblacklist_excuse").remove();
+		$(m_div).find(".xblacklist_excuse_container").remove();
 
 		// Fix for canvases on Disable Gifs:
 		if ($(m_div).hasClass("disable-gifs-checked")) {
@@ -724,14 +724,14 @@ XKit.extensions.blacklist = new Object({
 			$(obj).attr('id', post_id);
 		}
 
-		var block_excuse = '<div class="xblacklist_excuse">' +
+		var block_excuse = '<div class="xblacklist_excuse_container"><div class="xblacklist_excuse">' +
 					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
-			block_excuse = '<div class="xblacklist_excuse">' +
+			block_excuse = '<div class="xblacklist_excuse_container"><div class="xblacklist_excuse">' +
 					'Post blocked.' + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div></div>';
 		}
 
 		$(obj).addClass("xblacklist_blacklisted_post");
@@ -743,8 +743,9 @@ XKit.extensions.blacklist = new Object({
 
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
 			const tagsSel = XKit.css_map.keyToCss('tags') || '.post_tags';
-			const excuseTags = $(obj).find(tagsSel);
-			$(obj).find('.xblacklist_excuse').append(excuseTags);
+			const excuseTags = $(obj).find(tagsSel).clone();
+			excuseTags.addClass('post_tags');
+			$(obj).find('.xblacklist_excuse_container').append(excuseTags);
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -972,7 +973,7 @@ XKit.extensions.blacklist = new Object({
 		setTimeout(function() {
 			$(".xblacklist-done").each(function() {
 				$(this).removeClass("xblacklist_blacklisted_post");
-				$(this).find(".xblacklist_excuse").remove();
+				$(this).find(".xblacklist_excuse_container").remove();
 				const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
 				$(this).find(postContentSel).html($(this).find(".xblacklist_old_content").html());
 				$(this).find(".xkit-shorten-posts-embiggen").css("display", "block");
