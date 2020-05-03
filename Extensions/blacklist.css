@@ -97,11 +97,12 @@
 	text-align: left; font-size: 12px;
 	color: rgb(130,130,130);
 	line-height: 50px;
-	position: relative; margin-top: 5px;
+	margin-top: 5px;
 }
 
 .xblacklist_excuse_container {
 	border-radius: 3px;
+	position: relative;
 }
 
 .xblacklist_open_post {
