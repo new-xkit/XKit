@@ -665,15 +665,6 @@ XKit.extensions.blacklist = new Object({
 		var m_this = e.target;
 		var m_div = $("#" + $(m_this).attr('data-post-id'));
 		$(m_div).removeClass("xblacklist_blacklisted_post");
-		$(m_div).find(".post_info").css("display", "block");
-		$(m_div).find(".post_controls").css("display", "block");
-		$(m_div).find(".post_footer_links").css('display', 'block');
-		$(m_div).find(".post_source").css('display', 'block');
-		$(m_div).find(".post_tags").css('display', 'block');
-		$(m_div).find(".post_footer").css('display', 'table');
-		$(m_div).find(".post-source-footer").css('display', 'block');
-
-		$(m_div).find(".post_answer").css("display", "block");
 
 		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
 			$(m_div).find(".xkit-shorten-posts-embiggen").css("display", "block");
@@ -744,21 +735,16 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		$(obj).addClass("xblacklist_blacklisted_post");
-		$(obj).find(".post_info").css("display", "none");
-		$(obj).find(".post_controls").css("display", "none");
 		$(obj).prepend(block_excuse);
-		$(obj).find(".post_footer_links").css('display', 'none');
-		$(obj).find(".post_source").css('display', 'none');
-		$(obj).find(".post-source-footer").css('display', 'none');
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
 		}
 
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
-			$(obj).find(".post_footer").css('display', 'none');
-		} else {
-			$(obj).find(".post_tags, .post_footer").css('display', 'none');
+			const tagsSel = XKit.css_map.keyToCss('tags') || '.post_tags';
+			const excuseTags = $(obj).find(tagsSel);
+			$(obj).find('.xblacklist_excuse').append(excuseTags);
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -769,9 +755,6 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".xkit-shorten-posts-embiggen").css("display", "none");
 
 		}
-
-		$(obj).find(".post_answer").css("display", "none");
-
 	},
 
 	do_post: function(obj, post_content, tags) {
@@ -989,14 +972,6 @@ XKit.extensions.blacklist = new Object({
 		setTimeout(function() {
 			$(".xblacklist-done").each(function() {
 				$(this).removeClass("xblacklist_blacklisted_post");
-				$(this).find(".post_info").css("display", "block");
-				$(this).find(".post_controls").css("display", "block");
-				$(this).find(".post_tags").css('display', 'block');
-				$(this).find(".post_source").css('display', 'block');
-				$(this).find(".post_footer").css('display', 'table');
-				$(this).find(".post_footer_links").css('display', 'block');
-				$(this).find(".post-source-footer").css('display', 'block');
-				$(this).find(".post_answer").css("display", "block");
 				$(this).find(".xblacklist_excuse").remove();
 				const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
 				$(this).find(postContentSel).html($(this).find(".xblacklist_old_content").html());

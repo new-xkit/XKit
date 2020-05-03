@@ -223,7 +223,6 @@
 .xkit--react .xblacklist_excuse {
     padding: var(--post-header-vertical-padding) var(--post-padding);
     margin: 0;
-    height: 50px;
     background-color: var(--white);
     color: var(--black);
 }
