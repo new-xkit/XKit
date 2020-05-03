@@ -829,7 +829,7 @@ XKit.extensions.xkit_patches = new Object({
 			/**
 			 * Get the secure_form_key through a request using the current form_key
 			 * @param {Function} callback - invoked with `{errors: Boolean, kitten: String}`
-			 * @param {Boolean} retry_mode - whether to retry using a new form_key
+			 * @param {Boolean} retry_mode - if true, don't retry on failure
 			 */
 			XKit.interface.kitty.get = async function(callback, retry_mode = false) {
 				if (XKit.interface.kitty.stored !== "") {
