@@ -95,7 +95,6 @@
 
 .xblacklist_excuse {
 	text-align: left; font-size: 12px;
-	color: rgb(130,130,130);
 	line-height: 50px;
 	margin-top: 5px;
 }
@@ -248,4 +247,22 @@
     margin: 0;
     top: var(--post-header-vertical-padding) !important;
     right: var(--post-padding) !important;
+}
+
+.xkit--react .xblacklist_open_post {
+	color: rgba(var(--rgb-black), 0.8);
+	background: rgba(var(--rgb-black), 0.05);
+	border-color: rgba(var(--rgb-black), 0.3);
+}
+
+.xkit--react .xblacklist_open_post:hover {
+	color: var(--black);
+	background: var(--white);
+	border-color: rgba(var(--rgb-black), 0.5);
+}
+
+.xkit--react .xblacklist_open_post:active {
+	color: var(--black);
+	background: rgba(var(--rgb-black), 0.25);
+	border-color: rgba(var(--rgb-black), 0.8);
 }
