@@ -26,19 +26,29 @@ XKit.extensions.hideavatars = new Object({
 				/* globals tumblr */
 				return await tumblr.getCssMap();
 			})
-			.then(({stickyContainer}) => {
-				const top_selector = `.xkit--react .${stickyContainer[0]}`;
-				const selector = this.blognames.map(x => `${top_selector} a[title="${x.title}"]::before`).join(',');
+			.then(({stickyContainer, reblogHeader}) => {
+				const sticky_top_selector = `.xkit--react .${stickyContainer[0]}`;
+				const sticky_selector = this.blognames.map(x => `${sticky_top_selector} a[title="${x.title}"]::before`).join(',');
+
+				const reblog_top_selector = `.xkit--react .${reblogHeader[0]}`;
+				const reblog_selector = this.blognames.map(x => `${reblog_top_selector} a[title="${x.title}"]::before`).join(',');
 
 				XKit.tools.add_css(`
-					${selector} {
+					${sticky_selector}, ${reblog_selector} {
 						content: "";
 						display: inline-block;
-						height: 64px;
-						width: 64px;
 						background-image: url("${this.hidden_avatar}");
+						background-size: contain;
 						position: absolute;
 						z-index: 1;
+					}
+					${sticky_selector} {
+						height: 64px;
+						width: 64px;
+					}
+					${reblog_selector} {
+						height: 25px;
+						width: 25px;
 					}
 				`, 'hideavatars');
 			});
