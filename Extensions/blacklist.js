@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.9.8 **//
+//* VERSION 3.0.0 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -107,12 +107,6 @@ XKit.extensions.blacklist = new Object({
 			default: false,
 			value: false
 		},
-		"hide_by_default": {
-			text: "Hide newly loaded posts until Blacklist makes sure they aren't blocked",
-			default: false,
-			value: false,
-			experimental: true
-		},
 		"sep3": {
 			text: "Blacklisted Words",
 			type: "separator"
@@ -122,8 +116,10 @@ XKit.extensions.blacklist = new Object({
 	blacklisted: [],
 	whitelisted: [],
 
-	run: function() {
+	run: async function() {
 		this.running = true;
+
+		await XKit.css_map.getCssMap();
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 			if (this.preferences.dont_on_inbox.value) {
@@ -152,18 +148,23 @@ XKit.extensions.blacklist = new Object({
 
 		$(document).on('click', ".xblacklist_open_post", XKit.extensions.blacklist.unhide_post);
 
+		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
+		const postContentClasses = XKit.css_map.keyToClasses('post') || ['.post_content'];
+		const blacklistedPostContentSel = postContentClasses.map(cls => `.xblacklist_blacklisted_post ${cls}`).join(', ');
+
 		if (this.preferences.mini_block.value === true) {
 
 			var mini_ui =
 					" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
 					" .xblacklist_blacklisted_post .xblacklist_excuse { " +
 						" position: absolute; top: 0; left: 0; width: 100%; " +
-						" color: rgba(255,255,255,.43); height: 27px !important; padding: 0px; !important; " +
-						" line-height: 27px !important; padding-left: 15px; !important; } " +
-					" .xblacklist_blacklisted_post .post_content { " +
+						" color: rgba(255,255,255,.43); height: 40px !important; padding: 0; margin: 0;" +
+						" line-height: 40px !important; padding-left: 15px; !important; } " +
+					` ${blacklistedPostContentSel} { ` +
 						" background: transparent; color: rgba(255,255,255,.43); } " +
 					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { " +
-						"display: inline-block; height: unset; line-height: initial;} " +
+						"display: inline-block; height: unset; line-height: initial; " +
+						"top: 50% !important; transform: translateY(-50%); margin: 0; } " +
 					" .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } " +
 					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
 					" .xblacklist_blacklisted_post { " +
@@ -176,19 +177,7 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		if (this.preferences.hide_by_default.value) {
-			// Set opacity of all post content to 0, upon Blacklist's
-			// completion set it back to 1
-			XKit.tools.add_css(
-				".post_content { opacity: 0; }" +
-				".post.xblacklist-done .post_content { opacity: 1; }" +
-				".post .post_header::after { content: \"Hidden by Blacklist\"; }" +
-				".post.xblacklist-done .post_header::after { content: \"\"; }",
-				"xkit_blacklist_hide_by_default"
-			);
-		}
-
-		if ($(".posts .post").length > 0) {
+		if ($(postSel).length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
 
@@ -510,7 +499,8 @@ XKit.extensions.blacklist = new Object({
 
 		if (XKit.extensions.blacklist.running !== true) {return; }
 
-		$(".posts .post").not(".xblacklist-done").each(function() {
+		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
+		$(postSel).not(".xblacklist-done").each(function() {
 
 			try {
 
@@ -528,13 +518,9 @@ XKit.extensions.blacklist = new Object({
 
 				// Collect the tags
 				var tag_array = [];
-				if ($(this).find(".post_tag").length > 0) {
-					$(this).find(".post_tag").each(function() {
-						tag_array.push($(this).html().replace("#", "").toLowerCase());
-					});
-				}
-				if ($(this).find(".tag").length > 0) {
-					$(this).find(".tag").each(function() {
+				const tagSel = XKit.css_map.keyToCss('tag') || '.post_tag';
+				if ($(this).find(tagSel).length > 0) {
+					$(this).find(tagSel).each(function() {
 						tag_array.push($(this).html().replace("#", "").toLowerCase());
 					});
 				}
@@ -549,15 +535,18 @@ XKit.extensions.blacklist = new Object({
 				var m_author = "";
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-						var post_info_links = $(this).find(".post_info_link, .reblog-tumblelog-name").map(function() {
+						const postInfoSel = XKit.css_map.keyToCss('blogLink') ||
+							'.post_info_link, .reblog-tumblelog-name';
+						var post_info_links = $(this).find(postInfoSel).map(function() {
 							return $(this).text();
 						});
 
-					// Join the text of the post info links with spaces
+						// Join the text of the post info links with spaces
 						m_author += post_info_links.get().join(" ");
 
-						if ($(this).find(".reblog_source").length > 0) {
-							m_author = m_author + " " + $(this).find(".reblog_source a").html();
+						const contentSourceSel = XKit.css_map.keyToCss('contentSource') || '.reblog_source';
+						if ($(this).find(contentSourceSel).length > 0) {
+							m_author = m_author + " " + $(this).find(contentSourceSel).find("a").html();
 						}
 
 						if ($(this).find(".post_source_link").length > 0) {
@@ -571,8 +560,9 @@ XKit.extensions.blacklist = new Object({
 				// Collect the content.
 				var m_content = "";
 
-				if ($(this).find(".post_text_wrapper").length > 0) {
-					m_content = $(this).find(".post_text_wrapper").html();
+				// Old methods of finding content
+				if ($(this).find('.post_text_wrapper').length > 0) {
+					m_content = $(this).find('.post_text_wrapper').html();
 				}
 
 				if ($(this).find(".post_body").length > 0) {
@@ -595,6 +585,14 @@ XKit.extensions.blacklist = new Object({
 					}).get().join(" ");
 				}
 
+				// New method for finding content
+				const rowsSel = XKit.css_map.keyToCss('rows');
+				if (rowsSel && $(this).find(rowsSel).length > 0) {
+					m_content = $(this).find(rowsSel).map(function() {
+					    return $(this).html();
+					}).get().join(" ");
+				}
+
 				m_content = m_content + " " + m_title;
 
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
@@ -608,6 +606,8 @@ XKit.extensions.blacklist = new Object({
 			    m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
 				// Strip HTML tags.
 				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
+
+				console.log('all the content is', m_content);
 
 				var m_result = XKit.extensions.blacklist.do_post($(this), m_content, tag_array);
 				if (m_result !== "") {
@@ -666,15 +666,6 @@ XKit.extensions.blacklist = new Object({
 		var m_this = e.target;
 		var m_div = $("#" + $(m_this).attr('data-post-id'));
 		$(m_div).removeClass("xblacklist_blacklisted_post");
-		$(m_div).find(".post_info").css("display", "block");
-		$(m_div).find(".post_controls").css("display", "block");
-		$(m_div).find(".post_footer_links").css('display', 'block');
-		$(m_div).find(".post_source").css('display', 'block');
-		$(m_div).find(".post_tags").css('display', 'block');
-		$(m_div).find(".post_footer").css('display', 'table');
-		$(m_div).find(".post-source-footer").css('display', 'block');
-
-		$(m_div).find(".post_answer").css("display", "block");
 
 		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
 			$(m_div).find(".xkit-shorten-posts-embiggen").css("display", "block");
@@ -682,8 +673,7 @@ XKit.extensions.blacklist = new Object({
 			$(m_div).css("height", pre_hidden_height);
 		}
 
-		$(m_div).find(".xblacklist_excuse").remove();
-		$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
+		$(m_div).find(".xblacklist_excuse_container").remove();
 
 		// Fix for canvases on Disable Gifs:
 		if ($(m_div).hasClass("disable-gifs-checked")) {
@@ -715,9 +705,6 @@ XKit.extensions.blacklist = new Object({
 			return;
 		}
 
-		var old_content = '<div style="display: none;" class="xblacklist_old_content">' +
-					$(obj).find(".post_content").html() + '</div>';
-
 		var to_add_type = "";
 
 		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
@@ -733,32 +720,33 @@ XKit.extensions.blacklist = new Object({
 			$(obj).attr('id', post_id);
 		}
 
-		var block_excuse = '<div class="xblacklist_excuse">' +
+		if (!post_id) {
+			post_id = $(obj).attr('data-id');
+			$(obj).attr('id', post_id);
+		}
+
+		var block_excuse = '<div class="xblacklist_excuse_container"><div class="xblacklist_excuse">' +
 					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
-			block_excuse = '<div class="xblacklist_excuse">' +
+			block_excuse = '<div class="xblacklist_excuse_container"><div class="xblacklist_excuse">' +
 					'Post blocked.' + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div></div>';
 		}
 
 		$(obj).addClass("xblacklist_blacklisted_post");
-		$(obj).find(".post_info").css("display", "none");
-		$(obj).find(".post_controls").css("display", "none");
-		$(obj).find(".post_content").html(old_content + block_excuse);
-		$(obj).find(".post_footer_links").css('display', 'none');
-		$(obj).find(".post_source").css('display', 'none');
-		$(obj).find(".post-source-footer").css('display', 'none');
+		$(obj).prepend(block_excuse);
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
 		}
 
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
-			$(obj).find(".post_footer").css('display', 'none');
-		} else {
-			$(obj).find(".post_tags, .post_footer").css('display', 'none');
+			const tagsSel = XKit.css_map.keyToCss('tags') || '.post_tags';
+			const excuseTags = $(obj).find(tagsSel).clone();
+			excuseTags.addClass('post_tags');
+			$(obj).find('.xblacklist_excuse_container').append(excuseTags);
 		}
 
 		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
@@ -769,9 +757,6 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".xkit-shorten-posts-embiggen").css("display", "none");
 
 		}
-
-		$(obj).find(".post_answer").css("display", "none");
-
 	},
 
 	do_post: function(obj, post_content, tags) {
@@ -884,9 +869,9 @@ XKit.extensions.blacklist = new Object({
 							for (var j = 0; j < m_p_words.length; j++) {
 								if (m_p_words[j].indexOf(m_word) !== -1) {
 									var mp_word = m_p_words[j].replace(/\./g, '');
-									mp_word = mp_word.replace(/\,/g, '');
+									mp_word = mp_word.replace(/,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
-									mp_word = mp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
+									mp_word = mp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
 									//// console.log('%c  mp_word = ' + mp_word, 'background: #a5edae; color: black');
 									if (m_word === mp_word) {
 										if (tag_search_mode) {
@@ -943,12 +928,14 @@ XKit.extensions.blacklist = new Object({
 								tmp_word = tmp_word + " " + m_p_words[m_i + 6];
 							}
 
-							tmp_word = tmp_word.replace(/\,/g, '').replace(/\u2026/g, '');
-							tmp_word = tmp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
+							const unsanitized = tmp_word;
+
+							tmp_word = tmp_word.replace(/,/g, '').replace(/\u2026/g, '');
+							tmp_word = tmp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
 
 							// // console.log("--------- " + tmp_word);
 
-							if (tmp_word.indexOf(m_word) !== -1) {
+							if (tmp_word.includes(m_word) || unsanitized.includes(m_word)) {
 								if (tag_search_mode) {
 									return "#" + m_word;
 								} else {
@@ -987,16 +974,9 @@ XKit.extensions.blacklist = new Object({
 		setTimeout(function() {
 			$(".xblacklist-done").each(function() {
 				$(this).removeClass("xblacklist_blacklisted_post");
-				$(this).find(".post_info").css("display", "block");
-				$(this).find(".post_controls").css("display", "block");
-				$(this).find(".post_tags").css('display', 'block');
-				$(this).find(".post_source").css('display', 'block');
-				$(this).find(".post_footer").css('display', 'table');
-				$(this).find(".post_footer_links").css('display', 'block');
-				$(this).find(".post-source-footer").css('display', 'block');
-				$(this).find(".post_answer").css("display", "block");
-				$(this).find(".xblacklist_excuse").remove();
-				$(this).find(".post_content").html($(this).find(".xblacklist_old_content").html());
+				$(this).find(".xblacklist_excuse_container").remove();
+				const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
+				$(this).find(postContentSel).html($(this).find(".xblacklist_old_content").html());
 				$(this).find(".xkit-shorten-posts-embiggen").css("display", "block");
 				XKit.extensions.blacklist.unhide_post($(this));
 			});
@@ -1005,7 +985,6 @@ XKit.extensions.blacklist = new Object({
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);
 		XKit.tools.remove_css("xkit_blacklist_mini_ui");
-		XKit.tools.remove_css("xkit_blacklist_hide_by_default");
 		XKit.tools.remove_css("blacklist");
 	},
 

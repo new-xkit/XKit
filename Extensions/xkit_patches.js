@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.3.5 **//
+//* VERSION 7.4.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -184,6 +184,28 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.2": function() {
+			XKit.post_listener.observer = new MutationObserver(mutations => {
+				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
+				const new_posts = mutations.some(({addedNodes}) => {
+					for (let i = 0; i < addedNodes.length; i++) {
+						const $addedNode = $(addedNodes[i]);
+						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
+							return true;
+						}
+					}
+				});
+
+				if (new_posts) {
+					Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
+						try {
+							callback();
+						} catch (e) {
+							console.error(e);
+						}
+					}));
+				}
+			});
+
 			/**
 			 * Show an XKit alert window
 			 * @param {String} title - Text for alert window's title bar
@@ -595,6 +617,38 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 
+			XKit.css_map = {
+				cssMap: null,
+
+				getCssMap: async function() {
+					if (this.cssMap) {
+						return this.cssMap;
+					}
+
+					this.cssMap = await XKit.tools.async_add_function(async() => {
+						if (!window.tumblr) {
+							return null;
+						}
+						const cssMap = await window.tumblr.getCssMap();
+						return cssMap;
+					});
+					return this.cssMap;
+				},
+				keyToClasses: function(key) {
+					if (!this.cssMap || !this.cssMap.hasOwnProperty(key)) {
+						return;
+					}
+					return this.cssMap[key];
+				},
+				keyToCss: function(key) {
+					const classes = this.keyToClasses(key);
+					if (!classes) {
+						return;
+					}
+					return classes.map(cls => '.' + cls).join(', ');
+				},
+			};
+
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
 
@@ -806,20 +860,14 @@ XKit.extensions.xkit_patches = new Object({
 
 			/**
 			 * Get the secure_form_key through a request using the current form_key
-			 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+			 * @param {Function} callback - invoked with `{errors: Boolean, kitten: String}`
+			 * @param {Boolean} retry_mode - if true, don't retry on failure
 			 */
-			XKit.interface.kitty.get = async function(callback) {
-				var m_object = {
-					errors: false,
-					kitten: ''
-				};
-
-				var kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
-
+			XKit.interface.kitty.get = async function(callback, retry_mode = false) {
 				if (XKit.interface.kitty.stored !== "") {
+					const kitty_diff = (new Date()) - XKit.interface.kitty.store_time;
 					if (kitty_diff <= XKit.interface.kitty.expire_time && kitty_diff > 0) {
-						m_object.kitten = XKit.interface.kitty.stored;
-						callback(m_object);
+						callback({errors: false, kitten: XKit.interface.kitty.stored});
 						return;
 					}
 				}
@@ -831,23 +879,21 @@ XKit.extensions.xkit_patches = new Object({
 				XKit.tools.Nx_XHR({
 					method: "POST",
 					url: "https://www.tumblr.com/svc/secure_form_key",
-					headers: {
-						"X-tumblr-form-key": XKit.interface.form_key(),
-					},
 					onload: function(response) {
 						XKit.interface.kitty.store_time = new Date().getTime();
-						var kitty_text = response.headers["x-tumblr-secure-form-key"];
-						XKit.interface.kitty.stored = kitty_text;
-						m_object.kitten = XKit.interface.kitty.stored;
-						m_object.response = response;
-						callback(m_object);
+						XKit.interface.kitty.stored = response.headers["x-tumblr-secure-form-key"];
+
+						callback({errors: false, kitten: XKit.interface.kitty.stored, response});
 					},
 					onerror: function(response) {
-						m_object.errors = true;
-						m_object.kitten = "";
-						m_object.response = response;
 						XKit.interface.kitty.stored = "";
-						callback(m_object);
+						XKit.storage.set("xkit_patches", "last_stored_form_key", "");
+
+						if (!retry_mode) {
+							XKit.interface.kitty.get(callback, true);
+						} else {
+							callback({errors: true, kitten: "", response});
+						}
 					}
 				});
 			};
@@ -2774,23 +2820,6 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					}
 				},
-				observer: new MutationObserver(function(mutations) {
-					for (var mutation in mutations) {
-						var $target = $(mutations[mutation].target);
-						if ($target.hasClass("posts") || $target.parent().hasClass("posts") || $(mutations[mutation].addedNodes).find(".post").length) {
-							for (var x in XKit.post_listener.callbacks) {
-								for (var i in XKit.post_listener.callbacks[x]) {
-									try {
-										XKit.post_listener.callbacks[x][i]();
-									} catch (e) {
-										console.error("Could not run callback for " + x + ": " + e.message);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}),
 				check: function() {
 					XKit.post_listener.observer.observe($("body")[0], {
 						childList: true,

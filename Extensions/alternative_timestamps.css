@@ -14,3 +14,7 @@
 .alternative_timestamps_preview {
 	font-style: italic;
 }
+
+.xkit_timestamps .alternative_timestamp {
+    display: none;
+}

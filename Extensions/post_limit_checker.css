@@ -22,24 +22,3 @@
 .xkit-plc-division:first-child {
 	margin-top: 10px;
 }
-
-.xkit-plc-division {
-	border-top: 1px dotted rgb(200,200,200);
-	height: 40px;
-	position: relative;
-}
-
-.xkit-plc-title {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	line-height: 40px;
-	font-weight: bold;
-}
-
-.xkit-plc-value {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	line-height: 40px;
-}

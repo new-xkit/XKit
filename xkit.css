@@ -276,24 +276,26 @@
 	background: rgb(240,240,240) !important;
 	position: relative  !important;
 	top: 0px !important;
+	color: rgb(170,170,170) !important;
+	border: 1px dashed rgb(160,160,160) !important;
 }
 
 .xkit-button {
 	color: rgb(100,100,100);
 	padding: 4px 15px;
-	border: 1px solid rgb(150,150,150);
 	background: rgb(240,240,240);
-	box-shadow: inset 0px 1px 0px rgba(255,255,255,0.73), inset 0px -1px 1px rgba(0,0,0,0.12), 0px 1px 1px rgba(0,0,0,0.32);
 	display: inline-block;
 	font-size: 11px;
 	line-height: 16px;
-	border-radius: 2px;
 	margin: 4px 4px 4px 0px;
 	cursor: pointer;
 	text-decoration: none;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+	border: 1px solid rgb(160,160,160);
+	box-shadow: none;
+	border-radius: 3px;
 }
 
 .xkit-button-group .xkit-button {
@@ -301,15 +303,17 @@
 }
 
 .xkit-button:hover {
-	background: rgb(244,244,244);
+	background: white;
+	border: 1px solid rgb(130,130,130);
+	color: black;
 }
 
 .xkit-button:active {
+	top: 0;
+	color: black;
 	position: relative;
-	top: 1px;
-	color: rgb(80,80,80);
-	background: rgb(230,230,230);
-	box-shadow: inset 0px -1px 0px rgba(255,255,255,0.73), inset 0px 1px 1px rgba(0,0,0,0.12);
+	background: rgb(200,200,200);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.53);
 }
 
 .xkit-button.pushed {
@@ -317,7 +321,6 @@
 	cursor: default;
 	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.22);
 }
-
 
 /* Windows */
 
@@ -798,12 +801,6 @@
 
 }
 
-.xkit-button {
-	border: 1px solid rgb(160,160,160);
-	box-shadow: none;
-	border-radius: 3px;
-}
-
 .xkit-window-buttons {
 	height: 40px;
 	padding: 0px;
@@ -866,30 +863,6 @@
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAA8CAIAAAAljTfqAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTYwODRBMDAzNzM4MTFFM0E0MTFDNDE2OTFDMzA4QzciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTYwODRBMDEzNzM4MTFFM0E0MTFDNDE2OTFDMzA4QzciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5NjA4NDlGRTM3MzgxMUUzQTQxMUM0MTY5MUMzMDhDNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5NjA4NDlGRjM3MzgxMUUzQTQxMUM0MTY5MUMzMDhDNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Ps5DRcUAAABySURBVHjaYvz8YD+PvMP3F+ff31zF8P8vn6IXkMuc4y/GyMjKLWPJwiH84+31n+9vAbksDIzMn+5vY2BgACphYGR8f2MlkMskqB4Gkfjy8ACnuIGgRjiQy/j//380Q7+/vMA4atuobaO2jdo25GwDCDAA+two9+RM17sAAAAASUVORK5CYII=);
 	background-repeat: no-repeat;
 	background-position: -3px 0px;
-}
-
-.xkit-button.disabled {
-	box-shadow: none;
-	opacity: 0.75;
-	cursor: default;
-	background: rgb(240, 240, 240);
-	position: relative;
-	top: 0px;
-	color: rgb(170,170,170) !important;
-	border: 1px dashed rgb(160,160,160) !important;
-}
-
-.xkit-button:active {
-	top: 0;
-	color: black;
-	background: rgb(200,200,200);
-	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.53);
-}
-
-.xkit-button:hover {
-	background: white;
-	border: 1px solid rgb(130,130,130);
-	color: black;
 }
 
 #xkit-extensions-panel-right .xkit-message-display {
