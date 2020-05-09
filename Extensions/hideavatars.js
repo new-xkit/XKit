@@ -32,6 +32,7 @@ XKit.extensions.hideavatars = new Object({
 
 				const reblog_top_selector = `.xkit--react .${reblogHeader[0]}`;
 				const reblog_selector = this.blognames.map(x => `${reblog_top_selector} a[title="${x.title}"]::before`).join(',');
+				const reblog_badge_selector = this.blognames.map(x => `${reblog_top_selector} a[title="${x.title}"] svg`).join(',');
 
 				XKit.tools.add_css(`
 					${sticky_selector}, ${reblog_selector} {
@@ -49,6 +50,9 @@ XKit.extensions.hideavatars = new Object({
 					${reblog_selector} {
 						height: 25px;
 						width: 25px;
+					}
+					${reblog_badge_selector} {
+						display: none;
 					}
 				`, 'hideavatars');
 			});
