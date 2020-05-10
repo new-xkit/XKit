@@ -501,6 +501,12 @@ XKit.extensions.blacklist = new Object({
 
 		if (XKit.extensions.blacklist.running !== true) {return; }
 
+		// Refuse to process anything within the new post form
+		$('.post-form .post').not('.xblacklist-done').each(function() {
+			$(this).addClass('xblacklist-done');
+			return;
+		});
+
 		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
 		$(postSel).not(".xblacklist-done").each(function() {
 
