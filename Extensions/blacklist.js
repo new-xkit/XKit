@@ -119,6 +119,10 @@ XKit.extensions.blacklist = new Object({
 	run: async function() {
 		this.running = true;
 
+		if (!XKit.interface.is_tumblr_page()) {
+			return;
+		}
+
 		await XKit.css_map.getCssMap();
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
