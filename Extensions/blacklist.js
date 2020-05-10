@@ -662,7 +662,23 @@ XKit.extensions.blacklist = new Object({
 		if (!XKit.extensions.blacklist.running) { return; }
 
 		var m_this = e.target;
-		var m_div = $("#" + $(m_this).attr('data-post-id'));
+		const postId = $(m_this).attr('data-post-id');
+
+		// Search only parents of the open_post element since the id
+		// may be duplicated (i.e. in peepr)
+		let m_div = m_this.parentNode;
+		while (m_div) {
+			if (m_div.id === postId) {
+				break;
+			}
+			m_div = m_div.parentNode;
+		}
+		if (m_div) {
+			m_div = $(m_div);
+		} else {
+			// Fall back to old approach
+			m_div = $("#" + postId);
+		}
 		$(m_div).removeClass("xblacklist_blacklisted_post");
 
 		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
