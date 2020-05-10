@@ -762,12 +762,7 @@ XKit.extensions.blacklist = new Object({
 		$(obj).addClass("xblacklist_blacklisted_post");
 		$(obj).prepend(block_excuse);
 
-		$(obj).find('.xblacklist_open_post').each(function() {
-			this.addEventListener('click', function(event) {
-				event.stopPropagation();
-				XKit.extensions.blacklist.unhide_post(event);
-			}, true);
-		});
+		$(obj).on('click', '.xblacklist_open_post', XKit.extensions.blacklist.unhide_post);
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
