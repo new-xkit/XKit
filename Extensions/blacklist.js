@@ -156,23 +156,54 @@ XKit.extensions.blacklist = new Object({
 
 		if (this.preferences.mini_block.value === true) {
 
-			var mini_ui =
-					" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
-					" .xblacklist_blacklisted_post .xblacklist_excuse { " +
-						" height: 40px !important; " +
-						" color: rgba(255,255,255,.43); height: 40px !important; padding: 0; margin: 0;" +
-						" line-height: 40px !important; padding-left: 15px; !important; } " +
-					` ${blacklistedPostContentSel} { ` +
-						" background: transparent; color: rgba(255,255,255,.43); } " +
-					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { " +
-						"display: inline-block; height: unset; line-height: initial; " +
-						"top: 50% !important; transform: translateY(-50%); margin: 0; } " +
-					" .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } " +
-					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
-					" .xblacklist_blacklisted_post { " +
-						" opacity: 1 !important; padding: 0px !important; " +
-						" border: 1px dashed rgba(255,255,255,0.25) !important; background: transparent !important;" +
-					" }";
+			const mini_ui = `
+				.xblacklist_blacklisted_post {
+					opacity: 1 !important;
+					padding: 0 !important;
+					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
+					background: transparent !important;
+				}
+				.xblacklist_blacklisted_post .post_avatar,
+				.xblacklist_blacklisted_post .post_permalink {
+					display: none !important;
+				}
+				.xblacklist_excuse_container {
+					background: transparent !important;
+				}
+				.xblacklist_blacklisted_post .xblacklist_excuse {
+					height: 40px !important;
+					line-height: 40px !important;
+					color: var(--transparent-white-40, rgba(255,255,255,.43));
+					padding: 0;
+					margin: 0;
+					padding-left: 15px;
+				}
+				${blacklistedPostContentSel} {
+					background: transparent;
+				}
+				.xblacklist_blacklisted_post .xblacklist_open_post,
+				.xblacklist_blacklisted_post .post_tags {
+					display: none;
+				}
+				.xblacklist_blacklisted_post:hover .xblacklist_open_post {
+					display: inline-block;
+					height: unset;
+					line-height: initial;
+					top: 50% !important;
+					transform: translateY(-50%);
+					margin: 0;
+				}
+				.xkit--react .xblacklist_open_post {
+					color: rgba(var(--rgb-white-on-dark), 0.8);
+					background: rgba(var(--rgb-white-on-dark), 0.05);
+					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+				}
+				.xkit--react .xblacklist_open_post:hover {
+					color: var(--white-on-dark);
+					background: rgba(var(--rgb-white-on-dark), 0.1);
+					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+				}
+			`;
 
 			XKit.tools.add_css(mini_ui, "blacklist");
 
