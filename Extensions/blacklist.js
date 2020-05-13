@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.0.1 **//
+//* VERSION 3.1.0 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -159,7 +159,7 @@ XKit.extensions.blacklist = new Object({
 			var mini_ui =
 					" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
 					" .xblacklist_blacklisted_post .xblacklist_excuse { " +
-						" position: absolute; top: 0; left: 0; width: 100%; " +
+						" height: 40px !important; " +
 						" color: rgba(255,255,255,.43); height: 40px !important; padding: 0; margin: 0;" +
 						" line-height: 40px !important; padding-left: 15px; !important; } " +
 					` ${blacklistedPostContentSel} { ` +
@@ -170,12 +170,11 @@ XKit.extensions.blacklist = new Object({
 					" .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } " +
 					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
 					" .xblacklist_blacklisted_post { " +
-						" height: 40px !important; " +
 						" opacity: 1 !important; padding: 0px !important; " +
 						" border: 1px dashed rgba(255,255,255,0.25) !important; background: transparent !important;" +
 					" }";
 
-			XKit.tools.add_css(mini_ui, "xkit_blacklist_mini_ui");
+			XKit.tools.add_css(mini_ui, "blacklist");
 
 		}
 
@@ -667,122 +666,88 @@ XKit.extensions.blacklist = new Object({
 
 	check_interval: 0,
 
-	unhide_post: function(e) {
+	hide_post: function($post, word) {
+		const {
+			dont_block_me,
+			dont_block_liked,
+			dont_display,
+			show_type,
+			dont_show_cause,
+			mini_block,
+			show_tags
+		} = this.preferences;
 
-		if (!XKit.extensions.blacklist.running) { return; }
-
-		var m_this = e.target;
-		const postId = $(m_this).attr('data-post-id');
-
-		// Search only parents of the open_post element since the id
-		// may be duplicated (i.e. in peepr)
-		let m_div = m_this.parentNode;
-		while (m_div) {
-			if (m_div.id === postId) {
-				break;
-			}
-			m_div = m_div.parentNode;
-		}
-		if (m_div) {
-			m_div = $(m_div);
-		} else {
-			// Fall back to old approach
-			m_div = $("#" + postId);
-		}
-		$(m_div).removeClass("xblacklist_blacklisted_post");
-
-		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
-			$(m_div).find(".xkit-shorten-posts-embiggen").css("display", "block");
-			var pre_hidden_height = $(m_div).attr('data-xkit-blacklist-old-height');
-			$(m_div).css("height", pre_hidden_height);
-		}
-
-		$(m_div).find(".xblacklist_excuse_container").remove();
-
-		// Fix for canvases on Disable Gifs:
-		if ($(m_div).hasClass("disable-gifs-checked")) {
-			try {
-				XKit.extensions.disable_gifs.redraw_canvases($(m_div));
-			} catch (err) {
-				// console.log("Unable to redraw canvases for Disable Gifs: " + e.message);
-			}
-		}
-
-	},
-
-	hide_post: function(obj, word) {
-
-		if (XKit.extensions.blacklist.preferences.dont_block_me.value === true) {
-			if ($(obj).hasClass("is_mine") === true) {
-				return;
-			}
-		}
-
-		if (XKit.extensions.blacklist.preferences.dont_block_liked.value === true) {
-			if ($(obj).find('.post_control.like.liked').length > 0) { return; }
-			if ($(obj).find('.post_answer_input').attr ('readonly')) { return; }
-		}
-
-		if (XKit.extensions.blacklist.preferences.dont_display.value === true) {
-			// Wow this user must hate the words they've added.
-			$(obj).addClass("xblacklist_hidden_post");
+		if (dont_block_me.value && $post.hasClass('is_mine')) {
 			return;
 		}
 
-		var to_add_type = "";
-
-		if (XKit.extensions.blacklist.preferences.show_type.value === true) {
-
-			to_add_type = "<div class=\"xkit-blacklist-post-type  " + $(obj).attr('data-type') + "\">&nbsp;</div>";
-
+		if (dont_block_liked.value && $post.find('.post_control.like.liked').length !== 0) {
+			return;
 		}
 
-		var post_id = $(obj).attr('id');
-		// If the post doesn't have an id, reuse a conveniently unique attribute
-		if (!post_id) {
-			post_id = $(obj).attr('data-post-id');
-			$(obj).attr('id', post_id);
+		if (dont_display.value) {
+			$post.addClass('xblacklist_hidden_post');
 		}
 
-		if (!post_id) {
-			post_id = $(obj).attr('data-id');
-			$(obj).attr('id', post_id);
+		const cause = dont_show_cause.value ?
+			''
+			: `Blocked because it contains the word &quot;<b>${word}</b>&quot;`;
+
+		const post_type_div = show_type.value ?
+			`<div class="xkit-blacklist-post-type ${$post.attr('data-type')}">&nbsp;</div>`
+			: '';
+
+		const excuse = `
+			<div class="xblacklist_excuse_container">
+				<div class="xblacklist_excuse">
+					${cause}
+					${post_type_div}
+					<div class="xkit-button xblacklist_open_post">
+						Show it anyway
+					</div>
+				</div>
+			</div>
+		`;
+
+		$post.addClass('xblacklist_blacklisted_post');
+
+		if (!mini_block.value) {
+			$post.find('header, .post_header').first().after(excuse);
+		} else {
+			$post.prepend(excuse);
 		}
 
-		var block_excuse = '<div class="xblacklist_excuse_container"><div class="xblacklist_excuse">' +
-					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div></div>';
+		$post.on('click', '.xblacklist_open_post', this.unhide_post);
 
-		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
-			block_excuse = '<div class="xblacklist_excuse_container"><div class="xblacklist_excuse">' +
-					'Post blocked.' + to_add_type +
-					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div></div>';
+		if (!mini_block.value) {
+			$post.addClass('xblacklist_blacklisted_post_full_ui');
+
+			if (show_tags.value) {
+				const tagsSel = XKit.css_map.keyToCss('tags') || '.post_tags';
+				const excuseTags = $post.find(tagsSel).clone().addClass('post_tags');
+				$post.find('.xblacklist_excuse_container').append(excuseTags);
+			}
 		}
 
-		$(obj).addClass("xblacklist_blacklisted_post");
-		$(obj).prepend(block_excuse);
+		if ($post.hasClass("xkit-shorten-posts-shortened")) {
+			$post.find('.xkit-shorten-posts-embiggen').hide();
+			$post.attr('data-xkit-blacklist-old-height', $post.css("height"));
+			$post.css('height', 'auto');
+		}
+	},
 
-		$(obj).on('click', '.xblacklist_open_post', XKit.extensions.blacklist.unhide_post);
+	unhide_post: function(e) {
+		const $button = $(e.target);
+		const $post = $button.parents('.xblacklist_blacklisted_post');
+		const $excuse = $button.parents('.xblacklist_excuse_container');
 
-		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
-			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
+		if ($post.hasClass('xkit-shorten-posts-shortened')) {
+			$post.find('.xkit-shorten-posts-embiggen').show();
+			$post.css('height', $post.attr('data-xkit-blacklist-old-height'));
 		}
 
-		if (XKit.extensions.blacklist.preferences.show_tags.value === true && XKit.extensions.blacklist.preferences.mini_block.value === false) {
-			const tagsSel = XKit.css_map.keyToCss('tags') || '.post_tags';
-			const excuseTags = $(obj).find(tagsSel).clone();
-			excuseTags.addClass('post_tags');
-			$(obj).find('.xblacklist_excuse_container').append(excuseTags);
-		}
-
-		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
-
-			// This was also shortened.
-			$(obj).attr('data-xkit-blacklist-old-height', $(obj).css("height"));
-			$(obj).css("height", "auto");
-			$(obj).find(".xkit-shorten-posts-embiggen").css("display", "none");
-
-		}
+		$post.removeClass('xblacklist_blacklisted_post');
+		$excuse.remove();
 	},
 
 	do_post: function(obj, post_content, tags) {
@@ -1010,7 +975,6 @@ XKit.extensions.blacklist = new Object({
 			$(".xblacklist_hidden_post").removeClass("xblacklist_hidden_post");
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);
-		XKit.tools.remove_css("xkit_blacklist_mini_ui");
 		XKit.tools.remove_css("blacklist");
 	},
 
