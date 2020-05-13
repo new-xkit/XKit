@@ -718,6 +718,7 @@ XKit.extensions.blacklist = new Object({
 
 		if (dont_display.value) {
 			$post.addClass('xblacklist_hidden_post');
+			return;
 		}
 
 		const cause = dont_show_cause.value ?
