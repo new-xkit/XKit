@@ -102,9 +102,8 @@ XKit.extensions.audio_plus = {
 	react_slider_handle_event: function(e) {
 		e.stopPropagation();
 
-		const {audioBlockClass} = XKit.extensions.audio_plus;
 		const $slider = $(e.target);
-		const $audioBlock = $slider.parents(audioBlockClass);
+		const $audioBlock = $slider.parents('.audio_plus_done');
 		const volume = $slider.val();
 
 		$slider.attr('title', volume);
