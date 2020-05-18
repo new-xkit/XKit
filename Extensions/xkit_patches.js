@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.2 **//
+//* VERSION 7.4.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -186,13 +186,15 @@ XKit.extensions.xkit_patches = new Object({
 		"7.9.2": function() {
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
-				const new_posts = mutations.some(({addedNodes}) => {
+				const new_posts = mutations.some(({addedNodes, target}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
 						const $addedNode = $(addedNodes[i]);
 						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
 							return true;
 						}
 					}
+
+					return $(target).parents(criteria).length !== 0;
 				});
 
 				if (new_posts) {
