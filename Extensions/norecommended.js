@@ -1,5 +1,5 @@
 //* TITLE No Recommended **//
-//* VERSION 2.3.1 **//
+//* VERSION 2.3.2 **//
 //* DESCRIPTION Removes recommended posts **//
 //* DETAILS This extension removes recommended posts from your dashboard. To remove Recommended Blogs on the sidebar, please use Tweaks extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -14,6 +14,16 @@ XKit.extensions.norecommended = new Object({
 		"sep-0": {
 			text: "Options",
 			type: "separator"
+		},
+		"no_search": {
+			text: "Hide recommended posts from followed searches",
+			default: true,
+			value: true
+		},
+		"no_pinned": {
+			text: "Hide pinned posts",
+			default: false,
+			value: false
 		},
 		"no_liked": {
 			text: "Get rid of recommended likes",
@@ -48,10 +58,18 @@ XKit.extensions.norecommended = new Object({
 	react_do: function() {
 		$('[data-id]:not(.norecommended-done)').each(async function() {
 			const $this = $(this).addClass('norecommended-done');
+			const {no_search, no_pinned} = XKit.extensions.norecommended.preferences;
 			const {recommendationReason} = await XKit.interface.react.post_props($this.attr('data-id'));
 
-			if (recommendationReason !== null && recommendationReason !== undefined) {
-				$this.hide();
+			if (recommendationReason && recommendationReason.hasOwnProperty('loggingReason')) {
+				const {loggingReason} = recommendationReason;
+				const is_search = loggingReason.startsWith('search:');
+				const is_pinned = loggingReason.startsWith('pin:');
+
+				if ((no_search.value && is_search) || (no_pinned.value && is_pinned) || (!is_search && !is_pinned)) {
+					$this.addClass('norecommended-hidden');
+					$this.hide();
+				}
 			}
 		});
 	},
@@ -106,6 +124,8 @@ XKit.extensions.norecommended = new Object({
 
 	destroy: function() {
 		this.running = false;
+		$('.norecommended-done').removeClass('norecommended-done');
+		$('.norecommended-hidden').show();
 		XKit.tools.remove_css("norecommended_no_mini_recs");
 		XKit.tools.remove_css("norecommended_no_liked");
 		XKit.tools.remove_css("norecommended_hide_recommended_on_blogs");
