@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.12 **//
+//* VERSION 3.3.13 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -210,48 +210,33 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	process_reblog_content: function() {
-		var reblog_tree = $(".post-form .reblog-list");
+		this.state = 'processing reblog content';
 
-		var all_quotes = [];
-		var old_content = '';
-		var all_quotes_text = '';
+		const $reblog_items = $('.post-form .reblog-list-item');
+		let trail_data = [];
 
-		this.state = "processing reblog content";
-		// Guard against double evaluation by marking the tree as processed
-		var processed_class = 'xkit-editable-reblogs-done';
-		if (reblog_tree.length > 0) {
-			this.state = "tree processing";
-
-			if (reblog_tree.hasClass(processed_class)) {
-				return;
-			}
-			reblog_tree.addClass(processed_class);
-
-			this.state = "processing reblog items";
-
-			reblog_tree.find(".reblog-list-item").each(function(index) {
-				var reblog_data = {
-					reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
-					reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text().trim() : '',
-					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href')
-						? $(this).find('.reblog-tumblelog-name').attr('href').trim()
-						: 'http://' + $(this).find('.reblog-tumblelog-name').text().trim() + '.tumblr.com/post/1/undefined'
-				};
-
-				all_quotes.push(reblog_data);
+		$reblog_items.each(function() {
+			const $this = $(this);
+			trail_data.push({
+				url: $this.find('.reblog-tumblelog-name').attr('href') || '',
+				author: $this.find('.reblog-tumblelog-name').text() || '',
+				content: $this.find('.reblog-content').html() || ''
 			});
+		});
 
-			all_quotes.forEach(function(data, index, all) {
-				var reblog_content = data.reblog_content.replace("tmblr-truncated read_more_container", "");
+		this.state = 'processing trail data';
 
-				if (!all_quotes_text && this.is_blockquote_reblog(data.reblog_content)) {
-					all_quotes_text = reblog_content;
-				} else {
-					all_quotes_text = "<p><a href='" + data.reblog_url + "'>" + data.reblog_author + "</a>\u200C:</p>" +
-					"<blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
-				}
-			}.bind(this));
+		let converted_trail = '';
+		let old_content = '';
+
+		const reblog_title = $reblog_items.first().find('.reblog-title').text();
+		if (reblog_title) {
+			converted_trail = `<h1>${reblog_title}</h1>`;
 		}
+
+		trail_data.forEach(({url, author, content}) => {
+			converted_trail = `<p><a class="tumblr_blog" href="${url}">${author.trim()}</a>\u200B:</p>\n<blockquote>${converted_trail}${content}</blockquote>`;
+		});
 
 		try {
 			old_content = XKit.interface.post_window.get_content_html();
@@ -265,53 +250,14 @@ XKit.extensions.editable_reblogs = new Object({
 			throw error;
 		}
 
-		this.state = "post processing";
-		// add 'tumblr_blog' class to all tumblr.com links,
-		// assuming that they're part of a reblog-structure that's not being parsed properly
-		var nodes = $(all_quotes_text + old_content);
-		// nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
-		var nodes_text = $('<div>').append($(nodes).clone()).html();
-
-		// var undefined_urls = nodes_text.match(new RegExp("<a .*post/1/undefined", "g")) || [];
-		// if (undefined_urls.length > 1) {
-		// 	var error = new Error("Too many bad urls");
-		// 	error.hide_url = true;
-		// 	throw error;
-		// }
+		converted_trail += old_content;
 
 		this.state = "mutation";
 
-		var title = reblog_tree.find('.reblog-title');
-		$('.post-form--header').append(title);
-		XKit.interface.post_window.set_content_html(nodes_text);
+		XKit.interface.post_window.set_content_html(converted_trail);
 
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
-	},
-
-	is_blockquote_reblog: function(text) {
-		var elements = $(text);
-
-		elements = elements.filter(function(index, node) {
-			if (!node.innerHTML || node.innerHTML == "<br>") {
-				return false;
-			}
-			return true;
-		});
-
-		if (elements.length != 2) {
-			return false;
-		}
-
-		var url = elements[0];
-		var is_url = url.tagName == "P" &&
-					 url.childNodes[0].tagName == "A" &&
-					 url.childNodes[0].href.match("/post/");
-
-		var blockquote = elements[1];
-		var is_blockquote = blockquote.tagName == "BLOCKQUOTE";
-
-		return is_url && is_blockquote;
 	},
 
 	reblog_tree_exists: function() {
