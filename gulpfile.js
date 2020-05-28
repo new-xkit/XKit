@@ -5,16 +5,13 @@ var cache = require('gulp-cached'),
 	connect = require('connect'),
 	connectLogger = require('morgan'),
 	connectStatic = require('serve-static'),
-	csslint = require('gulp-csslint'),
 	del = require('del'),
 	eslint = require('gulp-eslint'),
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
-	https = require('https'),
-	zip = require('gulp-zip');
+	https = require('https');
 
-var BUILD_DIR = 'build';
 var paths = {
 	scripts: {
 		dev: ['gulpfile.js', 'dev/**/*.js'],
@@ -31,24 +28,6 @@ var paths = {
 	]
 };
 
-gulp.task('clean', ['clean:build']);
-
-gulp.task('clean:build', function(cb) {
-	del([BUILD_DIR], cb);
-});
-
-gulp.task('clean:modules', function(cb) {
-	del(['node_modules'], cb);
-});
-
-gulp.task('clean:webext', function(cb) {
-	del([BUILD_DIR + '/webext'], cb);
-});
-
-gulp.task('clean:safari', function(cb) {
-	del([BUILD_DIR + '/safari.safariextension'], cb);
-});
-
 gulp.task('clean:extensions', function(cb) {
 	del(['Extensions/dist/*.json',
 	     'Extensions/dist/page/gallery.json',
@@ -56,8 +35,10 @@ gulp.task('clean:extensions', function(cb) {
 });
 
 gulp.task('clean:themes', function(cb) {
-	del(['Extenstions/dist/page/themes.json'], cb);
+	del(['Extensions/dist/page/themes.json'], cb);
 });
+
+gulp.task('clean', gulp.series('clean:extensions', 'clean:themes'));
 
 gulp.task('lint:scripts', function() {
 	var src = [].concat(
@@ -75,59 +56,9 @@ gulp.task('lint:scripts', function() {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task('lint:css', function() {
-	var src = [].concat(
-		paths.css.core,
-		paths.css.extensions,
-		paths.css.themes
-	);
+gulp.task('lint', gulp.series('lint:scripts'));
 
-	return gulp.src(src)
-		.pipe(cache('lint:css'))
-		.pipe(csslint())
-		.pipe(csslint.reporter());
-});
-
-gulp.task('lint', ['lint:scripts']);
-
-gulp.task('copy:webext', ['clean:webext', 'lint'], function() {
-	var src = [].concat(
-		paths.scripts.core,
-		paths.css.core,
-		paths.vendor,
-		['WebExtension/**/*']
-	);
-
-	return gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/webext'));
-});
-
-gulp.task('compress:webext', ['copy:webext'], function() {
-	var webextManifest = JSON.parse(fs.readFileSync('WebExtension/manifest.json'));
-
-	return gulp.src(BUILD_DIR + '/webext/**/*')
-		.pipe(zip('new-xkit-' + webextManifest.version + '.zip'))
-		.pipe(gulp.dest(BUILD_DIR + '/webext'));
-});
-
-gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
-	var src = [].concat(
-		paths.scripts.core,
-		paths.css.core,
-		paths.vendor,
-		['Safari/**/*']
-	);
-
-	return gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/safari.safariextension'));
-
-});
-
-gulp.task('build:webext', ['compress:webext']);
-
-gulp.task('build:safari', ['copy:safari']);
-
-gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
+gulp.task('build:extensions', gulp.series('lint:scripts', 'clean:extensions', function() {
 	var extensionBuilder = require('./dev/builders/extension');
 	return gulp.src(paths.scripts.extensions)
 		.pipe(extensionBuilder())
@@ -136,25 +67,20 @@ gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'))
 		.pipe(extensionBuilder.listBuilder('list.json'))
 		.pipe(gulp.dest('Extensions/dist/page'));
-});
+}));
 
-gulp.task('build:themes', ['clean:themes'], function() {
+gulp.task('build:themes', gulp.series('clean:themes', function() {
 	var themeBuilder = require('./dev/builders/theme');
 	return gulp.src(paths.css.themes)
 		.pipe(themeBuilder())
 		.pipe(themeBuilder.galleryBuilder('themes.json'))
 		.pipe(gulp.dest('Extensions/dist/page'));
-});
+}));
 
-gulp.task('build', ['build:webext', 'build:safari']);
-
-gulp.task('watch', function() {
-	gulp.watch('**/*.js', ['lint:scripts']);
-	gulp.watch('**/*.css', ['lint:css']);
-});
+gulp.task('build', gulp.series('build:extensions', 'build:themes'));
 
 // Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
-gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
+gulp.task('server', gulp.series('build', function(callback) {
 	var log = gutil.log;
 	var colors = gutil.colors;
 
@@ -163,11 +89,11 @@ gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 	devApp.use(connectStatic('.'));
 
 	// Automatically rebuild Extensions on script changes
-	gulp.watch('Extensions/**/*.js', ['build:extensions']);
-	gulp.watch('Extensions/**/*.css', ['build:extensions']);
+	gulp.watch('Extensions/**/*.js', gulp.series('build:extensions'));
+	gulp.watch('Extensions/**/*.css', gulp.series('build:extensions'));
 
 	//Automatically rebuild Themes on change
-	gulp.watch('Themes/**/*.css', ['build:themes']);
+	gulp.watch('Themes/**/*.css', gulp.series('build:themes'));
 
 	var devServer = https.createServer({
 		key: fs.readFileSync('./dev/certs/key.pem'),
@@ -195,6 +121,6 @@ gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 
 		callback(); // we're done with this task for now
 	});
-});
+}));
 
-gulp.task('default', ['lint']);
+gulp.task('default', gulp.series('lint'));

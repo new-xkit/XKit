@@ -36,15 +36,12 @@
   "devDependencies": {
     "connect": "^3.6.6",
     "del": "^1.2.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-cached": "^1.1.0",
-    "gulp-csslint": "^0.2.0",
     "gulp-eslint": "^3.0.1",
     "gulp-util": "^3.0.6",
-    "gulp-zip": "^3.0.2",
-    "jpm": "^1.0.1",
     "merge-stream": "^0.1.8",
-    "morgan": "^1.6.1",
+    "morgan": "^1.10.0",
     "serve-static": "^1.10.0",
     "through2": "^2.0.0"
   }
