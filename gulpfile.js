@@ -15,7 +15,7 @@ var cache = require('gulp-cached'),
 var paths = {
 	scripts: {
 		dev: ['gulpfile.js', 'dev/**/*.js'],
-		core: ['editor.js', 'xkit.js'],
+		core: ['bridge.js', 'editor.js', 'xkit.js'],
 		extensions: ['Extensions/**/*.js', '!Extensions/**/*.icon.js']
 	},
 	css: {
@@ -44,9 +44,7 @@ gulp.task('lint:scripts', function() {
 	var src = [].concat(
 		paths.scripts.dev,
 		paths.scripts.core,
-		paths.scripts.extensions,
-		['WebExtension/**/*.js',
-		 'Safari/**/*.js']
+		paths.scripts.extensions
 	);
 
 	return gulp.src(src)

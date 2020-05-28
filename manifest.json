@@ -11,7 +11,15 @@
       "*://www.tumblr.com/upload/image*",
       "*://www.tumblr.com/video/*"
     ],
-    "js": [ "bridge.js", "lodash.min.js", "jquery.js", "tiptip.js", "moment.js", "nano.js", "xkit.js" ],
+    "js": [
+      "bridge.js",
+      "vendor/lodash.min.js",
+      "vendor/jquery.js",
+      "vendor/tiptip.js",
+      "vendor/moment.js",
+      "vendor/nano.js",
+      "xkit.js"
+    ],
     "matches": [ "*://*.tumblr.com/*" ]
   } ],
   "description": "A fork of XKit, the extension framework for Tumblr.",
