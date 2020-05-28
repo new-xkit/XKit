@@ -16,7 +16,7 @@ Serving extensions and themes locally is useful for rapid development without re
 3. Change [the relevant line](https://github.com/new-xkit/XKit/blob/db88af1f6d232a4f3e8ba4626f28a0d64240e2a0/xkit.js#L233) with the URL string in `xkit.js` to `https://localhost:31337/Extensions/dist/` to point XKit at `localhost`.
 4. Reload the XKit extension in the browser under test:
   - Chrome: [reload the unpacked extension](https://developer.chrome.com/extensions/getstarted#unpacked)
-  - Firefox: [reload the temporary add-on](https://developer.mozilla.org/en-US/docs/Tools/about:debugging#Loading_a_temporary_add-on)
+  - Firefox: [reload the temporary add-on](https://developer.mozilla.org/en-US/docs/Tools/about:debugging#Extensions)
 5. Open the XKit settings menu and navigate to Other > Update All and click "Update all my extensions".
 
 > **Note**: changes to extension and theme files are not automatically propagated to the XKit extension in the browser.  Each time changes are made, XKit must be force-updated through "Update all my extensions" before the changes will be reflected.
