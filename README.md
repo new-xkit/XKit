@@ -25,20 +25,3 @@ Read the guide on [writing a new extension](./docs/extensions/Writing-a-New-Exte
 
 ### Develop XKit
 Review the project prerequisites and learn how to [build XKit from source](./docs/contributing/Build-XKit.md).
-
-### Quickstart
-In your clone of this repository run:
-
-```sh
-npm install
-```
-
-To build XKit from source, run:
-
-```sh
-gulp build
-```
-
-Builds can be found in the `build/` directory.
-
-For a list of available build tasks, see [the documentation](./docs/contributing/Build-XKit.md#gulp-tasks).

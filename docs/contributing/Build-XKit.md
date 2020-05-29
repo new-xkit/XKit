@@ -21,6 +21,20 @@ Serving extensions and themes locally is useful for rapid development without re
 
 > **Note**: changes to extension and theme files are not automatically propagated to the XKit extension in the browser.  Each time changes are made, XKit must be force-updated through "Update all my extensions" before the changes will be reflected.
 
+## Scripts:
+
+#### `npm test`
+
+Shortcut for [`gulp lint`](#gulp-lint).
+
+#### `npm run-script dev`
+
+Shortcut for [`gulp server`](#gulp-server).
+
+#### `npm run-script build`
+
+Uses `web-ext build` with the necessary file exclusions to build and pack the WebExtension (unsigned).
+
 ## Gulp Tasks:
 
 #### `gulp` (default)
@@ -49,16 +63,10 @@ See also: [`gulp build:extensions`](#gulp-buildextensions), [`gulp build:themes`
 
 Builds the extension distribution from source, including the JSON-ified extension files, `list.json`, and `gallery.json`.
 
-See also: [`gulp lint:scripts`](#gulp-lintscripts).
-
 #### `gulp build:themes`
 
 Builds the themes distribution from source, including `themes.json`.
 
-See also: [`gulp lint:css`](#gulp-lintcss).
-
 #### `gulp server`
 
 Serve extension and theme files locally.
-
-See also: [`gulp build:extensions`](#gulp-buildextensions), [`gulp build:themes`](#gulp-buildthemes).
