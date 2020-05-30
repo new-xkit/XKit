@@ -25,7 +25,7 @@ Serving extensions and themes locally is useful for rapid development without re
 
 #### `npm test`
 
-Shortcut for [`gulp lint`](#gulp-lint).
+Shortcut for [`gulp lint:scripts`](#gulp-lintscripts).
 
 #### `npm run-script dev`
 
