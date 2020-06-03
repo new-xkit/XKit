@@ -292,10 +292,9 @@ XKit.extensions.timestamps = new Object({
 
 			var post_id = $(this).parents("[data-id]").attr("data-id");
 
+			var xtimestamp_class = "xtimestamp";
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
-				var xtimestamp_class = "xtimestamp-in-search";
-			} else {
-				var xtimestamp_class = "xtimestamp";
+				xtimestamp_class = "xtimestamp-in-search";
 			}
 
 			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp_loading">&nbsp;</div>`;
