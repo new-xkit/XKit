@@ -293,9 +293,9 @@ XKit.extensions.timestamps = new Object({
 			var post_id = $(this).parents("[data-id]").attr("data-id");
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
-				xtimestamp_class = "xtimestamp-in-search";
+				var xtimestamp_class = "xtimestamp-in-search";
 			} else {
-				xtimestamp_class = "xtimestamp";
+				var xtimestamp_class = "xtimestamp";
 			}
 
 			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp_loading">&nbsp;</div>`;
@@ -315,12 +315,10 @@ XKit.extensions.timestamps = new Object({
 		$(selector).not(".xkit_timestamps")
 		.addClass("xkit_timestamps")
 		.each(function() {
-			let $this = $(this);
-
 			try {
-				var post_id = $(this).find(XKit.extensions.timestamps.blog_link_class)[1]["href"].split("/").slice(-2)[0];
-				var blog_name = $(this).find(XKit.extensions.timestamps.blog_link_class)[1]["href"].split("/")[2].split(".")[0];
-			} catch(e) {
+				var post_id = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
+				var blog_name = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
+			} catch (e) {
 				note = $(this).find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp">&nbsp;</div>`);
 				XKit.extensions.timestamps.show_failed(note);
 			}
