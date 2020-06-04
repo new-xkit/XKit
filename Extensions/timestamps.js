@@ -127,52 +127,44 @@ XKit.extensions.timestamps = new Object({
 		});
 
 		if (XKit.page.react) {
-			XKit.tools.async_add_function(async () => {
-				/* globals tumblr */
-				return await tumblr.getCssMap();
-			})
-			.then(({post, rightContent, reblog, reblogHeader, badge, blogLink, private}) => {
-				this.posts_class = post.map(x => `.${x}`).join(", ");
-				this.meatballs_class = rightContent.map(x => `.${x}`).join(", ");
-				this.reblogs_class = reblog.map(x => `.${x}`).join(", ");
-				this.reblog_headers_class = reblogHeader.map(x => `.${x}`).join(", ");
-				this.reblog_op_class = badge[1];
-				this.blog_link_class = blogLink.map(x => `.${x}`).join(", ");
-				this.private_posts_class = private.map(x => `.${x}`).join(", ");
-
-				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
-					this.react_add_timestamps();
-					XKit.post_listener.add("timestamps", this.react_add_timestamps);
-				}
-
-				if (this.preferences.reblogs.value !== "off") {
-					this.react_add_reblog_timestamps();
-					XKit.post_listener.add("timestamps", this.react_add_reblog_timestamps);
-				}
-				
-				if (this.preferences.only_on_hover.value) {
-					XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
-				}
+			XKit.css_map.getCssMap()
+			.then(() => {
+				this.posts_class = XKit.css_map.keyToCss("post");
+				this.headers_class = XKit.css_map.keyToCss("header");
+				this.reblogs_class = XKit.css_map.keyToCss("reblog");
+				this.reblog_headers_class = XKit.css_map.keyToCss("reblogHeader");
+				this.blog_link_class = XKit.css_map.keyToCss("blogLink");
 			});
 
-			return;
-
-		} else {
-			XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
-
 			if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
-				this.add_timestamps();
-				XKit.post_listener.add("timestamps", this.add_timestamps);
+				this.react_add_timestamps();
+				XKit.post_listener.add("timestamps", this.react_add_timestamps);
 			}
 
 			if (this.preferences.reblogs.value !== "off") {
-				this.add_reblog_timestamps();
-				XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
+				this.react_add_reblog_timestamps();
+				XKit.post_listener.add("timestamps", this.react_add_reblog_timestamps);
 			}
 
 			if (this.preferences.only_on_hover.value) {
-				XKit.tools.add_css(`.xtimestamp { display: none; } .post:hover .xtimestamp { display: block; }`, "timestamps_on_hover");
+				XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
 			}
+		}
+
+		XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
+
+		if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
+			this.add_timestamps();
+			XKit.post_listener.add("timestamps", this.add_timestamps);
+		}
+
+		if (this.preferences.reblogs.value !== "off") {
+			this.add_reblog_timestamps();
+			XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
+		}
+
+		if (this.preferences.only_on_hover.value) {
+			XKit.tools.add_css(`.xtimestamp { display: none; } .post:hover .xtimestamp { display: block; }`, "timestamps_on_hover");
 		}
 	},
 
@@ -202,10 +194,10 @@ XKit.extensions.timestamps = new Object({
 			var blog_name = post.attr('data-tumblelog-name');
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
-				var in_search_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp-in-search xtimestamp_loading">&nbsp;</div>';
+				var in_search_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp-in-search xtimestamp-loading">&nbsp;</div>';
 				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
-				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
+				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp-loading">&nbsp;</div>';
 				post.find(".post_content").prepend(normal_html);
 			}
 
@@ -232,7 +224,7 @@ XKit.extensions.timestamps = new Object({
 
 			let {tumblelog, postId} = JSON.parse($link.attr("data-peepr"));
 
-			$this.find(".reblog-header").append(`<div class="xkit_timestamp_${postId} xtimestamp xtimestamp_loading">&nbsp;</div>`);
+			$this.find(".reblog-header").append(`<div class="xkit_timestamp_${postId} xtimestamp xtimestamp-loading">&nbsp;</div>`);
 			let $timestamp = $(`.xkit_timestamp_${postId}`);
 			XKit.extensions.timestamps.fetch_timestamp(postId, tumblelog, $timestamp);
 		});
@@ -259,16 +251,16 @@ XKit.extensions.timestamps = new Object({
 
 			var timestamp = responseData.posts[0].timestamp;
 			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
-			date_element.removeClass("xtimestamp_loading");
+			date_element.removeClass("xtimestamp-loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
 		})
 		.catch(() => this.show_failed(date_element));
 	},
 
 	react_add_timestamps: function() {
-		var posts = $(XKit.extensions.timestamps.posts_class).not(".xkit_timestamps");
+		var posts = $("[data-id]:not(.xkit_timestamps)");
 
-		if (!posts || posts.length === 0) {
+		if (posts.length === 0) {
 			return;
 		}
 
@@ -276,29 +268,17 @@ XKit.extensions.timestamps = new Object({
 
 		posts.each(function() {
 			var post = $(this);
-
 			post.addClass("xkit_timestamps");
 
-			// What is the react class for .fan_mail?
-//			if (post.hasClass("fan_mail")) {
-//				return;
-//			}
-
-			// What is the react id for #new_post?
-//			if (post.attr('id') === "new_post" || post.find(XKit.extensions.timestamps.private_posts_class).length > 0)
-			if (post.find(XKit.extensions.timestamps.private_posts_class).length > 0) {
-				return;
-			}
-
-			var post_id = $(this).parents("[data-id]").attr("data-id");
+			var post_id = $(this).attr("data-id");
 
 			var xtimestamp_class = "xtimestamp";
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
 				xtimestamp_class = "xtimestamp-in-search";
 			}
 
-			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp_loading">&nbsp;</div>`;
-			post.find(XKit.extensions.timestamps.meatballs_class).prepend(xtimestamp_html);
+			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp-loading">&nbsp;</div>`;
+			$(xtimestamp_html).insertAfter(post.find(XKit.extensions.timestamps.headers_class));
 
 			var note = $(".xkit_timestamp_" + post_id);
 			XKit.extensions.timestamps.react_fetch_timestamp(post_id, note);
@@ -306,27 +286,30 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	react_add_reblog_timestamps: function() {
-		var selector = XKit.extensions.timestamps.reblogs_class;
+		var reblogs = $(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps");
 		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
-			selector += ` > ${XKit.extensions.timestamps.reblog_op_class}`;
+			var posts = $("[data-id]");
+			reblogs = posts.map(function() { return $(this).children(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
 		}
 
-		$(selector).not(".xkit_timestamps")
+		reblogs
 		.addClass("xkit_timestamps")
 		.each(function() {
+			if ($(this).length === 0) { return; }
+
 			try {
 				var post_id = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
 				var blog_name = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
 			} catch (e) {
-				note = $(this).find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp">&nbsp;</div>`);
+				note = $(this).find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
 				XKit.extensions.timestamps.show_failed(note);
 			}
 
-			var normal_html = `<div class="xkit_timestamp_${post_id} xtimestamp xtimestamp_loading">&nbsp;</div>`;
+			var normal_html = `<div class="xkit_timestamp_${post_id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`;
 			$(this).find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
 			var note = $(`.xkit_timestamp_${post_id}`);
 
-			// XKit.interface.react.page_props doesn't appear to work for reblogs yet
+			// XKit.interface.react.post_props doesn't appear to work for reblogs yet
 //			XKit.extensions.timestamps.react_fetch_timestamp(post_id, note);
 			XKit.extensions.timestamps.fetch_timestamp(post_id, blog_name, note);
 		});
@@ -341,7 +324,7 @@ XKit.extensions.timestamps = new Object({
 
 		if (timestamp) {
 			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
-			date_element.removeClass("xtimestamp_loading");
+			date_element.removeClass("xtimestamp-loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
 		} else {
 			this.show_failed(date_element);
@@ -365,13 +348,13 @@ XKit.extensions.timestamps = new Object({
 		}
 
 		date_element.html(this.format_date(cached_date));
-		date_element.removeClass("xtimestamp_loading");
+		date_element.removeClass("xtimestamp-loading");
 		return true;
 	},
 
 	show_failed: function(obj) {
 		$(obj).html("failed to load timestamp <div class=\"xkit-timestamp-failed-why\">why?</div>");
-		if ($(obj).hasClass('xtimestamp_loading')) { $(obj).removeClass('xtimestamp_loading'); }
+		$(obj).removeClass("xtimestamp-loading");
 	},
 
 	cpanel: function() {
