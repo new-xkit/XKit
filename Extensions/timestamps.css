@@ -33,13 +33,21 @@
 	color: rgb(168,177,184);
 	text-align: left;
 	font-weight: normal !important;
-	font-size: 11px;
-	margin: 0 10px;
-	align-self: center;
-	flex-shrink: 9999;
+	font-size: 14px;
+	line-height: 1em;
+	padding: 0 var(--post-padding);
+	margin-top: calc(-1 * (var(--post-header-vertical-padding) / 2));
+	margin-bottom: var(--post-header-vertical-padding);
 }
 
-.xtimestamp.xtimestamp_loading {
+.xtimestamp.xtimestamp-reblog {
+	align-self: center;
+	flex-shrink: 9999;
+	padding: 0;
+	margin: 0 10px;
+}
+
+.xtimestamp.xtimestamp-loading {
 	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M.9.5a.4.4 2 0 1-.247.37.4.4 0 0 1-.436-.087A.4.4 0 0 1 .13.347.4.4 0 0 1 .5.1' fill='none' stroke='%23888' stroke-width='.12' stroke-linecap='round' stroke-linejoin='round'%3E%3CanimateTransform attributeName='transform' attributeType='XML' type='rotate' from='0 .5 .5' to='360 .5 .5' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/svg%3E") center no-repeat;
 	min-height: 20px;
 	min-width: 20px;
