@@ -30,17 +30,26 @@
 
 .xtimestamp {
 	position: relative;
+	top: -9px;
 	color: rgb(168,177,184);
 	text-align: left;
 	font-weight: normal !important;
+	font-size: 11px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+
+.xkit--react .xtimestamp {
+	top: 0;
 	font-size: 14px;
 	line-height: 1em;
 	padding: 0 var(--post-padding);
+	margin-left: 0;
 	margin-top: calc(-1 * (var(--post-header-vertical-padding) / 2));
 	margin-bottom: var(--post-header-vertical-padding);
 }
 
-.xtimestamp.xtimestamp-reblog {
+.xkit--react .xtimestamp.xtimestamp-reblog {
 	align-self: center;
 	flex-shrink: 9999;
 	padding: 0;
