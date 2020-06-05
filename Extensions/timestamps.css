@@ -40,7 +40,8 @@
 }
 
 .xkit--react .xtimestamp {
-	top: 0;
+	position: static;
+	color: var(--gray-40);
 	font-size: 14px;
 	line-height: 1em;
 	padding: 0 var(--post-padding);
