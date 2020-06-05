@@ -303,8 +303,10 @@ XKit.extensions.timestamps = new Object({
 				var post_id = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
 				var blog_name = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
 			} catch (e) {
-				note = $(this).find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
+				$(this).find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
+				note = $(this).find(".xtimestamp.xtimestamp-reblog");
 				XKit.extensions.timestamps.show_failed(note);
+				return;
 			}
 
 			var normal_html = `<div class="xkit_timestamp_${post_id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`;
