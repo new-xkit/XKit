@@ -41,12 +41,12 @@
 
 .xkit--react .xtimestamp {
 	position: static;
-	color: var(--gray-40);
+	color: var(--gray-65);
 	font-size: 14px;
 	line-height: 1em;
 	padding: 0 var(--post-padding);
 	margin-left: 0;
-	margin-top: calc(-1 * (var(--post-header-vertical-padding) / 2));
+	margin-top: calc(var(--post-header-vertical-padding) / -2);
 	margin-bottom: var(--post-header-vertical-padding);
 }
 
