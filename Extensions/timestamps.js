@@ -291,7 +291,6 @@ XKit.extensions.timestamps = new Object({
 		.addClass("xkit_timestamps")
 		.each(function() {
 			var reblog = $(this);
-			var post = reblog.parents("[data-id]");
 
 			if (reblog.length === 0) { return; }
 
