@@ -107,13 +107,6 @@ XKit.extensions.timestamps = new Object({
 
 		if (XKit.interface.where().search) {
 			this.in_search = true;
-			XKit.tools.add_css(`
-				.xtimestamp-in-search {
-					position: absolute;
-					top: 32px;
-					color: rgb(168,177,184);
-					font-size: 10px;
-				}`, "timestamps");
 		}
 
 		if (this.preferences.format.value === "") {
@@ -130,7 +123,6 @@ XKit.extensions.timestamps = new Object({
 			XKit.css_map.getCssMap()
 			.then(() => {
 				this.posts_class = XKit.css_map.keyToCss("post");
-				this.headers_class = XKit.css_map.keyToCss("header");
 				this.reblogs_class = XKit.css_map.keyToCss("reblog");
 				this.reblog_headers_class = XKit.css_map.keyToCss("reblogHeader");
 				this.blog_link_class = XKit.css_map.keyToCss("blogLink");
@@ -149,7 +141,7 @@ XKit.extensions.timestamps = new Object({
 			if (this.preferences.only_on_hover.value) {
 				XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
 			}
-			
+
 			return;
 		}
 
@@ -166,7 +158,7 @@ XKit.extensions.timestamps = new Object({
 		}
 
 		if (this.preferences.only_on_hover.value) {
-			XKit.tools.add_css(`.xtimestamp { display: none; } .post:hover .xtimestamp { display: block; }`, "timestamps_on_hover");
+			XKit.tools.add_css(".xtimestamp { display: none; } .post:hover .xtimestamp { display: block; }", "timestamps_on_hover");
 		}
 	},
 
@@ -195,7 +187,7 @@ XKit.extensions.timestamps = new Object({
 			var post_id = post.attr('data-post-id');
 			var blog_name = post.attr('data-tumblelog-name');
 
-			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
+			if (XKit.extensions.timestamps.in_search) {
 				var in_search_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp-in-search xtimestamp-loading">&nbsp;</div>';
 				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
@@ -261,6 +253,7 @@ XKit.extensions.timestamps = new Object({
 
 	react_add_timestamps: function() {
 		var posts = $("[data-id]:not(.xkit_timestamps)");
+		posts.addClass("xkit_timestamps");
 
 		if (posts.length === 0) {
 			return;
@@ -270,17 +263,16 @@ XKit.extensions.timestamps = new Object({
 
 		posts.each(function() {
 			var post = $(this);
-			post.addClass("xkit_timestamps");
 
-			var post_id = $(this).attr("data-id");
+			var post_id = post.attr("data-id");
 
 			var xtimestamp_class = "xtimestamp";
-			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
+			if (XKit.extensions.timestamps.in_search) {
 				xtimestamp_class = "xtimestamp-in-search";
 			}
 
 			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp-loading">&nbsp;</div>`;
-			$(xtimestamp_html).insertAfter(post.find(XKit.extensions.timestamps.headers_class));
+			$(xtimestamp_html).insertAfter(post.find("header"));
 
 			var note = $(".xkit_timestamp_" + post_id);
 			XKit.extensions.timestamps.react_fetch_timestamp(post_id, note);
@@ -289,6 +281,7 @@ XKit.extensions.timestamps = new Object({
 
 	react_add_reblog_timestamps: function() {
 		var reblogs = $(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps");
+
 		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
 			var posts = $("[data-id]");
 			reblogs = posts.map(function() { return $(this).children(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
@@ -297,20 +290,23 @@ XKit.extensions.timestamps = new Object({
 		reblogs
 		.addClass("xkit_timestamps")
 		.each(function() {
-			if ($(this).length === 0) { return; }
+			var reblog = $(this);
+			post = reblog.parents("[data-id]");
+
+			if (reblog.length === 0) { return; }
 
 			try {
-				var post_id = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
-				var blog_name = $(this).find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
+				var post_id = reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
+				var blog_name = reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
 			} catch (e) {
-				$(this).find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
-				note = $(this).find(".xtimestamp.xtimestamp-reblog");
+				reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
+				note = reblog.find(".xtimestamp.xtimestamp-reblog");
 				XKit.extensions.timestamps.show_failed(note);
 				return;
 			}
 
 			var normal_html = `<div class="xkit_timestamp_${post_id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`;
-			$(this).find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
+			reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
 			var note = $(`.xkit_timestamp_${post_id}`);
 
 			// XKit.interface.react.post_props doesn't appear to work for reblogs yet
