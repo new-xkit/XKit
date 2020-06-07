@@ -26,13 +26,6 @@
 	--xkit-border: rgb(230,230,230);
 	--xkit-dark-border: rgb(200,200,200);
 
-	--xkit-notification-accent: white;
-	--xkit-notification-error: #c21900;
-	--xkit-notification-ok: #248a00;
-	--xkit-notification-warning: #dc5e0b;
-	--xkit-notification-warning-sticky: rgba(255, 204, 150, .7);
-	--xkit-notification-mail: #238ec4;
-
 	--xkit-url-field: rgb(240,240,240);
 	--xkit-on-url-field: rgb(100,100,100);
 
@@ -58,85 +51,35 @@
 
 	--xkit-progress-bar: rgb(240,240,240);
 
-	--xkit-window: var(--xkit-primary);
-	--xkit-window-title: var(--xkit-on-primary);
 	--xkit-window-error: #c31700;
 	--xkit-window-warning: #c54e03;
 	--xkit-window-question: #2b639d;
 	--xkit-window-info: #66a820;
 
-	--xkit-msg: var(--xkit-primary);
-	--xkit-msg-on-a: #1e7db9;
-	--xkit-msg-on-a-hover: #0f5c8c;
-	--xkit-msg-info: rgb(247,247,247);
-	--xkit-msg-on-info: rgb(130,130,130);
-	--xkit-msg-on-display: rgb(60,60,60);
-	--xkit-msg-on-display-h2: rgb(110,110,110);
+	--xkit-notification-accent: white;
+	--xkit-notification-error: #c21900;
+	--xkit-notification-ok: #248a00;
+	--xkit-notification-warning: #dc5e0b;
+	--xkit-notification-warning-sticky: rgba(255, 204, 150, .7);
+	--xkit-notification-mail: #238ec4;
 
 	/* KEEP IN PREFERENCES */
-
-	--xkit-icon: var(--xkit-primary);
-	--xkit-panel: var(--xkit-primary);
-	--xkit-panel-overlay: var(--xkit-white-33-shadow);
-	--xkit-panel-left: var(--xkit-primary);
-	--xkit-panel-right: var(--xkit-primary);
-	--xkit-wide-panel: var(--xkit-secondary);
-
-	--xkit-tab: var(--xkit-secondary);
-	--xkit-on-tab: var(--xkit-on-secondary);
-	--xkit-tab-hover: var(--xkit-11-shadow);
-	--xkit-tab-active: var(--xkit-22-shadow);
-	--xkit-tab-selected: var(--xkit-primary);
-	--xkit-on-tab-selected: var(--xkit-on-primary);
-
-	--xkit-display-type-switcher: var(--xkit-primary);
-	--xkit-display-type-switcher-hover: var(--xkit-primary);
-	--xkit-display-type-switcher-active: var(--xkit-33-shadow);
-	--xkit-display-type-switcher-selected: var(--xkit-secondary);
 
 	--xkit-welcoming-bubble: #88b7d5;
 	--xkit-welcoming-bubble-border: #c2e1f5;
 
-	--xkit-about-on-primary: var(--xkit-on-primary);
-	--xkit-about-on-secondary: var(--xkit-on-secondary);
 	--xkit-about-on-a-hover: rgb(100,100,100);
 
-	--xkit-third-party: var(--xkit-secondary);
-	--xkit-on-third-party: var(--xkit-on-secondary);
-
-	--xkit-extension: var(--xkit-primary);
-	--xkit-on-extension: var(--xkit-on-secondary);
-	--xkit-extension-hover: var(--xkit-11-shadow);
 	--xkit-extension-selected: rgba(0, 153, 255, 0.18);
-	--xkit-on-extension-selected: var(--xkit-on-primary);
-
-	--xkit-extensions-settings-on-primary: var(--xkit-on-primary);
-	--xkit-extensions-settings-on-secondary: var(--xkit-on-secondary);
 	--xkit-extensions-settings-slow: #fffbe6;
-	--xkit-extensions-settings-on-slow: var(--xkit-on-primary);
-	--xkit-extensions-settings-on-none: var(--xkit-on-secondary);
+	--xkit-gallery-extension-install-button: rgba(60,190,47,0.8);
 
-	--xkit-install-extension: var(--xkit-secondary);
-	--xkit-on-install-extension: var(--xkit-on-secondary);
-	--xkit-installed-extension: var(--xkit-secondary);
-	--xkit-on-installed-extension: var(--xkit-on-primary);
-	--xkit-extension-icon: var(--xkit-primary);
-
-	--xkit-gallery-toolbar: var(--xkit-primary);
-	--xkit-gallery-loading: var(--xkit-primary);
-	--xkit-gallery-extension: var(--xkit-primary);
-	--xkit-gallery-extension-just-installed: rgba(60,190,47,0.8);
-	--xkit-gallery-extension-on-just-installed: var(--xkit-on-color);
-	--xkit-gallery-extension-installed: var(--xkit-secondary);
-	--xkit-gallery-on-extension-hover: var(--xkit-on-primary);
-	--xkit-gallery-extension-img: var(--xkit-primary);
-	--xkit-gallery-on-extension-installing: var(--xkit-on-primary);
-	--xkit-gallery-on-error: var(--xkit-on-secondary);
+	--xkit-msg-on-a: #1e7db9;
+	--xkit-msg-on-a-hover: #0f5c8c;
+	--xkit-msg-on-display: rgb(60,60,60);
 
 	--xkit-search-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M 0.40543798,-4.092902e-5 C 0.18238855,-4.092902e-5 -2.8100719e-8,0.18241907 0,0.40546907 c -2.8100716e-8,0.22305 0.18238855,0.40546 0.40543798,0.40546 0.0845247,0 0.16320577,-0.0262 0.22835463,-0.0709 l 0.23844462,0.23837 a 0.07509666,0.0750964 0 0 0 0.10619917,-0.1062 l -0.23842507,-0.23834 c 0.0447091,-0.0652 0.0709624,-0.14383 0.0709624,-0.22838 0,-0.22305 -0.18248633,-0.40550999902 -0.40553575,-0.40550999902 z m 0,0.15016999902 c 0.14188789,0 0.25535905,0.11345 0.25535905,0.25534 0,0.14189 -0.11347116,0.25528 -0.25535905,0.25528 -0.1418879,0 -0.2552613,-0.11339 -0.25526128,-0.25528 -2e-8,-0.14189 0.11337338,-0.25534 0.25526128,-0.25534 z' fill='%23888'%3E%3C/path%3E%3C/svg%3E");
 }
-
-/* KEEP IN PREFERENCES */
 
 #help_button, .tab_help {
 	display: none !important;
@@ -162,7 +105,7 @@
 #xkit-gallery-toolbar {
 	position: relative;
 	height: 30px;
-	background-color: var(--xkit-gallery-toolbar);
+	background-color: var(--xkit-primary);
 	box-sizing: border-box;
 	border-bottom: 1px solid var(--xkit-border);
 }
@@ -170,7 +113,7 @@
 .xkit-third-party {
 	position: absolute;
 	top: 13px; right: 15px;
-	color: var(--xkit-on-third-party);
+	color: var(--xkit-on-secondary);
 	opacity: 0.65;
 	font-size: 12px;
 	font-weight: bold;
@@ -186,13 +129,13 @@
 
 .xkit-third-party-credit {
 	border: 1px solid var(--xkit-dark-border);
-	background: var(--xkit-third-party);
+	background: var(--xkit-secondary);
 	margin: 15px 0px;
 	padding: 10px;
-	color: var(--xkit-on-third-party);
+	color: var(--xkit-on-secondary);
 	text-align: center;
 	border-radius: 4px;
-	box-shadow: inset 0px 1px 0px var(--xkit-third-party), 0px 1px 2px var(--xkit-22-shadow);
+	box-shadow: inset 0px 1px 0px var(--xkit-secondary), 0px 1px 2px var(--xkit-22-shadow);
 }
 
 .xkit-third-party-credit a {
@@ -229,7 +172,7 @@
 	border-bottom: 0;
 	font-size: 11px;
 	background: var(--xkit-extensions-settings-slow);
-	color: var(--xkit-extensions-settings-on-slow);
+	color: var(--xkit-on-primary);
 }
 
 #xkit-extension-panel-slow-extension .xkit-more-info {
@@ -281,7 +224,7 @@
 	float: left;
 	margin-left: 13px;
 	margin-top: 13px;
-	background: var(--xkit-gallery-extension);
+	background: var(--xkit-primary);
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -293,7 +236,7 @@
 	padding: 70px 20px 20px 20px;
 	text-align: center;
 	font-size: 13px;
-	color: var(--xkit-on-extension);
+	color: var(--xkit-on-secondary);
 }
 
 .xkit-gallery-extension .overlay {
@@ -306,12 +249,12 @@
 	font-weight: bold;
 	text-shadow: 0px 1px 0px var(--xkit-white-33-shadow);
 	display: none;
-	color: var(--xkit-on-extension);
+	color: var(--xkit-on-secondary);
 }
 
 .xkit-gallery-extension .overlay.green {
-	background: var(--xkit-gallery-extension-just-installed);
-	color: var(--xkit-gallery-extension-on-just-installed);
+	background: var(--xkit-gallery-extension-install-button);
+	color: var(--xkit-on-color);
 	text-shadow: 0px 1px 2px var(--xkit-44-shadow);
 }
 
@@ -340,14 +283,14 @@
 	padding: 4px 0px;
 	margin-left: -40px;
 	border-radius: 40px;
-	background: var(--xkit-gallery-extension-just-installed);
-	color: var(--xkit-gallery-extension-on-just-installed);
+	background: var(--xkit-gallery-extension-install-button);
+	color: var(--xkit-on-color);
 	display: block;
 	text-shadow: 0px 1px 2px var(--xkit-44-shadow);
 }
 
 .xkit-installed-extension {
-	background: var(--xkit-gallery-extension-installed);
+	background: var(--xkit-secondary);
 	font-style: oblique;
 }
 
@@ -359,7 +302,7 @@
 
 .xkit-gallery-extension:hover {
 	opacity: 1;
-	color: var(--xkit-gallery-on-extension-hover);
+	color: var(--xkit-on-primary);
 	box-shadow: 0px 1px 2px var(--xkit-11-shadow);
 }
 
@@ -373,7 +316,7 @@
 	top: 20px; left: 50%;
 	margin-left: -16px;
 	border-radius: 5px;
-	background: var(--xkit-gallery-extension-img);
+	background: var(--xkit-primary);
 	width: 32px; height: 32px;
 }
 
@@ -422,7 +365,7 @@
 	height: 360px;
 	position: absolute;
 	width: 100%;
-	background: var(--xkit-panel);
+	background: var(--xkit-primary);
 	top: 0; left: 0;
 	padding: 15px;
 	box-sizing: border-box;
@@ -438,7 +381,7 @@
 	height: 40px;
 	position: absolute;
 	width: 100%;
-	background: var(--xkit-tab);
+	background: var(--xkit-secondary);
 	bottom: 0; left: 0;
 	box-shadow: inset 0px 1px 3px var(--xkit-22-shadow);
 	border-radius: 0px 0px 5px 5px;
@@ -449,23 +392,23 @@
 	float: left;
 	height: 40px;
 	line-height: 40px;
-	color: var(--xkit-on-tab);
+	color: var(--xkit-on-secondary);
 	padding: 0px 25px;
 	cursor: pointer;
 	text-shadow: 0px 0px 3px var(--xkit-white-53-shadow);
 }
 
 #xkit-control-panel-tabs div:hover {
-	background: var(--xkit-tab-hover);
+	background: var(--xkit-11-shadow);
 }
 
 #xkit-control-panel-tabs div:active {
-	background: var(--xkit-tab-active);
+	background: var(--xkit-22-shadow);
 }
 
 #xkit-control-panel-tabs div.selected {
-	color: var(--xkit-on-tab-selected);
-	background: var(--xkit-tab-selected);
+	color: var(--xkit-on-primary);
+	background: var(--xkit-primary);
 	cursor: default;
 	border-radius: 0px 0px 4px 4px;
 	box-shadow: 1px 1px 1px var(--xkit-22-shadow);
@@ -477,7 +420,7 @@
 	width: 100%; height: 100%;
 	z-index: 21474835;
 	display: none;
-	background: var(--xkit-panel-overlay);
+	background: var(--xkit-white-33-shadow);
 	-webkit-transform: translate3d(0, 0, 0);
 }
 
@@ -492,7 +435,7 @@
 #xkit-about-window-links a {
 	margin-left: 14px;
 	margin-right: 14px;
-	color: var(--xkit-about-on-secondary);
+	color: var(--xkit-on-secondary);
 	font-weight: normal;
 	font-size: 13px;
 	text-decoration: underline;
@@ -511,29 +454,29 @@
 #xkit-about-window-text .title {
 	font-size: 20px;
 	font-weight: bold;
-	color: var(--xkit-about-on-primary);
+	color: var(--xkit-on-primary);
 	margin-right: 20px;
 }
 
 #xkit-about-window-text .subtitle {
 	font-size: 20px;
-	color: var(--xkit-about-on-secondary);
+	color: var(--xkit-on-secondary);
 }
 
 #xkit-about-window-text .copyright {
 	font-size: 14px;
-	color: var(--xkit-about-on-secondary);
+	color: var(--xkit-on-secondary);
 }
 
 #xkit-about-window-text .thanks {
 	margin-top: 18px;
 	font-size: 16px;
 	line-height: 24px;
-	color: var(--xkit-about-on-primary);
+	color: var(--xkit-on-primary);
 }
 
 #xkit-extensions-panel-left {
-	background-color: var(--xkit-panel-left);
+	background-color: var(--xkit-primary);
 	position: absolute;
 	left: 15px; top: 15px;
 	width: 235px;
@@ -567,20 +510,20 @@
 	left: 190px;
 	border-bottom: 1px solid var(--xkit-border);
 	cursor: pointer;
-	background-color: var(--xkit-display-type-switcher);
+	background-color: var(--xkit-primary);
 }
 
 .xkit-extensions-display-type-switcher:hover {
-	background-color: var(--xkit-display-type-switcher-hover) !important;
+	background-color: var(--xkit-primary) !important;
 }
 
 .xkit-extensions-display-type-switcher:active {
-	background-color: var(--xkit-display-type-switcher-active) !important;
+	background-color: var(--xkit-33-shadow) !important;
 	box-shadow: inset 0px 1px 1px var(--xkit-22-shadow);
 }
 
 .xkit-extensions-display-type-switcher.selected {
-	background-color: var(--xkit-display-type-switcher-selected) !important;
+	background-color: var(--xkit-secondary) !important;
 	box-shadow: inset 0px 1px 2px var(--xkit-11-shadow);
 	cursor: default;
 }
@@ -626,10 +569,10 @@
 #xkit-extensions-panel-right .xkit-message-info {
 	padding: 20px 30px;
 	border-bottom: 1px solid var(--xkit-border);
-	background: var(--xkit-msg-info);
+	background: var(--xkit-secondary);
 	font-size: 13px; font-weight: bold;
 	box-shadow: inset 0px -2px 3px var(--xkit-11-shadow);
-	color: var(--xkit-msg-on-info);
+	color: var(--xkit-on-secondary);
 	text-shadow: 0px 1px 0px var(--xkit-white-83-shadow);
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAIklEQVQIW2NkAILDhw+ngWhbW9tZjECOD5CxBSbBCGIgAwBVVAqz+1ddLwAAAABJRU5ErkJggg==');
 }
@@ -678,7 +621,7 @@
 	margin: 15px 0px 10px 0px;
 	font-size: 18px;
 	font-weight: bold;
-	color: var(--xkit-msg-on-display-h2);
+	color: var(--xkit-on-secondary);
 	padding: 0;
 }
 
@@ -687,7 +630,7 @@
 	left: 250px; top: 15px;
 	width: 535px;
 	height: 325px;
-	background: var(--xkit-panel-right);
+	background: var(--xkit-primary);
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -698,19 +641,19 @@
 #xkit-extensions-panel-right.xkit-wide-panel {
 	left: 15px;
 	width: 770px;
-	background: var(--xkit-wide-panel);
+	background: var(--xkit-secondary);
 	border-left: 1px solid var(--xkit-border);
 }
 
 #xkit-extensions-panel-right.xkit-wide-panel.white {
-	background: var(--xkit-panel);
+	background: var(--xkit-primary);
 }
 
 #xkit-extensions-panel-right .xkit-gallery-not-found-error {
 	text-align: center;
 	padding: 20px 10px;
 	padding-top: 120px;
-	color: var(--xkit-gallery-on-error);
+	color: var(--xkit-on-secondary);
 	text-shadow: 0px 1px 0px var(--xkit-white-83-shadow);
 	font-size: 15px;
 }
@@ -718,7 +661,7 @@
 #xkit-extensions-panel-left .xkit-not-found-error {
 	text-align: center;
 	padding: 30px 10px;
-	color: var(--xkit-gallery-on-error);
+	color: var(--xkit-on-secondary);
 	font-size: 12px;
 }
 
@@ -727,7 +670,7 @@
 	padding: 10px;
 	margin-top: 85px;
 	line-height: 0;
-	color: var(--xkit-extensions-settings-on-none);
+	color: var(--xkit-on-secondary);
 	font-size: 14px;
 	font-weight: normal;
 	text-transform: uppercase;
@@ -775,7 +718,7 @@
 #xkit-extensions-panel-right .xkit-others-panel .description {
 	font-weight: normal;
 	font-size: 15px;
-	color: var(--xkit-on-extension);
+	color: var(--xkit-on-secondary);
 	margin-bottom: 20px;
 	line-height: 28px;
 }
@@ -821,7 +764,7 @@
 	height: 40px; line-height: 40px;
 	font-weight: bold;
 	font-size: 13px;
-	color: var(--xkit-on-extension);
+	color: var(--xkit-on-secondary);
 	text-shadow: 0px 1px 0px var(--xkit-white-53-shadow);
 }
 
@@ -840,7 +783,7 @@
 }
 
 #xkit-extensions-panel-left .xkit-extension:hover {
-	background-color: var(--xkit-extension-hover);
+	background-color: var(--xkit-11-shadow);
 }
 
 #xkit-extensions-panel-left .xkit-extension .title {
@@ -850,7 +793,7 @@
 	line-height: 50px;
 	font-weight: bold;
 	font-size: 13px;
-	color: var(--xkit-on-extension);
+	color: var(--xkit-on-secondary);
 	text-shadow: 0px 1px 0px var(--xkit-white-53-shadow);
 }
 
@@ -858,12 +801,12 @@
 	position: absolute;
 	top: 9px; left: 12px;
 	border-radius: 3px;
-	background: var(--xkit-extension-icon);
+	background: var(--xkit-primary);
 	width: 32px; height: 32px;
 }
 
 #xkit-extensions-panel-left .xkit-extension.selected .title {
-	color: var(--xkit-on-extension-selected);
+	color: var(--xkit-on-primary);
 	text-shadow: 0px 1px 1px var(--xkit-53-shadow);
 }
 
@@ -875,7 +818,7 @@
 }
 
 #xkit-extensions-panel-top .title {
-	color: var(--xkit-extensions-settings-on-primary);
+	color: var(--xkit-on-primary);
 	font-size: 15px; font-weight: bold;
 	display: inline-block;
 }
@@ -883,7 +826,7 @@
 #xkit-extensions-panel-top .version {
 	font-size: 12px;
 	display: inline-block;
-	color: var(--xkit-extensions-settings-on-secondary);
+	color: var(--xkit-on-secondary);
 	margin-left: 7px;
 }
 
@@ -891,7 +834,7 @@
 	position: absolute;
 	top: 15px; right: 15px;
 	font-size: 12px; font-weight: bold;
-	color: var(--xkit-extensions-settings-on-secondary);
+	color: var(--xkit-on-secondary);
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -900,17 +843,17 @@
 	position: absolute;
 	bottom: 16px; left: 15px;
 	font-size: 12px;
-	color: var(--xkit-extensions-settings-on-secondary);
+	color: var(--xkit-on-secondary);
 }
 
 #xkit-extensions-panel-top .description {
-	color: var(--xkit-extensions-settings-on-primary);
+	color: var(--xkit-on-primary);
 	height: 40px; margin-top: 4px;
 }
 
 #xkit-extensions-panel-top .description .details {
 	font-size: 11px; font-weight: bold;
-	color: var(--xkit-extensions-settings-on-secondary);
+	color: var(--xkit-on-secondary);
 	margin-top: 4px;
 	text-decoration: underline;
 	cursor: pointer;
@@ -925,7 +868,7 @@
 	position: absolute;
 	top: 15px; right: 15px;
 	font-size: 12px; font-weight: bold;
-	color: var(--xkit-extensions-settings-on-secondary);
+	color: var(--xkit-on-secondary);
 	display: none;
 }
 
@@ -956,7 +899,7 @@
 	font-weight: normal;
 	position: absolute;
 	line-height: 20px;
-	color: var(--xkit-extensions-settings-on-primary);
+	color: var(--xkit-on-primary);
 	top: 50%;	left: 0;
 	margin-top: -10px;
 }
@@ -1072,9 +1015,9 @@
 }
 
 #xkit-gallery-loading {
-	background: var(--xkit-gallery-loading) no-repeat 50% 50%/60px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M.9.5a.4.4 0 0 1-.247.37.4.4 0 0 1-.436-.087A.4.4 0 0 1 .13.347.4.4 0 0 1 .5.1' fill='none' stroke='%23888' stroke-width='.12' stroke-linecap='round' stroke-linejoin='round'%3E%3CanimateTransform attributeName='transform' attributeType='XML' type='rotate' from='0 .5 .5' to='360 .5 .5' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/svg%3E");
+	background: var(--xkit-primary) no-repeat 50% 50%/60px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M.9.5a.4.4 0 0 1-.247.37.4.4 0 0 1-.436-.087A.4.4 0 0 1 .13.347.4.4 0 0 1 .5.1' fill='none' stroke='%23888' stroke-width='.12' stroke-linecap='round' stroke-linejoin='round'%3E%3CanimateTransform attributeName='transform' attributeType='XML' type='rotate' from='0 .5 .5' to='360 .5 .5' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/svg%3E");
 	height: 50%; line-height: 400px;
-	color: var(--xkit-on-extension);
+	color: var(--xkit-on-secondary);
 	margin: 0px;
 	padding-left: 0px;
 	font-size: 16px;
@@ -1116,7 +1059,7 @@
 }
 
 .xkit-gallery-extension .overlay {
-	color: var(--xkit-gallery-on-extension-installing);
+	color: var(--xkit-on-primary);
 	text-shadow: none;
 	line-height: 400px;
 	font-size: 12px;
@@ -1124,7 +1067,7 @@
 }
 
 #xkit-extensions-panel-left .xkit-extension {
-	background: var(--xkit-extension);
+	background: var(--xkit-primary);
 	border-bottom: 0;
 }
 
@@ -1135,7 +1078,7 @@
 #xkit-extensions-panel-left .xkit-extension.text-only.selected,
 #xkit-extensions-panel-left .xkit-extension.selected .title {
 	text-shadow: none;
-	color: var(--xkit-on-extension-selected);
+	color: var(--xkit-on-primary);
 }
 
 .xkit-gallery-extension .xkit-button {
@@ -1157,8 +1100,8 @@
 }
 
 .xkit-gallery-extension .xkit-button:hover {
-	background: var(--xkit-gallery-extension-just-installed);
-	color: var(--xkit-gallery-extension-on-just-installed);
+	background: var(--xkit-gallery-extension-install-button);
+	color: var(--xkit-on-color);
 	text-shadow: 0px 1px 2px var(--xkit-44-shadow);
 	box-shadow: inset 0px 1px 1px  var(--xkit-53-shadow);;
 }
@@ -1166,16 +1109,16 @@
 .xkit-installed-extension .xkit-install-extension {
 	box-shadow: none;
 	cursor: default;
-	background: var(--xkit-installed-extension)/* #66a820 */;
-	color: var(--xkit-on-installed-extension);
+	background: var(--xkit-secondary)/* #66a820 */;
+	color: var(--xkit-on-primary);
 	text-shadow: none;
 }
 
 .xkit-installed-extension:hover .xkit-install-extension, .xkit-installed-extension .xkit-install-extension:active {
 	box-shadow: none;
 	cursor: default;
-	background: var(--xkit-installed-extension)/* #66a820 */;
-	color: var(--xkit-on-installed-extension);
+	background: var(--xkit-secondary)/* #66a820 */;
+	color: var(--xkit-on-primary);
 	text-shadow: none;
 }
 
@@ -1222,7 +1165,7 @@
 }
 
 #xkit-extensions-panel-right .xkit-message-display {
-	background: var(--xkit-msg);
+	background: var(--xkit-primary);
 	padding-top: 20px;
 }
 
@@ -1232,7 +1175,7 @@
 	text-align: left;
 	padding: 18px 27px;
 	border-bottom: 0px;
-	background: var(--xkit-msg-info);
+	background: var(--xkit-secondary);
 	text-shadow: none;
 	box-shadow: inset 0px -2px 1px var(--xkit-05-shadow);
 }
@@ -1335,7 +1278,7 @@
 }
 
 .xkit-window-title {
-	color: var(--xkit-window-title);
+	color: var(--xkit-on-primary);
 	font-size: 19px;
 	padding-top: 18px;
 }
@@ -1352,7 +1295,7 @@
 	height: 40px;
 	padding: 0px;
 	box-shadow: none;
-	background-color: var(--xkit-window);
+	background-color: var(--xkit-primary);
 	border-top: 1px dotted var(--xkit-dark-border);
 	padding-left: 10px;
 	padding-top: 5px;
@@ -1365,7 +1308,7 @@
 }
 
 #xkit-window {
-	background-color: var(--xkit-window) !important;
+	background-color: var(--xkit-primary) !important;
 	background-repeat: no-repeat;
 	background-position: 18px 18px;
 	background-size: 25px;
@@ -1466,7 +1409,7 @@
 }
 
 #xkit_button svg {
-	fill: var(--xkit-icon);
+	fill: var(--xkit-primary);
 }
 
 .xkit--react #xkit_button {
