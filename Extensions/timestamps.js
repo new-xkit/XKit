@@ -126,21 +126,21 @@ XKit.extensions.timestamps = new Object({
 				this.reblogs_class = XKit.css_map.keyToCss("reblog");
 				this.reblog_headers_class = XKit.css_map.keyToCss("reblogHeader");
 				this.blog_link_class = XKit.css_map.keyToCss("blogLink");
+				
+				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
+					this.react_add_timestamps();
+					XKit.post_listener.add("timestamps", this.react_add_timestamps);
+				}
+
+				if (this.preferences.reblogs.value !== "off") {
+					this.react_add_reblog_timestamps();
+					XKit.post_listener.add("timestamps", this.react_add_reblog_timestamps);
+				}
+
+				if (this.preferences.only_on_hover.value) {
+					XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
+				}
 			});
-
-			if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
-				this.react_add_timestamps();
-				XKit.post_listener.add("timestamps", this.react_add_timestamps);
-			}
-
-			if (this.preferences.reblogs.value !== "off") {
-				this.react_add_reblog_timestamps();
-				XKit.post_listener.add("timestamps", this.react_add_reblog_timestamps);
-			}
-
-			if (this.preferences.only_on_hover.value) {
-				XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
-			}
 
 			return;
 		}
@@ -187,7 +187,7 @@ XKit.extensions.timestamps = new Object({
 			var post_id = post.attr('data-post-id');
 			var blog_name = post.attr('data-tumblelog-name');
 
-			if (XKit.extensions.timestamps.in_search) {
+			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
 				var in_search_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp-in-search xtimestamp-loading">&nbsp;</div>';
 				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
@@ -259,8 +259,6 @@ XKit.extensions.timestamps = new Object({
 			return;
 		}
 
-		XKit.extensions.timestamps.check_quota();
-
 		posts.each(function() {
 			var post = $(this);
 
@@ -286,9 +284,14 @@ XKit.extensions.timestamps = new Object({
 			var posts = $("[data-id]");
 			reblogs = posts.map(function() { return $(this).children(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
 		}
+		
+		reblogs.addClass("xkit_timestamps");
+
+		if (reblogs.length === 0) {
+			return;
+		}
 
 		reblogs
-		.addClass("xkit_timestamps")
 		.each(function() {
 			var reblog = $(this);
 
@@ -308,17 +311,11 @@ XKit.extensions.timestamps = new Object({
 			reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
 			var note = $(`.xkit_timestamp_${post_id}`);
 
-			// XKit.interface.react.post_props doesn't appear to work for reblogs yet
-//			XKit.extensions.timestamps.react_fetch_timestamp(post_id, note);
 			XKit.extensions.timestamps.fetch_timestamp(post_id, blog_name, note);
 		});
 	},
 
 	react_fetch_timestamp: async function(post_id, date_element) {
-		if (this.fetch_from_cache(post_id, date_element)) {
-			return;
-		}
-
 		var {timestamp} = await XKit.interface.react.post_props(post_id);
 
 		if (timestamp) {
