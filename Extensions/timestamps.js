@@ -252,14 +252,10 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	react_add_timestamps: function() {
-		var posts = $("[data-id]:not(.xkit_timestamps)");
-		posts.addClass("xkit_timestamps");
+		var $posts = $("[data-id]:not(.xkit_timestamps)");
+		$posts.addClass("xkit_timestamps");
 
-		if (posts.length === 0) {
-			return;
-		}
-
-		posts.each(function() {
+		$posts.each(function() {
 			var post = $(this);
 
 			var post_id = post.attr("data-id");
@@ -278,37 +274,31 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	react_add_reblog_timestamps: function() {
-		var reblogs = $(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps");
+		var $reblogs = $(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps");
 
 		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
-			var posts = $("[data-id]");
-			reblogs = posts.map(function() { return $(this).children(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
+			var $posts = $("[data-id]");
+			$reblogs = $posts.map(function() { return $(this).children(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
 		}
 		
-		reblogs.addClass("xkit_timestamps");
+		$reblogs.addClass("xkit_timestamps");
 
-		if (reblogs.length === 0) {
-			return;
-		}
-
-		reblogs
+		$reblogs
 		.each(function() {
-			var reblog = $(this);
-
-			if (reblog.length === 0) { return; }
+			var $reblog = $(this);
 
 			try {
-				var post_id = reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
-				var blog_name = reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
+				var post_id = $reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
+				var blog_name = $reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
 			} catch (e) {
-				reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
-				note = reblog.find(".xtimestamp.xtimestamp-reblog");
+				$reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
+				note = $reblog.find(".xtimestamp.xtimestamp-reblog");
 				XKit.extensions.timestamps.show_failed(note);
 				return;
 			}
 
 			var normal_html = `<div class="xkit_timestamp_${post_id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`;
-			reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
+			$reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
 			var note = $(`.xkit_timestamp_${post_id}`);
 
 			XKit.extensions.timestamps.fetch_timestamp(post_id, blog_name, note);
