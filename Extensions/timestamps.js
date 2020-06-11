@@ -126,7 +126,7 @@ XKit.extensions.timestamps = new Object({
 				this.reblogs_class = XKit.css_map.keyToCss("reblog");
 				this.reblog_headers_class = XKit.css_map.keyToCss("reblogHeader");
 				this.blog_link_class = XKit.css_map.keyToCss("blogLink");
-				
+
 				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
 					this.react_add_timestamps();
 					XKit.post_listener.add("timestamps", this.react_add_timestamps);
@@ -274,34 +274,51 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	react_add_reblog_timestamps: function() {
-		var $reblogs = $(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps");
+		const {reblogs_class, reblog_headers_class, preferences} = XKit.extensions.timestamps;
+		const $posts = $("[data-id]:not(.xkit_reblog_timestamps)");
 
-		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
-			var $posts = $("[data-id]");
-			$reblogs = $posts.map(function() { return $(this).find(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
-		}
-		
-		$reblogs.addClass("xkit_timestamps");
+		$posts
+		.addClass("xkit_reblog_timestamps")
+		.each(async function() {
+			const $post = $(this);
+			const post_id = $post.attr("data-id");
+			const {trail} = await XKit.interface.react.post_props(post_id);
+			var $reblogs = $post.find(reblogs_class);
 
-		$reblogs
-		.each(function() {
-			var $reblog = $(this);
-
-			try {
-				var post_id = $reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/").slice(-2)[0];
-				var blog_name = $reblog.find(XKit.extensions.timestamps.blog_link_class)[1].href.split("/")[2].split(".")[0];
-			} catch (e) {
-				$reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(`<div class="xtimestamp xtimestamp-reblog">&nbsp;</div>`);
-				note = $reblog.find(".xtimestamp.xtimestamp-reblog");
-				XKit.extensions.timestamps.show_failed(note);
-				return;
+			if (preferences.reblogs.value === "op") {
+				$reblogs = $reblogs.first();
 			}
 
-			var normal_html = `<div class="xkit_timestamp_${post_id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`;
-			$reblog.find(XKit.extensions.timestamps.reblog_headers_class).append(normal_html);
-			var note = $(`.xkit_timestamp_${post_id}`);
+			$reblogs.each(function(i) {
+				if (trail[i].blog.active === false) {
+					return;
+				}
 
-			XKit.extensions.timestamps.fetch_timestamp(post_id, blog_name, note);
+				const $reblog = $(this);
+				const {uuid} = trail[i].blog;
+				const {id} = trail[i].post;
+
+				$reblog.find(reblog_headers_class).append(`<div class="xkit_timestamp_${id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`);
+				const $xtimestamp = $(`.xkit_timestamp_${id}`);
+
+				if (XKit.extensions.timestamps.fetch_from_cache(id, $xtimestamp) === true) {
+					return;
+				}
+
+				XKit.tools.async_add_function(async ({uuid, id}) => { // eslint-disable-line no-shadow
+					/* globals tumblr */
+					const {response: {timestamp}} = await tumblr.apiFetch(`/v2/blog/${uuid}/posts/${id}`);
+					return timestamp;
+				}, {uuid, id}).then(timestamp => {
+					$xtimestamp
+					.removeClass("xtimestamp-loading")
+					.html(XKit.extensions.timestamps.format_date(moment(new Date(timestamp * 1000))));
+
+					XKit.storage.set("timestamps", `xkit_timestamp_cache_${id}`, timestamp);
+				}).catch(() => {
+					XKit.extensions.timestamps.show_failed($xtimestamp);
+				});
+			});
 		});
 	},
 
