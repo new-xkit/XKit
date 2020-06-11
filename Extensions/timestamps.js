@@ -256,9 +256,9 @@ XKit.extensions.timestamps = new Object({
 		$posts.addClass("xkit_timestamps");
 
 		$posts.each(function() {
-			var post = $(this);
+			var $post = $(this);
 
-			var post_id = post.attr("data-id");
+			var post_id = $post.attr("data-id");
 
 			var xtimestamp_class = "xtimestamp";
 			if (XKit.extensions.timestamps.in_search) {
@@ -266,7 +266,7 @@ XKit.extensions.timestamps = new Object({
 			}
 
 			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp-loading">&nbsp;</div>`;
-			$(xtimestamp_html).insertAfter(post.find("header"));
+			$(xtimestamp_html).insertAfter($post.find("header"));
 
 			var note = $(".xkit_timestamp_" + post_id);
 			XKit.extensions.timestamps.react_fetch_timestamp(post_id, note);
@@ -278,7 +278,7 @@ XKit.extensions.timestamps = new Object({
 
 		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
 			var $posts = $("[data-id]");
-			$reblogs = $posts.map(function() { return $(this).children(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
+			$reblogs = $posts.map(function() { return $(this).find(XKit.extensions.timestamps.reblogs_class).not(".xkit_timestamps").get(0); });
 		}
 		
 		$reblogs.addClass("xkit_timestamps");
@@ -363,6 +363,7 @@ XKit.extensions.timestamps = new Object({
 		$(".xkit-fan-timestamp").remove();
 		$(".with-xkit-timestamp").removeClass("with-xkit-timestamp");
 		$(".xkit_timestamps").removeClass("xkit_timestamps");
+		$(".xkit_reblog_timestamps").removeClass("xkit_reblog_timestamps");
 		XKit.tools.remove_css("timestamps");
 		XKit.post_listener.remove("timestamps");
 		XKit.tools.remove_css("timestamps_on_hover");
