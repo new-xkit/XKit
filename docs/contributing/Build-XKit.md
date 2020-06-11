@@ -27,11 +27,11 @@ Serving extensions and themes locally is useful for rapid development without re
 
 Shortcut for [`gulp lint:scripts`](#gulp-lintscripts).
 
-#### `npm run-script dev`
+#### `npm run dev`
 
 Shortcut for [`gulp server`](#gulp-server).
 
-#### `npm run-script build`
+#### `npm run build`
 
 Uses `web-ext build` with the necessary file exclusions to build and pack the WebExtension (unsigned).
 
