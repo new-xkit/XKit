@@ -652,11 +652,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	scroll_pos: $(window).scrollTop(),
 
-	open: function() {			
-		console.log('opening');
-		console.log(XKit.tools.get_setting("xkit_match_tumblr_theme", "true"));
-		console.log(XKit.tools.get_setting("xkit_show_dark_mode", "true"));
-		console.log(getComputedStyle(document.documentElement).getPropertyValue("--rgb-black").replace(/\s+/g, ""));
+	open: function() {
 
 		if (XKit.tools.get_setting("xkit_match_tumblr_theme", "true") === "true") {
 			if (getComputedStyle(document.documentElement).getPropertyValue("--rgb-black").replace(/\s+/g, "") != "0,0,0") {
@@ -664,7 +660,7 @@ XKit.extensions.xkit_preferences = new Object({
 			} else {
 				XKit.tools.remove_css('dark-mode');
 			}
-		} else if (XKit.tools.get_setting("xkit_show_dark_mode", "true") === "true") {
+		} else if (XKit.tools.get_setting("xkit_show_dark_mode", "false") === "true") {
 			XKit.tools.add_css(XKit.extensions.xkit_preferences.dark_mode, 'dark-mode');
 		}
 
@@ -2103,7 +2099,6 @@ XKit.extensions.xkit_preferences = new Object({
 			if (XKit.tools.get_setting("xkit_match_tumblr_theme", "true") === "false") {
 				$("#xkit-panel-enable-match-tumblr-theme").addClass("selected");
 				$("#xkit-panel-enable-dark-mode").addClass("disabled");
-				console.log(getComputedStyle(document.documentElement).getPropertyValue("--rgb-black").replace(/\s+/g, ""));
 				if (getComputedStyle(document.documentElement).getPropertyValue("--rgb-black").replace(/\s+/g, "") != "0,0,0") {
 					XKit.tools.add_css(XKit.extensions.xkit_preferences.dark_mode, 'dark-mode');
 				} else {
@@ -2113,7 +2108,7 @@ XKit.extensions.xkit_preferences = new Object({
 			} else {
 				$("#xkit-panel-enable-match-tumblr-theme").removeClass("selected");
 				$("#xkit-panel-enable-dark-mode").removeClass("disabled");
-				if (XKit.tools.get_setting("xkit_show_dark_mode", "true") === "true") {
+				if (XKit.tools.get_setting("xkit_show_dark_mode", "false") === "true") {
 					XKit.tools.add_css(XKit.extensions.xkit_preferences.dark_mode, 'dark-mode');
 				} else {
 					XKit.tools.remove_css('dark-mode');
@@ -2123,13 +2118,13 @@ XKit.extensions.xkit_preferences = new Object({
 
 		});
 
-		if (XKit.tools.get_setting("xkit_show_dark_mode", "true") === "true") {
+		if (XKit.tools.get_setting("xkit_show_dark_mode", "false") === "true") {
 			$("#xkit-panel-enable-dark-mode").addClass("selected");
 		}
 
 		$("#xkit-panel-enable-dark-mode").click(function() {
 
-			if (XKit.tools.get_setting("xkit_show_dark_mode", "true") === "false") {
+			if (XKit.tools.get_setting("xkit_show_dark_mode", "false") === "false") {
 				$("#xkit-panel-enable-dark-mode").addClass("selected");
 				XKit.tools.add_css(XKit.extensions.xkit_preferences.dark_mode, 'dark-mode');
 				XKit.tools.set_setting("xkit_show_dark_mode", "true");
@@ -2584,6 +2579,7 @@ XKit.extensions.xkit_preferences = new Object({
 	destroy: function() {
 		$("#xkit_button").remove();
 		XKit.tools.remove_css('mobile_xkit_menu');
+		XKit.tools.remove_css('dark-mode');
 		this.running = false;
 	}
 });
