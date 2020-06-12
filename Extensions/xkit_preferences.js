@@ -20,7 +20,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 	hide_xcloud_if_not_installed: false,
 
-	dark_mode: `:root {
+	dark_mode: `
+		:root {
 			--xkit-primary: #222;
 			--xkit-on-primary: #EEE;
 			--xkit-secondary: #444;
@@ -105,7 +106,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 		#xkit-logo-big {
 			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 0.264'%3E%3Cpath d='M.222 0l.221.264h.058L.391.132.5 0H.443L.361.097.335.066.391 0H.332L.306.031.28 0zM.11 0l.221.264h.059L.169 0zM0 0l.11.132L0 .264h.058L.14.167l.026.031-.055.066h.058L.195.233l.027.031H.28L.058 0z' fill='%23888'/%3E%3Cpath d='M.942.044V.08H.895v.136H.857V.08H.81V.044zm-.188 0h.038v.171H.754zM.6.044H.64V.12L.69.045h.046L.682.117.74.214H.693L.654.144.64.161v.055H.6zM.554 0l-.11.132.11.132H1V0z' fill='%230371d2'/%3E%3C/svg%3E")
-		}`,
+		}
+	`,
 
 	run: function() {
 
