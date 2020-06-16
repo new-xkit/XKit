@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.0 **//
+//* VERSION 3.1.1 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -337,7 +337,7 @@ XKit.extensions.blacklist = new Object({
 			var to_check_blacklist = "listBlack";
 			var to_check_whitelist = "listWhite";
 
-			var supported_ver = "0.4.22";
+			var supported_ver = "1.1.0";
 
 			if (m_obj.creator === "XKIT") {
 
@@ -346,9 +346,16 @@ XKit.extensions.blacklist = new Object({
 
 			} else {
 
-				if (m_obj.version !== supported_ver) {
+				const version = XKit.tools.parse_version(m_obj.version);
+				const supported = XKit.tools.parse_version(supported_ver);
+				const is_compatible =
+					version.major < supported.major || (version.major === supported.major &&
+						(version.minor < supported.minor || (version.minor === supported.minor &&
+							version.patch <= supported.patch)));
+
+				if (!is_compatible) {
 					XKit.window.show("Could not import.",
-						"XKit Blacklist can only import words from version " + supported_ver + " of Tumblr Savior.",
+						"XKit Blacklist can only import words from version " + supported_ver + " and below of Tumblr Savior.",
 						"error",
 						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
 					);
@@ -400,8 +407,6 @@ XKit.extensions.blacklist = new Object({
 				});
 			}
 
-			XKit.window.close();
-
 			if (blacklist_count > 0 || whitelist_count > 0) {
 
 				if (m_obj.creator === "XKIT") {
@@ -413,7 +418,7 @@ XKit.extensions.blacklist = new Object({
 
 				} else {
 
-					XKit.window.show("Results",	"<b>Imported from version " +  supported_ver + " of Tumblr Savior.</b><br/>" +
+					XKit.window.show("Results",	"<b>Imported from version " +  m_obj.version + " of Tumblr Savior.</b><br/>" +
 									"Added <b>" + blacklist_count + "</b> new words to the blacklist.<br/>" +
 									"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
@@ -423,7 +428,7 @@ XKit.extensions.blacklist = new Object({
 
 			} else {
 
-				XKit.window.show("Results", "<b>No words were imported.</b><br/>It might be possible that all the words in your import was already in your blacklist or the settings file was corrupt.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				XKit.window.show("Results", "<b>No words were imported.</b><br/>It might be possible that all the words in your import were already in your blacklist.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 			}
 
