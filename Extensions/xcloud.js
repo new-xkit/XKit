@@ -1,7 +1,7 @@
 //* TITLE XCloud **//
-//* VERSION 1.1.2 **//
-//* DESCRIPTION Sync XKit data on clouds **//
-//* DETAILS XCloud stores your XKit configuration on New XKit servers so you can back up your data and synchronize it with other computers and browsers easily. **//
+//* VERSION 1.1.3 **//
+//* DESCRIPTION Sync XKit data on clouds, or back up locally **//
+//* DETAILS XCloud stores your XKit configuration on New XKit servers so you can back up your data and synchronize it with other computers and browsers easily.<br><br>You can also export your data to a file to import elsewhere. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
@@ -143,15 +143,21 @@ XKit.extensions.xcloud = new Object({
 
 	panel: function() {
 
-		var m_html = "<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
-					"<div id=\"xcloud-panel-right\">" + XKit.extensions.xcloud.return_panel_welcome() +
-					"</div>" +
-					'<div id="xcloud-panel-left"><div id="xcloud-local-datastore"><span style="color: whitesmoke; font-weight: bold;">Local Backup</span><br>' +
-						'<div id="xcloud-local-export" class="xcloud-local-button">Export</div><br>' +
-						'<div id="xcloud-local-import" class="xcloud-local-button">Import</div>' +
-					'</div></div>' +
-					"</div>";
-		return m_html;
+		return `
+			<div id="xcloud-panel">
+				<div id="xcloud-beta-tag">&nbsp;</div>
+				<div id="xcloud-panel-right">${XKit.extensions.xcloud.return_panel_welcome()}</div>
+				<div id="xcloud-panel-left">
+					<div id="xcloud-local-datastore">
+						<p style="color: whitesmoke; font-weight: bold">
+							Local Backup <span id="xcloud-local-about">about</span>
+						</p>
+						<div id="xcloud-local-export" class="xcloud-local-button">Export</div>
+						<div id="xcloud-local-import" class="xcloud-local-button">Import</div>
+					</div>
+				</div>
+			</div>
+		`;
 
 	},
 
@@ -171,6 +177,28 @@ XKit.extensions.xcloud = new Object({
 	panel_appended: function() {
 		var xcloud_url = this.server;
 		var self = this;
+
+		var aboutButton = $("#xcloud-local-about");
+		aboutButton.unbind("click");
+		aboutButton.bind("click", function() {
+			XKit.window.show(
+				"XCloud Local Backups",
+
+				"Local backups allow you to import or export XCloud data as files on your computer.<br>" +
+				"This means you don't even need to sign up to transfer your XKit configuration elsewhere.<br>" +
+				"Additionally, unlike the cloud service, local backups do not limit the amount of data that can be transferred.<br><br>" +
+				"<b>Export</b><br>" +
+				"The Export button will immediately download a file containing your XKit data. " +
+				"This file is not human-readable; it is only for importing to XCloud.<br><br>" +
+				"<b>Import</b><br>" +
+				"The Import button will open a file-open prompt in your browser. If you select an XCloud payload file that you've exported, " +
+				"it will read and restore your settings from it.",
+
+				"info",
+
+				'<div id="xkit-close-message" class="xkit-button">Got it!</div>'
+			);
+		});
 
 		var exportPanel = $("#xcloud-local-export");
 		exportPanel.unbind("click");
@@ -832,19 +860,41 @@ XKit.extensions.xcloud = new Object({
 
 		if ((to_send.length / 1024 / 1024) >= 5) {
 
-			XKit.window.show("Unable to back up data.", "The backup data file is bigger than 5 megabytes, which is the maximum the XCloud servers can handle. Please go to XKit Control Panel > My XKit and select on extensions you don't use and select the setting \"Reset Settings\" to free up data.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show(
+				"Unable to back up data.",
+
+				"The backup data file is bigger than 5 megabytes, which is the maximum the XCloud servers can handle.<br><br>" +
+				"Please use XCloud Local Backup instead.",
+
+				"error",
+
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
+
 			return;
 
 		}
 
 		if (skipping.length > 0) {
-			var m_html = "<ol>";
+			var m_html = "<ul>";
 			for (var i = 0; i < skipping.length; i++) {
 				m_html += "<li><b>" + XKit.installed.title(skipping[i]) + "</b>";
-				// &middot; " + Math.ceil(this.skipping_size[i]) + " MB</li>";
 			}
-			m_html += "</ol>";
-			XKit.window.show("Skipping some extensions", "The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." + m_html + "<small style=\"color: rgb(110,110,110);\">If these extensions have data that you can remove, please try removing them and retry the backup process. If you are not using these extensions, click on \"Reset Settings\" button on top-right corner of their control panel to free up space on your computer.</small>", "warning", "<div class=\"xkit-button default\" id=\"xkit-xcloud-backup-skip-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			m_html += "</ul>";
+
+			XKit.window.show(
+				"Skipping some extensions",
+
+				"The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." +
+				m_html +
+				"To save your configuration without any filesize limits, please use XCloud Local Backup.",
+
+				"warning",
+
+				'<div class="xkit-button default" id="xkit-xcloud-backup-skip-continue">Continue</div>' +
+				'<div class="xkit-button" id="xkit-close-message">Cancel</div>'
+			);
+
 			$("#xkit-xcloud-backup-skip-continue").click(function() {
 				XKit.window.close();
 				XKit.extensions.xcloud.send_upload_data(to_send);
