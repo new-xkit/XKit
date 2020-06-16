@@ -88,22 +88,40 @@ XKit.extensions.audio_plus = {
 	react_do: function() {
 		const {audioBlockClass, react_slider_handle_event} = XKit.extensions.audio_plus;
 
-		$(`${audioBlockClass}:not(.audio_plus_done)`).each(function() {
-			const $audioBlock = $(this).addClass('audio_plus_done');
-			$audioBlock.append(`
-				<div class="xkit-audio-plus-slider-container">
-					<input type="range" value="100" min="0" max="100" class="xkit-audio-plus-slider"></input>
-				</div>
-			`);
+		$(`${audioBlockClass}:not(.audio_plus_done)`)
+		.addClass('audio_plus_done')
+		.each(function() {
+			const $audioBlock = $(this);
+			const audio = this.querySelector('audio');
+			const slider = this.querySelector('.xkit-audio-plus-slider');
+
+			if (audio === null) {
+				return;
+			}
+
 			$audioBlock.on('change', '.xkit-audio-plus-slider', react_slider_handle_event);
+
+			if (slider === null) {
+				$audioBlock.append(`
+					<div class="xkit-audio-plus-slider-container">
+						<input type="range" value="100" min="0" max="100" class="xkit-audio-plus-slider"></input>
+					</div>
+				`);
+			} else {
+				const $slider = $(slider);
+				const currentVolume = audio.volume;
+				$slider.val(currentVolume * 100);
+			}
+
 		});
 	},
 
 	react_slider_handle_event: function(e) {
 		e.stopPropagation();
 
+		const {audioBlockClass} = XKit.extensions.audio_plus;
 		const $slider = $(e.target);
-		const $audioBlock = $slider.parents('.audio_plus_done');
+		const $audioBlock = $slider.parents(audioBlockClass);
 		const volume = $slider.val();
 
 		$slider.attr('title', volume);
@@ -414,6 +432,8 @@ XKit.extensions.audio_plus = {
 		this.running = false;
 		XKit.tools.remove_css('audio_plus');
 		XKit.post_listener.remove("audio_plus");
+
+		$(document).off("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider");
 
 		$('.xkit-audio-plus-slider-container').remove();
 		$('.audio_plus_done')
