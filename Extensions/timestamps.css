@@ -57,7 +57,7 @@
 .xkit--react .xtimestamp.xtimestamp-reblog {
 	align-self: center;
 	flex-shrink: 9999;
-	padding: 0;
+	padding-right: 0;
 	margin: 0;
 	margin-left: auto;
 }
