@@ -198,14 +198,19 @@ XKit.extensions.xkit_preferences = new Object({
 
 			XKit.notifications.add("New XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
 				"warning", true, function() {
-					XKit.window.show("Spring Cleaning",
+					XKit.window.show(
+						"Spring Cleaning",
+
 						"Due to them not working correctly anymore, the following obsolete extensions have been removed to speed up your computer:" +
 						XKit.extensions.xkit_preferences.spring_cleaning_m_list_html +
-						"For more information, including the reason(s) why they were removed, please send an ask to <b>new-xkit-support</b> or click the below button " +
-						"to join our live support channel.",
-						"warning", '<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-						'<a href="https://new-xkit-support.tumblr.com/ask" target="_BLANK" class="xkit-button">Send an ask</a>' +
-						'<a href="https://new-xkit-support.tumblr.com/support" target="_BLANK" class="xkit-button">Join live support</a>');
+						"For more information, including the reason(s) why they were removed, please check the &quot;More information&quot; link below.<br>" +
+						"(The link will open in a new tab.)",
+
+						"warning",
+
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
+						'<a href="https://github.com/new-xkit/XKit/wiki/Removed-Extensions#why-was-this-extension-removed" target="_blank" class="xkit-button">More information</a>'
+					);
 				});
 
 		}
