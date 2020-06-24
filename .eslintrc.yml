@@ -1,6 +1,6 @@
 ---
   parserOptions:
-    ecmaVersion: 6
+    ecmaVersion: 2018
   env:
     es6: true
     browser: true
@@ -42,9 +42,11 @@
       - before: true
         after: true
   globals:
+    BigInt: false
     _: true
     XKit: true
     XBridge: true
+    centerIt: true
     Tumblr: true
     add_tag: true
 

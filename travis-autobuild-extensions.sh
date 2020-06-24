@@ -14,9 +14,9 @@ if [ "$TRAVIS_REPO_SLUG" == "$GH_REPO" ] && [ "$TRAVIS_PULL_REQUEST" == "false" 
   git add --force Extensions
   git diff --staged --quiet Extensions || {
     git commit -m "Rebuild distribution based on $TRAVIS_COMMIT"
-	git push -fq https://"$GH_TOKEN"@github.com/"$GH_REPO" gh-pages > /dev/null
-	echo -e "Rebuilt extension dist.\n"
-	exit 0
+    git push -fq https://"$GH_TOKEN"@github.com/"$GH_REPO" gh-pages > /dev/null
+    echo -e "Rebuilt extension dist.\n"
+    exit 0
   }
   echo -e "Nothing to commit, extension dist has not changed."
 

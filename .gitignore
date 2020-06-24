@@ -1,14 +1,11 @@
 # Do not commit this
 
-# Only ignore build/ in project root
-/build
-
 .DS_Store
 
 node_modules/
+web-ext-artifacts/
 
 /Extensions/dist/*.json
-
 /Extensions/dist/page/gallery.json
 /Extensions/dist/page/list.json
 /Extensions/dist/page/themes.json

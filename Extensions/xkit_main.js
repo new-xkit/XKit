@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.1.0 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -25,6 +25,21 @@
 			if (XKit.extensions.xkit_main.running === true) {
 				return;
 			}
+
+			if (XKit.page.react === undefined) {
+				XKit.page.react = Boolean($("link[href*='/pop/']").length);
+				if (XKit.page.react) {
+					$("body").addClass('xkit--react');
+					const waitUntilReactLoaded = setInterval(() => {
+						if ($('[data-rh]').length === 0) {
+							clearInterval(waitUntilReactLoaded);
+							this.run();
+						}
+					}, 100);
+					return;
+				}
+			}
+
 			this.running = true;
 
 			console.log("Welcome from XKit Main " + XKit.installed.version('xkit_main'));

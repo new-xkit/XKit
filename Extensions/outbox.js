@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.11.2 **//
+//* VERSION 0.11.3 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -236,7 +236,6 @@ XKit.extensions.outbox = new Object({
 		var m_to = $(m_parent).attr('data-tumblelog-name');
 
 		var post_id = $(m_parent).attr('data-post-id');
-		XKit.extensions.outbox.poke_tinymce(post_id);
 
 		if (m_message.indexOf("<div id=\"ask_answer_") !== -1) {
 
@@ -287,21 +286,6 @@ XKit.extensions.outbox = new Object({
 
 		}, 1);
 
-	},
-
-	poke_tinymce: function(post_id) {
-		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
-						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
-				 " } ";
-
-		if ('function' == typeof source) {
-			source = '(' + source + ')();';
-		}
-
-		var script = document.createElement('script');
-		script.setAttribute("type", "application/javascript");
-		script.textContent = source;
-		document.body.appendChild(script);
 	},
 
 	start: function() {

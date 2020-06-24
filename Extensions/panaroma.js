@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.3 **//
+//* VERSION 2.0.0 **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -22,6 +22,51 @@ XKit.extensions.panaroma = new Object({
 
 	run: function() {
 		this.running = true;
+
+		if (XKit.page.react) {
+			const header_max_width = 1580;
+			const container_max_width = 990;
+
+			const increase_by = header_max_width - container_max_width;
+
+			XKit.tools.async_add_function(async () => {
+				/* globals tumblr */
+				return await tumblr.getCssMap();
+			})
+			.then(({bluespaceLayout, container, main, audioBlock, videoBlock}) => {
+				const containerSelector = container.map(x => `.${bluespaceLayout[0]} > .${x}`).join(',');
+				const mainSelector = main.map(x => `.${x}`).join(',');
+
+				const $container = $(containerSelector);
+				const $main = $container.children(mainSelector);
+				const $inner_main = $main.children('main');
+
+				const main_max_width = parseInt($main.css('max-width'));
+				const inner_main_max_width = parseInt($inner_main.css('max-width'));
+
+				const new_main_max_width = main_max_width + increase_by;
+				const new_inner_main_max_width = inner_main_max_width + increase_by;
+
+				XKit.tools.add_css(`
+					.xkit--react ${containerSelector} {
+						max-width: ${header_max_width}px;
+					}
+					.xkit--react ${mainSelector} {
+						max-width: ${new_main_max_width}px;
+					}
+					.xkit--react main,
+					.xkit--react main article,
+					.xkit--react main article > *,
+					.xkit--react .${audioBlock[0]},
+					.xkit--react .${videoBlock[0]} {
+						max-width: ${new_inner_main_max_width}px;
+					}
+				`, 'panaroma');
+			});
+
+			return;
+		}
+
 		XKit.tools.init_css("panaroma");
 
 		if (XKit.extensions.panaroma.preferences.stretch_images.value === true) {

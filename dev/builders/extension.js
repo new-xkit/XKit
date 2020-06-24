@@ -172,7 +172,7 @@ var buildListFile = function(filename) {
 			listFile = new File(filename);
 		}
 
-		listFile.contents = new Buffer(JSON.stringify(list));
+		listFile.contents = Buffer.from(JSON.stringify(list));
 		this.push(listFile);
 		cb();
 	});
