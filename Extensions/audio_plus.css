@@ -36,6 +36,7 @@
 .xkit--react .xkit-audio-plus-slider-container {
 	width: 100px;
 	padding-right: 10px;
+	z-index: 1;
 }
 
 .xkit--react .xkit-extension-setting[data-extension-id="audio_plus"][data-setting-id="pop_out_player"] {
