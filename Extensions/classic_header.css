@@ -1,8 +1,12 @@
-#xoldeheader { display: inline-block; }
+#xoldeheader {
+	display: inline-block;
+}
 
 .xoldeheader-item-container {
-	position: relative; top: 5px;
-	display: inline-block; min-height: 50px; margin-right: 9px; margin-left: 9px;
+	position: relative;
+	display: inline-block;
+	margin-right: 9px;
+	margin-left: 9px;
 }
 
 .xoldeheader-item-container.selected .selection_nipple {
