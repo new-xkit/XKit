@@ -57,15 +57,14 @@ XKit.extensions.vanilla_video = {
 
 	run: function() {
 		this.running = true;
-		this.observer = new MutationObserver(this.add_controls);
 
 		if (this.preferences.background_color.value === "") {
 			this.preferences.background_color.value = "#000000";
 		}
 
 		if (XKit.page.react) {
-			XKit.tools.add_css("video + div {display: none !important;}");
-			this.observer.observe(document.body, {childList: true, subtree: true});
+			XKit.tools.add_css(".xkit-vanilla-video ~ * {display: none !important;}");
+			XKit.post_listener.add('vanilla_video', this.add_controls);
 			this.add_controls();
 			return;
 		}
@@ -76,13 +75,28 @@ XKit.extensions.vanilla_video = {
 
 	add_controls: function() {
 		const {preferences} = XKit.extensions.vanilla_video;
-		$("video:not([controls])")
+
+		$("video:not(.xkit-vanilla-video-done):not(.xkit-vanilla-video)").each(function() {
+			const $this = $(this);
+			const $newPlayer = $this.clone();
+			const $parent = $this.parent();
+
+			$this.addClass('xkit-vanilla-video-done');
+
+			$newPlayer
+			.addClass("xkit-vanilla-video")
+			.css({
+				"cursor": "auto",
+				"background-color": preferences.background_color.value,
+			})
 			.attr({
 				"controls": true,
 				"loop": preferences.loop.value ? "true" : null,
 				"preload": preferences.disable_preload.value ? "none" : null,
-			})
-			.css({"background-color": preferences.background_color.value});
+			});
+
+			$parent.prepend($newPlayer);
+		});
 	},
 
 	cpanel: function() {
@@ -140,14 +154,9 @@ XKit.extensions.vanilla_video = {
 
 	destroy: function() {
 		this.running = false;
-		this.observer.disconnect();
 		XKit.tools.remove_css('vanilla_video');
 		XKit.post_listener.remove('vanilla_video');
-		$("video[controls]").attr({
-			"controls": null,
-			"loop": true,
-			"preload": null,
-			"style": null,
-		});
+		$('.xkit-vanilla-video').remove();
+		$('.xkit-vanilla-video-done').removeClass('xkit-vanilla-video-done');
 	}
 };
