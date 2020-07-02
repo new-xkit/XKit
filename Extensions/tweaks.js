@@ -297,7 +297,7 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			desktop_only: true
 		},
-		"hide_notification_badges": {
+		hide_notification_badges: {
 			text: "Hide all notification badges in the header",
 			default: false,
 			value: false,
@@ -752,7 +752,7 @@ XKit.extensions.tweaks = new Object({
 			const ltoSel = XKit.css_map.keyToCss('listTimelineObjectInner');
 			XKit.extensions.tweaks.add_css(`${ltoSel} {
 				box-shadow: none !important;
-			}`, 'xkit_tweaks_hide_notification_badges');
+			}`, 'xkit_tweaks_hide_post_highlight');
 		}
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 	},
