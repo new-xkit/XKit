@@ -192,7 +192,7 @@ XKit.extensions.xkit_patches = new Object({
 				} else {
 					return [current];
 				}
-			}
+			};
 
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
@@ -659,10 +659,10 @@ XKit.extensions.xkit_patches = new Object({
 				},
 				descendantSelector: function(...keys) {
 					return XKit.tools.cartesian_product(
-						keys.map(k => this.keyToClasses(k).map(cls => `.${cls}`))
-					).map(i => i.join(' ')).join(',')
+						keys.map(key => this.keyToClasses(key).map(cls => `.${cls}`))
+					).map(item => item.join(' ')).join(',');
 				},
-			}
+			};
 			_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
