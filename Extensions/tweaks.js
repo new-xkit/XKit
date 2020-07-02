@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.5 **/
+//* VERSION 6.0.0 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -296,7 +296,13 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false,
 			desktop_only: true
-		}
+		},
+		"hide_notification_badges": {
+			text: "Hide all notification badges in the header",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
 	},
 
 	default_page_title: "",
@@ -305,8 +311,11 @@ XKit.extensions.tweaks = new Object({
 		XKit.extensions.tweaks.process_wrap_tags_one_line();
 	}),
 
-	run: function() {
+	run: async function() {
 		this.running = true;
+
+		await XKit.css_map.getCssMap();
+
 		this.css_to_add = "";
 
 		if (!XKit.interface.is_tumblr_page()) { return; }
@@ -726,8 +735,14 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
+		if (XKit.extensions.tweaks.preferences.hide_notification_badges.value) {
+			let notificationBadgeSel = XKit.css_map.keyToCss('notificationBadge');
+			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
+				display: none !important;
+			}`, 'xkit_tweaks_hide_notification_badges');
+		}
 
+		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 	},
 
 	show_all_tags_button_event: function() {
