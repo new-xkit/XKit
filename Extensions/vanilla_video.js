@@ -95,6 +95,8 @@ XKit.extensions.vanilla_video = {
 				"preload": preferences.disable_preload.value ? "none" : null,
 			});
 
+			$newPlayer[0].volume = preferences.default_volume.value;
+
 			$parent.prepend($newPlayer);
 		});
 	},
