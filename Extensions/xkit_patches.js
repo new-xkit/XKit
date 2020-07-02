@@ -184,6 +184,16 @@ XKit.extensions.xkit_patches = new Object({
 
 	patches: {
 		"7.9.2": function() {
+			XKit.tools.cartesian_product = (items, current = []) => {
+				if (current.length < items.length) {
+					return items[current.length].flatMap(pick =>
+						XKit.tools.cartesian_product(items, current.concat(pick))
+					);
+				} else {
+					return [current];
+				}
+			}
+
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
 				const new_posts = mutations.some(({addedNodes}) => {
@@ -647,7 +657,13 @@ XKit.extensions.xkit_patches = new Object({
 					}
 					return classes.map(cls => '.' + cls).join(', ');
 				},
-			};
+				descendantSelector: function(...keys) {
+					return XKit.tools.cartesian_product(
+						keys.map(k => this.keyToClasses(k).map(cls => `.${cls}`))
+					).map(i => i.join(' ')).join(',')
+				},
+			}
+			_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
 			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
