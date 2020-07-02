@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.0 **/
+//* VERSION 6.0.1 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -299,6 +299,12 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_notification_badges": {
 			text: "Hide all notification badges in the header",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		hide_post_highlight: {
+			text: "Hide the post highlight that appears when using jk to scroll",
 			default: false,
 			value: false,
 			desktop_only: true
@@ -742,6 +748,12 @@ XKit.extensions.tweaks = new Object({
 			}`, 'xkit_tweaks_hide_notification_badges');
 		}
 
+		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value) {
+			const ltoSel = XKit.css_map.keyToCss('listTimelineObjectInner');
+			XKit.extensions.tweaks.add_css(`${ltoSel} {
+				box-shadow: none !important;
+			}`, 'xkit_tweaks_hide_notification_badges');
+		}
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 	},
 
