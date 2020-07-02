@@ -39,7 +39,8 @@ XKit.extensions.disable_search = {
 			$search.after($tagged);
 
 			$tagged.addClass("xkit-classic-search");
-			$tagged.on("submit", function(event) {
+			$tagged.on("keydown", event => event.stopPropagation());
+			$tagged.on("submit", event => {
 				event.preventDefault();
 				event.stopPropagation();
 
