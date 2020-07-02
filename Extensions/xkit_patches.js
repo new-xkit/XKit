@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.2 **//
+//* VERSION 7.4.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -660,7 +660,7 @@ XKit.extensions.xkit_patches = new Object({
 				descendantSelector: function(...keys) {
 					return XKit.tools.cartesian_product(
 						keys.map(key => this.keyToClasses(key).map(cls => `.${cls}`))
-					).map(item => item.join(' ')).join(',');
+					).map(selectors => selectors.join(' ')).join(',');
 				},
 			};
 			_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);

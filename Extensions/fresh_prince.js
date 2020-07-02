@@ -1,5 +1,5 @@
 //* TITLE Fresh Prince **//
-//* VERSION 0.1.0 **//
+//* VERSION 0.1.1 **//
 //* DESCRIPTION Everything's flipped, turned upside down **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension flips everything on the dashboard. Don't expect Tumblr to function correctly whatsoever while this extension is installed. **//
