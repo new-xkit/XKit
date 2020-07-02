@@ -49,7 +49,7 @@ XKit.extensions.go_to_dash = new Object({
 			go_back_html = html_pieces.join('dashboard/blog/' + blog + '/' + post_id);
 		} else {
 			var next_post_id = BigInt(post_id) + BigInt(1);
-			go_back_html = html_pieces.join('dashboard/2/' + next_post_id);
+			go_back_html = html_pieces.join('dashboard/2/' + next_post_id + '/');
 		}
 		// Remove the text from the dashboard button because otherwise the iframe
 		// overflows
