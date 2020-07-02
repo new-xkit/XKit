@@ -105,7 +105,7 @@ XKit.extensions.fresh_prince = new Object({
 				#xkit-notifications {
 				  transform: scale(1, -1);
 				}
-			`, 'fresh_prince_react');
+			`, 'fresh_prince');
 			this.remove_fastdash();
 		}
 	},
