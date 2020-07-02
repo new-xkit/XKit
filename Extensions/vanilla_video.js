@@ -64,8 +64,8 @@ XKit.extensions.vanilla_video = {
 
 		if (XKit.page.react) {
 			XKit.tools.add_css(".xkit-vanilla-video ~ * {display: none !important;}");
-			XKit.post_listener.add('vanilla_video', this.add_controls);
-			this.add_controls();
+			XKit.post_listener.add('vanilla_video', this.replace_players);
+			this.replace_players();
 			return;
 		}
 
@@ -73,7 +73,7 @@ XKit.extensions.vanilla_video = {
 		XKit.extensions.vanilla_video.check();
 	},
 
-	add_controls: function() {
+	replace_players: function() {
 		const {preferences} = XKit.extensions.vanilla_video;
 
 		$("video:not(.xkit-vanilla-video-done):not(.xkit-vanilla-video)").each(function() {
