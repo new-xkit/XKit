@@ -310,6 +310,12 @@ XKit.extensions.tweaks = new Object({
 				"Old Red", "oldred",
 			]
 		},
+		hide_activity_notification_badge: {
+			text: "Hide the activity notification badge",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
 		hide_post_highlight: {
 			text: "Hide the post highlight that appears when using jk to scroll",
 			default: false,
@@ -770,6 +776,12 @@ XKit.extensions.tweaks = new Object({
 					break;
 			}
 			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { ${notificationBadgeStyle} }`, 'xkit_tweaks_notification_badge_style');
+		}
+		
+		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value) {
+			let notificationBadgeSel = XKit.css_map.keyToCss('notificationBadge');
+			let activityAriaLabel = await XKit.interface.translate('Activity');
+			XKit.extensions.tweaks.add_css(`button[aria-label=${activityAriaLabel}] + ${notificationBadgeSel} { display: none !important; }`, 'xkit_tweaks_hide_activity_notification_badge');
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value) {
