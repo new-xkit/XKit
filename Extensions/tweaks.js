@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.1 **/
+//* VERSION 6.0.2 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -640,8 +640,8 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
 			if (!XKit.browser().mobile) { // mobile stuff
 				if (XKit.page.react) {
-					let stickyContainerSelector = XKit.css_map.keyToCss('stickyContainer');
-					XKit.extensions.tweaks.add_css(`${stickyContainerSelector}:first-child {
+					let stickyContainerSelector = XKit.css_map.keyToCss('stickyContainer').map(cssClass => `${cssClass} div:first-child`).join(',');
+					XKit.extensions.tweaks.add_css(`${stickyContainerSelector} {
 						position: unset;
 					}`, 'xkit_pin_avatars');
 				} else {
