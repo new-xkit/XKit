@@ -18,8 +18,8 @@ XKit.extensions.old_blue = new Object({
 		},
 		old_font_size: {
 			text: "Set the base font size back to 14px",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		}
 	},
 
