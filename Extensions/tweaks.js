@@ -778,16 +778,21 @@ XKit.extensions.tweaks = new Object({
 					notificationBadgeStyle = 'background: var(--white-on-dark) !important;';
 					break;
 				case "oldred":
-					notificationBadgeStyle = 'background: var(--red) !important; color: var(--white-on-dark) !important;';
+					notificationBadgeStyle = `background: var(--red) !important;
+						color: var(--white-on-dark) !important;`;
 					break;
 			}
-			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { ${notificationBadgeStyle} }`, 'xkit_tweaks_notification_badge_style');
+			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
+				${notificationBadgeStyle}
+			}`, 'xkit_tweaks_notification_badge_style');
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value) {
 			let notificationBadgeSel = XKit.css_map.keyToCss('notificationBadge');
 			let activityAriaLabel = await XKit.interface.translate('Activity');
-			XKit.extensions.tweaks.add_css(`button[aria-label=${activityAriaLabel}] + ${notificationBadgeSel} { display: none !important; }`, 'xkit_tweaks_hide_activity_notification_badge');
+			XKit.extensions.tweaks.add_css(`button[aria-label="${activityAriaLabel}"] + ${notificationBadgeSel} { 
+				display: none !important;
+			}`, 'xkit_tweaks_hide_activity_notification_badge');
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value) {
@@ -798,8 +803,10 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value) {
-			let postIconButtonSel = XKit.css_map.keyToCss('postIconButton');
-			XKit.extensions.tweaks.add_css(`${postIconButtonSel} span { filter: grayscale(100%); }`, 'xkit_tweaks_grayscale_new_post_button');
+			let postIconButtonSel = XKit.css_map.keyToCss('postIconButton').map(cssClass => `${cssClass} span`).join(',');
+			XKit.extensions.tweaks.add_css(`${postIconButtonSel} {
+				filter: grayscale(100%);
+			}`, 'xkit_tweaks_grayscale_new_post_button');
 		}
 		
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
