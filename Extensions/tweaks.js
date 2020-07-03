@@ -816,7 +816,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.subtle_follow_button.value) {
-			let followButtonSelector = XKit.css_map.keyToClasses('followButton').map(cssClass => `.${cssClass}`).join(',');
+			let followButtonSelector = XKit.css_map.keyToCss('followButton');
 			XKit.extensions.tweaks.add_css(`${followButtonSelector} {
 				color: var(--gray-40) !important;
 			}`, 'xkit_tweaks_subtle_follow_button');
