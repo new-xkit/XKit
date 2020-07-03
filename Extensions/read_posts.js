@@ -87,7 +87,7 @@ XKit.extensions.read_posts = new Object({
 		if (!XKit.interface.where().dashboard) {
 			return;  /* don't run on non-dashboard, since that can be in the background of a new post page */
 		}
-		$('[data-id]').not('.read_posts_done').not(".xkit_view_on_dash_post").each(function(index) {
+		$('#base-container [data-id]').not('.read_posts_done').not(".xkit_view_on_dash_post").each(function(index) {
 			var post_id = $(this).data('id');
 
 			if (XKit.extensions.read_posts.post_is_read(post_id)) {
