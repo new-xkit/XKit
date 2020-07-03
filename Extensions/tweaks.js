@@ -816,8 +816,12 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.subtle_follow_button.value) {
-			let followButtonSelector = XKit.css_map.keyToCss('followButton');
-			XKit.extensions.tweaks.add_css(`${followButtonSelector} {
+			let followButtonSelectors = XKit.css_map.keyToClasses('followButton');
+			let postSelectors = XKit.css_map.keyToClasses('post');
+			let postFollowButtonSelectors = postSelectors.map(postCssClass => {
+				return followButtonSelectors.map(followCssClass => `.${postCssClass} .${followCssClass}`).join(', ');
+			}).join(', ');
+			XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
 				color: var(--gray-40) !important;
 			}`, 'xkit_tweaks_subtle_follow_button');
 		}
