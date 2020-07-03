@@ -1,5 +1,5 @@
 //* TITLE Vanilla Videos **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Make the video player unexciting **//
 //* DETAILS Use the browser's native video controls. Only affects Tumblr's player. **//
 //* DEVELOPER new-xkit **//
@@ -96,6 +96,7 @@ XKit.extensions.vanilla_video = {
 			});
 
 			$newPlayer[0].volume = preferences.default_volume.value;
+			$newPlayer[0].pause();
 
 			$parent.prepend($newPlayer);
 		});
