@@ -297,11 +297,18 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			desktop_only: true
 		},
-		hide_notification_badges: {
-			text: "Hide all notification badges in the header",
-			default: false,
-			value: false,
-			desktop_only: true
+		notification_badge_style: {
+			text: "Notification badge style",
+			default: "default",
+			value: "default",
+			desktop_only: true,
+			type: "combo",
+			values: [
+				"Default", "default",
+				"Hidden", "hidden",
+				"White", "white",
+				"Old Red", "oldred",
+			]
 		},
 		hide_post_highlight: {
 			text: "Hide the post highlight that appears when using jk to scroll",
@@ -748,11 +755,21 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_notification_badges.value) {
+		if (XKit.extensions.tweaks.preferences.notification_badge_style.value != "default") {
 			let notificationBadgeSel = XKit.css_map.keyToCss('notificationBadge');
-			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
-				display: none !important;
-			}`, 'xkit_tweaks_hide_notification_badges');
+			let notificationBadgeStyle = '';
+			switch (XKit.extensions.tweaks.preferences.notification_badge_style.value) {
+				case "hidden":
+					notificationBadgeStyle = 'display: none !important;';
+					break;
+				case "white":
+					notificationBadgeStyle = 'background: var(--white-on-dark) !important;';
+					break;
+				case "oldred":
+					notificationBadgeStyle = 'background: var(--red) !important; color: var(--white-on-dark) !important;';
+					break;
+			}
+			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { ${notificationBadgeStyle} }`, 'xkit_tweaks_notification_badge_style');
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value) {
