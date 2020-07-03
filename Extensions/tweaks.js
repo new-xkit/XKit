@@ -322,6 +322,12 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			desktop_only: true
 		},
+		grayscale_new_post_button: {
+			text: "Turn the New Post button gray",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
 	},
 
 	default_page_title: "",
@@ -790,6 +796,12 @@ XKit.extensions.tweaks = new Object({
 				box-shadow: none !important;
 			}`, 'xkit_tweaks_hide_post_highlight');
 		}
+		
+		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value) {
+			let postIconButtonSel = XKit.css_map.keyToCss('postIconButton');
+			XKit.extensions.tweaks.add_css(`${postIconButtonSel} span { filter: grayscale(100%); }`, 'xkit_tweaks_grayscale_new_post_button');
+		}
+		
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 	},
 
