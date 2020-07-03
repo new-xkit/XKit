@@ -640,9 +640,9 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
 			if (!XKit.browser().mobile) { // mobile stuff
 				if (XKit.page.react) {
-					let stickyContainerSelector = XKit.css_map.keyToCss('stickyContainer').map(cssClass => `${cssClass} div:first-child`).join(',');
+					let stickyContainerSelector = XKit.css_map.keyToClasses('stickyContainer').map(cssClass => `.${cssClass} div:first-child`).join(',');
 					XKit.extensions.tweaks.add_css(`${stickyContainerSelector} {
-						position: unset;
+						position: unset !important;
 					}`, 'xkit_pin_avatars');
 				} else {
 					XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
@@ -803,7 +803,7 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value) {
-			let postIconButtonSel = XKit.css_map.keyToCss('postIconButton').map(cssClass => `${cssClass} span`).join(',');
+			let postIconButtonSel = XKit.css_map.keyToClasses('postIconButton').map(cssClass => `.${cssClass} span`).join(',');
 			XKit.extensions.tweaks.add_css(`${postIconButtonSel} {
 				filter: grayscale(100%);
 			}`, 'xkit_tweaks_grayscale_new_post_button');
