@@ -1,5 +1,5 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION Customize how anons appear **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
@@ -69,14 +69,14 @@ XKit.extensions.satsukimous = new Object({
 			return $( this ).attr( "src" ).indexOf( "anonymous_avatar" ) !== -1;
 		}).attr( "src", replacement ).addClass("satsukimous_src matoiRYUKOOOOoO");
 		$(".satsukimous_src").parent().parent().find(".asker > .name").text(XKit.extensions.satsukimous.preferences.replace_name.value ? XKit.extensions.satsukimous.preferences.name_replacement.value : "anonymous");
-		
+
 		$( "div.post_avatar_link" ).filter(function( index ) {
 			return $( this ).attr( "style" ).indexOf( "anonymous_avatar" ) !== -1;
 		}).attr( "style", "background-image: url('" + replacement + "');" ).addClass("satsukimous_style matoiRYUKOOOOoO");
 		$(".satsukimous_style").parent().parent().find(".post_wrapper > .post_header > .post_info").each(function(index) {
 			$(this).text($(this).text().replace(/anonymous/ig, XKit.extensions.satsukimous.preferences.replace_name.value ? XKit.extensions.satsukimous.preferences.name_replacement.value : "Anonymous"));
 		});
-		
+
 		if (XKit.extensions.satsukimous.preferences.play_scream.value) {
 			$(".matoiRYUKOOOOoO").click(function() {
 				document.getElementById("matoi-sound").play();
@@ -85,6 +85,8 @@ XKit.extensions.satsukimous = new Object({
 	},
 
 	run: function() {
+		return;
+		/* eslint-disable no-unreachable */
 		this.running = true;
 		XKit.post_listener.add( "SATSUKI", XKit.extensions.satsukimous.satsuki );
 		XKit.extensions.satsukimous.satsuki();
