@@ -708,7 +708,7 @@ XKit.extensions.xkit_patches = new Object({
 				 * possible combinations of `key[0] key[1]` and then separating
 				 * them with commas.
 				 *
-				 * @param {Array<String>} keys - the cssMap keys to combine.
+				 * @param {...String} keys - the cssMap keys to combine.
 				 * @returns {String} - the combined CSS selector.
 				 */
 				descendantSelector: function(...keys) {
