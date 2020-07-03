@@ -329,7 +329,7 @@ XKit.extensions.tweaks = new Object({
 			desktop_only: true
 		},
 		subtle_follow_button: {
-			text: "Make the Follow button more subtle",
+			text: "Make the Follow button more subtle inside posts",
 			default: false,
 			value: false,
 			desktop_only: true
