@@ -1,5 +1,5 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.2.2 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Customize how anons appear **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
@@ -62,20 +62,45 @@ XKit.extensions.satsukimous = new Object({
 
 	satsuki: function() {
 		var replacement = XKit.extensions.satsukimous.preferences.replacement.value;
+
 		if (replacement === "custom") {
 			replacement = XKit.extensions.satsukimous.preferences.custom_replacement.value;
 		}
-		$( "img" ).filter(function( index ) {
-			return $( this ).attr( "src" ).indexOf( "anonymous_avatar" ) !== -1;
-		}).attr( "src", replacement ).addClass("satsukimous_src matoiRYUKOOOOoO");
-		$(".satsukimous_src").parent().parent().find(".asker > .name").text(XKit.extensions.satsukimous.preferences.replace_name.value ? XKit.extensions.satsukimous.preferences.name_replacement.value : "anonymous");
 
-		$( "div.post_avatar_link" ).filter(function( index ) {
-			return $( this ).attr( "style" ).indexOf( "anonymous_avatar" ) !== -1;
-		}).attr( "style", "background-image: url('" + replacement + "');" ).addClass("satsukimous_style matoiRYUKOOOOoO");
-		$(".satsukimous_style").parent().parent().find(".post_wrapper > .post_header > .post_info").each(function(index) {
-			$(this).text($(this).text().replace(/anonymous/ig, XKit.extensions.satsukimous.preferences.replace_name.value ? XKit.extensions.satsukimous.preferences.name_replacement.value : "Anonymous"));
-		});
+		var custom_name = XKit.extensions.satsukimous.preferences.replace_name.value &&
+			XKit.extensions.satsukimous.preferences.name_replacement.value;
+
+		$("img")
+			.filter(function(index) {
+				return $(this).attr("src").match("anonymous_avatar")
+			})
+			.attr("src", replacement)
+			.addClass("satsukimous_src matoiRYUKOOOOoO");
+
+		$(".satsukimous_src")
+			.parent()
+			.parent()
+			.find(".asker > .name")
+			.text(custom_name || "anonymous");
+
+		$("div.post_avatar_link")
+			.filter(function(index) {
+				return $(this).attr("style").match("anonymous_avatar")
+			})
+			.attr("style", `background-image: url('${replacement}');`)
+			.addClass("satsukimous_style matoiRYUKOOOOoO");
+
+		$(".satsukimous_style")
+			.parent()
+			.parent()
+			.find(".post_wrapper > .post_header > .post_info:not(.xkit_satsukimous_info_handled)")
+			.each(function(index) {
+				var $post_info = $(this);
+				$post_info.addClass("xkit_satsukimous_info_handled");
+				$post_info.text(
+					$post_info.text().replace(/anonymous/ig, custom_name || "Anonymous")
+				);
+			});
 
 		if (XKit.extensions.satsukimous.preferences.play_scream.value) {
 			$(".matoiRYUKOOOOoO").click(function() {
@@ -85,10 +110,8 @@ XKit.extensions.satsukimous = new Object({
 	},
 
 	run: function() {
-		return;
-		/* eslint-disable no-unreachable */
 		this.running = true;
-		XKit.post_listener.add( "SATSUKI", XKit.extensions.satsukimous.satsuki );
+		XKit.post_listener.add("SATSUKI", XKit.extensions.satsukimous.satsuki);
 		XKit.extensions.satsukimous.satsuki();
 		if (XKit.extensions.satsukimous.preferences.play_scream.value) {
 			$("head").append('<audio id="matoi-sound" src="https://a.tumblr.com/tumblr_nt2vx0HIy21tgqvb3o1.mp3" type="audio/mp3"></audio>');
@@ -98,12 +121,27 @@ XKit.extensions.satsukimous = new Object({
 	destroy: function() {
 		this.running = false;
 		$("#matoi-sound").remove();
-		$(".satsukimous_src").attr("src", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif").removeClass("satsukimous_src matoiRYUKOOOOoO").parent().parent().find(".asker > .name").text("anonymous");
-		$(".satsukimous_style").parent().parent().find(".post_wrapper > .post_header > .post_info").each(function(index) {
-			$(this).text($(this).text().replace(XKit.extensions.satsukimous.preferences.name_replacement.value, "Anonymous"));
+
+		$(".satsukimous_src")
+			.attr("src", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif")
+			.removeClass("satsukimous_src matoiRYUKOOOOoO")
+			.parent().parent()
+			.find(".asker > .name")
+			.text("anonymous");
+
+		$(".xkit_satsukimous_info_handled").each(function(index) {
+			var $post_info = $(this);
+			$post_info.removeClass('xkit_satsukimous_info_handled');
+			$post_info.text(
+				$post_info.text().replace(XKit.extensions.satsukimous.preferences.name_replacement.value, "Anonymous")
+			);
 		});
-		$(".satsukimous_style").attr("style", "background-image: url('https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif');").removeClass("satsukimous_style matoiRYUKOOOOoO");
-		XKit.post_listener.remove( "SATSUKI" );
+
+		$(".satsukimous_style")
+			.attr("style", "background-image: url('https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif');")
+			.removeClass("satsukimous_style matoiRYUKOOOOoO");
+
+		XKit.post_listener.remove("SATSUKI");
 	}
 
 });
