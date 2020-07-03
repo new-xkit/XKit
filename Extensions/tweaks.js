@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.1 **/
+//* VERSION 6.0.3 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -324,6 +324,12 @@ XKit.extensions.tweaks = new Object({
 		},
 		grayscale_new_post_button: {
 			text: "Turn the New Post button gray",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		subtle_follow_button: {
+			text: "Make the Follow button more subtle",
 			default: false,
 			value: false,
 			desktop_only: true
@@ -801,14 +807,22 @@ XKit.extensions.tweaks = new Object({
 				box-shadow: none !important;
 			}`, 'xkit_tweaks_hide_post_highlight');
 		}
-		
+
 		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value) {
 			let postIconButtonSel = XKit.css_map.keyToCss('postIconButton').map(cssClass => `${cssClass} span`).join(',');
 			XKit.extensions.tweaks.add_css(`${postIconButtonSel} {
 				filter: grayscale(100%);
 			}`, 'xkit_tweaks_grayscale_new_post_button');
 		}
-		
+
+		if (XKit.extensions.tweaks.preferences.subtle_follow_button.value) {
+			let followButtonSelector = XKit.css_map.keyToClasses('followButton').map(cssClass => `.${cssClass}`).join(',');
+			console.log('follow button selector: ', followButtonSelector);
+			XKit.extensions.tweaks.add_css(`${followButtonSelector} {
+				color: var(--gray-40) !important;
+			}`, 'xkit_tweaks_subtle_follow_button');
+		}
+
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 	},
 
