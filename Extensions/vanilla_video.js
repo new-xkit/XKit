@@ -97,6 +97,7 @@ XKit.extensions.vanilla_video = {
 
 			$newPlayer[0].volume = preferences.default_volume.value;
 			$newPlayer[0].pause();
+			$newPlayer[0].currentTime = 0;
 
 			$parent.prepend($newPlayer);
 		});
