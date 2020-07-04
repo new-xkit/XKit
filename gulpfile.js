@@ -84,6 +84,10 @@ gulp.task('server', gulp.series('build', function(callback) {
 
 	var devApp = connect();
 	devApp.use(connectLogger('dev'));
+	devApp.use(function(request, response, next) {
+		response.setHeader('Access-Control-Allow-Origin', '*');
+		next();
+	});
 	devApp.use(connectStatic('.'));
 
 	// Automatically rebuild Extensions on script changes
