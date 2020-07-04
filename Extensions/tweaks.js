@@ -789,7 +789,7 @@ XKit.extensions.tweaks = new Object({
 		
 		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value) {
 			let activityAriaLabel = await XKit.interface.translate('Activity');
-			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cssClass => `button[aria-label="${activityAriaLabel}] ${cssClass}`).join(',');
+			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cssClass => `button[aria-label="${activityAriaLabel}"] .${cssClass}`).join(',');
 			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { 
 				display: none !important;
 			}`, 'xkit_tweaks_hide_activity_notification_badge');
