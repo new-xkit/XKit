@@ -80,7 +80,8 @@ XKit.extensions.satsukimous = new Object({
 		$(".satsukimous_src")
 			.parent()
 			.parent()
-			.find(".asker > .name")
+			.find(".asker > .name:not(.xkit_satsukimous_name_handled)")
+			.addClass('xkit_satsukimous_name_handled')
 			.text(custom_name || "anonymous");
 
 		$("div.post_avatar_link")
@@ -124,10 +125,11 @@ XKit.extensions.satsukimous = new Object({
 
 		$(".satsukimous_src")
 			.attr("src", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif")
-			.removeClass("satsukimous_src matoiRYUKOOOOoO")
-			.parent().parent()
-			.find(".asker > .name")
-			.text("anonymous");
+			.removeClass("satsukimous_src matoiRYUKOOOOoO");
+
+		$(".xkit_satsukimous_name_handled")
+			.text("anonymous")
+			.removeClass('xkit_satsukimous_name_handled');
 
 		$(".xkit_satsukimous_info_handled").each(function(index) {
 			var $post_info = $(this);
