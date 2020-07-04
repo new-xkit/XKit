@@ -1,5 +1,5 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.2.3 **//
+//* VERSION 1.2.4 **//
 //* DESCRIPTION Customize how anons appear **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
