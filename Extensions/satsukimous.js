@@ -72,7 +72,7 @@ XKit.extensions.satsukimous = new Object({
 
 		$("img")
 			.filter(function(index) {
-				return $(this).attr("src").match("anonymous_avatar")
+				return $(this).attr("src").match("anonymous_avatar");
 			})
 			.attr("src", replacement)
 			.addClass("satsukimous_src matoiRYUKOOOOoO");
@@ -85,7 +85,7 @@ XKit.extensions.satsukimous = new Object({
 
 		$("div.post_avatar_link")
 			.filter(function(index) {
-				return $(this).attr("style").match("anonymous_avatar")
+				return $(this).attr("style").match("anonymous_avatar");
 			})
 			.attr("style", `background-image: url('${replacement}');`)
 			.addClass("satsukimous_style matoiRYUKOOOOoO");
