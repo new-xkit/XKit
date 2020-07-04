@@ -1,6 +1,7 @@
 ## Prerequisites:
 
 * Download [Node.js](https://nodejs.org/download/) for your platform.
+* Optional: Install [Node Version Manager](https://github.com/nvm-sh/nvm) and run `nvm use v8` to travel back in time to a point when the dev server worked perfectly.
 * Ensure you have the `npm` command available.  Test this with `npm --version`.
 * Install `gulp` globally: `npm install -g gulp`.
 * Install the [EditorConfig](http://editorconfig.org/#download) plugin for your favourite editor.  We use this to enforce some style rules not covered by code linting.
@@ -13,7 +14,7 @@ Serving extensions and themes locally is useful for rapid development without re
 
 1. Run `gulp server` to start the resource server.  This task will automatically build the extension and theme files from source before the server starts.  See [`gulp server`](#gulp-server) for more information.
 2. Navigate to `https://localhost:31337` and create a security exception for the `localhost` domain.  The project uses self-signed SSL/TLS certificates that are untrusted by default in order to work around mixed-content warnings for websites like Tumblr that are served over HTTPS.
-3. Change [the relevant line](https://github.com/new-xkit/XKit/blob/db88af1f6d232a4f3e8ba4626f28a0d64240e2a0/xkit.js#L233) with the URL string in `xkit.js` to `https://localhost:31337/Extensions/dist/` to point XKit at `localhost`.
+3. Change [the relevant lines](https://gist.github.com/hobinjk/4b0ae4698d4e35320d3c977753946cf5) in xkit.js and manifest.json to point to and allow serving XKit from `localhost`.
 4. Reload the XKit extension in the browser under test:
   - Chrome: [reload the unpacked extension](https://developer.chrome.com/extensions/getstarted#unpacked)
   - Firefox: [reload the temporary add-on](https://developer.mozilla.org/en-US/docs/Tools/about:debugging#Extensions)

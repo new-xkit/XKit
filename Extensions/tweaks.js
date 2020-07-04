@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.3 **/
+//* VERSION 6.0.6 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -328,6 +328,12 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			desktop_only: true
 		},
+		subtle_follow_button: {
+			text: "Make the Follow button more subtle inside posts",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
 	},
 
 	default_page_title: "",
@@ -640,7 +646,7 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
 			if (!XKit.browser().mobile) { // mobile stuff
 				if (XKit.page.react) {
-					let stickyContainerSelector = XKit.css_map.keyToClasses('stickyContainer').map(cssClass => `.${cssClass} div:first-child`).join(',');
+					let stickyContainerSelector = XKit.css_map.keyToClasses('stickyContainer').map(cssClass => `.${cssClass} > div`).join(',');
 					XKit.extensions.tweaks.add_css(`${stickyContainerSelector} {
 						position: unset !important;
 					}`, 'xkit_pin_avatars');
@@ -767,7 +773,7 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.notification_badge_style.value != "default") {
+		if (XKit.extensions.tweaks.preferences.notification_badge_style.value !== "default" && XKit.page.react) {
 			let notificationBadgeSel = XKit.css_map.keyToCss('notificationBadge');
 			let notificationBadgeStyle = '';
 			switch (XKit.extensions.tweaks.preferences.notification_badge_style.value) {
@@ -786,7 +792,7 @@ XKit.extensions.tweaks = new Object({
 				${notificationBadgeStyle}
 			}`, 'xkit_tweaks_notification_badge_style');
 		}
-		
+
 		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value) {
 			let activityAriaLabel = await XKit.interface.translate('Activity');
 			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cssClass => `button[aria-label="${activityAriaLabel}"] .${cssClass}`).join(',');
@@ -795,20 +801,31 @@ XKit.extensions.tweaks = new Object({
 			}`, 'xkit_tweaks_hide_activity_notification_badge');
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value) {
+		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value && XKit.page.react) {
 			const ltoSel = XKit.css_map.keyToCss('listTimelineObjectInner');
 			XKit.extensions.tweaks.add_css(`${ltoSel} {
 				box-shadow: none !important;
 			}`, 'xkit_tweaks_hide_post_highlight');
 		}
-		
-		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value) {
+
+		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value && XKit.page.react) {
 			let postIconButtonSel = XKit.css_map.keyToClasses('postIconButton').map(cssClass => `.${cssClass} span`).join(',');
 			XKit.extensions.tweaks.add_css(`${postIconButtonSel} {
 				filter: grayscale(100%);
 			}`, 'xkit_tweaks_grayscale_new_post_button');
 		}
-		
+
+		if (XKit.extensions.tweaks.preferences.subtle_follow_button.value && XKit.page.react) {
+			let followButtonSelectors = XKit.css_map.keyToClasses('followButton');
+			let postSelectors = XKit.css_map.keyToClasses('post');
+			let postFollowButtonSelectors = postSelectors.map(postCssClass => {
+				return followButtonSelectors.map(followCssClass => `.${postCssClass} .${followCssClass}`).join(', ');
+			}).join(', ');
+			XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
+				color: var(--gray-40) !important;
+			}`, 'xkit_tweaks_subtle_follow_button');
+		}
+
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 	},
 

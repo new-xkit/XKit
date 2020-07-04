@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.14 **//
+//* VERSION 4.4.15 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -606,29 +606,23 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 		});
 
-		var m_blogselector_html = "";
-
 		XKit.extensions.one_click_postage.blogs_list = m_blogs;
 		XKit.extensions.one_click_postage.default_blog_id = m_blogs[0];
 
 		if (this.preferences.show_blog_selector.value) {
-			for (var i = 0; i < m_blogs.length; i++) {
-				if (m_blogs[i] !== "") {
-					var extra_cls = "";
-					if (this.preferences.default_blog.value !== "") {
-						if (this.preferences.default_blog.value === m_blogs[i]) {
-							extra_cls = "selected";
-						}
-					}
-					m_blogselector_html = m_blogselector_html + "<option " + extra_cls + " value=\"" +
-							m_blogs[i] + "\">" + m_blogs[i] + "</option>";
-				}
-			}
-			m_blogselector_html = "<select id=\"x1cpostage_blog\">" + m_blogselector_html + "</select>";
+			const m_blogselector_html = `
+				<select id="x1cpostage_blog">
+					${m_blogs.map(blog => `<option value="${blog}">${blog}</option>`).join("")}
+				</select>`;
+
 			if (this.preferences.show_reverse_ui.value) {
 				$("#x1cpostage_reblog").before(m_blogselector_html);
 			} else {
 				$("#x1cpostage_caption").before(m_blogselector_html);
+			}
+
+			if (m_blogs.includes(this.preferences.default_blog.value)) {
+				$("#x1cpostage_blog").val(this.preferences.default_blog.value);
 			}
 		}
 
@@ -1016,11 +1010,6 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_caption").removeClass("x1cpostage_remove_caption_on");
 		$("#x1cpostage_tags").css("border-top", "0px");
 		$("#x1cpostage_caption").css("height", XKit.extensions.one_click_postage.caption_height + "px");
-
-		if (this.preferences.show_blog_selector.value && this.preferences.default_blog.value !== "") {
-			$("#x1cpostage_blog option:selected").prop("selected", false);
-			$("#x1cpostage_blog option[value='" + this.preferences.default_blog.value + "']").prop("selected", true);
-		}
 
 		$(obj).attr('title', '');
 
