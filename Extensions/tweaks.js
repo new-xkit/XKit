@@ -793,7 +793,7 @@ XKit.extensions.tweaks = new Object({
 			}`, 'xkit_tweaks_notification_badge_style');
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value) {
+		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value && XKit.page.react) {
 			let activityAriaLabel = await XKit.interface.translate('Activity');
 			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cssClass => `button[aria-label="${activityAriaLabel}"] .${cssClass}`).join(',');
 			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { 
