@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.6 **//
+//* VERSION 0.6.7 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -69,12 +69,7 @@ XKit.extensions.quick_tags = new Object({
 
 		XKit.tools.init_css("quick_tags");
 
-		if (!$(".post.post_full, .post.post_brick, [data-id]").length && !XKit.page.react) {
-			return;
-		}
-
 		XKit.interface.post_window.create_control_button("xkit-quick-tags-window", this.button_icon, "Quick Tags in a window!");
-		XKit.interface.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon);
 
 		$(document).on("mouseover", "#xkit-quick-tags-window", XKit.extensions.quick_tags.cancel_menu_close);
 		$(document).on("mouseout", "#xkit-quick-tags-window", XKit.extensions.quick_tags.menu_close);
@@ -86,9 +81,14 @@ XKit.extensions.quick_tags = new Object({
 		$(document).on('click', '.xkit-tag-add', XKit.extensions.quick_tags.add_button_clicked);
 
 		XKit.interface.post_window_listener.add("quick_tags", XKit.extensions.quick_tags.post_window);
-		XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
-		this.do_posts();
 
+		// don't run this if we're on the new post 'page'
+		if ($("[data-id]").length && XKit.page.react) {
+			XKit.interface.react.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon);
+			XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
+
+			this.do_posts();
+		}
 	},
 
 	post_window: function() {
@@ -97,7 +97,7 @@ XKit.extensions.quick_tags = new Object({
 		}
 	},
 
-	submit: function(tags, button) {
+	submit: async function(tags, button) {
 
 		// Are we in post window?
 		if ($(button).attr('data-in-window') === "true") {
@@ -110,7 +110,7 @@ XKit.extensions.quick_tags = new Object({
 		}
 
 		// Find the post object.
-		var m_post = XKit.interface.find_post($(button).attr('data-post-id'));
+		var m_post = await XKit.interface.react.find_post($(button).attr('data-post-id'));
 
 		var m_button = $(button);
 
@@ -155,14 +155,14 @@ XKit.extensions.quick_tags = new Object({
 				var m_post_object = XKit.interface.edit_post_object(data.data, { tags: m_tags });
 
 				// Now submit it back to the server:
-				XKit.interface.edit(m_post_object, function(edit_data) {
+				XKit.interface.edit(m_post_object, async function(edit_data) {
 
 					XKit.interface.switch_control_button($(m_button), false);
 
 					if (edit_data.error === false && edit_data.data.errors === false) {
 
 						XKit.interface.switch_control_button($(m_button), false);
-						XKit.interface.update_view.tags(m_post, m_tags);
+						await XKit.interface.react.update_view.tags(m_post, m_tags);
 
 					} else {
 						// Oops?
@@ -398,20 +398,17 @@ XKit.extensions.quick_tags = new Object({
 	},
 
 	do_posts: function() {
-
 		// get posts:
-		var posts = XKit.interface.get_posts("xkit-quick-tags-done", true, true);
+		XKit.interface.react.get_posts("xkit-quick-tags-done", true).then((posts) => {
+			$(posts).each(function() {
+				$(this).addClass("xkit-quick-tags-done");
 
-		$(posts).each(function() {
+				if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
 
-			$(this).addClass("xkit-quick-tags-done");
+				XKit.interface.react.add_control_button(this, "xkit-quick-tags", "");
 
-			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
-
-			XKit.interface.add_control_button(this, "xkit-quick-tags", "");
-
+			});
 		});
-
 	},
 
 	destroy: function() {
