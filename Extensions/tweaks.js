@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.6 **/
+//* VERSION 6.0.7 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -307,7 +307,8 @@ XKit.extensions.tweaks = new Object({
 				"Default", "default",
 				"Hidden", "hidden",
 				"White", "white",
-				"Old Red", "oldred",
+				"Old Red - theme-dependent", "oldred",
+				"Old Red - always red", "olderredder"
 			]
 		},
 		hide_activity_notification_badge: {
@@ -787,6 +788,9 @@ XKit.extensions.tweaks = new Object({
 					notificationBadgeStyle = `background: var(--red) !important;
 						color: var(--white-on-dark) !important;`;
 					break;
+				case "olderredder":
+					notificationBadgeStyle = `background: #bb2502 !important;
+						color: #fff !important;`;
 			}
 			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
 				${notificationBadgeStyle}
