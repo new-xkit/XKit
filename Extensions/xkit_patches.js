@@ -976,15 +976,15 @@ XKit.extensions.xkit_patches = new Object({
 				get_control_button_template: async function() {
 					await XKit.css_map.getCssMap();
 
-					var selector = XKit.css_map.keyToClasses("controlIcon").map(c => `[data-id]:first footer .${c}:first`).join(", ");
+					var selector = XKit.css_map.keyToClasses("controlIcon").map(css => `[data-id]:first footer .${css}:first`).join(", ");
 					var control = $(selector);
 
 					var get_used_class_from_map = function(key) {
-						const selector = XKit.css_map.keyToCss(key);
-						var element = control.find(selector);
+						const keyCss = XKit.css_map.keyToCss(key);
+						var element = control.find(keyCss);
 
 						return element.attr("class");
-					}
+					};
 
 					var controlIconClass = control.attr("class");
 					var buttonClass = get_used_class_from_map("button");
