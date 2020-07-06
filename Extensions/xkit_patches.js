@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.6 **//
+//* VERSION 7.4.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -893,7 +893,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					return {
 						id: id,
-						root_id: post.rebloggedRootId,
+						root_id: post.rebloggedRootId || id,
 						reblog_key: post.reblogKey,
 						owner: post.blogName,
 						get tumblelog_key() { throw new Error('not supported'); },
