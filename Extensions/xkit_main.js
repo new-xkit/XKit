@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.1.0 **//
+//* VERSION 2.1.1 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -67,21 +67,31 @@
 					}
 
 					if (XKit.installed.enabled(extension.id)) {
+						let promise;
 
 						if (XKit.frame_mode) {
 							if (extension.frame) {
-								XKit.extensions[extension.id].run();
+								promise = XKit.extensions[extension.id].run();
 							} else if (typeof XKit.extensions[extension.id].frame_run !== "undefined") {
-								XKit.extensions[extension.id].frame_run();
+								promise = XKit.extensions[extension.id].frame_run();
 							} else {
 								this.disabled_extensions.push(extension.id + " (in frame)");
 								continue;
 							}
 						} else if (!extension.frame) {
-							XKit.extensions[extension.id].run();
+							promise = XKit.extensions[extension.id].run();
 						} else {
 							this.disabled_extensions.push(extension.id + " (not in frame)");
 							continue;
+						}
+
+						if (promise instanceof Promise) {
+							promise.catch(e => {
+								console.error(
+									`[XKit Main] Could not run ${extension.id} (async)\n`,
+									e
+								);
+							});
 						}
 					} else {
 						this.disabled_extensions.push(extension.id);

@@ -12,6 +12,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			standard:
 				window.window === window.top &&
 				document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1,
+			form_frame:
+				document.location.href.indexOf("://www.tumblr.com/neue_web/iframe/") !== -1,
 			ask_frame:
 				document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1,
 			blog_frame:
@@ -34,7 +36,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				return;
 			}
 
-			if (XKit.page.standard) {
+			if (XKit.page.standard || XKit.page.form_frame) {
 				XKit.init_normal();
 				return;
 			}

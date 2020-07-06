@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER jesskay **//
@@ -87,9 +87,8 @@ XKit.extensions.read_posts = new Object({
 		if (!XKit.interface.where().dashboard) {
 			return;  /* don't run on non-dashboard, since that can be in the background of a new post page */
 		}
-
-		$('.post.with_permalink').not('.read_posts_done').not(".xkit_view_on_dash_post").each(function(index) {
-			var post_id = $(this).attr('id').replace('post_', '');
+		$('#base-container [data-id]').not('.read_posts_done').not(".xkit_view_on_dash_post").each(function(index) {
+			var post_id = $(this).data('id');
 
 			if (XKit.extensions.read_posts.post_is_read(post_id)) {
 				$(this).addClass('read_posts_read');

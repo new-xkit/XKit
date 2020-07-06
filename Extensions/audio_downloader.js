@@ -1,7 +1,7 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.1.1 **//
+//* VERSION 3.0.1 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 //* SLOW true **//
@@ -12,10 +12,25 @@ XKit.extensions.audio_downloader = new Object({
 	slow: true,
 	running: false,
 	apiKey: XKit.api_key,
+	audioBlockClass: "",
 
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkY1MzdFN0ExNTU3MTFFMzlCNjJGNTNDQTgzRjc3M0UiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkY1MzdFN0IxNTU3MTFFMzlCNjJGNTNDQTgzRjc3M0UiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCRjUzN0U3ODE1NTcxMUUzOUI2MkY1M0NBODNGNzczRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCRjUzN0U3OTE1NTcxMUUzOUI2MkY1M0NBODNGNzczRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuxbowMAAACcSURBVHja7NTBDYAgDABA6gKMQpzEURiFERyFERiFEZCamlTToqIvY5O+aO/RlEIpxUgBAOJDrQejxGBejB/7EobhcX0epl/3lZY2PoAiGhyzNXMHhD12hxHoOjC39e8wAv3dOakYgfMFaD72aRjOLzWgxOfUxNj8sjJwJ/WoGIGTgE1afRMjMDAotGoxQbu07OImurDj2VdaBBgAbglVZHbAZ/wAAAAASUVORK5CYII=",
 
 	run: function() {
+
+		if (XKit.page.react) {
+			XKit.tools.async_add_function(async () => {
+				/* globals tumblr */
+				return await tumblr.getCssMap();
+			})
+			.then(({audioBlock}) => {
+				this.audioBlockClass = `.${audioBlock[0]}`;
+				this.react_add_buttons();
+				XKit.post_listener.add('audio_downloader', this.react_add_buttons);
+			});
+
+			return;
+		}
 
 		XKit.tools.init_css("audio_downloader");
 
@@ -28,6 +43,47 @@ XKit.extensions.audio_downloader = new Object({
 		XKit.extensions.audio_downloader.init();
 		XKit.post_listener.add("audio_downloader", XKit.extensions.audio_downloader.do);
 		XKit.extensions.audio_downloader.do();
+	},
+
+	react_add_buttons: function() {
+		const {audioBlockClass} = XKit.extensions.audio_downloader;
+
+		$("audio > source[src]:not(.xkit-audio-downloader-done)").each(function() {
+			const $source = $(this).addClass("xkit-audio-downloader-done");
+			const src = $source.attr('src');
+
+			$source.parents(audioBlockClass).append(`
+				<div style="margin: 10px 0; padding: 0 20px;">
+					<button class="audio_downloader" data-src="${src}" style="color: var(--purple); text-decoration: underline;">
+						(Download)
+					</button>
+				</div>
+			`);
+		});
+
+		$(".audio_downloader:not(.download_ready)").each(function() {
+			$(this).addClass("download_ready");
+			this.onclick = function(event) {
+				event.stopPropagation();
+				const src = this.getAttribute('data-src');
+				const filename = (new URL(src)).pathname.replace("/", "");
+
+				fetch(src)
+				.then(response => response.blob())
+				.then(blob => {
+					const blob_url = window.URL.createObjectURL(blob);
+					const download_link = Object.assign(document.createElement('a'), {
+						style: { display: 'none' },
+						href: blob_url,
+						download: filename,
+					});
+					document.body.appendChild(download_link);
+					download_link.click();
+					download_link.parentElement.removeChild(download_link);
+					window.URL.revokeObjectURL(blob_url);
+				});
+			};
+		});
 	},
 
 	init: function() {
@@ -159,8 +215,11 @@ XKit.extensions.audio_downloader = new Object({
 	},
 
 	destroy: function() {
+		XKit.post_listener.remove("audio_downloader");
 		XKit.tools.remove_css("audio_downloader");
 		$(".xgetaudiobutton").remove();
+		$(".xkit-audio-downloader-done").removeClass("xkit-audio-downloader-done");
+		$("button.audio_downloader").parent().remove();
 	}
 
 });

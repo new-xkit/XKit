@@ -1,5 +1,5 @@
 //* TITLE Disable Gifs **//
-//* VERSION 0.3.2 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Stops GIFs on dashboard **//
 //* DETAILS This is a very early preview version of an extension that allows you to stop the GIFs from playing on your dashboard. If you still would like to view them, you can click on the Play button on the post. Please note that for now, this extension can't stop GIFs added to text posts. **//
 //* DEVELOPER new-xkit **//
@@ -24,6 +24,33 @@ XKit.extensions.disable_gifs = new Object({
 
 	run: function() {
 		this.running = true;
+
+		if (XKit.page.react) {
+			XKit.post_listener.add('disable_gifs', this.react_do);
+			this.react_do();
+
+			XKit.tools.add_css(`
+				figure:hover .xkit-paused-gif,
+				figure:hover .xkit-gif-label {
+					display: none;
+				}
+				.xkit-gif-label {
+					color: white;
+					background-color: black;
+					height: 1em;
+					line-height: 1em;
+					padding: 5px 7px;
+					border-radius: 20px;
+					position: absolute;
+					top: 5px;
+					left: 5px;
+					z-index: 2;
+				}
+			`, 'disable_gifs');
+
+			return;
+		}
+
 		XKit.tools.init_css("disable_gifs");
 		if ($("#posts").length > 0) {
 			$(document).on('click', '.disable_gifs_button', XKit.extensions.disable_gifs.on_click);
@@ -34,6 +61,42 @@ XKit.extensions.disable_gifs = new Object({
 			XKit.extensions.disable_gifs.do();
 		}
 
+	},
+
+	react_do: function() {
+		const {react_draw} = XKit.extensions.disable_gifs;
+
+		$('figure img[srcset*=".gif"]:not(.xkit-disabled-gif)').each(function() {
+			$(this).addClass('xkit-disabled-gif');
+
+			if (this.complete && this.currentSrc) {
+				react_draw(this);
+			} else {
+				this.onload = function() { react_draw(this); };
+			}
+		});
+	},
+
+	react_draw: function(gif) {
+		const image = new Image();
+		image.src = gif.currentSrc;
+		image.onload = () => {
+			const canvas = document.createElement('canvas');
+			canvas.width = image.naturalWidth;
+			canvas.height = image.naturalHeight;
+			canvas.className = gif.className;
+			canvas.classList.remove('xkit-disabled-gif');
+			canvas.classList.add('xkit-paused-gif');
+			canvas.style.zIndex = '1';
+			canvas.getContext('2d').drawImage(image, 0, 0);
+
+			const label = document.createElement('p');
+			label.innerText = 'GIF';
+			label.className = 'xkit-gif-label';
+
+			gif.parentNode.appendChild(canvas);
+			gif.parentNode.appendChild(label);
+		};
 	},
 
 	redraw_canvases: function(obj) {
@@ -278,6 +341,8 @@ XKit.extensions.disable_gifs = new Object({
 	},
 
 	destroy: function() {
+		$('.xkit-paused-gif, .xkit-gif-label').remove();
+		$('.xkit-disabled-gif').removeClass('xkit-disabled-gif');
 		XKit.tools.remove_css("disable_gifs");
 		this.running = false;
 	}

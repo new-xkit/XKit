@@ -271,6 +271,42 @@
 #x1cpostage_reblog i::before { content: "\EA8F"; }
 #x1cpostage_queue i::before { content: "\EA8E"; }
 #x1cpostage_draft i::before { content: "\EA25"; }
+
+.xkit--react #x1cpostage_reblog,
+.xkit--react #x1cpostage_queue,
+.xkit--react #x1cpostage_draft {
+	display: flex;
+	align-items: center;
+	flex-grow: 1;
+	justify-content: center;
+}
+
+.xkit--react #x1cpostage_reblog i,
+.xkit--react #x1cpostage_queue i,
+.xkit--react #x1cpostage_draft i {
+	background: center / contain no-repeat;
+	width: 23px;
+	height: 23px;
+}
+
+.xkit--react #x1cpostage_reblog i {
+	background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 18.1"><path d="M12.8.2c-.4-.4-.8-.2-.8.4v2H2c-2 0-2 2-2 2v5s0 1 1 1 1-1 1-1v-4c0-1 .5-1 1-1h9v2c0 .6.3.7.8.4L17 3.6 12.8.2zM4.2 17.9c.5.4.8.2.8-.3v-2h10c2 0 2-2 2-2v-5s0-1-1-1-1 1-1 1v4c0 1-.5 1-1 1H5v-2c0-.6-.3-.7-.8-.4L0 14.6l4.2 3.3z"></path></svg>');
+}
+.xkit--react #x1cpostage_queue i {
+	background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="3 3 17.5 17.5"><path d="M11.5 3a8.5 8.5 0 1 0 .001 17.001A8.5 8.5 0 0 0 11.5 3zM16 13h-6V7h2v4h4v2z" fill-rule="evenodd"></path></svg>');
+}
+
+.xkit--react #x1cpostage_draft i {
+	background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 18"><path d="M4,14h8v-1H4V14z M4,11h8v-1H4V11z M4,8h4V7H4V8z M4,5h4V4H4V5z M15.3,6.1C15.2,6,15.1,6,15,6h-3V1c0-0.6-0.4-1-1-1H1 C0.4,0,0,0.4,0,1v16c0,0.6,0.4,1,1,1h14c0.6,0,1-0.4,1-1V7C16,6.6,15.7,6.2,15.3,6.1z M14,16H2V2h8v5c0,0.2,0.1,0.4,0.2,0.5 C10.3,7.8,10.6,8,11,8h3V16z"></path></svg>');
+}
+
+.xkit--react #x1cpostage_reblog i::before,
+.xkit--react #x1cpostage_queue i::before,
+.xkit--react #x1cpostage_draft i::before {
+	display: none;
+}
+
+
 #xkit-1cp-social-twitter::before {
 	content: "\EAA5";
 	bottom: 1px;
@@ -311,6 +347,12 @@
 	box-shadow: 0 4px 9px rgba(0,0,0,0.35);
 	border-radius: 4px;
 	padding: 1px;
+}
+
+#x1cpostage_box input,
+#x1cpostage_box textarea,
+#x1cpostage_box select {
+	font-size: 14px;
 }
 
 #x1cpostage_box:after, #x1cpostage_box:before {

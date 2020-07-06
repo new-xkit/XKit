@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.6.0 **//
+//* VERSION 3.0.0 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -103,8 +103,10 @@ XKit.extensions.classic_header = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
+
+		await XKit.css_map.getCssMap();
 
 		XKit.tools.init_css("classic_header");
 		$("#xoldeheader").remove();
@@ -266,7 +268,13 @@ XKit.extensions.classic_header = new Object({
 				}
 			}
 
-			$("#user_tools").prepend('<div id="xoldeheader">' + m_html + '</div>');
+			let target;
+			if (XKit.page.react) {
+				target = $(XKit.css_map.keyToCss('menuRight'));
+			} else {
+				target = $('#user_tools');
+			}
+			target.prepend('<div id="xoldeheader">' + m_html + '</div>');
 
 			if (XKit.extensions.classic_header.preferences.show_bubble.value === true) {
 				$(".xoldeheader-item").tipTip({maxWidth: "auto", delay: 10, edgeOffset: 5 });

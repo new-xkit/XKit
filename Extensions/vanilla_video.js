@@ -1,7 +1,7 @@
 //* TITLE Vanilla Videos **//
-//* VERSION 0.2.1 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Make the video player unexciting **//
-//* DETAILS Use the browser's native video player. Only affects Tumblr's player. **//
+//* DETAILS Use the browser's native video controls. Only affects Tumblr's player. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA true **//
@@ -54,15 +54,55 @@ XKit.extensions.vanilla_video = {
 	},
 
 	running: false,
+
 	run: function() {
 		this.running = true;
+
 		if (this.preferences.background_color.value === "") {
 			this.preferences.background_color.value = "#000000";
 		}
+
+		if (XKit.page.react) {
+			XKit.tools.add_css(".xkit-vanilla-video ~ * {display: none !important;}");
+			XKit.post_listener.add('vanilla_video', this.replace_players);
+			this.replace_players();
+			return;
+		}
+
 		XKit.post_listener.add('vanilla_video', function() { setTimeout(XKit.extensions.vanilla_video.check, 10); });
 		XKit.extensions.vanilla_video.check();
 	},
-	
+
+	replace_players: function() {
+		const {preferences} = XKit.extensions.vanilla_video;
+
+		$("video:not(.xkit-vanilla-video-done):not(.xkit-vanilla-video)").each(function() {
+			const $this = $(this);
+			const $newPlayer = $this.clone();
+			const $parent = $this.parent();
+
+			$this.addClass('xkit-vanilla-video-done');
+
+			$newPlayer
+			.addClass("xkit-vanilla-video")
+			.css({
+				"cursor": "auto",
+				"background-color": preferences.background_color.value,
+			})
+			.attr({
+				"controls": true,
+				"loop": preferences.loop.value ? "true" : null,
+				"preload": preferences.disable_preload.value ? "none" : null,
+			});
+
+			$newPlayer[0].volume = preferences.default_volume.value;
+			$newPlayer[0].pause();
+			$newPlayer[0].currentTime = 0;
+
+			$parent.prepend($newPlayer);
+		});
+	},
+
 	cpanel: function() {
 		$("#xkit-vanilla-video-color-help").click(function() {
 			XKit.window.show("Background color", "The Vanilla Videos extension allows you to set the background color used when videos do not fill the whole player, generally due to being very narrow. Any CSS color value works, for example: <br/><br/><ul><li>#000000</li><li>#FF0000</li><li>rgba(0, 0, 0, 0)</li></ul><br/>These would produce black, red, and transparent respectively.<br/><br/>Please be careful while customizing the color. An improper value can cause issues. In that case, just delete the text you've entered completely and XKit will revert to the default color.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -118,6 +158,9 @@ XKit.extensions.vanilla_video = {
 
 	destroy: function() {
 		this.running = false;
+		XKit.tools.remove_css('vanilla_video');
 		XKit.post_listener.remove('vanilla_video');
+		$('.xkit-vanilla-video').remove();
+		$('.xkit-vanilla-video-done').removeClass('xkit-vanilla-video-done');
 	}
 };
