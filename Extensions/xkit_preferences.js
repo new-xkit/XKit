@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.6 **//
+//* VERSION 7.6.8 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -74,32 +74,33 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.tools.add_css(mobile_control_panel, 'mobile_xkit_menu');
 		}
 
+		let button_ready = Promise.resolve();
 		if (XKit.page.react) {
-			XKit.interface.translate("Account").then(AccountLabel => {
-				$(`header div div:has([aria-label="${AccountLabel}"])`).before(m_html);
+			button_ready = XKit.interface.translate("Account").then(account_label => {
+				$(`header div div:has([aria-label="${account_label}"])`).before(m_html);
 				$(".xkit--react #xkit_button").attr('tabindex', '0');
-				$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
 			});
 		} else {
 			$("#account_button").before(m_html);
 			$("#account_button > button").attr("tabindex", "8");
 		}
 
+		button_ready.then(() => {
+			if (XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
+				this.show_welcome_bubble();
+			}
+
+			$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
+
+			const unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
+			if (unread_mail_count > 0) {
+				$(".xkit_notice_container > .tab_notice_value").html(unread_mail_count);
+				$(".xkit_notice_container").addClass("tab-notice--active");
+			}
+		});
+
 		$(".no-js").removeClass("no-js"); // possibly unnecessary // mobile stuff
 		$(".mobile-logo").html(mobile_html); // mobile stuff
-
-		if (XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
-			XKit.extensions.xkit_preferences.show_welcome_bubble();
-		}
-
-		$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
-
-		var unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
-		if (unread_mail_count > 0) {
-			$(".xkit_notice_container > .tab_notice_value").html(unread_mail_count);
-			$(".xkit_notice_container").addClass("tab-notice--active");
-		}
-		// XKit.extensions.xkit_preferences.news.update();
 
 		var launch_count = XKit.storage.get("xkit_preferences", "launch_count", "0");
 		launch_count++;
@@ -172,7 +173,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	spring_cleaning: function() {
 
-		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself", "alternative_timestamps"];
+		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself", "alternative_timestamps", "autoloadimages"];
 
 		var removed_list = [];
 
