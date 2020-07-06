@@ -307,8 +307,8 @@ XKit.extensions.tweaks = new Object({
 				"Default", "default",
 				"Hidden", "hidden",
 				"White", "white",
-				"Old Red - theme-dependent", "oldred",
-				"Old Red - always red", "olderredder"
+				"Old Red (Palette-dependent)", "oldred",
+				"Old Red (Always red)", "olderredder",
 			]
 		},
 		hide_activity_notification_badge: {
@@ -791,6 +791,7 @@ XKit.extensions.tweaks = new Object({
 				case "olderredder":
 					notificationBadgeStyle = `background: #bb2502 !important;
 						color: #fff !important;`;
+					break;
 			}
 			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
 				${notificationBadgeStyle}
