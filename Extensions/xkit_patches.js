@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.4 **//
+//* VERSION 7.4.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -973,137 +973,40 @@ XKit.extensions.xkit_patches = new Object({
 			/**
 			 * @return {Object} Information about the browser's current location in Tumblr with keys
 			 *	inbox: boolean - Whether viewing inbox
-				*	activity: boolean - Whether viewing activity
-				*	queue: boolean - Whether viewing queue
-				*	channel: boolean - Whether viewing a channel
-				*	search: boolean - Whether viewing a search
-				*	drafts: boolean - Whether viewing drafts
-				*	followers: boolean - Whether viewing followers
-				*	channel: boolean - Whether viewing a channel
-				*	tagged: boolean - Whether viewing tagged posts
-				*	user_url: String - The url of the currently viewed side blog.
-				*	                   Otherwise the user's main URL
-				*	endless: boolean - Whether the current view scrolls endlessly
-				*	following: boolean - Whether the viewed blog follows the user
-				*/
+			 *	activity: boolean - Whether viewing activity
+			 *	queue: boolean - Whether viewing queue
+			 *	channel: boolean - Whether viewing a channel
+			 *	search: boolean - Whether viewing a search
+			 *	drafts: boolean - Whether viewing drafts
+			 *	followers: boolean - Whether viewing followers
+			 *	channel: boolean - Whether viewing a channel
+			 *	tagged: boolean - Whether viewing tagged posts
+			 *	user_url: String - The url of the currently viewed side blog
+			 *	endless: boolean - Whether the current view scrolls endlessly
+			 *	following: boolean - Whether viewing the following page
+			 */
 			XKit.interface.where = function() {
-				var m_return = {
-					inbox: false,
-					user_url: "",
-					activity: false,
-					queue: false,
-					channel: false,
-					search: false,
-					drafts: false,
-					followers: false,
-					endless: false,
-					dashboard: false,
-					likes: false,
-					following: false,
-					tagged: false,
-					explore: false
+				const is_tumblr_page = XKit.interface.is_tumblr_page();
+				const is_blog_page = location.pathname.startsWith("/blog");
+				const current_blog_page = location.pathname.split("/")[3];
+
+				return {
+					dashboard:	is_tumblr_page && location.pathname.startsWith("/dashboard"),
+					inbox:		is_tumblr_page && (location.pathname.startsWith("/inbox") || current_blog_page === "messages"),
+					likes:		is_tumblr_page && location.pathname.startsWith("/likes"),
+					following:	is_tumblr_page && location.pathname.startsWith("/following"),
+					channel:	is_tumblr_page && is_blog_page && !current_blog_page,
+					followers:	is_tumblr_page && is_blog_page && current_blog_page === "followers",
+					activity:	is_tumblr_page && is_blog_page && current_blog_page === "activity",
+					drafts:		is_tumblr_page && is_blog_page && current_blog_page === "drafts",
+					queue:		is_tumblr_page && is_blog_page && current_blog_page === "queue",
+					explore:	is_tumblr_page && location.pathname.startsWith("/explore"),
+					search:		is_tumblr_page && location.pathname.startsWith("/search"),
+					tagged:		is_tumblr_page && location.pathname.startsWith("/tagged"),
+
+					endless:	is_tumblr_page && $("body").hasClass("without_auto_paginate") === false,
+					user_url:	is_tumblr_page && is_blog_page ? location.pathname.split("/")[2] : "",
 				};
-
-				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
-					m_return.inbox = true;
-				} else {
-					if (document.location.href.indexOf("www.tumblr.com/inbox") !== -1) {
-						m_return.inbox = true;
-					} else {
-						if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-							var m_array = document.location.href.split("/");
-							if (m_array[5] === "messages") {
-								m_return.inbox = true;
-							}
-						}
-					}
-				}
-
-				var href_parts = document.location.href.split("/");
-				if ($("body").hasClass("notifications_index")) {
-					m_return.activity = true;
-				} else {
-					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						if (href_parts[5] === "activity") {
-							m_return.activity = true;
-							m_return.user_url = href_parts[4].replace("#", "");
-						}
-					}
-				}
-
-				if ($("body").hasClass("dashboard_post_queue")) {
-					m_return.queue = true;
-				} else {
-					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						if (href_parts[5] === "queue") {
-							m_return.queue = true;
-							m_return.user_url = href_parts[4].replace("#", "");
-						}
-					}
-				}
-
-				if ($("body").hasClass("dashboard_drafts")) {
-					m_return.drafts = true;
-				} else {
-					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						if (href_parts[5] === "drafts") {
-							m_return.drafts = true;
-							m_return.user_url = href_parts[4].replace("#", "");
-						}
-					}
-				}
-
-				if ($("body").hasClass("dashboard_useraction_followers")) {
-					m_return.followers = true;
-				} else {
-					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						if (href_parts[5] === "followers") {
-							m_return.followers = true;
-							m_return.user_url = href_parts[4].replace("#", "");
-						}
-					}
-				}
-
-				if ($("body").hasClass("dashboard_useraction_following")) {
-					m_return.following = true;
-				}
-
-				if ($("body").hasClass("tagged_actions_display") && document.location.href.indexOf("/tagged") !== 1) {
-					m_return.tagged = true;
-				}
-
-				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-					if (href_parts[3] === "blog") {
-						m_return.user_url = href_parts[4].replace("#", "");
-					}
-				}
-
-				if (document.location.href.indexOf("tumblr.com/search/") !== -1) {
-					m_return.search = true;
-				}
-
-				if ($("body").hasClass("discover") ||
-						document.location.href.indexOf("tumblr.com/explore/") !== -1) {
-					m_return.explore = true;
-				}
-
-				if ($("body").hasClass("dashboard_posts_likes") ||
-						document.location.href.indexOf("tumblr.com/likes/") !== -1) {
-					m_return.likes = true;
-				}
-
-				if ($('link[type="application/rss+xml"]').length) {
-					m_return.user_url = $('link[type="application/rss+xml"]').attr("href").replace(/\/rss.*$/, '');
-				}
-
-				if (document.location.href.indexOf("www.tumblr.com/dashboard") !== -1) {
-					m_return.dashboard = true;
-				}
-
-				m_return.channel = $("body").hasClass("is_channel") === true;
-				m_return.endless = $("body").hasClass("without_auto_paginate") === false;
-
-				return m_return;
 			};
 		},
 
