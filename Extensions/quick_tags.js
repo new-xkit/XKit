@@ -66,7 +66,7 @@ XKit.extensions.quick_tags = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 
 		XKit.tools.init_css("quick_tags");
@@ -84,12 +84,12 @@ XKit.extensions.quick_tags = new Object({
 
 		XKit.interface.post_window_listener.add("quick_tags", XKit.extensions.quick_tags.post_window);
 
-		// don't run this if we're on the new post 'page'
+		// don't run this if we're on the new post iframe
 		if ($("[data-id]").length && XKit.page.react) {
 			XKit.interface.react.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon);
-			XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
+			XKit.post_listener.add("quick_tags", async function() { await XKit.extensions.quick_tags.do_posts() });
 
-			this.do_posts();
+			await this.do_posts();
 		}
 	},
 
@@ -399,8 +399,7 @@ XKit.extensions.quick_tags = new Object({
 
 	},
 
-	do_posts: function() {
-		(async () => {
+	do_posts: async function() {
 			if (XKit.extensions.quick_tags.processing === true) {
 				return;
 			}
@@ -410,7 +409,7 @@ XKit.extensions.quick_tags = new Object({
 			}
 
 			XKit.extensions.quick_tags.processing = true;
-			var posts = await XKit.interface.react.get_posts("xkit-quick-tags-done", true);
+			var posts = await XKit.interface.react.get_posts("xkit-quick-tags-done", false);
 
 			posts.forEach($post => {
 				$post.addClass("xkit-quick-tags-done");
@@ -419,7 +418,6 @@ XKit.extensions.quick_tags = new Object({
 			});
 
 			XKit.extensions.quick_tags.processing = false;
-		})();
 	},
 
 	destroy: function() {

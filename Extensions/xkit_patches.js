@@ -1042,7 +1042,6 @@ XKit.extensions.xkit_patches = new Object({
 					if (typeof additional == "undefined") {additional = ""; }
 
 					if (XKit.interface.added_icon.indexOf(class_name) === -1) {
-						// console.log("Interface -> Can't add icon, button not created, use create_control_button.");
 						return;
 					}
 
