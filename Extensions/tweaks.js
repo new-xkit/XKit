@@ -558,7 +558,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
 			if (XKit.page.react) {
-				$(`${XKit.css_map.keyToCss('radar')}`).parent().css("display", "none");
+				$(`${XKit.css_map.keyToCss('radar')}`).parent().hide();
 			} else {
 				$("#tumblr_radar").css("display", "none");
 				$(".radar_header").parent().css("display", "none");
@@ -666,7 +666,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
 			if (XKit.page.react) {
-				$(`${XKit.css_map.keyToCss('recommendedBlogs')}`).parent().css("display", "none");
+				$(`${XKit.css_map.keyToCss('recommendedBlogs')}`).parent().hide();
 			} else {
 				XKit.extensions.tweaks.add_css(".controls_section.recommended_tumblelogs { display: none !important; }", "xkit_tweaks_hide_recommended");
 			}
@@ -1030,6 +1030,10 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display", "block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
+		if (XKit.page.react) {
+			$(`${XKit.css_map.keyToCss('radar')}`).parent().show();
+			$(`${XKit.css_map.keyToCss('recommendedBlogs')}`).parent().show();
+		}
 
 		XKit.tools.remove_css("tweaks_grey_urls");
 	}
