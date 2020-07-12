@@ -88,9 +88,9 @@ XKit.extensions.classic_tags = new Object({
 							}
 						});
 					}
-				})
+				});
 			}
-		})
+		});
 	}),
 
 	get_post_timestamp: function(blog_name, post_id) {
@@ -288,18 +288,16 @@ XKit.extensions.classic_tags = new Object({
 		this.search_input = $container.find("input[name='q']");
 		this.placeholder = this.search_input.attr("placeholder");
 
-		this.tags = await XKit.tools.async_add_function(async () =>
-			{
-				const result = await tumblr.apiFetch("/v2/user/followed_tags", { method: "GET", queryParams: { limit: 20 } });
-				return {
-					tags: result.response.timeline.elements.map(t => ({
-						name: t.tagName,
-						link: t.links.tap.href
-					})),
-					more: result.response.timeline.links.next != null
-				};
-			}
-		);
+		this.tags = await XKit.tools.async_add_function(async () => {
+			const result = await window.tumblr.apiFetch("/v2/user/followed_tags", { method: "GET", queryParams: { limit: 20 } });
+			return {
+				tags: result.response.timeline.elements.map(tag => ({
+					name: tag.tagName,
+					link: tag.links.tap.href
+				})),
+				more: result.response.timeline.links.next != null
+			};
+		});
 
 		var extra_classes = "";
 		var m_html = "";
