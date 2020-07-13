@@ -937,16 +937,10 @@ XKit.extensions.xkit_patches = new Object({
 					selection.each(function() {
 						var $this = $(this);
 
-						// recommended post
-						var recommended = $this.find(recommended_selector);
-						if (recommended.length > 0) {
-							return;
-						}
-
 						// If can_edit is requested and we don't have an edit post control,
 						// don't push the post
 
-						if (can_edit &&  $this.find(`[aria-label="${editLabel}"]`).length === 0) {
+						if (can_edit && $this.find(`[aria-label="${editLabel}"]`).length === 0) {
 							return;
 						}
 						posts.push($this);
@@ -1068,10 +1062,6 @@ XKit.extensions.xkit_patches = new Object({
 
 					if (controls.length > 0) {
 						controls.prepend(m_html);
-					}
-
-					if (XKit.interface.where().search) {
-						XKit.interface.trigger_reflow();
 					}
 				},
 
