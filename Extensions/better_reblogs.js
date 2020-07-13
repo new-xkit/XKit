@@ -141,7 +141,7 @@ XKit.extensions.better_reblogs = new Object({
 	run: function() {
 		this.running = true;
 
-		if (!XKit.interface.where().dashboard) {
+		if (!XKit.interface.is_tumblr_page()) {
 			return;	
 		}
 		
