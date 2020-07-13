@@ -928,9 +928,6 @@ XKit.extensions.xkit_patches = new Object({
 
 					var editLabel = await XKit.interface.translate("Edit");
 
-					await XKit.css_map.getCssMap();
-					var recommended_selector = XKit.css_map.keyToCss("recommendationReason");
-
 					var selection = $(selector);
 					selection = selection.not("." + without_tag);
 
