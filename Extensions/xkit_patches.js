@@ -922,27 +922,15 @@ XKit.extensions.xkit_patches = new Object({
 				 * @return {Array<Object>} The posts
 				 */
 				get_posts: async function(without_tag, can_edit) {
-					var posts = [];
+					const selector = `[data-id]${(without_tag != null ? `:not(.${without_tag})` : "")}`;
+					var $posts = $(selector);
 
-					var selector = "[data-id]";
+					if (can_edit) {
+						const edit_label = await XKit.interface.translate("Edit");
+						$posts = $posts.filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+					}
 
-					var editLabel = await XKit.interface.translate("Edit");
-
-					var selection = $(selector);
-					selection = selection.not("." + without_tag);
-
-					selection.each(function() {
-						var $this = $(this);
-
-						// If can_edit is requested and we don't have an edit post control,
-						// don't push the post
-
-						if (can_edit && $this.find(`[aria-label="${editLabel}"]`).length === 0) {
-							return;
-						}
-						posts.push($this);
-					});
-					return posts;
+					return $posts;
 				},
 
 				/**

@@ -409,9 +409,10 @@ XKit.extensions.quick_tags = new Object({
 		}
 
 		XKit.extensions.quick_tags.processing = true;
-		var posts = await XKit.interface.react.get_posts("xkit-quick-tags-done", true);
+		var $posts = await XKit.interface.react.get_posts("xkit-quick-tags-done", true);
 
-		posts.forEach($post => {
+		$posts.each(function() {
+			const $post = $(this);
 			$post.addClass("xkit-quick-tags-done");
 
 			XKit.interface.react.add_control_button($post, "xkit-quick-tags", "");
