@@ -72,28 +72,28 @@ XKit.extensions.classic_tags = new Object({
 			if (!addedNodes) {
 				return;
 			}
-				mutation.addedNodes.forEach(addedNode => {
-					const container = $(addedNode).filter(classic_tags.typeahead_dropdown);
 
-					if (container.length === 0) {
-						return;
-					}
-						const $tags = container.find("a");
+			addedNodes.forEach(addedNode => {
+				const container = $(addedNode).filter(classic_tags.typeahead_dropdown);
 
-						$tags.each(function() {
-							const $t = $(this);
+				if (container.length === 0) {
+					return;
+				}
 
-							$t.attr("target", new_tab ? "_blank" : "");
+				const $tags = container.find("a");
 
-							const $name = $t.find(classic_tags.tag_text);
-							const count = classic_tags.tagcounts[$name.text()];
-							if (count) {
-								$name.text(`${$name.text()} (${count})`);
-							}
-						});
+				$tags.each(function() {
+					const $t = $(this);
+
+					$t.attr("target", new_tab ? "_blank" : "");
+
+					const $name = $t.find(classic_tags.tag_text);
+					const count = classic_tags.tagcounts[$name.text()];
+					if (count) {
+						$name.text(`${$name.text()} (${count})`);
 					}
 				});
-			}
+			});
 		});
 	}),
 
