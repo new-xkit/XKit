@@ -65,15 +65,19 @@ XKit.extensions.classic_tags = new Object({
 	search_input: null,
 
 	observer: new MutationObserver(function(mutations) {
-		const classic_tags = XKit.extensions.classic_tags;
+		const {classic_tags} = XKit.extensions;
 		const new_tab = classic_tags.preferences.open_in_new_tab.value;
 
-		mutations.forEach(mutation => {
-			if (mutation.addedNodes != null) {
+		mutations.forEach(({addedNodes})=> {
+			if (!addedNodes) {
+				return;
+			}
 				mutation.addedNodes.forEach(addedNode => {
 					const container = $(addedNode).filter(classic_tags.typeahead_dropdown);
 
-					if (container.length > 0) {
+					if (container.length === 0) {
+						return;
+					}
 						const $tags = container.find("a");
 
 						$tags.each(function() {
