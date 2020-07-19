@@ -720,7 +720,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_follows.value) {
 			if (XKit.page.react) {
-				let postFollowButtonSelectors = XKit.css_map.keyToCss('.post .followButton');
+				let postFollowButtonSelectors = XKit.css_map.descendantSelector('post', 'followButton');
 				XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
 					display: none !important;
 				}`, 'xkit_tweaks_hide_follows');
