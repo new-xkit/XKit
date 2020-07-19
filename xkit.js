@@ -3354,27 +3354,6 @@ function xkit_init_special() {
 		});
 	}
 
-	if (document.location.href.indexOf("/xkit_editor") !== -1) {
-		if (typeof(browser) !== 'undefined') {
-			/* global browser */
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', browser.extension.getURL('editor.js'), false);
-			xhr.send(null);
-			try {
-				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
-				XKit.extensions.xkit_editor.run();
-			} catch (e) {
-				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-			}
-		} else if (XKit.extensions.xkit_editor) {
-			XKit.extensions.xkit_editor.run();
-		} else {
-			XKit.window.show("Can't launch XKit Editor",
-				"Extension platform unsupported or broken.", "error",
-				"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-		}
-	}
-
 }
 
 function xkit_init_frame() {
