@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.9 **/
+//* VERSION 6.0.10 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -718,8 +718,15 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_follows.value) {
-			XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+		if (XKit.extensions.tweaks.preferences.hide_follows.value && XKit.page.react) {
+			let followButtonSelectors = XKit.css_map.keyToClasses('followButton');
+			let postSelectors = XKit.css_map.keyToClasses('post');
+			let postFollowButtonSelectors = postSelectors.map(postCssClass => {
+				return followButtonSelectors.map(followCssClass => `.${postCssClass} .${followCssClass}`).join(', ');
+			}).join(', ');
+			XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
+				display: none!important;
+			}`, 'xkit_tweaks_hide_follows');
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value) {
