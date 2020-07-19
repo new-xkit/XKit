@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.9 **//
+//* VERSION 7.6.10 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -2280,12 +2280,16 @@ XKit.extensions.xkit_preferences = new Object({
 					"XKit comes with the Extension Editor embedded. This is used to write new extensions and update the existing. You can use it to write extensions if you are good with JavaScript and the XKit framework." +
 				"</div>" +
 				'<div class="bottom-part">' +
-					'<a href="http://www.tumblr.com/xkit_editor" class="xkit-button block">Open Editor</a>' +
+					'<div id="xkit-panel-open-xkit-editor" class="xkit-button block">Open Editor</div>' +
 				"</div>" +
 				"</div>";
 
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		$("#xkit-extensions-panel-right").nanoScroller();
+
+		$("#xkit-panel-open-xkit-editor").click(function() {
+			browser.runtime.sendMessage({'action': 'createeditor'});
+		});
 
 	},
 
