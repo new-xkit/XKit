@@ -718,15 +718,15 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_follows.value && XKit.page.react) {
-			let followButtonSelectors = XKit.css_map.keyToClasses('followButton');
-			let postSelectors = XKit.css_map.keyToClasses('post');
-			let postFollowButtonSelectors = postSelectors.map(postCssClass => {
-				return followButtonSelectors.map(followCssClass => `.${postCssClass} .${followCssClass}`).join(', ');
-			}).join(', ');
-			XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
-				display: none!important;
-			}`, 'xkit_tweaks_hide_follows');
+		if (XKit.extensions.tweaks.preferences.hide_follows.value) {
+			if (XKit.page.react) {
+				let postFollowButtonSelectors = XKit.css_map.keyToCss('.post .followButton');
+				XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
+					display: none !important;
+				}`, 'xkit_tweaks_hide_follows');
+			} else {
+				XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value) {
