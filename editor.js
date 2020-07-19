@@ -1,10 +1,10 @@
 /*
 
 	Extension Editor for XKit 7
-	Version 1.2.1
+	Version 1.2.2
 
 	(c) 2011 - 2014 STUDIOXENIX
-	(c) 2015 - 2018 the New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
+	(c) 2015 - 2020 the New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
 
 */
 
@@ -53,7 +53,7 @@ function extension_editor_run() {
 	var aceScript = document.createElement('script');
 	document.body.appendChild(aceScript);
 	aceScript.onload = extension_editor_finish_run;
-	aceScript.src = "//cdn.jsdelivr.net/ace/1.2.0/noconflict/ace.js";
+	aceScript.src = "vendor/ace.js";
 }
 
 function makeEditorShim(id) {
@@ -493,3 +493,7 @@ function extension_editor_resize() {
 	css_editor.resize();
 	object_editor.resize();
 }
+
+onload = function() {
+	XKit.extensions.xkit_editor.run();
+};
