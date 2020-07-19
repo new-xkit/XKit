@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.4 **//
+//* VERSION 7.4.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -117,57 +117,59 @@ XKit.extensions.xkit_patches = new Object({
 					}, window.location.protocol + "//" + window.location.host);
 				}
 			};
-		XKit.tools.add_function(blog_scraper, true);
+		if (window.location.hostname.includes("tumblr.com")) {
+			XKit.tools.add_function(blog_scraper, true);
 
-		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
+			XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
 
-			if (!window._ || !window.jQuery) {
-				return;
-			}
-			/* globals _ */
+				if (!window._ || !window.jQuery) {
+					return;
+				}
+				/* globals _ */
 
-			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
-				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
-				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
-					function(wrapped, _event) {
-						if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
-							if (!this.$el.find('video[src^="blob:"]').length) {
-								return true;
+				if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
+					window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
+					_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
+						function(wrapped, _event) {
+							if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
+								if (!this.$el.find('video[src^="blob:"]').length) {
+									return true;
+								}
 							}
+							return wrapped.call(this, _event);
+						});
+				}
+
+				// unfortunately we're not fast enought to catch some
+				// CRT instances that are currently instantiated, so handle those differently
+				jQuery('video').parent().each(function() {
+					this.addEventListener('loadedmetadata', function(event) {
+						var $target = jQuery(event.target);
+						if (!$target.is(":visible") || !jQuery.contains(document, event.target)) {
+							event.stopPropagation();
 						}
-						return wrapped.call(this, _event);
-					});
-			}
+					}, true); // uses .parent() and capturing to preempt tumblr's js
+				});
+			}, true, {});
 
-			// unfortunately we're not fast enought to catch some
-			// CRT instances that are currently instantiated, so handle those differently
-			jQuery('video').parent().each(function() {
-				this.addEventListener('loadedmetadata', function(event) {
-					var $target = jQuery(event.target);
-					if (!$target.is(":visible") || !jQuery.contains(document, event.target)) {
-						event.stopPropagation();
-					}
-				}, true); // uses .parent() and capturing to preempt tumblr's js
-			});
-		}, true, {});
+			XKit.tools.add_function(function fix_jk_scrolling() {
+				if (!window._ || !window.jQuery) {
+					return;
+				}
 
-		XKit.tools.add_function(function fix_jk_scrolling() {
-			if (!window._ || !window.jQuery) {
-				return;
-			}
-
-			if (_.get(window, "Tumblr.KeyCommands.update_post_positions")) {
-				Tumblr.KeyCommands.update_post_positions = _.wrap(Tumblr.KeyCommands.update_post_positions,
-					function(wrapped, _event) {
-						wrapped.call(this);
-						this.post_positions = _.pick(this.post_positions,
-							function(scroll_pos, element_id) {
-								var element = jQuery("[data-pageable='" + element_id + "']");
-								return element.is(":visible") && element.height() > 0;
-							});
-					});
-			}
-		}, true, {});
+				if (_.get(window, "Tumblr.KeyCommands.update_post_positions")) {
+					Tumblr.KeyCommands.update_post_positions = _.wrap(Tumblr.KeyCommands.update_post_positions,
+						function(wrapped, _event) {
+							wrapped.call(this);
+							this.post_positions = _.pick(this.post_positions,
+								function(scroll_pos, element_id) {
+									var element = jQuery("[data-pageable='" + element_id + "']");
+									return element.is(":visible") && element.height() > 0;
+								});
+						});
+				}
+			}, true, {});
+		}
 
 		setTimeout(function() {
 
@@ -675,14 +677,15 @@ XKit.extensions.xkit_patches = new Object({
 					if (this.cssMap) {
 						return this.cssMap;
 					}
-
-					this.cssMap = await XKit.tools.async_add_function(async() => {
-						if (!window.tumblr) {
-							return null;
-						}
-						const cssMap = await window.tumblr.getCssMap();
-						return cssMap;
-					});
+					if (window.location.hostname.includes("tumblr.com")) {
+						this.cssMap = await XKit.tools.async_add_function(async() => {
+							if (!window.tumblr) {
+								return null;
+							}
+							const cssMap = await window.tumblr.getCssMap();
+							return cssMap;
+						});
+					}
 					return this.cssMap;
 				},
 
