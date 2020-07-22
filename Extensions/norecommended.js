@@ -38,7 +38,7 @@ XKit.extensions.norecommended = new Object({
 		if (XKit.page.react) {
 			XKit.tools.add_css(`
 				.norecommended-hidden,
- 				.norecommended-hidden + :not(.norecommended-done) {
+ 				.norecommended-hidden + :not([data-id]) {
 					height: 0;
 					margin: 0;
 					overflow: hidden;
