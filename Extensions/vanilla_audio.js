@@ -33,7 +33,7 @@ XKit.extensions.vanilla_audio = new Object({
 		await XKit.css_map.getCssMap();
 
 		if (XKit.page.react) {
-			XKit.tools.add_css(".xkit-audio-added { padding: 0 16px; } .xkit-audio-player { display: block !important; margin: auto; } }", "vanilla_audio");
+			XKit.tools.add_css(".xkit-audio-player { display: block !important; margin: auto; }", "vanilla_audio");
 			XKit.post_listener.add("vanilla_audio", this.add_audio_react);
 			this.add_audio_react();
 			return;
