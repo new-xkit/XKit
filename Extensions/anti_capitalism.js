@@ -56,7 +56,7 @@ XKit.extensions.anti_capitalism = new Object({
 
 		if (XKit.page.react) {
 			if (this.preferences.sponsored_posts.value) {
-				XKit.tools.add_css("[data-id] + :not([data-id]) {display: none}", "anti_capitalism");
+				XKit.tools.add_css("[data-id] + :not([data-id]) {height: 0; margin: 0; overflow: hidden;}", "anti_capitalism");
 			}
 
 			return;
