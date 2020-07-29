@@ -22,17 +22,23 @@ XKit.extensions.show_originals = new Object({
 			default: true,
 			value: true
 		},
+		/* "in_sidebar": {
+			text: "Hide reblogs in the sidebar",
+			default: false,
+			value: false,
+			experimental: true
+		}, */
 		"sep-1": {
 			text: "Appearance",
 			type: "separator"
 		},
 		"generic_message": {
-			text: "Show a generic message in place of hidden posts",
+			text: "Show a generic message in place of hidden reblogs",
 			default: false,
 			value: false
 		},
 		"hide_completely": {
-			text: "Hide posts completely",
+			text: "Hide reblogs completely",
 			default: false,
 			value: false,
 			experimental: true
@@ -68,11 +74,11 @@ XKit.extensions.show_originals = new Object({
 	react_do: function() {
 		$('[data-id]:not(.noreblogs-done)').each(async function() {
 			const $this = $(this).addClass('noreblogs-done');
-			const {show_original_reblogs, generic_message, hide_completely} = XKit.extensions.show_originals.preferences;
+			const {show_original_reblogs,in_sidebar,generic_message, hide_completely} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
 			
-			// Don't hide anything in the sidebar
-			if ($this.closest("#glass-container").length > 0) { return; }
+			// Unless enabled, don't hide anything in the sidebar
+			if (!in_sidebar && $this.closest("#glass-container").length > 0) { return; }
 			
 			// Don't hide original posts
 			if (!rebloggedFromUrl) { return; }
