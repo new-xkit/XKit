@@ -411,12 +411,13 @@ XKit.extensions.quick_tags = new Object({
 		XKit.extensions.quick_tags.processing = true;
 		var $posts = await XKit.interface.react.get_posts("xkit-quick-tags-done", true);
 
-		$posts.each(function() {
-			const $post = $(this);
-			$post.addClass("xkit-quick-tags-done");
+		$posts
+			.addClass("xkit-quick-tags-done")
+			.each(function() {
+				const $post = $(this);
 
-			XKit.interface.react.add_control_button($post, "xkit-quick-tags", "");
-		});
+				XKit.interface.react.add_control_button($post, "xkit-quick-tags", "");
+			});
 
 		XKit.extensions.quick_tags.processing = false;
 	},

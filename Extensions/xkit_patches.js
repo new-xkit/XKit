@@ -922,7 +922,11 @@ XKit.extensions.xkit_patches = new Object({
 				 * @return {Array<Object>} The posts
 				 */
 				get_posts: async function(without_tag, can_edit) {
-					const selector = `[data-id]${(without_tag != null ? `:not(.${without_tag})` : "")}`;
+					let selector = "[data-id]";
+					if (without_tag !== undefined) {
+						selector += `:not(.${without_tag})`;
+					}
+
 					var $posts = $(selector);
 
 					if (can_edit) {
@@ -992,7 +996,10 @@ XKit.extensions.xkit_patches = new Object({
 				 */
 				create_control_button: async function(class_name, icon, text, func, ok_icon) {
 					if (this.control_button_template == null) {
-						this.control_button_template = await this.get_control_button_template();
+						this.control_button_template = {
+							template: await this.get_control_button_template(),
+							func: func
+						};
 					}
 
 					XKit.interface.added_icon.push(class_name);
@@ -1011,11 +1018,6 @@ XKit.extensions.xkit_patches = new Object({
 							background-image: url('${ok_icon}');
 						}`, `xkit_interface_icon__completed__${class_name}`);
 					}
-
-					$(document).on('click', '.' + class_name, function() {
-						if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
-						if (typeof func === "function") { func.call(this, event); }
-					});
 				},
 				add_control_button: async function(obj, class_name, additional) {
 					if (typeof additional == "undefined") {additional = ""; }
@@ -1033,7 +1035,8 @@ XKit.extensions.xkit_patches = new Object({
 
 					var m_data = `data-post-id = "${post_id}" data-post-type="${post_type}" data-permalink="${post_permalink}"`;
 
-					var m_html = this.control_button_template
+					var { template, func } = this.control_button_template;
+					var m_html = template
 						.replace(/{{className}}/g, class_name)
 						.replace(/{{text}}/g, m_text)
 						.replace(/{{additional}}/g, additional)
@@ -1047,6 +1050,11 @@ XKit.extensions.xkit_patches = new Object({
 
 					if (controls.length > 0) {
 						controls.prepend(m_html);
+
+						controls.on('click', '.' + class_name, function() {
+							if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
+							if (typeof func === "function") { func.call(this, event); }
+						});
 					}
 				},
 
