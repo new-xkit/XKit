@@ -50,23 +50,20 @@ XKit.extensions.show_originals = new Object({
 	react_do: function() {
 		$('[data-id]:not(.noreblogs-done)').each(async function() {
 			const $this = $(this).addClass('noreblogs-done');
-			const {show_original_reblogs} = XKit.extensions.no_reblogs_test.preferences;
+			const {show_original_reblogs} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
 			
 			// Prevent hiding posts in peepr
 			if ($this.closest("#glass-container").length > 0) { return; }
 			
-			if (show_original_reblogs.value) {
-				if (rebloggedFromUrl && rebloggedRootName != blogName) {
-					//$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
-					//$this.prepend('<div class="noreblogs-note">' + blogName + ' reblogged ' + rebloggedRootName + '</div>');
-					$this.prepend('<div class="noreblogs-note">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
-					}
-			} else if (rebloggedFromUrl) {
-				//$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
-				//$this.prepend('<div class="noreblogs-note">' + blogName + ' reblogged ' + rebloggedRootName + '</div>');
-				$this.prepend('<div class="noreblogs-note">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
-			}
+			// Don't hide original posts
+			if (!rebloggedFromUrl) { return; }
+			
+			// If enabled, don't hide reblogs with the same blog as root
+			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
+			
+			// Hide everything else
+			$this.prepend('<div class="noreblogs-note">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
 
 		});
 	},
