@@ -1,7 +1,7 @@
 //* TITLE Show Originals **//
 //* VERSION 1.2.5 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
-//* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
+//* DETAILS This really experimental extension allows you to only see original (non-reblogged) posts made by users on your dashboard. Posts must be replaced by an indicator to avoid breaking j/k scrolling.**//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -12,126 +12,71 @@ XKit.extensions.show_originals = new Object({
 	running: false,
 	slow: true,
 
-	status: "false",
-	lbl_on: "on",
-	lbl_off: "off",
-	dont_show_mine: false,
-
 	preferences: {
-		only_on_dashboard: {
-			text: "Only run when I'm on the dashboard",
-			default: false,
-			value: false
-		}
+		"sep-0": {
+			text: "Options",
+			type: "separator"
+		},
+		"show_original_reblogs": {
+			text: "Show when someone reblogs their own original content",
+			default: true,
+			value: true
+		},
 	},
 
 	run: function() {
 		this.running = true;
-
-		if (this.preferences.only_on_dashboard.value && !XKit.interface.where().dashboard) { return; }
-		if (!XKit.interface.where().dashboard && !XKit.interface.where().channel) { return; }
-
-		try {
-			if (XKit.installed.is_running("tweaks")) {
-				if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
-					XKit.extensions.show_originals.dont_show_mine = true;
+		
+		if (XKit.page.react) {
+			XKit.tools.add_css(`
+				.noreblogs-note {
+					height: 1em;
+					color: var(--white-on-dark);
+					opacity: 0.4;
+					//padding: var(--post-header-vertical-padding) var(--post-padding);
+					padding: 0 var(--post-padding);
 				}
-			}
-		} catch (e) {
-			console.log("show_originals -> can't read tweaks property: " + e.message);
-			XKit.extensions.show_originals.dont_show_mine = false;
-		}
+				.noreblogs-note ~ * {
+					display: none;
+				}
+			`, 'noreblogs');
 
-		if (!$("body").hasClass("with_auto_paginate")) {
-			if (XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
-				XKit.notifications.add("Show Originals only works when Endless Scrolling is turned on. Click here to learn more and disable this warning.", "warning", false, function() {
-					XKit.window.show("Endless Scrolling required.", "Show Originals require Endless Scrolling to be enabled on your dashboard. Click on the Tumblr Settings button (gear icon) on top-right of the page and then Dashboard > Enable endless scrolling.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-					XKit.storage.set("show_originals", "shown_warning_about_scrolling", "yass");
-				});
-			}
+			XKit.post_listener.add('noreblogs', this.react_do);
+			this.react_do();
 			return;
 		}
+	},
 
-		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
+	react_do: function() {
+		$('[data-id]:not(.noreblogs-done)').each(async function() {
+			const $this = $(this).addClass('noreblogs-done');
+			const {show_original_reblogs} = XKit.extensions.no_reblogs_test.preferences;
+			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
+			
+			// Prevent hiding posts in peepr
+			if ($this.closest("#glass-container").length > 0) { return; }
+			
+			if (show_original_reblogs.value) {
+				if (rebloggedFromUrl && rebloggedRootName != blogName) {
+					//$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
+					//$this.prepend('<div class="noreblogs-note">' + blogName + ' reblogged ' + rebloggedRootName + '</div>');
+					$this.prepend('<div class="noreblogs-note">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
+					}
+			} else if (rebloggedFromUrl) {
+				//$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
+				//$this.prepend('<div class="noreblogs-note">' + blogName + ' reblogged ' + rebloggedRootName + '</div>');
+				$this.prepend('<div class="noreblogs-note">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
+			}
 
-		XKit.interface.sidebar.add({
-			id: "xshow_originals_sidebar",
-			title: "Show Originals",
-			items: [{
-				id: "xshoworiginals_button",
-				text: "Originals Only",
-				count: XKit.extensions.show_originals.lbl_off
-			}]
 		});
-
-		XKit.extensions.show_originals.update_button();
-
-		$("#xshoworiginals_button").click(function() {
-			XKit.extensions.show_originals.toggle();
-
-			return false;
-		});
-
-		XKit.tools.init_css("show_originals");
-		XKit.post_listener.add("show_originals", XKit.extensions.show_originals.do);
-		XKit.extensions.show_originals.do();
-	},
-
-	update_button: function() {
-
-		if (XKit.extensions.show_originals.status == "true") {
-			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_on);
-		} else {
-			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_off);
-		}
-
-	},
-
-	toggle: function() {
-
-		if (XKit.extensions.show_originals.status == "true") {
-			XKit.extensions.show_originals.status = "false";
-			XKit.extensions.show_originals.do(true);
-		} else {
-			XKit.extensions.show_originals.status = "true";
-			XKit.extensions.show_originals.do(false);
-		}
-
-		XKit.extensions.show_originals.update_button();
-		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
-
-	},
-
-	added_css: false,
-
-	do: function(force_shutdown) {
-
-		if (XKit.extensions.show_originals.status == "false" || force_shutdown) {
-			XKit.tools.remove_css("show_originals_on");
-			XKit.extensions.show_originals.added_css = false;
-			return;
-		}
-
-		XKit.extensions.show_originals.added_css = true;
-		XKit.tools.add_css(" .post.is_reblog { display: none; }", "show_originals_on");
-
-		XKit.extensions.show_originals.call_tumblr_resize();
-
-	},
-
-	call_tumblr_resize: function() {
-
-		XKit.tools.add_function(function() {
-			Tumblr.Events.trigger("DOMEventor:updateRect");
-		}, true, "");
-
 	},
 
 	destroy: function() {
 		this.running = false;
-		XKit.tools.remove_css("show_originals");
-		XKit.tools.remove_css("show_originals_on");
-		XKit.interface.sidebar.remove("xshow_originals_sidebar");
+		$('.noreblogs-done').removeClass('noreblogs-done');
+		$('.noreblogs-note').remove();
+		XKit.post_listener.remove('noreblogs');
+		XKit.tools.remove_css("noreblogs");
 	}
 
 });
