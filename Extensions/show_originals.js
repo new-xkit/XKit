@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.5 **//
+//* VERSION 1.2.6 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This really experimental extension allows you to only see original (non-reblogged) posts made by users on your dashboard. Posts must be replaced by an indicator to avoid breaking j/k scrolling.**//
 //* DEVELOPER STUDIOXENIX **//
@@ -47,7 +47,7 @@ XKit.extensions.show_originals = new Object({
 
 	run: function() {
 		this.running = true;
-		
+
 		if (XKit.page.react) {
 			XKit.tools.add_css(`
 				.noreblogs-note {
@@ -76,16 +76,16 @@ XKit.extensions.show_originals = new Object({
 			const $this = $(this).addClass('noreblogs-done');
 			const {show_original_reblogs,in_sidebar,generic_message, hide_completely} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
-			
+
 			// Unless enabled, don't hide anything in the sidebar
 			if (!in_sidebar && $this.closest("#glass-container").length > 0) { return; }
-			
+
 			// Don't hide original posts
 			if (!rebloggedFromUrl) { return; }
-			
+
 			// If enabled, don't hide reblogs with the same blog as root
 			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
-			
+
 			// Hide everything else
 			if (hide_completely.value) {
 				$this.addClass('noreblogs-hidden');
