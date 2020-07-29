@@ -44,6 +44,7 @@ XKit.extensions.vanilla_audio = new Object({
 	},
 
 	add_audio_react: function() {
+		"use strict";
 		let audiocontainer_classname = XKit.css_map.keyToClasses('nativePlayer')[0];
 		$(`.${audiocontainer_classname}`).not(".xkit-audio-added").each(function() {
 			var $this = $(this);
