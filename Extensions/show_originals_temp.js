@@ -14,21 +14,16 @@ XKit.extensions.hidepostswithblacklist = new Object({
 
 		XKit.tools.init_css("hidepostswithblacklist");
 
-		const mini_ui = `
+		const noreblogs_css = `
 				.noreblogs-hidden {
 					opacity: 1 !important;
 					padding: 0 !important;
 					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
 					background: transparent !important;
 				}
-				.noreblogs-hidden .post_avatar,
-				.noreblogs-hidden .post_permalink {
-					display: none !important;
-				}
-				.noreblogs-note{
-					background: transparent !important;
-				}
-				.noreblogs-hidden .xblacklist_excuse {
+
+
+				.noreblogs-hidden .noreblogs_note_text {
 					height: 40px !important;
 					line-height: 40px !important;
 					color: var(--transparent-white-40, rgba(255,255,255,.43));
@@ -36,8 +31,7 @@ XKit.extensions.hidepostswithblacklist = new Object({
 					margin: 0;
 					padding-left: 15px;
 				}
-				.noreblogs-hidden .noreblogs-button,
-				.noreblogs-hidden .post_tags {
+				.noreblogs-hidden .noreblogs-button {
 					display: none;
 				}
 				.noreblogs-hidden:hover .noreblogs-button {
@@ -59,11 +53,12 @@ XKit.extensions.hidepostswithblacklist = new Object({
 					border-color: rgba(var(--rgb-white-on-dark), 0.5);
 				}
 
+				//hide the port after the note
 				.noreblogs-note ~ * {
-	                display: none;
-                }
+					display: none;
+				}
 
-                .noreblogs-button {
+				.noreblogs-button {
 					position: absolute !important;
 					height: 30px;
 					line-height: 30px;
@@ -76,7 +71,7 @@ XKit.extensions.hidepostswithblacklist = new Object({
 				}
 			`;
 
-			XKit.tools.add_css(mini_ui, "blacklist");
+			XKit.tools.add_css(noreblogs_css, "noreblogstest");
 
 			XKit.post_listener.add('noreblogs', this.react_do);
 			this.react_do();
@@ -89,7 +84,7 @@ XKit.extensions.hidepostswithblacklist = new Object({
 			const $this = $(this).addClass('noreblogs-done');
 			//const {show_original_reblogs,in_sidebar,generic_message, hide_completely} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
-            /*
+			/*
 			// Unless enabled, don't hide anything in the sidebar
 			if (!in_sidebar && $this.closest("#glass-container").length > 0) { return; }
 
@@ -98,18 +93,16 @@ XKit.extensions.hidepostswithblacklist = new Object({
 
 			// If enabled, don't hide reblogs with the same blog as root
 			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
-            */
+			*/
 			// Hide everything else
 			$this.addClass('noreblogs-hidden');
 
-			const cause = 'hi';
-			const post_type_div = '';
+			const note_text = 'this is a hidden reblog';
 
-			const excuse = `
+			const noreblogs_note = `
 			<div class="noreblogs-note">
-				<div class="xblacklist_excuse">
-					${cause}
-					${post_type_div}
+				<div class="noreblogs_note_text">
+					${note_text}
 					<div class="xkit-button noreblogs-button">
 						Show it anyway
 					</div>
@@ -117,7 +110,7 @@ XKit.extensions.hidepostswithblacklist = new Object({
 			</div>
 		`;
 
-			$this.prepend(excuse);
+			$this.prepend(noreblogs_note);
 
 			//$this.on('click', '.noreblogs-button', this.unhide_post);
 			$this.on('click', '.noreblogs-button', XKit.extensions.hidepostswithblacklist.unhide_post);
@@ -126,7 +119,7 @@ XKit.extensions.hidepostswithblacklist = new Object({
 		});
 	},
 
-    unhide_post: function(e) {
+	unhide_post: function(e) {
 		const $button = $(e.target);
 		const $post = $button.parents('.noreblogs-hidden');
 		const $excuse = $button.parents('.noreblogs-note');
