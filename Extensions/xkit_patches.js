@@ -919,7 +919,7 @@ XKit.extensions.xkit_patches = new Object({
 				 * Get the posts on the screen without the given tag
 				 * @param {String} without_tag - Class that the posts should not have
 				 * @param {Boolean} can_edit - Whether the posts must be editable
-				 * @return {Array<Object>} The posts
+				 * @return {jQuery} JQuery object containing the posts
 				 */
 				get_posts: async function(without_tag, can_edit) {
 					let selector = "[data-id]";
