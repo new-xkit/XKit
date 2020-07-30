@@ -11,24 +11,24 @@ XKit.extensions.hidepostswithblacklist = new Object({
 
 	run: function() {
 		this.running = true;
-		
+
 		XKit.tools.init_css("hidepostswithblacklist");
-		
+
 		const mini_ui = `
-				.xblacklist_blacklisted_post {
+				.noreblogs-hidden {
 					opacity: 1 !important;
 					padding: 0 !important;
 					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
 					background: transparent !important;
 				}
-				.xblacklist_blacklisted_post .post_avatar,
-				.xblacklist_blacklisted_post .post_permalink {
+				.noreblogs-hidden .post_avatar,
+				.noreblogs-hidden .post_permalink {
 					display: none !important;
 				}
-				.xblacklist_excuse_container {
+				.noreblogs-note{
 					background: transparent !important;
 				}
-				.xblacklist_blacklisted_post .xblacklist_excuse {
+				.noreblogs-hidden .xblacklist_excuse {
 					height: 40px !important;
 					line-height: 40px !important;
 					color: var(--transparent-white-40, rgba(255,255,255,.43));
@@ -36,11 +36,11 @@ XKit.extensions.hidepostswithblacklist = new Object({
 					margin: 0;
 					padding-left: 15px;
 				}
-				.xblacklist_blacklisted_post .xblacklist_open_post,
-				.xblacklist_blacklisted_post .post_tags {
+				.noreblogs-hidden .noreblogs-button,
+				.noreblogs-hidden .post_tags {
 					display: none;
 				}
-				.xblacklist_blacklisted_post:hover .xblacklist_open_post {
+				.noreblogs-hidden:hover .noreblogs-button {
 					display: inline-block;
 					height: unset;
 					line-height: initial;
@@ -48,18 +48,18 @@ XKit.extensions.hidepostswithblacklist = new Object({
 					transform: translateY(-50%);
 					margin: 0;
 				}
-				.xkit--react .xblacklist_open_post {
+				.xkit--react .noreblogs-button {
 					color: rgba(var(--rgb-white-on-dark), 0.8);
 					background: rgba(var(--rgb-white-on-dark), 0.05);
 					border-color: rgba(var(--rgb-white-on-dark), 0.3);
 				}
-				.xkit--react .xblacklist_open_post:hover {
+				.xkit--react .noreblogs-button:hover {
 					color: var(--white-on-dark);
 					background: rgba(var(--rgb-white-on-dark), 0.1);
 					border-color: rgba(var(--rgb-white-on-dark), 0.5);
 				}
-				
-				.xblacklist_excuse_container ~ * {
+
+				.noreblogs-note~ * {
 	                display: none;
                 }
 			`;
@@ -71,7 +71,7 @@ XKit.extensions.hidepostswithblacklist = new Object({
 			return;
 
 	},
-	
+
 	react_do: function() {
 		$('[data-id]:not(.noreblogs-done)').each(async function() {
 			const $this = $(this).addClass('noreblogs-done');
@@ -88,48 +88,43 @@ XKit.extensions.hidepostswithblacklist = new Object({
 			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
             */
 			// Hide everything else
-			$this.addClass('xblacklist_blacklisted_post');
-			
+			$this.addClass('noreblogs-hidden');
+
 			const cause = 'hi';
 			const post_type_div = '';
-			
+
 			const excuse = `
-			<div class="xblacklist_excuse_container">
+			<div class="noreblogs-note">
 				<div class="xblacklist_excuse">
 					${cause}
 					${post_type_div}
-					<div class="xkit-button xblacklist_open_post">
+					<div class="xkit-button noreblogs-button">
 						Show it anyway
 					</div>
 				</div>
 			</div>
 		`;
-			
+
 			$this.prepend(excuse);
-			
-			//$this.on('click', '.xblacklist_open_post', this.unhide_post);
-			$this.on('click', '.xblacklist_open_post', XKit.extensions.hidepostswithblacklist.unhide_post);
-			
-			if ($this.hasClass("xkit-shorten-posts-shortened")) {
-			    $this.find('.xkit-shorten-posts-embiggen').hide();
-			    $this.attr('data-xkit-blacklist-old-height', $post.css("height"));
-			    $this.css('height', 'auto');
-			}
+
+			//$this.on('click', '.noreblogs-button', this.unhide_post);
+			$this.on('click', '.noreblogs-button', XKit.extensions.hidepostswithblacklist.unhide_post);
+
 
 		});
 	},
 
     unhide_post: function(e) {
 		const $button = $(e.target);
-		const $post = $button.parents('.xblacklist_blacklisted_post');
-		const $excuse = $button.parents('.xblacklist_excuse_container');
+		const $post = $button.parents('.noreblogs-hidden');
+		const $excuse = $button.parents('.noreblogs-note');
 
 		if ($post.hasClass('xkit-shorten-posts-shortened')) {
 			$post.find('.xkit-shorten-posts-embiggen').show();
 			$post.css('height', $post.attr('data-xkit-blacklist-old-height'));
 		}
 
-		$post.removeClass('xblacklist_blacklisted_post');
+		$post.removeClass('noreblogs-hidden');
 		$excuse.remove();
 	},
 

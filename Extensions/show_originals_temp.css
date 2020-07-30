@@ -1,15 +1,15 @@
 
 
-.xblacklist_blacklisted_post {
+.noreblogs-hidden {
 	opacity: 0.7;
 	padding: 15px 0px 7px 0px !important;
 }
 
-.xblacklist_blacklisted_post .post_footer { display: none !important; }
+.noreblogs-hidden .post_footer { display: none !important; }
 
-.xblacklist_blacklisted_post .post_footer,
-.xblacklist_blacklisted_post .post_header,
-.xblacklist_blacklisted_post .xtimestamp {
+.noreblogs-hidden .post_footer,
+.noreblogs-hidden .post_header,
+.noreblogs-hidden .xtimestamp {
 	display: none;
 }
 
@@ -19,19 +19,19 @@
 	margin-top: 5px;
 }
 
-.xblacklist_excuse_container {
+.noreblogs-note{
 	border-radius: 3px;
 	position: relative;
 }
 
-.xblacklist_open_post {
+.noreblogs-button {
 	position: absolute !important;
 	height: 30px;
 	line-height: 30px;
 	right: 5px;
 }
 
-.xblacklist_open_post:active {
+.noreblogs-button:active {
 	position: absolute !important;
 	right: 5px !important;
 }
@@ -48,20 +48,20 @@
  * things that are partially transparent and position: sticky;
  * get launched like 200 px to the left
  */
-.xblacklist_blacklisted_post .post_avatar.post-avatar--sticky .post_avatar_wrapper {
+.noreblogs-hidden .post_avatar.post-avatar--sticky .post_avatar_wrapper {
 	position: relative;
 	top: 0;
 }
 
-.xblacklist_excuse_container ~ * {
+.noreblogs-note~ * {
 	display: none;
 }
 
-.xblacklist_excuse_container > .post_tags {
+.noreblogs-note> .post_tags {
 	padding-bottom: 1rem;
 }
 
-.xkit--react .xblacklist_blacklisted_post {
+.xkit--react .noreblogs-hidden {
     opacity: 1;
     padding: 0 !important;
 }
@@ -71,7 +71,7 @@
     margin: 0;
 }
 
-.xkit--react .xblacklist_excuse_container {
+.xkit--react .noreblogs-note{
     background-color: var(--white);
     color: var(--black);
 }
@@ -80,7 +80,7 @@
     display: none;
 }
 
-.xkit--react .xblacklist_open_post {
+.xkit--react .noreblogs-button {
     height: 40px;
     line-height: 42px;
     margin: 0;
@@ -88,19 +88,19 @@
     right: var(--post-padding) !important;
 }
 
-.xkit--react .xblacklist_open_post {
+.xkit--react .noreblogs-button {
 	color: rgba(var(--rgb-black), 0.8);
 	background: rgba(var(--rgb-black), 0.05);
 	border-color: rgba(var(--rgb-black), 0.3);
 }
 
-.xkit--react .xblacklist_open_post:hover {
+.xkit--react .noreblogs-button:hover {
 	color: var(--black);
 	background: var(--white);
 	border-color: rgba(var(--rgb-black), 0.5);
 }
 
-.xkit--react .xblacklist_open_post:active {
+.xkit--react .noreblogs-button:active {
 	color: var(--black);
 	background: rgba(var(--rgb-black), 0.25);
 	border-color: rgba(var(--rgb-black), 0.8);
