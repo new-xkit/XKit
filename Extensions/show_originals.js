@@ -52,17 +52,12 @@ XKit.extensions.show_originals = new Object({
 			XKit.tools.add_css(`
 
 				.noreblogs-hidden {
-					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
+					border: 1px dashed var(--white-on-dark) !important;
 				}
 
-				.noreblogs-note {
-					height: 1em;
-					color: var(--white-on-dark);
-					opacity: 0.4;
-					padding: 0 var(--post-padding);
-				}
 
-				.noreblogs_note_text {
+
+				.noreblogs-hidden .noreblogs_note_text {
 					height: 40px !important;
 					line-height: 40px !important;
 					color: var(--white-on-dark);
@@ -71,11 +66,40 @@ XKit.extensions.show_originals = new Object({
 					padding-left: 15px;
 				}
 
+				.noreblogs-hidden .noreblogs-button {
+				    position: absolute !important;
+					height: 30px;
+					line-height: 30px;
+					right: 5px;
+					display: none;
+				}
+				.noreblogs-hidden:hover .noreblogs-button {
+					display: inline-block;
+					height: unset;
+					line-height: initial;
+					top: 50% !important;
+					transform: translateY(-50%);
+					margin: 0;
+				}
+				.xkit--react .noreblogs-button {
+					color: rgba(var(--rgb-white-on-dark), 0.8);
+					background: rgba(var(--rgb-white-on-dark), 0.05);
+					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+				}
+				.xkit--react .noreblogs-button:hover {
+					color: var(--white-on-dark);
+					background: rgba(var(--rgb-white-on-dark), 0.1);
+					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+				}
+
 				.noreblogs-note ~ * {
 					display: none;
 				}
 
-
+				.noreblogs-note {
+					border-radius: 3px;
+					position: relative;
+				}
 
 
 
@@ -110,14 +134,45 @@ XKit.extensions.show_originals = new Object({
 			// Hide everything else
 			if (hide_completely.value) {
 				$this.addClass('noreblogs-completely-hidden');
+
 			} else if (generic_message.value) {
 				$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
+
 			} else {
 				$this.addClass('noreblogs-hidden');
-				$this.prepend('<div class="noreblogs-note noreblogs-note-text">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
+
+				const note_text = blogName +
+					' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName;
+
+
+				const noreblogs_note = `
+				<div class="noreblogs-note">
+					<div class="noreblogs_note_text">
+						${note_text}
+						<div class="xkit-button noreblogs-button">
+							show reblog
+						</div>
+					</div>
+				</div>
+				`;
+
+				const button_text = '<div class="xkit-button noreblogs-button"> show reblog </div>'
+
+				$this.prepend(noreblogs_note);
+
+				$this.on('click', '.noreblogs-button', XKit.extensions.show_originals.unhide_post);
 			}
 
 		});
+	},
+
+	unhide_post: function(e) {
+		const $button = $(e.target);
+		const $post = $button.parents('.noreblogs-hidden');
+		const $note = $button.parents('.noreblogs-note');
+
+		$post.removeClass('noreblogs-hidden');
+		$note.remove();
 	},
 
 	destroy: function() {
