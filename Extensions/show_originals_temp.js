@@ -59,9 +59,21 @@ XKit.extensions.hidepostswithblacklist = new Object({
 					border-color: rgba(var(--rgb-white-on-dark), 0.5);
 				}
 
-				.noreblogs-note~ * {
+				.noreblogs-note ~ * {
 	                display: none;
                 }
+
+                .noreblogs-button {
+					position: absolute !important;
+					height: 30px;
+					line-height: 30px;
+					right: 5px;
+				}
+
+				.noreblogs-note {
+					border-radius: 3px;
+					position: relative;
+				}
 			`;
 
 			XKit.tools.add_css(mini_ui, "blacklist");

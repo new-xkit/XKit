@@ -1,16 +1,1 @@
-.noreblogs-note {
-	border-radius: 3px;
-	position: relative;
-}
-
-.noreblogs-button {
-	position: absolute !important;
-	height: 30px;
-	line-height: 30px;
-	right: 5px;
-}
-
-.noreblogs-note ~ * {
-	display: none;
-}
 
