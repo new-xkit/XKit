@@ -14,7 +14,7 @@ XKit.extensions.show_originals = new Object({
 
 	preferences: {
 		"sep-0": {
-			text: "Options",
+			text: "Functionality",
 			type: "separator"
 		},
 		"show_original_reblogs": {
@@ -28,6 +28,11 @@ XKit.extensions.show_originals = new Object({
 			value: false,
 			experimental: true
 		}, */
+		"link_text": {
+			text: "Make hidden posts into links",
+			default: false,
+			value: false
+		},
 		"sep-1": {
 			text: "Appearance",
 			type: "separator"
@@ -116,7 +121,7 @@ XKit.extensions.show_originals = new Object({
 	react_do: function() {
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
-			const {show_original_reblogs,in_sidebar,generic_message, hide_completely} = XKit.extensions.show_originals.preferences;
+			const {show_original_reblogs,in_sidebar,link_text,generic_message, hide_completely} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
 
 			// Unless enabled, don't hide anything in the sidebar
@@ -140,8 +145,11 @@ XKit.extensions.show_originals = new Object({
 
 				const icon = '<svg viewBox="0 0 12.3 13.7" width="16" height="14" fill="var(--white-on-dark)"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
 
-				const note_text = blogName + ' ' + icon + ' ' + rebloggedRootName;
-
+				if (link_text.value) {
+					note_text = '<a href=' + postUrl + ' style="text-decoration:none" target="_blank">' + blogName + ' ' + icon + ' ' + rebloggedRootName + '</a>';
+				} else {
+					note_text = blogName + ' ' + icon + ' ' + rebloggedRootName;
+				}
 
 				const showoriginals_note = `
 				<div class="showoriginals-note">
@@ -153,8 +161,6 @@ XKit.extensions.show_originals = new Object({
 					</div>
 				</div>
 				`;
-
-				const button_text = '<div class="xkit-button showoriginals-button"> show reblog </div>'
 
 				$this.prepend(showoriginals_note);
 
