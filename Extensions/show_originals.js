@@ -69,8 +69,9 @@ XKit.extensions.show_originals = new Object({
 					padding: 0;
 					margin: 0;
 					padding-left: 15px;
+					display: flex;
 				}
-				.showoriginals-hidden .showoriginals-button {
+				.showoriginals-button {
 				    position: absolute !important;
 					height: 30px;
 					line-height: 30px;
@@ -85,12 +86,12 @@ XKit.extensions.show_originals = new Object({
 					transform: translateY(-50%);
 					margin: 0;
 				}
-				.xkit--react .showoriginals-button {
+				.showoriginals-button {
 					color: rgba(var(--rgb-white-on-dark), 0.8);
 					background: rgba(var(--rgb-white-on-dark), 0.05);
 					border-color: rgba(var(--rgb-white-on-dark), 0.3);
 				}
-				.xkit--react .showoriginals-button:hover {
+				.showoriginals-button:hover {
 					color: var(--white-on-dark);
 					background: rgba(var(--rgb-white-on-dark), 0.1);
 					border-color: rgba(var(--rgb-white-on-dark), 0.5);
@@ -136,7 +137,7 @@ XKit.extensions.show_originals = new Object({
 				$this.prepend('<div class="showoriginals-note"><div class="showoriginals_note_text">Hidden by Show Originals</div></div>');
 
 			} else {
-				const reblogicon = '<svg viewBox="0 0 12.3 13.7" width="16" height="14" fill="var(--white-on-dark)"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
+				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--white-on-dark)"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
 
 				if (hide_posts_makelink.value) {
 					note_text = `<a href='${postUrl}' style="text-decoration:none" target="_blank">${blogName} ${reblogicon} ${rebloggedRootName}</a>`;
