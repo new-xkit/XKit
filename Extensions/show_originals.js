@@ -59,7 +59,7 @@ XKit.extensions.show_originals = new Object({
 				.noreblogs-note ~ * {
 					display: none;
 				}
-				.noreblogs-hidden {
+				.noreblogs-completely-hidden {
 					height: 0;
 					margin: 0;
 					overflow: hidden;
@@ -88,7 +88,7 @@ XKit.extensions.show_originals = new Object({
 
 			// Hide everything else
 			if (hide_completely.value) {
-				$this.addClass('noreblogs-hidden');
+				$this.addClass('noreblogs-completely-hidden');
 			} else if (generic_message.value) {
 				$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
 			} else {
