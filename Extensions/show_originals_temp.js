@@ -52,8 +52,6 @@ XKit.extensions.hidepostswithblacklist = new Object({
 					background: rgba(var(--rgb-white-on-dark), 0.1);
 					border-color: rgba(var(--rgb-white-on-dark), 0.5);
 				}
-
-				//hide the port after the note
 				.noreblogs-note ~ * {
 					display: none;
 				}
@@ -104,11 +102,11 @@ XKit.extensions.hidepostswithblacklist = new Object({
 				<div class="noreblogs_note_text">
 					${note_text}
 					<div class="xkit-button noreblogs-button">
-						Show it anyway
+						show reblog
 					</div>
 				</div>
 			</div>
-		`;
+		    `;
 
 			$this.prepend(noreblogs_note);
 
@@ -122,15 +120,10 @@ XKit.extensions.hidepostswithblacklist = new Object({
 	unhide_post: function(e) {
 		const $button = $(e.target);
 		const $post = $button.parents('.noreblogs-hidden');
-		const $excuse = $button.parents('.noreblogs-note');
-
-		if ($post.hasClass('xkit-shorten-posts-shortened')) {
-			$post.find('.xkit-shorten-posts-embiggen').show();
-			$post.css('height', $post.attr('data-xkit-blacklist-old-height'));
-		}
+		const $note = $button.parents('.noreblogs-note');
 
 		$post.removeClass('noreblogs-hidden');
-		$excuse.remove();
+		$note.remove();
 	},
 
 
