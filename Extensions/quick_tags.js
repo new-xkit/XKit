@@ -84,7 +84,6 @@ XKit.extensions.quick_tags = new Object({
 
 		XKit.interface.post_window_listener.add("quick_tags", XKit.extensions.quick_tags.post_window);
 
-		// don't run this if we're on the new post iframe
 		if (XKit.page.react) {
 			XKit.interface.react.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon);
 			XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
