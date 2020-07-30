@@ -49,17 +49,21 @@ XKit.extensions.show_originals = new Object({
 		this.running = true;
 
 		if (XKit.page.react) {
+
+
+			// border: 1px dashed var(--white-on-dark) !important;
 			XKit.tools.add_css(`
 
 				.noreblogs-hidden {
-					border: 1px dashed var(--white-on-dark) !important;
+
+					opacity: 0.5;
+					margin-bottom:8px;
+					transform: translateY(-6px);
 				}
 
-
-
 				.noreblogs-hidden .noreblogs_note_text {
-					height: 40px !important;
-					line-height: 40px !important;
+					height: 30px !important;
+					line-height: 30px !important;
 					color: var(--white-on-dark);
 					padding: 0;
 					margin: 0;
@@ -95,13 +99,6 @@ XKit.extensions.show_originals = new Object({
 				.noreblogs-note ~ * {
 					display: none;
 				}
-
-				.noreblogs-note {
-					border-radius: 3px;
-					position: relative;
-				}
-
-
 
 				.noreblogs-completely-hidden {
 					height: 0;
@@ -141,8 +138,9 @@ XKit.extensions.show_originals = new Object({
 			} else {
 				$this.addClass('noreblogs-hidden');
 
-				const note_text = blogName +
-					' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName;
+				const icon = '<svg viewBox="0 0 12.3 13.7" width="16" height="14" fill="var(--white-on-dark)"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
+
+				const note_text = blogName + ' ' + icon + ' ' + rebloggedRootName;
 
 
 				const noreblogs_note = `
