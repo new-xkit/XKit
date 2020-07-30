@@ -16,22 +16,22 @@ XKit.extensions.hidepostswithblacklist = new Object({
 
 		const noreblogs_css = `
 				.noreblogs-hidden {
-					opacity: 1 !important;
-					padding: 0 !important;
-					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
-					background: transparent !important;
+					border: 1px dashed var(--white-on-dark) !important;
 				}
-
 
 				.noreblogs-hidden .noreblogs_note_text {
 					height: 40px !important;
 					line-height: 40px !important;
-					color: var(--transparent-white-40, rgba(255,255,255,.43));
+					color: var(--white-on-dark));
 					padding: 0;
 					margin: 0;
 					padding-left: 15px;
 				}
 				.noreblogs-hidden .noreblogs-button {
+				    position: absolute !important;
+					height: 30px;
+					line-height: 30px;
+					right: 5px;
 					display: none;
 				}
 				.noreblogs-hidden:hover .noreblogs-button {
@@ -54,13 +54,6 @@ XKit.extensions.hidepostswithblacklist = new Object({
 				}
 				.noreblogs-note ~ * {
 					display: none;
-				}
-
-				.noreblogs-button {
-					position: absolute !important;
-					height: 30px;
-					line-height: 30px;
-					right: 5px;
 				}
 
 				.noreblogs-note {
