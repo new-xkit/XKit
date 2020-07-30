@@ -1,25 +1,4 @@
-
-
-.noreblogs-hidden {
-	opacity: 0.7;
-	padding: 15px 0px 7px 0px !important;
-}
-
-.noreblogs-hidden .post_footer { display: none !important; }
-
-.noreblogs-hidden .post_footer,
-.noreblogs-hidden .post_header,
-.noreblogs-hidden .xtimestamp {
-	display: none;
-}
-
-.xblacklist_excuse {
-	text-align: left; font-size: 12px;
-	line-height: 50px;
-	margin-top: 5px;
-}
-
-.noreblogs-note{
+.noreblogs-note {
 	border-radius: 3px;
 	position: relative;
 }
@@ -31,77 +10,7 @@
 	right: 5px;
 }
 
-.noreblogs-button:active {
-	position: absolute !important;
-	right: 5px !important;
-}
-
-.xblacklist_hidden_post {
-	display: none !important;
-	height: 0px !important; width: 0px !important;
-	overflow: hidden !important;
-}
-
-
-
-/* Workaround for chrome bug
- * things that are partially transparent and position: sticky;
- * get launched like 200 px to the left
- */
-.noreblogs-hidden .post_avatar.post-avatar--sticky .post_avatar_wrapper {
-	position: relative;
-	top: 0;
-}
-
-.noreblogs-note~ * {
+.noreblogs-note ~ * {
 	display: none;
 }
 
-.noreblogs-note> .post_tags {
-	padding-bottom: 1rem;
-}
-
-.xkit--react .noreblogs-hidden {
-    opacity: 1;
-    padding: 0 !important;
-}
-
-.xkit--react .xblacklist_excuse {
-    padding: var(--post-header-vertical-padding) var(--post-padding);
-    margin: 0;
-}
-
-.xkit--react .noreblogs-note{
-    background-color: var(--white);
-    color: var(--black);
-}
-
-.xkit--react .xkit-blacklist-post-type {
-    display: none;
-}
-
-.xkit--react .noreblogs-button {
-    height: 40px;
-    line-height: 42px;
-    margin: 0;
-    top: var(--post-header-vertical-padding) !important;
-    right: var(--post-padding) !important;
-}
-
-.xkit--react .noreblogs-button {
-	color: rgba(var(--rgb-black), 0.8);
-	background: rgba(var(--rgb-black), 0.05);
-	border-color: rgba(var(--rgb-black), 0.3);
-}
-
-.xkit--react .noreblogs-button:hover {
-	color: var(--black);
-	background: var(--white);
-	border-color: rgba(var(--rgb-black), 0.5);
-}
-
-.xkit--react .noreblogs-button:active {
-	color: var(--black);
-	background: rgba(var(--rgb-black), 0.25);
-	border-color: rgba(var(--rgb-black), 0.8);
-}
