@@ -50,19 +50,40 @@ XKit.extensions.show_originals = new Object({
 
 		if (XKit.page.react) {
 			XKit.tools.add_css(`
+
+				.noreblogs-hidden {
+					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
+				}
+
 				.noreblogs-note {
 					height: 1em;
 					color: var(--white-on-dark);
 					opacity: 0.4;
 					padding: 0 var(--post-padding);
 				}
+
+				.noreblogs_note_text {
+					height: 40px !important;
+					line-height: 40px !important;
+					color: var(--white-on-dark);
+					padding: 0;
+					margin: 0;
+					padding-left: 15px;
+				}
+
 				.noreblogs-note ~ * {
 					display: none;
 				}
+
+
+
+
+
 				.noreblogs-completely-hidden {
 					height: 0;
 					margin: 0;
 					overflow: hidden;
+				}
 			`, 'noreblogs');
 
 			XKit.post_listener.add('noreblogs', this.react_do);
@@ -92,7 +113,8 @@ XKit.extensions.show_originals = new Object({
 			} else if (generic_message.value) {
 				$this.prepend('<div class="noreblogs-note">Hidden by Show Originals</div>');
 			} else {
-				$this.prepend('<div class="noreblogs-note">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
+				$this.addClass('noreblogs-hidden');
+				$this.prepend('<div class="noreblogs-note noreblogs-note-text">' + blogName + ' <a href="' + postUrl + '" target="_blank">reblogged</a> ' + rebloggedRootName + '</div>');
 			}
 
 		});
@@ -102,6 +124,7 @@ XKit.extensions.show_originals = new Object({
 		this.running = false;
 		$('.noreblogs-done').removeClass('noreblogs-done');
 		$('.noreblogs-hidden').removeClass('noreblogs-hidden');
+		$('.noreblogs-completely-hidden').removeClass('noreblogs-completely-hidden');
 		$('.noreblogs-note').remove();
 		XKit.post_listener.remove('noreblogs');
 		XKit.tools.remove_css("noreblogs");
