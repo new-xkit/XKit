@@ -333,7 +333,7 @@ XKit.extensions.classic_tags = new Object({
 			const extra_class = this.preferences.only_new_tags.value ? "hidden" : "";
 			m_html = `
 				<div class="${XKit.css_map.keyToClasses("sidebarItem").join(" ")} ${extra_class}" id="xtags">
-					<div class="${XKit.css_map.keyToClasses("sidebarTitle").join(" ")}">TRACKED TAGS</div>
+					<div class="${XKit.css_map.keyToClasses("sidebarTitle").join(" ")}">Tracked Tags</div>
 					${m_html}
 				</div>
 			`;
