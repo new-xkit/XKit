@@ -22,12 +22,12 @@ XKit.extensions.show_originals = new Object({
 			default: true,
 			value: true
 		},
-		/* "hide_posts_in_peepr": {
+		"hide_posts_in_peepr": {
 			text: "Hide reblogs in the sidebar",
 			default: false,
 			value: false,
 			experimental: true
-		}, */
+		},
 		"hide_posts_makelink": {
 			text: "Make hidden reblog indicators links",
 			default: false,
@@ -47,7 +47,6 @@ XKit.extensions.show_originals = new Object({
 			text: "Hide reblogs completely",
 			default: false,
 			value: false,
-			experimental: true
 		},
 	},
 
@@ -55,30 +54,32 @@ XKit.extensions.show_originals = new Object({
 		this.running = true;
 
 		if (XKit.page.react) {
-			XKit.tools.add_css(`
 
+			const automatic_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+
+			XKit.tools.add_css(`
 				.showoriginals-hidden {
 					opacity: 0.5;
 					margin-bottom:8px;
 					transform: translateY(-6px);
 				}
-				.showoriginals_note_text {
+				.showoriginals-hidden-note-body {
 					height: 30px !important;
 					line-height: 30px !important;
-					color: var(--white-on-dark);
+					color: rgba(${automatic_color}, 0.8);
 					padding: 0;
 					margin: 0;
 					padding-left: 15px;
 					display: flex;
 				}
-				.showoriginals-button {
+				.showoriginals-hidden-button {
 				    position: absolute !important;
 					height: 30px;
 					line-height: 30px;
 					right: 5px;
 					display: none;
 				}
-				.showoriginals-hidden:hover .showoriginals-button {
+				.showoriginals-hidden:hover .showoriginals-hidden-button {
 					display: inline-block;
 					height: unset;
 					line-height: initial;
@@ -86,15 +87,15 @@ XKit.extensions.show_originals = new Object({
 					transform: translateY(-50%);
 					margin: 0;
 				}
-				.showoriginals-button {
-					color: rgba(var(--rgb-white-on-dark), 0.8);
-					background: rgba(var(--rgb-white-on-dark), 0.05);
-					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+				.showoriginals-hidden-button {
+					color: rgba(${automatic_color}, 0.8);
+					background: rgba(${automatic_color}, 0.05);
+					border-color: rgba(${automatic_color}, 0.3);
 				}
-				.showoriginals-button:hover {
-					color: var(--white-on-dark);
-					background: rgba(var(--rgb-white-on-dark), 0.1);
-					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+				.showoriginals-hidden-button:hover {
+					color: rgba(${automatic_color});
+					background: rgba(${automatic_color}, 0.1);
+					border-color: rgba(${automatic_color}, 0.5);
 				}
 				.showoriginals-note ~ * {
 					display: none;
@@ -134,10 +135,10 @@ XKit.extensions.show_originals = new Object({
 
 			} else if (hide_posts_generic.value) {
 				$this.addClass('showoriginals-hidden');
-				$this.prepend('<div class="showoriginals-note"><div class="showoriginals_note_text">Hidden by Show Originals</div></div>');
+				$this.prepend('<div class="showoriginals-note"><div class="showoriginals-hidden-note-body">Hidden by Show Originals</div></div>');
 
 			} else {
-				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--white-on-dark)"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
+				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--blog-contrasting-title-color,var(--white-on-dark))" fill-opacity="0.5"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
 
 				if (hide_posts_makelink.value) {
 					note_text = `<a href='${postUrl}' style="text-decoration:none" target="_blank">${blogName} ${reblogicon} ${rebloggedRootName}</a>`;
@@ -145,13 +146,13 @@ XKit.extensions.show_originals = new Object({
 					note_text = `${blogName} ${reblogicon} ${rebloggedRootName}`;
 				}
 
-				const button = '<div class="xkit-button showoriginals-button">show reblog</div>';
+				const button = '<div class="xkit-button showoriginals-hidden-button">show reblog</div>';
 
 				$this.addClass('showoriginals-hidden');
-				$this.prepend(`<div class="showoriginals-note"><div class="showoriginals_note_text">${note_text}${button}</div></div>`);
+				$this.prepend(`<div class="showoriginals-note"><div class="showoriginals-hidden-note-body">${note_text}${button}</div></div>`);
 
 				// add listener to unhide the post on button click
-				$this.on('click', '.showoriginals-button', XKit.extensions.show_originals.unhide_post);
+				$this.on('click', '.showoriginals-hidden-button', XKit.extensions.show_originals.unhide_post);
 			}
 
 		});
