@@ -19,6 +19,15 @@ XKit.extensions.anti_capitalism = new Object({
 			default: true,
 			value: true
 		},
+		"sidebar_ad": {
+			text: "Hide the Sidebar Ads",
+			default: true,
+			value: true
+		},
+		"sep1": {
+			text: "Legacy Options",
+			type: "separator",
+		},
 		"video_ad": {
 			text: "Terminate with extreme prejudice the auto-playing audio sidebar ads",
 			default: true,
@@ -43,11 +52,6 @@ XKit.extensions.anti_capitalism = new Object({
 			text: "Hide the asktime banner at the top of the dashboard",
 			default: false,
 			value: false
-		},
-		"sidebar_ad": {
-			text: "Hide the Sidebar Ads",
-			default: true,
-			value: true
 		}
 	},
 
