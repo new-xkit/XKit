@@ -51,12 +51,18 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 
 		if (XKit.page.react) {
+			await XKit.css_map.getCssMap();
+
 			if (this.preferences.sponsored_posts.value) {
 				XKit.tools.add_css("[data-id] + :not([data-id]) {height: 0; margin: 0; overflow: hidden;}", "anti_capitalism");
+			}
+
+			if (this.preferences.sidebar_ad.value) {
+				XKit.tools.add_css(`${XKit.css_map.keyToCss('mrecContainer')} { display: none !important; }`, "anti_capitalism");
 			}
 
 			return;
