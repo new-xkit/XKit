@@ -264,24 +264,19 @@ XKit.extensions.classic_tags = new Object({
 		}
 
 		XKit.css_map.getCssMap().then(() => {
-			try {
-				this.typeahead_dropdown = XKit.css_map.keyToCss("typeaheadDropdown");
-				this.tag_text = XKit.css_map.keyToCss("tagText");
+			this.typeahead_dropdown = XKit.css_map.keyToCss("typeaheadDropdown");
+			this.tag_text = XKit.css_map.keyToCss("tagText");
 
-				if (where.tagged) {
-					this.update_tag_timestamp().then(() => this.show());
-				} else {
-					this.show();
-				}
-			} catch (e) {
-				console.error("Can't run Classic Tags:" + e.message);
+			if (where.tagged) {
+				this.update_tag_timestamp().then(() => this.show());
+			} else {
+				this.show();
 			}
-		});
+		}).catch(e => console.error("Can't run Classic Tags:" + e.message));
 	},
 
 	show: async function() {
 		const where = XKit.interface.where();
-
 		if (!where.dashboard && !where.tagged) {
 			return;
 		}
