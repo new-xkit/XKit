@@ -13,14 +13,20 @@ XKit.extensions.show_originals = new Object({
 	slow: true,
 
 	status: "false",
+	my_blogs: [],
 
 	preferences: {
 		"sep-0": {
 			text: "Functionality",
 			type: "separator"
 		},
+		"show_my_posts": {
+			text: "Don't hide my posts",
+			default: true,
+			value: true
+		},
 		"show_original_reblogs": { //this needs a better description (actually all the options do)
-			text: "Show reblogs if the original post was by the same blog",
+			text: "Don't hide someone reblogging themself",
 			default: true,
 			value: true
 		},
@@ -30,23 +36,23 @@ XKit.extensions.show_originals = new Object({
 			value: false,
 			experimental: true
 		},
+
+		"sep-1": {
+			text: "Hidden post appearance",
+			type: "separator"
+		},
 		"hide_posts_makelink": {
 			text: "Make hidden reblog indicators links",
 			default: false,
 			value: false
 		},
-
-		"sep-1": {
-			text: "Appearance",
-			type: "separator"
-		},
 		"hide_posts_generic": {
-			text: "Show a generic message in place of hidden reblogs",
+			text: "Make hidden reblog indicators a generic message",
 			default: false,
 			value: false
 		},
 		"hide_posts_completely": {
-			text: "Hide reblogs completely",
+			text: "Don't show anything to indicate a hidden reblog",
 			default: false,
 			value: false,
 		},
@@ -54,6 +60,8 @@ XKit.extensions.show_originals = new Object({
 
 	run: function() {
 		this.running = true;
+
+		this.my_blogs = XKit.tools.get_blogs();
 
 		//I don't do anything with this right now since XKit.interface.sidebar isn't a thing
 		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
@@ -123,17 +131,20 @@ XKit.extensions.show_originals = new Object({
 		//runs on each post
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
-			const {show_original_reblogs, active_in_peepr, hide_posts_makelink, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
+			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_makelink, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
-
-			// Unless enabled, don't hide posts in the sidebar
-			if (!active_in_peepr && $this.closest("#glass-container").length > 0) { return; }
 
 			// Don't hide posts that aren't reblogs
 			if (!rebloggedFromUrl) { return; }
 
 			// If enabled, don't hide reblogs with the same blog as root
 			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
+
+			//Don't hide my posts
+			if (show_my_posts.value && XKit.extensions.show_originals.my_blogs.includes(blogName)) { return; }
+
+			// Unless enabled, don't hide posts in the sidebar
+			if (!active_in_peepr && $this.closest("#glass-container").length > 0) { return; }
 
 			// We haven't returned, so hide the post now:
 
