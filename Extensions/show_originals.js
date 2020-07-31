@@ -24,7 +24,7 @@ XKit.extensions.show_originals = new Object({
 			default: true,
 			value: true
 		},
-		"hide_posts_in_peepr": {
+		"active_in_peepr": {
 			text: "Hide reblogs in the sidebar",
 			default: false,
 			value: false,
@@ -123,11 +123,11 @@ XKit.extensions.show_originals = new Object({
 		//runs on each post
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
-			const {show_original_reblogs,hide_posts_in_peepr,hide_posts_makelink,hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
+			const {show_original_reblogs,active_in_peepr,hide_posts_makelink,hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
 			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
 
 			// Unless enabled, don't hide posts in the sidebar
-			if (!hide_posts_in_peepr && $this.closest("#glass-container").length > 0) { return; }
+			if (!active_in_peepr && $this.closest("#glass-container").length > 0) { return; }
 
 			// Don't hide posts that aren't reblogs
 			if (!rebloggedFromUrl) { return; }
