@@ -12,12 +12,14 @@ XKit.extensions.show_originals = new Object({
 	running: false,
 	slow: true,
 
+	status: "false",
+
 	preferences: {
 		"sep-0": {
 			text: "Functionality",
 			type: "separator"
 		},
-		"show_original_reblogs": {
+		"show_original_reblogs": { //this needs a better description (actually all the options do)
 			text: "Show reblogs if the original post was by the same blog",
 			default: true,
 			value: true
@@ -52,6 +54,9 @@ XKit.extensions.show_originals = new Object({
 
 	run: function() {
 		this.running = true;
+
+		//I don't do anything with this right now since XKit.interface.sidebar isn't a thing
+		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
 
 		if (XKit.page.react) {
 
@@ -114,12 +119,14 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	react_do: function() {
+		
+		//runs on each post
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
 			const {show_original_reblogs,hide_posts_in_peepr,hide_posts_makelink,hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
-			const {rebloggedFromUrl, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
+			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
 
-			// Unless enabled, exit if we're in the sidebar
+			// Unless enabled, don't hide posts in the sidebar
 			if (!hide_posts_in_peepr && $this.closest("#glass-container").length > 0) { return; }
 
 			// Don't hide posts that aren't reblogs
@@ -128,7 +135,7 @@ XKit.extensions.show_originals = new Object({
 			// If enabled, don't hide reblogs with the same blog as root
 			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
 
-			// We haven't returned, so hide the post now
+			// We haven't returned, so hide the post now:
 
 			if (hide_posts_completely.value) {
 				$this.addClass('showoriginals-hidden-completely');
@@ -141,9 +148,9 @@ XKit.extensions.show_originals = new Object({
 				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--blog-contrasting-title-color,var(--white-on-dark))" fill-opacity="0.5"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>'
 
 				if (hide_posts_makelink.value) {
-					note_text = `<a href='${postUrl}' style="text-decoration:none" target="_blank">${blogName}</a> ${reblogicon} <a href='${postUrl}' style="text-decoration:none" target="_blank">${rebloggedRootName}</a>`;
+					note_text = `<a href='${postUrl}' style="text-decoration:none" target="_blank">${blogName}</a> ${reblogicon} <a href='${postUrl}' style="text-decoration:none" target="_blank">${rebloggedFromName}</a>`;
 				} else {
-					note_text = `${blogName} ${reblogicon} ${rebloggedRootName}`;
+					note_text = `${blogName} ${reblogicon} ${rebloggedFromName}`;
 				}
 
 				const button = '<div class="xkit-button showoriginals-hidden-button">show reblog</div>';
