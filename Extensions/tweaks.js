@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.10 **/
+//* VERSION 6.0.11 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -678,7 +678,9 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share_menu.value) {
-			XKit.tools.add_css(".post_control.share { display: none; } ", "xkit_tweaks_hide_share");
+			XKit.interface.translate('Share').then(share_label => {
+				XKit.tools.add_css(`button[aria-label="${share_label}"] { display: none; }`, 'xkit_tweaks_hide_share');
+			});
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
