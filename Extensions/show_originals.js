@@ -90,10 +90,10 @@ XKit.extensions.show_originals = new Object({
 					height: 30px;
 					line-height: 30px;
 					right: 5px;
-					display: none;
+					display: none !important;
 				}
 				.showoriginals-hidden:hover .showoriginals-hidden-button {
-					display: inline-block;
+					display: inline-block !important;
 					height: unset;
 					line-height: initial;
 					top: 50% !important;
