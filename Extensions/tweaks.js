@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.8 **/
+//* VERSION 6.0.10 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -645,7 +645,11 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_like_animation.value) {
-			XKit.extensions.tweaks.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
+			if (XKit.page.react) {
+				XKit.extensions.tweaks.add_css(`${XKit.css_map.keyToCss('postLikeHeartAnimation')} { display: none !important; }`, "xkit_tweaks_hide_like_animation");
+			} else {
+				XKit.extensions.tweaks.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
@@ -715,7 +719,14 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_follows.value) {
-			XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+			if (XKit.page.react) {
+				let postFollowButtonSelectors = XKit.css_map.descendantSelector('post', 'followButton');
+				XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
+					display: none !important;
+				}`, 'xkit_tweaks_hide_follows');
+			} else {
+				XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value) {

@@ -915,6 +915,191 @@ XKit.extensions.xkit_patches = new Object({
 						tags: post.tags.join(","),
 					};
 				},
+				/**
+				 * Get the posts on the screen without the given tag
+				 * @param {String} without_tag - Class that the posts should not have
+				 * @param {Boolean} can_edit - Whether the posts must be editable
+				 * @return {jQuery} JQuery object containing the posts
+				 */
+				get_posts: async function(without_tag, can_edit) {
+					let selector = "[data-id]";
+					if (without_tag !== undefined) {
+						selector += `:not(.${without_tag})`;
+					}
+
+					var $posts = $(selector);
+
+					if (can_edit) {
+						const edit_label = await XKit.interface.translate("Edit");
+						$posts = $posts.filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+					}
+
+					return $posts;
+				},
+
+				/**
+				 * @param {String} post_id
+				 * @return {Object} Interface Post Object of post with given id
+				 */
+				find_post: async function(post_id) {
+					// Return a post object based on post ID.
+					var post = $(`[data-id='${post_id}']`);
+
+					if (post.length > 0) {
+						return await XKit.interface.react.post(post);
+					} else {
+						var m_error = {};
+						m_error.error = true;
+						m_error.error_message = "Object not found on page.";
+						return m_error;
+					}
+				},
+
+				control_button_template: null,
+				get_control_button_template: async function() {
+					await XKit.css_map.getCssMap();
+
+					var selector = XKit.css_map.keyToClasses("controlIcon").map(css => `[data-id]:first footer .${css}:first`).join(", ");
+					var control = $(selector);
+
+					var get_used_class_from_map = function(key) {
+						const keyCss = XKit.css_map.keyToCss(key);
+						var element = control.find(keyCss);
+
+						return element.attr("class");
+					};
+
+					var controlIconClass = control.attr("class");
+					var buttonClass = get_used_class_from_map("button");
+
+					var new_control = `
+						<div class="${controlIconClass} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
+							<button class="${buttonClass}" aria-label="" tabindex="0">
+								<div class="xkit-interface-icon" {{data}}></div>
+							</button>
+						</div>
+					`;
+
+					this.control_button_template = new_control;
+
+					return this.control_button_template;
+				},
+				/**
+				 * Create a specification for a control button that can be added to
+				 * future posts using `XKit.interface.add_control_button`.
+				 * @param {String} class_name - CSS class of the button to be created
+				 * @param {String} icon - URL of the button's icon
+				 * @param {String} text - Hover text of the button
+				 * @param {EventListener} func - Function called on click of control button
+				 * @param {String?} ok_icon - URL of icon displayed when the button is
+				 *                            "completed" (e.g. reblog button turning green)
+				 */
+				create_control_button: async function(class_name, icon, text, func, ok_icon) {
+					if (this.control_button_template == null) {
+						this.control_button_template = {
+							template: await this.get_control_button_template(),
+							func: func
+						};
+					}
+
+					XKit.interface.added_icon.push(class_name);
+					XKit.interface.added_icon_icon.push(icon);
+					XKit.interface.added_icon_text.push(text);
+
+					XKit.tools.add_css(`.${class_name} .xkit-interface-icon {
+						background-image: url('${icon}');
+						background-size: 100% 100%;
+						width: 21px;
+						height: 21px;
+					}`, `xkit_interface_icon__${class_name}`);
+
+					if (typeof ok_icon !== "undefined") {
+						XKit.tools.add_css(`.${class_name} .xkit-interface-icon-completed {
+							background-image: url('${ok_icon}');
+						}`, `xkit_interface_icon__completed__${class_name}`);
+					}
+				},
+				add_control_button: async function(obj, class_name, additional) {
+					if (typeof additional == "undefined") {additional = ""; }
+
+					if (XKit.interface.added_icon.indexOf(class_name) === -1) {
+						return;
+					}
+
+					var m_text = XKit.interface.added_icon_text[XKit.interface.added_icon.indexOf(class_name)];
+
+					var post_obj = await XKit.interface.react.post(obj);
+					var post_id = post_obj.id;
+					var post_type = post_obj.type;
+					var post_permalink = post_obj.permalink;
+
+					var m_data = `data-post-id = "${post_id}" data-post-type="${post_type}" data-permalink="${post_permalink}"`;
+
+					var { template, func } = this.control_button_template;
+					var m_html = template
+						.replace(/{{className}}/g, class_name)
+						.replace(/{{text}}/g, m_text)
+						.replace(/{{additional}}/g, additional)
+						.replace(/{{data}}/g, m_data)
+					;
+
+					// we know that XKit.css_map.getCssMap() has been called because we have a template from create_control_button
+					// so we skip that call with this XKit.css_map.keyToCss() call.
+					var controlsSelector = XKit.css_map.keyToCss("controls");
+					var controls = $(obj).find(controlsSelector);
+
+					if (controls.length > 0) {
+						controls.prepend(m_html);
+
+						controls.on('click', '.' + class_name, function() {
+							if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
+							if (typeof func === "function") { func.call(this, event); }
+						});
+					}
+				},
+
+				// Each function here requires a Interface Post Object,
+				// you can get using interface.post.
+				update_view: {
+					/**
+					 * Set the tags of a post
+					 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+					 * @param {String} tags - Comma-separated array of tags
+					 */
+					tags: async function(post_obj, tags) {
+						var post_div = $(`[data-id='${post_obj.id}']`);
+
+						var m_inner = "";
+						var tags_array = tags.split(",");
+
+						await XKit.css_map.getCssMap();
+
+						var post_tag = XKit.css_map.keyToClasses("tag").join(" ");
+
+						for (var i = 0; i < tags_array.length; i++) {
+							var formatted = encodeURIComponent(tags_array[i]);
+
+							if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
+
+							if (tags_array[i].substring(0, 1) === " ") {
+								tags_array[i] = tags_array[i].substring(1);
+							}
+
+							m_inner = m_inner + `<a class="${post_tag}" href=\"/tagged/" ${formatted} \">#${tags_array[i]}</a>`;
+						}
+
+						var tags_class = XKit.css_map.keyToCss("tags");
+						var tags_element = $(post_div).find(tags_class);
+						if (tags_element.length > 0) {
+							tags_element.find("div:first-child").html(m_inner);
+
+						} else {
+							var m_html = `<div class="${XKit.css_map.keyToClasses("tags").join(" ")}"><div>${m_inner}</div></div>`;
+							$(post_div).find("footer").before(m_html);
+
+						}
+					},
+				},
 			};
 
 			XKit.interface.async_form_key = async function() {
