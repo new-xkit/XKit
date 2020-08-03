@@ -83,11 +83,11 @@ XKit.extensions.classic_tags = new Object({
 				const $tags = container.find("a");
 
 				$tags.each(function() {
-					const $t = $(this);
+					const $tag = $(this);
 
-					$t.attr("target", new_tab ? "_blank" : "");
+					$tag.attr("target", new_tab ? "_blank" : "");
 
-					const $name = $t.find(classic_tags.tag_text);
+					const $name = $tag.find(classic_tags.tag_text);
 					const count = classic_tags.tagcounts[$name.text()];
 					if (count) {
 						$name.text(`${$name.text()} (${count})`);
