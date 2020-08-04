@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.6 **//
+//* VERSION 1.6.7 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -21,11 +21,6 @@ XKit.extensions.classic_tags = new Object({
 		},
 		"show_new_notification": {
 			text: "Show a [new] indicator in the tag search bar",
-			default: true,
-			value: true
-		},
-		"redirect_to_tagged": {
-			text: "Redirect the followed tags to /tagged/ instead of /search/",
 			default: true,
 			value: true
 		},
@@ -63,39 +58,44 @@ XKit.extensions.classic_tags = new Object({
 			value: false
 		}
 	},
+	typeahead_dropdown: null,
+	tag_text: null,
+	tags: [],
+	placeholder: null,
+	search_input: null,
 
 	observer: new MutationObserver(function(mutations) {
-		$("#popover_search .result_link").each(function() {
-			var link = $(this);
-			if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
-				link.attr("target", "_BLANK");
-			} else {
-				link.attr("target", "");
+		const {classic_tags} = XKit.extensions;
+		const new_tab = classic_tags.preferences.open_in_new_tab.value;
+
+		mutations.forEach(({addedNodes})=> {
+			if (!addedNodes) {
+				return;
 			}
 
-			if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
-				XKit.extensions.classic_tags.redirect_to_tagged.call(this);
-			}
+			addedNodes.forEach(addedNode => {
+				const container = $(addedNode).filter(classic_tags.typeahead_dropdown);
 
-			var tag_name = link.attr("data-tag-result");
-			var count = XKit.extensions.classic_tags.tagcounts[tag_name];
-			if (count) {
-				var title = link.find(".result_title");
-				title.text(title.text() + " (" + count + ")");
-			}
+				if (container.length === 0) {
+					return;
+				}
+
+				const $tags = container.find("a");
+
+				$tags.each(function() {
+					const $tag = $(this);
+
+					$tag.attr("target", new_tab ? "_blank" : "");
+
+					const $name = $tag.find(classic_tags.tag_text);
+					const count = classic_tags.tagcounts[$name.text()];
+					if (count) {
+						$name.text(`${$name.text()} (${count})`);
+					}
+				});
+			});
 		});
 	}),
-
-	redirect_to_tagged: function() {
-		// Extract tag from the data-tag-result attribute. May break if
-		// Tumblr removes this. Will not break if tumblr changes the
-		// link format.
-		var tag = $(this).attr("data-tag-result");
-
-		// Construct a URL for the tag, replacing all spaces with "-"
-		var newHref = "/tagged/" + tag.replace(/ /g, "-");
-		$(this).attr("href", newHref);
-	},
 
 	get_post_timestamp: function(blog_name, post_id) {
 		var self = this;
@@ -176,16 +176,18 @@ XKit.extensions.classic_tags = new Object({
 		});
 	},
 
-	update_tag_timestamp: function() {
+	update_tag_timestamp: async function() {
 		try {
-			var current_tag = $(".tag_controls .tag").text().trim();
-			var newest_post = $(".posts .post[data-id]").first();
-			var post_id = newest_post.attr("data-id");
-			var post_data = newest_post.attr("data-json");
-			var blog_url = JSON.parse(post_data)["tumblelog-data"].uuid;
-			return XKit.extensions.classic_tags.get_post_timestamp(blog_url, post_id).then(function(timestamp) {
-				XKit.storage.set("classic_tags", "lastseen#" + current_tag, timestamp);
-			});
+			const current_tag = $("h1").filter(XKit.css_map.keyToCss("title")).text().replace("#", "").trim();
+			const newest_post = $("[data-id]").first();
+
+			if (newest_post != null) {
+				const post = await XKit.interface.react.post(newest_post);
+
+				return this.get_post_timestamp(post.owner, post.id).then(function(timestamp) {
+					XKit.storage.set("classic_tags", "lastseen#" + current_tag, timestamp);
+				});
+			}
 		} catch (e) {
 			console.log("XKit TagTracker+ Error: Couldn't find newest post timestamp on /tagged");
 			return $.Deferred().resolve();
@@ -205,16 +207,19 @@ XKit.extensions.classic_tags = new Object({
 		if (self.preferences.show_tags_on_sidebar.value) {
 			var list = $("#xtags");
 			var list_hidden = list.hasClass("hidden");
+
 			$(".xtag").each(function() {
 				var li = $(this);
 				var anchor = li.find(".result_link");
 				var tag_name = anchor.attr("data-tag-result");
+
 				if (parseInt(self.tagcounts[tag_name], 10) === self.max_posts_per_tag) {
 					return true;
 				}
 
 				fetch_count(tag_name).then(function(count) {
 					if (!count) { return; }
+
 					if (list_hidden) {
 						list.removeClass("hidden");
 						list_hidden = false;
@@ -225,29 +230,24 @@ XKit.extensions.classic_tags = new Object({
 					if (existing_count.length) {
 						existing_count.text(count);
 					} else {
-						anchor.find(".result_title").removeClass("no_count").after("<span class='count'>" + count + "</span>");
+						anchor.find(".result_title").after(`<span class="count">${count}</span>`);
 					}
 				});
 			});
 		} else {
-			$("#popover_search .result_link").each(function() {
-				var link = $(this);
-				var tag_name = link.attr("data-tag-result");
-				var count = self.tagcounts[tag_name];
+			self.tags.tags.forEach(tag => {
+				var count = self.tagcounts[tag.name];
+
 				if (!count || parseInt(count, 10) < self.max_posts_per_tag) {
-					fetch_count(tag_name);
+					fetch_count(tag.name);
 				}
 			});
 		}
 
-		var search = $("#search_query");
-		var new_label = "Search [new]";
-		if (self.preferences.show_new_notification.value && search.attr("placeholder") !== new_label) {
+		if (self.preferences.show_new_notification.value) {
 			$.when.apply($, new_post_count_promises).then(function() {
 				var any_new_posts = Array.prototype.some.call(arguments, function(count) { return !!count; });
-				if (any_new_posts) {
-					search.attr("placeholder", new_label);
-				}
+				self.search_input.attr("placeholder", `${self.placeholder}${(any_new_posts ? " [New]" : "")}`);
 			});
 		}
 
@@ -255,133 +255,109 @@ XKit.extensions.classic_tags = new Object({
 	},
 
 	run: function() {
+		XKit.tools.init_css("classic_tags");
 
-		try {
+		var where = XKit.interface.where();
 
-			XKit.tools.init_css("classic_tags");
-			if ($("#dashboard_index").length === 0) {
-				if (document.location.href.indexOf('/tagged') === -1) {
-					return;
-				}
-			}
-
-			if (XKit.interface.where().tagged && !location.href.match(/before=[0-9]+/i)) {
-				XKit.extensions.classic_tags.update_tag_timestamp().then(function() {
-					XKit.extensions.classic_tags.show();
-				});
-			} else {
-				XKit.extensions.classic_tags.show();
-			}
-
-		} catch (e) {
-
-			console.error("Can't run Classic Tags:" + e.message);
-
-		}
-	},
-
-	show: function() {
-		if ($(".tracked_tags").length === 0) {
+		if (!where.dashboard && !where.tagged) {
 			return;
 		}
 
-		if ($("#dashboard_index").length === 0) {
-			if (document.location.href.indexOf('/tagged') === -1) {
-				return;
+		XKit.css_map.getCssMap().then(() => {
+			this.typeahead_dropdown = XKit.css_map.keyToCss("typeaheadDropdown");
+			this.tag_text = XKit.css_map.keyToCss("tagText");
+
+			if (where.tagged) {
+				this.update_tag_timestamp().then(() => this.show());
+			} else {
+				this.show();
 			}
+		}).catch(e => console.error("Can't run Classic Tags:" + e.message));
+	},
+
+	show: async function() {
+		const where = XKit.interface.where();
+		if (!where.dashboard && !where.tagged) {
+			return;
 		}
+
+		const $container = $(XKit.css_map.descendantSelector("formContainer", "targetWrapper"));
+		const $sidebar = $(XKit.css_map.keyToCss("sidebar")).find("aside");
+
+		this.search_input = $container.find("input[name='q']");
+		this.placeholder = this.search_input.attr("placeholder");
+
+		this.tags = await XKit.tools.async_add_function(async () => {
+			const result = await window.tumblr.apiFetch("/v2/user/followed_tags", { method: "GET", queryParams: { limit: 20 } });
+			return {
+				tags: result.response.timeline.elements.map(tag => ({
+					name: tag.tagName,
+					link: tag.links.tap.href
+				})),
+				more: result.response.timeline.links.next != null
+			};
+		});
 
 		var extra_classes = "";
 		var m_html = "";
-		var total_tag_count = $(".tracked_tag").length;
 
-		if (XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
-			if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value !== true) {
+		this.tags.tags.forEach(tag => {
 
-				m_html = "<div class=\"classic-tags-too-much-tags-error\"><b>Too Many Tracked Tags:</b><br> After around 20 tags, Tumblr stops updating the status of all your tracked tags until you untrack some. Please track less than 20 tags for this extension to work.</div>";
-				m_html = '<ul class="controls_section" id="xtags"><li class=\"section_header selected\">Tracked Tags</li>' + m_html + '</ul>';
-
-				if (document.location.href.indexOf('/tagged/') !== -1) {
-
-					$("#right_column").append(m_html);
-
-				} else {
-
-					if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
-						$("#right_column").prepend(m_html);
-						$("#xtags").css("margin", "0 0 18px");
-					} else {
-						$(".controls_section:eq(1)").before(m_html);
-					}
-				}
-
-				return;
-
-			}
-		}
-
-		$(".tracked_tag").each(function() {
-			var result = $(this).find(".result_link");
-			var href = result.attr('href');
-
-			if ($("body").attr('data-page-root') === href) {
+			if (location.href === tag.link) {
 				extra_classes = "selected";
 			} else {
 				extra_classes = "";
 			}
 
-			if (XKit.extensions.classic_tags.preferences.only_new_tags.value) {
+			if (this.preferences.only_new_tags.value) {
 				extra_classes += " hidden";
 			}
 
-			var m_title = $(this);
-			var result_title = $(m_title).find(".result_title");
-			result_title.html(result_title.html().replace("#", ""));
+			m_html += `
+				<div class="xtag ${extra_classes}">
+					<div class="hide_overflow">
+						<a class="result_link" href="${tag.link}" data-tag-result="${tag.name}" ${(this.preferences.open_in_new_tab.value ? "target='_blank'" : "")}>
+							<span class="result_title">${tag.name}</span>
+						</a>
+					</div>
+				</div>
+			`;
 
-			m_html = m_html + '<li class="xtag ' + extra_classes + '"><div class="hide_overflow">' + $(m_title).html() + '</div></li>';
 		});
 
-		if (m_html !== "" && XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value) {
-			var extra_class = XKit.extensions.classic_tags.preferences.only_new_tags.value ? "hidden" : "";
-			m_html = '<ul class="controls_section ' + extra_class + '" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
+		if (m_html !== "" && this.preferences.show_tags_on_sidebar.value) {
+			if (this.tags.more === true && this.preferences.turn_off_warning.value !== true) {
+				m_html += "<div class=\"classic-tags-too-much-tags-error\"><b>Too Many Tracked Tags:</b><br> Only 20 tracked tags will be listed here.</div>";
+			}
 
-			if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
-				$("#right_column").prepend(m_html);
-				$("#xtags").css("margin", "0 0 18px");
-			} else if (document.location.href.indexOf('/tagged/') !== -1) {
-				if ($("#related_tags_show_more").length) {
-					$("#related_tags_show_more").after(m_html);
-				} else if ($("#related_tags").length) {
-					$("#related_tags").after(m_html);
-				} else {
-					$(".tag_controls").after(m_html);
-				}
-				$("#xtags").css("margin-bottom", "18px");
+			const extra_class = this.preferences.only_new_tags.value ? "hidden" : "";
+			m_html = `
+				<div class="${XKit.css_map.keyToClasses("sidebarItem").join(" ")} ${extra_class}" id="xtags">
+					<div class="${XKit.css_map.keyToClasses("sidebarTitle").join(" ")}">Tracked Tags</div>
+					${m_html}
+				</div>
+			`;
+
+			if (this.preferences.prepend_sidebar.value === true) {
+				$sidebar.prepend(m_html);
 			} else {
-				$(".controls_section:eq(1)").before(m_html);
+				$sidebar.append(m_html);
 			}
 		}
 
-		var target = document.querySelector('#popover_search');
-		XKit.extensions.classic_tags.observer.observe(target, {
-			attributes: true
+		var target = $container[0];
+		this.observer.observe(target, {
+			subtree: true,
+			childList: true
 		});
-		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
-			$(".result_link").each(function() { $(this).attr("target", "_BLANK"); });
-		} else {
-			$(".result_link").each(function() { $(this).attr("target", ""); });
-		}
-		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
-			$(".result_link").each(XKit.extensions.classic_tags.redirect_to_tagged);
-		}
 
-		XKit.extensions.classic_tags.update_tag_counts(2 * 60 * 1000); //start at 2 minutes
+		this.update_tag_counts(2 * 60 * 1000); //start at 2 minutes
 	},
 
 	destroy: function() {
 		XKit.tools.remove_css("classic_tags");
 		$("#xtags").remove();
-		$("#search_query").attr("placeholder", "Search Tumblr");
+		XKit.extensions.classic_tags.search_input.attr("placeholder", XKit.extensions.classic_tags.placeholder);
 		XKit.extensions.classic_tags.observer.disconnect();
 		clearTimeout(XKit.extensions.classic_tags.count_update_handle);
 	}

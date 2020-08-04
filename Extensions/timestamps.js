@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.11.1 **//
+//* VERSION 2.11.2 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -90,7 +90,9 @@ XKit.extensions.timestamps = new Object({
 		XKit.storage.set("timestamps", "preference_conversion", "done");
 	},
 
-	in_search: false,
+	get in_search() {
+		return XKit.interface.where().search;
+	},
 
 	run: function() {
 		if (XKit.storage.get("timestamps", "preference_conversion") !== "done") {
@@ -105,9 +107,6 @@ XKit.extensions.timestamps = new Object({
 
 		XKit.tools.init_css("timestamps");
 
-		if (XKit.interface.where().search) {
-			this.in_search = true;
-		}
 
 		if (this.preferences.format.value === "") {
 			this.preferences.format.value = "MMMM Do YYYY, h:mm:ss a";

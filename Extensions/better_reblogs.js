@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.3.5 **//
+//* VERSION 1.3.6 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -141,6 +141,10 @@ XKit.extensions.better_reblogs = new Object({
 	run: function() {
 		this.running = true;
 
+		if (!XKit.interface.is_tumblr_page()) {
+			return;	
+		}
+		
 		if (this.preferences.type.value === "nested") {
 			this.run_nested();
 		} else {
