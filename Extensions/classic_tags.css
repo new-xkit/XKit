@@ -1,8 +1,8 @@
 .xtag {
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjIxRDQwNkY4Mzc2MTFFMjlCRUNFNzIyNjBCNEQzRkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjIxRDQwNzA4Mzc2MTFFMjlCRUNFNzIyNjBCNEQzRkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MjFENDA2RDgzNzYxMUUyOUJFQ0U3MjI2MEI0RDNGQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2MjFENDA2RTgzNzYxMUUyOUJFQ0U3MjI2MEI0RDNGQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnPFZNIAAAEiSURBVHjanJS9TgJBGEW/RYFQWBmVSMJLCJR2Sqv2PCJEOiAk/oGlxlhaWYBoZa1ZxvvFO2Yc2J1lb3Kys7uTM/8TGWM6IlKS30TAsLwFXsAUfEkg26AOign/D0EFjEOyAliy/AauwMyr0wInKY39iQpsbQJuwGBN603QBuU0keEQd/ntgPPjpwFOnflcmSND4TFbriSINEesPwTfvqjolHcknAZlI1emPfmQzdP0h6miS/CeU9a2sggbUp9VcAH2cwifwKMV2c13lkOmggdXpKlRtpdREnP/Pfsi27PzDDKVXIM7O9l+5qAbWM1/kiSRZgF6CasZ80xO/CMiKbK+17OY5/HeuW6CIjtMlX3yXXtx69wYmUXCa0X3yiufa/MjwADlV01i2iKErQAAAABJRU5ErkJggg==);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' width='18' height='18' fill='rgba(255,255,255,0.5)'%3E%3Cpath d='M 0 0 L 0 8 L 11 18 L 18 10 L 8 0 L 0 0 z M 3.5 2 A 1.5 1.5 0 0 1 5 3.5 A 1.5 1.5 0 0 1 3.5 5 A 1.5 1.5 0 0 1 2 3.5 A 1.5 1.5 0 0 1 3.5 2 z '%3E%3C/path%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: 13px 50%;
-	border-top: 1px solid #ffffff12;
+	border-top: 1px solid var(--transparent-white-7);
 	position: relative;
 	padding: 0;
 }
@@ -17,7 +17,7 @@
 }
 
 .xtag.selected {
-	background-color: #ffffff12;
+	background-color: var(--transparent-white-7);
 }
 
 .xtag .hide_overflow {
@@ -29,7 +29,7 @@
 .xtag .result_title {
 	width: 88% !important;
 	display: block;
-	color: rgba(255, 255, 255, 0.5);
+	color: var(--transparent-white-65);
 	padding: 8px 0 8px 40px;
 	font-weight: 700;
 	position: relative;
@@ -39,8 +39,7 @@
 	top: 8px;
 	position: absolute;
 	right: 10px;
-	color: #fff;
-	font-size: 13px;
+	color: var(--transparent-white-65);
 	font-weight: 400;
 }
 
@@ -53,6 +52,7 @@
 	font-size: 13px;
 	text-align: center;
 	padding: 10px 10px;
+	margin-top: 3px;
 	background: rgba(0, 0, 0, 0.06);
-	color: rgba(255, 255, 255, 0.54);
+	color: var(--transparent-white-40);
 }
