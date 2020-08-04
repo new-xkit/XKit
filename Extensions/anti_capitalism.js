@@ -1,6 +1,6 @@
 //* TITLE Anti-Capitalism **//
 //* VERSION 1.5.7 **//
-//* DESCRIPTION	Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
+//* DESCRIPTION Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
