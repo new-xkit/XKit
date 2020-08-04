@@ -16,7 +16,7 @@
 	visibility: hidden !important;
 }
 
-.xtag.selected {
+.xtag.selected, .xtag:hover {
 	background-color: var(--transparent-white-7);
 }
 
