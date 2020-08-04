@@ -43,6 +43,11 @@ XKit.extensions.classic_tags = new Object({
 		    default: false,
 		    value: false
 		},
+		"alphabetical_tags": {
+			text: "Sort tags alphabetically",
+		    default: false,
+		    value: false
+		},
 		"sep-3": {
 			text: "Settings",
 			type: "separator"
@@ -300,6 +305,10 @@ XKit.extensions.classic_tags = new Object({
 
 		var extra_classes = "";
 		var m_html = "";
+
+		if (this.preferences.alphabetical_tags.value) {
+			this.tags.tags.sort((a, b) => (a.name > b.name) ? 1 : -1);
+		};
 
 		this.tags.tags.forEach(tag => {
 
