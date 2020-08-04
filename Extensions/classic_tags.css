@@ -7,6 +7,10 @@
 	padding: 0;
 }
 
+.xtag a {
+	text-decoration: none;
+}
+
 .xtag.hidden {
 	display: none !important;
 	visibility: hidden !important;
