@@ -307,8 +307,8 @@ XKit.extensions.classic_tags = new Object({
 		var m_html = "";
 
 		if (this.preferences.alphabetical_tags.value) {
-			this.tags.tags.sort((a, b) => (a.name > b.name) ? 1 : -1);
-		};
+			this.tags.tags.sort((tagA, tagB) => (tagA.name > tagB.name) ? 1 : -1);
+		}
 
 		this.tags.tags.forEach(tag => {
 
