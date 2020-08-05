@@ -36,7 +36,7 @@ XKit.extensions.postblock = new Object({
 	},
 
 	remove: function($post, postID) {
-		$post.remove();
+		XKit.tools.hide_post($post);
 
 		if (postID !== undefined) {
 			XKit.interface.react.get_posts().then($posts => {
@@ -44,7 +44,7 @@ XKit.extensions.postblock = new Object({
 					const $p = $(this);
 					var post_obj = await XKit.interface.react.post($p);
 					if (post_obj.root_id == postID) {
-						$p.remove();
+						XKit.tools.hide_post($p);
 					}
 				});
 			});
@@ -56,10 +56,14 @@ XKit.extensions.postblock = new Object({
 		const post = await XKit.interface.react.post($post);
 		const postID = post.root_id;
 
-		if (altKey) {
-			$post.fadeOut("slow", () => this.remove($post, postID));
+		const blockPost = () => {
+			this.remove($post, postID);
 			this.blacklisted.push(postID);
 			this.save();
+		};
+
+		if (altKey) {
+			blockPost();
 		} else {
 			XKit.window.show(
 				"Block this post?",
@@ -74,9 +78,7 @@ XKit.extensions.postblock = new Object({
 
 			$("#xkit-post-block-ok").click(() => {
 				XKit.window.close();
-				$post.fadeOut("slow", () => this.remove($post, postID));
-				this.blacklisted.push(postID);
-				this.save();
+				blockPost();
 			});
 		}
 	},
