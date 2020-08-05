@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.6.2 **//
+//* VERSION 1.6.3 **//
 //* DESCRIPTION Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -62,12 +62,20 @@ XKit.extensions.anti_capitalism = new Object({
 			await XKit.css_map.getCssMap();
 
 			if (this.preferences.sponsored_posts.value) {
-				const selector = XKit.css_map.keyToClasses("listTimelineObject").map(css => `.${css}:not([data-id])`).join(",");
-				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}", "anti_capitalism`);
+				//const selector = `${XKit.css_map.keyToCss("listTimelineObject")}:not([data-id]):not(${XKit.css_map.keyToCss("masonryTimelineObject")})`;
+
+				const listTimelineObject = XKit.css_map.keyToClasses("listTimelineObject");
+				const masonryTimelineObject = XKit.css_map.keyToClasses("masonryTimelineObject");
+				const selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject]).map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`).join(", ");
+
+				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, "anti_capitalism");
 			}
 
 			if (this.preferences.sidebar_ad.value) {
-				XKit.tools.add_css(`${XKit.css_map.keyToCss('mrecContainer')} { display: none !important; }`, "anti_capitalism");
+				//XKit.tools.add_css(`${XKit.css_map.keyToCss('mrecContainer')} { display: none !important; }`, "anti_capitalism");
+
+				const selector = XKit.css_map.keyToClasses("mrecContainer").map(css => `.${css}`).join(",");
+				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, "anti_capitalism");
 			}
 
 			return;
