@@ -30,9 +30,8 @@ XKit.extensions.vanilla_audio = new Object({
 		"use strict";
 		this.running = true;
 
-		await XKit.css_map.getCssMap();
-
 		if (XKit.page.react) {
+			await XKit.css_map.getCssMap();
 			XKit.tools.add_css(".xkit-audio-player { display: block !important; margin: auto; }", "vanilla_audio");
 			XKit.post_listener.add("vanilla_audio", this.add_audio_react);
 			this.add_audio_react();
@@ -45,7 +44,7 @@ XKit.extensions.vanilla_audio = new Object({
 
 	add_audio_react: function() {
 		"use strict";
-		let audiocontainer_classname = XKit.css_map.keyToClasses('nativePlayer')[0];
+		let audiocontainer_classname = XKit.css_map.keyToCss('nativePlayer')[0];
 		$(`.${audiocontainer_classname}`).not(".xkit-audio-added").each(function() {
 			var $this = $(this);
 			$this.addClass("xkit-audio-added");
