@@ -35,20 +35,19 @@ XKit.extensions.postblock = new Object({
 		XKit.storage.set("postblock", "posts", this.blacklisted.join(","));
 	},
 
-	remove: function($post, postID) {
-		XKit.tools.hide_post($post);
+	remove: function(postID) {
+		const hide = (id) => XKit.interface.hide(`[data-id='${id}']`, "postblock");
 
-		if (postID !== undefined) {
-			XKit.interface.react.get_posts().then($posts => {
-				$posts.each(async function() {
-					const $p = $(this);
-					var post_obj = await XKit.interface.react.post($p);
-					if (post_obj.root_id == postID) {
-						XKit.tools.hide_post($p);
-					}
-				});
+		hide(postID);
+
+		XKit.interface.react.get_posts().then($posts => {
+			$posts.each(async function() {
+				var post_obj = await XKit.interface.react.post($(this));
+				if (post_obj.root_id == postID) {
+					hide(post_obj.id);
+				}
 			});
-		}
+		});
 	},
 
 	block: async function($button, altKey) {
@@ -57,7 +56,7 @@ XKit.extensions.postblock = new Object({
 		const postID = post.root_id;
 
 		const blockPost = () => {
-			this.remove($post, postID);
+			this.remove(postID);
 			this.blacklisted.push(postID);
 			this.save();
 		};

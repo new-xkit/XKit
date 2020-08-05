@@ -1291,15 +1291,8 @@ XKit.extensions.xkit_patches = new Object({
 				return m_return;
 			};
 
-			XKit.tools.hide_selector = function(selector, extension) {
+			XKit.interface.hide = function(selector, extension) {
 				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, extension);
-			};
-			XKit.tools.hide_post = function($post) {
-				$post.css({
-					"height": 0,
-					"margin": 0,
-					"overflow": "hidden"
-				});
 			};
 		},
 
