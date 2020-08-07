@@ -62,10 +62,11 @@ XKit.extensions.anti_capitalism = new Object({
 			await XKit.css_map.getCssMap();
 
 			if (this.preferences.sponsored_posts.value) {
-				//const selector = `${XKit.css_map.keyToCss("listTimelineObject")}:not([data-id]):not(${XKit.css_map.keyToCss("masonryTimelineObject")})`;
-
 				const listTimelineObject = XKit.css_map.keyToClasses("listTimelineObject");
 				const masonryTimelineObject = XKit.css_map.keyToClasses("masonryTimelineObject");
+
+				//find every combination of css selectors that follow the pattern --> listTimelineObject:not([data-id]):not(masonryTimelineObject)
+				//masonryTimelineObject is excluded to not hide part of the /tagged/ page
 				const selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject]).map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`).join(", ");
 
 				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, "anti_capitalism");
