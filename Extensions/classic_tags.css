@@ -1,7 +1,4 @@
 .xtag {
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' width='18' height='18' fill='rgba(255,255,255,0.5)'%3E%3Cpath d='M 0 0 L 0 8 L 11 18 L 18 10 L 8 0 L 0 0 z M 3.5 2 A 1.5 1.5 0 0 1 5 3.5 A 1.5 1.5 0 0 1 3.5 5 A 1.5 1.5 0 0 1 2 3.5 A 1.5 1.5 0 0 1 3.5 2 z '%3E%3C/path%3E%3C/svg%3E");
-	background-repeat: no-repeat;
-	background-position: 13px 50%;
 	border-top: 1px solid var(--transparent-white-7);
 	position: relative;
 	padding: 0;
@@ -28,11 +25,17 @@
 
 .xtag .result_title {
 	width: 88% !important;
-	display: block;
 	color: var(--transparent-white-65);
-	padding: 8px 0 8px 40px;
+	padding-left: 3px;
 	font-weight: 700;
-	position: relative;
+	position: absolute;
+	line-height: 30px;
+}
+
+.xtag .result_icon {
+	display: inline-block;
+	height: 18px;
+	padding: 6px 6px 6px 13px;
 }
 
 .xtag a .count {
