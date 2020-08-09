@@ -76,7 +76,7 @@ XKit.extensions.show_originals = new Object({
 					margin-bottom:8px;
 					transform: translateY(-6px);
 				}
-				.showoriginals-hidden-note-body {
+				.showoriginals-hidden-note {
 					height: 30px !important;
 					line-height: 30px !important;
 					color: rgba(${automatic_color}, 0.8);
@@ -110,7 +110,7 @@ XKit.extensions.show_originals = new Object({
 					background: rgba(${automatic_color}, 0.1);
 					border-color: rgba(${automatic_color}, 0.5);
 				}
-				.showoriginals-note ~ * {
+				.showoriginals-hidden-note ~ * {
 					display: none;
 				}
 				.showoriginals-hidden-completely {
@@ -153,7 +153,7 @@ XKit.extensions.show_originals = new Object({
 
 			} else if (hide_posts_generic.value) {
 				$this.addClass('showoriginals-hidden');
-				$this.prepend('<div class="showoriginals-note"><div class="showoriginals-hidden-note-body">Hidden by Show Originals</div></div>');
+				$this.prepend('<div class="showoriginals-hidden-note">Hidden by Show Originals</div>');
 
 			} else {
 				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--blog-contrasting-title-color,var(--white-on-dark))" fill-opacity="0.5"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>';
@@ -168,7 +168,7 @@ XKit.extensions.show_originals = new Object({
 				const button = '<div class="xkit-button showoriginals-hidden-button">show reblog</div>';
 
 				$this.addClass('showoriginals-hidden');
-				$this.prepend(`<div class="showoriginals-note"><div class="showoriginals-hidden-note-body">${note_text}${button}</div></div>`);
+				$this.prepend(`<div class="showoriginals-hidden-note">${note_text}${button}</div>`);
 
 				// add listener to unhide the post on button click
 				$this.on('click', '.showoriginals-hidden-button', XKit.extensions.show_originals.unhide_post);
