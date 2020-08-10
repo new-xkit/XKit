@@ -59,6 +59,31 @@ XKit.extensions.norecommended = new Object({
 					margin:0;
 					padding-left: 15px;
 				}
+				.norecommended-hidden-button {
+				    position: absolute !important;
+					height: 30px;
+					line-height: 30px;
+					right: 5px;
+					display: none !important;
+				}
+				.norecommended-hidden:hover .norecommended-hidden-button {
+					display: inline-block !important;
+					height: unset;
+					line-height: initial;
+					top: 50% !important;
+					transform: translateY(-50%);
+					margin: 0;
+				}
+				.norecommended-hidden-button {
+					color: rgba(var(--rgb-white-on-dark), 0.8);
+					background: rgba(var(--rgb-white-on-dark), 0.05);
+					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+				}
+				.norecommended-hidden-button:hover {
+					color: rgba(var(--rgb-white-on-dark));
+					background: rgba(var(--rgb-white-on-dark), 0.1);
+					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+				}
 				.norecommended-note ~ * {
 					display: none;
 				}
@@ -83,7 +108,7 @@ XKit.extensions.norecommended = new Object({
 		$('[data-id]:not(.norecommended-done)').each(async function() {
 			const $this = $(this).addClass('norecommended-done');
 			const {no_search, no_pinned, hide_posts_completely} = XKit.extensions.norecommended.preferences;
-			const {recommendationReason} = await XKit.interface.react.post_props($this.attr('data-id'));
+			const {recommendationReason, blogName} = await XKit.interface.react.post_props($this.attr('data-id'));
 
 			if (recommendationReason && recommendationReason.hasOwnProperty('loggingReason')) {
 				const {loggingReason} = recommendationReason;
@@ -95,11 +120,25 @@ XKit.extensions.norecommended = new Object({
 						$this.addClass('norecommended-hidden-completely');
 					} else {
 						$this.addClass('norecommended-hidden');
-						$this.prepend('<div class="norecommended-note">Hidden by No Recommended</div>');
+
+						const button = '<div class="xkit-button norecommended-hidden-button">show post</div>';
+						$this.prepend(`<div class="norecommended-note">recommended post by ${blogName}${button}</div>`);
+
+						// add listener to unhide the post on button click
+						$this.on('click', '.norecommended-hidden-button', XKit.extensions.norecommended.unhide_post);
 					}
 				}
 			}
 		});
+	},
+
+	unhide_post: function(e) {
+		const $button = $(e.target);
+		const $post = $button.parents('.norecommended-hidden');
+		const $note = $button.parents('.norecommended-note');
+
+		$post.removeClass('norecommended-hidden');
+		$note.remove();
 	},
 
 	hide_recommended_on_blogs: function() {
