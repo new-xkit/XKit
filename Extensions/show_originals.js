@@ -194,7 +194,7 @@ XKit.extensions.show_originals = new Object({
 		$('.showoriginals-done').removeClass('showoriginals-done');
 		$('.showoriginals-hidden').removeClass('showoriginals-hidden');
 		$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
-		$('.showoriginals-note').remove();
+		$('.showoriginals-hidden-note').remove();
 		XKit.post_listener.remove('showoriginals');
 		XKit.tools.remove_css("showoriginals");
 	}
