@@ -70,11 +70,14 @@ XKit.extensions.show_originals = new Object({
 
 			const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
 
+			//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+			const shrink_post_amount = '12px';
+
 			XKit.tools.add_css(`
 				.showoriginals-hidden {
 					opacity: 0.65;
-					margin-bottom:8px;
-					transform: translateY(-6px);
+					margin-bottom: calc(20px - ${shrink_post_amount});
+					transform: translateY(calc(-${shrink_post_amount}/2));
 				}
 				.showoriginals-hidden-note {
 					height: 30px !important;
