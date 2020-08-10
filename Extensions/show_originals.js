@@ -69,6 +69,7 @@ XKit.extensions.show_originals = new Object({
 		if (XKit.page.react) {
 
 			const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
+			const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
 
 			//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
 			const shrink_post_amount = '12px';
@@ -104,14 +105,14 @@ XKit.extensions.show_originals = new Object({
 					margin: 0;
 				}
 				.showoriginals-hidden-button {
-					color: rgba(${automatic_color}, 0.8);
-					background: rgba(${automatic_color}, 0.05);
-					border-color: rgba(${automatic_color}, 0.3);
+					color: rgba(${automatic_button_color}, 0.8);
+					background: rgba(${automatic_button_color}, 0.05);
+					border-color: rgba(${automatic_button_color}, 0.3);
 				}
 				.showoriginals-hidden-button:hover {
-					color: rgba(${automatic_color});
-					background: rgba(${automatic_color}, 0.1);
-					border-color: rgba(${automatic_color}, 0.5);
+					color: rgba(${automatic_button_color});
+					background: rgba(${automatic_button_color}, 0.1);
+					border-color: rgba(${automatic_button_color}, 0.5);
 				}
 				.showoriginals-hidden-note ~ * {
 					display: none;
@@ -183,7 +184,7 @@ XKit.extensions.show_originals = new Object({
 	unhide_post: function(e) {
 		const $button = $(e.target);
 		const $post = $button.parents('.showoriginals-hidden');
-		const $note = $button.parents('.showoriginals-note');
+		const $note = $button.parents('.showoriginals-hidden-note');
 
 		$post.removeClass('showoriginals-hidden');
 		$note.remove();
