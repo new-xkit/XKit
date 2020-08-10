@@ -42,6 +42,11 @@ XKit.extensions.norecommended = new Object({
 		this.running = true;
 
 		if (XKit.page.react) {
+
+			//adjust colors to look good on the sidebar if we're there
+			const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
+			const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+
 			//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
 			const shrink_post_amount = '12px';
 
@@ -54,7 +59,7 @@ XKit.extensions.norecommended = new Object({
 				.norecommended-note {
 					height: 30px !important;
 					line-height: 30px !important;
-					color: var(--transparent-white-65);
+					color: ${automatic_color};
 					padding: 0;
 					margin:0;
 					padding-left: 15px;
@@ -75,14 +80,14 @@ XKit.extensions.norecommended = new Object({
 					margin: 0;
 				}
 				.norecommended-hidden-button {
-					color: rgba(var(--rgb-white-on-dark), 0.8);
-					background: rgba(var(--rgb-white-on-dark), 0.05);
-					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+					color: rgba(${automatic_button_color}, 0.8);
+					background: rgba(${automatic_button_color}, 0.05);
+					border-color: rgba(${automatic_button_color}, 0.3);
 				}
 				.norecommended-hidden-button:hover {
-					color: rgba(var(--rgb-white-on-dark));
-					background: rgba(var(--rgb-white-on-dark), 0.1);
-					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+					color: rgba(${automatic_button_color});
+					background: rgba(${automatic_button_color}, 0.1);
+					border-color: rgba(${automatic_button_color}, 0.5);
 				}
 				.norecommended-note ~ * {
 					display: none;
