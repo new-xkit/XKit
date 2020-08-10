@@ -31,7 +31,7 @@ XKit.extensions.norecommended = new Object({
 			value: false
 		},
 		"hide_posts_completely": {
-			text: "Hide posts completely",
+			text: "Hide posts completely (may break post loading if it hides your entire dash)",
 			default: false,
 			value: false,
 			experimental: true
@@ -42,18 +42,28 @@ XKit.extensions.norecommended = new Object({
 		this.running = true;
 
 		if (XKit.page.react) {
+			//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+			const shrink_post_amount = '12px';
+
 			XKit.tools.add_css(`
+				.norecommended-hidden {
+					opacity: 0.65;
+					margin-bottom: calc(20px - ${shrink_post_amount});
+					transform: translateY(calc(-${shrink_post_amount}/2));
+				}
 				.norecommended-note {
-					height: 1em;
-					color: var(--white-on-dark);
-					opacity: 0.4;
-					padding: var(--post-header-vertical-padding) var(--post-padding);
+					height: 30px !important;
+					line-height: 30px !important;
+					color: var(--transparent-white-65);
+					padding: 0;
+					margin:0;
+					padding-left: 15px;
 				}
 				.norecommended-note ~ * {
 					display: none;
 				}
-				.norecommended-hidden,
- 				.norecommended-hidden + :not([data-id]) {
+				.norecommended-hidden-completely,
+ 				.norecommended-hidden-completely + :not([data-id]) {
 					height: 0;
 					margin: 0;
 					overflow: hidden;
@@ -82,8 +92,9 @@ XKit.extensions.norecommended = new Object({
 
 				if ((no_search.value && is_search) || (no_pinned.value && is_pinned) || (!is_search && !is_pinned)) {
 					if (hide_posts_completely.value) {
-						$this.addClass('norecommended-hidden');
+						$this.addClass('norecommended-hidden-completely');
 					} else {
+						$this.addClass('norecommended-hidden');
 						$this.prepend('<div class="norecommended-note">Hidden by No Recommended</div>');
 					}
 				}
@@ -102,6 +113,7 @@ XKit.extensions.norecommended = new Object({
 		this.running = false;
 		$('.norecommended-done').removeClass('norecommended-done');
 		$('.norecommended-hidden').removeClass('norecommended-hidden');
+		$('.norecommended-hidden-completely').removeClass('norecommended-hidden-completely');
 		$('.norecommended-note').remove();
 		XKit.post_listener.remove('norecommended');
 		XKit.tools.remove_css("norecommended");
