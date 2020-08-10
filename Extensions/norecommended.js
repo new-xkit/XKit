@@ -52,7 +52,7 @@ XKit.extensions.norecommended = new Object({
 
 			XKit.tools.add_css(`
 				.norecommended-hidden {
-					opacity: 0.65;
+					opacity: 0.75;
 					margin-bottom: calc(20px - ${shrink_post_amount});
 					transform: translateY(calc(-${shrink_post_amount}/2));
 				}
