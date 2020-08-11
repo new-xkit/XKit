@@ -34,7 +34,6 @@ XKit.extensions.show_originals = new Object({
 			text: "Hide reblogs in the sidebar",
 			default: false,
 			value: false,
-			experimental: true
 		},
 
 		"sep-1": {
@@ -42,20 +41,27 @@ XKit.extensions.show_originals = new Object({
 			type: "separator"
 		},
 		"hide_posts_makelink": {
-			text: "Make hidden reblog indicators links",
+			text: "Open reblogged posts in a new tab when you click the indicator",
 			default: false,
 			value: false
 		},
 		"hide_posts_generic": {
-			text: "Make hidden reblog indicators a generic message",
+			text: 'Use a generic "hidden reblog" message',
 			default: false,
 			value: false
 		},
 		"hide_posts_completely": {
-			text: "Don't show anything to indicate a hidden reblog",
+			text: "Hide reblogs completely (<a id=\"xkit-completely-hide-posts-help\" href=\"#\" onclick=\"return false\">may break endless scrolling</a>)",
 			default: false,
 			value: false,
+			slow: true,
 		},
+	},
+
+	cpanel: function(div) {
+		$("#xkit-completely-hide-posts-help").click(function() {
+			XKit.window.show("Completely hiding posts", 'If you have endless scrolling enabled and XKit completely hides every single post on the first "page" of your dashboard, you may become unable to scroll down to load more posts. Disable this option if you experience an empty dashboard with the loading icon appearing forever.', "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		});
 	},
 
 	run: function() {
@@ -157,7 +163,7 @@ XKit.extensions.show_originals = new Object({
 
 			} else if (hide_posts_generic.value) {
 				$this.addClass('showoriginals-hidden');
-				$this.prepend('<div class="showoriginals-hidden-note">Hidden by Show Originals</div>');
+				$this.prepend('<div class="showoriginals-hidden-note">hidden reblog</div>');
 
 			} else {
 				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--blog-contrasting-title-color,var(--transparent-white-65))" fill-opacity="0.75"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>';
