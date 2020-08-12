@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.4.4 **//
+//* VERSION 0.4.7 **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -33,8 +33,8 @@ XKit.extensions.mass_plus = new Object({
 	},
 	do_headings: function() {
 		$(".heading").each(function() {
-			if ($(this).find(".xkit-mass-plus-buttons-month-inside").length > 0) { 
-				return; 
+			if ($(this).find(".xkit-mass-plus-buttons-month-inside").length > 0) {
+				return;
 			}
 			$(this).append( "<div class=\"xkit-mass-plus-buttons-month-inside\">" +
 				"<div data-type=\"month-select\" class=\"xkit-mass-link xkit-selector\">first 100 in this month</div>" +
@@ -171,15 +171,15 @@ XKit.extensions.mass_plus = new Object({
 		if (last_timestamp.indexOf(" ") !== -1) {
 			last_timestamp = last_timestamp.substring(0, last_timestamp.indexOf(" "));
 		}
-		var blog_shortname = document.location.href.substring(document.location.href.indexOf('mega-editor/') + 12);
-		if (blog_shortname .indexOf("/") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("/")); }
-		if (blog_shortname .indexOf("?") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("?")); }
-		if (blog_shortname .indexOf("#") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("#")); }
+		var [/* root */, /* page */, /* state */, blog_shortname] = location.pathname.split("/");
 		this.search_found_count = 0;
 		this.search_last_timestamp = last_timestamp;
 		this.search_page = 0;
 		this.search_found_posts = [];
-		this.search_url = "http://api.tumblr.com/v2/blog/" + blog_shortname + ".tumblr.com/posts?api_key=" + XKit.api_key + "&tag=" + tag.toLowerCase();
+		this.search_url = `https://api.tumblr.com/v2/blog/${blog_shortname}/posts?` + $.param({
+			"api_key": XKit.api_key,
+			"tag": tag.toLowerCase()
+		});
 		this.search_next_page(tag.toLowerCase());
 	},
 	search_next_page: function(tag) {
@@ -199,7 +199,7 @@ XKit.extensions.mass_plus = new Object({
 					return;
 				}
 				posts_array.forEach(function(post) {
-					XKit.extensions.mass_plus.search_found_posts.push(post.id);
+					XKit.extensions.mass_plus.search_found_posts.push(post.id_string);
 					XKit.extensions.mass_plus.search_found_count++;
 				});
 				if (XKit.extensions.mass_plus.search_found_count < 100 && XKit.extensions.mass_plus.search_page <= 5) {

@@ -1,5 +1,5 @@
 //* TITLE No Recommended **//
-//* VERSION 2.2.4 **//
+//* VERSION 2.3.3 **//
 //* DESCRIPTION Removes recommended posts **//
 //* DETAILS This extension removes recommended posts from your dashboard. To remove Recommended Blogs on the sidebar, please use Tweaks extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -10,26 +10,20 @@ XKit.extensions.norecommended = new Object({
 
 	running: false,
 
-	run: function() {
-		this.running = true;
-		XKit.post_listener.add("norecommended", XKit.extensions.norecommended.do);
-		XKit.extensions.norecommended.do();
-	},
-
 	preferences: {
-	    "sep-0": {
-	        text: "Options",
-	        type: "separator"
-	    },
-		"no_liked": {
-			text: "Get rid of recommended likes",
+		"sep-0": {
+			text: "Options",
+			type: "separator"
+		},
+		"no_search": {
+			text: "Hide recommended posts from followed searches",
+			default: true,
+			value: true
+		},
+		"no_pinned": {
+			text: "Hide pinned posts",
 			default: false,
 			value: false
-		},
-		"no_mini_recs": {
-		    text: "Get rid of two-column recommended blogs",
-		    default: true,
-		    value: true
 		},
 		"hide_recommended_on_blogs": {
 			text: "Hide recommended posts under permalinked posts on user blogs",
@@ -38,59 +32,62 @@ XKit.extensions.norecommended = new Object({
 		}
 	},
 
-	do: function() {
+	run: function() {
+		this.running = true;
 
-	    if (XKit.extensions.norecommended.preferences.no_mini_recs.value) {
-		XKit.tools.add_css(" .recommended-unit-container.blog-card-compact {display: none;}", "norecommended_no_mini_recs");
-	}
-
-		if (XKit.extensions.norecommended.preferences.no_liked.value) {
-			XKit.tools.add_css(" .rapid-recs {display: none;}", "norecommended_no_liked");
+		if (XKit.page.react) {
+			XKit.tools.add_css(`
+				.norecommended-note {
+					height: 1em;
+					color: var(--white-on-dark);
+					opacity: 0.4;
+					padding: var(--post-header-vertical-padding) var(--post-padding);
+				}
+				.norecommended-note ~ * {
+					display: none;
+				}
+			`, 'norecommended');
+			XKit.post_listener.add('norecommended', this.react_do);
+			this.react_do();
+			return;
 		}
 
-		var doResize = false;
-
-		$(".posts .post").not(".norecommended-done").each(function() {
-
-			$(this).addClass("norecommended-done");
-
-			if ($(this).hasClass("is_recommended") || $(this).find(".post_info_recommended").length > 0) {
-				$(this).remove();
-				doResize = true;
-			}
-
-		});
-
-		if (doResize) {
-			XKit.extensions.norecommended.call_tumblr_resize();
+		if (this.preferences.hide_recommended_on_blogs.value) {
+			this.hide_recommended_on_blogs();
 		}
-
-		if (XKit.extensions.norecommended.preferences.hide_recommended_on_blogs.value) {
-			XKit.extensions.norecommended.hide_recommended_on_blogs();
-		}
-
 	},
 
-	call_tumblr_resize: function() {
+	react_do: function() {
+		$('[data-id]:not(.norecommended-done)').each(async function() {
+			const $this = $(this).addClass('norecommended-done');
+			const {no_search, no_pinned} = XKit.extensions.norecommended.preferences;
+			const {recommendationReason} = await XKit.interface.react.post_props($this.attr('data-id'));
 
-		XKit.tools.add_function(function() {
-			Tumblr.Events.trigger("DOMEventor:updateRect");
-		}, true, "");
+			if (recommendationReason && recommendationReason.hasOwnProperty('loggingReason')) {
+				const {loggingReason} = recommendationReason;
+				const is_search = loggingReason.startsWith('search:');
+				const is_pinned = loggingReason.startsWith('pin:');
 
+				if ((no_search.value && is_search) || (no_pinned.value && is_pinned) || (!is_search && !is_pinned)) {
+					$this.prepend('<div class="norecommended-note">Hidden by No Recommended</div>');
+				}
+			}
+		});
 	},
 
 	hide_recommended_on_blogs: function() {
 		if (!XKit.interface.is_tumblr_page()) {
 			//We're not going to expect other themes have this class as well.
-			XKit.tools.add_css(".related-posts-wrapper, .recommended-posts-wrapper {display:none;}", "norecommended_hide_recommended_on_blogs");
+			XKit.tools.add_css(".related-posts-wrapper, .recommended-posts-wrapper {display:none;}", "norecommended");
 		}
 	},
 
 	destroy: function() {
 		this.running = false;
-		XKit.tools.remove_css("norecommended_no_mini_recs");
-		XKit.tools.remove_css("norecommended_no_liked");
-		XKit.tools.remove_css("norecommended_hide_recommended_on_blogs");
+		$('.norecommended-done').removeClass('norecommended-done');
+		$('.norecommended-note').remove();
+		XKit.post_listener.remove('norecommended');
+		XKit.tools.remove_css("norecommended");
 	}
 
 });

@@ -32,11 +32,14 @@ XKit.extensions.theme_editor = new Object({
 			}
 		}
 
-		var xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' +
-			'<li class="no_push"><a href="#" class="customize" id="xkit-theme-editor-button">' +
-			'<div class="hide_overflow">Edit Theme</div>' +
-			'</a></li></ul>';
-		$(".controls_section:eq(1)").before(xf_html);
+		XKit.interface.sidebar.add({
+			id: "xkit-theme-editor-sidebar",
+			title: "Theme Editor",
+			items: [{
+				id: "xkit-theme-editor-button",
+				text: "Edit Theme"
+			}]
+		});
 
 		$("#xkit-theme-editor-button").click(function() {
 
@@ -129,7 +132,7 @@ XKit.extensions.theme_editor = new Object({
 
 	destroy: function() {
 		this.running = false;
-		$("#xkit-theme-editor-ul").remove();
+		XKit.interface.sidebar.remove("xkit-theme-editor-sidebar");
 		$("#xkit-theme-editor-user-theme").remove();
 		XKit.tools.remove_css("theme_editor");
 	}

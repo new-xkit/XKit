@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.8 **//
+//* VERSION 2.3.9 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER new-xkit **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -66,13 +66,10 @@ XKit.extensions.bookmarker = new Object({
 
 		var str = document.location.href.toLowerCase().split("/");
 		if (str.length < 5) { return; }
-
 		if (str[3] !== "dashboard") { return; }
+		if (!str[5]) { return; }
 
-		var post_id = parseInt(str[5]);
-		if (isNaN(post_id) || post_id === 0) { return; }
-
-		post_id = post_id - 1;
+		var post_id = BigInt(str[5]) - BigInt(1);
 
 		if ($("#xkit_bookmark_" + post_id).length <= 0) { return; }
 
@@ -212,11 +209,11 @@ XKit.extensions.bookmarker = new Object({
 
 			} else {
 				// Go to the post!
-				post_id = parseInt(post_id);
+				const dashboard_page = BigInt(post_id) + BigInt(1);
 				if (XKit.extensions.bookmarker.preferences.new_tab.value === true) {
-					window.open("/dashboard/100/" + (post_id + 1) + "/?bookmark=true");
+					window.open("/dashboard/100/" + dashboard_page + "/?bookmark=true");
 				} else {
-					document.location.href = "/dashboard/100/" + (post_id + 1) + "/?bookmark=true";
+					document.location.href = "/dashboard/100/" + dashboard_page + "/?bookmark=true";
 				}
 			}
 

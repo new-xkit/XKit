@@ -47,7 +47,7 @@ module.exports.resourceBuilder = function(file, resource, contentsKey, attribute
 		}
 	});
 
-	file.contents = new Buffer(JSON.stringify(resource));
+	file.contents = Buffer.from(JSON.stringify(resource));
 	file.path = gutil.replaceExtension(file.path, '.json');
 
 	return file;
@@ -122,7 +122,7 @@ module.exports.galleryBuilder = function(galleryFileIn, gallery, attributeMappin
 			galleryFile = new File(galleryFileIn);
 		}
 
-		galleryFile.contents = new Buffer(JSON.stringify(gallery));
+		galleryFile.contents = Buffer.from(JSON.stringify(gallery));
 		this.push(galleryFile);
 		cb();
 	}

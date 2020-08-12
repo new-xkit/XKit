@@ -12,6 +12,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			standard:
 				window.window === window.top &&
 				document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1,
+			form_frame:
+				document.location.href.indexOf("://www.tumblr.com/neue_web/iframe/") !== -1,
 			ask_frame:
 				document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1,
 			blog_frame:
@@ -34,7 +36,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				return;
 			}
 
-			if (XKit.page.standard) {
+			if (XKit.page.standard || XKit.page.form_frame) {
 				XKit.init_normal();
 				return;
 			}
@@ -96,6 +98,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 					return;
 				}
 
+				// Before we run main--if patches is a broken version,
+				// we need to force an update.
+				if (XKit.installed.version('xkit_patches') === '7.2.8') {
+					XKit.special.force_update();
+				}
+
 				// It exists! Great.
 				var xkit_main = XKit.installed.get("xkit_main");
 				if (!xkit_main.errors && xkit_main.script) {
@@ -104,7 +112,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 						XKit.extensions.xkit_main.run();
 					} catch (e) {
-						show_error_reset("Can't run xkit_main:" + e.message);
+						show_error_reset("Can't run xkit_main: " + e.message);
 					}
 				} else {
 					if (xkit_main.error == "not_installed") {
@@ -144,7 +152,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					XKit.frame_mode = true;
 					XKit.extensions.xkit_main.run();
 				} catch (e) {
-					console.error("Can't run xkit_main:" + e.message);
+					console.error("Can't run xkit_main: " + e.message);
 				}
 			}
 
@@ -196,7 +204,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						// We are done!
 						var mdata = {};
 						try {
-							mdata = jQuery.parseJSON(response.responseText);
+							mdata = JSON.parse(response.responseText);
 						} catch (e) {
 							// Server returned bad thingy.
 							console.error("Unable to download '" + path +
@@ -2421,7 +2429,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 							XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 							try {
-								to_return.data = jQuery.parseJSON(response.responseText);
+								to_return.data = JSON.parse(response.responseText);
 								func(to_return);
 							} catch (e) {
 								to_return.error = true;
@@ -2496,7 +2504,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					onload: function(response) {
 
 						try {
-							to_return.data = jQuery.parseJSON(response.responseText);
+							to_return.data = JSON.parse(response.responseText);
 							func(to_return);
 						} catch (e) {
 							to_return.error = true;
@@ -3201,6 +3209,33 @@ var xkit_global_start = Date.now();  // log start timestamp
 		},
 		special: {
 
+			force_update: function() {
+				XKit.install("xkit_updates", data => {
+					if (data.errors) {
+						if (data.storage_error === true) {
+							show_error_installation("[Code: 401] Storage error: " + data.error);
+						} else {
+							if (data.server_down === true) {
+								show_error_installation("[Code: 101] Can't reach New XKit servers");
+							} else {
+								show_error_installation("[Code: 100] Server returned error/empty script");
+							}
+						}
+						return;
+					}
+
+					try {
+						eval(data.script + "\n//# sourceURL=xkit/xkit_updates.js");
+						XKit.window.show("Forcing Extension Updates",
+							"Please do not navigate away from this page. Your extensions are being updated for compatibility with the latest XKit version." +
+							'<div id="xkit-forced-auto-updates-message">Initializing...</div>', "info");
+						XKit.extensions.xkit_updates.get_list(true);
+					} catch (e) {
+						show_error_installation("[Code: 102] " + e.message);
+					}
+				});
+			},
+
 			reset: function() {
 
 				XKit.window.show("Reset XKit", "Really delete all the data stored in XKit?<br/>Your settings will be lost. You can not undo this action.", "question", "<div id=\"reset-xkit-yes\" class=\"xkit-button default\">Yes, reset XKit</div><div id=\"reset-xkit-no\" class=\"xkit-button\">Cancel</div>");
@@ -3510,7 +3545,7 @@ function xkit_install() {
 	XKit.install("xkit_installer", function(mdata) {
 		if (mdata.errors) {
 			if (mdata.storage_error === true) {
-				show_error_installation("[Code: 401] Storage error:" + mdata.error);
+				show_error_installation("[Code: 401] Storage error: " + mdata.error);
 			} else {
 				if (mdata.server_down === true) {
 					show_error_installation("[Code: 101] Can't reach New XKit servers");
@@ -3525,7 +3560,7 @@ function xkit_install() {
 			eval(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js");
 			XKit.extensions.xkit_installer.run();
 		} catch (e) {
-			show_error_installation("[Code: 102]" + e.message);
+			show_error_installation("[Code: 102] " + e.message);
 		}
 
 	});
@@ -3544,78 +3579,41 @@ function show_error_installation(message) {
 		"error",
 
 		'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-		'<div id="xkit-install-troubleshooting" class="xkit-button">Troubleshooting</div>'
+		'<div id="xkit-install-troubleshooting" class="xkit-button">Troubleshooting &rarr;</div>'
 	);
 
 	$("#xkit-install-troubleshooting").click(function() {
 
-		XKit.window.show("Troubleshooting",
+		XKit.window.show(
+			"Connection Troubleshooting",
 
-			"<b>Part 1: The Exact Problem</b>" +
-			"<br/><br/>" +
-			"If you're reading this, New XKit failed to reach our GitHub Pages site at" +
-			"<p>https://new-xkit.github.io/XKit/</p>" +
-			"and could not install. However, we can't figure out what's gone wrong " +
-			"without your help, since a few things can cause it." +
-			"<br/><br/>" +
-			"The first thing to check is if GitHub is down. If GitHub Status reports " +
-			"100%, press continue. If not, sit tight - this outage will be temporary, " +
-			"and you can try installing again later.",
+			`The easiest way to determine the problem is to attempt a direct connection.
+			Use the <b>Connect</b> button to open a test page from our servers in a new tab,
+			then follow the appropriate advice:<br><br>
+
+			<b>If you can connect</b>, something local is impeding New XKit's connection to <code>new-xkit.github.io</code> -
+			this is usually another browser add-on blocking it. Be sure to whitelist the domain in any script blockers.<br><br>
+
+			<b>If you can't connect</b>, either GitHub is having issues or there's a problem with your network.
+			If GitHub Status reports 100%, try troubleshooting the error your browser gives you, or wait a while and try again if it only times out.<br><br>
+
+			<b>In either case</b>, feel free to reach out to our team for help.`,
 
 			"question",
 
-			'<a class="xkit-button default" href="https://status.github.com" target="_blank">GitHub Status</a>' +
-			'<div class="xkit-button" id="xkit-install-troubleshooting-2">Continue &rarr;</div>' +
-			'<div class="xkit-button" id="xkit-close-message">Close</div>'
+			'<a href="https://new-xkit.github.io/XKit/Test" class="xkit-button default" target="_blank">Connect</a>' +
+			'<a href="https://www.githubstatus.com" class="xkit-button" target="_blank">GitHub Status</a>' +
+			'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button" target="_blank">New XKit Blog</a>' +
+			'<div id="xkit-close-message" class="xkit-button">Close</div>'
 		);
 
-		$("#xkit-install-troubleshooting-2").click(function() {
-
-			XKit.window.show("Troubleshooting",
-
-				"<b>Part 2: Other Browser Add-ons</b>" +
-				"<br/><br/>" +
-				"The most common source of problems is other browser extensions, " +
-				"such as ad- or script-blockers. Adblockers causing interference " +
-				"is almost always temporary, so if you have one, try updating its " +
-				"lists (through its own settings)." +
-				"<br/><br/>" +
-				"If you use a script blocker, be sure to add" +
-				"<p style='display: inline-block; margin: 0 0.5em'>new-xkit.github.io</p>" +
-				"to its whitelist." +
-				"<br/><br/>" +
-				"<b>If you've tried installing New XKit with no other add-ons enabled</b>, or would like to " +
-				"read on regardless, press continue.",
-
-				"question",
-
-				'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
-				'<div class="xkit-button" id="xkit-install-troubleshooting-3">Continue &rarr;</div>',
-
-				true
-			);
-
-			$("#xkit-install-troubleshooting-3").click(function() {
-
-				XKit.window.show("Troubleshooting",
-
-					"<b>Part 3: Security Settings and Network Problems</b>" +
-					"<br/><br/>" +
-					"Try visiting our GitHub Pages site using the link below. " +
-					"If your browser fails to display it, the error it gives you there " +
-					"is what you need to tackle." +
-					"<br/><br/>" +
-					"If that page displays normally, or if you would like help anyway, " +
-					"please get in touch with us at New XKit Support.",
-
-					"question",
-
-					'<a class="xkit-button default" href="https://new-xkit.github.io/XKit/" target="_blank">New XKit on GitHub Pages</a>' +
-					'<a class="xkit-button" href="https://new-xkit-support.tumblr.com">New XKit Support</a>' +
-					'<a class="xkit-button" id="xkit-close-message">OK</a>'
-				);
-			});
+		$(".xkit-window-msg code").css({
+			"font-family": "monospace",
+			"user-select": "all",
+			"-moz-user-select": "all",
+			"-webkit-user-select": "all"
 		});
+
 	});
 }
 
@@ -3626,7 +3624,21 @@ function show_error_script(message) {
 
 function show_error_reset(message) {
 	// Shortcut to call when there is a javascript error.
-	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>It is recommended that you reset XKit. Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.tumblr.com/xkit_reset\" class=\"xkit-button\">Reset XKit</a><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">New XKit Support</a>");
+	XKit.window.show(
+		"XKit ran into an error.",
+
+		"<b>Generated Error message:</b><br/><p>" + message + "</p>" +
+		"It is recommended that you update XKit.<br><br>" +
+		"If you've seen this message more than once, try restarting your browser. " +
+		"If you continue to see this message after completing the update process and restarting your browser, please contact us at New XKit Support.",
+
+		"error",
+
+		'<div id="xkit-close-message" class="xkit-button">OK</div>' +
+		'<div id="xkit-force-update" class="xkit-button default">Update Extensions</div>' +
+		'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>'
+	);
+	$("#xkit-force-update").click(XKit.special.force_update);
 }
 
 function show_error_update(message) {

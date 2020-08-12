@@ -1,6 +1,6 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.3 **//
-//* DESCRIPTION Better than 'shut up!' **//
+//* VERSION 2.4.0 **//
+//* DESCRIPTION Better than &quot;shut up!&quot; **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -14,7 +14,7 @@ XKit.extensions.mute = new Object({
 
 	preferences: {
 		"title": {
-			text: "Muted users",
+			text: `Muted users&emsp;<div id="xkit-mute-user" class="xkit-button">Add</div>`,
 			type: "separator"
 		}
 	},
@@ -708,6 +708,40 @@ XKit.extensions.mute = new Object({
 	control_panel_div: "",
 
 	cpanel: function(mdiv) {
+		$("#xkit-mute-user").unbind("click");
+		$("#xkit-mute-user").click(() => {
+			XKit.window.show("Mute user",
+				"Enter a username to show muting options." +
+				`<input type="text" maxlength="32" placeholder="e.g. new-xkit-discussion" class="xkit-textbox" id="xkit-muting-user">`,
+				"question",
+				`<div id="xkit-mute-continue" class="xkit-button default">Mute &rarr;</div>` +
+				`<div id="xkit-close-message" class="xkit-button">Cancel</div>`);
+
+			function complain(reason) {
+				$("#xkit-muting-user")
+				.val("")
+				.attr("placeholder", reason)
+				.css("border-color", "red")
+				.click(function() {
+					$(this)
+					.unbind("click")
+					.removeAttr("style")
+					.attr("placeholder", "e.g. new-xkit-discussion");
+				});
+			}
+
+			$("#xkit-mute-continue").click(() => {
+				const username = $("#xkit-muting-user").val().trim().toLowerCase();
+
+				if (username.length == 0) {
+					complain("This can't be blank!");
+				} else if (!/^[A-Za-z0-9-]+$/.test(username)) {
+					complain("Usernames are only comprised of letters, numbers and dashes.");
+				} else {
+					XKit.extensions.mute.show_window(username);
+				}
+			});
+		});
 
 		if ($("#xkit-control-panel-mute").length > 0) {
 			$("#xkit-control-panel-mute").remove();
@@ -726,8 +760,7 @@ XKit.extensions.mute = new Object({
 		}
 
 		if (found_count <= 0) {
-			var no_muted_html = "<div id=\"xkit-control-panel-mute\" class=\"no-muted-users\"><b>You have no muted users.</b><br/>You can add some using the menu on their avatars on your dashboard.<br/>Hover over their avatar, click on the user options icon, then Mute.</div>";
-			$(mdiv).append(no_muted_html);
+			$(mdiv).append(`<div id="xkit-control-panel-mute" class="no-muted-users"><b>You have no muted users.</b></div>`);
 			return;
 		}
 

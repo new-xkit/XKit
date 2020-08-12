@@ -33,6 +33,16 @@
 	border-radius: 6px;
 }
 
+.xkit--react .xkit-audio-plus-slider-container {
+	width: 100px;
+	padding-right: 10px;
+	z-index: 1;
+}
+
+.xkit--react .xkit-extension-setting[data-extension-id="audio_plus"][data-setting-id="pop_out_player"] {
+	display: none;
+}
+
 #right_column.has_docked_audio {
 	opacity: 0.3;
 }
@@ -51,7 +61,7 @@
 	z-index: -1;
 	transition:
 		bottom .15s cubic-bezier(.165,.84,.44,1),
-		transform .15s cubic-bezier(.165,.84,.44,1), 
+		transform .15s cubic-bezier(.165,.84,.44,1),
 		opacity .15s cubic-bezier(.165,.84,.44,1);
 }
 

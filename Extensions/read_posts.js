@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.4 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER jesskay **//
@@ -21,11 +21,13 @@ XKit.extensions.read_posts = new Object({
 	undimmed_post: null,
 	currently_undimming: false,
 
+	post_selector: "[data-id]",
+
 	run: function() {
 		XKit.tools.init_css('read_posts');
 		XKit.post_listener.add('read_posts_process', this.process_posts);
 		this.process_posts();
-		$(document).on("click", ".post_notes_inner *, .post_control.reply, .tumblelog_menu_button, .share_social_button, .post_control_menu", XKit.extensions.read_posts.undim);
+		$(document).on("click", `${XKit.extensions.read_posts.post_selector} footer`, XKit.extensions.read_posts.undim);
 		$(document).on("click", XKit.extensions.read_posts.redim);
 
 		this.running = true;
@@ -50,8 +52,8 @@ XKit.extensions.read_posts = new Object({
 	undim: function(e) {
 		XKit.extensions.read_posts.currently_undimming = true;
 		var m_obj = $(e.target)[0];
-		if (!$(m_obj).hasClass("post")) {
-			m_obj = $(m_obj).parentsUntil('.post').parent();
+		if (!m_obj.hasAttribute("data-id")) {
+			m_obj = $(m_obj).parentsUntil(XKit.extensions.read_posts.post_selector).parent();
 		}
 		if (!m_obj.hasClass("read_posts_read")) {
 			return;
@@ -83,18 +85,23 @@ XKit.extensions.read_posts = new Object({
 		}
 	},
 
-	process_posts: function() {
+	process_posts: async function() {
 		if (!XKit.interface.where().dashboard) {
 			return;  /* don't run on non-dashboard, since that can be in the background of a new post page */
 		}
 
-		$('.post.with_permalink').not('.read_posts_done').not(".xkit_view_on_dash_post").each(function(index) {
-			var post_id = $(this).attr('id').replace('post_', '');
+		await XKit.css_map.getCssMap();
+		var avatarSelector = XKit.css_map.keyToCss("avatar");
+
+		$('#base-container [data-id]').not('.read_posts_done').not(".xkit_view_on_dash_post").each(function(index) {
+			var post_id = $(this).data('id');
 
 			if (XKit.extensions.read_posts.post_is_read(post_id)) {
 				$(this).addClass('read_posts_read');
 				if (XKit.extensions.read_posts.preferences.dim_avatars_only.value === true) {
 					$(this).addClass('read_posts_avatar_only');
+
+					$(this).find(avatarSelector).addClass("read_posts_post_avatar");
 				}
 			} else {
 				XKit.extensions.read_posts.mark_post_read(post_id);
@@ -105,16 +112,17 @@ XKit.extensions.read_posts = new Object({
 	},
 
 	remove_classes: function() {
-		$('.post.read_posts_done').removeClass('read_posts_done');
-		$('.post.read_posts_read').removeClass('read_posts_read');
-		$('.post.read_posts_avatar_only').removeClass('read_posts_avatar_only');
+		$(`${XKit.extensions.read_posts.post_selector}.read_posts_done`).removeClass('read_posts_done');
+		$(`${XKit.extensions.read_posts.post_selector}.read_posts_read`).removeClass('read_posts_read');
+		$(`${XKit.extensions.read_posts.post_selector}.read_posts_avatar_only`).removeClass('read_posts_avatar_only');
+		$(`${XKit.extensions.read_posts.post_selector}.read_posts_post_avatars`).removeClass('read_posts_post_avatar');
 	},
 
 	destroy: function() {
 		this.remove_classes();
 		XKit.tools.remove_css('read_posts');
 		XKit.post_listener.remove('read_posts_process');
-		$("document").off("click", ".post.read_posts_read .post_control.reply", XKit.extensions.read_posts.undim);
+		$("document").off("click", `${XKit.extensions.read_posts.post_selector} footer`, XKit.extensions.read_posts.undim);
 		this.running = false;
 	}
 

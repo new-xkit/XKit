@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.6.0 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -8,6 +8,8 @@
 XKit.extensions.audio_plus = {
 
 	running: false,
+
+	audioBlockClass: "",
 
 	current_player: null,
 	timeout_counter: 0,
@@ -33,7 +35,7 @@ XKit.extensions.audio_plus = {
 		}
 	},
 
-	can_see_docked_posts: $("#right_column").length != 0,
+	can_see_docked_posts: $("#right_column").length !== 0,
 
 	run: function() {
 		this.running = true;
@@ -42,27 +44,127 @@ XKit.extensions.audio_plus = {
 			return;
 		}
 
-		if ($("#posts").length === 0) {
+		if (!XKit.page.react && $("#posts").length === 0) {
 			return;
 		}
 
 		XKit.tools.init_css("audio_plus");
 
-		if (XKit.extensions.audio_plus.preferences.add_volume_control.value) {
-			$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", XKit.extensions.audio_plus.slider_handle_event);
-			XKit.post_listener.add("audio_plus", function() { setTimeout(XKit.extensions.audio_plus.do, 10); });
-			setTimeout(function() { XKit.extensions.audio_plus.do(); }, 500);
+		if (XKit.page.react) {
+			if (this.preferences.add_volume_control.value) {
+				XKit.css_map.getCssMap().then(({audioBlock}) => {
+					this.audioBlockClass = `.${audioBlock[0]}`;
+					XKit.post_listener.add('audio_plus', this.react_do);
+					this.react_do();
+
+					XKit.tools.add_css(
+						`${this.audioBlockClass} { position: relative !important; }`,
+						'audio_plus'
+					);
+				});
+			}
+
+			return;
 		}
 
-		if (XKit.extensions.audio_plus.preferences.pop_out_player.value) {
-			window.addEventListener("scroll", XKit.extensions.audio_plus.handle_scroll, false);
-			XKit.extensions.audio_plus.create_pop_out_controls();
+		if (this.preferences.add_volume_control.value) {
+			$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", this.slider_handle_event);
+			XKit.post_listener.add("audio_plus", () => setTimeout(this.do, 10));
+			setTimeout(() => this.do(), 500);
+		}
 
-			//keep tabs on whether there's a docked video post
+		if (this.preferences.pop_out_player.value) {
+			window.addEventListener("scroll", this.handle_scroll, false);
+			this.create_pop_out_controls();
+
 			if (this.can_see_docked_posts) {
 				var targetNode = document.getElementById("right_column");
 				var config = {attributes: true};
 				this.dock_observer.observe(targetNode, config);
+			}
+		}
+	},
+
+	react_do: function() {
+		const {audioBlockClass, react_slider_handle_event} = XKit.extensions.audio_plus;
+
+		$(`${audioBlockClass}:not(.audio_plus_done)`)
+		.addClass('audio_plus_done')
+		.each(function() {
+			const $audioBlock = $(this);
+			const audio = this.querySelector('audio');
+			const slider = this.querySelector('.xkit-audio-plus-slider');
+
+			if (audio === null) {
+				return;
+			}
+
+			$audioBlock.on('change', '.xkit-audio-plus-slider', react_slider_handle_event);
+
+			if (slider === null) {
+				$audioBlock.append(`
+					<div class="xkit-audio-plus-slider-container">
+						<input type="range" value="100" min="0" max="100" class="xkit-audio-plus-slider"></input>
+					</div>
+				`);
+			} else {
+				const $slider = $(slider);
+				const currentVolume = audio.volume;
+				$slider.val(currentVolume * 100);
+			}
+
+		});
+	},
+
+	react_slider_handle_event: function(e) {
+		e.stopPropagation();
+
+		const {audioBlockClass} = XKit.extensions.audio_plus;
+		const $slider = $(e.target);
+		const $audioBlock = $slider.parents(audioBlockClass);
+		const volume = $slider.val();
+
+		$slider.attr('title', volume);
+
+		const audio = $audioBlock[0].querySelector('audio');
+		if (audio !== null && audio.volume !== volume / 100) {
+			audio.volume = volume / 100;
+		}
+	},
+
+	do: function() {
+
+		var posts = XKit.interface.get_posts("audio_plus_done");
+
+		$(posts).each(function() {
+			$(this).addClass("audio_plus_done");
+
+			var m_post = XKit.interface.post($(this));
+
+			if (!m_post || m_post.type !== "audio") { return; }
+
+			// Check if hosted by Tumblr:
+			if ($(this).find(".audio-player").length === 0) { return; }
+
+			var slider_html = "<div data-post-id=\"" + m_post.id + "\" class=\"xkit-audio-plus-slider-container\">" +
+								"<input type=\"range\" value=\"100\" min=\"0\" max=\"100\" data-post-id=\"" + m_post.id + "\" title=\"somepeoplelikefish\" class=\"xkit-audio-plus-slider\"></input>" +
+						"</div>";
+
+			$(this).find(".audio-player").after(slider_html);
+		});
+
+	},
+
+	slider_handle_event: function(e) {
+		var slider = e.target;
+		var player = $(e.target).closest(".native-audio-container")[0];
+
+		var volume = slider.value;
+		if (e.type === "click" || e.type === "mousemove") {
+			slider.title = volume;
+			var audio = player.querySelector("audio");
+			if (audio && audio.volume !== volume / 100) {
+				audio.volume = volume / 100;
 			}
 		}
 	},
@@ -143,24 +245,24 @@ XKit.extensions.audio_plus = {
 				<div id="xkit-audio-plus-controls-undock"></div>
 			</div>
 		`;
-		
+
 		var psuedo_post = document.createElement("div");
 		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
 		psuedo_post.innerHTML = controls_markup;
 		document.body.appendChild(psuedo_post);
-		
+
 		this.pop_out_controls = psuedo_post;
 		this.pop_out_controls_progress = psuedo_post.querySelector(".progress");
 		this.pop_out_controls_track_name = psuedo_post.querySelector(".track-name");
 		this.pop_out_controls_track_artist = psuedo_post.querySelector(".track-artist");
-		
+
 		//event listeners
 		var audio_plus = XKit.extensions.audio_plus;
 		var controls = psuedo_post.querySelector(".xkit-audio-plus-controls");
 		var progress = psuedo_post.querySelector(".progress");
 		var playPause = psuedo_post.querySelector(".play-pause");
 		var controls_undock_container = psuedo_post.querySelector("#xkit-audio-plus-controls-undock-container");
-		
+
 		//change progress
 		controls.addEventListener("mousedown", function(event) {
 			if (event.target === playPause) {
@@ -243,43 +345,6 @@ XKit.extensions.audio_plus = {
 		return elt;
 	},
 
-	slider_handle_event: function(e) {
-		var slider = e.target;
-		var player = $(e.target).closest(".native-audio-container")[0];
-
-		var volume = slider.value;
-		if (e.type === "click" || e.type === "mousemove") {
-			slider.title = volume;
-			var audio = player.querySelector("audio");
-			if (audio && audio.volume !== volume / 100) {
-				audio.volume = volume / 100;
-			}
-		}
-	},
-
-	do: function() {
-
-		var posts = XKit.interface.get_posts("audio_plus_done");
-
-		$(posts).each(function() {
-			$(this).addClass("audio_plus_done");
-
-			var m_post = XKit.interface.post($(this));
-
-			if (!m_post || m_post.type !== "audio") { return; }
-
-			// Check if hosted by Tumblr:
-			if ($(this).find(".audio-player").length === 0) { return; }
-
-			var slider_html = "<div data-post-id=\"" + m_post.id + "\" class=\"xkit-audio-plus-slider-container\">" +
-								"<input type=\"range\" value=\"100\" min=\"0\" max=\"100\" data-post-id=\"" + m_post.id + "\" title=\"somepeoplelikefish\" class=\"xkit-audio-plus-slider\"></input>" +
-						"</div>";
-
-			$(this).find(".audio-player").after(slider_html);
-		});
-
-	},
-
 	handle_scroll: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		if (audio_plus.scroll_waiting) {
@@ -295,7 +360,7 @@ XKit.extensions.audio_plus = {
 	check_pop_out: function() {
 		var audio_plus = XKit.extensions.audio_plus;
 		audio_plus.scroll_waiting = false;
-		
+
 		// Arbitrarily select the first if there are multiple
 		var pause_icon = document.querySelectorAll(".post_media .audio-player .icon_pause")[0];
 		if (pause_icon) {
@@ -365,18 +430,28 @@ XKit.extensions.audio_plus = {
 
 	destroy: function() {
 		this.running = false;
-
-		XKit.tools.add_function(function() {
-			clearInterval(window.xkit_audio_plus_check_current_interval);
-		}, true, "");
-		$("#xkit-audio-plus-current-player").remove();
-
-		document.body.removeChild(this.pop_out_controls);
+		XKit.tools.remove_css('audio_plus');
 		XKit.post_listener.remove("audio_plus");
-		window.removeEventListener("scroll", this.handle_scroll, false);
 
-		this.dock_observer.disconnect();
-		this.progress_observer.disconnect();
-		this.icon_observer.disconnect();
+		$(document).off("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider");
+
+		$('.xkit-audio-plus-slider-container').remove();
+		$('.audio_plus_done')
+			.removeClass('audio_plus_done')
+			.off('change', '.xkit-audio-plus-slider');
+
+		if (this.pop_out_controls) {
+			XKit.tools.add_function(function() {
+				clearInterval(window.xkit_audio_plus_check_current_interval);
+			}, true, "");
+			$("#xkit-audio-plus-current-player").remove();
+
+			document.body.removeChild(this.pop_out_controls);
+			window.removeEventListener("scroll", this.handle_scroll, false);
+
+			this.dock_observer.disconnect();
+			this.progress_observer.disconnect();
+			this.icon_observer.disconnect();
+		}
 	}
 };

@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.1.2 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -140,13 +140,13 @@ XKit.extensions.xkit_updates = new Object({
 					"unable to contact the servers and download the latest updates. This " +
 					"might be a temporary server error or a problem with your connection." +
 					"<br/><br/>" +
-					"Press continue below to start troubleshooting. <b>It's important to fix this issue</b> - " +
-					"if you don't, you'll be running an out-of-date version of New XKit, " +
-					"which might not work properly and cause problems.",
+					"We recommend troubleshooting immediately. <b>It's important to fix this issue</b> - " +
+					"if you don't, you'll be running out-of-date versions of extensions, " +
+					"which may not work properly or cause problems.",
 
 					"error",
 
-					'<div class="xkit-button default" id="xkit-updates-troubleshooting">Continue &rarr;</div>' +
+					'<div class="xkit-button default" id="xkit-updates-troubleshooting">Troubleshooting &rarr;</div>' +
 					'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button">New XKit Blog</a>' +
 					'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>' +
 					'<div class="xkit-button" id="xkit-close-message">OK</div>'
@@ -154,72 +154,36 @@ XKit.extensions.xkit_updates = new Object({
 
 				$("#xkit-updates-troubleshooting").click(function() {
 
-					XKit.window.show("Troubleshooting",
+					XKit.window.show(
+						"Connection Troubleshooting",
 
-						"<b>Part 1: The Exact Problem</b>" +
-						"<br/><br/>" +
-						"If you're reading this, New XKit failed to reach our GitHub Pages site at" +
-						"<p>https://new-xkit.github.io/XKit/</p>" +
-						"and produced an error notification. However, we can't figure out what's gone wrong " +
-						"without your help, since a few things can cause it." +
-						"<br/><br/>" +
-						"The first thing to check is if GitHub is down. If GitHub Status reports " +
-						"100%, press continue. If not, sit tight - this outage will be temporary.",
+						`The easiest way to determine the problem is to attempt a direct connection.
+						Use the <b>Connect</b> button to open a test page from our servers in a new tab,
+						then follow the appropriate advice:<br><br>
+
+						<b>If you can connect</b>, something local is impeding New XKit's connection to <code>new-xkit.github.io</code> -
+						this is usually another browser add-on blocking it. Be sure to whitelist the domain in any script blockers.<br><br>
+
+						<b>If you can't connect</b>, either GitHub is having issues or there's a problem with your network.
+						If GitHub Status reports 100%, try troubleshooting the error your browser gives you, or wait a while and try again if it only times out.<br><br>
+
+						<b>In either case</b>, feel free to reach out to our team for help.`,
 
 						"question",
 
-						'<a class="xkit-button default" href="https://status.github.com" target="_blank">GitHub Status</a>' +
-						'<div class="xkit-button" id="xkit-updates-troubleshooting-2">Continue &rarr;</div>' +
-						'<div class="xkit-button" id="xkit-close-message">Close</div>'
+						'<a href="https://new-xkit.github.io/XKit/Test" class="xkit-button default" target="_blank">Connect</a>' +
+						'<a href="https://www.githubstatus.com" class="xkit-button" target="_blank">GitHub Status</a>' +
+						'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button" target="_blank">New XKit Blog</a>' +
+						'<div id="xkit-close-message" class="xkit-button">Close</div>'
 					);
 
-					$("#xkit-updates-troubleshooting-2").click(function() {
-
-						XKit.window.show("Troubleshooting",
-
-							"<b>Part 2: Other Browser Add-ons</b>" +
-							"<br/><br/>" +
-							"The most common source of problems is other browser extensions, " +
-							"such as ad- or script-blockers. Adblockers causing interference " +
-							"is almost always temporary, so if you have one, try updating its " +
-							"lists (through its own settings)." +
-							"<br/><br/>" +
-							"If you use a script blocker, be sure to add" +
-							"<p style='display: inline-block; margin: 0 0.5em;>new-xkit.github.io</p>" +
-							"to its whitelist." +
-							"<br/><br/>" +
-							"<b>If you've already updated your adblocker's lists on three consecutive days</b>, or would like to " +
-							"read on regardless, press continue.",
-
-							"question",
-
-							'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
-							'<div class="xkit-button" id="xkit-updates-troubleshooting-3">Continue &rarr;</div>',
-
-							true
-						);
-
-						$("#xkit-updates-troubleshooting-3").click(function() {
-
-							XKit.window.show("Troubleshooting",
-
-								"<b>Part 3: Security Settings and Network Problems</b>" +
-								"<br/><br/>" +
-								"Try visiting our GitHub Pages site using the link below. " +
-								"If your browser fails to display it, the error it gives you there " +
-								"is what you need to tackle." +
-								"<br/><br/>" +
-								"If that page displays normally, or if you would like help anyway, " +
-								"please get in touch with us at New XKit Support.",
-
-								"question",
-
-								'<a class="xkit-button default" href="https://new-xkit.github.io/XKit" target="_blank">New XKit on GitHub Pages</a>' +
-								'<a class="xkit-button" href="https://new-xkit-support.tumblr.com">New XKit Support</a>' +
-								'<a class="xkit-button" id="xkit-close-message">OK</a>'
-							);
-						});
+					$(".xkit-window-msg code").css({
+						"font-family": "monospace",
+						"user-select": "all",
+						"-moz-user-select": "all",
+						"-webkit-user-select": "all"
 					});
+
 				});
 			});
 

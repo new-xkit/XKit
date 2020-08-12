@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.5.3 **//
+//* VERSION 3.0.0 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -103,8 +103,10 @@ XKit.extensions.classic_header = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
+
+		await XKit.css_map.getCssMap();
 
 		XKit.tools.init_css("classic_header");
 		$("#xoldeheader").remove();
@@ -113,22 +115,35 @@ XKit.extensions.classic_header = new Object({
 			XKit.extensions.classic_header.show_blogs();
 		}
 		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
-			$( function() {
-				var cwidth = $(".l-content").outerWidth() + 30; // +10 to match l-container, +20 to allow for right padding
-				if (cwidth < 816) { return; } // either l-content does not exist or the screen is too small to need to do anything
-				var lpad = 1; // even with the correct width, the tumblr logo is just one pixel off lining up perfectly
-				if (XKit.extensions.tweaks.preferences.old_sidebar_width.value && $("#right_column").length > 0) {
-					lpad += 75; // # of pixels added to the dashboard's left margin by this tweak
-				}
-				XKit.tools.add_css(
-				"@media screen and (min-width: " + cwidth + "px) {" +
-					".l-header {" +
-						"max-width: " + cwidth + "px !important;" +
-						"padding-left: " + lpad + "px !important;" +
-					"}" +
-				"}",
-				"classic_header_fixed_width");
-			});
+			let containerWidth = $(".l-container:not(.l-container--flex)").css("width");
+			let contentSidePad = $(".l-content").css("padding-left");
+			let logoLeftPad = $(".png-logo").css("padding-left");
+
+			if (containerWidth && contentSidePad && logoLeftPad) {
+
+				XKit.tools.add_css(`
+					.l-header {
+						max-width: ${containerWidth} !important;
+						padding: 0 ${contentSidePad} !important;
+					}
+					.logo {
+						margin-left: -${logoLeftPad};
+					}`,
+				"classic_header");
+
+				XKit.installed.when_running("tweaks", function() {
+					let mainLeftMargin = $("#left_column").css("margin-left");
+
+					if (mainLeftMargin && mainLeftMargin !== "0px") {
+						XKit.tools.add_css(`
+							.l-header {
+								max-width: calc(${containerWidth} - ${mainLeftMargin}) !important;
+								transform: translateX(calc(${mainLeftMargin} / 2));
+							}`,
+						"classic_header");
+					}
+				});
+			}
 		}
 
 		if (XKit.extensions.classic_header.preferences.fix_logo.value) {
@@ -144,11 +159,11 @@ XKit.extensions.classic_header = new Object({
 				.logo .logo-anchor .preload-container {
 					opacity: 0 !important;
 				}`,
-			"classic_header_fix_logo");
+			"classic_header");
 		}
 
 		if (XKit.extensions.classic_header.preferences.hide_compose.value) {
-			XKit.tools.add_css(".compose-button { display: none; }", "classic_header_hide_compose");
+			XKit.tools.add_css(".compose-button { display: none; }", "classic_header");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fixed_position.value) {
@@ -159,14 +174,14 @@ XKit.extensions.classic_header = new Object({
 			XKit.tools.add_css(" .l-header-container { position: absolute !important; box-shadow: none; }" +
 								".post_avatar.post-avatar--sticky .post_avatar_wrapper { top: 14px; }" +
 								"#xwidgets-drawer, #xwidgets-opener { transform: translate(0,-52px); z-index: 91 !important; }",
-								"classic_header_fixed_position");
+								"classic_header");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fix_color.value) {
 			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; }" +
-								".selected .tab_notice, .tab_notice { background: #bc3333 !important; }" +
-								".tab_bar .tab.selected .tab_anchor::before { opacity: 0.5; }",
-								"classic_header_fixed_color");
+								".selected .tab_notice, .tab_notice { background: #bc3333 !important; }",
+								"classic_header");
+			$(".tab.iconic.selected").addClass("was-selected").removeClass("selected");
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
@@ -203,9 +218,9 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		if (XKit.extensions.classic_header.preferences.appearance.value === "box") {
-			XKit.tools.add_css(".xoldeheader-item { border-radius: 7px !important; }", "classic_header_box");
+			XKit.tools.add_css(".xoldeheader-item { border-radius: 7px !important; }", "classic_header");
 		} else if (XKit.extensions.classic_header.preferences.appearance.value === "square") {
-			XKit.tools.add_css(".xoldeheader-item { border-radius: 0px !important; }", "classic_header_square");
+			XKit.tools.add_css(".xoldeheader-item { border-radius: 0px !important; }", "classic_header");
 		}
 
 		try {
@@ -253,7 +268,13 @@ XKit.extensions.classic_header = new Object({
 				}
 			}
 
-			$("#user_tools").prepend('<div id="xoldeheader">' + m_html + '</div>');
+			let target;
+			if (XKit.page.react) {
+				target = $(XKit.css_map.keyToCss('menuRight'));
+			} else {
+				target = $('#user_tools');
+			}
+			target.prepend('<div id="xoldeheader">' + m_html + '</div>');
 
 			if (XKit.extensions.classic_header.preferences.show_bubble.value === true) {
 				$(".xoldeheader-item").tipTip({maxWidth: "auto", delay: 10, edgeOffset: 5 });
@@ -286,16 +307,10 @@ XKit.extensions.classic_header = new Object({
 			Tumblr.KeyCommands.scroll_offset = 69;
 		}, true);
 		XKit.tools.remove_css("classic_header");
-		XKit.tools.remove_css("classic_header_fixed_color");
-		XKit.tools.remove_css("classic_header_fixed_position");
-		XKit.tools.remove_css("classic_header_fixed_width");
-		XKit.tools.remove_css("classic_header_fix_logo");
-		XKit.tools.remove_css("classic_header_hide_compose");
 		XKit.tools.remove_css("classic_header_mobile_sticky");
 		$(".nav-item-goodbye").remove();
 		$("#xoldeheader").remove();
-		XKit.tools.remove_css("classic_header_box");
-		XKit.tools.remove_css("classic_header_square");
+		$(".tab.iconic.was-selected").addClass("selected").removeClass("was-selected");
 	}
 
 });

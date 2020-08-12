@@ -1,7 +1,7 @@
 {
   "name": "XKit",
   "description": "The extension framework for Tumblr.",
-  "version": "1.4.1",
+  "version": "2.0.1",
   "main": "xkit.js",
   "repository": {
     "type": "git",
@@ -31,21 +31,40 @@
   ],
   "scripts": {
     "dev": "gulp server",
-    "test": "gulp lint:scripts"
+    "test": "gulp lint:scripts",
+    "lint": "web-ext lint",
+    "build": "web-ext build",
+    "sign": "web-ext sign"
   },
   "devDependencies": {
-    "connect": "^3.6.6",
-    "del": "^1.2.0",
-    "gulp": "^3.9.1",
-    "gulp-cached": "^1.1.0",
-    "gulp-csslint": "^0.2.0",
+    "connect": "^3.7.0",
+    "del": "^1.2.1",
+    "gulp": "^4.0.2",
+    "gulp-cached": "^1.1.1",
     "gulp-eslint": "^3.0.1",
-    "gulp-util": "^3.0.6",
-    "gulp-zip": "^3.0.2",
-    "jpm": "^1.0.1",
+    "gulp-util": "^3.0.8",
     "merge-stream": "^0.1.8",
-    "morgan": "^1.6.1",
-    "serve-static": "^1.10.0",
-    "through2": "^2.0.0"
+    "morgan": "^1.10.0",
+    "serve-static": "^1.14.1",
+    "through2": "^2.0.5",
+    "web-ext": "^4.2.0"
+  },
+  "webExt": {
+    "ignoreFiles": [
+      ".*",
+      "dev/",
+      "docs/",
+      "Extensions/",
+      "Themes/",
+      "gulpfile.js",
+      "LICENSE",
+      "package-lock.json",
+      "package.json",
+      "*.md",
+      "*.sh"
+    ],
+    "lint": {
+      "selfHosted": true
+    }
   }
 }

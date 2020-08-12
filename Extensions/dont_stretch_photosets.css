@@ -1,0 +1,10 @@
+.post_full.is_photo .post_media_photo,
+.post_full.is_photoset .photoset .photoset_row,
+.post_full.is_photo .photoset .photoset_row,
+.post_full.is_photoset .photoset .photoset_row img {
+    width: initial !important;
+    height: initial !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}

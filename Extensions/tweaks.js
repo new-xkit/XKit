@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.7.1 **/
+//* VERSION 6.0.11 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -291,18 +291,50 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			desktop_only: true
 		},
-		"show_customize": {
-			text: "Show Mass Post Editor and Blog Settings buttons",
-			default: true,
-			value: true,
-			desktop_only: true
-		},
 		"hide_follower_count": {
 			text: "Hide your follower count in the account menu and on the sidebar",
 			default: false,
 			value: false,
 			desktop_only: true
-		}
+		},
+		notification_badge_style: {
+			text: "Notification badge style",
+			default: "default",
+			value: "default",
+			desktop_only: true,
+			type: "combo",
+			values: [
+				"Default", "default",
+				"Hidden", "hidden",
+				"White", "white",
+				"Old Red (Palette-dependent)", "oldred",
+				"Old Red (Always red)", "olderredder",
+			]
+		},
+		hide_activity_notification_badge: {
+			text: "Hide the activity notification badge",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		hide_post_highlight: {
+			text: "Hide the post highlight that appears when using jk to scroll",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		grayscale_new_post_button: {
+			text: "Turn the New Post button gray",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
+		subtle_follow_button: {
+			text: "Make the Follow button more subtle inside posts",
+			default: false,
+			value: false,
+			desktop_only: true
+		},
 	},
 
 	default_page_title: "",
@@ -311,8 +343,11 @@ XKit.extensions.tweaks = new Object({
 		XKit.extensions.tweaks.process_wrap_tags_one_line();
 	}),
 
-	run: function() {
+	run: async function() {
 		this.running = true;
+
+		await XKit.css_map.getCssMap();
+
 		this.css_to_add = "";
 
 		if (!XKit.interface.is_tumblr_page()) { return; }
@@ -351,6 +386,10 @@ XKit.extensions.tweaks = new Object({
 			".ui_notes .activity-notification .activity-notification__activity" +
 				"{ transform: translate(-10px); }" +
 
+			// Remove ask responses (currently always blank, and messes up the activity dropdown)
+			".ui_notes .activity-notification .activity-notification__activity_response.is_part_answer" +
+				"{ display: none; }" +
+
 			// Remove the speech bubble from conversational notes and put it back in the right place
 			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational" +
 				"{ background-color: transparent !important; padding: 5px 0; }" +
@@ -364,7 +403,8 @@ XKit.extensions.tweaks = new Object({
 				"{ padding: 0; min-width: 25px; }" +
 
 			// Allow user avatars to use the padding too
-			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar" +
+			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar," +
+			".ui_notes .activity-notification .activity-notification__avatar .flagged-post" +
 				"{ margin: 0; }" +
 
 			// Shrink post type icons
@@ -412,7 +452,7 @@ XKit.extensions.tweaks = new Object({
 			"tweaks_slim_activity_feed");
 		}
 
-		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
+		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value && !XKit.interface.where().following) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
 			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
 			"tweaks_old_sidebar_width");
@@ -518,8 +558,12 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
-			$("#tumblr_radar").css("display", "none");
-			$(".radar_header").parent().css("display", "none");
+			if (XKit.page.react) {
+				$(`${XKit.css_map.keyToCss('radar')}`).parent().hide();
+			} else {
+				$("#tumblr_radar").css("display", "none");
+				$(".radar_header").parent().css("display", "none");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.real_red.value) {
@@ -601,12 +645,23 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_like_animation.value) {
-			XKit.extensions.tweaks.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
+			if (XKit.page.react) {
+				XKit.extensions.tweaks.add_css(`${XKit.css_map.keyToCss('postLikeHeartAnimation')} { display: none !important; }`, "xkit_tweaks_hide_like_animation");
+			} else {
+				XKit.extensions.tweaks.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
 			if (!XKit.browser().mobile) { // mobile stuff
-				XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
+				if (XKit.page.react) {
+					let stickyContainerSelector = XKit.css_map.keyToClasses('stickyContainer').map(cssClass => `.${cssClass} > div`).join(',');
+					XKit.extensions.tweaks.add_css(`${stickyContainerSelector} {
+						position: unset !important;
+					}`, 'xkit_pin_avatars');
+				} else {
+					XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
+				}
 			}
 		}
 
@@ -615,7 +670,11 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
-			XKit.extensions.tweaks.add_css(".controls_section.recommended_tumblelogs { display: none !important; }", "xkit_tweaks_hide_recommended");
+			if (XKit.page.react) {
+				$(`${XKit.css_map.keyToCss('recommendedBlogs')}`).parent().hide();
+			} else {
+				XKit.extensions.tweaks.add_css(".controls_section.recommended_tumblelogs { display: none !important; }", "xkit_tweaks_hide_recommended");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share_menu.value) {
@@ -660,7 +719,14 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_follows.value) {
-			XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+			if (XKit.page.react) {
+				let postFollowButtonSelectors = XKit.css_map.descendantSelector('post', 'followButton');
+				XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
+					display: none !important;
+				}`, 'xkit_tweaks_hide_follows');
+			} else {
+				XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value) {
@@ -727,56 +793,64 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.show_customize.value) {
-			var user_url = XKit.tools.get_current_blog();
+		if (XKit.extensions.tweaks.preferences.notification_badge_style.value !== "default" && XKit.page.react) {
+			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cls => `header a[tabindex="-1"] > .${cls}, header span[tabindex="-1"] > .${cls}`).join(', ');
+			let notificationBadgeStyle = '';
+			switch (XKit.extensions.tweaks.preferences.notification_badge_style.value) {
+				case "hidden":
+					notificationBadgeStyle = 'display: none !important;';
+					break;
+				case "white":
+					notificationBadgeStyle = 'background: var(--white-on-dark) !important;';
+					break;
+				case "oldred":
+					notificationBadgeStyle = `background: var(--red) !important;
+						color: var(--white-on-dark) !important;`;
+					break;
+				case "olderredder":
+					notificationBadgeStyle = `background: #bb2502 !important;
+						color: #fff !important;`;
+					break;
+			}
+			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
+				${notificationBadgeStyle}
+			}`, 'xkit_tweaks_notification_badge_style');
+		}
 
-			if (typeof user_url === "undefined") {
-				XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
-				return;
-			}
+		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value && XKit.page.react) {
+			let activityAriaLabel = await XKit.interface.translate('Activity');
+			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cssClass => `button[aria-label="${activityAriaLabel}"] .${cssClass}`).join(',');
+			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { 
+				display: none !important;
+			}`, 'xkit_tweaks_hide_activity_notification_badge');
+		}
 
-			// Patch for custom domains.
-			if ($("#popover_blogs > .popover_inner").length > 0) {
-				user_url = $("#popover_blogs > .popover_inner").children(".item:first-child").attr('id').substring(9);
-			}
+		if (XKit.extensions.tweaks.preferences.hide_post_highlight.value && XKit.page.react) {
+			const ltoSel = XKit.css_map.keyToCss('listTimelineObjectInner');
+			XKit.extensions.tweaks.add_css(`${ltoSel} {
+				box-shadow: none !important;
+			}`, 'xkit_tweaks_hide_post_highlight');
+		}
 
-			var add_mega_link = true;
-			if ($(".small_links").length > 0) {
-				try {
-					$(".small_links a").each(function() {
-						var m_link = $(this).attr('href');
-						if (m_link.indexOf('/mega-editor') !== -1) {
-							add_mega_link = false;
-							return false;
-						}
-					});
-				} catch (e) {
-					// Meh.
-				}
-			}
+		if (XKit.extensions.tweaks.preferences.grayscale_new_post_button.value && XKit.page.react) {
+			let postIconButtonSel = XKit.css_map.keyToClasses('postIconButton').map(cssClass => `.${cssClass} span`).join(',');
+			XKit.extensions.tweaks.add_css(`${postIconButtonSel} {
+				filter: grayscale(100%);
+			}`, 'xkit_tweaks_grayscale_new_post_button');
+		}
 
-			var x_html = '<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/", "") + '/settings/" target="_blog_settings">Blog Settings</a>';
-			if (add_mega_link) {
-				x_html = '<div class="small_links by-xkit">' +
-											'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
-											'<a href="/blog/' + user_url.replace("/", "") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
-						'</div>';
-			}
-			if ($(".small_links").length > 0 && !add_mega_link) {
-				$(".small_links:first").append(x_html);
-			} else {
-				if ($("#dashboard_controls_open_blog").length > 0) {
-					// If using Old Stats, append there
-					$("#dashboard_controls_open_blog").after(x_html);
-				} else {
-					// Otherwise just tack it onto the end of the right column's controls
-					$(".controls_section:last").after(x_html);
-				}
-			}
+		if (XKit.extensions.tweaks.preferences.subtle_follow_button.value && XKit.page.react) {
+			let followButtonSelectors = XKit.css_map.keyToClasses('followButton');
+			let postSelectors = XKit.css_map.keyToClasses('post');
+			let postFollowButtonSelectors = postSelectors.map(postCssClass => {
+				return followButtonSelectors.map(followCssClass => `.${postCssClass} .${followCssClass}`).join(', ');
+			}).join(', ');
+			XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
+				color: var(--gray-40) !important;
+			}`, 'xkit_tweaks_subtle_follow_button');
 		}
 
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
-
 	},
 
 	show_all_tags_button_event: function() {
@@ -972,6 +1046,10 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display", "block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
+		if (XKit.page.react) {
+			$(`${XKit.css_map.keyToCss('radar')}`).parent().show();
+			$(`${XKit.css_map.keyToCss('recommendedBlogs')}`).parent().show();
+		}
 
 		XKit.tools.remove_css("tweaks_grey_urls");
 	}

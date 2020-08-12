@@ -1,16 +1,22 @@
-.mutuals::after, .mutuals::before{
+.mutuals::after, .mutuals::before {
 	font-family: tumblr-icons, None;
 	font-weight: normal;
 	font-size: 1.23em;
 	line-height: 0;
 }
 
-.mutuals:not(.mutuals-front)::after{
+.mutuals:not(.mutuals-front)::after {
 	content: "\EA59";
 	padding-left: 0.3em;
 }
 
-.mutuals.mutuals-front::before{
+.mutuals.mutuals-front::before {
 	content: "\EA59";
 	padding-right: 0.3em;
+}
+
+body.xkit-april-fools .mutuals:not(.mutuals-front)::after,
+body.xkit-april-fools .mutuals.mutuals-front::before {
+	content: "\EAA7";
+	color: #00b8ff;
 }

@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.1.1 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -12,16 +12,34 @@
 
 		run: function() {
 
-			if (typeof document.location.href !== "undefined") {
-				if (document.location.href.indexOf("://www.tumblr.com/login") !== -1 || document.location.href.indexOf("://www.tumblr.com/settings") !== -1) {
-					console.log("Refusing to run XKit, login or settings page!");
-					return;
-				}
+			if (location.href.includes("://www.tumblr.com/login") || location.href.includes("://www.tumblr.com/settings")) {
+				console.log("Refusing to run XKit, login or settings page!");
+				return;
+			}
+
+			if (!document.doctype || document.doctype.name !== "html") {
+				console.log("Refusing to run XKit, not an HTML document!");
+				return;
 			}
 
 			if (XKit.extensions.xkit_main.running === true) {
 				return;
 			}
+
+			if (XKit.page.react === undefined) {
+				XKit.page.react = Boolean($("link[href*='/pop/']").length);
+				if (XKit.page.react) {
+					$("body").addClass('xkit--react');
+					const waitUntilReactLoaded = setInterval(() => {
+						if ($('[data-rh]').length === 0) {
+							clearInterval(waitUntilReactLoaded);
+							this.run();
+						}
+					}, 100);
+					return;
+				}
+			}
+
 			this.running = true;
 
 			console.log("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
@@ -49,21 +67,31 @@
 					}
 
 					if (XKit.installed.enabled(extension.id)) {
+						let promise;
 
 						if (XKit.frame_mode) {
 							if (extension.frame) {
-								XKit.extensions[extension.id].run();
+								promise = XKit.extensions[extension.id].run();
 							} else if (typeof XKit.extensions[extension.id].frame_run !== "undefined") {
-								XKit.extensions[extension.id].frame_run();
+								promise = XKit.extensions[extension.id].frame_run();
 							} else {
 								this.disabled_extensions.push(extension.id + " (in frame)");
 								continue;
 							}
 						} else if (!extension.frame) {
-							XKit.extensions[extension.id].run();
+							promise = XKit.extensions[extension.id].run();
 						} else {
 							this.disabled_extensions.push(extension.id + " (not in frame)");
 							continue;
+						}
+
+						if (promise instanceof Promise) {
+							promise.catch(e => {
+								console.error(
+									`[XKit Main] Could not run ${extension.id} (async)\n`,
+									e
+								);
+							});
 						}
 					} else {
 						this.disabled_extensions.push(extension.id);
@@ -76,13 +104,13 @@
 					this.disabled_extensions.push(extension.id + " (error)");
 
 					switch (extension.id) {
-					case "xkit_patches":
-					case "xkit_preferences":
-					case "xkit_updates":
-						// defined in xkit.js
-						/* globals show_error_reset */
-						show_error_reset("Can't run " + extension.id + ": " + e.message);
-						fatal = true;
+						case "xkit_patches":
+						case "xkit_preferences":
+						case "xkit_updates":
+							// defined in xkit.js
+							/* globals show_error_reset */
+							show_error_reset("Can't run " + extension.id + ": " + e.message);
+							fatal = true;
 					}
 
 					if (fatal) {
@@ -108,16 +136,16 @@
 				}
 
 				switch (XKit.extensions[extension_id].preferences[pref].type) {
-				case "text":
-					break;
-				case "blog":
-					XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value.substring(1, XKit.extensions[extension_id].preferences[pref].value.length - 1);
-					break;
-				case undefined:
-				case "checkbox":
-					if (typeof XKit.extensions[extension_id].preferences[pref].value !== "boolean") {
-						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value === "true";
-					}
+					case "text":
+						break;
+					case "blog":
+						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value.substring(1, XKit.extensions[extension_id].preferences[pref].value.length - 1);
+						break;
+					case undefined:
+					case "checkbox":
+						if (typeof XKit.extensions[extension_id].preferences[pref].value !== "boolean") {
+							XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value === "true";
+						}
 				}
 
 			}

@@ -1,5 +1,5 @@
 //* TITLE ReplyViewer **//
-//* VERSION 0.3.2 **//
+//* VERSION 0.3.6 **//
 //* DESCRIPTION View post replies easily **//
 //* DETAILS The close relative of TagViewer, this extension allows you to see what replies, answers and additional content added to it while reblogging on any post. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -83,7 +83,7 @@ XKit.extensions.replyviewer = new Object({
 		$.ajax({
 			url: m_url,
 			dataType: 'json'
-		}).error(function() {
+		}).fail(function() {
 
 			XKit.window.close();
 			XKit.window.show("Unable to fetch required data", "ReplyViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -104,7 +104,7 @@ XKit.extensions.replyviewer = new Object({
 				var post_type = this.type;
 				var blog_name = this.blog_name;
 				var post_id = this.post_id;
-				var blog_avatar = this.avatar_url[48];
+				var blog_avatar = this.avatar_url[64];
 				var post_url = "";
 				var content = "";
 				var only_text = false;

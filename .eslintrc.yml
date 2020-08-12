@@ -1,7 +1,8 @@
 ---
   parserOptions:
-    ecmaVersion: 6
+    ecmaVersion: 2018
   env:
+    es6: true
     browser: true
     jquery: true
   extends: eslint:recommended
@@ -26,7 +27,7 @@
         requireParamDescription: false
         requireReturnDescription: false
 
-    indent: [error, tab]
+    indent: [error, tab, {SwitchCase: 1}]
     semi: error
     brace-style: [error, 1tbs, allowSingleLine: true]
     linebreak-style: [error, unix]
@@ -41,9 +42,11 @@
       - before: true
         after: true
   globals:
+    BigInt: false
     _: true
     XKit: true
     XBridge: true
+    centerIt: true
     Tumblr: true
     add_tag: true
 

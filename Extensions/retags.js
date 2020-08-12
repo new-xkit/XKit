@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.2.5 **//
+//* VERSION     1.2.8 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -9,7 +9,7 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: XKit.api_key,
-	selectors: '.type_2,.type_8,.type_6,.reblog:not(.ui_avatar_link, .retags_has_processed),.is_reblog,.is_reblog_naked,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
+	selectors: '.type_2,.type_8,.type_6,.reblog:not(.ui_avatar_link, .retags_has_processed),.is_reblog:not(.rollup),.is_reblog_naked,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
 
 	run: function() {
@@ -212,20 +212,17 @@ XKit.extensions.retags = {
 		Object.keys(cache).forEach(function(key) {
 			var id_match;
 			if ((id_match = key.match(/^post_([0-9]+)$/))) {
-				postIds.push(parseInt(id_match[1], 10));
+				postIds.push(id_match[1]);
 			} else {
 				settingKeys.push(key);
 			}
 		});
 
-		// Now sort the post IDs in descending order and take only the first
-		// few, so we only keep the newest posts.
-		postIds.sort(function(id_one, id_two) { return id_two - id_one; });
-		if (postIds.length > XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED) {
-			postIds.length = XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED;
-		}
+		postIds.map(id => id.padStart(20, '0')).sort();
+		postIds = postIds.slice(-this.POST_CACHE_CLEAR_PRESERVED);
 		postIds.forEach(function(id) {
-			settingKeys.push('post_' + id);
+			const idWithoutPadding = id.match(/^0*(\d+)/)[1];
+			settingKeys.push('post_' + idWithoutPadding);
 		});
 
 		// And finally write back to storage!
@@ -265,7 +262,7 @@ XKit.extensions.retags = {
 	$('<style class="retags"> ' +
 		'.ui_note, .ui_notes .activity-notification { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
-		'.activity-notification.is_retags, .activity-notification.is_reply, .activity-notification.is_reblog:not(.naked), .activity-notification.user_mention, .activity-notification.note_mention { display: flex; }' +
+		'.activity-notification.is_retags, .activity-notification.is_reply, .activity-notification.is_reblog:not(.naked):not(.rollup), .activity-notification.user_mention, .activity-notification.note_mention { display: flex; }' +
 	'</style>'),
 
 	mobile_toggle:

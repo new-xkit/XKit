@@ -1,5 +1,5 @@
 //* TITLE Classic Search **//
-//* VERSION 1.0.5 **//
+//* VERSION 2.0.1 **//
 //* DESCRIPTION Get the old search back **//
 //* DETAILS This is a very simple extension that simply redirects your search requests to the old Tumblr tag search pages. Note that features of the new search page, such as multiple tag search will not work when this extension is enabled. **//
 //* DEVELOPER new-xkit **//
@@ -17,8 +17,8 @@ XKit.extensions.disable_search = {
 		},
 		"open_in_new_tab": {
 			text: "Open search results in a new tab",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		}
 	},
 
@@ -26,10 +26,43 @@ XKit.extensions.disable_search = {
 	run: function() {
 
 		this.running = true;
+
 		if (!XKit.interface.is_tumblr_page()) {
 			return;
 		}
+
+		if (XKit.page.react) {
+			const $search = $('form[role="search"][action="//www.tumblr.com/search"]');
+			const $input = $search.find('input');
+			const $tagged = $search.clone();
+
+			$search.hide();
+			$search.after($tagged);
+
+			$input.before($input.clone());
+
+			$tagged.addClass("xkit-classic-search");
+			$tagged.find('input').replaceWith($input);
+			$tagged.on("keydown", event => event.stopPropagation());
+			$tagged.on("submit", event => {
+				event.preventDefault();
+				event.stopPropagation();
+
+				const query = event.target.querySelector('input').value;
+				const address = `//www.tumblr.com/tagged/${query}`;
+
+				if (XKit.extensions.disable_search.preferences.open_in_new_tab.value) {
+					window.open(address);
+				} else {
+					location.assign(address);
+				}
+			});
+
+			return;
+		}
+
 		$('#search_form').on('submit', XKit.extensions.disable_search.do);
+
 		var search_result_click_handler = function(e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -39,6 +72,7 @@ XKit.extensions.disable_search = {
 				document.location = e.currentTarget.href;
 			}
 		};
+
 		var mo = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
 				if (mutation.target.className === 'scrollable_container'
@@ -58,6 +92,7 @@ XKit.extensions.disable_search = {
 				}
 			});
 		});
+
 		mo.observe($('#search_results_container')[0], {childList: true, subtree: true});
 
 	},
@@ -81,6 +116,8 @@ XKit.extensions.disable_search = {
 	destroy: function() {
 		this.running = false;
 		$('#search_form').off('submit', XKit.extensions.disable_search.do);
+		$('form[role="search"][action="//www.tumblr.com/search"]').show();
+		$('.xkit-classic-search').remove();
 	}
 
 };
