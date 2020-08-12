@@ -69,24 +69,24 @@ XKit.extensions.show_originals = new Object({
 	run: async function() {
 		this.running = true;
 
+		const where = XKit.interface.where();
+
 		this.my_blogs = XKit.tools.get_blogs();
 
-		// This could be made to work on react by detecting css mapped manualPaginatorButtons, but it's not really necessary
-		/*
-		if (!$("body").hasClass("with_auto_paginate")) {
-			if (XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
-				XKit.notifications.add("Show Originals only works when Endless Scrolling is turned on. Click here to learn more and disable this warning.", "warning", false, function() {
-					XKit.window.show("Endless Scrolling required.", "Show Originals require Endless Scrolling to be enabled on your dashboard. Click on the Tumblr Settings button (gear icon) on top-right of the page and then Dashboard > Enable endless scrolling.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		if (where.dashboard && XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
+			const nextAriaLabel = await XKit.interface.translate('Next');
+			if ($(`button[aria-label="${nextAriaLabel}"]`).length) {
+				XKit.notifications.add("Show Originals works best when Endless Scrolling is turned on. Click here to learn more and dismiss this popup.", "warning", false, function() {
+					XKit.window.show("Endless Scrolling recommended.", "Show Originals works best when Endless Scrolling is enabled on your dashboard. If you want to enable it, click on the Account Settings button (person icon) on top-right of the page and then Settings > Dashboard > Enable endless scrolling.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					XKit.storage.set("show_originals", "shown_warning_about_scrolling", "yass");
 				});
 			}
-			return;
 		}
-		*/
+
 
 		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
 
-		const where = XKit.interface.where();
+
 		const show_sidebar_definitely = where.dashboard || where.likes;
 		const show_sidebar_ifmine = where.queue || where.channel || where.drafts;
 
