@@ -13,12 +13,19 @@ XKit.extensions.show_originals = new Object({
 	slow: true,
 
 	status: "false",
+	lbl_on: "on",
+	lbl_off: "off",
 	my_blogs: [],
 
 	preferences: {
 		"sep-0": {
 			text: "Functionality",
 			type: "separator"
+		},
+		"show_on_sidebar": {
+			text: "Show toggle in the sidebar",
+			default: true,
+			value: true
 		},
 		"show_my_posts": {
 			text: "Don't hide my posts",
@@ -59,13 +66,49 @@ XKit.extensions.show_originals = new Object({
 		});
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 
 		this.my_blogs = XKit.tools.get_blogs();
 
-		//I don't do anything with this right now since XKit.interface.sidebar isn't a thing
+		// This could be made to work on react by detecting css mapped manualPaginatorButtons, but it's not really necessary
+		/*
+		if (!$("body").hasClass("with_auto_paginate")) {
+			if (XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
+				XKit.notifications.add("Show Originals only works when Endless Scrolling is turned on. Click here to learn more and disable this warning.", "warning", false, function() {
+					XKit.window.show("Endless Scrolling required.", "Show Originals require Endless Scrolling to be enabled on your dashboard. Click on the Tumblr Settings button (gear icon) on top-right of the page and then Dashboard > Enable endless scrolling.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.storage.set("show_originals", "shown_warning_about_scrolling", "yass");
+				});
+			}
+			return;
+		}
+		*/
+
 		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
+
+		const where = XKit.interface.where();
+		const show_sidebar_definitely = where.dashboard || where.likes;
+		const show_sidebar_ifmine = where.queue || where.channel || where.drafts;
+
+		if (this.preferences.show_on_sidebar.value && (show_sidebar_definitely || show_sidebar_ifmine && !this.preferences.show_my_posts.value)) {
+			await XKit.interface.react.sidebar.add({
+				id: "xshow_originals_sidebar",
+				title: "Show Originals",
+				items: [{
+					id: "xshoworiginals_button",
+					text: "Originals Only",
+					count: XKit.extensions.show_originals.lbl_off
+				}]
+			});
+		}
+
+		XKit.extensions.show_originals.update_button();
+
+		$("#xshoworiginals_button").click(function() {
+			XKit.extensions.show_originals.toggle();
+
+			return false;
+		});
 
 		if (XKit.page.react) {
 
@@ -131,13 +174,36 @@ XKit.extensions.show_originals = new Object({
 		}
 	},
 
+	update_button: function() {
+
+		if (XKit.extensions.show_originals.status == "true") {
+			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_on);
+		} else {
+			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_off);
+		}
+
+	},
+
+	toggle: function() {
+
+		if (XKit.extensions.show_originals.status == "true") {
+			XKit.extensions.show_originals.status = "false";
+		} else {
+			XKit.extensions.show_originals.status = "true";
+		}
+
+		XKit.extensions.show_originals.update_button();
+		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
+
+	},
+
 	react_do: function() {
 
 		//runs on each post
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
-			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName, postUrl} = await XKit.interface.react.post_props($this.attr('data-id'));
+			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName} = await XKit.interface.react.post_props($this.attr('data-id'));
 
 			// Don't hide posts that aren't reblogs
 			if (!rebloggedFromUrl) { return; }
@@ -193,6 +259,7 @@ XKit.extensions.show_originals = new Object({
 		$('.showoriginals-hidden-note').remove();
 		XKit.post_listener.remove('showoriginals');
 		XKit.tools.remove_css("showoriginals");
+		XKit.interface.react.sidebar.remove("xshow_originals_sidebar");
 	}
 
 });
