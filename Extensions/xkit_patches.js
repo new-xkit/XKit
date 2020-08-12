@@ -1177,7 +1177,7 @@ XKit.extensions.xkit_patches = new Object({
 					if (XKit.page.react) {
 
 						await XKit.css_map.getCssMap().then(() => {
-							const $sidebar = $(XKit.css_map.keyToCss("sidebar")).find("aside");
+							const $sidebar = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
 
 							const html = `<div id="xkit_sidebar"></div>`;
 
