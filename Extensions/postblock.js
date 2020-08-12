@@ -50,7 +50,7 @@ XKit.extensions.postblock = new Object({
 		const self = XKit.extensions.postblock;
 
 		const $button = $(this);
-		const altKey = event.altKey
+		const altKey = event.altKey;
 		const $post = $button.parents("[data-id]");
 		const post = await XKit.interface.react.post($post);
 		const postID = post.root_id;
