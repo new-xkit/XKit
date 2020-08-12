@@ -691,15 +691,14 @@ XKit.extensions.xkit_patches = new Object({
 				 * @return {String} Plug-ready sidebar controls section HTML
 				 */
 				construct_react: async function(section) {
-					await XKit.css_map.getCssMap();
-
 					section.items = section.items || [];
 					section.small = section.small || [];
 
-					const sidebarTitle = XKit.css_map.keyToClasses("sidebarTitle").join(" ");
-
 					var html = `<ul id="${section.id}" class="controls_section">`;
 					if (section.title) {
+						await XKit.css_map.getCssMap();
+						const sidebarTitle = XKit.css_map.keyToClasses("sidebarTitle").join(" ");
+
 						html += `<li class="${sidebarTitle}">${section.title}</li>`;
 					}
 					for (let item of section.items) {
@@ -709,11 +708,10 @@ XKit.extensions.xkit_patches = new Object({
 									<div class="hide_overflow">
 										${item.text}
 									</div>
-									<span class="count">${(item.count ? item.count : "")}${(item.carrot ? '<svg height="30px" fill="var(--transparent-white-65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>' : "")}</span>
+									<span class="count">${item.count || ""}${(item.carrot ? '<svg height="30px" fill="var(--transparent-white-65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>' : "")}</span>
 								</a>
 							</li>`;
 					}
-
 
 					if (section.small.length !== 0) {
 						html += '<div class="small_links">';
