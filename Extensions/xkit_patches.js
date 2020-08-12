@@ -1051,7 +1051,7 @@ XKit.extensions.xkit_patches = new Object({
 					if (controls.length > 0) {
 						controls.prepend(m_html);
 
-						controls.on('click', '.' + class_name, function() {
+						controls.on('click', '.' + class_name, function(event) {
 							if ($(this).hasClass("xkit-interface-working") || $(this).hasClass("xkit-interface-disabled")) { return; }
 							if (typeof func === "function") { func.call(this, event); }
 						});

@@ -21,11 +21,7 @@ XKit.extensions.postblock = new Object({
 
 		this.blacklisted = XKit.storage.get("postblock", "posts", "").split(",");
 
-		$(document).on('click', '.xpostblockbutton', function(e) {
-			XKit.extensions.postblock.block($(this), e.altKey);
-		});
-
-		XKit.interface.react.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", "").then(() => {
+		XKit.interface.react.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", XKit.extensions.postblock.block).then(() => {
 			XKit.post_listener.add("postblock", XKit.extensions.postblock.process_posts);
 			XKit.extensions.postblock.process_posts();
 		});
@@ -50,15 +46,19 @@ XKit.extensions.postblock = new Object({
 		});
 	},
 
-	block: async function($button, altKey) {
+	block: async function(event) {
+		const self = XKit.extensions.postblock;
+
+		const $button = $(this);
+		const altKey = event.altKey
 		const $post = $button.parents("[data-id]");
 		const post = await XKit.interface.react.post($post);
 		const postID = post.root_id;
 
 		const blockPost = () => {
-			this.remove(postID);
-			this.blacklisted.push(postID);
-			this.save();
+			self.remove(postID);
+			self.blacklisted.push(postID);
+			self.save();
 		};
 
 		if (altKey) {
@@ -136,7 +136,7 @@ XKit.extensions.postblock = new Object({
 		this.running = false;
 		XKit.post_listener.remove("postblock");
 		XKit.tools.remove_css("postblock");
-		$(document).off("click", ".xpostblockbutton");
+		$(".xpostblock-done").removeClass("xpostblock-done");
 		$(".xpostblockbutton").remove();
 	}
 
