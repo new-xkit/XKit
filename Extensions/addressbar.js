@@ -40,12 +40,12 @@ XKit.extensions.addressbar = new Object({
 		var minDist = Number.MAX_SAFE_INTEGER;
 		var id = null; //check later and do nothing to history if no post qualifies
 	
-		$("[data-pageable] .post").each(function() {
+		$("[data-id]").each(function() {
 			var dist = scrollPos - $(this).offset().top;
 			//if it equals exactly 200 that's a bogus value
 			if (dist > 0 && dist !== offset && dist < minDist) {
 				minDist = dist;
-				id = $(this).attr('data-post-id');
+				id = $(this).attr('data-id');
 			}
 		});
 		return id;
@@ -56,7 +56,7 @@ XKit.extensions.addressbar = new Object({
 		window.history.replaceState(
 			{ id: postid }, 
 			'Tumblr - ' + postid, //title param is ignored currently
-			'/dashboard/2/' + (postid + 1) //has to be the id immediately after
+			'?max_post_id=' + (postid + 1) //has to be the id immediately after
 		);
 	},
 
