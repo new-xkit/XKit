@@ -22,7 +22,7 @@ XKit.extensions.show_originals = new Object({
 			text: "Functionality",
 			type: "separator"
 		},
-		"show_on_sidebar": {
+		"use_sidebar_toggle": {
 			text: "Show toggle in the sidebar",
 			default: true,
 			value: true
@@ -90,7 +90,7 @@ XKit.extensions.show_originals = new Object({
 		const show_sidebar_definitely = where.dashboard || where.likes;
 		const show_sidebar_ifmine = where.queue || where.channel || where.drafts;
 
-		if (this.preferences.show_on_sidebar.value && (show_sidebar_definitely || show_sidebar_ifmine && !this.preferences.show_my_posts.value)) {
+		if (this.preferences.use_sidebar_toggle.value && (show_sidebar_definitely || show_sidebar_ifmine && !this.preferences.show_my_posts.value)) {
 			await XKit.interface.react.sidebar.add({
 				id: "xshow_originals_sidebar",
 				title: "Show Originals",
@@ -192,12 +192,22 @@ XKit.extensions.show_originals = new Object({
 			XKit.extensions.show_originals.status = "true";
 		}
 
+		this.react_do();
+
 		XKit.extensions.show_originals.update_button();
 		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
 
 	},
 
 	react_do: function() {
+
+		if (XKit.extensions.show_originals.preferences.use_sidebar_toggle.value && XKit.extensions.show_originals.status == "false") {
+			$('.showoriginals-done').removeClass('showoriginals-done');
+			$('.showoriginals-hidden').removeClass('showoriginals-hidden');
+			$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
+			$('.showoriginals-hidden-note').remove();
+			return;
+		}
 
 		//runs on each post
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
