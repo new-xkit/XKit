@@ -31,11 +31,17 @@ XKit.extensions.norecommended = new Object({
 			value: false
 		},
 		"hide_posts_completely": {
-			text: "Hide posts completely (may break post loading if it hides your entire dash)",
+			text: "Hide posts completely (<a id=\"norecommended-completely-hide-help\" href=\"#\" onclick=\"return false\">may break endless scrolling</a>)",
 			default: false,
 			value: false,
-			experimental: true
+			slow: true
 		}
+	},
+
+	cpanel: function(div) {
+		$("#norecommended-completely-hide-help").click(function() {
+			XKit.window.show("Completely hiding posts", 'If you have endless scrolling enabled and XKit completely hides every single post on the first "page" of your dashboard, you may become unable to scroll down to load more posts. Disable this option if you experience an empty dashboard with the loading icon appearing forever.', "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		});
 	},
 
 	run: function() {
