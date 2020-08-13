@@ -1,7 +1,7 @@
 //* TITLE Show Originals **//
 //* VERSION 1.2.6 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
-//* DETAILS This really experimental extension allows you to only see original (non-reblogged) posts made by users on your dashboard.**//
+//* DETAILS This extension allows you to only see original (non-reblogged) posts made by users on your dashboard.**//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -23,22 +23,22 @@ XKit.extensions.show_originals = new Object({
 			type: "separator"
 		},
 		"use_sidebar_toggle": {
-			text: "Show toggle in the sidebar",
+			text: 'Show the "originals only" toggle',
 			default: true,
 			value: true
 		},
 		"show_my_posts": {
-			text: "Don't hide my posts",
+			text: "Always show my posts",
 			default: true,
 			value: true
 		},
 		"show_original_reblogs": { //this needs a better description (actually all the options do)
-			text: "Don't hide someone reblogging themself",
+			text: "Show when someone reblogs their own post",
 			default: true,
 			value: true
 		},
 		"active_in_peepr": {
-			text: "Hide reblogs in the sidebar",
+			text: "Activate this extension on blogs in the sidebar",
 			default: false,
 			value: false,
 		},
@@ -48,7 +48,7 @@ XKit.extensions.show_originals = new Object({
 			type: "separator"
 		},
 		"hide_posts_generic": {
-			text: 'Use a generic "hidden reblog" message',
+			text: 'Replace reblogs with a simple "hidden reblog" message',
 			default: false,
 			value: false
 		},
