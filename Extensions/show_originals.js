@@ -71,11 +71,21 @@ XKit.extensions.show_originals = new Object({
 
 		const where = XKit.interface.where();
 
+		const dont_run = where.inbox || where.following  || where.followers  || where.activity;
+		const uses_masonry = where.explore || where.search || where.tagged;
+
+		if (dont_run || uses_masonry) { return; }
+
+		console.log("running show originals");
+
 		this.my_blogs = XKit.tools.get_blogs();
 
 		if (where.dashboard && XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
+
+			//detects endless scrolling via the "next" button
 			const nextAriaLabel = await XKit.interface.translate('Next');
 			if ($(`button[aria-label="${nextAriaLabel}"]`).length) {
+
 				XKit.notifications.add("Show Originals works best when Endless Scrolling is turned on. Click here to learn more and dismiss this popup.", "warning", false, function() {
 					XKit.window.show("Endless Scrolling recommended.", "Show Originals works best when Endless Scrolling is enabled on your dashboard. If you want to enable it, click on the Account Settings button (person icon) on top-right of the page and then Settings > Dashboard > Enable endless scrolling.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					XKit.storage.set("show_originals", "shown_warning_about_scrolling", "yass");
