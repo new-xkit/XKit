@@ -70,7 +70,8 @@ XKit.extensions.anti_capitalism = new Object({
 			}
 
 			if (this.preferences.sidebar_ad.value) {
-				XKit.tools.add_css(`${XKit.css_map.keyToCss('mrecContainer')} { display: none !important; }`, "anti_capitalism");
+				const selector = XKit.css_map.keyToClasses("mrecContainer").map(css => `.${css}`).join(",");
+				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, "anti_capitalism");
 			}
 
 			return;
