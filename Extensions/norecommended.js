@@ -100,13 +100,10 @@ XKit.extensions.norecommended = new Object({
 				.norecommended-note ~ * {
 					display: none;
 				}
-				.norecommended-hidden-completely,
- 				.norecommended-hidden-completely + :not([data-id]) {
-					height: 0;
-					margin: 0;
-					overflow: hidden;
-				}
 			`, 'norecommended');
+
+			XKit.interface.hide(".norecommended-hidden-completely, .norecommended-hidden-completely + :not([data-id])", "norecommended");
+
 			XKit.post_listener.add('norecommended', this.react_do);
 			this.react_do();
 			return;
