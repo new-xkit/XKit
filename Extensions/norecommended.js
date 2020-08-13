@@ -41,6 +41,8 @@ XKit.extensions.norecommended = new Object({
 	run: function() {
 		this.running = true;
 
+		if (XKit.interface.where().explore) { return; }
+
 		if (XKit.page.react) {
 
 			//adjust colors to look good on the sidebar if we're there
