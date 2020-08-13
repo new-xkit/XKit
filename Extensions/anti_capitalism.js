@@ -66,12 +66,12 @@ XKit.extensions.anti_capitalism = new Object({
 
 			if (this.preferences.sponsored_posts.value) {
 				const selector = XKit.css_map.keyToClasses("listTimelineObject").map(css => `.${css}:not([data-id])`).join(",");
-				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, "anti_capitalism");
+				XKit.interface.hide(selector, "anti_capitalism");
 			}
 
 			if (this.preferences.sidebar_ad.value) {
 				const selector = XKit.css_map.keyToClasses("mrecContainer").map(css => `.${css}`).join(",");
-				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, "anti_capitalism");
+				XKit.interface.hide(selector, "anti_capitalism");
 			}
 
 			return;
