@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.11.2 **//
+//* VERSION 2.11.3 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -243,7 +243,7 @@ XKit.extensions.timestamps = new Object({
 			}
 
 			var timestamp = responseData.posts[0].timestamp;
-			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
+			date_element.html(this.format_date(timestamp));
 			date_element.removeClass("xtimestamp-loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
 		})
@@ -311,7 +311,7 @@ XKit.extensions.timestamps = new Object({
 				}, {uuid, id}).then(timestamp => {
 					$xtimestamp
 					.removeClass("xtimestamp-loading")
-					.html(XKit.extensions.timestamps.format_date(moment(new Date(timestamp * 1000))));
+					.html(XKit.extensions.timestamps.format_date(timestamp));
 
 					XKit.storage.set("timestamps", `xkit_timestamp_cache_${id}`, timestamp);
 				}).catch(() => {
@@ -325,7 +325,7 @@ XKit.extensions.timestamps = new Object({
 		var {timestamp} = await XKit.interface.react.post_props(post_id);
 
 		if (timestamp) {
-			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
+			date_element.html(this.format_date(timestamp));
 			date_element.removeClass("xtimestamp-loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
 		} else {
@@ -349,7 +349,7 @@ XKit.extensions.timestamps = new Object({
 			return false;
 		}
 
-		date_element.html(this.format_date(cached_date));
+		date_element.html(this.format_date(cached_utc_seconds));
 		date_element.removeClass("xtimestamp-loading");
 		return true;
 	},
@@ -363,7 +363,9 @@ XKit.extensions.timestamps = new Object({
 		$("#xkit-timestamps-format-help").click(XKit.tools.show_timestamps_help);
 	},
 
-	format_date: function(date) {
+	format_date: function(timestamp) {
+		const date = moment(new Date(timestamp * 1000));
+
 		const absolute = date.format(this.preferences.format.value);
 		const relative = date.from(moment());
 
