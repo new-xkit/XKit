@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.7 **//
+//* VERSION 7.4.8 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -956,6 +956,8 @@ XKit.extensions.xkit_patches = new Object({
 				},
 
 				control_button_template: null,
+				added_func: {},
+
 				get_control_button_template: async function() {
 					await XKit.css_map.getCssMap();
 
@@ -996,15 +998,13 @@ XKit.extensions.xkit_patches = new Object({
 				 */
 				create_control_button: async function(class_name, icon, text, func, ok_icon) {
 					if (this.control_button_template == null) {
-						this.control_button_template = {
-							template: await this.get_control_button_template(),
-							func: func
-						};
+						this.control_button_template = await this.get_control_button_template();
 					}
 
 					XKit.interface.added_icon.push(class_name);
 					XKit.interface.added_icon_icon.push(icon);
 					XKit.interface.added_icon_text.push(text);
+					XKit.interface.react.added_func[class_name] = func;
 
 					XKit.tools.add_css(`.${class_name} .xkit-interface-icon {
 						background-image: url('${icon}');
@@ -1035,7 +1035,9 @@ XKit.extensions.xkit_patches = new Object({
 
 					var m_data = `data-post-id = "${post_id}" data-post-type="${post_type}" data-permalink="${post_permalink}"`;
 
-					var { template, func } = this.control_button_template;
+					var template = this.control_button_template;
+					var func = XKit.interface.react.added_func[class_name];
+
 					var m_html = template
 						.replace(/{{className}}/g, class_name)
 						.replace(/{{text}}/g, m_text)
