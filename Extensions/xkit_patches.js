@@ -1104,6 +1104,7 @@ XKit.extensions.xkit_patches = new Object({
 				},
 			};
 
+
 			const react_sidebar_css = `
 				.xkit--react .controls_section li {
 					list-style-type: none;
@@ -1160,33 +1161,35 @@ XKit.extensions.xkit_patches = new Object({
 
 				.xkit--react .small_links a:first-child { float: left; }
 				.xkit--react .small_links a:nth-child(2) { float: right; }
-			`;
-			XKit.tools.add_css(react_sidebar_css, "xkit_patches_react_sidebar");
+		`;
+			XKit.tools.add_css(react_sidebar_css, "xkit_patches");
+
 
 			XKit.interface.react.sidebar = {
+
+				css_added: false,
+
 				init: async function() {
-					if (XKit.page.react) {
+					if ($("#xkit_sidebar").length) { return; }
 
-						await XKit.css_map.getCssMap().then(() => {
-							if ($("#xkit_sidebar").length) { return; }
+					if (!this.css_added) {
 
-							const html = `<div id="xkit_sidebar"></div>`;
+						this.css_added = true;
+					}
 
-							//inject after the sidebarItem containing the navigation on tumblr.com/blog/myblogname pages
-							const $navigationSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
-							if ($navigationSidebarItem.length) {
-								$navigationSidebarItem.after(html);
-								return;
-							}
+					await XKit.css_map.getCssMap();
+					const html = `<div id="xkit_sidebar"></div>`;
 
-							//inject at the top of the sidebar container
-							const $sidebarContainer = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
-							$sidebarContainer.prepend(html);
-
-						}).catch(e => console.error("Can't run sidebar.init:" + e.message));
-
+					//inject after the sidebarItem containing the navigation on tumblr.com/blog/myblogname pages
+					const $navigationSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
+					if ($navigationSidebarItem.length) {
+						$navigationSidebarItem.after(html);
 						return;
 					}
+
+					//inject at the top of the sidebar container otherwise
+					const $sidebarContainer = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
+					$sidebarContainer.prepend(html);
 				},
 
 				/**
@@ -1216,6 +1219,9 @@ XKit.extensions.xkit_patches = new Object({
 
 						html += `<li class="${sidebarTitleClasses}">${section.title}</li>`;
 					}
+
+					const carrot = '<svg height="30px" fill="var(--transparent-white-65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>';
+
 					for (let item of section.items) {
 						html += `
 							<li class="controls_section_item">
@@ -1223,7 +1229,7 @@ XKit.extensions.xkit_patches = new Object({
 									<div class="hide_overflow">
 										${item.text}
 									</div>
-									<span class="count">${item.count || ""}${(item.carrot ? '<svg height="30px" fill="var(--transparent-white-65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>' : "")}</span>
+									<span class="count">${item.count || ""}${(item.carrot ? carrot : "")}</span>
 								</a>
 							</li>`;
 					}
@@ -1245,11 +1251,12 @@ XKit.extensions.xkit_patches = new Object({
 				 * @param {Object} section - see construct's documentation
 				 */
 				add: async function(section) {
+					if (!XKit.page.react) { return; }
 					if (!$("#xkit_sidebar").length) {
 						await this.init();
 					}
 
-					$("#xkit_sidebar").append(this.construct(section));
+					$("#xkit_sidebar").append(await this.construct(section));
 				},
 
 				remove: id => $(`#${id}, #${id} + .small_links`).remove()
