@@ -42,8 +42,13 @@ XKit.extensions.timestamps = new Object({
 			text: "Display options",
 			type: "separator"
 		},
+		no_xkit_rewritten_format: {
+			text: "Select your own timestamp format",
+			default: false,
+			value: false
+		},
 		format: {
-			text: 'Timestamp format (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
+			text: 'Manual timestamp format (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
 			type: "text",
 			default: "MMMM Do YYYY, h:mm:ss a",
 			value: "MMMM Do YYYY, h:mm:ss a"
@@ -378,7 +383,33 @@ XKit.extensions.timestamps = new Object({
 		$("#xkit-timestamps-format-help").click(XKit.tools.show_timestamps_help);
 	},
 
-	format_date: function(timestamp) {
+	constructMinimalTimeString: function(unixTime) {
+		const locale = document.documentElement.lang;
+		const date = new Date(unixTime * 1000);
+		const now = new Date();
+
+		const sameDate = date.toDateString() === now.toDateString();
+		const sameYear = date.getFullYear() === now.getFullYear();
+
+		if (sameDate) {
+		  return date.toLocaleTimeString(locale, {
+			hour: 'numeric',
+			minute: 'numeric',
+		  });
+		} else {
+		  return date.toLocaleDateString(locale, {
+			day: 'numeric',
+			month: 'short',
+			year: sameYear ? undefined : 'numeric',
+		  });
+		}
+	  },
+
+	  format_date: function(timestamp) {
+		if (!this.preferences.no_xkit_rewritten_format.value) {
+			return this.constructMinimalTimeString(timestamp);
+		}
+
 		const date = moment(new Date(timestamp * 1000));
 
 		const absolute = date.format(this.preferences.format.value);
