@@ -1104,76 +1104,72 @@ XKit.extensions.xkit_patches = new Object({
 				},
 			};
 
-
-			const react_sidebar_css = `
-				.xkit--react .controls_section li {
-					list-style-type: none;
-				}
-
-				.xkit--react .controls_section {
-					padding: 0;
-					margin-bottom: 38px;
-				}
-
-				.xkit--react .controls_section .controls_section_item {
-					border-top: 1px solid var(--transparent-white-7);
-					position: relative;
-					color: var(--transparent-white-65);
-					line-height: 30px;
-					font-weight: 700;
-				}
-
-				.xkit--react .controls_section .controls_section_item:hover {
-					background-color: var(--transparent-white-7);
-				}
-
-				.xkit--react .controls_section .hide_overflow {
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					width: 88%;
-					padding-left: 10px;
-				}
-
-				.xkit--react .controls_section a {
-					text-decoration: none;
-				}
-
-				.xkit--react .controls_section a .count {
-					position: absolute;
-					top: 0;
-					right: 10px;
-					font-size: 13px;
-					font-weight: 400;
-					display: flex;
-				}
-
-				.xkit--react .small_links {
-					border-top: 1px solid var(--transparent-white-7);
-					overflow: hidden;
-				}
-
-				.xkit--react .small_links a {
-					padding: 11px 13px 0;
-					color: var(--transparent-white-65);
-					font-size: 11px;
-				}
-
-				.xkit--react .small_links a:first-child { float: left; }
-				.xkit--react .small_links a:nth-child(2) { float: right; }
-		`;
-			XKit.tools.add_css(react_sidebar_css, "xkit_patches");
-
-
 			XKit.interface.react.sidebar = {
 
 				css_added: false,
+				react_sidebar_css: `
+					.xkit--react .controls_section li {
+						list-style-type: none;
+					}
+
+					.xkit--react .controls_section {
+						padding: 0;
+						margin-bottom: 38px;
+					}
+
+					.xkit--react .controls_section .controls_section_item {
+						border-top: 1px solid var(--transparent-white-7);
+						position: relative;
+						color: var(--transparent-white-65);
+						line-height: 30px;
+						font-weight: 700;
+					}
+
+					.xkit--react .controls_section .controls_section_item:hover {
+						background-color: var(--transparent-white-7);
+					}
+
+					.xkit--react .controls_section .hide_overflow {
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						width: 88%;
+						padding-left: 10px;
+					}
+
+					.xkit--react .controls_section a {
+						text-decoration: none;
+					}
+
+					.xkit--react .controls_section a .count {
+						position: absolute;
+						top: 0;
+						right: 10px;
+						font-size: 13px;
+						font-weight: 400;
+						display: flex;
+					}
+
+					.xkit--react .small_links {
+						border-top: 1px solid var(--transparent-white-7);
+						overflow: hidden;
+					}
+
+					.xkit--react .small_links a {
+						padding: 11px 13px 0;
+						color: var(--transparent-white-65);
+						font-size: 11px;
+					}
+
+					.xkit--react .small_links a:first-child { float: left; }
+					.xkit--react .small_links a:nth-child(2) { float: right; }
+			`,
 
 				init: async function() {
 					if ($("#xkit_sidebar").length) { return; }
 
 					if (!this.css_added) {
-
+						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
 						this.css_added = true;
 					}
 
