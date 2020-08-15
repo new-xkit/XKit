@@ -10,7 +10,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 	running: false,
 
-	run: function() {
+	run: async function() {
 
 		if (!XKit.interface.where().queue) {
 			return;
@@ -18,16 +18,29 @@ XKit.extensions.shuffle_queue = new Object({
 
 		this.running = true;
 
-		XKit.interface.sidebar.add({
-			id: "queue_plus_sidebar",
-			title: "Queue+",
-			items: [
-				{ id: "xshufflequeue_button", text: "Shuffle Queue" },
-				{ id: "xdeletequeue_button", text: "Clear Queue" },
-				{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
-				{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
-			]
-		});
+		if (XKit.page.react) {
+			await XKit.interface.react.sidebar.add({
+				id: "queue_plus_sidebar",
+				title: "Queue+",
+				items: [
+					{ id: "xshufflequeue_button", text: "Shuffle Queue" },
+					{ id: "xdeletequeue_button", text: "Clear Queue" },
+					{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
+					{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
+				]
+			});
+		} else {
+			XKit.interface.sidebar.add({
+				id: "queue_plus_sidebar",
+				title: "Queue+",
+				items: [
+					{ id: "xshufflequeue_button", text: "Shuffle Queue" },
+					{ id: "xdeletequeue_button", text: "Clear Queue" },
+					{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
+					{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
+				]
+			});
+		}
 
 		$("#xshufflequeue_button").click(() => this.shuffle());
 		$("#xdeletequeue_button").click(() => this.clear());
