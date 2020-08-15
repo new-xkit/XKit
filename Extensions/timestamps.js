@@ -69,7 +69,7 @@ XKit.extensions.timestamps = new Object({
 			default: "auto",
 			value: "auto"
 		},
-		no_xkit_rewritten_location: {
+		display_on_top: {
 			text: "Display timestamps on the top of posts",
 			default: false,
 			value: false
@@ -274,7 +274,7 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	react_add_timestamps: function() {
-		const {note_count_class, preferences} = XKit.extensions.timestamps;
+		const {note_count_class, preferences, in_search} = XKit.extensions.timestamps;
 		var $posts = $("[data-id]:not(.xkit_timestamps)");
 		$posts.addClass("xkit_timestamps");
 
@@ -284,16 +284,16 @@ XKit.extensions.timestamps = new Object({
 			var post_id = $post.attr("data-id");
 
 			var xtimestamp_class = "xtimestamp";
-			if (XKit.extensions.timestamps.in_search) {
+			if (in_search) {
 				xtimestamp_class = "xtimestamp-in-search";
 			}
-			if (!preferences.no_xkit_rewritten_location.value) {
+			if (!preferences.display_on_top.value) {
 				xtimestamp_class += " xtimestamp-bottom";
 			}
 
 			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp-loading">&nbsp;</div>`;
 
-			if (preferences.no_xkit_rewritten_location.value) {
+			if (preferences.display_on_top.value) {
 				$(xtimestamp_html).insertAfter($post.find("header"));
 			} else {
 				$(xtimestamp_html).insertAfter($post.find(note_count_class));
@@ -418,21 +418,24 @@ XKit.extensions.timestamps = new Object({
 	  },
 
 	format_date: function(timestamp) {
+		const absolute_type = this.preferences.format_type_absolute.value;
+		const relative_type = this.preferences.format_type_relative.value;
+
 		var absoluteText = '';
 		var relativeText = '';
 		var tooltip = '';
 
 		const date = moment(new Date(timestamp * 1000));
 
-		if (this.preferences.format_type_absolute.value == "xkit_rewritten") {
+		if (absolute_type == "xkit_rewritten") {
 			absoluteText = this.constructMinimalTimeString(timestamp);
-		} else if (this.preferences.format_type_absolute.value == "custom") {
+		} else if (absolute_type == "custom") {
 			absoluteText = date.format(this.preferences.format.value);
 		} else {
 			tooltip = date.format(this.preferences.format.value);
 		}
 
-		if (this.preferences.format_type_relative.value == "auto") {
+		if (relative_type == "auto") {
 			relativeText = date.from(moment());
 		} else {
 			tooltip = date.from(moment());
@@ -440,10 +443,8 @@ XKit.extensions.timestamps = new Object({
 
 		if (absoluteText && relativeText) {
 			return `${absoluteText} &middot; ${relativeText}`;
-		} else if (relativeText) {
-			return `<span title="${tooltip}">${relativeText}</span>`;
 		} else {
-			return `<span title="${tooltip}">${absoluteText}</span>`;
+			return `<span title="${tooltip}">${relativeText}${absoluteText}</span>`;
 		}
 	},
 
