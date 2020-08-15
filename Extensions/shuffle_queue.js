@@ -10,6 +10,8 @@ XKit.extensions.shuffle_queue = new Object({
 
 	running: false,
 
+	queueoptions_selector: ".dashboard_options_form",
+
 	run: async function() {
 
 		if (!XKit.interface.where().queue) {
@@ -26,9 +28,11 @@ XKit.extensions.shuffle_queue = new Object({
 					{ id: "xshufflequeue_button", text: "Shuffle Queue" },
 					{ id: "xdeletequeue_button", text: "Clear Queue" },
 					{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
-					{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
+					{ id: "xqueueoptions_button", text: "Show Queue Options", count: "on" }
 				]
 			});
+			await XKit.css_map.getCssMap();
+			this.queueoptions_selector = XKit.css_map.keyToCss('queueSettings');
 		} else {
 			XKit.interface.sidebar.add({
 				id: "queue_plus_sidebar",
@@ -80,7 +84,7 @@ XKit.extensions.shuffle_queue = new Object({
 			if ($button.hasClass("xkit-queue-option-button-on")) {
 				$button.find(".count").html("off");
 				XKit.storage.set("shuffle_queue", "hide_options", "true");
-				XKit.tools.add_css(" .dashboard_options_form { display: none; }", "shuffle_queue_hide_options");
+				XKit.tools.add_css(`${XKit.extensions.shuffle_queue.queueoptions_selector} { display: none; }`, "shuffle_queue_hide_options");
 			} else {
 				$button.find(".count").html("on");
 				XKit.storage.set("shuffle_queue", "hide_options", "false");
