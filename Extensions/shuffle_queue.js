@@ -124,10 +124,18 @@ XKit.extensions.shuffle_queue = new Object({
 				.text("Shuffling...");
 
 			let postIDs = [];
-			$("#posts [data-pageable]").each(function() {
-				let [ /* "post" */, postID] = $(this).attr("data-pageable").split("_");
-				postIDs.push(postID);
-			});
+
+			if (XKit.page.react) {
+				$("[data-id]").each(function() {
+					let postID = $(this).attr("data-id");
+					postIDs.push(postID);
+				});
+			} else {
+				$("#posts [data-pageable]").each(function() {
+					let [ /* "post" */, postID] = $(this).attr("data-pageable").split("_");
+					postIDs.push(postID);
+				});
+			}
 
 			if (postIDs.length === 0) {
 				XKit.window.close();
@@ -152,9 +160,7 @@ XKit.extensions.shuffle_queue = new Object({
 					"post_ids": postIDs.join(",")
 				}),
 				onload: response => {
-					postIDs.reverse().forEach(postID => {
-						$("#new_post_buttons").after($(`[data-pageable="post_${postID}"]`));
-					});
+					this.update_shuffled_order(postIDs);
 					XKit.window.close();
 					XKit.notifications.add(`Shuffled ${postIDs.length} posts!`, "ok");
 				},
@@ -170,6 +176,18 @@ XKit.extensions.shuffle_queue = new Object({
 				}
 			});
 		});
+	},
+
+	update_shuffled_order: function(postIDs) {
+		if (XKit.page.react) {
+			postIDs.reverse().forEach(postID => {
+				$(".sortableContainer").prepend($(`[data-id="${postID}"]`));
+			});
+		} else {
+			postIDs.reverse().forEach(postID => {
+				$("#new_post_buttons").after($(`[data-pageable="post_${postID}"]`));
+			});
+		}
 	},
 
 	posts_to_delete: [],
