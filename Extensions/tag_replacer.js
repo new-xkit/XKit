@@ -10,7 +10,7 @@ XKit.extensions.tag_replacer = new Object({
 
 	running: false,
 
-	run: function() {
+	run: async function() {
 
 		this.running = true;
 
@@ -20,15 +20,27 @@ XKit.extensions.tag_replacer = new Object({
 
 		XKit.tools.init_css("tag_replacer");
 
-		XKit.interface.sidebar.add({
-			id: "tag_replacer_sidebar",
-			title: "Tag Replacer",
-			items: [{
-				id: "tag_replacer_button",
-				text: "Replace a tag",
-				carrot: true
-			}]
-		});
+		if (XKit.page.react) {
+			await XKit.interface.react.sidebar.add({
+				id: "tag_replacer_sidebar",
+				title: "Tag Replacer",
+				items: [{
+					id: "tag_replacer_button",
+					text: "Replace a tag",
+					carrot: true
+				}]
+			});
+		} else {
+			XKit.interface.sidebar.add({
+				id: "tag_replacer_sidebar",
+				title: "Tag Replacer",
+				items: [{
+					id: "tag_replacer_button",
+					text: "Replace a tag",
+					carrot: true
+				}]
+			});
+		}
 
 		$("#tag_replacer_button").click(() => {
 			const url = XKit.interface.where().user_url;
