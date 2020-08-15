@@ -321,7 +321,7 @@ XKit.extensions.timestamps = new Object({
 			}
 
 			$reblogs.each(function(i) {
-				if (trail[i].blog === undefined || trail[i].blog.active === false) {
+				if (trail[i] === undefined || trail[i].blog === undefined || trail[i].blog.active === false) {
 					return;
 				}
 
