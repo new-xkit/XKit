@@ -131,6 +131,17 @@ XKit.extensions.post_limit_checker = new Object({
 				return;
 			}
 
+			//the first post might be pinned, so don't stop if it's not new
+			if (posts.shift().timestamp > this.cutoff) {
+				this.posts[blog]++;
+			}
+
+			//prevent breakage if your blog has one post
+			if (!posts.length) {
+				this.scan_next_blog();
+				return;
+			}
+
 			for (let post of posts) {
 				if (post.timestamp > this.cutoff) {
 					this.posts[blog]++;
