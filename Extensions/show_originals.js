@@ -164,12 +164,9 @@ XKit.extensions.show_originals = new Object({
 				.showoriginals-hidden-note ~ * {
 					display: none;
 				}
-				.showoriginals-hidden-completely {
-					height: 0;
-					margin: 0;
-					overflow: hidden;
-				}
 			`, 'showoriginals');
+
+			XKit.interface.hide(".showoriginals-hidden-completely, .showoriginals-hidden-completely + :not([data-id])", "showoriginals");
 
 			XKit.post_listener.add('showoriginals', this.react_do);
 			this.react_do();
