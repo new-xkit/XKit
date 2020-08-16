@@ -53,7 +53,7 @@ XKit.extensions.show_originals = new Object({
 			value: false
 		},
 		"hide_posts_completely": {
-			text: "Hide reblogs completely (<a id=\"xkit-completely-hide-posts-help\" href=\"#\" onclick=\"return false\">may break endless scrolling</a>)",
+			text: "Hide dashboard reblogs completely (<a id=\"xkit-completely-hide-posts-help\" href=\"#\" onclick=\"return false\">may break endless scrolling</a>)",
 			default: false,
 			value: false,
 			slow: true,
@@ -225,11 +225,12 @@ XKit.extensions.show_originals = new Object({
 			if (show_my_posts.value && XKit.extensions.show_originals.my_blogs.includes(blogName)) { return; }
 
 			// Unless enabled, don't hide posts in the sidebar
-			if (!active_in_peepr && $this.closest("#glass-container").length > 0) { return; }
+			const inSidebar = $this.closest("#glass-container").length > 0;
+			if (!active_in_peepr && inSidebar) { return; }
 
 			// We haven't returned, so hide the post now:
 
-			if (hide_posts_completely.value) {
+			if (hide_posts_completely.value && !inSidebar) {
 				$this.addClass('showoriginals-hidden-completely');
 
 			} else if (hide_posts_generic.value) {
