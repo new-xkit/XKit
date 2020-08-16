@@ -63,11 +63,21 @@
 }
 
 .xkit--react .xtimestamp.xtimestamp-bottom {
-	margin: 0 auto 0 0;
+	margin: 0;
 	padding: 0;
+	display: inline-block;
 }
 
-:not(:empty) + .xtimestamp.xtimestamp-bottom {
+.xkit--react .xtimestamp-bottom-container {
+	flex-grow: 1;
+	flex-basis: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 1rem; /* fixes buggy behavior with old blue enabled */
+}
+
+:not(:empty) + .xtimestamp-bottom-container {
 	margin-left: var(--post-padding);
 }
 

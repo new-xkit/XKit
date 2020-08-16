@@ -296,6 +296,7 @@ XKit.extensions.timestamps = new Object({
 			if (preferences.display_on_top.value) {
 				$(xtimestamp_html).insertAfter($post.find("header"));
 			} else {
+				xtimestamp_html = `<span class="xtimestamp-bottom-container">${xtimestamp_html}</span>`;
 				$(xtimestamp_html).insertAfter($post.find(note_count_class));
 			}
 
