@@ -135,28 +135,21 @@ XKit.extensions.show_originals = new Object({
 					transform: translateY(calc(-${shrink_post_amount}/2));
 				}
 				.showoriginals-hidden-note {
-					height: 30px !important;
-					line-height: 30px !important;
+					height: 30px;
 					color: ${automatic_color};
-					padding: 0;
-					margin: 0;
 					padding-left: 15px;
 					display: flex;
+					align-items: center;
 				}
 				.showoriginals-hidden-button {
-				    position: absolute !important;
-					height: 30px;
-					line-height: 30px;
+					line-height: initial;
+					margin: 0;
+					position: absolute !important;
 					right: 5px;
 					display: none !important;
 				}
 				.showoriginals-hidden:hover .showoriginals-hidden-button {
 					display: inline-block !important;
-					height: unset;
-					line-height: initial;
-					top: 50% !important;
-					transform: translateY(-50%);
-					margin: 0;
 				}
 				.showoriginals-hidden-button {
 					color: rgba(${automatic_button_color}, 0.8);
@@ -249,7 +242,7 @@ XKit.extensions.show_originals = new Object({
 			} else {
 				$this.addClass('showoriginals-hidden');
 
-				const reblogicon = '<svg viewBox="0 -7.5 12.3 28" width="25" height="30" fill="var(--blog-contrasting-title-color,var(--transparent-white-65))" fill-opacity="0.75"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>';
+				const reblogicon = '<svg viewBox="0 0 12.3 13.7" width="24" height="14" fill="var(--blog-contrasting-title-color,var(--transparent-white-65))" fill-opacity="0.75"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>';
 				const note_text = `${blogName} ${reblogicon} ${rebloggedFromName}`;
 				const button = '<div class="xkit-button showoriginals-hidden-button">show reblog</div>';
 
