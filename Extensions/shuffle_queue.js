@@ -196,6 +196,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 	posts_to_delete: [],
 	posts_to_delete_count: 0,
+	blog_identifier: "",
 
 	clear: function() {
 
@@ -222,39 +223,50 @@ XKit.extensions.shuffle_queue = new Object({
 
 			this.posts_to_delete = [];
 			this.posts_to_delete_count = 0;
+			this.blog_identifier = XKit.interface.where().user_url + ".tumblr.com";
 			this.clear_collect_next();
 		});
 
 	},
 
-	clear_collect_next: function(page = 1) {
-		const username = XKit.interface.where().user_url;
+	clear_collect_next: function(offset = 0) {
+		const blog_identifier = this.blog_identifier;
 
-		XKit.tools.Nx_XHR({
-			method: "GET",
-			url: `https://www.tumblr.com/blog/${username}/queue?page=${page}`
-		}).then(response => {
-			if ($(".no_posts_found", response.responseText).length) {
-				$("#xkit-shuffle-queue-progress")
-					.text(`Mass-deleting ${this.posts_to_delete.length} posts...`);
-				this.posts_to_delete_count = this.posts_to_delete.length;
-				this.clear_delete_next();
-				return;
-			}
+		var limit = 20; //maximum set by tumblr api
 
-			$("#posts .post", response.responseText).each((i, post) => {
-				const $post = $(post);
-				const post_id = $post.attr("data-post-id");
-				this.posts_to_delete.push(post_id);
+		XKit.tools.async_add_function(async ({blog_identifier, offset, limit}) => { // eslint-disable-line no-shadow
+			/* globals tumblr */
+			const result = await window.tumblr.apiFetch(`/v2/blog/${blog_identifier}/posts/queue`, { method: "GET", queryParams: { offset: offset, limit: limit } });
+			return result.response.posts.map(post => post.id);
+		}, {blog_identifier, offset, limit})
+			.then(async response => {
+				const {shuffle_queue} = XKit.extensions;
+
+				//maybe there's a less ridiculous way to combine 2 arrays?
+				shuffle_queue.posts_to_delete = shuffle_queue.posts_to_delete.concat(response);
+
+				if ( response.length == limit ) {
+					$("#xkit-shuffle-queue-progress")
+						.text(`Please wait, gathering posts to delete... (${shuffle_queue.posts_to_delete.length} so far...)`);
+
+					//get more posts recusrively
+					this.clear_collect_next(offset + limit);
+				} else {
+					//we're done
+					console.log("Enhanced Queue: posts_to_delete: " + shuffle_queue.posts_to_delete);
+
+					$("#xkit-shuffle-queue-progress")
+						.text(`Mass-deleting ${shuffle_queue.posts_to_delete.length} posts...`);
+					shuffle_queue.posts_to_delete_count = shuffle_queue.posts_to_delete.length;
+
+					//this.clear_delete_next();
+					await new Promise(r => setTimeout(r, 2000));
+
+					this.clear_done();
+				}
+			}).catch(response => {
+				this.clear_error("Couldn't gather posts to delete.", response.status);
 			});
-
-			$("#xkit-shuffle-queue-progress")
-				.text(`Please wait, gathering posts to delete... (${this.posts_to_delete.length} so far...)`);
-
-			this.clear_collect_next(page + 1);
-		}).catch(response =>
-			this.clear_error("Couldn't gather posts to delete.", response.status)
-		);
 	},
 
 	clear_delete_next: function() {
