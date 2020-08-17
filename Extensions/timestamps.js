@@ -451,6 +451,7 @@ XKit.extensions.timestamps = new Object({
 
 	destroy: function() {
 		$(".xtimestamp").remove();
+		$(".xtimestamp-bottom-container").remove();
 		$(".xkit-fan-timestamp").remove();
 		$(".with-xkit-timestamp").removeClass("with-xkit-timestamp");
 		$(".xkit_timestamps").removeClass("xkit_timestamps");
