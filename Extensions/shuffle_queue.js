@@ -259,8 +259,7 @@ XKit.extensions.shuffle_queue = new Object({
 						.text(`Mass-deleting ${shuffle_queue.posts_to_delete.length} posts...`);
 					shuffle_queue.posts_to_delete_count = shuffle_queue.posts_to_delete.length;
 
-					//this.clear_delete_next();
-					await new Promise(r => setTimeout(r, 2000));
+					this.clear_delete_next();
 
 					this.clear_done();
 				}
