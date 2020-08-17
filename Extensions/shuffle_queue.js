@@ -11,6 +11,7 @@ XKit.extensions.shuffle_queue = new Object({
 	running: false,
 
 	queueoptions_selector: ".dashboard_options_form",
+	shrinkPostsCss: "",
 
 	run: async function() {
 
@@ -33,6 +34,37 @@ XKit.extensions.shuffle_queue = new Object({
 			});
 			await XKit.css_map.getCssMap();
 			this.queueoptions_selector = XKit.css_map.keyToCss('queueSettings');
+
+			this.shrinkPostsCss = `
+				.sortableContainer header {
+					padding-top: 10px;
+					padding-left: calc(var(--post-padding) - 10px);
+					margin-bottom: 10px;
+				}
+				.sortableContainer a[title=${XKit.interface.where().user_url}] {
+					display: none; /* hide the header avatar */
+				}
+				footer[role=contentinfo] {
+					margin-top: 5px;
+    				padding-bottom: 5px;
+				}
+				.queue_plus_shrink_container {
+					position: relative;
+				}
+				.queue_plus_shrink_container_inner {
+					max-height: 200px !important;
+					overflow-y: scroll;
+				}
+				.queue_plus_shrink_container_shadow {
+					box-shadow: inset 0 -20px 20px -26px black, inset 0 20px 20px -26px black;
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					z-index: 99;
+					pointer-events: none;
+					}
+				`;
+
 		} else {
 			XKit.interface.sidebar.add({
 				id: "queue_plus_sidebar",
@@ -44,6 +76,9 @@ XKit.extensions.shuffle_queue = new Object({
 					{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
 				]
 			});
+			this.shrinkPostsCss = ".post_header { display: none; }" +
+			".post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; }" +
+			".post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); }";
 		}
 
 		$("#xshufflequeue_button").click(() => this.shuffle());
@@ -64,17 +99,18 @@ XKit.extensions.shuffle_queue = new Object({
 				if ($button.hasClass("xkit-queue-option-button-on")) {
 					$button.find(".count").html("on");
 					XKit.storage.set("shuffle_queue", "shrink_posts", "true");
-					XKit.tools.add_css(
-						".post_header { display: none; }" +
-						".post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; }" +
-						".post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); }",
-
-						"shuffle_queue_mini_posts"
-					);
+					XKit.tools.add_css(XKit.extensions.shuffle_queue.shrinkPostsCss, "shuffle_queue_mini_posts");
+					if (XKit.page.react) {
+						XKit.post_listener.add('queue_plus_shrink', XKit.extensions.shuffle_queue.shrink_posts_do);
+						XKit.extensions.shuffle_queue.shrink_posts_do();
+					}
 				} else {
 					$button.find(".count").html("off");
 					XKit.storage.set("shuffle_queue", "shrink_posts", "false");
 					XKit.tools.remove_css("shuffle_queue_mini_posts");
+					if (XKit.page.react) {
+						XKit.post_listener.remove('queue_plus_shrink', XKit.extensions.shuffle_queue.shrink_posts_do);
+					}
 				}
 			}
 		});
@@ -312,6 +348,28 @@ XKit.extensions.shuffle_queue = new Object({
 			'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
 			'<a href="https://new-xkit-support.tumblr.com/" target="_blank" class="xkit-button">New XKit support</a>'
 	),
+
+	shrink_posts_do: function() {
+		if (!XKit.page.react || !XKit.interface.where().queue) {
+			XKit.post_listener.remove('queue_plus_shrink', this.shrink_posts_do);
+			return;
+		}
+		$('[data-id]:not(.queue_plus_shrink-done)').each(async function() {
+			const $post = $(this).addClass('queue_plus_shrink-done').find("article").first();
+			const $header = $post.find("header").first();
+
+			const outerHtml = `<div class="queue_plus_shrink_container"><div class="queue_plus_shrink_container_shadow"></div></div>.`;
+			const innerHtml = `<div class="queue_plus_shrink_container_inner"></div>`;
+
+			const $shrinkContainer = $(outerHtml).insertAfter($header);
+			const $shrinkContainerInner = $(innerHtml).appendTo($shrinkContainer);
+
+			$shrinkContainer.next().css("margin", 0);
+
+			//move everything between the header and footer into the shrink container
+			$shrinkContainer.nextUntil("footer").appendTo($shrinkContainerInner);
+		});
+	},
 
 	destroy: function() {
 		XKit.tools.remove_css("shuffle_queue_mini_posts");
