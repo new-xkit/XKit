@@ -16,14 +16,15 @@ XKit.extensions.show_originals = new Object({
 	lbl_on: "on",
 	lbl_off: "off",
 	my_blogs: [],
+	blogs_to_exclude: [],
 
 	preferences: {
 		"sep-0": {
-			text: "Functionality",
+			text: "Exclusions",
 			type: "separator"
 		},
-		"use_sidebar_toggle": {
-			text: 'Show the "originals only" toggle',
+		"show_original_reblogs": { //this needs a better description (actually all the options do)
+			text: "Show when someone you follow reblogs their own post",
 			default: true,
 			value: true
 		},
@@ -32,8 +33,18 @@ XKit.extensions.show_originals = new Object({
 			default: true,
 			value: true
 		},
-		"show_original_reblogs": { //this needs a better description (actually all the options do)
-			text: "Show when someone reblogs their own post",
+		"blogs_to_exclude": {
+			text: "Show every post from these blogs:",
+			type: "text",
+			default: "",
+			value: ""
+		},
+		"sep-1": {
+			text: "Functionality",
+			type: "separator"
+		},
+		"use_sidebar_toggle": {
+			text: 'Show the "originals only" toggle',
 			default: true,
 			value: true
 		},
@@ -42,8 +53,7 @@ XKit.extensions.show_originals = new Object({
 			default: false,
 			value: false,
 		},
-
-		"sep-1": {
+		"sep-2": {
 			text: "Hidden post appearance",
 			type: "separator"
 		},
@@ -79,6 +89,9 @@ XKit.extensions.show_originals = new Object({
 		console.log("running show originals");
 
 		this.my_blogs = XKit.tools.get_blogs();
+
+		this.blogs_to_exclude = this.preferences.blogs_to_exclude.value.split(/[ ,]+/);
+
 
 		if (where.dashboard && XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
 
@@ -213,6 +226,7 @@ XKit.extensions.show_originals = new Object({
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
+			const {blogs_to_exclude, my_blogs} = XKit.extensions.show_originals;
 			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName} = await XKit.interface.react.post_props($this.attr('data-id'));
 
 			// Don't hide posts that aren't reblogs
@@ -222,7 +236,10 @@ XKit.extensions.show_originals = new Object({
 			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
 
 			//Don't hide my posts
-			if (show_my_posts.value && XKit.extensions.show_originals.my_blogs.includes(blogName)) { return; }
+			if (show_my_posts.value && my_blogs.includes(blogName)) { return; }
+
+			//Exclude excluded blogs
+			if (blogs_to_exclude.length && blogs_to_exclude.includes(blogName)) { return; }
 
 			// Unless enabled, don't hide posts in the sidebar
 			const inSidebar = $this.closest("#glass-container").length > 0;
