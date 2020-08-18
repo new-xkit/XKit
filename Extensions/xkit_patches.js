@@ -1181,16 +1181,32 @@ XKit.extensions.xkit_patches = new Object({
 					await XKit.css_map.getCssMap();
 					const html = `<div id="xkit_sidebar"></div>`;
 
-					//inject after the sidebarItem containing the navigation on tumblr.com/blog/myblogname pages
-					const $navigationSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
-					if ($navigationSidebarItem.length) {
-						$navigationSidebarItem.after(html);
+					//inject the xkit sidebar after the navigation on tumblr.com/blog/myblogname pages
+					const $navSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
+					if ($navSidebarItem.length) {
+						$navSidebarItem.after(html);
 						return;
 					}
 
-					//inject at the top of the sidebar container otherwise
+					//otherwise, inject the xkit sidebar at the top
 					const $sidebarContainer = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
 					$sidebarContainer.prepend(html);
+
+
+					//fix for "after navigation" race condition:
+					//detect if we loaded before the sidebar navigation and wait for it
+					const $loadingPlaceholder = $(XKit.css_map.descendantSelector("sidebar", "loadingPlaceholder"));
+					if ($loadingPlaceholder.length) {
+
+						const loadingObserver = new MutationObserver(function(mutations) {
+							const $newNavSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
+							if ($newNavSidebarItem.length) {
+								$newNavSidebarItem.after($("#xkit_sidebar"));
+								loadingObserver.disconnect();
+							}
+						});
+						loadingObserver.observe($sidebarContainer.get(0), {childList: true, subtree: true});
+					}
 				},
 
 				/**
@@ -1273,7 +1289,7 @@ XKit.extensions.xkit_patches = new Object({
 					await XKit.css_map.getCssMap();
 					const html = `<div id="xkit_sidebar_sticky"></div>`;
 
-					//inject before the sidebar ad
+					//inject before the sidebar ad if it exists
 					const $sidebarAdItem = $(XKit.css_map.keyToCss("mrecContainer")).first();
 					if ($sidebarAdItem.length) {
 						$sidebarAdItem.before(html);
