@@ -13,6 +13,19 @@ XKit.extensions.shuffle_queue = new Object({
 	queueoptions_selector: ".dashboard_options_form",
 	shrinkPostsCss: "",
 
+	preferences: {
+		"sep0": {
+			text: "Shrink Posts",
+			type: "separator"
+		},
+		"shrink_height": {
+			text: "Maximum height for shrunk posts",
+			type: "text",
+			default: "200px",
+			value: "200px"
+		},
+	},
+
 	run: async function() {
 
 		if (!XKit.interface.where().queue) {
@@ -35,6 +48,10 @@ XKit.extensions.shuffle_queue = new Object({
 			await XKit.css_map.getCssMap();
 			this.queueoptions_selector = XKit.css_map.keyToCss('queueSettings');
 
+			if (this.preferences.shrink_height.value == "") {
+				this.preferences.shrink_height.value = "200px";
+			}
+
 			this.shrinkPostsCss = `
 				.sortableContainer header {
 					padding-top: 10px;
@@ -44,7 +61,7 @@ XKit.extensions.shuffle_queue = new Object({
 				.sortableContainer a[title=${XKit.interface.where().user_url}] {
 					display: none; /* hide the header avatar */
 				}
-				footer[role=contentinfo] {
+				.sortableContainer footer {
 					margin-top: 5px;
     				padding-bottom: 5px;
 				}
@@ -52,11 +69,11 @@ XKit.extensions.shuffle_queue = new Object({
 					position: relative;
 				}
 				.queue_plus_shrink_container_inner {
-					max-height: 200px !important;
+					max-height: ${this.preferences.shrink_height.value} !important;
 					overflow-y: scroll;
 				}
 				.queue_plus_shrink_container_shadow {
-					box-shadow: inset 0 -20px 20px -26px black, inset 0 20px 20px -26px black;
+					box-shadow: inset 0 -18px 18px -24px black, inset 0 18px 18px -24px black;
 					position: absolute;
 					width: 100%;
 					height: 100%;
