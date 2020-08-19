@@ -22,12 +22,14 @@ XKit.extensions.disable_gifs = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 
 		if (XKit.page.react) {
 			XKit.post_listener.add('disable_gifs', this.react_do);
 			this.react_do();
+
+			await XKit.css_map.getCssMap();
 
 			XKit.tools.add_css(`
 				figure:hover .xkit-paused-gif,
@@ -45,6 +47,9 @@ XKit.extensions.disable_gifs = new Object({
 					top: 5px;
 					left: 5px;
 					z-index: 2;
+				}
+				${XKit.css_map.keyToCss("baseContainer")} {
+					z-index: 3;
 				}
 			`, 'disable_gifs');
 
