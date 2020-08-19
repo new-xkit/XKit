@@ -1,5 +1,5 @@
 //* TITLE Disable Gifs **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Stops GIFs on dashboard **//
 //* DETAILS This is a very early preview version of an extension that allows you to stop the GIFs from playing on your dashboard. If you still would like to view them, you can click on the Play button on the post. Please note that for now, this extension can't stop GIFs added to text posts. **//
 //* DEVELOPER new-xkit **//
