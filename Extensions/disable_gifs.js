@@ -341,6 +341,7 @@ XKit.extensions.disable_gifs = new Object({
 	},
 
 	destroy: function() {
+		XKit.post_listener.remove('disable_gifs', this.react_do);
 		$('.xkit-paused-gif, .xkit-gif-label').remove();
 		$('.xkit-disabled-gif').removeClass('xkit-disabled-gif');
 		XKit.tools.remove_css("disable_gifs");
