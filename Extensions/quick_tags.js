@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.7 **//
+//* VERSION 0.6.8 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -85,10 +85,11 @@ XKit.extensions.quick_tags = new Object({
 		XKit.interface.post_window_listener.add("quick_tags", XKit.extensions.quick_tags.post_window);
 
 		if (XKit.page.react) {
-			XKit.interface.react.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon);
-			XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
+			XKit.interface.react.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon).then(() => {
+				XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
 
-			this.do_posts();
+				this.do_posts();
+			});
 		}
 	},
 

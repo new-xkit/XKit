@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.16 **//
+//* VERSION 4.4.18 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -538,7 +538,7 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.blog_listener.add("one_click_postage", this.init);
 	},
 
-	init: function(m_blogs) {
+	init: async function(m_blogs) {
 
 		var m_remove_button = "<div id=\"x1cpostage_remove_caption\">remove caption</div>";
 
@@ -651,12 +651,16 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.storage.set("one_click_postage", "share_on_" + $(this).attr('data-site'), m_value);
 		});
 
-		const reblog_buttons = [
+		var reblog_buttons = [
 			'.reblog_button',
 			'.post_control.reblog',
 			'button[aria-label="Reblog"]',
-			'a[role="button"][href*="/reblog/"]'
 		].join(',');
+
+		if (XKit.page.react) {
+			const reblogAriaLabel = await XKit.interface.translate('Reblog');
+			reblog_buttons += `, a[aria-label="${reblogAriaLabel}"][href*="/reblog/"]`;
+		}
 
 		$(document).on("mouseover", reblog_buttons, function(event) {
 			if ($(this).hasClass("radar_button") === true) {return; }

@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.10 **/
+//* VERSION 6.0.11 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -794,7 +794,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.notification_badge_style.value !== "default" && XKit.page.react) {
-			let notificationBadgeSel = XKit.css_map.keyToCss('notificationBadge');
+			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cls => `header a[tabindex="-1"] > .${cls}, header span[tabindex="-1"] > .${cls}`).join(', ');
 			let notificationBadgeStyle = '';
 			switch (XKit.extensions.tweaks.preferences.notification_badge_style.value) {
 				case "hidden":

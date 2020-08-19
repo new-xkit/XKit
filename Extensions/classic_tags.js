@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.7 **//
+//* VERSION 1.6.9 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -40,6 +40,11 @@ XKit.extensions.classic_tags = new Object({
 		},
 		"prepend_sidebar": {
 		    text: "Put tags at top of sidebar",
+		    default: false,
+		    value: false
+		},
+		"alphabetical_tags": {
+			text: "Sort tags alphabetically",
 		    default: false,
 		    value: false
 		},
@@ -301,6 +306,10 @@ XKit.extensions.classic_tags = new Object({
 		var extra_classes = "";
 		var m_html = "";
 
+		if (this.preferences.alphabetical_tags.value) {
+			this.tags.tags.sort((tagA, tagB) => (tagA.name > tagB.name) ? 1 : -1);
+		}
+
 		this.tags.tags.forEach(tag => {
 
 			if (location.href === tag.link) {
@@ -313,13 +322,16 @@ XKit.extensions.classic_tags = new Object({
 				extra_classes += " hidden";
 			}
 
+			const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' width='18' height='18' fill='var(--transparent-white-65)'><path d='M 0 0 L 0 8 L 11 18 L 18 10 L 8 0 L 0 0 z M 3.5 2 A 1.5 1.5 0 0 1 5 3.5 A 1.5 1.5 0 0 1 3.5 5 A 1.5 1.5 0 0 1 2 3.5 A 1.5 1.5 0 0 1 3.5 2 z '></path></svg>`;
+
 			m_html += `
 				<div class="xtag ${extra_classes}">
-					<div class="hide_overflow">
-						<a class="result_link" href="${tag.link}" data-tag-result="${tag.name}" ${(this.preferences.open_in_new_tab.value ? "target='_blank'" : "")}>
+					<a class="result_link" href="${tag.link}" data-tag-result="${tag.name}" ${(this.preferences.open_in_new_tab.value ? "target='_blank'" : "")}>
+						<div class="hide_overflow">
+							<span class="result_icon">${svg}</span>
 							<span class="result_title">${tag.name}</span>
-						</a>
-					</div>
+						</div>
+					</a>
 				</div>
 			`;
 
