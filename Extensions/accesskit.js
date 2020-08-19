@@ -136,7 +136,7 @@ XKit.extensions.accesskit = new Object({
 
 		XKit.tools.init_css('accesskit');
 
-		$.fx.off = this.preferences.xkit_disable_animation.value ? true : false;
+		$.fx.off = this.preferences.xkit_disable_animation.value;
 
 		if (XKit.page.react) {
 			const {font, make_links_blue, no_npf_colors, increase_post_margins, xkit_contrast_icons} = this.preferences;
