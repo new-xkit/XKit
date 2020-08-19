@@ -84,6 +84,11 @@ XKit.extensions.accesskit = new Object({
 			default: false,
 			value: false
 		},
+		xkit_disable_animation: {
+			text: "Disable some XKit animations",
+			default: false,
+			value: false
+		},
 		"sep-1": {
 			text: "Color Adjustments",
 			type: "separator"
@@ -130,6 +135,8 @@ XKit.extensions.accesskit = new Object({
 		this.running = true;
 
 		XKit.tools.init_css('accesskit');
+
+		$.fx.off = this.preferences.xkit_disable_animation.value ? true : false;
 
 		if (XKit.page.react) {
 			const {font, make_links_blue, no_npf_colors, increase_post_margins, xkit_contrast_icons} = this.preferences;
