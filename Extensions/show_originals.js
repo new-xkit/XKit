@@ -48,6 +48,11 @@ XKit.extensions.show_originals = new Object({
 			default: true,
 			value: true
 		},
+		"use_sticky_sidebar": {
+			text: 'Stick the toggle to the window as you scroll',
+			default: false,
+			value: false
+		},
 		"active_in_peepr": {
 			text: "Activate this extension on blogs in the sidebar",
 			default: false,
@@ -114,15 +119,27 @@ XKit.extensions.show_originals = new Object({
 		const show_sidebar_ifmine = where.queue || where.channel || where.drafts;
 
 		if (this.preferences.use_sidebar_toggle.value && (show_sidebar_definitely || show_sidebar_ifmine && !this.preferences.show_my_posts.value)) {
-			await XKit.interface.react.sidebar.add({
-				id: "xshow_originals_sidebar",
-				title: "Show Originals",
-				items: [{
-					id: "xshoworiginals_button",
-					text: "Originals Only",
-					count: XKit.extensions.show_originals.lbl_off
-				}]
-			});
+			if (this.preferences.use_sticky_sidebar.value) {
+				await XKit.interface.react.sidebar.addSticky({
+					id: "xshow_originals_sidebar",
+					title: "Show Originals",
+					items: [{
+						id: "xshoworiginals_button",
+						text: "Originals Only",
+						count: XKit.extensions.show_originals.lbl_off
+					}]
+				});
+			} else {
+				await XKit.interface.react.sidebar.add({
+					id: "xshow_originals_sidebar",
+					title: "Show Originals",
+					items: [{
+						id: "xshoworiginals_button",
+						text: "Originals Only",
+						count: XKit.extensions.show_originals.lbl_off
+					}]
+				});
+			}
 		}
 
 		XKit.extensions.show_originals.update_button();
