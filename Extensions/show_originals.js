@@ -12,7 +12,7 @@ XKit.extensions.show_originals = new Object({
 	running: false,
 	slow: true,
 
-	status: "false",
+	status: "on",
 	lbl_on: "on",
 	lbl_off: "off",
 	my_blogs: [],
@@ -24,7 +24,7 @@ XKit.extensions.show_originals = new Object({
 			type: "separator"
 		},
 		"show_original_reblogs": { //this needs a better description (actually all the options do)
-			text: "Show when someone you follow reblogs their own post",
+			text: "Show reblogs if you're following the source",
 			default: true,
 			value: true
 		},
@@ -34,7 +34,7 @@ XKit.extensions.show_originals = new Object({
 			value: true
 		},
 		"blogs_to_exclude": {
-			text: "Show every post from these blogs:",
+			text: "Show every post by these blogs:",
 			type: "text",
 			default: "",
 			value: ""
@@ -55,8 +55,8 @@ XKit.extensions.show_originals = new Object({
 		},
 		"active_in_peepr": {
 			text: "Activate this extension on blogs in the sidebar",
-			default: false,
-			value: false,
+			default: true,
+			value: true,
 		},
 		"sep-2": {
 			text: "Hidden post appearance",
@@ -81,24 +81,8 @@ XKit.extensions.show_originals = new Object({
 		});
 	},
 
-	run: async function() {
-		this.running = true;
-
-		const where = XKit.interface.where();
-
-		const dont_run = where.inbox || where.following  || where.followers  || where.activity;
-		const uses_masonry = where.explore || where.search || where.tagged;
-
-		if (dont_run || uses_masonry) { return; }
-
-		console.log("running show originals");
-
-		this.my_blogs = XKit.tools.get_blogs();
-
-		this.blogs_to_exclude = this.preferences.blogs_to_exclude.value.split(/[ ,]+/);
-
-
-		if (where.dashboard && XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
+	endlessScrollingWarning: async function() {
+		if (XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
 
 			//detects endless scrolling via the "next" button
 			const nextAriaLabel = await XKit.interface.translate('Next');
@@ -110,159 +94,165 @@ XKit.extensions.show_originals = new Object({
 				});
 			}
 		}
+	},
 
+	run: async function() {
+		this.running = true;
 
-		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
+		const where = XKit.interface.where();
 
+		//split up for clarity; masonry may be doable eventually
+		//also, no current detection for /liked/by in interface.where
+		const dont_run_irrelevant = where.inbox || where.following || where.followers || where.activity;
+		const dont_run_mine = where.queue || where.channel || where.drafts || where.likes;
+		const uses_masonry = where.explore || where.search || where.tagged;
 
-		const show_sidebar_definitely = where.dashboard || where.likes;
-		const show_sidebar_ifmine = where.queue || where.channel || where.drafts;
+		if (dont_run_irrelevant || dont_run_mine || uses_masonry) { return; }
 
-		if (this.preferences.use_sidebar_toggle.value && (show_sidebar_definitely || show_sidebar_ifmine && !this.preferences.show_my_posts.value)) {
-			if (this.preferences.use_sticky_sidebar.value) {
-				await XKit.interface.react.sidebar.addSticky({
-					id: "xshow_originals_sidebar",
-					title: "Show Originals",
-					items: [{
-						id: "xshoworiginals_button",
-						text: "Originals Only",
-						count: XKit.extensions.show_originals.lbl_off
-					}]
-				});
-			} else {
-				await XKit.interface.react.sidebar.add({
-					id: "xshow_originals_sidebar",
-					title: "Show Originals",
-					items: [{
-						id: "xshoworiginals_button",
-						text: "Originals Only",
-						count: XKit.extensions.show_originals.lbl_off
-					}]
-				});
-			}
-		}
-
-		XKit.extensions.show_originals.update_button();
-
-		$("#xshoworiginals_button").click(function() {
-			XKit.extensions.show_originals.toggle();
-
-			return false;
-		});
+		this.my_blogs = XKit.tools.get_blogs();
+		this.blogs_to_exclude = this.preferences.blogs_to_exclude.value.split(/[ ,]+/);
 
 		if (XKit.page.react) {
 
-			const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
-			const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+			if (where.dashboard) {
+				this.endlessScrollingWarning();
+			}
 
-			//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
-			const shrink_post_amount = '12px';
+			this.add_css();
 
-			XKit.tools.add_css(`
-				.showoriginals-hidden {
-					opacity: 0.75;
-					margin-bottom: calc(20px - ${shrink_post_amount});
-					transform: translateY(calc(-${shrink_post_amount}/2));
-				}
-				.showoriginals-hidden-note {
-					height: 30px;
-					color: ${automatic_color};
-					padding-left: 15px;
-					display: flex;
-					align-items: center;
-				}
-				.showoriginals-hidden-button {
-					line-height: initial;
-					margin: 0;
-					position: absolute !important;
-					right: 5px;
-					display: none !important;
-				}
-				.showoriginals-hidden:hover .showoriginals-hidden-button {
-					display: inline-block !important;
-				}
-				.showoriginals-hidden-button {
-					color: rgba(${automatic_button_color}, 0.8);
-					background: rgba(${automatic_button_color}, 0.05);
-					border-color: rgba(${automatic_button_color}, 0.3);
-				}
-				.showoriginals-hidden-button:hover {
-					color: rgba(${automatic_button_color});
-					background: rgba(${automatic_button_color}, 0.1);
-					border-color: rgba(${automatic_button_color}, 0.5);
-				}
-				.showoriginals-hidden-note ~ * {
-					display: none;
-				}
-			`, 'showoriginals');
+			const section = {
+				id: "xshow_originals_sidebar",
+				title: "Show Originals",
+				items: [{
+					id: "xshoworiginals_button",
+					text: "Originals Only",
+					count: XKit.extensions.show_originals.lbl_on
+				}]
+			};
 
-			XKit.interface.hide(".showoriginals-hidden-completely, .showoriginals-hidden-completely + :not([data-id])", "showoriginals");
+			if (this.preferences.use_sidebar_toggle.value) {
+				if (this.preferences.use_sticky_sidebar.value) {
+					await XKit.interface.react.sidebar.addSticky(section);
+				} else {
+					await XKit.interface.react.sidebar.add(section);
+				}
+				this.status = XKit.storage.get("show_originals", "status", "on");
+				$("#xshoworiginals_button .count").html(this.status == "on" ? this.lbl_on : this.lbl_off);
+				$("#xshoworiginals_button").click(function() {
+					XKit.extensions.show_originals.toggle();
+					return false;
+				});
+			}
 
-			XKit.post_listener.add('showoriginals', this.react_do);
-			this.react_do();
-			return;
+			if (!this.preferences.use_sidebar_toggle.value || this.status == "on") {
+				this.on();
+			}
 		}
 	},
 
-	update_button: function() {
+	add_css: function() {
+		const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
+		const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
 
-		if (XKit.extensions.show_originals.status == "true") {
-			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_on);
-		} else {
-			$("#xshoworiginals_button .count").html(XKit.extensions.show_originals.lbl_off);
-		}
+		//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+		const shrink_post_amount = '12px';
 
+		XKit.tools.add_css(`
+			.showoriginals-hidden {
+				opacity: 0.75;
+				margin-bottom: calc(20px - ${shrink_post_amount});
+				transform: translateY(calc(-${shrink_post_amount}/2));
+			}
+			.showoriginals-hidden-note {
+				height: 30px;
+				color: ${automatic_color};
+				padding-left: 15px;
+				display: flex;
+				align-items: center;
+			}
+			.showoriginals-hidden-button {
+				line-height: initial;
+				margin: 0;
+				position: absolute !important;
+				right: 5px;
+				display: none !important;
+			}
+			.showoriginals-hidden:hover .showoriginals-hidden-button {
+				display: inline-block !important;
+			}
+			.showoriginals-hidden-button {
+				color: rgba(${automatic_button_color}, 0.8);
+				background: rgba(${automatic_button_color}, 0.05);
+				border-color: rgba(${automatic_button_color}, 0.3);
+			}
+			.showoriginals-hidden-button:hover {
+				color: rgba(${automatic_button_color});
+				background: rgba(${automatic_button_color}, 0.1);
+				border-color: rgba(${automatic_button_color}, 0.5);
+			}
+			.showoriginals-hidden-note ~ * {
+				display: none;
+			}
+		`, 'showoriginals');
+
+		XKit.interface.hide(".showoriginals-hidden-completely, .showoriginals-hidden-completely + :not([data-id])", "showoriginals");
+	},
+
+	on: function() {
+		XKit.post_listener.add('showoriginals', XKit.extensions.show_originals.react_do);
+		XKit.extensions.show_originals.react_do();
+	},
+
+	off: function() {
+		$('.showoriginals-done').removeClass('showoriginals-done');
+		$('.showoriginals-hidden').removeClass('showoriginals-hidden');
+		$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
+		$('.showoriginals-hidden-note').remove();
+		XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do);
 	},
 
 	toggle: function() {
+		const {lbl_off, lbl_on, off, on} = XKit.extensions.show_originals;
 
-		if (XKit.extensions.show_originals.status == "true") {
-			XKit.extensions.show_originals.status = "false";
+		if (XKit.extensions.show_originals.status == "on") {
+			XKit.extensions.show_originals.status = "off";
+			$("#xshoworiginals_button .count").html(lbl_off);
+			off();
+
 		} else {
-			XKit.extensions.show_originals.status = "true";
+			XKit.extensions.show_originals.status = "on";
+			$("#xshoworiginals_button .count").html(lbl_on);
+			on();
 		}
-
-		this.react_do();
-
-		XKit.extensions.show_originals.update_button();
 		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
 
 	},
 
 	react_do: function() {
-
-		if (XKit.extensions.show_originals.preferences.use_sidebar_toggle.value && XKit.extensions.show_originals.status == "false") {
-			$('.showoriginals-done').removeClass('showoriginals-done');
-			$('.showoriginals-hidden').removeClass('showoriginals-hidden');
-			$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
-			$('.showoriginals-hidden-note').remove();
-			return;
-		}
-
-		//runs on each post
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
 			const {blogs_to_exclude, my_blogs} = XKit.extensions.show_originals;
-			const {rebloggedFromUrl, rebloggedFromName, rebloggedRootName, blogName} = await XKit.interface.react.post_props($this.attr('data-id'));
+			const {blogName, rebloggedFromName, rebloggedRootFollowing} = await XKit.interface.react.post_props($this.attr('data-id'));
 
-			// Don't hide posts that aren't reblogs
-			if (!rebloggedFromUrl) { return; }
+			//show original posts
+			if (!rebloggedFromName) { return; }
 
-			// If enabled, don't hide reblogs with the same blog as root
-			if (show_original_reblogs.value && rebloggedRootName == blogName) { return; }
+			//show reblogs if we're following the OP
+			if (show_original_reblogs.value && rebloggedRootFollowing) { return; }
 
-			//Don't hide my posts
+			//show reblogs if we're the OP
 			if (show_my_posts.value && my_blogs.includes(blogName)) { return; }
 
-			//Exclude excluded blogs
-			if (blogs_to_exclude.length && blogs_to_exclude.includes(blogName)) { return; }
+			//show reblogs if they're from excluded blogs
+			if (blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) { return; }
 
-			// Unless enabled, don't hide posts in the sidebar
+			//if disabled in the sidebar, show everything
 			const inSidebar = $this.closest("#glass-container").length > 0;
 			if (!active_in_peepr && inSidebar) { return; }
 
-			// We haven't returned, so hide the post now:
+
+			//we haven't returned, so hide the post now:
 
 			if (hide_posts_completely.value && !inSidebar) {
 				$this.addClass('showoriginals-hidden-completely');
@@ -280,11 +270,8 @@ XKit.extensions.show_originals = new Object({
 				const button = '<div class="xkit-button showoriginals-hidden-button">show reblog</div>';
 
 				$this.prepend(`<div class="showoriginals-hidden-note" aria-label="${aria_label}">${note_text}${button}</div>`);
-
-				// add listener to unhide the post on button click
 				$this.on('click', '.showoriginals-hidden-button', XKit.extensions.show_originals.unhide_post);
 			}
-
 		});
 	},
 
@@ -299,13 +286,9 @@ XKit.extensions.show_originals = new Object({
 
 	destroy: function() {
 		this.running = false;
-		$('.showoriginals-done').removeClass('showoriginals-done');
-		$('.showoriginals-hidden').removeClass('showoriginals-hidden');
-		$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
-		$('.showoriginals-hidden-note').remove();
-		XKit.post_listener.remove('showoriginals');
+		this.off();
 		XKit.tools.remove_css("showoriginals");
 		XKit.interface.react.sidebar.remove("xshow_originals_sidebar");
 	}
-
 });
+
