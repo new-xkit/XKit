@@ -18,7 +18,7 @@ XKit.extensions.tf2_reblogs = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 		if (this.preferences.random_crits.value) {
 			XKit.tools.add_css(`
@@ -29,8 +29,28 @@ XKit.extensions.tf2_reblogs = new Object({
 				"tf2_reblogs_crits"
 			);
 		}
+		if (XKit.page.react) {
+			await XKit.css_map.getCssMap();
+			this.selector = XKit.css_map.keyToCss("reblogAttribution");
+
+			XKit.post_listener.add("tf2_reblogs", XKit.extensions.tf2_reblogs.react_change_icon);
+			XKit.extensions.tf2_reblogs.react_change_icon();
+			return;
+		}
 		XKit.post_listener.add("tf2_reblogs", XKit.extensions.tf2_reblogs.change_icon);
 		XKit.extensions.tf2_reblogs.change_icon();
+	},
+
+	selector: "",
+
+	react_change_icon: function() {
+		$(XKit.extensions.tf2_reblogs.selector).each(function() {
+			var iconurl = XKit.extensions.tf2_reblogs.icons[$(this).closest("[data-id]").attr("data-id") % XKit.extensions.tf2_reblogs.icons.length];
+			console.log($(this).closest("[data-id]").attr("data-id") % XKit.extensions.tf2_reblogs.icons.length);
+			if (iconurl) {
+				$(this).find("svg").replaceWith('<img class="tf2_icon" src="' + iconurl + '" style="vertical-align: top; margin: 0 5px; max-height: 20px;">');
+			}
+		});
 	},
 
 	change_icon: function() {
