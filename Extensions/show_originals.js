@@ -239,53 +239,52 @@ XKit.extensions.show_originals = new Object({
 
 
 	/**
-	 * Saves and restores the user's scroll location after a command that
+	 * Preserves the user's scroll location while running a function that modifies post heights in
+	 * real time.
 	 *
+	 * This is done by choosing a point on the screen, picking the nearest post, and restoring
+	 * the position of that post relative to that point, even if it becomes collapsed.
 	 *
-	 * Stores the scroll height relative to a position in the viewport and the nearest post for restoreScrollPosition
-	 * .
-	 * @param {JQuery} [$targetElement] -
-	 * @returns {Object} scrollPosition
-	 * @returns {number} scrollPosition.targetViewportLocation - The
-	 * @returns {Object} scrollPosition.fixedPost - The post we will keep stationary
-	 * @returns {number} scrollPosition.offset - The height difference between
+	 * Supplying the element the user clicked to trigger height modification is recommended, as the
+	 * closest post to where they clicked is probably what they expect to stay stationary. If not,
+	 * the center of the viewport is used.
+	 *
+	 * @param {Function} func - the post-modifying function to be run
+	 * @param {JQuery} [$targetElement] - a JQuery object whose position will be the target
 	 */
-	saveScrollPosition: function($targetElement) {
+	preserveScrollPosition: function(func, $targetElement) {
 		var $fixedPost = null;
-		var pageOffset = $(window).scrollTop();
-		var targetPageLocation = $targetElement ? $targetElement.offset().top : pageOffset + $(window).height() / 2;
-		var targetViewportLocation = targetPageLocation - pageOffset;
+		const oldPagePosition = $(window).scrollTop();
+		const targetLocationPage = $targetElement ?
+			$targetElement.offset().top + $targetElement.outerHeight() / 2 :
+			oldPagePosition + $(window).height() / 2;
 
-		console.log(`----`);
+		const targetLocationViewport = targetLocationPage - oldPagePosition;
 
 		$('[data-id]').each(function() {
-			if ($(this).offset().top + $(this).outerHeight() > targetPageLocation) {
+			if ($(this).offset().top + $(this).outerHeight() > targetLocationPage) {
 				$fixedPost = $(this);
-				return false;
+				return false; //breaks each()
 			}
 		});
-		if (!$fixedPost) { return null; }
+		if (!$fixedPost) { func(); return; }
 
-		var offset = targetPageLocation - $fixedPost.offset().top;
+		//debug
+		//$fixedPost.css("outline", "1px solid red");
+		//$fixedPost.css("outline-offset", "3px");
 
-		console.log(`post viewport location = ${$fixedPost.offset().top - pageOffset}`);
-		console.log(`saving scroll`);
+		var offset = targetLocationPage - $fixedPost.offset().top;
 
-		return {$fixedPost: $fixedPost, targetViewportLocation: targetViewportLocation, offset: offset};
-	},
+		func();
 
-	restoreScrollPosition: function(scrollPosition) {
-		if (!scrollPosition) { return; }
-		console.log(`restoring scroll`);
+		offset = Math.min(offset, $fixedPost.outerHeight());
 
-		const {$fixedPost, targetViewportLocation, offset} = scrollPosition;
-
-		var pageOffset = $fixedPost.offset().top + Math.min(offset, $fixedPost.outerHeight()) - targetViewportLocation;
-
-		$(window).scrollTop(Math.max(pageOffset, 0));
-
-		console.log(`post viewport location = ${$fixedPost.offset().top - pageOffset}`);
-		console.log(`----`);
+		//1ms delay is a hack but I dunno why it doesn't work without it
+		//maybe it's Tumblr's javascript?
+		setTimeout(() => {
+			const newPagePosition = $fixedPost.offset().top + offset - targetLocationViewport;
+			$(window).scrollTop(Math.max(newPagePosition, 0));
+		}, 1);
 	},
 
 	toggle: async function() {
@@ -294,72 +293,24 @@ XKit.extensions.show_originals = new Object({
 		if (self.status == "on") {
 			self.status = "off";
 			$("#xshoworiginals_button .count").html(self.lbl_off);
-			//self.off();
-
 
 			if (!self.preferences.use_sticky_sidebar.value) {
 				self.off();
 			} else {
-				const scrollPosition = self.saveScrollPosition($("#xshoworiginals_button"));
-				//const scrollPosition = self.saveScrollPosition();
-
-
-				if (scrollPosition.$fixedPost) {
-					//scrollPosition.$fixedPost.css("outline", "1px solid red");
-					//scrollPosition.$fixedPost.css("outline-offset", "3px");
-				}
-				//await self.on();
-
-
-				const test = async () => {
-					await self.off();
-
-					const test2 = async () => {
-						self.restoreScrollPosition(scrollPosition);
-					};
-
-					setTimeout(test2, 1);
-
-				};
-				//test();
-				setTimeout(test, 1);
-
+				this.preserveScrollPosition(self.off, $("#xshoworiginals_button"));
 			}
-
 
 		} else {
 			self.status = "on";
 			$("#xshoworiginals_button .count").html(self.lbl_on);
+
 			if (!self.preferences.use_sticky_sidebar.value) {
 				self.on();
 			} else {
-				const scrollPosition = self.saveScrollPosition($("#xshoworiginals_button"));
-				//const scrollPosition = self.saveScrollPosition();
-
-				if (scrollPosition.$fixedPost) {
-					//scrollPosition.$fixedPost.css("outline", "1px solid red");
-					//scrollPosition.$fixedPost.css("outline-offset", "3px");
-				}
-				//await self.on();
-
-
-				const test = async () => {
-					await self.on();
-
-					const test2 = async () => {
-						self.restoreScrollPosition(scrollPosition);
-					};
-
-					setTimeout(test2, 1);
-
-				};
-				//test();
-				setTimeout(test, 1);
-
+				this.preserveScrollPosition(self.on, $("#xshoworiginals_button"));
 			}
 		}
 		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
-
 	},
 
 	react_do: function() {
