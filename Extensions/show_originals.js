@@ -237,18 +237,126 @@ XKit.extensions.show_originals = new Object({
 		XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do);
 	},
 
-	toggle: function() {
-		const {lbl_off, lbl_on, off, on} = XKit.extensions.show_originals;
 
-		if (XKit.extensions.show_originals.status == "on") {
-			XKit.extensions.show_originals.status = "off";
-			$("#xshoworiginals_button .count").html(lbl_off);
-			off();
+	/**
+	 * Saves and restores the user's scroll location after a command that
+	 *
+	 *
+	 * Stores the scroll height relative to a position in the viewport and the nearest post for restoreScrollPosition
+	 * .
+	 * @param {JQuery} [$targetElement] -
+	 * @returns {Object} scrollPosition
+	 * @returns {number} scrollPosition.targetViewportLocation - The
+	 * @returns {Object} scrollPosition.fixedPost - The post we will keep stationary
+	 * @returns {number} scrollPosition.offset - The height difference between
+	 */
+	saveScrollPosition: function($targetElement) {
+		var $fixedPost = null;
+		var pageOffset = $(window).scrollTop();
+		var targetPageLocation = $targetElement ? $targetElement.offset().top : pageOffset + $(window).height() / 2;
+		var targetViewportLocation = targetPageLocation - pageOffset;
+
+		console.log(`----`);
+
+		$('[data-id]').each(function() {
+			if ($(this).offset().top + $(this).outerHeight() > targetPageLocation) {
+				$fixedPost = $(this);
+				return false;
+			}
+		});
+		if (!$fixedPost) { return null; }
+
+		var offset = targetPageLocation - $fixedPost.offset().top;
+
+		console.log(`post viewport location = ${$fixedPost.offset().top - pageOffset}`);
+		console.log(`saving scroll`);
+
+		return {$fixedPost: $fixedPost, targetViewportLocation: targetViewportLocation, offset: offset};
+	},
+
+	restoreScrollPosition: function(scrollPosition) {
+		if (!scrollPosition) { return; }
+		console.log(`restoring scroll`);
+
+		const {$fixedPost, targetViewportLocation, offset} = scrollPosition;
+
+		var pageOffset = $fixedPost.offset().top + Math.min(offset, $fixedPost.outerHeight()) - targetViewportLocation;
+
+		$(window).scrollTop(Math.max(pageOffset, 0));
+
+		console.log(`post viewport location = ${$fixedPost.offset().top - pageOffset}`);
+		console.log(`----`);
+	},
+
+	toggle: async function() {
+		const self = XKit.extensions.show_originals;
+
+		if (self.status == "on") {
+			self.status = "off";
+			$("#xshoworiginals_button .count").html(self.lbl_off);
+			//self.off();
+
+
+			if (!self.preferences.use_sticky_sidebar.value) {
+				self.off();
+			} else {
+				const scrollPosition = self.saveScrollPosition($("#xshoworiginals_button"));
+				//const scrollPosition = self.saveScrollPosition();
+
+
+				if (scrollPosition.$fixedPost) {
+					//scrollPosition.$fixedPost.css("outline", "1px solid red");
+					//scrollPosition.$fixedPost.css("outline-offset", "3px");
+				}
+				//await self.on();
+
+
+				const test = async () => {
+					await self.off();
+
+					const test2 = async () => {
+						self.restoreScrollPosition(scrollPosition);
+					};
+
+					setTimeout(test2, 1);
+
+				};
+				//test();
+				setTimeout(test, 1);
+
+			}
+
 
 		} else {
-			XKit.extensions.show_originals.status = "on";
-			$("#xshoworiginals_button .count").html(lbl_on);
-			on();
+			self.status = "on";
+			$("#xshoworiginals_button .count").html(self.lbl_on);
+			if (!self.preferences.use_sticky_sidebar.value) {
+				self.on();
+			} else {
+				const scrollPosition = self.saveScrollPosition($("#xshoworiginals_button"));
+				//const scrollPosition = self.saveScrollPosition();
+
+				if (scrollPosition.$fixedPost) {
+					//scrollPosition.$fixedPost.css("outline", "1px solid red");
+					//scrollPosition.$fixedPost.css("outline-offset", "3px");
+				}
+				//await self.on();
+
+
+				const test = async () => {
+					await self.on();
+
+					const test2 = async () => {
+						self.restoreScrollPosition(scrollPosition);
+					};
+
+					setTimeout(test2, 1);
+
+				};
+				//test();
+				setTimeout(test, 1);
+
+			}
 		}
 		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
 
