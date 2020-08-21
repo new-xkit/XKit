@@ -52,11 +52,11 @@ XKit.extensions.addressbar = new Object({
 	},
 	
 	replace_address: function(postid) {
-		postid = Number(postid);
+		postid = BigInt(postid);
 		window.history.replaceState(
 			{ id: postid }, 
 			'Tumblr - ' + postid, //title param is ignored currently
-			'?max_post_id=' + (postid + 1) //has to be the id immediately after
+			'?max_post_id=' + (postid + BigInt(1)) //has to be the id immediately after
 		);
 	},
 
