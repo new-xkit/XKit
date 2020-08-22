@@ -1166,11 +1166,6 @@ XKit.extensions.xkit_patches = new Object({
 
 					.xkit--react .small_links a:first-child { float: left; }
 					.xkit--react .small_links a:nth-child(2) { float: right; }
-
-					.xkit--react #xkit_react_sidebar_sticky {
-						position: sticky;
-						top: 69px;
-					}
 			`,
 
 				init: async function() {
@@ -1280,58 +1275,6 @@ XKit.extensions.xkit_patches = new Object({
 					}
 
 					$("#xkit_react_sidebar").append(await this.construct(section));
-				},
-
-				sidebarAdClass: "",
-
-				initSticky: async function() {
-					await XKit.css_map.getCssMap();
-
-					if ($("#xkit_react_sidebar_sticky").length) { return; }
-					//everything after this check is synchronous
-
-					if (!this.css_added) {
-						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
-						this.css_added = true;
-					}
-
-					const html = `<div id="xkit_react_sidebar_sticky"></div>`;
-
-					//inject before the sidebar ad if it exists
-					const $sidebarAdItem = $(XKit.css_map.keyToCss("mrecContainer")).first();
-					if ($sidebarAdItem.length) {
-						$sidebarAdItem.before(html);
-						this.sidebarAdClass = XKit.css_map.keyToCss("mrecContainer");
-						return;
-					}
-
-					//inject at the bottom of the sidebar container otherwise
-					const $sidebarContainer = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
-					$sidebarContainer.append(html);
-
-					this.running_sticky = false;
-				},
-
-
-				/**
-				 * Shortcut command for constructing and applying controls sections to a sticky
-				 * container. Note that this may be below the stock Tumblr sidebar items if the
-				 * user doesn't hide recommended blogs/radar and thus may not be on the screen
-				 * initally.
-				 *
-				 * @param {Object} section - see construct's documentation
-				 */
-				addSticky: async function(section) {
-					if (!XKit.page.react) { return; }
-					if (!$("#xkit_react_sidebar_sticky").length) {
-						await this.initSticky();
-					}
-
-					$("#xkit_react_sidebar_sticky").append(await this.construct(section));
-
-					if (this.sidebarAdClass) {
-						$(this.sidebarAdClass).css("top", 69 + 38 + $("#xkit_react_sidebar_sticky").height());
-					}
 				},
 
 				remove: id => $(`#${id}, #${id} + .small_links`).remove()
