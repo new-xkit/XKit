@@ -234,7 +234,11 @@ XKit.extensions.show_originals = new Object({
 		$('.showoriginals-hidden').removeClass('showoriginals-hidden');
 		$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
 		$('.showoriginals-hidden-note').remove();
-		XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do);
+		try {
+			XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do);
+		} catch (e) {
+			//no post listener to remove
+		}
 	},
 
 
