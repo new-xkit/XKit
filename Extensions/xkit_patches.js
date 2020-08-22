@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.9 **//
+//* VERSION 7.4.10 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -830,7 +830,11 @@ XKit.extensions.xkit_patches = new Object({
 				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
 
 				if (typeof without_tag !== "undefined") {
-					exclusions.push("." + without_tag);
+					if (!Array.isArray(without_tag)) {
+						without_tag = [without_tag];
+					}
+
+					without_tag.forEach(tag => exclusions.push("." + without_tag));
 				}
 
 				for (var i = 0; i < exclusions.length; i++) {
@@ -924,7 +928,11 @@ XKit.extensions.xkit_patches = new Object({
 				get_posts: async function(without_tag, can_edit) {
 					let selector = "[data-id]";
 					if (without_tag !== undefined) {
-						selector += `:not(.${without_tag})`;
+						if (!Array.isArray(without_tag)) {
+							without_tag = [without_tag];
+						}
+
+						selector += `:not(${without_tag.map(tag => "." + tag).join(",")})`;
 					}
 
 					var $posts = $(selector);
