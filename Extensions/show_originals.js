@@ -277,14 +277,15 @@ XKit.extensions.show_originals = new Object({
 
 		func();
 
-		offset = Math.min(offset, $fixedPost.outerHeight());
-
 		//1ms delay is a hack but I dunno why it doesn't work without it
 		//maybe it's Tumblr's javascript?
 		setTimeout(() => {
+			offset = Math.min(offset, $fixedPost.outerHeight());
 			const newPagePosition = $fixedPost.offset().top + offset - targetLocationViewport;
-			$(window).scrollTop(Math.max(newPagePosition, 0));
-		}, 1);
+			if (Math.abs(newPagePosition - $(window).scrollTop()) > 10) {
+				$(window).scrollTop(Math.max(newPagePosition, 0));
+			}
+		}, 10);
 	},
 
 	toggle: async function() {
