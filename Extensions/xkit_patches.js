@@ -490,6 +490,8 @@ XKit.extensions.xkit_patches = new Object({
 
 			XKit.interface.sidebar = {
 				init: function() {
+					if (XKit.page.react) { return; }
+
 					const html = `<div id="xkit_sidebar"></div>`;
 					const priority = [
 						$(".small_links"),
@@ -1107,6 +1109,9 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.interface.react.sidebar = {
 
 				css_added: false,
+				is_running: false,
+				is_running_sticky: false,
+
 				react_sidebar_css: `
 					.xkit--react .controls_section li {
 						list-style-type: none;
@@ -1164,14 +1169,15 @@ XKit.extensions.xkit_patches = new Object({
 					.xkit--react .small_links a:first-child { float: left; }
 					.xkit--react .small_links a:nth-child(2) { float: right; }
 
-					.xkit--react #xkit_sidebar_sticky {
+					.xkit--react #xkit_react_sidebar_sticky {
 						position: sticky;
 						top: 69px;
 					}
 			`,
 
 				init: async function() {
-					if ($("#xkit_sidebar").length) { return; }
+					if ($("#xkit_react_sidebar").length || this.running) { return; }
+					this.running = true;
 
 					if (!this.css_added) {
 						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
@@ -1179,7 +1185,7 @@ XKit.extensions.xkit_patches = new Object({
 					}
 
 					await XKit.css_map.getCssMap();
-					const html = `<div id="xkit_sidebar"></div>`;
+					const html = `<div id="xkit_react_sidebar"></div>`;
 
 					//inject the xkit sidebar after the navigation on tumblr.com/blog/myblogname pages
 					const $navSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
@@ -1201,12 +1207,13 @@ XKit.extensions.xkit_patches = new Object({
 						const loadingObserver = new MutationObserver(function(mutations) {
 							const $newNavSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
 							if ($newNavSidebarItem.length) {
-								$newNavSidebarItem.after($("#xkit_sidebar"));
+								$newNavSidebarItem.after($("#xkit_react_sidebar"));
 								loadingObserver.disconnect();
 							}
 						});
 						loadingObserver.observe($sidebarContainer.get(0), {childList: true, subtree: true});
 					}
+					this.running = false;
 				},
 
 				/**
@@ -1269,17 +1276,18 @@ XKit.extensions.xkit_patches = new Object({
 				 */
 				add: async function(section) {
 					if (!XKit.page.react) { return; }
-					if (!$("#xkit_sidebar").length) {
+					if (!$("#xkit_react_sidebar").length) {
 						await this.init();
 					}
 
-					$("#xkit_sidebar").append(await this.construct(section));
+					$("#xkit_react_sidebar").append(await this.construct(section));
 				},
 
 				sidebarAdClass: "",
 
 				initSticky: async function() {
-					if ($("#xkit_sidebar_sticky").length) { return; }
+					if ($("#xkit_react_sidebar_sticky").length || this.running_sticky) { return; }
+					this.running_sticky = true;
 
 					if (!this.css_added) {
 						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
@@ -1287,7 +1295,7 @@ XKit.extensions.xkit_patches = new Object({
 					}
 
 					await XKit.css_map.getCssMap();
-					const html = `<div id="xkit_sidebar_sticky"></div>`;
+					const html = `<div id="xkit_react_sidebar_sticky"></div>`;
 
 					//inject before the sidebar ad if it exists
 					const $sidebarAdItem = $(XKit.css_map.keyToCss("mrecContainer")).first();
@@ -1300,6 +1308,8 @@ XKit.extensions.xkit_patches = new Object({
 					//inject at the bottom of the sidebar container otherwise
 					const $sidebarContainer = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
 					$sidebarContainer.append(html);
+
+					this.running_sticky = false;
 				},
 
 
@@ -1313,14 +1323,14 @@ XKit.extensions.xkit_patches = new Object({
 				 */
 				addSticky: async function(section) {
 					if (!XKit.page.react) { return; }
-					if (!$("#xkit_sidebar_sticky").length) {
+					if (!$("#xkit_react_sidebar_sticky").length) {
 						await this.initSticky();
 					}
 
-					$("#xkit_sidebar_sticky").append(await this.construct(section));
+					$("#xkit_react_sidebar_sticky").append(await this.construct(section));
 
 					if (this.sidebarAdClass) {
-						$(this.sidebarAdClass).css("top", 69 + 38 + $("#xkit_sidebar_sticky").height());
+						$(this.sidebarAdClass).css("top", 69 + 38 + $("#xkit_react_sidebar_sticky").height());
 					}
 				},
 
