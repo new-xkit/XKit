@@ -15,6 +15,11 @@ XKit.extensions.disable_gifs = new Object({
 	slow: true,
 
 	preferences: {
+		"hover": {
+			text: "Animate gifs when you mouse over them",
+			default: true,
+			value: true
+		},
 		"hide_completely": {
 			text: "Completely hide posts with GIFs.",
 			default: false,
@@ -32,10 +37,6 @@ XKit.extensions.disable_gifs = new Object({
 			await XKit.css_map.getCssMap();
 
 			XKit.tools.add_css(`
-				figure:hover .xkit-paused-gif,
-				figure:hover .xkit-gif-label {
-					display: none;
-				}
 				.xkit-gif-label {
 					color: white;
 					background-color: black;
@@ -51,7 +52,19 @@ XKit.extensions.disable_gifs = new Object({
 				${XKit.css_map.keyToCss("baseContainer")} {
 					z-index: 3;
 				}
+				.xkit--react .xkit-extension-setting[data-extension-id="disable_gifs"][data-setting-id="hide_completely"] {
+					display: none;
+				}
 			`, 'disable_gifs');
+
+			if (this.preferences.hover.value) {
+				XKit.tools.add_css(`
+					figure:hover .xkit-paused-gif,
+					figure:hover .xkit-gif-label {
+						display: none;
+					}
+				`, 'disable_gifs');
+			}
 
 			return;
 		}
