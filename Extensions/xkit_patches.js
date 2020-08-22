@@ -1109,8 +1109,6 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.interface.react.sidebar = {
 
 				css_added: false,
-				is_running: false,
-				is_running_sticky: false,
 
 				react_sidebar_css: `
 					.xkit--react .controls_section li {
@@ -1176,15 +1174,16 @@ XKit.extensions.xkit_patches = new Object({
 			`,
 
 				init: async function() {
-					if ($("#xkit_react_sidebar").length || this.running) { return; }
-					this.running = true;
+					await XKit.css_map.getCssMap();
+
+					if ($("#xkit_react_sidebar").length) { return; }
+					//everything after this check is synchronous
 
 					if (!this.css_added) {
 						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
 						this.css_added = true;
 					}
 
-					await XKit.css_map.getCssMap();
 					const html = `<div id="xkit_react_sidebar"></div>`;
 
 					//inject the xkit sidebar after the navigation on tumblr.com/blog/myblogname pages
@@ -1286,15 +1285,16 @@ XKit.extensions.xkit_patches = new Object({
 				sidebarAdClass: "",
 
 				initSticky: async function() {
-					if ($("#xkit_react_sidebar_sticky").length || this.running_sticky) { return; }
-					this.running_sticky = true;
+					await XKit.css_map.getCssMap();
+
+					if ($("#xkit_react_sidebar_sticky").length) { return; }
+					//everything after this check is synchronous
 
 					if (!this.css_added) {
 						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
 						this.css_added = true;
 					}
 
-					await XKit.css_map.getCssMap();
 					const html = `<div id="xkit_react_sidebar_sticky"></div>`;
 
 					//inject before the sidebar ad if it exists
