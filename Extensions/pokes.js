@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.12.0 **//
+//* VERSION 0.12.1 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -10,6 +10,7 @@
 XKit.extensions.pokes = {
 	running: false,
 	pokedex_url: "https://new-xkit.github.io/XKit/Extensions/dist/page/pokedex.json",
+	selector: "",
 
 	preferences: {
 		"allow_fullwidth": {
@@ -40,6 +41,7 @@ XKit.extensions.pokes = {
 	run: function() {
 		if (!window.location.href.match(/www.tumblr.com/)) return;
 		this.running = true;
+		this.selector = (XKit.page.react ? "[data-id] article" : ".post_avatar") + ":not(.poked):not(.unpokable)";
 		XKit.tools.init_css('pokes');
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
@@ -73,7 +75,7 @@ XKit.extensions.pokes = {
 	},
 
 	checkEligibility: function() {
-		$(".post_avatar:not(.poked):not(.unpokable)").each(function() {
+		$(XKit.extensions.pokes.selector).each(function() {
 			if (XKit.extensions.pokes.chanceGen()) {
 				$(this).addClass("poked");
 			} else {
@@ -144,7 +146,7 @@ XKit.extensions.pokes = {
 				'</div>';
 			}
 
-			pokedThing.after(poke_html);
+			XKit.page.react ? pokedThing.prepend(poke_html) : pokedThing.after(poke_html);
 			pokedThing.parent().find(".poke").click(function(event) {
 				if (XKit.storage.get("pokes", "pokemon_storage", "") === "") {
 					XKit.storage.set("pokes", "pokemon_storage", "[]");
