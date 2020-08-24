@@ -334,6 +334,7 @@ XKit.extensions.pokes = {
 				}
 			});
 		});
+		$(".xkit-pokes-pc-info .nickname-textbox").keydown(event => event.stopPropagation());
 		$(".xkit-pokes-pc-info .release_pokemon").click(function() {
 			var pokename = $("div.active").attr("data-pokespecies");
 			if (typeof $("div.active").attr("data-pokenick") !== "undefined" && $("div.active").attr("data-pokenick")) {
