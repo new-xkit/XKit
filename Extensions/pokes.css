@@ -148,10 +148,10 @@
 	font-family: pokepixelplus, monospace;
 	font-weight: 500;
 	font-size: 28px;
+	line-height: 38px;
 }
 .nickname::before {
-	content: "\EA27";
-	font-family: "tumblr-icons";
+	content: url("data:image/svg+xml,%3Csvg height='38px' xmlns='http://www.w3.org/2000/svg' viewBox='0 -178 1000 1356'%3E%3Cpath d='M358 703l-88 30 29-89 267-266 59 59zm267-384l-59-59-340 339-88 266 265-89 339-339zm235-59L742 142q-12-12-29-12t-30 12l-60 61 177 176 60-60q12-12 12-29.5T860 260z'/%3E%3C/svg%3E");
 	float: left;
 }
 .species {
