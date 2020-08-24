@@ -1,7 +1,7 @@
 //* TITLE Show Originals **//
 //* VERSION 1.2.6 **//
-//* DESCRIPTION Only shows non-reblogged posts **//
-//* DETAILS This extension allows you to only see original (non-reblogged) posts made by users on your dashboard.**//
+//* DESCRIPTION Only shows original content by blogs you follow **//
+//* DETAILS This extension allows you to focus on original content made by users you follow.**//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -20,24 +20,24 @@ XKit.extensions.show_originals = new Object({
 
 	preferences: {
 		"sep-0": {
-			text: "Exclusions",
+			text: "Shown content",
 			type: "separator"
 		},
 		"show_original_reblogs": { //this needs a better description (actually all the options do)
-			text: "Show reblogs if you're following the source blog",
-			default: false,
-			value: false
-		},
-		"show_my_posts": {
-			text: "Always show my posts",
+			text: "Show reblogged posts with added original content",
 			default: true,
 			value: true
 		},
 		"blogs_to_exclude": {
-			text: "Show every post by these blogs:",
+			text: "Show every reblog by these blogs:",
 			type: "text",
 			default: "",
 			value: ""
+		},
+		"show_my_posts": {
+			text: "Never hide my posts",
+			default: true,
+			value: true
 		},
 		"sep-1": {
 			text: "Functionality",
@@ -54,7 +54,7 @@ XKit.extensions.show_originals = new Object({
 			value: false
 		},
 		"active_in_peepr": {
-			text: "Activate this extension on blogs in the sidebar",
+			text: "Activate Show Originals on blogs in the sidebar",
 			default: true,
 			value: true,
 		},
@@ -324,13 +324,13 @@ XKit.extensions.show_originals = new Object({
 			const $this = $(this).addClass('showoriginals-done');
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
 			const {blogs_to_exclude, my_blogs} = XKit.extensions.show_originals;
-			const {blogName, rebloggedFromName, rebloggedRootFollowing} = await XKit.interface.react.post_props($this.attr('data-id'));
+			const {blogName, rebloggedFromName, content} = await XKit.interface.react.post_props($this.attr('data-id'));
 
 			//show original posts
 			if (!rebloggedFromName) { return; }
 
-			//show reblogs if we're following the OP
-			if (show_original_reblogs.value && rebloggedRootFollowing) { return; }
+			//show reblogs with added original content
+			if (show_original_reblogs.value && content.length) { return; }
 
 			//show reblogs if we're the OP
 			if (show_my_posts.value && my_blogs.includes(blogName)) { return; }
