@@ -24,9 +24,9 @@ XKit.extensions.show_originals = new Object({
 			type: "separator"
 		},
 		"show_original_reblogs": { //this needs a better description (actually all the options do)
-			text: "Show reblogs if you're following the source",
-			default: true,
-			value: true
+			text: "Show reblogs if you're following the source blog",
+			default: false,
+			value: false
 		},
 		"show_my_posts": {
 			text: "Always show my posts",
@@ -138,10 +138,7 @@ XKit.extensions.show_originals = new Object({
 				}
 				this.status = XKit.storage.get("show_originals", "status", "on");
 				$("#xshoworiginals_button .count").html(this.status == "on" ? this.lbl_on : this.lbl_off);
-				$("#xshoworiginals_button").click(function() {
-					XKit.extensions.show_originals.toggle();
-					return false;
-				});
+				$("#xshoworiginals_button").click(this.toggle);
 			}
 
 			if (!this.preferences.use_sidebar_toggle.value || this.status == "on") {
@@ -170,6 +167,9 @@ XKit.extensions.show_originals = new Object({
 				}
 				.post.is_reblog .post_footer {
 					display: none;
+				}
+				.post.is_reblog .post-source-footer {
+					display: none;
 				}`, "show_originals");
 		}
 		XKit.post_listener.add("show_originals", XKit.extensions.show_originals.call_tumblr_resize);
@@ -177,6 +177,8 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	add_css: function() {
+
+		//match blog theme colors if we're in peepr
 		const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
 		const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
 
@@ -281,8 +283,7 @@ XKit.extensions.show_originals = new Object({
 
 		func();
 
-		//small delay is a hack but I dunno why it doesn't work without it
-		//maybe it's Tumblr's javascript?
+		//delay is kinda a hack but seems necessary to avoid getting clobbered by Tumblr's javascript
 		setTimeout(() => {
 			offset = Math.min(offset, $fixedPost.outerHeight());
 			const newPagePosition = $fixedPost.offset().top + offset - targetLocationViewport;
@@ -293,29 +294,29 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	toggle: async function() {
-		const self = XKit.extensions.show_originals;
+		const {show_originals} = XKit.extensions;
 
-		if (self.status == "on") {
-			self.status = "off";
-			$("#xshoworiginals_button .count").html(self.lbl_off);
+		if (show_originals.status == "on") {
+			show_originals.status = "off";
+			$("#xshoworiginals_button .count").html(show_originals.lbl_off);
 
-			if (!self.preferences.use_sticky_sidebar.value) {
-				self.off();
+			if (!show_originals.preferences.use_sticky_sidebar.value) {
+				show_originals.off();
 			} else {
-				this.preserveScrollPosition(self.off, $("#xshoworiginals_button"));
+				show_originals.preserveScrollPosition(show_originals.off, $("#xshoworiginals_button"));
 			}
 
 		} else {
-			self.status = "on";
-			$("#xshoworiginals_button .count").html(self.lbl_on);
+			show_originals.status = "on";
+			$("#xshoworiginals_button .count").html(show_originals.lbl_on);
 
-			if (!self.preferences.use_sticky_sidebar.value) {
-				self.on();
+			if (!show_originals.preferences.use_sticky_sidebar.value) {
+				show_originals.on();
 			} else {
-				this.preserveScrollPosition(self.on, $("#xshoworiginals_button"));
+				show_originals.preserveScrollPosition(show_originals.on, $("#xshoworiginals_button"));
 			}
 		}
-		XKit.storage.set("show_originals", "status", XKit.extensions.show_originals.status);
+		XKit.storage.set("show_originals", "status", show_originals.status);
 	},
 
 	react_do: function() {
@@ -386,6 +387,12 @@ XKit.extensions.show_originals = new Object({
 		if (XKit.page.react) {
 			this.off();
 			XKit.interface.react.sidebar.remove("xshow_originals_sidebar");
+		} else {
+			try {
+				XKit.post_listener.remove("show_originals", XKit.extensions.show_originals.call_tumblr_resize);
+			} catch (e) {
+				//no post listener to remove
+			}
 		}
 	}
 });
