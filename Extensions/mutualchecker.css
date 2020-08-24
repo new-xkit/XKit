@@ -5,18 +5,31 @@
 	line-height: 0;
 }
 
-.mutuals:not(.mutuals-front)::after {
+.xkit-mutual-icon {
+	height: 1.23em;
+	vertical-align: text-bottom;
+}
+
+.mutuals:not(.mutuals-front) .xkit-mutual-icon {
+	padding-left: 0.3em;
+}
+
+.mutuals.mutuals-front .xkit-mutual-icon {
+	padding-right: 0.3em;
+}
+
+.mutuals-legacy:not(.mutuals-front)::after {
 	content: "\EA59";
 	padding-left: 0.3em;
 }
 
-.mutuals.mutuals-front::before {
+.mutuals-legacy.mutuals-front::before {
 	content: "\EA59";
 	padding-right: 0.3em;
 }
 
-body.xkit-april-fools .mutuals:not(.mutuals-front)::after,
-body.xkit-april-fools .mutuals.mutuals-front::before {
+body.xkit-april-fools .mutuals-legacy:not(.mutuals-front)::after,
+body.xkit-april-fools .mutuals-legacy.mutuals-front::before {
 	content: "\EAA7";
 	color: #00b8ff;
 }
