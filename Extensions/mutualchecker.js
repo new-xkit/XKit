@@ -141,6 +141,7 @@ XKit.extensions.mutualchecker = new Object({
 
 	add_label_react: function($name_div, user) {
 		$name_div.addClass("mutuals").attr("title", user + " follows you");
+		$name_div.closest("[data-id]").addClass("from_mutual");
 		if (this.preferences.put_in_front.value) {
 			$name_div.prepend(this.icon);
 			$name_div.addClass("mutuals-front");
@@ -166,6 +167,7 @@ XKit.extensions.mutualchecker = new Object({
 		XKit.post_listener.remove("mutualchecker");
 		$(".mutuals").removeAttr("title").removeClass("mutuals").removeClass("mutuals-front");
 		$(".xkit-mutual-icon").remove();
+		$(".from_mutual").removeClass("from_mutual");
 		$(".mutualchecker-done").removeClass("mutualchecker-done");
 		XKit.tools.remove_css("mutualchecker");
 	}
