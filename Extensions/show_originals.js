@@ -1,7 +1,7 @@
 //* TITLE Show Originals **//
 //* VERSION 1.2.6 **//
-//* DESCRIPTION Only shows original content by blogs you follow **//
-//* DETAILS This extension allows you to focus on original content made by users you follow.**//
+//* DESCRIPTION Only shows original content by the blogs you follow **//
+//* DETAILS This extension hides reblogs on your dash that don't contain added original content. This may slow down your computer if it hides a large number of reblogs. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
