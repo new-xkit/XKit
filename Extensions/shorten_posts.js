@@ -23,6 +23,12 @@ XKit.extensions.shorten_posts = new Object({
 			default: "350",
 			value: "350"
 		},
+		threshold: {
+			text: 'Minimum hidden height (<a id="xkit-shorten-posts-threshold-help" href="#" onclick="return false;">what is this?</a>)',
+			type: "text",
+			default: "50",
+			value: "50"
+		},
 		display_tags: {
 			text: "Display the tags on shortened posts",
 			default: true,
@@ -78,7 +84,7 @@ XKit.extensions.shorten_posts = new Object({
 
 			var height = $this.height();
 
-			if (height >= XKit.extensions.shorten_posts.preferences.height.value) {
+			if (height >= parseInt(XKit.extensions.shorten_posts.preferences.height.value, 10) + parseInt(XKit.extensions.shorten_posts.preferences.threshold.value, 10)) {
 				XKit.extensions.shorten_posts.react_short($(this), height);
 			}
 		});
@@ -95,8 +101,7 @@ XKit.extensions.shorten_posts = new Object({
 
 			if ($(this).hasClass("xblacklist_blacklisted_post")) { return; }
 
-
-			if (m_height >= XKit.extensions.shorten_posts.preferences.height.value) {
+			if (m_height >= parseInt(XKit.extensions.shorten_posts.preferences.height.value, 10) + parseInt(XKit.extensions.shorten_posts.preferences.threshold.value, 10)) {
 				XKit.extensions.shorten_posts.short($(this), m_height);
 				shortened_count++;
 			}
@@ -251,9 +256,10 @@ XKit.extensions.shorten_posts = new Object({
 	cpanel: function(div) {
 
 		$("#xkit-shorten-posts-height-help").click(function() {
-
 			XKit.window.show("Maximum post height", "XKit will shorten posts longer than the height entered here.<br/><br/>The minimum value you can enter is <b>200</b>, and the maximum is <b>" + XKit.extensions.shorten_posts.height_max + "</b>. If you enter a value bigger or smaller than these, XKit will return to it's default value, which is 350 pixels.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-
+		});
+		$("#xkit-shorten-posts-threshold-help").click(function() {
+			XKit.window.show("Minimum hidden height", "XKit will only shorten posts if there is at least the height entered here to be hidden.<br/><br/>This will avoid shortening posts that have little to expand.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		});
 
 	}
