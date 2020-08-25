@@ -697,11 +697,11 @@ XKit.extensions.blacklist = new Object({
 			}, 300);
 		}
 
-		XKit.extensions.blacklist.check_interval = setTimeout(function() { XKit.extensions.blacklist.check(); }, 2000);
+		//XKit.extensions.blacklist.check_interval = setTimeout(function() { XKit.extensions.blacklist.check(); }, 2000);
 
 	},
 
-	check_interval: 0,
+	//check_interval: 0,
 
 	hide_post: function($post, word) {
 		const {
