@@ -114,6 +114,8 @@ XKit.extensions.mutualchecker = new Object({
 					} else {
 						this.mutuals[post.owner] = false;
 					}
+				}).catch((error) => {
+					this.mutuals[post.owner] = false;
 				});
 			} else if (this.mutuals[post.owner]) {
 				this.add_label_react($link, post.owner);
