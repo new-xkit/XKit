@@ -61,11 +61,15 @@ XKit.extensions.anti_capitalism = new Object({
 		if (XKit.page.react) {
 			await XKit.css_map.getCssMap();
 
-			//exit if we're on a grid page to avoid breaking anything
-			if ($(XKit.css_map.keyToCss("masonry")).length) { return; }
-
 			if (this.preferences.sponsored_posts.value) {
-				const selector = XKit.css_map.keyToClasses("listTimelineObject").map(css => `.${css}:not([data-id])`).join(",");
+				const listTimelineObject = XKit.css_map.keyToClasses("listTimelineObject");
+				const masonryTimelineObject = XKit.css_map.keyToClasses("masonryTimelineObject");
+
+				// pattern created:
+				// listTimelineObject:not([data-id]):not(masonryTimelineObject)
+				const selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject])
+					.map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`)
+					.join(", ");
 				XKit.interface.hide(selector, "anti_capitalism");
 			}
 
