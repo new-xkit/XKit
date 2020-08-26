@@ -70,13 +70,16 @@ XKit.extensions.mutualchecker = new Object({
 	},
 
 	add_post_icons_react: async function() {
-		$('[data-id]:not(.mutualchecker-done)')
-			.addClass("mutualchecker-done")
-			.each(async function() {
-				var post = await XKit.interface.react.post($(this));
+		XKit.interface.react.get_posts("mutualchecker-done").then(($posts) => {
+			$posts.each(async function() {
+				$(this).addClass("mutualchecker-done"); //remove once get_posts is fixed
+
 				const $link = $(this).find(XKit.extensions.mutualchecker.selector);
-				XKit.extensions.mutualchecker.check_react(post, $link);
+				const blog_name = $link.text();
+
+				XKit.extensions.mutualchecker.check_react($link, blog_name);
 			});
+		});
 	},
 
 	add_post_icons: function() {
@@ -103,23 +106,25 @@ XKit.extensions.mutualchecker = new Object({
 		});
 	},
 
-	check_react: function(post, $link) {
-		if (post.is_following && !post.can_edit) {
-			if (typeof this.mutuals[post.owner] === "undefined") {
-				XKit.interface.is_following(post.owner, this.preferences.main_blog.value)
+	check_react: function($link, blog_name) {
+		if (typeof this.mutuals[blog_name] === "undefined") {
+			XKit.interface.is_following(blog_name, this.preferences.main_blog.value)
 				.then(follow => {
 					if (follow) {
-						this.add_label_react($link, post.owner);
-						this.mutuals[post.owner] = true;
+						this.add_label_react($link, blog_name);
+						this.mutuals[blog_name] = true;
+						console.log(blog_name + " is following you");
 					} else {
-						this.mutuals[post.owner] = false;
+						this.mutuals[blog_name] = false;
+						console.log(blog_name + " isn't following you");
 					}
 				}).catch((error) => {
-					this.mutuals[post.owner] = false;
+					this.mutuals[blog_name] = false;
+					console.log(blog_name + " isn't following you... probably");
 				});
-			} else if (this.mutuals[post.owner]) {
-				this.add_label_react($link, post.owner);
-			}
+		} else if (this.mutuals[blog_name]) {
+			console.log("getting cached value for " + blog_name);
+			this.add_label_react($link, blog_name);
 		}
 	},
 
