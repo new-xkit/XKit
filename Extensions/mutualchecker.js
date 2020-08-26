@@ -70,16 +70,18 @@ XKit.extensions.mutualchecker = new Object({
 	},
 
 	add_post_icons_react: async function() {
-		$('[data-id]:not(.mutualchecker-done)')
-			.addClass("mutualchecker-done")
-			.each(async function() {
-				var post = await XKit.interface.react.post($(this));
+		XKit.interface.react.get_posts("mutualchecker-done").then(($posts) => {
+			$posts.each(async function() {
+				$(this).addClass("mutualchecker-done"); //remove once get_posts is fixed
 
-				const $link = $(this).find(XKit.extensions.mutualchecker.selector);
-				const blog_name = $link.text();
+				setTimeout(() => {
+					const $link = $(this).find(XKit.extensions.mutualchecker.selector);
+					const blog_name = $link.text();
 
-				XKit.extensions.mutualchecker.check_react($link, blog_name);
+					XKit.extensions.mutualchecker.check_react($link, blog_name);
+				}, 0);
 			});
+		});
 	},
 
 	add_post_icons: function() {
