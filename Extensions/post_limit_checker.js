@@ -20,24 +20,19 @@ XKit.extensions.post_limit_checker = new Object({
 			return;
 		}
 
+		const sidebar_config = {
+			id: "post_limit_checker_sidebar",
+			title: "Post Limit",
+			items: [{
+				id: "post_limit_checker_view",
+				text: "Check Post Limit"
+			}]
+		};
+
 		if (XKit.page.react) {
-			await XKit.interface.react.sidebar.add({
-				id: "post_limit_checker_sidebar",
-				title: "Post Limit",
-				items: [{
-					id: "post_limit_checker_view",
-					text: "Check Post Limit"
-				}]
-			});
+			await XKit.interface.react.sidebar.add(sidebar_config);
 		} else {
-			XKit.interface.sidebar.add({
-				id: "post_limit_checker_sidebar",
-				title: "Post Limit",
-				items: [{
-					id: "post_limit_checker_view",
-					text: "Check Post Limit"
-				}]
-			});
+			XKit.interface.sidebar.add(sidebar_config);
 		}
 
 		$("#post_limit_checker_view").click(() => this.start());
