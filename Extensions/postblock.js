@@ -13,7 +13,7 @@ XKit.extensions.postblock = new Object({
 	slow: true,
 	blacklisted: [],
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Q0U0NTdGNzMwMjA1MTFFM0IwRTREQUE2OUI0ODg5QzAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Q0U0NTdGNzQwMjA1MTFFM0IwRTREQUE2OUI0ODg5QzAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDRTQ1N0Y3MTAyMDUxMUUzQjBFNERBQTY5QjQ4ODlDMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDRTQ1N0Y3MjAyMDUxMUUzQjBFNERBQTY5QjQ4ODlDMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PumfPHEAAACvSURBVHjaYmDAD44C8Q4GCoAlEFtA2f+hmGzwFYg/YTFsNRAvINUwZAPQ2f/waWQi0SJGahoGAw1AXECJNwkCFhLDEq+3Qd50B+IWIOZDU6hDpCXzkTkfobYuQPPafxxexiYON/AsUrRbkGkY3MBSJIEzZBiGAkSA+BsOxYQMQ8GgCHhDTjbBB1SA+DelLkM2cAI1DeMF4rvUMgwEdIH4ObUMAwEJaNn1lVTDAAIMAPLOnUicW2nyAAAAAElFTkSuQmCC",
-	processing: false,
+
 
 	run: function() {
 		this.running = true;
@@ -83,17 +83,10 @@ XKit.extensions.postblock = new Object({
 	},
 
 	process_posts: async function() {
-		if (XKit.extensions.postblock.processing === true) {
-			return;
-		}
-		XKit.extensions.postblock.processing = true;
-
 		let blacklist = XKit.extensions.postblock.blacklisted;
 
-		const $posts = await XKit.interface.react.get_posts("xpostblock-done");
-		$posts
-			.addClass("xpostblock-done")
-			.each(async function() {
+		XKit.interface.react.get_posts("xpostblock-done").then(($posts) => {
+			$posts.each(async function() {
 				const $post = $(this);
 				const post = await XKit.interface.react.post($post);
 
@@ -103,7 +96,7 @@ XKit.extensions.postblock = new Object({
 					await XKit.interface.react.add_control_button($post, "xpostblockbutton");
 				}
 			});
-		XKit.extensions.postblock.processing = false;
+		});
 	},
 
 	cpanel: function(m_div) {

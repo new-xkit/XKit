@@ -50,8 +50,6 @@ XKit.extensions.quick_tags = new Object({
 
 	tag_array: [],
 
-	processing: false,
-
 	cancel_menu_close: function() {
 		clearTimeout(XKit.extensions.quick_tags.menu_closer_int);
 		XKit.extensions.quick_tags.user_on_box = true;
@@ -400,24 +398,15 @@ XKit.extensions.quick_tags = new Object({
 	},
 
 	do_posts: async function() {
-		if (XKit.extensions.quick_tags.processing === true) {
-			return;
-		}
-
 		if (XKit.interface.where().inbox) {
 			return;
 		}
 
-		XKit.extensions.quick_tags.processing = true;
-		var $posts = await XKit.interface.react.get_posts("xkit-quick-tags-done", true);
-
-		$posts
-			.addClass("xkit-quick-tags-done")
-			.each(function() {
+		XKit.interface.react.get_posts("xkit-quick-tags-done", true).then(($posts) => {
+			$posts.each(async function() {
 				XKit.interface.react.add_control_button($(this), "xkit-quick-tags", "");
 			});
-
-		XKit.extensions.quick_tags.processing = false;
+		});
 	},
 
 	destroy: function() {
