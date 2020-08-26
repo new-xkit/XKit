@@ -315,7 +315,7 @@ XKit.extensions.mute = new Object({
 
 	},
 
-	should_be_removed: function(type, username, reblogged_post, original_post) {
+	should_be_removed: function(username, reblogged_post, original_post) {
 
 		// console.log(" checking, type = " + type + " || username = " + username);
 
@@ -329,17 +329,17 @@ XKit.extensions.mute = new Object({
 				continue;
 			}
 
-			if (type === "note" && XKit.extensions.mute.muted[i].asks === true) {
-				return true;
-			}
+			// if (type === "note" && XKit.extensions.mute.muted[i].asks === true) {
+			// 	return true;
+			// }
 
-			if (type === "photoset" && XKit.extensions.mute.muted[i].photo === true) {
-				return true;
-			}
+			// if (type === "photoset" && XKit.extensions.mute.muted[i].photo === true) {
+			// 	return true;
+			// }
 
-			if (type === "conversation" && XKit.extensions.mute.muted[i].chat === true) {
-				return true;
-			}
+			// if (type === "conversation" && XKit.extensions.mute.muted[i].chat === true) {
+			// 	return true;
+			// }
 
 			if (typeof XKit.extensions.mute.muted[i].reblogs !== "undefined") {
 				if (XKit.extensions.mute.muted[i].reblogs === true && reblogged_post === true) {
@@ -353,9 +353,9 @@ XKit.extensions.mute = new Object({
 				}
 			}
 
-			if (XKit.extensions.mute.muted[i][type] === true) {
-				return true;
-			}
+			// if (XKit.extensions.mute.muted[i][type] === true) {
+			// 	return true;
+			// }
 
 		}
 
@@ -368,7 +368,7 @@ XKit.extensions.mute = new Object({
 		$('.tumblelog_menu_button').unbind('click', XKit.extensions.mute.add_mute_link);
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
 
-		var update_rects = false;
+		//var update_rects = false;
 
 		if (rethink === true) {
 
@@ -380,36 +380,57 @@ XKit.extensions.mute = new Object({
 
 		}
 
-		var posts = XKit.interface.get_posts("xmute-done");
-
-		$(posts).each(function() {
-
+		// Check posts
+		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
+	    $(postSel).not(".xmute-done").each(function() {
+			// Make sure we don't revisit the same post twice
 			$(this).addClass("xmute-done");
 
-			var m_post = XKit.interface.post($(this));
-			if (m_post.is_mine === true) { return; }
-
+			// BROKEN
+			// var m_post = XKit.interface.post($(this));
+			// if (m_post.is_mine === true) { return; }
 			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
-			if (XKit.extensions.mute.should_be_removed(m_post.type, m_post.owner, m_post.is_reblogged, !m_post.is_reblogged) === true) {
-				update_rects = true;
+			// Get author info
+			var m_author = {};
+			try {
+				const postInfoSel = XKit.css_map.keyToCss('blogLink') ||
+					'.post_info_link, .reblog-tumblelog-name';
+				var post_info_links = $(this).find(postInfoSel).map(function() {
+					return $(this).text();
+				});
+				// Classify post info
+				var info_links = post_info_links.get();
+				m_author.username = info_links[1];
+				m_author.via = info_links[2];
+				if (m_author.via === undefined) { 	// if via doesn't exist, it's an original post
+					m_author.original = true;
+				}
+				else {
+					m_author.original = false;
+				}
+			} catch (e) {
+				console.log(" !! can't get author !!");
+			}
+			// Remove posts based on author info
+			var should_remove = XKit.extensions.mute.should_be_removed(m_author.username, !m_author.original, m_author.orignal);
+			if (should_remove) {
+				// 	update_rects = true;
 				$(this).attr("data-xkit-mute-old-classes", $(this).attr("class"));
 				$(this).attr("class", "xmute-muted xmute-done");
-			} else {
-				if (rethink === true) {
-					$(this).attr('class', $(this).attr("data-xkit-mute-old-classes"));
-					$(this).removeClass("xmute-muted");
-					update_rects = true;
-				}
+			} else if (rethink === true) {
+				$(this).attr('class', $(this).attr("data-xkit-mute-old-classes"));
+				$(this).removeClass("xmute-muted");
+				// update_rects = true;
 			}
 
 		});
 
-		if (update_rects === true) {
-			XKit.tools.add_function(function() {
-				Tumblr.Events.trigger("DOMEventor:updateRect");
-			}, true, "");
-		}
+		// if (update_rects === true) {
+		// 	XKit.tools.add_function(function() {
+		// 		Tumblr.Events.trigger("DOMEventor:updateRect");
+		// 	}, true, "");
+		// }
 
 	},
 
