@@ -20,26 +20,20 @@ XKit.extensions.tag_replacer = new Object({
 
 		XKit.tools.init_css("tag_replacer");
 
+		const sidebar_config = {
+			id: "tag_replacer_sidebar",
+			title: "Tag Replacer",
+			items: [{
+				id: "tag_replacer_button",
+				text: "Replace a tag",
+				carrot: true
+			}]
+		};
+
 		if (XKit.page.react) {
-			await XKit.interface.react.sidebar.add({
-				id: "tag_replacer_sidebar",
-				title: "Tag Replacer",
-				items: [{
-					id: "tag_replacer_button",
-					text: "Replace a tag",
-					carrot: true
-				}]
-			});
+			await XKit.interface.react.sidebar.add(sidebar_config);
 		} else {
-			XKit.interface.sidebar.add({
-				id: "tag_replacer_sidebar",
-				title: "Tag Replacer",
-				items: [{
-					id: "tag_replacer_button",
-					text: "Replace a tag",
-					carrot: true
-				}]
-			});
+			XKit.interface.sidebar.add(sidebar_config);
 		}
 
 		$("#tag_replacer_button").click(() => {
