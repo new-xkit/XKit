@@ -927,7 +927,7 @@ XKit.extensions.xkit_patches = new Object({
 						selector += `:not(.${without_tag})`;
 					}
 
-					var $posts = $(selector);
+					var $posts = $(selector).addClass(without_tag);
 
 					if (can_edit) {
 						const edit_label = await XKit.interface.translate("Edit");
