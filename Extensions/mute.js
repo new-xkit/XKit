@@ -315,7 +315,7 @@ XKit.extensions.mute = new Object({
 
 	},
 
-	should_be_removed: function(username, reblogged_post, original_post) {
+	should_be_removed: function(username, is_reblogged) {
 
 		// console.log(" checking, type = " + type + " || username = " + username);
 
@@ -342,13 +342,13 @@ XKit.extensions.mute = new Object({
 			// }
 
 			if (typeof XKit.extensions.mute.muted[i].reblogs !== "undefined") {
-				if (XKit.extensions.mute.muted[i].reblogs === true && reblogged_post === true) {
+				if (XKit.extensions.mute.muted[i].reblogs === true && is_reblogged) {
 					return true;
 				}
 			}
 
 			if (typeof XKit.extensions.mute.muted[i].originals !== "undefined") {
-				if (XKit.extensions.mute.muted[i].originals === true && original_post === true) {
+				if (XKit.extensions.mute.muted[i].originals === true && !is_reblogged) {
 					return true;
 				}
 			}
@@ -363,7 +363,7 @@ XKit.extensions.mute = new Object({
 
 	},
 
-	do_posts: function(rethink) {
+	do_posts: async function(rethink) {
 
 		$('.tumblelog_menu_button').unbind('click', XKit.extensions.mute.add_mute_link);
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
@@ -381,39 +381,16 @@ XKit.extensions.mute = new Object({
 		}
 
 		// Check posts
-		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
-	    $(postSel).not(".xmute-done").each(function() {
+		var posts = await XKit.interface.react.get_posts("xmute-done", false);
+		$(posts).each(async function() {
 			// Make sure we don't revisit the same post twice
 			$(this).addClass("xmute-done");
-
-			// BROKEN
-			// var m_post = XKit.interface.post($(this));
-			// if (m_post.is_mine === true) { return; }
-			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
-
 			// Get author info
-			var m_author = {};
-			try {
-				const postInfoSel = XKit.css_map.keyToCss('blogLink') ||
-					'.post_info_link, .reblog-tumblelog-name';
-				var post_info_links = $(this).find(postInfoSel).map(function() {
-					return $(this).text();
-				});
-				// Classify post info
-				var info_links = post_info_links.get();
-				m_author.username = info_links[1];
-				m_author.via = info_links[2];
-				if (m_author.via === undefined) { 	// if via doesn't exist, it's an original post
-					m_author.original = true;
-				}
-				else {
-					m_author.original = false;
-				}
-			} catch (e) {
-				console.log(" !! can't get author !!");
-			}
-			// Remove posts based on author info
-			var should_remove = XKit.extensions.mute.should_be_removed(m_author.username, !m_author.original, m_author.orignal);
+			const postdata = await XKit.interface.react.post($(this));
+			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
+			if (postdata.is_mine) { return; }
+			// Remove posts
+			var should_remove = XKit.extensions.mute.should_be_removed(postdata.owner, postdata.is_reblogged);
 			if (should_remove) {
 				// 	update_rects = true;
 				$(this).attr("data-xkit-mute-old-classes", $(this).attr("class"));
@@ -423,7 +400,6 @@ XKit.extensions.mute = new Object({
 				$(this).removeClass("xmute-muted");
 				// update_rects = true;
 			}
-
 		});
 
 		// if (update_rects === true) {
