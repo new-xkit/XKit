@@ -24,8 +24,8 @@ XKit.extensions.mutualchecker = new Object({
 		},
 		"put_in_front": {
 			text: "Place mutual icon before, not after usernames",
-			default: false,
-			value: false
+			default: true,
+			value: true
 		}
 	},
 
@@ -51,7 +51,7 @@ XKit.extensions.mutualchecker = new Object({
 		this.add_follower_icons();
 		if (XKit.page.react) {
 			await XKit.css_map.getCssMap();
-			this.selector = XKit.css_map.keyToClasses("postAttribution").map(css => `.${css} a`).join(", ");
+			this.selector = XKit.css_map.keyToCss("postAttribution");
 		}
 		XKit.page.react ? this.add_post_icons_react() : this.add_post_icons();
 		XKit.post_listener.add("mutualchecker", XKit.page.react ? this.add_post_icons_react : this.add_post_icons);
@@ -70,19 +70,24 @@ XKit.extensions.mutualchecker = new Object({
 	},
 
 	add_post_icons_react: async function() {
-		XKit.interface.react.get_posts("mutualchecker-done").then(($posts) => {
-			$posts.each(async function() {
-				$(this).addClass("mutualchecker-done"); //remove once get_posts is fixed
+		const $posts = $('[data-id]:not(.mutualchecker-done)');
+		//console.log($posts);
+		$posts.addClass("mutualchecker-done");
+		for (var post of $posts.get()) {
+			console.log(post);
+			const $link = $(post).find(XKit.extensions.mutualchecker.selector);
+			const blog_name = $link.text();
+			if (!blog_name.length) {
+				console.log("couldn't find blog name for ");
+				console.log(post);
+				return;
+			}
+			console.log("blog name is " + blog_name);
 
-				setTimeout(() => {
-					const $link = $(this).find(XKit.extensions.mutualchecker.selector);
-					const blog_name = $link.text();
-					if (!blog_name.length) { return; }
+			XKit.extensions.mutualchecker.check_react($link, blog_name);
 
-					XKit.extensions.mutualchecker.check_react($link, blog_name);
-				}, 0);
-			});
-		});
+
+		}
 	},
 
 	add_post_icons: function() {
@@ -114,10 +119,15 @@ XKit.extensions.mutualchecker = new Object({
 			console.log("checking mutuals: " + blog_name);
 			this.mutuals[blog_name] = XKit.interface.is_following(blog_name, this.preferences.main_blog.value)
 				.catch(() => Promise.resolve(false)); //don't keep checking if we get an error
+		} else {
+			console.log("in cache: " + blog_name);
 		}
 		this.mutuals[blog_name].then(is_mutual => {
 			if (is_mutual) {
 				this.add_label_react($link, blog_name);
+				console.log("followed by: " + blog_name);
+			} else {
+				console.log("not followed by: " + blog_name);
 			}
 		});
 	},
@@ -140,15 +150,16 @@ XKit.extensions.mutualchecker = new Object({
 		}
 	},
 
-	add_label_react: function($name_div, user) {
-		$name_div.addClass("mutuals").attr("title", user + " follows you");
-		$name_div.closest("[data-id]").addClass("from_mutual");
+	add_label_react: function($link, user) {
+		$link.addClass("mutuals").attr("title", user + " follows you");
+		$link.closest("[data-id]").addClass("from_mutual");
 		if (this.preferences.put_in_front.value) {
-			$name_div.prepend(this.icon);
-			$name_div.addClass("mutuals-front");
+			$link.before(this.icon); //note: icon must be outside $link or it gets clobbered by react
+			$link.addClass("mutuals-front");
 		} else {
-			$name_div.append(this.icon);
+			$link.after(this.icon); //same here
 		}
+		$link.parentsUntil("[data-id]").addClass("why-do-you-do-this-to-me");
 	},
 
 	add_label: function($name_div, user) {
