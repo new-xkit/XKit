@@ -77,6 +77,7 @@ XKit.extensions.mutualchecker = new Object({
 				setTimeout(() => {
 					const $link = $(this).find(XKit.extensions.mutualchecker.selector);
 					const blog_name = $link.text();
+					if (!blog_name.length) { return; }
 
 					XKit.extensions.mutualchecker.check_react($link, blog_name);
 				}, 0);
@@ -110,24 +111,15 @@ XKit.extensions.mutualchecker = new Object({
 
 	check_react: function($link, blog_name) {
 		if (typeof this.mutuals[blog_name] === "undefined") {
-			XKit.interface.is_following(blog_name, this.preferences.main_blog.value)
-				.then(follow => {
-					if (follow) {
-						this.add_label_react($link, blog_name);
-						this.mutuals[blog_name] = true;
-						console.log(blog_name + " is following you");
-					} else {
-						this.mutuals[blog_name] = false;
-						console.log(blog_name + " isn't following you");
-					}
-				}).catch((error) => {
-					this.mutuals[blog_name] = false;
-					console.log(blog_name + " isn't following you... probably");
-				});
-		} else if (this.mutuals[blog_name]) {
-			console.log("getting cached value for " + blog_name);
-			this.add_label_react($link, blog_name);
+			console.log("checking mutuals: " + blog_name);
+			this.mutuals[blog_name] = XKit.interface.is_following(blog_name, this.preferences.main_blog.value)
+				.catch(() => Promise.resolve(false)); //don't keep checking if we get an error
 		}
+		this.mutuals[blog_name].then(is_mutual => {
+			if (is_mutual) {
+				this.add_label_react($link, blog_name);
+			}
+		});
 	},
 
 	check: function(json_obj, $link) {
