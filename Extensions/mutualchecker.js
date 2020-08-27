@@ -70,23 +70,13 @@ XKit.extensions.mutualchecker = new Object({
 	},
 
 	add_post_icons_react: async function() {
-		const $posts = $('[data-id]:not(.mutualchecker-done)');
-		//console.log($posts);
-		$posts.addClass("mutualchecker-done");
+		const $posts = $('[data-id]:not(.mutualchecker-done)').addClass("mutualchecker-done");
 		for (var post of $posts.get()) {
-			console.log(post);
 			const $link = $(post).find(XKit.extensions.mutualchecker.selector);
 			const blog_name = $link.text();
-			if (!blog_name.length) {
-				console.log("couldn't find blog name for ");
-				console.log(post);
-				return;
+			if (blog_name.length) {
+				XKit.extensions.mutualchecker.check_react($link, blog_name);
 			}
-			console.log("blog name is " + blog_name);
-
-			XKit.extensions.mutualchecker.check_react($link, blog_name);
-
-
 		}
 	},
 
@@ -118,16 +108,11 @@ XKit.extensions.mutualchecker = new Object({
 		if (typeof this.mutuals[blog_name] === "undefined") {
 			console.log("checking mutuals: " + blog_name);
 			this.mutuals[blog_name] = XKit.interface.is_following(blog_name, this.preferences.main_blog.value)
-				.catch(() => Promise.resolve(false)); //don't keep checking if we get an error
-		} else {
-			console.log("in cache: " + blog_name);
+				.catch(() => Promise.resolve(false)); //assume we're not mutuals if we get an error
 		}
 		this.mutuals[blog_name].then(is_mutual => {
 			if (is_mutual) {
 				this.add_label_react($link, blog_name);
-				console.log("followed by: " + blog_name);
-			} else {
-				console.log("not followed by: " + blog_name);
 			}
 		});
 	},
@@ -153,13 +138,13 @@ XKit.extensions.mutualchecker = new Object({
 	add_label_react: function($link, user) {
 		$link.addClass("mutuals").attr("title", user + " follows you");
 		$link.closest("[data-id]").addClass("from_mutual");
+
+		//note: icon must be outside $link or it can get clobbered by react
 		if (this.preferences.put_in_front.value) {
-			$link.before(this.icon); //note: icon must be outside $link or it gets clobbered by react
-			$link.addClass("mutuals-front");
+			$link.before(this.icon);
 		} else {
-			$link.after(this.icon); //same here
+			$link.after(this.icon);
 		}
-		$link.parentsUntil("[data-id]").addClass("why-do-you-do-this-to-me");
 	},
 
 	add_label: function($name_div, user) {
