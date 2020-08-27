@@ -8,13 +8,6 @@
 .xkit-mutual-icon {
 	height: 1.23em;
 	vertical-align: text-bottom;
-}
-
-.mutuals:not(.mutuals-front) .xkit-mutual-icon {
-	padding-left: 0.3em;
-}
-
-.mutuals.mutuals-front .xkit-mutual-icon {
 	padding-right: 0.3em;
 }
 
