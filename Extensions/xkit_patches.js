@@ -220,15 +220,22 @@ XKit.extensions.xkit_patches = new Object({
 				});
 
 				if (new_posts) {
-					Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
-						try {
-							callback();
-						} catch (e) {
-							console.error(e);
-						}
-					}));
+					XKit.post_listener.run_callbacks_debounced();
 				}
 			});
+
+			XKit.post_listener.run_callbacks = function() {
+				Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
+					try {
+						callback();
+					} catch (e) {
+						console.error(e);
+					}
+				}));
+			};
+
+			XKit.post_listener.run_callbacks_debounced =
+				XKit.tools.debounce(XKit.post_listener.run_callbacks, 0);
 
 			/**
 			 * Show an XKit alert window
