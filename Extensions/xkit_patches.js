@@ -227,17 +227,14 @@ XKit.extensions.xkit_patches = new Object({
 				if (observed) {
 					clearTimeout(self.debounce_timer);
 					if (new_posts) {
-						console.warn("post listener: new posts, running immediately");
 						self.run_callbacks();
 					} else {
-						console.log("post listener: delayed");
 						self.debounce_timer = setTimeout(self.run_callbacks, 60);
 					}
 				}
 			});
 
 			XKit.post_listener.run_callbacks = function() {
-				console.log("post listener: running");
 				Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
 					try {
 						callback();
