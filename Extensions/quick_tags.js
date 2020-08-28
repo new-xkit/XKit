@@ -84,9 +84,8 @@ XKit.extensions.quick_tags = new Object({
 
 		if (XKit.page.react) {
 			XKit.interface.react.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", "", this.button_ok_icon).then(() => {
-				XKit.post_listener.add("quick_tags", XKit.extensions.quick_tags.do_posts);
 
-				this.do_posts();
+				XKit.interface.react.post_iterator.add("quick_tags", this.add_tags_button, true);
 			});
 		}
 	},
@@ -397,16 +396,11 @@ XKit.extensions.quick_tags = new Object({
 
 	},
 
-	do_posts: async function() {
+	add_tags_button: async function() {
 		if (XKit.interface.where().inbox) {
 			return;
 		}
-
-		XKit.interface.react.get_posts("xkit-quick-tags-done", true).then(($posts) => {
-			$posts.each(async function() {
-				XKit.interface.react.add_control_button($(this), "xkit-quick-tags", "");
-			});
-		});
+		XKit.interface.react.add_control_button($(this), "xkit-quick-tags", "");
 	},
 
 	destroy: function() {
@@ -414,7 +408,7 @@ XKit.extensions.quick_tags = new Object({
 		this.running = false;
 
 		XKit.interface.post_window_listener.remove("quick_tags");
-		XKit.post_listener.remove("quick_tags");
+		XKit.interface.react.post_iterator.remove("quick_tags");
 
 		$(document).off("mouseover", "#xkit-quick-tags-window", XKit.extensions.quick_tags.cancel_menu_close);
 		$(document).off("mouseout", "#xkit-quick-tags-window", XKit.extensions.quick_tags.menu_close);

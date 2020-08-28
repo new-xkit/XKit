@@ -22,8 +22,7 @@ XKit.extensions.postblock = new Object({
 		this.blacklisted = XKit.storage.get("postblock", "posts", "").split(",");
 
 		XKit.interface.react.create_control_button("xpostblockbutton", this.button_icon, "PostBlock", XKit.extensions.postblock.block).then(() => {
-			XKit.post_listener.add("postblock", XKit.extensions.postblock.process_posts);
-			XKit.extensions.postblock.process_posts();
+			XKit.interface.react.post_iterator.add("postblock", this.process_post);
 		});
 	},
 
@@ -82,21 +81,16 @@ XKit.extensions.postblock = new Object({
 		}
 	},
 
-	process_posts: async function() {
+	process_post: async function() {
 		let blacklist = XKit.extensions.postblock.blacklisted;
+		const $post = $(this);
+		const post = await XKit.interface.react.post($post);
 
-		XKit.interface.react.get_posts("xpostblock-done").then(($posts) => {
-			$posts.each(async function() {
-				const $post = $(this);
-				const post = await XKit.interface.react.post($post);
-
-				if (blacklist.includes(post.root_id)) {
-					XKit.extensions.postblock.remove(post.root_id);
-				} else {
-					await XKit.interface.react.add_control_button($post, "xpostblockbutton");
-				}
-			});
-		});
+		if (blacklist.includes(post.root_id)) {
+			$post.addClass("xpostblock-hidden");
+		} else {
+			await XKit.interface.react.add_control_button($post, "xpostblockbutton");
+		}
 	},
 
 	cpanel: function(m_div) {
@@ -127,7 +121,7 @@ XKit.extensions.postblock = new Object({
 
 	destroy: function() {
 		this.running = false;
-		XKit.post_listener.remove("postblock");
+		XKit.interface.react.post_iterator.remove("postblock");
 		XKit.tools.remove_css("postblock");
 		$(".xpostblock-done").removeClass("xpostblock-done");
 		$(".xpostblockbutton").remove();

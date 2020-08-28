@@ -1102,6 +1102,43 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					},
 				},
+
+				post_iterator: {
+
+					/**
+					 * Runs a function on every post exactly once.
+					 * @param {string} id - Unique id for this function; will be added to processed
+					 *     posts as an ."id"-done class
+					 * @param {post_iterator_func} func - The function to run.
+					 * @param {boolean} can_edit -
+					 */
+					add: function(id, func, can_edit) {
+
+						const do_posts = async function iterator() {
+							XKit.interface.react.get_posts(`${id}-done`, can_edit).then(($posts) => {
+								$posts.each(function() {
+									(func.bind(this))().catch((e) => {
+										console.error(`error in ${id}'s post iterator: ${e}`);
+									});
+								});
+							});
+						};
+
+						XKit.post_listener.add(id, do_posts);
+						do_posts();
+					},
+
+					/**
+					 * Callback to be run on every post. No parameters right now, but could have
+					 * post_props caching added in the future if desired.
+					 * @callback post_iterator_func
+					 */
+
+					remove: function(id) {
+						XKit.post_listener.remove(id);
+						$(`${id}-done`).removeClass(`${id}-done`);
+					}
+				}
 			};
 
 			XKit.interface.async_form_key = async function() {
