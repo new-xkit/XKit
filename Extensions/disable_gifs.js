@@ -50,7 +50,7 @@ XKit.extensions.disable_gifs = new Object({
 					z-index: 2;
 				}
 				${XKit.css_map.keyToCss("baseContainer")} {
-					z-index: 80;
+					z-index: 99;
 				}
 				.xkit--react .xkit-extension-setting[data-extension-id="disable_gifs"][data-setting-id="hide_completely"] {
 					display: none;
