@@ -1110,7 +1110,7 @@ XKit.extensions.xkit_patches = new Object({
 					 * @param {string} id - Unique id for this function; will be added to processed
 					 *     posts as an ."id"-done class
 					 * @param {post_iterator_func} func - The function to run.
-					 * @param {boolean} can_edit -
+					 * @param {boolean} can_edit - If true, only run on posts the user can edit.
 					 */
 					add: function(id, func, can_edit) {
 
