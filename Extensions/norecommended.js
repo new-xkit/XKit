@@ -1,5 +1,5 @@
 //* TITLE No Recommended **//
-//* VERSION 2.3.5 **//
+//* VERSION 2.3.4 **//
 //* DESCRIPTION Removes recommended posts **//
 //* DETAILS This extension removes recommended posts from your dashboard. To remove Recommended Blogs on the sidebar, please use Tweaks extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -50,54 +50,11 @@ XKit.extensions.norecommended = new Object({
 		if (XKit.interface.where().explore) { return; }
 
 		if (XKit.page.react) {
-
-			//adjust colors to look good on the sidebar if we're there
-			const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
-			const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
-
-			//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
-			const shrink_post_amount = '12px';
-
-			XKit.tools.add_css(`
-				.norecommended-hidden {
-					opacity: 0.75;
-					margin-bottom: calc(20px - ${shrink_post_amount});
-					transform: translateY(calc(-${shrink_post_amount}/2));
-				}
-				.norecommended-note {
-					height: 30px;
-					color: ${automatic_color};
-					padding-left: 15px;
-					display: flex;
-					align-items: center;
-				}
-				.norecommended-hidden-button {
-					line-height: initial;
-					margin: 0;
-					position: absolute !important;
-					right: 5px;
-					display: none !important;
-				}
-				.norecommended-hidden:hover .norecommended-hidden-button {
-					display: inline-block !important;
-				}
-				.norecommended-hidden-button {
-					color: rgba(${automatic_button_color}, 0.8);
-					background: rgba(${automatic_button_color}, 0.05);
-					border-color: rgba(${automatic_button_color}, 0.3);
-				}
-				.norecommended-hidden-button:hover {
-					color: rgba(${automatic_button_color});
-					background: rgba(${automatic_button_color}, 0.1);
-					border-color: rgba(${automatic_button_color}, 0.5);
-				}
-				.norecommended-note ~ * {
-					display: none;
-				}
-			`, 'norecommended');
-
-			XKit.interface.hide(".norecommended-hidden-completely, .norecommended-hidden-completely + :not([data-id])", "norecommended");
-
+			if (this.preferences.hide_posts_completely.value) {
+				XKit.interface.hide(".norecommended-hidden, .norecommended-hidden + :not([data-id])", "norecommended");
+			} else {
+				this.add_css();
+			}
 			XKit.post_listener.add('norecommended', this.react_do);
 			this.react_do();
 			return;
@@ -108,7 +65,56 @@ XKit.extensions.norecommended = new Object({
 		}
 	},
 
+	add_css: function() {
+		//adjust colors to look good on the sidebar if we're there
+		const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
+		const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+
+		//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+		const shrink_post_amount = '12px';
+
+		XKit.tools.add_css(`
+			.norecommended-hidden {
+				opacity: 0.75;
+				margin-bottom: calc(20px - ${shrink_post_amount});
+				transform: translateY(calc(-${shrink_post_amount}/2));
+			}
+			.norecommended-note {
+				height: 30px;
+				color: ${automatic_color};
+				padding-left: 15px;
+				display: flex;
+				align-items: center;
+			}
+			.norecommended-hidden-button {
+				line-height: initial;
+				margin: 0;
+				position: absolute !important;
+				right: 5px;
+				display: none !important;
+			}
+			.norecommended-hidden:hover .norecommended-hidden-button {
+				display: inline-block !important;
+			}
+			.norecommended-hidden-button {
+				color: rgba(${automatic_button_color}, 0.8);
+				background: rgba(${automatic_button_color}, 0.05);
+				border-color: rgba(${automatic_button_color}, 0.3);
+			}
+			.norecommended-hidden-button:hover {
+				color: rgba(${automatic_button_color});
+				background: rgba(${automatic_button_color}, 0.1);
+				border-color: rgba(${automatic_button_color}, 0.5);
+			}
+			.norecommended-note ~ * {
+				display: none;
+			}
+		`, 'norecommended');
+	},
+
 	react_do: function() {
+		if (XKit.interface.where().explore) { return; }
+
 		$('[data-id]:not(.norecommended-done)').each(async function() {
 			const $this = $(this).addClass('norecommended-done');
 			const {no_search, no_pinned, hide_posts_completely} = XKit.extensions.norecommended.preferences;
@@ -120,16 +126,12 @@ XKit.extensions.norecommended = new Object({
 				const is_pinned = loggingReason.startsWith('pin:');
 
 				if ((no_search.value && is_search) || (no_pinned.value && is_pinned) || (!is_search && !is_pinned)) {
-					if (hide_posts_completely.value) {
-						$this.addClass('norecommended-hidden-completely');
-					} else {
-						$this.addClass('norecommended-hidden');
+					$this.addClass('norecommended-hidden');
 
+					if (!hide_posts_completely.value) {
 						var note_text = loggingReason.startsWith('pin:') ? `pinned post by ${blogName}` : `recommended post by ${blogName}`;
 						const button = '<div class="xkit-button norecommended-hidden-button">show post</div>';
 						$this.prepend(`<div class="norecommended-note">${note_text}${button}</div>`);
-
-						// add listener to unhide the post on button click
 						$this.on('click', '.norecommended-hidden-button', XKit.extensions.norecommended.unhide_post);
 					}
 				}
@@ -157,7 +159,6 @@ XKit.extensions.norecommended = new Object({
 		this.running = false;
 		$('.norecommended-done').removeClass('norecommended-done');
 		$('.norecommended-hidden').removeClass('norecommended-hidden');
-		$('.norecommended-hidden-completely').removeClass('norecommended-hidden-completely');
 		$('.norecommended-note').remove();
 		XKit.post_listener.remove('norecommended');
 		XKit.tools.remove_css("norecommended");
