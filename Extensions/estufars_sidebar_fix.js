@@ -28,6 +28,11 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 			return;
 		}
 
+		if (XKit.page.react) {
+			this.run_react();
+			return;
+		}
+
 		if (XKit.extensions.estufars_sidebar_fix.preferences.dashonly.value) {
 			if (document.location.href.indexOf('://www.tumblr.com/dashboard') === -1) {
 				return;
@@ -88,6 +93,78 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 			observer.observe(document.body, {childList: true});
 			var account = document.getElementById("account_button");
 			account.click();
+		} else {
+			movesidebar();
+		}
+
+		this.done = true;
+	},
+
+	run_react: async function() {
+
+		//test other pages later
+		if (!XKit.interface.where().dashboard) { return; }
+
+		await XKit.css_map.getCssMap();
+		const homeMenu_sel = XKit.css_map.keyToCss('homeMenu');
+		const menuContainer_sel = XKit.css_map.keyToCss('menuContainer');
+		const heading_sel = XKit.css_map.keyToCss('heading');
+		const navItem_sel = XKit.css_map.keyToCss('navItem');
+		const accountBlogItem_sel = XKit.css_map.keyToCss('accountBlogItem');
+		const navLink_sel = XKit.css_map.keyToCss('navLink');
+
+		const react_css = `
+			#old_sidebar {
+				border-radius: 3px;
+				background: var(--white);
+				overflow-y: auto;
+				color: var(--black);
+			}
+		`;
+
+		XKit.tools.add_css(react_css, "estufars_sidebar_fix");
+
+
+		const account_aria_label = await XKit.interface.translate('Account');
+		const $account_button = $(`button[aria-label="${account_aria_label}"]`)
+		const $account_button_outer = $account_button.closest(menuContainer_sel);
+
+		console.log($account_button[0]);
+		console.log($(homeMenu_sel)[0]);
+
+		function movesidebar() {
+			const $homeMenu = $(homeMenu_sel);
+
+			const $sidebar = $(`<div id="old_sidebar" class="controls_section"></div>`).prependTo($("#xkit_react_sidebar"));
+
+			console.log($(homeMenu_sel)[0]);
+			$sidebar.prepend($homeMenu);
+
+
+			// var account = document.getElementById("account_button");
+			// account.style.display = "none";
+			// // wait and then let tumblr know the menu is no longer active
+			// window.setTimeout(function() {
+			// 	document.querySelector(".tab_nav_account.active").click();
+			// }, 250);
+		}
+
+		if (!$(homeMenu_sel).length) {
+			console.log("hi");
+			var observer = new MutationObserver(function(mutations) {
+				mutations.forEach(function(mutation) {
+					console.log("found mutation");
+					console.log(mutation);
+					var popover = $(homeMenu_sel)[0];
+					if (mutation.addedNodes[0] == popover) {
+						console.log("moving");
+						observer.disconnect();
+						movesidebar();
+					}
+				});
+			});
+			observer.observe($account_button_outer[0], {childList: true, subtree: true});
+			$account_button.click();
 		} else {
 			movesidebar();
 		}
