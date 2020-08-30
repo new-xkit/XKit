@@ -110,10 +110,13 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		await XKit.css_map.getCssMap();
 		const homeMenu_sel = XKit.css_map.keyToCss('homeMenu');
 		const menuContainer_sel = XKit.css_map.keyToCss('menuContainer');
-		const heading_sel = XKit.css_map.keyToCss('heading');
-		const navItem_sel = XKit.css_map.keyToCss('navItem');
+		//const heading_sel = XKit.css_map.keyToCss('heading');
+		//const navItem_sel = XKit.css_map.keyToCss('navItem');
 		const accountBlogItem_sel = XKit.css_map.keyToCss('accountBlogItem');
-		const navLink_sel = XKit.css_map.keyToCss('navLink');
+		//const navLink_sel = XKit.css_map.keyToCss('navLink');
+
+		// "keyboard shortcuts" and "change palatte" are broken right now, idk why!
+		const menuitemlabel = await XKit.interface.translate('Menuitem');
 
 		const react_css = `
 			#old_sidebar {
@@ -121,6 +124,13 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 				background: var(--white);
 				overflow-y: auto;
 				color: var(--black);
+			}
+			#old_sidebar li[role="${menuitemlabel}"] {
+				display: none;
+			}
+			#old_sidebar_blogs_container {
+				max-height: 265px;
+    			overflow-y: scroll;
 			}
 		`;
 
@@ -133,9 +143,19 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 
 		function movesidebar() {
 			const $homeMenu = $(homeMenu_sel);
-			const $sidebar = $(`<div id="old_sidebar" class="controls_section"></div>`).prependTo($("#xkit_react_sidebar"));
+			const $sidebar = $(`<div id="old_sidebar" class="controls_section"></div>`)
+				.prependTo($("#xkit_react_sidebar"));
 
 			$sidebar.prepend($homeMenu);
+
+			$account_button.css("opacity", "0.4");
+
+			const $blogs_container = $(accountBlogItem_sel).first().parent();
+			$blogs_container.attr("id", "old_sidebar_blogs_container");
+
+			//fun with math just to make our initial sidebar height fit nicely on the screen
+			const blogs_container_height = Math.max(265, $(window).height() - $blogs_container.offset().top - 50);
+			$blogs_container.css("max-height", `${blogs_container_height}px`);
 
 			// var account = document.getElementById("account_button");
 			// account.style.display = "none";
@@ -143,6 +163,9 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 			// window.setTimeout(function() {
 			// 	document.querySelector(".tab_nav_account.active").click();
 			// }, 250);
+			setTimeout(function() {
+				$account_button.click();
+			}, 0);
 		}
 
 		if (!$(homeMenu_sel).length) {
