@@ -105,6 +105,8 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		//test other pages later
 		if (!XKit.interface.where().dashboard) { return; }
 
+		if ($("#old_sidebar").length) { return; }
+
 		await XKit.css_map.getCssMap();
 		const homeMenu_sel = XKit.css_map.keyToCss('homeMenu');
 		const menuContainer_sel = XKit.css_map.keyToCss('menuContainer');
@@ -129,17 +131,11 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		const $account_button = $(`button[aria-label="${account_aria_label}"]`)
 		const $account_button_outer = $account_button.closest(menuContainer_sel);
 
-		console.log($account_button[0]);
-		console.log($(homeMenu_sel)[0]);
-
 		function movesidebar() {
 			const $homeMenu = $(homeMenu_sel);
-
 			const $sidebar = $(`<div id="old_sidebar" class="controls_section"></div>`).prependTo($("#xkit_react_sidebar"));
 
-			console.log($(homeMenu_sel)[0]);
 			$sidebar.prepend($homeMenu);
-
 
 			// var account = document.getElementById("account_button");
 			// account.style.display = "none";
@@ -150,14 +146,10 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		}
 
 		if (!$(homeMenu_sel).length) {
-			console.log("hi");
 			var observer = new MutationObserver(function(mutations) {
 				mutations.forEach(function(mutation) {
-					console.log("found mutation");
-					console.log(mutation);
 					var popover = $(homeMenu_sel)[0];
 					if (mutation.addedNodes[0] == popover) {
-						console.log("moving");
 						observer.disconnect();
 						movesidebar();
 					}
@@ -175,6 +167,14 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 	destroy: function() {
 		XKit.tools.remove_css("estufars_sidebar_fix");
 		this.running = false;
+
+		if (XKit.page.react) {
+			this.done = false;
+			$("#old_sidebar").remove();
+			//might need some more stuff in here
+			return;
+		}
+
 		if (!this.done) { return; }
 		this.done = false;
 		var account = document.getElementById("account_button");
