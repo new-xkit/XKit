@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.2.3 **//
+//* VERSION 1.2.4 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -120,6 +120,8 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 
 		const react_css = `
 			#old_sidebar {
+				margin-left: 10px;
+    			margin-right: 10px;
 				border-radius: 3px;
 				background: var(--white);
 				overflow-y: auto;
@@ -138,7 +140,7 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 
 
 		const account_aria_label = await XKit.interface.translate('Account');
-		const $account_button = $(`button[aria-label="${account_aria_label}"]`)
+		const $account_button = $(`button[aria-label="${account_aria_label}"]`);
 		const $account_button_outer = $account_button.closest(menuContainer_sel);
 
 		function movesidebar() {
