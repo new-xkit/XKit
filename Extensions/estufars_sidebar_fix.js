@@ -143,7 +143,10 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		const $account_button = $(`button[aria-label="${account_aria_label}"]`);
 		const $account_button_outer = $account_button.closest(menuContainer_sel);
 
-		function movesidebar() {
+		async function movesidebar() {
+			if (!$("#xkit_react_sidebar").length) {
+				await XKit.interface.react.sidebar.init();
+			}
 			const $homeMenu = $(homeMenu_sel);
 			const $sidebar = $(`<div id="old_sidebar" class="controls_section"></div>`)
 				.prependTo($("#xkit_react_sidebar"));
