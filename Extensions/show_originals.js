@@ -227,8 +227,8 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	on: function() {
-		XKit.post_listener.add('showoriginals', XKit.extensions.show_originals.react_do);
-		XKit.extensions.show_originals.react_do();
+		XKit.post_listener.add('showoriginals', XKit.extensions.show_originals.react_do_delayed);
+		XKit.extensions.show_originals.react_do_delayed();
 	},
 
 	off: function() {
@@ -237,7 +237,7 @@ XKit.extensions.show_originals = new Object({
 		$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
 		$('.showoriginals-hidden-note').remove();
 		try {
-			XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do);
+			XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do_delayed);
 		} catch (e) {
 			//no post listener to remove
 		}
@@ -319,9 +319,19 @@ XKit.extensions.show_originals = new Object({
 		XKit.storage.set("show_originals", "status", show_originals.status);
 	},
 
+	react_do_delayed: function() {
+		setTimeout(this.react_do_delayed, 0);
+	},
+
 	react_do: function() {
 		$('[data-id]:not(.showoriginals-done)').each(async function() {
 			const $this = $(this).addClass('showoriginals-done');
+			if ($this.hasClass("norecommended-hidden") ||
+				$this.hasClass("xblacklist_blacklisted_post") ||
+				$this.hasClass("xmute-muted") ||
+				$this.hasClass("xpostblock-hidden")) {
+				return;
+			}
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
 			const {blogs_to_exclude, my_blogs} = XKit.extensions.show_originals;
 			const {blogName, rebloggedFromName, content} = await XKit.interface.react.post_props($this.attr('data-id'));
