@@ -325,8 +325,8 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	react_do: function() {
-		$('[data-id]:not(.showoriginals-done)').each(async function() {
-			const $this = $(this).addClass('showoriginals-done');
+		$('[data-id]:not(.showoriginals-done)').addClass('showoriginals-done').each(async function() {
+			const $this = $(this);
 			if ($this.hasClass("norecommended-hidden") ||
 				$this.hasClass("xblacklist_blacklisted_post") ||
 				$this.hasClass("xmute-muted") ||
@@ -336,21 +336,20 @@ XKit.extensions.show_originals = new Object({
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
 			const {blogs_to_exclude, my_blogs} = XKit.extensions.show_originals;
 			const {blogName, rebloggedFromName, content} = await XKit.interface.react.post_props($this.attr('data-id'));
-			const inSidebar = $this.closest("#glass-container").length > 0;
+			const is_original = !rebloggedFromName;
+			const in_sidebar = $this.closest("#glass-container").length > 0;
 
-			const should_hide = () => {
-				if (!rebloggedFromName) { return false; } //show all original posts
+			const should_show =
+				(is_original) ||
+				(show_original_reblogs.value && content.length) ||
+				(show_my_posts.value && my_blogs.includes(blogName)) ||
+				(blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) ||
+				(!active_in_peepr && in_sidebar);
 
-				if (show_original_reblogs.value && content.length) { return false; }
-				if (show_my_posts.value && my_blogs.includes(blogName)) { return false; }
-				if (blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) { return false; }
-				if (!active_in_peepr && inSidebar) { return false; }
-				return true;
-			};
-
-			if (should_hide()) {
+			if (!should_show) {
 				$this.addClass('showoriginals-hidden');
-				if (hide_posts_completely.value && !inSidebar) {
+
+				if (hide_posts_completely.value && !in_sidebar) {
 					$this.addClass('showoriginals-hidden-completely');
 				} else if (hide_posts_generic.value) {
 					$this.prepend('<div class="showoriginals-hidden-note">hidden reblog</div>');
