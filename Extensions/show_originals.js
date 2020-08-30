@@ -320,7 +320,7 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	react_do_delayed: function() {
-		setTimeout(this.react_do, 0);
+		setTimeout(XKit.extensions.show_originals.react_do, 0);
 	},
 
 	react_do: function() {
