@@ -266,3 +266,10 @@
 	background: rgba(var(--rgb-black), 0.25);
 	border-color: rgba(var(--rgb-black), 0.8);
 }
+
+#xblacklist-cpanel-notice {
+	padding: 15px 15px 0 15px;
+	font-size: 14px;
+	line-height: 1.3em;
+	color: rgb(80,80,80);
+}

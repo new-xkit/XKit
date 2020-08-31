@@ -33,6 +33,15 @@ XKit.extensions.blacklist = new Object({
 	control_panel_div: "",
 
 	preferences: {
+		"notice": {
+			text: "Notice",
+			type: "separator"
+		},
+		"hide_filtered": {
+			text: "Use Blacklist's UI options for Tumblr's filtered posts feature",
+			default: true,
+			value: true
+		},
 		"sep0": {
 			text: "User interface options",
 			type: "separator"
@@ -543,6 +552,8 @@ XKit.extensions.blacklist = new Object({
 		});
 
 		const postSel = XKit.css_map.keyToCss('listTimelineObject') || '.post';
+		const filteredSel = XKit.css_map.keyToCss('filteredScreen');
+		const filteredReasonSel = XKit.css_map.descendantSelector('filteredScreen', 'linkOut');
 		$(postSel).not(".xblacklist-done").each(function() {
 
 			try {
@@ -558,6 +569,14 @@ XKit.extensions.blacklist = new Object({
 
 				// Add class to not do this twice.
 				$(this).addClass("xblacklist-done");
+
+				if (XKit.extensions.blacklist.preferences.hide_filtered.value && filteredSel &&
+					$(this).find(filteredSel).length) {
+
+					const m_result = $(this).find(filteredReasonSel).text();
+					XKit.extensions.blacklist.hide_post($(this), m_result);
+					return;
+				}
 
 				// Collect the tags
 				var tag_array = [];
@@ -1043,6 +1062,10 @@ XKit.extensions.blacklist = new Object({
 	cpanel: function(m_div) {
 
 		XKit.extensions.blacklist.control_panel_div = m_div;
+
+		let filtering_link = `<a href="https://tumblr.zendesk.com/hc/en-us/articles/360046752174" target="_blank">here</a>`;
+		let filtering_message = `Tumblr now has built-in post content filtering! Click ${filtering_link} to learn more. This extension doesn't have the ability to export your blacklisted words to Tumblr yet, but having blacklisted words in one, the other, or both should work correctly.`;
+		$(m_div).find(".xkit-extension-setting-separator").first().after(`<div id="xblacklist-cpanel-notice">${filtering_message}</div>`);
 
 		if ($("#xkit-blacklist-custom-panel").length > 0) {
 			// Panel already exists, probably in refresh mode.
