@@ -160,7 +160,9 @@ XKit.extensions.timestamps = new Object({
 				}
 
 				if (this.preferences.only_on_hover.value) {
-					XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
+					XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: inline-block; }`, "timestamps_on_hover");
+				} else {
+					XKit.tools.add_css(".xtimestamp { display: inline-block; }", "timestamps_on_hover");
 				}
 			});
 
