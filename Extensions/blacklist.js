@@ -132,6 +132,7 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		XKit.tools.init_css("blacklist");
+		XKit.interface.hide(".xblacklist_hidden_post", "blacklist");
 
 		var m_blacklist = XKit.storage.get("blacklist", "words", "").split(",");
 		var m_whitelist = XKit.storage.get("blacklist", "words_whitelisted", "").split(",");
