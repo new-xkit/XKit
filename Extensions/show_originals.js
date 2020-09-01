@@ -259,7 +259,7 @@ XKit.extensions.show_originals = new Object({
 	 * @param {JQuery} [$targetElement] - a JQuery object whose position will be the target
 	 */
 	preserveScrollPosition: function(func, $targetElement) {
-		var $fixedPost = null;
+		let $fixedPost = null;
 		const oldPagePosition = $(window).scrollTop();
 		const targetLocationPage = $targetElement ?
 			$targetElement.offset().top + $targetElement.outerHeight() / 2 :
@@ -279,7 +279,7 @@ XKit.extensions.show_originals = new Object({
 		//$fixedPost.css("outline", "1px solid red");
 		//$fixedPost.css("outline-offset", "3px");
 
-		var offset = targetLocationPage - $fixedPost.offset().top;
+		let offset = targetLocationPage - $fixedPost.offset().top;
 
 		func();
 
