@@ -71,7 +71,7 @@ XKit.extensions.mutualchecker = new Object({
 
 	add_post_icons_react: async function() {
 		const $posts = $('[data-id]:not(.mutualchecker-done)').addClass("mutualchecker-done");
-		for (var post of $posts.get()) {
+		for (let post of $posts.get()) {
 			const $link = $(post).find(XKit.extensions.mutualchecker.selector);
 			const blog_name = $link.text();
 			if (blog_name.length) {
