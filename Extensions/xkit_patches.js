@@ -1230,7 +1230,7 @@ XKit.extensions.xkit_patches = new Object({
 					section.items = section.items || [];
 					section.small = section.small || [];
 
-					var html = `<ul id="${section.id}" class="controls_section">`;
+					let html = `<ul id="${section.id}" class="controls_section">`;
 					if (section.title) {
 						await XKit.css_map.getCssMap();
 						const sidebarTitleClasses = XKit.css_map.keyToClasses("sidebarTitle").join(" ");
