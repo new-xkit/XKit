@@ -129,7 +129,7 @@ XKit.extensions.norecommended = new Object({
 					$this.addClass('norecommended-hidden');
 
 					if (!hide_posts_completely.value) {
-						var note_text = loggingReason.startsWith('pin:') ? `pinned post by ${blogName}` : `recommended post by ${blogName}`;
+						let note_text = loggingReason.startsWith('pin:') ? `pinned post by ${blogName}` : `recommended post by ${blogName}`;
 						const button = '<div class="xkit-button norecommended-hidden-button">show post</div>';
 						$this.prepend(`<div class="norecommended-note">${note_text}${button}</div>`);
 						$this.on('click', '.norecommended-hidden-button', XKit.extensions.norecommended.unhide_post);
