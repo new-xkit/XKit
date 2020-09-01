@@ -209,9 +209,8 @@ XKit.extensions.xkit_patches = new Object({
 			XKit.post_listener.debounce_timer = null;
 
 			XKit.post_listener.observer = new MutationObserver(mutations => {
-				const self = XKit.post_listener;
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
-				var new_posts = false;
+				let new_posts = false;
 				const observed = mutations.some(({addedNodes, target}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
 						const $addedNode = $(addedNodes[i]);
@@ -225,6 +224,7 @@ XKit.extensions.xkit_patches = new Object({
 				});
 
 				if (observed) {
+					const self = XKit.post_listener;
 					clearTimeout(self.debounce_timer);
 					if (new_posts) {
 						self.run_callbacks();
