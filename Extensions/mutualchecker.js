@@ -106,8 +106,7 @@ XKit.extensions.mutualchecker = new Object({
 
 	check_react: function($link, blog_name) {
 		if (typeof this.mutuals[blog_name] === "undefined") {
-			console.log("checking mutuals: " + blog_name);
-			this.mutuals[blog_name] = XKit.interface.is_following(blog_name, this.preferences.main_blog.value)
+			this.mutuals[blog_name] = this.followed_by(this.preferences.main_blog.value, blog_name)
 				.catch(() => Promise.resolve(false)); //assume we're not mutuals if we get an error
 		}
 		this.mutuals[blog_name].then(is_mutual => {
@@ -115,6 +114,14 @@ XKit.extensions.mutualchecker = new Object({
 				this.add_label_react($link, blog_name);
 			}
 		});
+	},
+
+	followed_by: function(blog_identifier, query) {
+		return XKit.tools.async_add_function(async ({blog_identifier, query}) => { // eslint-disable-line no-shadow
+			/* globals tumblr */
+			const result = await window.tumblr.apiFetch(`/v2/blog/${blog_identifier}/followed_by`, { method: "GET", queryParams: { query: query } });
+			return result.response.followedBy;
+		}, {blog_identifier, query});
 	},
 
 	check: function(json_obj, $link) {
