@@ -210,7 +210,6 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		//running on every react page until xkit handles tumblr's soft refresh
 		if (XKit.page.react || $(postSel).length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
