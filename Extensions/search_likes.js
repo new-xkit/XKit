@@ -1,247 +1,353 @@
 //* TITLE Search Likes **//
-//* VERSION 0.3.3 **//
+//* VERSION 0.3.4 **//
 //* DESCRIPTION Lets you search likes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a very experimental extension that lets you search the posts you've liked by URL or text. Just go to your likes page, then click on Search button to get started. **//
 //* FRAME false **//
 //* BETA false **//
+//* SLOW true **//
 
 XKit.extensions.search_likes = new Object({
 
 	running: false,
 
-	run: function() {
+	max_results: 200,
+	preferences: {
+		'highlight': {
+			text: 'Highlight search results (bug: breaks hyperlinks)',
+			default: true,
+			value: true,
+			slow: true
+		},
+		'max_results': {
+			text: 'Maximum search results (default: 200)',
+			type: 'text',
+			default: '200',
+			value: '200'
+		},
+	},
+
+	searching: false,
+	term: null,
+	results: 0,
+	posts_loaded: 0,
+
+	highlight_selector: '',
+	endless_scrolling_disabled: false,
+
+	run: async function() {
 		this.running = true;
+		if (!XKit.interface.where().likes) { return; }
 
-		if (document.location.href.indexOf("://www.tumblr.com/likes") !== -1) {
-
-
-			XKit.tools.init_css("search_likes");
-
-			var m_html = '<li id="xkit-search-likes-li">' +
-				'<a href="#" class="customize" id="xkit-search-likes-button">' +
-					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Search liked posts</div>' +
-				'</a>' +
-				'</li>';
-
-			var x_html = "<div id=\"xkit-search-likes-box\">" +
-					"<input type=\"text\" placeholder=\"Enter URL/text...\" id=\"xkit-search-likes-input\">" +
-				"</div>";
-
-			m_html = '<ul class="controls_section" id="xkit-search-likes-ul"><li class=\"section_header selected\">Search Likes</li>' + m_html + '</ul>';
-
-			$(".controls_section:eq(1)").after(m_html);
-			$("#xkit-search-likes-ul").before(x_html);
-
-			$("#xkit-search-likes-button").click(function() {
-
-				XKit.extensions.search_likes.search_start();
-
-				return false;
-			});
-
-			$("#xkit-search-likes-input").keyup(function() {
-
-				var m_value = $(this).val().toLowerCase();
-				m_value = $.trim(m_value);
-
-				$(".xkit-search-likes-done").removeClass("xkit-search-likes-done");
-				XKit.extensions.search_likes.term = m_value;
-				XKit.extensions.search_likes.search_do_posts();
-
-				$(".xkit-search-likes-done").removeClass("xkit-search-likes-done").removeClass("xkit-search-likes-found");
-
-			});
-
+		const nextAriaLabel = await XKit.interface.translate('Next');
+		if ($(`button[aria-label="${nextAriaLabel}"]`).length) {
+			this.endless_scrolling_disabled = true;
 		}
 
+		const max_results = parseInt(this.preferences.max_results.value);
+		this.max_results = !isNaN(max_results) && max_results > 0 ? max_results : 200;
+
+		await XKit.css_map.getCssMap();
+		this.highlight_selector = 'p, ' +
+			XKit.css_map.keyToCss('tag') + ', ' +
+			XKit.css_map.keyToCss('attribution') + ', ' +
+			XKit.css_map.keyToCss('contentSource');
+
+		XKit.tools.init_css('search_likes');
+
+		if (!$('#xkit_react_sidebar').length) {
+			await XKit.interface.react.sidebar.init();
+		}
+		const search_box_html =
+			`<div id='search-likes-box'>
+				<input type='text' placeholder='Search Likes' id='search-likes-input'>
+			</div>`;
+		$('#xkit_react_sidebar').prepend(search_box_html);
+		$('#search-likes-input').keydown(event => event.stopPropagation());
+		$('#search-likes-input').click(this.new_search_term);
+
+		const new_search_debounced = XKit.tools.debounce(this.new_search_term, 500);
+		$('#search-likes-input').keyup(new_search_debounced);
 	},
 
-	term: "",
-	page: 0,
-	scooping: false,
+	new_search_term: function() {
+		const {search_likes} = XKit.extensions;
+		var term = $(this).val().toLowerCase().trim();
+		if (term.length < 2) {
+			term = '';
+		}
+		if (search_likes.term != term) {
+			if (!search_likes.searching) {
+				search_likes.init_search();
+			}
+			console.log(`search term: ${term}`);
+			search_likes.term = term;
+			search_likes.results = 0;
+			const $allPosts = $('#search-likes-timeline [data-id]');
+			search_likes.posts_loaded = $allPosts.length;
+			search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>, please wait...`);
 
-	update_rect: function() {
-
-		XKit.tools.add_function(function() {
-			Tumblr.Events.trigger("DOMEventor:updateRect");
-		}, true, "");
-
+			search_likes.wait_for_render().then(() => {
+				$('#search-likes-timeline mark').contents().unwrap();
+				$allPosts
+				.removeClass('search-likes-done')
+				.removeClass('search-likes-shown');
+				XKit.extensions.search_likes.filter_posts(search_likes.term);
+			});
+		}
 	},
 
-	search_do_posts: function() {
+	init_search: async function() {
+		const {search_likes} = XKit.extensions;
+		search_likes.searching = true;
+		XKit.post_listener.add('search_likes', XKit.extensions.search_likes.process_new_posts);
+		$(XKit.css_map.keyToCss('timeline')).attr('id', 'search-likes-timeline');
+		$(XKit.css_map.descendantSelector('timeline', 'loader')).attr('id', 'search-likes-loader');
+		$('#search-likes-timeline').after(`<div id='prevent-load'></div>`);
 
-		var m_term = XKit.extensions.search_likes.term;
+		search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>`);
+		search_likes.wait_for_render().then(() => {
+			XKit.tools.add_css(`
+				#search-likes-timeline {
+					min-height: calc(100vh - ${$('#search-likes-timeline').offset().top - 10}px);
+				}
+				#search-likes-timeline article {
+					display: none;
+				}
+				#search-likes-timeline .search-likes-shown article {
+					display: block;
+			}`, 'search-likes-searching');
+		});
+	},
 
-		if (m_term.length <= 2) {
+	destroy_search: function() {
+		const {search_likes} = XKit.extensions;
+		search_likes.searching = false;
+		try {
+			XKit.post_listener.remove('search_likes');
+		} catch (error) {
+			// Nothing to remove
+		}
+		search_likes.term = null;
+		$('#search-likes-input').val('');
+		$('#search-likes-timeline mark').contents().unwrap();
+		$('#search-likes-timeline [data-id]')
+			.removeClass('search-likes-done')
+			.removeClass('search-likes-shown');
+		$('.search-likes-status-bar').remove();
+		$('#prevent-load').remove();
+		$('#search-likes-timeline').removeAttr('id');
+		XKit.tools.remove_css('search-likes-searching');
+	},
 
-			// Show all.
-
-			$(".post").parent().not("#right_column").addClass("xkit-search-likes-force-found");
-			$(".post").parent().slideDown('fast');
-
-			$("#xkit-search-likes-status-bar").remove();
-
-			XKit.extensions.search_likes.update_rect();
-			$(".post:gt(20)").parent().remove();
-
-			XKit.extensions.search_likes.page = 0;
-			XKit.extensions.search_likes.scooping = false;
-
+	process_new_posts: async function() {
+		const {search_likes} = XKit.extensions;
+		if (!search_likes.searching) { return; }
+		if (!XKit.interface.where().likes) {
+			XKit.post_listener.remove('search_likes');
 			return;
-		} else {
-
-			$(".xkit-search-likes-force-found").not("#right_column").removeClass("xkit-search-likes-force-found");
-
+		}
+		const $allPosts = $('#search-likes-timeline [data-id]');
+		if ($allPosts.length <= search_likes.posts_loaded) { return; }
+		search_likes.posts_loaded = $allPosts.length;
+		if (!search_likes.term) {
+			search_likes.update_status_bar('...');
+			return;
 		}
 
-		var i_html = "Searching for <b>\"" + m_term + "\"</b><br/><span id=\"xkit-search-likes-found-count\">0</span> results found so far<span style=\"display: none;\">, inspected <span id=\"xkit-search-likes-total-count\">0</span> posts.</span><br/><small>Scroll down to load more posts and results.</small>";
-
-		if ($("#xkit-search-likes-status-bar").length > 0) {
-			$("#xkit-search-likes-status-bar").html(i_html);
-		} else {
-			$("#posts").before("<div id=\"xkit-search-likes-status-bar\">" + i_html + "</div>");
-		}
-
-		// Remove the unnecessary posts.
-		$(".post_container.xkit-search-likes-done-container:gt(20)").not(".xkit-search-likes-found").remove();
-
-		var multi_array = [];
-
-		$(".post").not("#tumblr_radar").each(function() {
-
-			var post_id = $(this).attr('data-post-id');
-
-			if (multi_array.indexOf(post_id) !== -1) {
-				console.log(" >>> !! Multiple same posts found, removing this one.");
-				$(this).remove(); return;
-			} else {
-				multi_array.push(post_id);
-			}
-
+		//search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>`);
+		search_likes.wait_for_render().then(() => {
+			XKit.extensions.search_likes.filter_posts();
 		});
-
-		$(".post").not("#tumblr_radar").not("xkit-search-likes-done").each(function() {
-
-			var username = $(this).attr('data-tumblelog-name');
-			var hide_this = false;
-
-			$(this).addClass("xkit-search-likes-done");
-
-			var to_search_in = $(this).find(".post_content").text().toLowerCase();
-
-			if ($(this).find(".post_tag").length > 0) {
-
-				$(this).find(".post_tag").each(function() {
-
-					to_search_in = to_search_in + " " + $(this).html().toLowerCase();
-					to_search_in = to_search_in + " " + $(this).html().toLowerCase().substring(1);
-
-				});
-
-			}
-
-			if (typeof username !== "undefined") {
-				to_search_in = to_search_in + username;
-			}
-
-			document.title = m_term;
-
-			if (to_search_in.indexOf(m_term) === -1) {
-				hide_this = true;
-			}
-
-			$(this).parent().addClass("xkit-search-likes-done-container");
-
-			if (!hide_this) {
-
-				$(this).parent().slideDown('fast');
-				$(this).parent().addClass("xkit-search-likes-found");
-
-				$(this).find(".post_body").find("mark").contents().unwrap();
-				var m_html = XKit.extensions.search_likes.return_highlighted_html($(this).find(".post_body").html(), m_term);
-				$(this).find(".post_body").html(m_html);
-
-			} else {
-
-				$(this).parent().slideUp('fast');
-				$(this).parent().removeClass("xkit-search-likes-found");
-				$(this).find(".post_body").find("mark").contents().unwrap();
-
-			}
-
-		});
-
-		if ($(".xkit-search-likes-found").length <= 20) {
-
-			XKit.extensions.search_likes.scooping = true;
-			XKit.extensions.search_likes.scoop();
-
-		}
-
-		$("#xkit-search-likes-found-count").html($(".xkit-search-likes-found").length);
-		$("#xkit-search-likes-total-count").html($(".post").length);
-
 	},
 
-	scoop: function() {
+	filter_posts: async function(term) {
+		const {search_likes} = XKit.extensions;
+		var posts_to_show = [];
+		if (!term) {
+			search_likes.update_status_bar('...');
+			return;
+		}
 
-		XKit.extensions.search_likes.page++;
+		const $posts = $('#search-likes-timeline [data-id]:not(.search-likes-done)')
+		.addClass('search-likes-done');
 
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://www.tumblr.com/likes/page/" + XKit.extensions.search_likes.page,
-			json: false,
-			headers: {
-				"X-Requested-With": "XMLHttpRequest",
-			},
-			onerror: function(response) {
-				if (!XKit.extensions.search_likes.scooping) { return; }
-				setTimeout(function() { XKit.extensions.search_likes.scoop(); }, 200);
-			},
-			onload: function(response) {
+		search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>, please wait...`);
 
-				if (!XKit.extensions.search_likes.scooping) { return; }
-
-				var m_posts = $(".post", response.responseText);
-
-				var add_these = true;
-
-				$(m_posts).each(function() {
-
-					var m_search = $(this).attr('id');
-
-					if ($("#" + m_search).length > 0) {
-						// This set is already present.
-						add_these = false;
-						return false;
-					}
-
-				});
-
-				if (add_these) {
-
-					console.log("Search Likes Scooping: Found and adding!");
-					$("#posts").append(response.responseText);
-
-				} else {
-
-					console.log("Search Likes Scooping: This set already present, skipping.");
-
+		let render_chunk_size = 3;
+		const render = function() {
+			for (const post_to_show of posts_to_show) {
+				post_to_show.classList.add('search-likes-shown');
+				if (XKit.extensions.search_likes.preferences.highlight.value) {
+					$(post_to_show).find(search_likes.highlight_selector).each(function() {
+						$(this).html(search_likes.return_highlighted_html($(this).html(), search_likes.term));
+					});
 				}
-
-				if ($(".xkit-search-likes-found").length >= 5) {
-
-					console.log("Search Likes Scooping: No need to scoop anymore, stopping!");
-					return;
-
-				}
-
-				setTimeout(function() { XKit.extensions.search_likes.scoop(); }, 200);
-
 			}
-		});
+			posts_to_show = [];
+			search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>, please wait...`);
+		};
 
+		for (const post of $posts) {
+			if (search_likes.term != term) { return; }
+			if (search_likes.results >= search_likes.max_results) {
+				search_likes.update_status_bar(`Searching for <b>"${term}"</b>`);
+				break;
+			}
+			let text;
+
+			text = await search_likes.get_post_text(post);
+			console.log(text);
+
+			if (text.toLowerCase().indexOf(term) > -1) {
+				posts_to_show.push(post);
+				search_likes.results++;
+
+				if (posts_to_show.length >= render_chunk_size) {
+					if (search_likes.term != term) {
+						//search term has changed while we were processing
+						return;
+					}
+					render_chunk_size = 13;
+					render();
+					await search_likes.wait_for_render();
+				}
+			}
+		}
+		render();
+		search_likes.update_status_bar(`Searching for <b>"${term}"</b>`);
+	},
+
+	get_post_text: async function(post) {
+		var text = [];
+		const {blogName, rebloggedFromName, rebloggedRootname, sourceTitle, askingName, content, trail, postAuthor, tags} =
+			await XKit.interface.react.post_props(post.getAttribute('data-id'));
+		text.push(blogName, rebloggedFromName, rebloggedRootname);
+		if (askingName) {
+			text.push(askingName + ' asked:');
+		}
+
+		const process_content = function(input) {
+			for (let block of input) {
+				if (block.text) {
+					text.push(block.text);
+				}
+				if (block.formatting) {
+					for (let formatblock of block.formatting) {
+						if (formatblock.url) {
+							// Follow tumblr-redirected URLs
+							if (formatblock.url.indexOf('t.umblr.com/redirect') > -1) {
+								text.push(new URL(formatblock.url).searchParams.get('z'));
+							} else {
+								text.push(formatblock.url);
+							}
+						}
+					}
+				}
+				if (block.embedUrl) {
+					text.push(block.embedUrl);
+				}
+			}
+		};
+
+		if (trail) {
+			for (let reblog of trail) {
+				if (reblog.blog) {
+					text.push(reblog.blog.name);
+				}
+				if (reblog.brokenBlog) {
+					text.push(reblog.brokenBlog.name);
+				}
+				if (reblog.content) {
+					process_content(reblog.content);
+				}
+			}
+		}
+		if (content) {
+			process_content(content);
+		}
+
+		if (sourceTitle) {
+			text.push("source: " + sourceTitle);
+		}
+		if (postAuthor) {
+			text.push("submitted by: " + postAuthor);
+		}
+		if (tags) {
+			for (let tag of tags) {
+				text.push('#' + tag);
+			}
+		}
+		return text.join('\n');
+	},
+
+	simple_get_post_text: function(post) {
+		const text = post.innerHTML
+			.replace(/&nbsp;/ig, '')
+			.toLowerCase()
+			.trim()
+			.split(/<[^>]+>/ig)
+			.filter(Boolean)
+			.join('\n');
+
+		console.log(text);
+		return text;
+	},
+
+	update_status_bar: function(status) {
+		const {results, max_results, posts_loaded, destroy_search, endless_scrolling_disabled} =
+			XKit.extensions.search_likes;
+		let status_html;
+		if (results >= max_results) {
+			status_html = status +
+				`<br/>Showing the first ${max_results} results found out of ${posts_loaded} loaded posts.<br/>
+				Increase the maximum result count in Search Likes' preferences.<br/>
+				<a class='destroy-button'>Exit search and show all posts</a>`;
+
+		} else if (endless_scrolling_disabled) {
+			`<br/>${results} results on this page.<br/>
+				Enabling endless scrolling is recommended with the Search Likes extension.<br/>
+				<a class='destroy-button'>Exit search and show all posts</a>`;
+		} else {
+			status_html = status +
+				`<br/>${results} results found out of ${posts_loaded} loaded posts.<br/>
+				Scroll down to load more posts and results.<br/>
+				<a class='destroy-button'>Exit search and show all posts</a>`;
+		}
+
+		if (results > 0) {
+			if ($('#search-likes-status-bar-top').length > 0) {
+				$('#search-likes-status-bar-top').html(status_html);
+			 } else {
+				$('#search-likes-timeline').before(`<div id='search-likes-status-bar-top' class='search-likes-status-bar'>${status_html}</div>`);
+				$('#search-likes-status-bar-top').on('click', '.destroy-button', destroy_search);
+			}
+		} else {
+			$('#search-likes-status-bar-top').remove();
+		}
+
+		if ($('#search-likes-status-bar-bottom').length > 0) {
+			$('#search-likes-status-bar-bottom').html(status_html);
+		 } else {
+			$('#search-likes-loader').prepend(`<div id='search-likes-status-bar-bottom' class='search-likes-status-bar'>${status_html}</div>`);
+			$('#search-likes-status-bar-bottom').on('click', '.destroy-button', destroy_search);
+		}
+	},
+
+	/**
+	 * Returns a promise that resolves only once any changes previously made to the DOM have been
+	 * rendered on the page.
+	 *
+	 * @return {Promise}
+	 */
+	wait_for_render: function() {
+		return new Promise((resolve) => {
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					resolve();
+				});
+			});
+		});
 	},
 
 	return_highlighted_html: function(src_str, term) {
@@ -266,52 +372,12 @@ XKit.extensions.search_likes = new Object({
 
 	},
 
-	search_start: function() {
-
-		$("#xkit-search-likes-button").toggleClass("xkit-in-search");
-
-		if ($("#xkit-search-likes-button").hasClass("xkit-in-search")) {
-
-			$("#xkit-search-likes-li").addClass("selected");
-
-			XKit.extensions.search_likes.term = "";
-			$("#xkit-search-likes-input").val("");
-
-			$("#right_column").children().not("#xkit-search-likes-ul").not("#xkit-search-likes-box").slideUp('fast');
-			$("#xkit-search-likes-box").slideDown('slow');
-
-			XKit.post_listener.add("search_likes", XKit.extensions.search_likes.search_do_posts);
-			XKit.extensions.search_likes.search_do_posts();
-
-			XKit.tools.add_css(" #posts.posts>.post_container { display: none; } ", "search-likes-in-search");
-
-		} else {
-
-			$("#xkit-search-likes-li").removeClass("selected");
-
-			XKit.post_listener.remove("search_likes", XKit.extensions.search_likes.search_do_posts);
-			XKit.tools.remove_css("search-likes-in-search");
-
-			$(".post").not("#tumblr_radar").parent().addClass("xkit-search-likes-found");
-			$(".post").not("#tumblr_radar").parent().slideDown('fast');
-
-			$(".xkit-search-likes-done").removeClass("xkit-search-likes-done");
-
-			$("#xkit-search-likes-status-bar").slideUp('slow', function() { $(this).remove(); });
-
-			XKit.extensions.search_likes.update_rect();
-
-			$(".post:gt(30)").parent().remove();
-
-			$("#right_column").children().not("#xkit-search-likes-ul").not("#xkit-search-likes-box").slideDown('slow');
-			$("#xkit-search-likes-box").slideUp('slow');
-
-		}
-
-	},
-
 	destroy: function() {
+		const {search_likes} = XKit.extensions;
 		this.running = false;
+		search_likes.destroy_search();
+		XKit.tools.remove_css('search_likes');
+		$('#search-likes-box').remove();
 	}
 
 });
