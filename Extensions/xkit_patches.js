@@ -206,12 +206,16 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 
+			XKit.post_listener.debounce_timer = null;
+
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
-				const new_posts = mutations.some(({addedNodes, target}) => {
+				let new_posts = false;
+				const observed = mutations.some(({addedNodes, target}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
 						const $addedNode = $(addedNodes[i]);
 						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
+							new_posts = true;
 							return true;
 						}
 					}
@@ -219,16 +223,26 @@ XKit.extensions.xkit_patches = new Object({
 					return $(target).parents(criteria).length !== 0;
 				});
 
-				if (new_posts) {
-					Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
-						try {
-							callback();
-						} catch (e) {
-							console.error(e);
-						}
-					}));
+				if (observed) {
+					const self = XKit.post_listener;
+					clearTimeout(self.debounce_timer);
+					if (new_posts) {
+						self.run_callbacks();
+					} else {
+						self.debounce_timer = setTimeout(self.run_callbacks, 60);
+					}
 				}
 			});
+
+			XKit.post_listener.run_callbacks = function() {
+				Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
+					try {
+						callback();
+					} catch (e) {
+						console.error(e);
+					}
+				}));
+			};
 
 			/**
 			 * Show an XKit alert window

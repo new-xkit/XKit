@@ -116,12 +116,6 @@
 	right: 5px !important;
 }
 
-.xblacklist_hidden_post {
-	display: none !important;
-	height: 0px !important; width: 0px !important;
-	overflow: hidden !important;
-}
-
 .xkit-blacklist-add-margins-to-ul {
 	margin: 0; padding: 0px 20px;
 }

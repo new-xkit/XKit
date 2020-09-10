@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.2 **//
+//* VERSION 3.1.4 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -132,6 +132,7 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		XKit.tools.init_css("blacklist");
+		XKit.interface.hide(".xblacklist_hidden_post", "blacklist");
 
 		var m_blacklist = XKit.storage.get("blacklist", "words", "").split(",");
 		var m_whitelist = XKit.storage.get("blacklist", "words_whitelisted", "").split(",");
@@ -209,7 +210,7 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		if ($(postSel).length > 0) {
+		if (XKit.page.react || $(postSel).length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
 
@@ -628,10 +629,11 @@ XKit.extensions.blacklist = new Object({
 					}).get().join(" ");
 				}
 
-				// New method for finding content
-				const rowsSel = XKit.css_map.keyToCss('rows');
-				if (rowsSel && $(this).find(rowsSel).length > 0) {
-					m_content = $(this).find(rowsSel).map(function() {
+				// New method for finding content on react. "link" finds the content of link posts
+				const contentSel = XKit.css_map.keyToCss('textBlock') + "," + XKit.css_map.keyToCss('link');
+				var content = $(this).find(contentSel);
+				if (content.length) {
+					m_content += content.map(function() {
 					    return $(this).html();
 					}).get().join(" ");
 				}
@@ -650,7 +652,7 @@ XKit.extensions.blacklist = new Object({
 				// Strip HTML tags.
 				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
 
-				console.log('all the content is', m_content);
+				//console.log('all the content is', m_content);
 
 				var m_result = XKit.extensions.blacklist.do_post($(this), m_content, tag_array);
 				if (m_result !== "") {
@@ -695,12 +697,7 @@ XKit.extensions.blacklist = new Object({
 
 			}, 300);
 		}
-
-		XKit.extensions.blacklist.check_interval = setTimeout(function() { XKit.extensions.blacklist.check(); }, 2000);
-
 	},
-
-	check_interval: 0,
 
 	hide_post: function($post, word) {
 		const {
