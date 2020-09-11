@@ -73,6 +73,11 @@ XKit.extensions.anti_capitalism = new Object({
 					.join(', ');
 				this.listTimelineObjectInnerCss = XKit.css_map.keyToCss('listTimelineObjectInner');
 				XKit.interface.hide(".anti-capitalism-hidden", "anti_capitalism");
+				XKit.tools.add_css(`
+					.anti-capitalism-hidden {
+						outline: 1px solid red;
+					}
+				`, 'anti_capitalism');
 				XKit.post_listener.add("mutualchecker", this.process_posts);
 				this.process_posts();
 			}
