@@ -1,7 +1,7 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.5 **//
-//* DESCRIPTION Only shows non-reblogged posts **//
-//* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
+//* VERSION 1.2.6 **//
+//* DESCRIPTION Only shows original content by the blogs you follow **//
+//* DETAILS This extension hides reblogs on your dash that don't contain added original content. This may slow down your computer if it hides a large number of reblogs. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -15,21 +15,92 @@ XKit.extensions.show_originals = new Object({
 	status: "false",
 	lbl_on: "on",
 	lbl_off: "off",
-	dont_show_mine: false,
+	blogs_to_exclude: [],
 
 	preferences: {
-		only_on_dashboard: {
-			text: "Only run when I'm on the dashboard",
+		"sep-0": {
+			text: "Shown content",
+			type: "separator"
+		},
+		"show_original_reblogs": {
+			text: "Show reblogged posts with added original content",
+			default: true,
+			value: true
+		},
+		"blogs_to_exclude": {
+			text: "Show every reblog by these blogs:",
+			type: "text",
+			default: "",
+			value: ""
+		},
+		"show_my_posts": {
+			text: "Never hide my posts",
+			default: true,
+			value: true
+		},
+		"sep-1": {
+			text: "Functionality",
+			type: "separator"
+		},
+		"active_in_peepr": {
+			text: "Activate Show Originals on blogs in the sidebar",
+			default: true,
+			value: true,
+		},
+		"sep-2": {
+			text: "Hidden post appearance",
+			type: "separator"
+		},
+		"hide_posts_generic": {
+			text: 'Replace reblogs with a simple "hidden reblog" message',
 			default: false,
 			value: false
+		},
+		"hide_posts_completely": {
+			text: "Hide dashboard reblogs completely (<a id=\"xkit-completely-hide-posts-help\" href=\"#\" onclick=\"return false\">may break endless scrolling</a>)",
+			default: false,
+			value: false,
+			slow: true,
+		},
+	},
+
+	cpanel: function(div) {
+		$("#xkit-completely-hide-posts-help").click(function() {
+			XKit.window.show("Completely hiding posts", 'If you have endless scrolling enabled and XKit completely hides every single post on the first "page" of your dashboard, you may become unable to scroll down to load more posts. Disable this option if you experience an empty dashboard with the loading icon appearing forever.', "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		});
+	},
+
+	endlessScrollingWarning: async function() {
+		if (XKit.storage.get("show_originals", "shown_warning_about_scrolling", "") !== "yass") {
+
+			//detects endless scrolling via the "next" button
+			const nextAriaLabel = await XKit.interface.translate('Next');
+			if ($(`button[aria-label="${nextAriaLabel}"]`).length) {
+
+				XKit.notifications.add("Show Originals works best when Endless Scrolling is turned on. Click here to learn more and dismiss this popup.", "warning", false, function() {
+					XKit.window.show("Endless Scrolling recommended.", "Show Originals works best when Endless Scrolling is enabled on your dashboard. If you want to enable it, click on the Account Settings button (person icon) on top-right of the page and then Settings > Dashboard > Enable endless scrolling.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.storage.set("show_originals", "shown_warning_about_scrolling", "yass");
+				});
+			}
 		}
 	},
 
 	run: function() {
 		this.running = true;
 
-		if (this.preferences.only_on_dashboard.value && !XKit.interface.where().dashboard) { return; }
-		if (!XKit.interface.where().dashboard && !XKit.interface.where().channel) { return; }
+		const where = XKit.interface.where();
+		if (!where.dashboard && !where.channel) { return; }
+
+		if (XKit.page.react) {
+			this.blogs_to_exclude = this.preferences.blogs_to_exclude.value.split(/[ ,]+/);
+			if (where.dashboard) {
+				this.endlessScrollingWarning();
+			}
+			this.add_css();
+			XKit.post_listener.add('showoriginals', this.react_do_delayed);
+			this.react_do_delayed();
+			return;
+		}
 
 		try {
 			if (XKit.installed.is_running("tweaks")) {
@@ -75,6 +146,113 @@ XKit.extensions.show_originals = new Object({
 		XKit.tools.init_css("show_originals");
 		XKit.post_listener.add("show_originals", XKit.extensions.show_originals.do);
 		XKit.extensions.show_originals.do();
+	},
+
+	add_css: function() {
+		//match blog theme colors if we're in peepr
+		const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
+		const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+
+		//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+		const shrink_post_amount = '12px';
+
+		XKit.tools.add_css(`
+			.showoriginals-hidden {
+				opacity: 0.75;
+				margin-bottom: calc(20px - ${shrink_post_amount});
+				transform: translateY(calc(-${shrink_post_amount}/2));
+			}
+			.showoriginals-hidden-note {
+				height: 30px;
+				color: ${automatic_color};
+				padding-left: 15px;
+				display: flex;
+				align-items: center;
+			}
+			.xkit--react .showoriginals-hidden-button {
+				line-height: initial;
+				margin: 0;
+				position: absolute !important;
+				right: 5px;
+				display: none !important;
+			}
+			.xkit--react .showoriginals-hidden:hover .showoriginals-hidden-button {
+				display: inline-block !important;
+			}
+			.xkit--react .showoriginals-hidden-button {
+				color: rgba(${automatic_button_color}, 0.8);
+				background: rgba(${automatic_button_color}, 0.05);
+				border-color: rgba(${automatic_button_color}, 0.3);
+			}
+			.xkit--react .showoriginals-hidden-button:hover {
+				color: rgba(${automatic_button_color});
+				background: rgba(${automatic_button_color}, 0.1);
+				border-color: rgba(${automatic_button_color}, 0.5);
+			}
+			.showoriginals-hidden-note ~ * {
+				display: none;
+			}
+		`, 'show_originals');
+
+		XKit.interface.hide(".showoriginals-hidden-completely, .showoriginals-hidden-completely + :not([data-id])", "show_originals");
+	},
+
+	react_do_delayed: function() {
+		//run after other extensions like blacklist (though not reliably)
+		setTimeout(XKit.extensions.show_originals.react_do, 0);
+	},
+
+	react_do: function() {
+		$('[data-id]:not(.showoriginals-done)').addClass('showoriginals-done').each(async function() {
+			const $this = $(this);
+			if ($this.hasClass("norecommended-hidden") ||
+				$this.hasClass("xblacklist_blacklisted_post") ||
+				$this.hasClass("xmute-muted") ||
+				$this.hasClass("xpostblock-hidden")) {
+				return;
+			}
+			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} =
+				XKit.extensions.show_originals.preferences;
+			const {blogs_to_exclude} = XKit.extensions.show_originals;
+			const {blogName, canEdit, rebloggedFromName, content} =
+				await XKit.interface.react.post_props($this.attr('data-id'));
+			const is_original = !rebloggedFromName;
+			const in_sidebar = $this.closest("#glass-container").length > 0;
+
+			const should_show =
+				(is_original) ||
+				(show_original_reblogs.value && content.length) ||
+				(show_my_posts.value && canEdit) ||
+				(blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) ||
+				(!active_in_peepr && in_sidebar);
+
+			if (!should_show) {
+				$this.addClass('showoriginals-hidden');
+
+				if (hide_posts_completely.value && !in_sidebar) {
+					$this.addClass('showoriginals-hidden-completely');
+				} else if (hide_posts_generic.value) {
+					$this.prepend('<div class="showoriginals-hidden-note">hidden reblog</div>');
+				} else {
+					const reblogicon = '<svg viewBox="0 0 12.3 13.7" width="24" height="14" fill="var(--blog-contrasting-title-color,var(--transparent-white-65))" fill-opacity="0.75"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>';
+					const note_text = `${blogName} ${reblogicon} ${rebloggedFromName}`;
+					const aria_label = `hidden post: ${blogName} reblogged a post from ${rebloggedFromName}`;
+					const button = '<div class="xkit-button showoriginals-hidden-button">show post</div>';
+
+					$this.prepend(`<div class="showoriginals-hidden-note" aria-label="${aria_label}">${note_text}${button}</div>`);
+					$this.on('click', '.showoriginals-hidden-button', XKit.extensions.show_originals.unhide_post);
+				}
+			}
+		});
+	},
+
+	unhide_post: function(e) {
+		const $button = $(e.target);
+		const $post = $button.parents('.showoriginals-hidden');
+		const $note = $button.parents('.showoriginals-hidden-note');
+
+		$post.removeClass('showoriginals-hidden');
+		$note.remove();
 	},
 
 	update_button: function() {
@@ -131,7 +309,24 @@ XKit.extensions.show_originals = new Object({
 		this.running = false;
 		XKit.tools.remove_css("show_originals");
 		XKit.tools.remove_css("show_originals_on");
-		XKit.interface.sidebar.remove("xshow_originals_sidebar");
+		if (XKit.page.react) {
+			try {
+				XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do_delayed);
+			} catch (e) {
+				//no post listener to remove
+			}
+			$('.showoriginals-done').removeClass('showoriginals-done');
+			$('.showoriginals-hidden').removeClass('showoriginals-hidden');
+			$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
+			$('.showoriginals-hidden-note').remove();
+		} else {
+			try {
+				XKit.post_listener.remove("show_originals");
+			} catch (e) {
+				//no post listener to remove
+			}
+			XKit.interface.sidebar.remove("xshow_originals_sidebar");
+		}
 	}
 
 });
