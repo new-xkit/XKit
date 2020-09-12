@@ -88,7 +88,8 @@ XKit.extensions.tag_replacer = new Object({
 			'<div class="xkit-checkbox" id="xkit-tag-replacer-append"><b>&nbsp;</b>Don\'t replace the tag but append the tag above</div>' +
 			'<div class="xkit-tag-replacer-separator">&nbsp;</div>' +
 			'<small>You can replace only one tag at a time.<br/>' +
-			'Due to technical reasons, you can\'t edit tags containing dashes or slashes.</small>',
+			'Due to technical reasons, you can\'t edit tags containing dashes or slashes.<br/>' +
+			'Warning: this function currently breaks the formatting of posts written in Markdown or HTML.</small>',
 
 			'question',
 
