@@ -8,8 +8,7 @@
 XKit.extensions.anti_capitalism = new Object({
 
 	running: false,
-	selector: "",
-	listTimelineObjectInnerCss: "",
+	has_indicator_selector: "",
 
 	preferences: {
 		"sep0": {
@@ -64,14 +63,23 @@ XKit.extensions.anti_capitalism = new Object({
 			await XKit.css_map.getCssMap();
 
 			if (this.preferences.sponsored_posts.value) {
+				const listTimelineObject = XKit.css_map.keyToClasses("listTimelineObject");
+				const masonryTimelineObject = XKit.css_map.keyToClasses("masonryTimelineObject");
+
+				// pattern created:
+				// listTimelineObject:not([data-id]):not(masonryTimelineObject)
+				const no_id_selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject])
+					.map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`)
+					.join(", ");
+				XKit.interface.hide(no_id_selector, "anti_capitalism");
+
 				var selectorArray = XKit.css_map.keyToClasses("sponsoredContainer");
 				selectorArray.push(XKit.css_map.keyToClasses("headerSponsored"));
 				selectorArray.push(XKit.css_map.keyToClasses("sponsoredIndicator"));
 
-				this.selector = selectorArray
+				this.has_indicator_selector = selectorArray
 					.map(cls => `.${cls}:not(.anti-capitalism-done)`)
 					.join(', ');
-				this.listTimelineObjectInnerCss = XKit.css_map.keyToCss('listTimelineObjectInner');
 				XKit.interface.hide(".anti-capitalism-hidden", "anti_capitalism");
 				XKit.post_listener.add("mutualchecker", this.process_posts);
 				this.process_posts();
@@ -126,11 +134,10 @@ XKit.extensions.anti_capitalism = new Object({
 	},
 
 	process_posts: async function() {
-		const {selector, listTimelineObjectInnerCss} = XKit.extensions.anti_capitalism;
-		const $containers = $(selector).addClass("anti-capitalism-done");
+		const {has_indicator_selector} = XKit.extensions.anti_capitalism;
+		const $containers = $(has_indicator_selector).addClass("anti-capitalism-done");
 		for (let container of $containers.get()) {
-			$(container).closest(listTimelineObjectInnerCss).parent()
-				.addClass('anti-capitalism-hidden');
+			$(container).closest('[data-id]').addClass('anti-capitalism-hidden');
 		}
 	},
 
