@@ -229,6 +229,24 @@ XKit.extensions.search_likes = new Object({
 
 		const process_content = function(input) {
 			for (let block of input) {
+				if (block.attribution) {
+					text.push(block.attribution.appName, block.attribution.displayText, block.attribution.url);
+				}
+				if (block.description) {
+					text.push(block.description);
+				}
+				if (block.displayUrl) {
+					text.push(block.displayUrl);
+				}
+				if (block.title) {
+					text.push(block.title);
+				}
+				if (block.artist) {
+					text.push(block.artist);
+				}
+				if (block.artist) {
+					text.push(block.album);
+				}
 				if (block.text) {
 					text.push(block.text);
 				}
@@ -243,9 +261,6 @@ XKit.extensions.search_likes = new Object({
 							}
 						}
 					}
-				}
-				if (block.embedUrl) {
-					text.push(block.embedUrl);
 				}
 			}
 		};
