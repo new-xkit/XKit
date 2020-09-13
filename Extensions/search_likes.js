@@ -156,7 +156,7 @@ XKit.extensions.search_likes = new Object({
 
 		//search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>`);
 		search_likes.wait_for_render().then(() => {
-			XKit.extensions.search_likes.filter_posts();
+			XKit.extensions.search_likes.filter_posts(search_likes.term);
 		});
 	},
 
