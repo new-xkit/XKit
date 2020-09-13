@@ -80,7 +80,6 @@ XKit.extensions.search_likes = new Object({
 			if (!search_likes.searching) {
 				search_likes.init_search();
 			}
-			console.log(`search term: ${term}`);
 			search_likes.term = term;
 			search_likes.results = 0;
 			const $allPosts = $('#search-likes-timeline [data-id]');
@@ -194,10 +193,7 @@ XKit.extensions.search_likes = new Object({
 				search_likes.update_status_bar(`Searching for <b>"${term}"</b>`);
 				break;
 			}
-			let text;
-
-			text = await search_likes.get_post_text(post);
-			console.log(text);
+			let text = await search_likes.get_post_text(post);
 
 			if (text.toLowerCase().indexOf(term) > -1) {
 				posts_to_show.push(post);
