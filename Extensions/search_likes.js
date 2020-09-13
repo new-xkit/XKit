@@ -48,7 +48,8 @@ XKit.extensions.search_likes = new Object({
 		this.max_results = !isNaN(max_results) && max_results > 0 ? max_results : 200;
 
 		await XKit.css_map.getCssMap();
-		this.highlight_selector = 'p, ' +
+		this.highlight_selector =
+			XKit.css_map.keyToCss('textBlock') + ', ' +
 			XKit.css_map.keyToCss('tag') + ', ' +
 			XKit.css_map.keyToCss('attribution') + ', ' +
 			XKit.css_map.keyToCss('contentSource');
@@ -154,7 +155,6 @@ XKit.extensions.search_likes = new Object({
 			return;
 		}
 
-		//search_likes.update_status_bar(`Searching for <b>"${search_likes.term}"</b>`);
 		search_likes.wait_for_render().then(() => {
 			XKit.extensions.search_likes.filter_posts(search_likes.term);
 		});
