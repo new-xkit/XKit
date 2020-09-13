@@ -15,7 +15,6 @@ XKit.extensions.show_originals = new Object({
 	status: "on",
 	lbl_on: "on",
 	lbl_off: "off",
-	my_blogs: [],
 	blogs_to_exclude: [],
 
 	preferences: {
@@ -104,16 +103,13 @@ XKit.extensions.show_originals = new Object({
 		//split up for clarity; masonry may be doable eventually
 		//also, no current detection for /liked/by in interface.where
 		const dont_run_irrelevant = where.inbox || where.following || where.followers || where.activity;
-		const dont_run_mine = where.queue || where.channel || where.drafts || where.likes;
+		const dont_run_mine = where.queue || where.drafts || where.likes;
 		const uses_masonry = where.explore || where.search || where.tagged;
 
 		if (dont_run_irrelevant || dont_run_mine || uses_masonry) { return; }
 
-		this.my_blogs = XKit.tools.get_blogs();
-		this.blogs_to_exclude = this.preferences.blogs_to_exclude.value.split(/[ ,]+/);
-
 		if (XKit.page.react) {
-
+			this.blogs_to_exclude = this.preferences.blogs_to_exclude.value.split(/[ ,]+/);
 			if (where.dashboard) {
 				this.endlessScrollingWarning();
 			}
@@ -177,7 +173,6 @@ XKit.extensions.show_originals = new Object({
 	},
 
 	add_css: function() {
-
 		//match blog theme colors if we're in peepr
 		const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
 		const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
@@ -198,22 +193,22 @@ XKit.extensions.show_originals = new Object({
 				display: flex;
 				align-items: center;
 			}
-			.showoriginals-hidden-button {
+			.xkit--react .showoriginals-hidden-button {
 				line-height: initial;
 				margin: 0;
 				position: absolute !important;
 				right: 5px;
 				display: none !important;
 			}
-			.showoriginals-hidden:hover .showoriginals-hidden-button {
+			.xkit--react .showoriginals-hidden:hover .showoriginals-hidden-button {
 				display: inline-block !important;
 			}
-			.showoriginals-hidden-button {
+			.xkit--react .showoriginals-hidden-button {
 				color: rgba(${automatic_button_color}, 0.8);
 				background: rgba(${automatic_button_color}, 0.05);
 				border-color: rgba(${automatic_button_color}, 0.3);
 			}
-			.showoriginals-hidden-button:hover {
+			.xkit--react .showoriginals-hidden-button:hover {
 				color: rgba(${automatic_button_color});
 				background: rgba(${automatic_button_color}, 0.1);
 				border-color: rgba(${automatic_button_color}, 0.5);
@@ -334,15 +329,15 @@ XKit.extensions.show_originals = new Object({
 				return;
 			}
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} = XKit.extensions.show_originals.preferences;
-			const {blogs_to_exclude, my_blogs} = XKit.extensions.show_originals;
-			const {blogName, rebloggedFromName, content} = await XKit.interface.react.post_props($this.attr('data-id'));
+			const {blogs_to_exclude} = XKit.extensions.show_originals;
+			const {blogName, canEdit, rebloggedFromName, content} = await XKit.interface.react.post_props($this.attr('data-id'));
 			const is_original = !rebloggedFromName;
 			const in_sidebar = $this.closest("#glass-container").length > 0;
 
 			const should_show =
 				(is_original) ||
 				(show_original_reblogs.value && content.length) ||
-				(show_my_posts.value && my_blogs.includes(blogName)) ||
+				(show_my_posts.value && canEdit) ||
 				(blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) ||
 				(!active_in_peepr && in_sidebar);
 
