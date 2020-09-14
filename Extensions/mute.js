@@ -574,9 +574,9 @@ XKit.extensions.mute = new Object({
 		var m_reblogs_class = "";
 		var m_originals_class = "";
 
-		// var user_object = XKit.extensions.mute.return_user_object(ud);
+		var user_object = XKit.extensions.mute.return_user_object(ud);
 
-		// if (user_object !== -1) {
+		if (user_object !== -1) {
 		// 	if (user_object.regular === true) { m_regular_class = "selected"; }
 		// 	if (user_object.photo === true) { m_photo_class = "selected"; }
 		// 	if (user_object.quote === true) { m_quote_class = "selected"; }
@@ -585,13 +585,13 @@ XKit.extensions.mute = new Object({
 		// 	if (user_object.audio === true) { m_audio_class = "selected"; }
 		// 	if (user_object.video === true) { m_video_class = "selected"; }
 		// 	if (user_object.asks === true) { m_asks_class = "selected"; }
-		// 	if (typeof user_object.reblogs !== "undefined") {
-		// 		if (user_object.reblogs === true) { m_reblogs_class = "selected"; }
-		// 	}
-		// 	if (typeof user_object.originals !== "undefined") {
-		// 		if (user_object.originals === true) { m_originals_class = "selected"; }
-		// 	}
-		// }
+			if (typeof user_object.reblogs !== "undefined") {
+				if (user_object.reblogs === true) { m_reblogs_class = "selected"; }
+			}
+			if (typeof user_object.originals !== "undefined") {
+				if (user_object.originals === true) { m_originals_class = "selected"; }
+			}
+		}
 
 
 		// var m_html =	"<div class=\"xkit-mute-options\">" +
@@ -664,14 +664,14 @@ XKit.extensions.mute = new Object({
 
 			var m_object = {};
 			m_object.username = ud;
-			m_object.regular = $(".xkit-mute-option.regular").hasClass("selected");
-			m_object.photo = $(".xkit-mute-option.photo").hasClass("selected");
-			m_object.quote = $(".xkit-mute-option.quote").hasClass("selected");
-			m_object.link = $(".xkit-mute-option.link").hasClass("selected");
-			m_object.chat = $(".xkit-mute-option.chat").hasClass("selected");
-			m_object.audio = $(".xkit-mute-option.audio").hasClass("selected");
-			m_object.video = $(".xkit-mute-option.video").hasClass("selected");
-			m_object.asks = $(".xkit-mute-option.asks").hasClass("selected");
+			// m_object.regular = $(".xkit-mute-option.regular").hasClass("selected");
+			// m_object.photo = $(".xkit-mute-option.photo").hasClass("selected");
+			// m_object.quote = $(".xkit-mute-option.quote").hasClass("selected");
+			// m_object.link = $(".xkit-mute-option.link").hasClass("selected");
+			// m_object.chat = $(".xkit-mute-option.chat").hasClass("selected");
+			// m_object.audio = $(".xkit-mute-option.audio").hasClass("selected");
+			// m_object.video = $(".xkit-mute-option.video").hasClass("selected");
+			// m_object.asks = $(".xkit-mute-option.asks").hasClass("selected");
 
 			m_object.reblogs = $("#xkit-mute-hide-reblogs-checkbox").hasClass("selected");
 			m_object.originals = $("#xkit-mute-hide-originals-checkbox").hasClass("selected");
