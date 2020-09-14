@@ -563,35 +563,35 @@ XKit.extensions.mute = new Object({
 
 	show_window: function(ud, from_user_menu) {
 
-		var m_regular_class = "";
-		var m_photo_class = "";
-		var m_quote_class = "";
-		var m_link_class = "";
-		var m_chat_class = "";
-		var m_audio_class = "";
-		var m_video_class = "";
-		var m_asks_class = "";
-		var m_reblogs_class = "";
-		var m_originals_class = "";
+		// var m_regular_class = "";
+		// var m_photo_class = "";
+		// var m_quote_class = "";
+		// var m_link_class = "";
+		// var m_chat_class = "";
+		// var m_audio_class = "";
+		// var m_video_class = "";
+		// var m_asks_class = "";
+		// var m_reblogs_class = "";
+		// var m_originals_class = "";
 
-		var user_object = XKit.extensions.mute.return_user_object(ud);
+		// var user_object = XKit.extensions.mute.return_user_object(ud);
 
-		if (user_object !== -1) {
-			if (user_object.regular === true) { m_regular_class = "selected"; }
-			if (user_object.photo === true) { m_photo_class = "selected"; }
-			if (user_object.quote === true) { m_quote_class = "selected"; }
-			if (user_object.link === true) { m_link_class = "selected"; }
-			if (user_object.chat === true) { m_chat_class = "selected"; }
-			if (user_object.audio === true) { m_audio_class = "selected"; }
-			if (user_object.video === true) { m_video_class = "selected"; }
-			if (user_object.asks === true) { m_asks_class = "selected"; }
-			if (typeof user_object.reblogs !== "undefined") {
-				if (user_object.reblogs === true) { m_reblogs_class = "selected"; }
-			}
-			if (typeof user_object.originals !== "undefined") {
-				if (user_object.originals === true) { m_originals_class = "selected"; }
-			}
-		}
+		// if (user_object !== -1) {
+		// 	if (user_object.regular === true) { m_regular_class = "selected"; }
+		// 	if (user_object.photo === true) { m_photo_class = "selected"; }
+		// 	if (user_object.quote === true) { m_quote_class = "selected"; }
+		// 	if (user_object.link === true) { m_link_class = "selected"; }
+		// 	if (user_object.chat === true) { m_chat_class = "selected"; }
+		// 	if (user_object.audio === true) { m_audio_class = "selected"; }
+		// 	if (user_object.video === true) { m_video_class = "selected"; }
+		// 	if (user_object.asks === true) { m_asks_class = "selected"; }
+		// 	if (typeof user_object.reblogs !== "undefined") {
+		// 		if (user_object.reblogs === true) { m_reblogs_class = "selected"; }
+		// 	}
+		// 	if (typeof user_object.originals !== "undefined") {
+		// 		if (user_object.originals === true) { m_originals_class = "selected"; }
+		// 	}
+		// }
 
 
 		// var m_html =	"<div class=\"xkit-mute-options\">" +
