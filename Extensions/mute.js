@@ -571,8 +571,8 @@ XKit.extensions.mute = new Object({
 		// var m_audio_class = "";
 		// var m_video_class = "";
 		// var m_asks_class = "";
-		// var m_reblogs_class = "";
-		// var m_originals_class = "";
+		var m_reblogs_class = "";
+		var m_originals_class = "";
 
 		// var user_object = XKit.extensions.mute.return_user_object(ud);
 
