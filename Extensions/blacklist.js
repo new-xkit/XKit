@@ -463,7 +463,7 @@ XKit.extensions.blacklist = new Object({
 		$("#xkit-blacklist-add-word").click(function() {
 
 			var $m_to_add = $("#xkit-blacklist-word");
-			var m_to_add = $m_to_add.val();
+			var m_to_add = $m_to_add.val().replace(/\u200B/g, '');
 			function complain(problem) {
 				$m_to_add
 					.css("border-color", "red")
@@ -787,7 +787,7 @@ XKit.extensions.blacklist = new Object({
 	do_post: function(obj, post_content, tags) {
 
 		// if ($.trim(post_content) === "") { return ""; }
-		post_content = post_content.replace(/\n/g, ' ');
+		post_content = post_content.replace(/\n/g, ' ').replace(/\u200B/g, '');
 		var p_words = post_content.split(" ");
 
 		var new_array = [];
