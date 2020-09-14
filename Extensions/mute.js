@@ -594,22 +594,23 @@ XKit.extensions.mute = new Object({
 		}
 
 
-		var m_html =	"<div class=\"xkit-mute-options\">" +
-					"<div data-type=\"regular\" class=\"xkit-mute-option regular " + m_regular_class + "\">&nbsp;</div>" +
-					"<div data-type=\"asks\" class=\"xkit-mute-option asks " + m_asks_class + "\">&nbsp;</div>" +
-					"<div data-type=\"photo\" class=\"xkit-mute-option photo " + m_photo_class + "\">&nbsp;</div>" +
-					"<div data-type=\"quote\" class=\"xkit-mute-option quote " + m_quote_class + "\">&nbsp;</div>" +
-					"<div data-type=\"link\" class=\"xkit-mute-option link " + m_link_class + "\">&nbsp;</div>" +
-					"<div data-type=\"chat\" class=\"xkit-mute-option chat " + m_chat_class + "\">&nbsp;</div>" +
-					"<div data-type=\"audio\" class=\"xkit-mute-option audio " + m_audio_class + "\">&nbsp;</div>" +
-					"<div data-type=\"video\" class=\"xkit-mute-option video " + m_video_class + "\">&nbsp;</div>" +
-				"</div>";
+		// var m_html =	"<div class=\"xkit-mute-options\">" +
+		// 			"<div data-type=\"regular\" class=\"xkit-mute-option regular " + m_regular_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"asks\" class=\"xkit-mute-option asks " + m_asks_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"photo\" class=\"xkit-mute-option photo " + m_photo_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"quote\" class=\"xkit-mute-option quote " + m_quote_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"link\" class=\"xkit-mute-option link " + m_link_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"chat\" class=\"xkit-mute-option chat " + m_chat_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"audio\" class=\"xkit-mute-option audio " + m_audio_class + "\">&nbsp;</div>" +
+		// 			"<div data-type=\"video\" class=\"xkit-mute-option video " + m_video_class + "\">&nbsp;</div>" +
+		// 		"</div>";
 
 		XKit.window.show("Muting options for " + ud,
-			"<b>Hide the following types of posts:</b>" +
-			m_html +
-			"<div style=\"margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dotted rgb(190,190,190);\"><div class=\"xkit-checkbox " + m_originals_class + "\" id=\"xkit-mute-hide-originals-checkbox\"><b>&nbsp;</b>Hide original posts by this user (applies to all post types)</div><br/>" +
-			"<div class=\"xkit-checkbox " + m_reblogs_class + "\" id=\"xkit-mute-hide-reblogs-checkbox\"><b>&nbsp;</b>Hide posts this user reblogs (applies to all post types)</div></div>" +
+			//"<b>Hide the following types of posts:</b>" +
+			//m_html +
+			"<div style=\"margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dotted rgb(190,190,190);\">" +
+			"<div class=\"xkit-checkbox " + m_originals_class + "\" id=\"xkit-mute-hide-originals-checkbox\"><b>&nbsp;</b>Hide original posts by <span style=\"font-weight: bold\">" + ud + "</span> (applies to all post types)</div><br/>" +
+			"<div class=\"xkit-checkbox " + m_reblogs_class + "\" id=\"xkit-mute-hide-reblogs-checkbox\"><b>&nbsp;</b>Hide posts <span style=\"font-weight: bold\">" + ud + "</span> reblogs (applies to all post types)</div></div>" +
 			"Posts with the selected type will not be shown on your dashboard, without any indication that they are hidden.",
 
 			"question",
@@ -629,9 +630,9 @@ XKit.extensions.mute = new Object({
 
 			$(this).toggleClass("selected");
 
-			if ($("#xkit-mute-hide-originals-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
-				$("#xkit-mute-hide-originals-checkbox").removeClass("selected");
-			}
+			// if ($("#xkit-mute-hide-originals-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
+			// 	$("#xkit-mute-hide-originals-checkbox").removeClass("selected");
+			// }
 
 			updateSaveButton();
 
@@ -641,9 +642,9 @@ XKit.extensions.mute = new Object({
 
 			$(this).toggleClass("selected");
 
-			if ($("#xkit-mute-hide-reblogs-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
-				$("#xkit-mute-hide-reblogs-checkbox").removeClass("selected");
-			}
+			// if ($("#xkit-mute-hide-reblogs-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
+			// 	$("#xkit-mute-hide-reblogs-checkbox").removeClass("selected");
+			// }
 
 			updateSaveButton();
 
