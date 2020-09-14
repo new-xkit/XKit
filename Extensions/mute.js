@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.4.0 **//
+//* VERSION 2.4.1 **//
 //* DESCRIPTION Better than &quot;shut up!&quot; **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -111,6 +111,7 @@ XKit.extensions.mute = new Object({
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("mute");
+		XKit.interface.hide(".xmute-muted", "mute");
 
 		XKit.extensions.mute.load_muted();
 
@@ -527,6 +528,8 @@ XKit.extensions.mute = new Object({
 		$(".xmute-muted").each(function() {
 			$(this).attr('class', $(this).attr("data-xkit-mute-old-classes"));
 		});
+		$(".xmute-done, .xmute-muted").removeClass("xmute-muted").removeClass("xmute-done");
+		XKit.post_listener.remove("mute");
 
 		XKit.tools.add_function(function() {
 			Tumblr.Events.trigger("DOMEventor:updateRect");
