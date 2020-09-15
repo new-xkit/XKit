@@ -23,7 +23,8 @@ XKit.extensions.anti_capitalism = new Object({
 		"sponsored_sidebar": {
 			text: "Move them to the sidebar instead",
 			default: false,
-			value: false
+			value: false,
+			experimental: true
 		},
 		"sidebar_ad": {
 			text: "Hide the Sidebar Ads",
@@ -88,7 +89,7 @@ XKit.extensions.anti_capitalism = new Object({
 						.map(cls => `.${cls}:not(.anti-capitalism-done)`)
 						.join(', ');
 					XKit.interface.hide(".anti-capitalism-hidden", "anti_capitalism");
-					XKit.post_listener.add("mutualchecker", this.process_posts);
+					XKit.post_listener.add("anti_capitalism", this.process_posts);
 					this.process_posts();
 				} else {
 					$(no_id_selector).addClass("anti-capitalism-hidden-first-page");
@@ -188,7 +189,11 @@ XKit.extensions.anti_capitalism = new Object({
 		$('anti-capitalism-done').removeClass('anti-capitalism-done');
 		$('anti-capitalism-hidden').removeClass('anti-capitalism-hidden');
 		XKit.tools.remove_css("anti_capitalism");
-		XKit.post_listener.remove("mutualchecker", this.process_posts);
+		try {
+			XKit.post_listener.remove("anti_capitalism", this.process_posts);
+		} catch (e) {
+			//no listener to remove
+		}
 		clearInterval(this.interval_id);
 	}
 
