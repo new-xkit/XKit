@@ -19,6 +19,11 @@ XKit.extensions.anti_capitalism = new Object({
 			default: true,
 			value: true
 		},
+		"sponsored_sidebar": {
+			text: "Move them to the sidebar instead",
+			default: false,
+			value: false
+		},
 		"sidebar_ad": {
 			text: "Hide the Sidebar Ads",
 			default: true,
@@ -70,7 +75,44 @@ XKit.extensions.anti_capitalism = new Object({
 				const selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject])
 					.map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`)
 					.join(", ");
-				XKit.interface.hide(selector, "anti_capitalism");
+
+				if (!this.preferences.sponsored_sidebar.value) {
+					XKit.interface.hide(selector, "anti_capitalism");
+				} else {
+					$(selector).addClass("anti-capitalism-hidden-first-page");
+					XKit.interface.hide(".anti-capitalism-hidden-first-page", "anti_capitalism");
+
+					XKit.tools.add_css(`
+						${selector} {
+							height: 0;
+							margin: 0;
+							width: 300px;
+						}
+					`, 'anti_capitalism');
+					for (const instreamAd of await XKit.css_map.keyToClasses("instreamAd")) {
+						XKit.tools.add_css(`
+							.${instreamAd} {
+								background-color: transparent;
+								height: 0;
+								position: relative;
+								left: 580px;
+							}
+							.${instreamAd} header {
+								display: none;
+							}
+						`, 'anti_capitalism');
+					}
+					for (const adTimelineObject of await XKit.css_map.keyToClasses("adTimelineObject")) {
+						XKit.tools.add_css(`
+							.${adTimelineObject}, .${adTimelineObject} iframe {
+								width: 300px !important;
+								max-height: 300px !important;
+								margin: 0;
+								overflow: hidden;
+							}
+						`, 'anti_capitalism');
+					}
+				}
 			}
 
 			if (this.preferences.sidebar_ad.value) {
