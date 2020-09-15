@@ -71,7 +71,7 @@ XKit.extensions.search_likes = new Object({
 		$('#search-likes-input').keyup(new_search_debounced);
 	},
 
-	new_search_term: function() {
+	new_search_term: async function() {
 		const {search_likes} = XKit.extensions;
 		var term = $(this).val().toLowerCase().trim();
 		if (term.length < 2) {
@@ -79,7 +79,7 @@ XKit.extensions.search_likes = new Object({
 		}
 		if (search_likes.term != term) {
 			if (!search_likes.searching) {
-				search_likes.init_search();
+				await search_likes.init_search();
 			}
 			search_likes.term = term;
 			search_likes.results = 0;
@@ -316,7 +316,8 @@ XKit.extensions.search_likes = new Object({
 				<a class='destroy-button'>Exit search and show all posts</a>`;
 
 		} else if (endless_scrolling_disabled) {
-			`<br/>${results} results on this page.<br/>
+			status_html = status +
+				`<br/>${results} results on this page.<br/>
 				Enabling endless scrolling is recommended with the Search Likes extension.<br/>
 				<a class='destroy-button'>Exit search and show all posts</a>`;
 		} else {
@@ -326,7 +327,7 @@ XKit.extensions.search_likes = new Object({
 				<a class='destroy-button'>Exit search and show all posts</a>`;
 		}
 
-		if (results > 0) {
+		if (results > 0 || endless_scrolling_disabled) {
 			if ($('#search-likes-status-bar-top').length > 0) {
 				$('#search-likes-status-bar-top').html(status_html);
 			 } else {
