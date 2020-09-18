@@ -1180,7 +1180,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					.xkit--react .small_links a:first-child { float: left; }
 					.xkit--react .small_links a:nth-child(2) { float: right; }
-			`,
+				`,
 
 				init: async function() {
 					await XKit.css_map.getCssMap();
