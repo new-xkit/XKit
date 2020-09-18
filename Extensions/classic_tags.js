@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.9 **//
+//* VERSION 1.6.10 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -294,11 +294,18 @@ XKit.extensions.classic_tags = new Object({
 
 		this.tags = await XKit.tools.async_add_function(async () => {
 			const result = await window.tumblr.apiFetch("/v2/user/followed_tags", { method: "GET", queryParams: { limit: 20 } });
+			const tag_expression = new RegExp(/^#?(.+)/);
+
 			return {
-				tags: result.response.timeline.elements.map(tag => ({
-					name: tag.tagName,
-					link: tag.links.tap.href
-				})),
+				tags: result.response.timeline.elements.map(tag => {
+					const match = tag.tagName.match(tag_expression);
+					const tag_name = match != null ? match[1] : tag.tagName;
+
+					return ({
+						name: tag_name,
+						link: tag.links.tap.href
+					});
+				}),
 				more: result.response.timeline.links.next != null
 			};
 		});
