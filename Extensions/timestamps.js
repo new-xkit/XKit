@@ -71,8 +71,8 @@ XKit.extensions.timestamps = new Object({
 		},
 		display_on_top: {
 			text: "Display timestamps on the top of posts",
-			default: false,
-			value: false
+			default: true,
+			value: true
 		},
 		only_on_hover: {
 			text: "Hide timestamps until I hover over a post",
