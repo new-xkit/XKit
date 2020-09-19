@@ -98,9 +98,8 @@ XKit.extensions.show_originals = new Object({
 			}
 			if (this.preferences.hide_posts_completely.value) {
 				XKit.interface.hide('.showoriginals-hidden-completely', 'showoriginals');
-			} else {
-				XKit.interface.react.init_collapsed('showoriginals');
 			}
+			XKit.interface.react.init_collapsed('showoriginals');
 			XKit.post_listener.add('showoriginals', this.react_do_delayed);
 			this.react_do_delayed();
 			return;
