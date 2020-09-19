@@ -111,12 +111,8 @@ XKit.extensions.search_likes = new Object({
 				#search-likes-timeline {
 					min-height: calc(100vh - ${$('#search-likes-timeline').offset().top - 10}px);
 				}
-				#search-likes-timeline article {
-					display: none;
-				}
-				#search-likes-timeline .search-likes-shown article {
-					display: block;
-			}`, 'search-likes-searching');
+			`, 'search-likes-searching');
+			XKit.interface.hide('[data-id]:not(.search-likes-shown)', 'search-likes-searching');
 		});
 	},
 
