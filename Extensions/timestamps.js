@@ -409,16 +409,16 @@ XKit.extensions.timestamps = new Object({
 		const sameYear = date.getFullYear() === now.getFullYear();
 
 		if (sameDate) {
-		  return date.toLocaleTimeString(locale, {
-			hour: 'numeric',
-			minute: 'numeric',
-		  });
+			return date.toLocaleTimeString(locale, {
+				hour: 'numeric',
+				minute: 'numeric',
+			});
 		} else {
-		  return date.toLocaleDateString(locale, {
-			day: 'numeric',
-			month: 'short',
-			year: sameYear ? undefined : 'numeric',
-		  });
+			return date.toLocaleDateString(locale, {
+				day: 'numeric',
+				month: 'short',
+				year: sameYear ? undefined : 'numeric',
+			});
 		}
 	},
 
