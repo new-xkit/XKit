@@ -61,7 +61,7 @@ XKit.extensions.search_likes = new Object({
 		}
 		const search_box_html =
 			`<div id='search-likes-box'>
-				<input type='text' placeholder='Search Likes' id='search-likes-input'>
+				<input type='text' placeholder='Search Likes' autocomplete="off" id='search-likes-input'>
 			</div>`;
 		$('#xkit_react_sidebar').prepend(search_box_html);
 		$('#search-likes-input').keydown(event => event.stopPropagation());
