@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.11 **//
+//* VERSION 7.4.12 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1277,7 +1277,7 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			XKit.interface.hide = function(selector, extension) {
-				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, extension);
+				XKit.tools.add_css(`${selector} {height: 0 !important; margin: 0 !important; overflow: hidden;}`, extension);
 			};
 		},
 
