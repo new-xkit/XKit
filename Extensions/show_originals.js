@@ -96,7 +96,11 @@ XKit.extensions.show_originals = new Object({
 			if (where.dashboard) {
 				this.endlessScrollingWarning();
 			}
-			this.add_css();
+			if (this.preferences.hide_posts_completely.value) {
+				XKit.interface.hide('.showoriginals-hidden-completely', 'showoriginals');
+			} else {
+				XKit.interface.react.init_collapsed('showoriginals');
+			}
 			XKit.post_listener.add('showoriginals', this.react_do_delayed);
 			this.react_do_delayed();
 			return;
@@ -148,55 +152,6 @@ XKit.extensions.show_originals = new Object({
 		XKit.extensions.show_originals.do();
 	},
 
-	add_css: function() {
-		//match blog theme colors if we're in peepr
-		const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
-		const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
-
-		//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
-		const shrink_post_amount = '12px';
-
-		XKit.tools.add_css(`
-			.showoriginals-hidden {
-				opacity: 0.75;
-				margin-bottom: calc(20px - ${shrink_post_amount});
-				transform: translateY(calc(-${shrink_post_amount}/2));
-			}
-			.showoriginals-hidden-note {
-				height: 30px;
-				color: ${automatic_color};
-				padding-left: 15px;
-				display: flex;
-				align-items: center;
-			}
-			.xkit--react .showoriginals-hidden-button {
-				line-height: initial;
-				margin: 0;
-				position: absolute !important;
-				right: 5px;
-				display: none !important;
-			}
-			.xkit--react .showoriginals-hidden:hover .showoriginals-hidden-button {
-				display: inline-block !important;
-			}
-			.xkit--react .showoriginals-hidden-button {
-				color: rgba(${automatic_button_color}, 0.8);
-				background: rgba(${automatic_button_color}, 0.05);
-				border-color: rgba(${automatic_button_color}, 0.3);
-			}
-			.xkit--react .showoriginals-hidden-button:hover {
-				color: rgba(${automatic_button_color});
-				background: rgba(${automatic_button_color}, 0.1);
-				border-color: rgba(${automatic_button_color}, 0.5);
-			}
-			.showoriginals-hidden-note ~ * {
-				display: none;
-			}
-		`, 'show_originals');
-
-		XKit.interface.hide(".showoriginals-hidden-completely, .showoriginals-hidden-completely + :not([data-id])", "show_originals");
-	},
-
 	react_do_delayed: function() {
 		//run after other extensions like blacklist (though not reliably)
 		setTimeout(XKit.extensions.show_originals.react_do, 0);
@@ -232,27 +187,14 @@ XKit.extensions.show_originals = new Object({
 				if (hide_posts_completely.value && !in_sidebar) {
 					$this.addClass('showoriginals-hidden-completely');
 				} else if (hide_posts_generic.value) {
-					$this.prepend('<div class="showoriginals-hidden-note">hidden reblog</div>');
+					XKit.interface.react.collapse($this, 'hidden reblog', 'showoriginals');
 				} else {
 					const reblogicon = '<svg viewBox="0 0 12.3 13.7" width="24" height="14" fill="var(--blog-contrasting-title-color,var(--transparent-white-65))" fill-opacity="0.75"><path d="M9.2.2C8.7-.2 8 .2 8 .8v1.1H3.1c-2 0-3.1 1-3.1 2.6v1.9c0 .5.4.9.9.9.1 0 .2 0 .3-.1.3-.1.6-.5.6-.8V5.2c0-1.4.3-1.5 1.3-1.5H8v1.1c0 .6.7 1 1.2.6l3.1-2.6L9.2.2zM12 7.4c0-.5-.4-.9-.9-.9s-.9.4-.9.9v1.2c0 1.4-.3 1.5-1.3 1.5H4.3V9c0-.6-.7-.9-1.2-.5L0 11l3.1 2.6c.5.4 1.2.1 1.2-.5v-1.2h4.6c2 0 3.1-1 3.1-2.6V7.4z"></path></svg>';
 					const note_text = `${blogName} ${reblogicon} ${rebloggedFromName}`;
-					const aria_label = `hidden post: ${blogName} reblogged a post from ${rebloggedFromName}`;
-					const button = '<div class="xkit-button showoriginals-hidden-button">show post</div>';
-
-					$this.prepend(`<div class="showoriginals-hidden-note" aria-label="${aria_label}">${note_text}${button}</div>`);
-					$this.on('click', '.showoriginals-hidden-button', XKit.extensions.show_originals.unhide_post);
+					XKit.interface.react.collapse($this, note_text, 'showoriginals');
 				}
 			}
 		});
-	},
-
-	unhide_post: function(e) {
-		const $button = $(e.target);
-		const $post = $button.parents('.showoriginals-hidden');
-		const $note = $button.parents('.showoriginals-hidden-note');
-
-		$post.removeClass('showoriginals-hidden');
-		$note.remove();
 	},
 
 	update_button: function() {
@@ -318,7 +260,8 @@ XKit.extensions.show_originals = new Object({
 			$('.showoriginals-done').removeClass('showoriginals-done');
 			$('.showoriginals-hidden').removeClass('showoriginals-hidden');
 			$('.showoriginals-hidden-completely').removeClass('showoriginals-hidden-completely');
-			$('.showoriginals-hidden-note').remove();
+			XKit.tools.remove_css("showoriginals");
+			XKit.interface.react.destroy_collapsed('showoriginals');
 		} else {
 			try {
 				XKit.post_listener.remove("show_originals");
