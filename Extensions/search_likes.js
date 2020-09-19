@@ -210,7 +210,14 @@ XKit.extensions.search_likes = new Object({
 		search_likes.update_status_bar(`Searching for <b>"${term}"</b>`);
 	},
 
+	post_text_cache: {},
 	get_post_text: async function(post) {
+		const {post_text_cache} = XKit.extensions.search_likes;
+		const id = post.getAttribute('data-id');
+		if (Object.prototype.hasOwnProperty.call(post_text_cache, id)) {
+			return post_text_cache[id];
+		}
+
 		var text = [];
 		const {blogName, rebloggedFromName, rebloggedRootname, sourceTitle, askingName, content, trail, postAuthor, tags} =
 			await XKit.interface.react.post_props(post.getAttribute('data-id'));
@@ -285,7 +292,8 @@ XKit.extensions.search_likes = new Object({
 				text.push('#' + tag);
 			}
 		}
-		return text.join('\n');
+		post_text_cache[id] = text.join('\n');
+		return post_text_cache[id];
 	},
 
 	simple_get_post_text: function(post) {
