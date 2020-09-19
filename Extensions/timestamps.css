@@ -99,3 +99,15 @@
     top: 0;
     margin: 0;
 }
+
+.timestamps-cpanel-notice {
+	padding: 15px;
+	font-size: 14px;
+	line-height: 1.3em;
+	color: rgb(80,80,80);
+}
+
+.timestamps-cpanel-squished-preference {
+	border: none;
+	margin: -15px 0;
+}

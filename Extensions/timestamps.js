@@ -47,14 +47,14 @@ XKit.extensions.timestamps = new Object({
 			type: "combo",
 			values: [
 				'None', "none",
-				'Minimal: 9:30PM / June 12', "xkit_rewritten",
-				'Custom (see below)', "custom"
+				'Automatic', "xkit_rewritten",
+				'Custom', "custom"
 			],
 			default: "xkit_rewritten",
 			value: "xkit_rewritten"
 		},
 		format: {
-			text: 'Custom format, if selected (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
+			text: 'Custom format, if selected:',
 			type: "text",
 			default: "MMMM Do YYYY, h:mm:ss a",
 			value: "MMMM Do YYYY, h:mm:ss a"
@@ -64,7 +64,7 @@ XKit.extensions.timestamps = new Object({
 			type: "combo",
 			values: [
 				'None', "none",
-				'Auto: 2 hours ago / 3 days ago', "auto",
+				'Automatic', "auto",
 			],
 			default: "auto",
 			value: "auto"
@@ -112,6 +112,22 @@ XKit.extensions.timestamps = new Object({
 		XKit.storage.set("timestamps", "preference_conversion", "done");
 	},
 
+
+	convert_preferences_two: function() {
+		[
+			["only_relative", "true", {format_type_relative: "auto", format_type_absolute: "none"}],
+		]
+		.filter(([preference, defaultValue]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, defaultValue) === "true")
+		.forEach(([preference, _, conversion]) => {
+			Object.entries(conversion).forEach(([key, value]) => {
+				XKit.storage.set("timestamps", `extension__setting__${key}`, value.toString());
+				this.preferences[key].value = value;
+			});
+		});
+
+		XKit.storage.set("timestamps", "preference_conversion_two", "done");
+	},
+
 	get in_search() {
 		return XKit.interface.where().search;
 	},
@@ -119,6 +135,10 @@ XKit.extensions.timestamps = new Object({
 	run: function() {
 		if (XKit.storage.get("timestamps", "preference_conversion") !== "done") {
 			this.convert_preferences();
+		}
+
+		if (XKit.storage.get("timestamps", "preference_conversion_two") !== "done") {
+			this.convert_preferences_two();
 		}
 
 		if (!XKit.interface.is_tumblr_page()) { return; }
@@ -396,7 +416,28 @@ XKit.extensions.timestamps = new Object({
 		$(obj).removeClass("xtimestamp-loading");
 	},
 
-	cpanel: function() {
+	cpanel: function(m_div) {
+		const $absolute_box = $(m_div).find("[data-setting-id=format_type_absolute]").first()
+			.addClass('timestamps-cpanel-squished-preference');
+		const $format_box = $(m_div).find("[data-setting-id=format]").first()
+			.addClass('timestamps-cpanel-squished-preference');
+		const $relative_box = $(m_div).find("[data-setting-id=format_type_relative]").first()			.		addClass('timestamps-cpanel-squished-preference');
+
+		$relative_box.next().css("border-top", "1px solid var(--xkit-border)");
+
+		const message_one =
+			`<p>Timestamps can show the time a post was created, how old the post is, or both.</p>`;
+		$absolute_box.before(`<div class="timestamps-cpanel-notice">${message_one}</div>`);
+
+		const message_two =
+			`<p>Select automatic to display the creation time on posts made today (e.g. 1:30&nbsp;PM) and the creation date on posts made before that (e.g. Jan&nbsp;13). </p>
+			<p>Select custom and use the text box to choose your own time/date format. <span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">Click here for details.</span></p>`;
+		$format_box.after(`<div class="timestamps-cpanel-notice">${message_two}</div>`);
+
+		const message_three =
+			`<p>Select automatic to display how long it's been since a post's creation (e.g 2&nbsp;hours ago, 3&nbsp;days ago, etc.)</p>`;
+		$relative_box.after(`<div class="timestamps-cpanel-notice">${message_three}</div>`);
+
 		$("#xkit-timestamps-format-help").click(XKit.tools.show_timestamps_help);
 	},
 
