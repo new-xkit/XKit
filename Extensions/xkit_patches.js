@@ -1165,7 +1165,8 @@ XKit.extensions.xkit_patches = new Object({
 				},
 
 				collapse: function($post, note_text, id) {
-					$post.addClass(`${id}-collapsed`);
+					if ($post.hasClass('xkit-collapsed')) { return; }
+					$post.addClass(`${id}-collapsed`).addClass('xkit-collapsed');
 					const button = `<div class="xkit-button ${id}-collapsed-button">show post</div>`;
 					$post.prepend(`<div class="${id}-collapsed-note">${note_text}${button}</div>`);
 					$post.on('click', `.${id}-collapsed-button`, (e) => {
@@ -1180,6 +1181,7 @@ XKit.extensions.xkit_patches = new Object({
 
 				destroy_collapsed: function(id) {
 					$(`.${id}-collapsed`).removeClass(`${id}-collapsed`);
+					$(`.xkit-collapsed`).removeClass(`xkit-collapsed`);
 					$(`.${id}-collapsed-note`).remove();
 				}
 			};
