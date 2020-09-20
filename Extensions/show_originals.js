@@ -100,8 +100,8 @@ XKit.extensions.show_originals = new Object({
 				XKit.interface.hide('.showoriginals-hidden-completely', 'showoriginals');
 			}
 			XKit.interface.react.init_collapsed('showoriginals');
-			XKit.post_listener.add('showoriginals', this.react_do_delayed);
-			this.react_do_delayed();
+			XKit.post_listener.add('showoriginals', this.react_do);
+			this.react_do();
 			return;
 		}
 
@@ -151,20 +151,9 @@ XKit.extensions.show_originals = new Object({
 		XKit.extensions.show_originals.do();
 	},
 
-	react_do_delayed: function() {
-		//run after other extensions like blacklist (though not reliably)
-		setTimeout(XKit.extensions.show_originals.react_do, 0);
-	},
-
 	react_do: function() {
 		$('[data-id]:not(.showoriginals-done)').addClass('showoriginals-done').each(async function() {
 			const $this = $(this);
-			if ($this.hasClass("norecommended-hidden") ||
-				$this.hasClass("xblacklist_blacklisted_post") ||
-				$this.hasClass("xmute-muted") ||
-				$this.hasClass("xpostblock-hidden")) {
-				return;
-			}
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} =
 				XKit.extensions.show_originals.preferences;
 			const {blogs_to_exclude} = XKit.extensions.show_originals;
@@ -252,7 +241,7 @@ XKit.extensions.show_originals = new Object({
 		XKit.tools.remove_css("show_originals_on");
 		if (XKit.page.react) {
 			try {
-				XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do_delayed);
+				XKit.post_listener.remove('showoriginals', XKit.extensions.show_originals.react_do);
 			} catch (e) {
 				//no post listener to remove
 			}
