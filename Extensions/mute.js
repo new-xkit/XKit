@@ -330,18 +330,6 @@ XKit.extensions.mute = new Object({
 				continue;
 			}
 
-			// if (type === "note" && XKit.extensions.mute.muted[i].asks === true) {
-			// 	return true;
-			// }
-
-			// if (type === "photoset" && XKit.extensions.mute.muted[i].photo === true) {
-			// 	return true;
-			// }
-
-			// if (type === "conversation" && XKit.extensions.mute.muted[i].chat === true) {
-			// 	return true;
-			// }
-
 			if (typeof XKit.extensions.mute.muted[i].reblogs !== "undefined") {
 				if (XKit.extensions.mute.muted[i].reblogs === true && is_reblogged) {
 					return true;
@@ -354,10 +342,6 @@ XKit.extensions.mute = new Object({
 				}
 			}
 
-			// if (XKit.extensions.mute.muted[i][type] === true) {
-			// 	return true;
-			// }
-
 		}
 
 		return false;
@@ -368,8 +352,6 @@ XKit.extensions.mute = new Object({
 
 		$('.tumblelog_menu_button').unbind('click', XKit.extensions.mute.add_mute_link);
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
-
-		//var update_rects = false;
 
 		if (rethink === true) {
 
@@ -393,21 +375,13 @@ XKit.extensions.mute = new Object({
 			// Remove posts
 			var should_remove = XKit.extensions.mute.should_be_removed(postdata.owner, postdata.is_reblogged);
 			if (should_remove) {
-				// 	update_rects = true;
 				$(this).attr("data-xkit-mute-old-classes", $(this).attr("class"));
 				$(this).attr("class", "xmute-muted xmute-done");
 			} else if (rethink === true) {
 				$(this).attr('class', $(this).attr("data-xkit-mute-old-classes"));
 				$(this).removeClass("xmute-muted");
-				// update_rects = true;
 			}
 		});
-
-		// if (update_rects === true) {
-		// 	XKit.tools.add_function(function() {
-		// 		Tumblr.Events.trigger("DOMEventor:updateRect");
-		// 	}, true, "");
-		// }
 
 	},
 
@@ -566,28 +540,12 @@ XKit.extensions.mute = new Object({
 
 	show_window: function(ud, from_user_menu) {
 
-		// var m_regular_class = "";
-		// var m_photo_class = "";
-		// var m_quote_class = "";
-		// var m_link_class = "";
-		// var m_chat_class = "";
-		// var m_audio_class = "";
-		// var m_video_class = "";
-		// var m_asks_class = "";
 		var m_reblogs_class = "";
 		var m_originals_class = "";
 
 		var user_object = XKit.extensions.mute.return_user_object(ud);
 
 		if (user_object !== -1) {
-		// 	if (user_object.regular === true) { m_regular_class = "selected"; }
-		// 	if (user_object.photo === true) { m_photo_class = "selected"; }
-		// 	if (user_object.quote === true) { m_quote_class = "selected"; }
-		// 	if (user_object.link === true) { m_link_class = "selected"; }
-		// 	if (user_object.chat === true) { m_chat_class = "selected"; }
-		// 	if (user_object.audio === true) { m_audio_class = "selected"; }
-		// 	if (user_object.video === true) { m_video_class = "selected"; }
-		// 	if (user_object.asks === true) { m_asks_class = "selected"; }
 			if (typeof user_object.reblogs !== "undefined") {
 				if (user_object.reblogs === true) { m_reblogs_class = "selected"; }
 			}
@@ -596,21 +554,7 @@ XKit.extensions.mute = new Object({
 			}
 		}
 
-
-		// var m_html =	"<div class=\"xkit-mute-options\">" +
-		// 			"<div data-type=\"regular\" class=\"xkit-mute-option regular " + m_regular_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"asks\" class=\"xkit-mute-option asks " + m_asks_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"photo\" class=\"xkit-mute-option photo " + m_photo_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"quote\" class=\"xkit-mute-option quote " + m_quote_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"link\" class=\"xkit-mute-option link " + m_link_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"chat\" class=\"xkit-mute-option chat " + m_chat_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"audio\" class=\"xkit-mute-option audio " + m_audio_class + "\">&nbsp;</div>" +
-		// 			"<div data-type=\"video\" class=\"xkit-mute-option video " + m_video_class + "\">&nbsp;</div>" +
-		// 		"</div>";
-
 		XKit.window.show("Muting options for " + ud,
-			//"<b>Hide the following types of posts:</b>" +
-			//m_html +
 			"<div style=\"margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dotted rgb(190,190,190);\">" +
 			"<div class=\"xkit-checkbox " + m_originals_class + "\" id=\"xkit-mute-hide-originals-checkbox\"><b>&nbsp;</b>Hide original posts by <span style=\"font-weight: bold\">" + ud + "</span> (applies to all post types)</div><br/>" +
 			"<div class=\"xkit-checkbox " + m_reblogs_class + "\" id=\"xkit-mute-hide-reblogs-checkbox\"><b>&nbsp;</b>Hide posts <span style=\"font-weight: bold\">" + ud + "</span> reblogs (applies to all post types)</div></div>" +
@@ -633,10 +577,6 @@ XKit.extensions.mute = new Object({
 
 			$(this).toggleClass("selected");
 
-			// if ($("#xkit-mute-hide-originals-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
-			// 	$("#xkit-mute-hide-originals-checkbox").removeClass("selected");
-			// }
-
 			updateSaveButton();
 
 		});
@@ -644,10 +584,6 @@ XKit.extensions.mute = new Object({
 		$("#xkit-mute-hide-originals-checkbox").click(function() {
 
 			$(this).toggleClass("selected");
-
-			// if ($("#xkit-mute-hide-reblogs-checkbox").hasClass("selected") && $(this).hasClass("selected")) {
-			// 	$("#xkit-mute-hide-reblogs-checkbox").removeClass("selected");
-			// }
 
 			updateSaveButton();
 
@@ -667,14 +603,6 @@ XKit.extensions.mute = new Object({
 
 			var m_object = {};
 			m_object.username = ud;
-			// m_object.regular = $(".xkit-mute-option.regular").hasClass("selected");
-			// m_object.photo = $(".xkit-mute-option.photo").hasClass("selected");
-			// m_object.quote = $(".xkit-mute-option.quote").hasClass("selected");
-			// m_object.link = $(".xkit-mute-option.link").hasClass("selected");
-			// m_object.chat = $(".xkit-mute-option.chat").hasClass("selected");
-			// m_object.audio = $(".xkit-mute-option.audio").hasClass("selected");
-			// m_object.video = $(".xkit-mute-option.video").hasClass("selected");
-			// m_object.asks = $(".xkit-mute-option.asks").hasClass("selected");
 
 			m_object.reblogs = $("#xkit-mute-hide-reblogs-checkbox").hasClass("selected");
 			m_object.originals = $("#xkit-mute-hide-originals-checkbox").hasClass("selected");
