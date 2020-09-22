@@ -141,6 +141,7 @@ XKit.extensions.search_likes = new Object({
 		if (!search_likes.searching) { return; }
 		if (!XKit.interface.where().likes) {
 			XKit.post_listener.remove('search_likes');
+			search_likes.destroy_search();
 			return;
 		}
 		const $allPosts = $('#search-likes-timeline [data-id]');
