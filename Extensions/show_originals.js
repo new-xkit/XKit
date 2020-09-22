@@ -57,17 +57,11 @@ XKit.extensions.show_originals = new Object({
 			value: false
 		},
 		"hide_posts_completely": {
-			text: "Hide dashboard reblogs completely (<a id=\"xkit-completely-hide-posts-help\" href=\"#\" onclick=\"return false\">may break endless scrolling</a>)",
+			text: "Hide dashboard reblogs completely",
 			default: false,
 			value: false,
 			slow: true,
 		},
-	},
-
-	cpanel: function(div) {
-		$("#xkit-completely-hide-posts-help").click(function() {
-			XKit.window.show("Completely hiding posts", 'If you have endless scrolling enabled and XKit completely hides every single post on the first "page" of your dashboard, you may become unable to scroll down to load more posts. Disable this option if you experience an empty dashboard with the loading icon appearing forever.', "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-		});
 	},
 
 	endlessScrollingWarning: async function() {
@@ -99,6 +93,7 @@ XKit.extensions.show_originals = new Object({
 			if (this.preferences.hide_posts_completely.value) {
 				XKit.interface.hide('.showoriginals-hidden-completely', 'showoriginals');
 			}
+			this.expand_timeline();
 			XKit.interface.react.init_collapsed('showoriginals');
 			XKit.post_listener.add('showoriginals', this.react_do);
 			this.react_do();
@@ -149,6 +144,23 @@ XKit.extensions.show_originals = new Object({
 		XKit.tools.init_css("show_originals");
 		XKit.post_listener.add("show_originals", XKit.extensions.show_originals.do);
 		XKit.extensions.show_originals.do();
+	},
+
+	/**
+	 * Ensures the timeline is tall enough to scroll and load more posts if endless scrolling is
+	 * enabled, even if all posts are hidden by this extension
+	 */
+	expand_timeline: async function() {
+		const nextAriaLabel = await XKit.interface.translate('Next');
+		if ($(`button[aria-label="${nextAriaLabel}"]`).length) { return; }
+		await XKit.css_map.getCssMap();
+		const timelineSel = XKit.css_map.keyToCss("timeline");
+
+		XKit.tools.add_css(`
+			${timelineSel} {
+				min-height: calc(100vh - ${$(timelineSel).offset().top - 10}px);
+			}
+		`, "show_originals");
 	},
 
 	react_do: function() {
