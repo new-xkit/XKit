@@ -179,7 +179,7 @@ XKit.extensions.show_originals = new Object({
 				(show_original_reblogs.value && content.length) ||
 				(show_my_posts.value && canEdit) ||
 				(blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) ||
-				(!active_in_peepr && in_sidebar);
+				(!active_in_peepr.value && in_sidebar);
 
 			if (!should_show) {
 				$this.addClass('showoriginals-hidden');
