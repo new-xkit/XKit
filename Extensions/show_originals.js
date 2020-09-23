@@ -169,15 +169,16 @@ XKit.extensions.show_originals = new Object({
 			const {show_my_posts, show_original_reblogs, active_in_peepr, hide_posts_generic, hide_posts_completely} =
 				XKit.extensions.show_originals.preferences;
 			const {blogs_to_exclude} = XKit.extensions.show_originals;
-			const {blogName, canEdit, rebloggedFromName, content} =
+			const {blogName, blog, rebloggedFromName, content} =
 				await XKit.interface.react.post_props($this.attr('data-id'));
+			const is_mine = blog ? blog.isMember : false;
 			const is_original = !rebloggedFromName;
 			const in_sidebar = $this.closest("#glass-container").length > 0;
 
 			const should_show =
 				(is_original) ||
 				(show_original_reblogs.value && content.length) ||
-				(show_my_posts.value && canEdit) ||
+				(show_my_posts.value && is_mine) ||
 				(blogs_to_exclude.length && (blogs_to_exclude.includes(blogName))) ||
 				(!active_in_peepr.value && in_sidebar);
 
