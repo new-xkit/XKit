@@ -11,6 +11,7 @@ XKit.extensions.shuffle_queue = new Object({
 	running: false,
 
 	queueoptions_selector: ".dashboard_options_form",
+	footer_selector: "",
 	shrinkPostsCss: "",
 
 	preferences: {
@@ -47,6 +48,7 @@ XKit.extensions.shuffle_queue = new Object({
 			});
 			await XKit.css_map.getCssMap();
 			this.queueoptions_selector = XKit.css_map.keyToCss('queueSettings');
+			this.footer_selector = XKit.css_map.keyToCss('footerWrapper');
 
 			if (this.preferences.shrink_height.value == "") {
 				this.preferences.shrink_height.value = "200px";
@@ -377,7 +379,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 			$header.next().css("margin", 0);
 
-			$header.nextUntil("footer")
+			$header.nextUntil(XKit.extensions.shuffle_queue.footer_selector)
 			.wrapAll(
 				`<div class="queue_plus_shrink_container">
 					<div class="queue_plus_shrink_container_inner"></div>
