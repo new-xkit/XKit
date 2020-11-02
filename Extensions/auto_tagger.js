@@ -301,8 +301,7 @@ XKit.extensions.auto_tagger = new Object({
 			var source;
 			if (obj.source_owner !== undefined) {
 				source = obj.source_owner;
-			}
-			else {
+			} else {
 				source = obj.owner;
 			}
 
