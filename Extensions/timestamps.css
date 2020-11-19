@@ -39,7 +39,7 @@
 	margin-left: 20px;
 }
 
-.xkit--react .xtimestamp, 
+.xkit--react .xtimestamp,
 .xkit--react .xtimestamp-in-search {
 	position: static;
 	color: var(--gray-65);
@@ -61,6 +61,25 @@
 	margin: 0;
 	margin-left: auto;
 }
+
+.xkit--react .xtimestamp.xtimestamp-bottom {
+	margin: 0;
+	padding: 0;
+}
+
+.xkit--react .xtimestamp-bottom-container {
+	flex-grow: 1;
+	flex-basis: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 1rem; /* fixes buggy behavior with old blue enabled */
+}
+
+:not(:empty) + .xtimestamp-bottom-container {
+	margin-left: var(--post-padding);
+}
+
 
 .xtimestamp.xtimestamp-loading {
 	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Cpath d='M.9.5a.4.4 2 0 1-.247.37.4.4 0 0 1-.436-.087A.4.4 0 0 1 .13.347.4.4 0 0 1 .5.1' fill='none' stroke='%23888' stroke-width='.12' stroke-linecap='round' stroke-linejoin='round'%3E%3CanimateTransform attributeName='transform' attributeType='XML' type='rotate' from='0 .5 .5' to='360 .5 .5' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/svg%3E") center no-repeat;

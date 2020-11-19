@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.6.3 **//
+//* VERSION 1.6.4 **//
 //* DESCRIPTION Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -8,6 +8,7 @@
 XKit.extensions.anti_capitalism = new Object({
 
 	running: false,
+	has_indicator_selector: "",
 
 	preferences: {
 		"sep0": {
@@ -67,10 +68,21 @@ XKit.extensions.anti_capitalism = new Object({
 
 				// pattern created:
 				// listTimelineObject:not([data-id]):not(masonryTimelineObject)
-				const selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject])
+				const no_id_selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject])
 					.map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`)
 					.join(", ");
-				XKit.interface.hide(selector, "anti_capitalism");
+				XKit.interface.hide(no_id_selector, "anti_capitalism");
+
+				var selectorArray = XKit.css_map.keyToClasses("sponsoredContainer");
+				selectorArray.push(XKit.css_map.keyToClasses("headerSponsored"));
+				selectorArray.push(XKit.css_map.keyToClasses("sponsoredIndicator"));
+
+				this.has_indicator_selector = selectorArray
+					.map(cls => `.${cls}:not(.anti-capitalism-done)`)
+					.join(', ');
+				XKit.interface.hide(".anti-capitalism-hidden", "anti_capitalism");
+				XKit.post_listener.add("anti_capitalism", this.process_posts);
+				this.process_posts();
 			}
 
 			if (this.preferences.sidebar_ad.value) {
@@ -121,10 +133,24 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 	},
 
+	process_posts: async function() {
+		const {has_indicator_selector} = XKit.extensions.anti_capitalism;
+		const $containers = $(has_indicator_selector).addClass("anti-capitalism-done");
+		for (let container of $containers.get()) {
+			$(container).closest('[data-id]').addClass('anti-capitalism-hidden');
+		}
+	},
 
 	destroy: function() {
 		this.running = false;
+		$('anti-capitalism-done').removeClass('anti-capitalism-done');
+		$('anti-capitalism-hidden').removeClass('anti-capitalism-hidden');
 		XKit.tools.remove_css("anti_capitalism");
+		try {
+			XKit.post_listener.remove("anti_capitalism", this.process_posts);
+		} catch (e) {
+			//no listener to remove
+		}
 		clearInterval(this.interval_id);
 	}
 

@@ -1118,6 +1118,72 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					},
 				},
+
+				init_collapsed: function(id) {
+					//adjust colors to look good on the sidebar if we're there
+					const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
+					const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+
+					//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+					const shrink_post_amount = '12px';
+
+					XKit.tools.add_css(`
+						.xkit--react .${id}-collapsed {
+							opacity: 0.75;
+							margin-bottom: calc(20px - ${shrink_post_amount});
+							transform: translateY(calc(-${shrink_post_amount}/2));
+						}
+						.xkit--react .${id}-collapsed-note {
+							height: 30px;
+							color: ${automatic_color};
+							padding-left: 15px;
+							display: flex;
+							align-items: center;
+						}
+						.xkit--react .${id}-collapsed-button {
+							line-height: initial;
+							margin: 0;
+							position: absolute !important;
+							right: 5px;
+							display: none !important;
+						}
+						.xkit--react .${id}-collapsed:hover .${id}-collapsed-button {
+							display: inline-block !important;
+						}
+						.xkit--react .${id}-collapsed-button {
+							color: rgba(${automatic_button_color}, 0.8);
+							background: rgba(${automatic_button_color}, 0.05);
+							border-color: rgba(${automatic_button_color}, 0.3);
+						}
+						.xkit--react .${id}-collapsed-button:hover {
+							color: rgba(${automatic_button_color});
+							background: rgba(${automatic_button_color}, 0.1);
+							border-color: rgba(${automatic_button_color}, 0.5);
+						}
+						.xkit--react .${id}-collapsed-note ~ div {
+							display: none;
+						}
+					`, id);
+				},
+
+				collapse: function($post, note_text, id) {
+					$post.addClass(`${id}-collapsed`);
+					const button = `<div class="xkit-button ${id}-collapsed-button">show post</div>`;
+					$post.prepend(`<div class="${id}-collapsed-note">${note_text}${button}</div>`);
+					$post.on('click', `.${id}-collapsed-button`, (e) => {
+						const $clickedbutton = $(e.target);
+						const $clickedpost = $clickedbutton.parents(`.${id}-collapsed`);
+						const $note = $clickedbutton.parents(`.${id}-collapsed-note`);
+
+						$clickedpost.removeClass(`${id}-collapsed`);
+						$note.remove();
+					});
+				},
+
+				destroy_collapsed: function(id) {
+					$(`.${id}-collapsed`).removeClass(`${id}-collapsed`);
+					$(`.${id}-collapsed-note`).remove();
+				}
 			};
 
 			XKit.interface.react.sidebar = {

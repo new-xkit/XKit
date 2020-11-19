@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.4 **//
+//* VERSION 3.1.5 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -116,6 +116,8 @@ XKit.extensions.blacklist = new Object({
 	blacklisted: [],
 	whitelisted: [],
 
+	edit_label: "",
+
 	run: async function() {
 		this.running = true;
 
@@ -124,6 +126,9 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		await XKit.css_map.getCssMap();
+		if (XKit.page.react) {
+			this.edit_label = await XKit.interface.translate("Edit");
+		}
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 			if (this.preferences.dont_on_inbox.value) {
@@ -463,7 +468,7 @@ XKit.extensions.blacklist = new Object({
 		$("#xkit-blacklist-add-word").click(function() {
 
 			var $m_to_add = $("#xkit-blacklist-word");
-			var m_to_add = $m_to_add.val();
+			var m_to_add = $m_to_add.val().replace(/\u200B/g, '');
 			function complain(problem) {
 				$m_to_add
 					.css("border-color", "red")
@@ -559,6 +564,10 @@ XKit.extensions.blacklist = new Object({
 
 				// Add class to not do this twice.
 				$(this).addClass("xblacklist-done");
+
+				if (XKit.extensions.blacklist.preferences.dont_block_me.value && $(this).find(`[aria-label='${XKit.extensions.blacklist.edit_label}']`).length) {
+					return;
+				}
 
 				// Collect the tags
 				var tag_array = [];
@@ -665,7 +674,7 @@ XKit.extensions.blacklist = new Object({
 
 			} catch (e) {
 
-				// console.error("Can't parse post: " + e.message);
+				console.error("Blacklist can't parse post: " + e.message);
 				// $(this).css("background","red");
 
 			}
@@ -787,7 +796,7 @@ XKit.extensions.blacklist = new Object({
 	do_post: function(obj, post_content, tags) {
 
 		// if ($.trim(post_content) === "") { return ""; }
-		post_content = post_content.replace(/\n/g, ' ');
+		post_content = post_content.replace(/\n/g, ' ').replace(/\u200B/g, '');
 		var p_words = post_content.split(" ");
 
 		var new_array = [];
@@ -896,7 +905,7 @@ XKit.extensions.blacklist = new Object({
 									var mp_word = m_p_words[j].replace(/\./g, '');
 									mp_word = mp_word.replace(/,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
-									mp_word = mp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
+									mp_word = mp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()@]/g, "").replace(/\s{2,}/g, " ");
 									//// console.log('%c  mp_word = ' + mp_word, 'background: #a5edae; color: black');
 									if (m_word === mp_word) {
 										if (tag_search_mode) {

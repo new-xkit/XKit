@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.11.2 **//
+//* VERSION 2.11.4 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -42,22 +42,44 @@ XKit.extensions.timestamps = new Object({
 			text: "Display options",
 			type: "separator"
 		},
+		format_type_absolute: {
+			text: "Absolute timestamps",
+			type: "combo",
+			values: [
+				'None', "none",
+				'Minimal: 9:30PM / June 12', "xkit_rewritten",
+				'Custom (see below)', "custom"
+			],
+			default: "xkit_rewritten",
+			value: "xkit_rewritten"
+		},
 		format: {
-			text: 'Timestamp format (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
+			text: 'Custom format, if selected (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
 			type: "text",
 			default: "MMMM Do YYYY, h:mm:ss a",
 			value: "MMMM Do YYYY, h:mm:ss a"
+		},
+		format_type_relative: {
+			text: "Relative timestamps",
+			type: "combo",
+			values: [
+				'None', "none",
+				'Auto: 2 hours ago / 3 days ago', "auto",
+			],
+			default: "auto",
+			value: "auto"
+		},
+		display_on_top: {
+			text: "Display timestamps on the top of posts",
+			default: true,
+			value: true
 		},
 		only_on_hover: {
 			text: "Hide timestamps until I hover over a post",
 			default: false,
 			value: false
 		},
-		only_relative: {
-			text: "Display timestamps in relative form",
-			default: false,
-			value: false
-		}
+
 	},
 
 	check_quota: function() {
@@ -125,6 +147,7 @@ XKit.extensions.timestamps = new Object({
 				this.reblogs_class = XKit.css_map.keyToCss("reblog");
 				this.reblog_headers_class = XKit.css_map.keyToCss("reblogHeader");
 				this.blog_link_class = XKit.css_map.keyToCss("blogLink");
+				this.note_count_class = XKit.css_map.keyToCss('noteCount');
 
 				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
 					this.react_add_timestamps();
@@ -137,7 +160,9 @@ XKit.extensions.timestamps = new Object({
 				}
 
 				if (this.preferences.only_on_hover.value) {
-					XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: block; }`, "timestamps_on_hover");
+					XKit.tools.add_css(`.xtimestamp { display: none; } ${this.posts_class.split(", ").map(x => x + ":hover .xtimestamp").join(", ")} { display: inline-block; }`, "timestamps_on_hover");
+				} else {
+					XKit.tools.add_css(".xtimestamp { display: inline-block; }", "timestamps_on_hover");
 				}
 			});
 
@@ -243,7 +268,7 @@ XKit.extensions.timestamps = new Object({
 			}
 
 			var timestamp = responseData.posts[0].timestamp;
-			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
+			date_element.html(this.format_date(timestamp));
 			date_element.removeClass("xtimestamp-loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
 		})
@@ -251,6 +276,7 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	react_add_timestamps: function() {
+		const {note_count_class, preferences, in_search} = XKit.extensions.timestamps;
 		var $posts = $("[data-id]:not(.xkit_timestamps)");
 		$posts.addClass("xkit_timestamps");
 
@@ -260,12 +286,21 @@ XKit.extensions.timestamps = new Object({
 			var post_id = $post.attr("data-id");
 
 			var xtimestamp_class = "xtimestamp";
-			if (XKit.extensions.timestamps.in_search) {
+			if (in_search) {
 				xtimestamp_class = "xtimestamp-in-search";
+			}
+			if (!preferences.display_on_top.value) {
+				xtimestamp_class += " xtimestamp-bottom";
 			}
 
 			var xtimestamp_html = `<div class="xkit_timestamp_${post_id} ${xtimestamp_class} xtimestamp-loading">&nbsp;</div>`;
-			$(xtimestamp_html).insertAfter($post.find("header"));
+
+			if (preferences.display_on_top.value) {
+				$(xtimestamp_html).insertAfter($post.find("header"));
+			} else {
+				xtimestamp_html = `<span class="xtimestamp-bottom-container">${xtimestamp_html}</span>`;
+				$(xtimestamp_html).insertAfter($post.find(note_count_class));
+			}
 
 			var note = $(".xkit_timestamp_" + post_id);
 			XKit.extensions.timestamps.react_fetch_timestamp(post_id, note);
@@ -289,7 +324,7 @@ XKit.extensions.timestamps = new Object({
 			}
 
 			$reblogs.each(function(i) {
-				if (trail[i].blog === undefined || trail[i].blog.active === false) {
+				if (trail[i] === undefined || trail[i].blog === undefined || trail[i].blog.active === false) {
 					return;
 				}
 
@@ -311,7 +346,7 @@ XKit.extensions.timestamps = new Object({
 				}, {uuid, id}).then(timestamp => {
 					$xtimestamp
 					.removeClass("xtimestamp-loading")
-					.html(XKit.extensions.timestamps.format_date(moment(new Date(timestamp * 1000))));
+					.html(XKit.extensions.timestamps.format_date(timestamp));
 
 					XKit.storage.set("timestamps", `xkit_timestamp_cache_${id}`, timestamp);
 				}).catch(() => {
@@ -325,9 +360,11 @@ XKit.extensions.timestamps = new Object({
 		var {timestamp} = await XKit.interface.react.post_props(post_id);
 
 		if (timestamp) {
-			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
+			date_element.html(this.format_date(timestamp));
 			date_element.removeClass("xtimestamp-loading");
-			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
+			if (XKit.extensions.timestamps.preferences.reblogs.value !== "off") {
+				XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
+			}
 		} else {
 			this.show_failed(date_element);
 		}
@@ -349,7 +386,7 @@ XKit.extensions.timestamps = new Object({
 			return false;
 		}
 
-		date_element.html(this.format_date(cached_date));
+		date_element.html(this.format_date(cached_utc_seconds));
 		date_element.removeClass("xtimestamp-loading");
 		return true;
 	},
@@ -363,19 +400,62 @@ XKit.extensions.timestamps = new Object({
 		$("#xkit-timestamps-format-help").click(XKit.tools.show_timestamps_help);
 	},
 
-	format_date: function(date) {
-		const absolute = date.format(this.preferences.format.value);
-		const relative = date.from(moment());
+	constructMinimalTimeString: function(unixTime) {
+		const locale = document.documentElement.lang;
+		const date = new Date(unixTime * 1000);
+		const now = new Date();
 
-		if (this.preferences.only_relative.value) {
-			return `<span title="${absolute}">${relative}</span>`;
+		const sameDate = date.toDateString() === now.toDateString();
+		const sameYear = date.getFullYear() === now.getFullYear();
+
+		if (sameDate) {
+		  return date.toLocaleTimeString(locale, {
+			hour: 'numeric',
+			minute: 'numeric',
+		  });
 		} else {
-			return `${absolute} &middot; ${relative}`;
+		  return date.toLocaleDateString(locale, {
+			day: 'numeric',
+			month: 'short',
+			year: sameYear ? undefined : 'numeric',
+		  });
+		}
+	  },
+
+	format_date: function(timestamp) {
+		const absolute_type = this.preferences.format_type_absolute.value;
+		const relative_type = this.preferences.format_type_relative.value;
+
+		var absoluteText = '';
+		var relativeText = '';
+		var tooltip = '';
+
+		const date = moment(new Date(timestamp * 1000));
+
+		if (absolute_type == "xkit_rewritten") {
+			absoluteText = this.constructMinimalTimeString(timestamp);
+		} else if (absolute_type == "custom") {
+			absoluteText = date.format(this.preferences.format.value);
+		} else {
+			tooltip = date.format(this.preferences.format.value);
+		}
+
+		if (relative_type == "auto") {
+			relativeText = date.from(moment());
+		} else {
+			tooltip = date.from(moment());
+		}
+
+		if (absoluteText && relativeText) {
+			return `${absoluteText} &middot; ${relativeText}`;
+		} else {
+			return `<span title="${tooltip}">${relativeText}${absoluteText}</span>`;
 		}
 	},
 
 	destroy: function() {
 		$(".xtimestamp").remove();
+		$(".xtimestamp-bottom-container").remove();
 		$(".xkit-fan-timestamp").remove();
 		$(".with-xkit-timestamp").removeClass("with-xkit-timestamp");
 		$(".xkit_timestamps").removeClass("xkit_timestamps");
