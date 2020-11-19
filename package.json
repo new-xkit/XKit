@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "gulp server",
-    "test": "gulp lint:scripts",
+    "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
     "sign": "web-ext sign"
@@ -15,6 +15,7 @@
   "devDependencies": {
     "connect": "^3.7.0",
     "del": "^1.2.1",
+    "eslint": "^3.19.0",
     "gulp": "^4.0.2",
     "gulp-cached": "^1.1.1",
     "gulp-eslint": "^3.0.1",
