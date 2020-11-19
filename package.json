@@ -1,34 +1,10 @@
 {
-  "name": "XKit",
-  "description": "The extension framework for Tumblr.",
-  "version": "2.0.1",
-  "main": "xkit.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/new-xkit/XKit.git"
-  },
-  "author": {
-    "name": "STUDIOENIX",
-    "email": "xkit@studioxenix.com",
-    "url": "http://www.studioxenix.com/"
-  },
+  "repository": "github:new-xkit/XKit",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/new-xkit/XKit/issues"
-  },
-  "homepage": "https://new-xkit-extension.tumblr.com",
   "engines": {
     "node": ">= 8.11.2",
     "npm": ">= 5.6.0"
   },
-  "keywords": [
-    "framework",
-    "Tumblr",
-    "accessibility",
-    "extension",
-    "interface",
-    "tweaks"
-  ],
   "scripts": {
     "dev": "gulp server",
     "test": "gulp lint:scripts",
