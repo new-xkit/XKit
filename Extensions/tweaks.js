@@ -678,7 +678,9 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share_menu.value) {
-			XKit.tools.add_css(".post_control.share { display: none; } ", "xkit_tweaks_hide_share");
+			XKit.interface.translate('Share').then(share_label => {
+				XKit.tools.add_css(`button[aria-label="${share_label}"] { display: none; }`, 'xkit_tweaks_hide_share');
+			});
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
