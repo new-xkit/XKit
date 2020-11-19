@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.10 **//
+//* VERSION 7.6.11 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1410,7 +1410,11 @@ XKit.extensions.xkit_preferences = new Object({
 				$(this).html("Please wait, resetting...");
 
 				XKit.storage.clear(XKit.extensions.xkit_preferences.current_open_extension_panel);
-				XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				try {
+					XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				} catch (e) {
+					console.error("Unable to shutdown extension " + XKit.extensions.xkit_preferences.current_open_extension_panel);
+				}
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
 					XKit.extensions.xkit_main.load_extension_preferences(XKit.extensions.xkit_preferences.current_open_extension_panel);
@@ -1461,7 +1465,11 @@ XKit.extensions.xkit_preferences = new Object({
 				$(this).addClass("disabled");
 				$(this).html("Please wait, uninstalling...");
 
-				XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				try {
+					XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				} catch (e) {
+					console.error("Unable to shutdown extension " + XKit.extensions.xkit_preferences.current_open_extension_panel);
+				}
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
 					if ($("#xkit-purge-extension").hasClass("selected")) {
@@ -1487,11 +1495,19 @@ XKit.extensions.xkit_preferences = new Object({
 			var m_ext = XKit.extensions.xkit_preferences.current_open_extension_panel;
 			if (XKit.installed.enabled(m_ext) === true) {
 				XKit.installed.disable(m_ext);
-				XKit.extensions[extension_id].destroy();
+				try {
+					XKit.extensions[extension_id].destroy();
+				} catch (e) {
+					console.error("Unable to shutdown extension " + extension_id);
+				}
 				$(this).removeClass("selected");
 			} else {
 				XKit.installed.enable(m_ext);
-				XKit.extensions[extension_id].run();
+				try {
+					XKit.extensions[extension_id].run();
+				} catch (e) {
+					console.error("Unable to run extension " + extension_id);
+				}
 				$(this).addClass("selected");
 			}
 
