@@ -410,14 +410,14 @@ XKit.extensions.timestamps = new Object({
 
 		if (sameDate) {
 		  return date.toLocaleTimeString(locale, {
-			hour: 'numeric',
-			minute: 'numeric',
+				hour: 'numeric',
+				minute: 'numeric',
 		  });
 		} else {
 		  return date.toLocaleDateString(locale, {
-			day: 'numeric',
-			month: 'short',
-			year: sameYear ? undefined : 'numeric',
+				day: 'numeric',
+				month: 'short',
+				year: sameYear ? undefined : 'numeric',
 		  });
 		}
 	  },

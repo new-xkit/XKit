@@ -90,7 +90,7 @@ XKit.extensions.xkit_patches = new Object({
 				let blogs = [];
 				Promise.race([
 					new Promise((resolve) => setTimeout(resolve, 30000)),
-					(async() => {
+					(async () => {
 						const {response} = await tumblr.apiFetch("/v2/user/info", {
 							queryParams: {'fields[blogs]': 'name'},
 						});
@@ -427,8 +427,8 @@ XKit.extensions.xkit_patches = new Object({
 					const add_func = `(async ({callback_nonce, arguments}) => {
 						try {
 							const return_value = await (${
-								XKit.tools.normalize_indentation("\t".repeat(7), func.toString())
-							})(arguments);
+	XKit.tools.normalize_indentation("\t".repeat(7), func.toString())
+})(arguments);
 
 							window.postMessage({
 								xkit_callback_nonce: callback_nonce,
@@ -690,7 +690,7 @@ XKit.extensions.xkit_patches = new Object({
 						return this.cssMap;
 					}
 
-					this.cssMap = await XKit.tools.async_add_function(async() => {
+					this.cssMap = await XKit.tools.async_add_function(async () => {
 						if (!window.tumblr) {
 							return null;
 						}
@@ -1324,7 +1324,7 @@ XKit.extensions.xkit_patches = new Object({
 					if (typeof(revisionString[1]) === "undefined") {
 						version.patch = 0;
 					} else {
-				// No need for toLowerCase here since we already do that when we split versionSplit above
+						// No need for toLowerCase here since we already do that when we split versionSplit above
 						version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
 					}
 				} else {
@@ -3110,7 +3110,7 @@ XKit.extensions.xkit_patches = new Object({
 
 				$("#xkit-notifications").append(m_html);
 
-					// console.log(" Notification > " + message);
+				// console.log(" Notification > " + message);
 
 				var m_notification_id = XKit.notifications.count;
 				setTimeout(function() {
@@ -3121,7 +3121,7 @@ XKit.extensions.xkit_patches = new Object({
 						try {
 							callback();
 						} catch (e) {
-								// Meh.
+							// Meh.
 						}
 					}
 					$("#xkit_notification_" + m_notification_id).slideUp('slow');

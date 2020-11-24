@@ -65,16 +65,16 @@ XKit.extensions.old_blue = new Object({
 						--gray-7: rgba(var(--rgb-black), 0.07);
 
 						${this.preferences.old_font.value ?
-							'--font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif'
-							: ''
-						}
+		'--font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif'
+		: ''
+}
 					}
 
 					${this.preferences.old_font_size.value ?
-						`:root {
+		`:root {
 							--base-font-size: 14px !important;
 						}` : ''
-					}
+}
 				`, "old_blue");
 			}
 		}

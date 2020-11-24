@@ -108,7 +108,7 @@ XKit.extensions.hideavatars = new Object({
 					return $(this).attr("title") === blogname.title;
 				}).attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 
-			//Avatars in activity lines
+				//Avatars in activity lines
 				$(".ui_avatar_link").filter(function() {
 					return $(this).attr("title") === blogname.title;
 				}).find(".avatar").attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");

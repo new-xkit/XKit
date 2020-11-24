@@ -239,7 +239,7 @@ XKit.extensions.classic_header = new Object({
 					}
 
 					var raw_id = tab_blog.attr('id');
-				// Id has the form tab_blog_{blog-name}
+					// Id has the form tab_blog_{blog-name}
 					var blog_id = raw_id.substring('tab_blog_'.length, raw_id.length);
 					var blog_icon = tab_blog.find('.blog_icon').css('background-image');
 					if (!blog_icon || blog_icon === "none") {
