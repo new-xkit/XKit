@@ -27,7 +27,7 @@
         requireParamDescription: false
         requireReturnDescription: false
 
-    indent: [error, tab, {SwitchCase: 1}]
+    indent: [error, tab, {SwitchCase: 1, MemberExpression: off, CallExpression: {arguments: off}}]
     semi: error
     brace-style: [error, 1tbs, allowSingleLine: true]
     linebreak-style: [error, unix]
@@ -35,12 +35,13 @@
     comma-spacing: error
     space-infix-ops: error
     template-curly-spacing: error
-    space-before-function-paren: [error, never]
+    space-before-function-paren: [error, {anonymous: never, named: never, asyncArrow: always}]
     space-before-blocks: error
     keyword-spacing:
       - error
       - before: true
         after: true
+    no-useless-escape: off
   globals:
     BigInt: false
     _: true
