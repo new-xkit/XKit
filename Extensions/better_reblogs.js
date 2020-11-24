@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.3.6 **//
+//* VERSION 2.0.0 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -142,14 +142,32 @@ XKit.extensions.better_reblogs = new Object({
 		this.running = true;
 
 		if (!XKit.interface.is_tumblr_page()) {
-			return;	
+			return;
 		}
-		
-		if (this.preferences.type.value === "nested") {
-			this.run_nested();
-		} else {
-			this.run_flat();
+		if (XKit.page.react) {
+			XKit.css_map.getCssMap()
+			.then(() => {
+				this.reblog_av_wrappers_class = XKit.css_map.keyToCss("avatarWrapper");
+				this.reblog_urls_class = XKit.css_map.keyToCss("attributionWithAvatar");
+				this.reblog_url_wrappers_class = XKit.css_map.keyToCss("label");
+				this.url_links_class = XKit.css_map.keyToCss("blogLink");
+				this.reblogs_class = XKit.css_map.keyToCss("reblog");
+				this.reblog_headers_class = XKit.css_map.keyToCss("reblogHeader");
+				this.ask_blobs_class = XKit.css_map.keyToCss("ask");
+				this.row_class = XKit.css_map.keyToCss("row");
+				this.rows_class = XKit.css_map.keyToCss("rows");
+				this.text_blocks_class = XKit.css_map.keyToCss("textBlock");
+				this.img_block_buttons_class = XKit.css_map.keyToCss("imageBlockButton");
+				this.video_blocks_class = XKit.css_map.keyToCss("videoBlock");
+				this.audio_blocks_class = XKit.css_map.keyToCss("audioBlock");
+				if (this.preferences.type.value === "nested") {
+					this.run_nested();
+				} else {
+					this.run_flat();
+				}
+			});
 		}
+
 
 	},
 
@@ -201,65 +219,85 @@ XKit.extensions.better_reblogs = new Object({
 
 	run_flat: function() {
 
-		var list_sel = "";
+		const reblogTop = XKit.extensions.better_reblogs.reblogs_class;
+		const reblogHeader = XKit.extensions.better_reblogs.reblog_headers_class;
+		const reblogAvWrap = XKit.extensions.better_reblogs.reblog_av_wrappers_class;
+		const reblogUrlWrap = XKit.extensions.better_reblogs.reblog_url_wrappers_class;
+		const reblogUrl = XKit.extensions.better_reblogs.reblog_urls_class;
+		const rows = XKit.extensions.better_reblogs.rows_class;
+		const txtBlk = XKit.extensions.better_reblogs.text_blocks_class;
+		var list_sel = reblogTop + ">div:nth-of-type(2)";
 		if (this.preferences.remove_last_user.value) {
-			XKit.tools.add_css(".reblog-list-item.contributed-content .reblog-header {display: none;}", "better_reblogs");
-			list_sel = ".reblog-list ";
+			XKit.tools.add_css("div[data-is-contributed-content]>" + reblogHeader + " {display: none;}", "better_reblogs");
+			list_sel = reblogTop + ":not([data-is-contributed-content])>div:nth-of-type(2)";
 		}
 
 		if (this.preferences.margin.value) {
-			XKit.tools.add_css(list_sel + ".reblog-list-item .reblog-content {margin-left:35px;} " +
-                list_sel + ".reblog-list-item .reblog-title {margin-left:35px;}", "better_reblogs");
+			var margin = "35px";
+			if (this.preferences.remove_user_names.value) {
+				margin = "52px";
+			}
+			XKit.tools.add_css(list_sel + " {margin-left: " + margin + "; margin-right: 20.5px;} " +
+			list_sel + " " + rows + " " + txtBlk + " {margin-top: unset; margin-left: unset; padding-left: unset;}", "better_reblogs");
 		}
 
 		if (this.preferences.remove_icon.value) {
-			XKit.tools.add_css(".reblog-header .sub-icon-reblog:before {display: none!important;} " +
-                ".reblog-header .sub-icon-reblog:after {display:none!important;}", "better_reblogs");
-
-		}
-
-		if (this.preferences.add_border.value) {
-			XKit.tools.add_css(list_sel + ".reblog-list-item .reblog-content {border-left: 2px solid #E7E7E7; padding-left: 10px;} " +
-                ".post.post_full " + list_sel + ".reblog-list-item .tmblr-full > img {padding: 0 20px}", "better_reblogs");
-
-			if (!(this.preferences.margin.value || this.preferences.remove_user_names.value)) {
-				XKit.tools.add_css(".reblog-list-item .reblog-content {margin-left: 3px;}", "better_reblogs");
-			}
-
-			if (this.preferences.remove_last_user.value) {
-				XKit.tools.add_css(list_sel + ".contributed-content .reblog-content {border-left: unset !important; padding-left: unset !important;}", "better_reblogs");
-
-				if (!(this.preferences.margin.value || this.preferences.remove_user_names.value)) {
-					XKit.tools.add_css(list_sel + ".contributed-content .reblog-content {margin-left: -10px;}", "better_reblogs");
-				}
-
-			}
-
-		}
-
-		if (this.preferences.remove_user_names.value) {
-			XKit.tools.add_css(".reblog-tumblelog-name {display:none;} .reblog-list-item .reblog-header {margin-bottom: 0;} " +
-                list_sel + ".reblog-content {margin-left:35px;} .reblog-title {margin-left:35px; margin-top:-10px;}", "better_reblogs");
+			XKit.tools.add_css(reblogHeader + " :where(" + reblogAvWrap + ") svg {display: none;} ", "better_reblogs");
 		}
 
 		if (this.preferences.remove_avatars.value) {
-			XKit.tools.add_css(".reblog-avatar {display:none !important;} .reblog-header {padding-left: 0px !important;}",
-                "better_reblogs");
+			XKit.tools.add_css(reblogHeader + " " + reblogAvWrap + " {display: none!important;} " +
+			reblogHeader + " {padding-left: 5px; margin-bottom: 5px;}", "better_reblogs");
+		}
+
+		if (this.preferences.add_border.value) {
+			XKit.tools.add_css(list_sel + " {border-left: 4px solid #E7E7E7; padding-left: 10px; margin-left: 15px;} " +
+			list_sel + " button>span>figure {padding: 5px 0; padding-right: 10px; width: auto;}" +
+			list_sel + " " + rows + " " + txtBlk + " {margin-top: unset; margin-left: unset; padding-left: unset;}", "better_reblogs");
+
+			if (this.preferences.margin.value) {
+				var padding = "20.5px";
+				if (this.preferences.remove_user_names.value) {
+					padding = "17.5px";
+				}
+				XKit.tools.add_css(list_sel + " {margin-left: 30.5px; padding-left: " + padding + ";} " +
+				list_sel + " button>span>figure {padding-right: " + padding + ";} ", "better_reblogs");
+			}
+		}
+
+		if (this.preferences.remove_user_names.value) {
+			XKit.tools.add_css(reblogUrlWrap + " {display: none;} .reblog-list-item .reblog-header {margin-bottom: 0;} " +
+			list_sel + ".reblog-content {margin-left: 35px;} .reblog-title {margin-left: 35px; margin-top: -10px;}", "better_reblogs");
 		}
 
 		if (this.preferences.alternating_reblogs.value) {
 			XKit.tools.add_css(
-                ".reblog-list-item:nth-child(odd){background-color: rgb(245,245,245); padding-bottom: 15px;}" +
-                ".reblog-list-item:nth-child(even){background-color: rgb(250,250,250);}" +
-                ".original-reblog-content {background-color: #fff !important; padding-bottom: 15px;}" +
-                ".contributed-content {background-color: #F0F5FA !important;" +
-                    "padding-bottom:15px !important; border-top: 1px solid #D9E2EA;}",
-                "better_reblogs");
+				list_sel + ":nth-child(odd){background-color: rgb(245,245,245); padding-bottom: 15px;}" +
+				list_sel + ":nth-child(even){background-color: rgb(250,250,250);}" +
+				list_sel + ":first-child {background-color: #fff !important; padding-bottom: 15px;}" +
+				reblogTop + "[data-is-contributed-content] {background-color: #F0F5FA !important;" +
+				"padding-bottom:15px !important; border-top: 1px solid #D9E2EA;}",
+			"better_reblogs");
 		}
 
 		if (this.preferences.slim_new_reblog.value) {
-			XKit.tools.add_css(".reblog-list-item {padding: 10px 20px 5px !important; min-height: 41px;}",
-                "better_reblogs");
+			XKit.tools.add_css(list_sel + " {padding-top: 0; padding-bottom: 0; margin-left: 15.5px; margin-right: 0; min-height: 41px;}" +
+				reblogHeader + ", " + list_sel + " " + rows + " " + txtBlk + ", " + list_sel + " button>span>figure {padding-right: 10px !important;}" +
+				reblogTop + ", " + reblogHeader + " {padding: 5px; margin: 0;} " + reblogTop + " {padding-right: 0;}",
+                	"better_reblogs");
+
+			if (this.preferences.margin.value) {
+				XKit.tools.add_css(reblogHeader + ", " + list_sel + " " + rows + " " + txtBlk + ", " + list_sel + " button>span>figure {padding-right: 17.5px !important;}", "better_reblogs");
+			}
+
+			if (this.preferences.remove_avatars.value) {
+				XKit.tools.add_css(reblogUrl + ", " + list_sel + " {margin-left: 5px;}", "better_reblogs");
+			}
+
+			if (!this.preferences.add_border.value) {
+				XKit.tools.add_css(reblogTop + ", " + list_sel + " {padding-left: 0; margin-left: 0;}" +
+				list_sel + " " + rows + " " + txtBlk + " {margin-top: unset; margin-left: unset; padding-left: 10px;}", "better_reblogs");
+			}
 		}
 
 		if (this.preferences.reorder_reblog_title.value) {
@@ -273,15 +311,94 @@ XKit.extensions.better_reblogs = new Object({
 	},
 
 	run_nested: function() {
-		XKit.tools.add_css('.posts .reblog-list {display: none!important} ' +
-                '.posts .reblog-title {display: none!important} ' +
-                '.posts .reblog-list-item.contributed-content ' +
-                    '{display: none!important;} ' +
-                '.posts .post_full.post .post_content_inner .post_media ' +
-                '~ .xkit-better-reblogs-old {margin-top: 13px;} ' +
-                '.xkit-better-reblogs-old p.reblog-user {margin-bottom: 10px} ' +
-                '.xkit-better-reblogs-old blockquote.reblog-quote {margin-top: 10px}',
-            'better_reblogs');
+
+			const reblogTop = XKit.extensions.better_reblogs.reblogs_class;
+			const reblogHeader = XKit.extensions.better_reblogs.reblog_headers_class;
+			const reblogAvWrap = XKit.extensions.better_reblogs.reblog_av_wrappers_class;
+			const reblogUrl = XKit.extensions.better_reblogs.reblog_urls_class;
+			const reblogUrlWrap = XKit.extensions.better_reblogs.reblog_url_wrappers_class;
+			const UrlLink = XKit.extensions.better_reblogs.url_links_class;
+			const row = XKit.extensions.better_reblogs.row_class;
+			const imgBlkBtn = XKit.extensions.better_reblogs.img_block_buttons_class;
+			const list_sel = reblogTop + ":not([data-is-contributed-content])>div:nth-of-type(2)";
+
+			XKit.tools.add_css(`
+				${reblogTop} {
+					margin-left: 5px;
+					margin-top: unset;
+					padding-top: unset;
+					border-top: unset;
+				}
+				article > ${reblogTop} {
+					padding-top: 10px;
+					padding-left: 20px;
+					border-top: 1px solid var(--gray-13);
+				}
+				${reblogTop}[data-is-contributed-content]>div>div>div>p {
+					margin-left: -17px;
+				}
+				${reblogHeader} ${reblogAvWrap}, ${reblogHeader} button, ${reblogTop}[data-is-contributed-content]>${reblogHeader} {
+					display: none!important;
+				}
+				${reblogHeader} {
+					padding-left: 0px;
+					margin-bottom: 5px;
+					display: block;
+				}
+				${list_sel} {
+					border-left: 4px solid #E7E7E7;
+					padding-left: 10px;
+					margin-left: 0px;
+				}
+				${list_sel} figure {
+					padding: 5px 0;
+					padding-right: 10px;
+					width: auto;
+				}
+				${list_sel}>div:not(${reblogTop})>div {
+					margin-top: unset;
+					margin-left: unset;
+					padding-left: unset;
+				}
+				${reblogHeader} ${reblogUrl}, ${reblogHeader} ${reblogUrlWrap}>div {
+					opacity: 0.85;
+					text-decoration: underline dotted;
+					font-size: 15px;
+					font-weight: normal;
+					margin-left: unset;
+				}
+				${reblogHeader} ${reblogUrl}::after {
+					content: ':';
+				}
+				${reblogHeader} ${reblogUrlWrap} {
+					display: inline-block;
+				}
+				${reblogHeader} ${reblogUrlWrap}>div {
+					display: unset;
+				}
+				${reblogHeader} ${UrlLink} {
+					color: rgb(68, 68, 68) !important;
+				}
+				.xtimestamp-reblog {
+					margin-left: 10px!important;
+					padding-left: 10px!important;
+					display: inline-block;
+					vertical-align: text-bottom;
+				}
+				${row} {
+					display: flex;
+					width: 100%;
+				}
+				${row}+${row} {
+					margin-top: 4px;
+				}
+				${row}>${imgBlkBtn} {
+					margin-top: 0;
+				}
+				${imgBlkBtn}+${imgBlkBtn} {
+					margin-left: 4px;
+				}
+			`, "better_reblogs");
 		XKit.extensions.better_reblogs.do_nested();
 		XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_nested);
 		if (this.preferences.color_quotes.value) {
@@ -293,19 +410,13 @@ XKit.extensions.better_reblogs = new Object({
 	},
 
 	run_cq: function() {
-		if (this.preferences.increase_padding.value === true) {
-			XKit.tools.add_css("#posts .post_content blockquote " +
-                "{ padding-top: 8px; padding-bottom: 8px; }", "colorquotes_padding");
-		}
-
-		if ($("#posts").length > 0) {
-			XKit.post_listener.add("better_reblogs", this.do_cq);
-			this.do_cq();
-		}
+		XKit.extensions.better_reblogs.do_cq();
+		XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_cq);
 	},
 
 	do_flat: function() {
-		var posts = XKit.interface.get_posts("xkit-better-reblogs-done");
+
+		var posts = $('[data-id]:not(.xkit-better-reblogs-done)');
 
 		$(posts).each(function() {
 			var $this = $(this);
@@ -314,89 +425,64 @@ XKit.extensions.better_reblogs = new Object({
 			}
 			$this.addClass("xkit-better-reblogs-done");
 
-            // trick tumblr into displaying the little blog info popovers for the reblog avatars
-			$this.find(".reblog-avatar").addClass("post_sub_avatar");
-
-			if (XKit.extensions.better_reblogs.preferences.reorder_reblog_title.value) {
-				var title = $this.find(".reblog-title");
-				if (!title.length) {
-					return;
-				}
-				var parent = title.parent();
-				if (!parent.find(".reblog-content").length) {
-					return;
-				}
-				title.remove();
-				parent.prepend(title);
-			}
 		});
 	},
 
 	do_nested: function() {
-		var posts = XKit.interface.get_posts("xkit-better-reblogs-done");
+
+		var posts = $('[data-id]:not(.xkit-better-reblogs-done)');
 
 		$(posts).each(function() {
 			var $this = $(this);
-			if ($this.is("[data-js-container-inner]") || $this.hasClass("control-reblog-trail")) {
-				return;
-			}
+			const reblogTop = XKit.extensions.better_reblogs.reblogs_class;
+			const askBlob = XKit.extensions.better_reblogs.ask_blobs_class;
+			const row = XKit.extensions.better_reblogs.row_class;
+			const txtBlk = XKit.extensions.better_reblogs.text_blocks_class;
+			const vidBlk = XKit.extensions.better_reblogs.video_blocks_class;
+			const audBlk = XKit.extensions.better_reblogs.audio_blocks_class;
+
 			$this.addClass("xkit-better-reblogs-done");
 
-			var reblog_tree = $this.find(".reblog-list");
-			var title = reblog_tree.find('.reblog-title').clone();
+			var reblog_tree = $this.find(`${reblogTop}`);
+			var plop;
+			var next;
+			$($(reblog_tree)[0]).addClass('xkit-better-reblogs-op');
 
-			if (!reblog_tree.length) {
-				var content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
-				title = $this.find(".reblog-list-item.contributed-content .reblog-title").clone();
-				if (content.length) {
-					content.addClass("post_body");
-					$this.find(".reblog-list-item.contributed-content").before(title);
-					title.removeClass("reblog-title");
-					title.addClass("post_title xkit-better-reblogs-title");
-					$this.find(".reblog-list-item.contributed-content").before(content);
-				}
-				return;
+			for (j = 0; j+1 < $(reblog_tree).get().length; j++) {
+				plop = $(reblog_tree)[j];
+				next = $(reblog_tree)[j+1];
+				next.lastChild.insertBefore(plop, next.lastChild.firstChild);
 			}
 
-			reblog_tree.after('<div class="xkit-better-reblogs-old post_body"></div>');
-			reblog_tree.after(title);
-			title.removeClass("reblog-title");
-			title.addClass("post_title xkit-better-reblogs-title");
+			plop = $this.find($(askBlob));
+			next = $this.find($(`article>${reblogTop}`));
 
-			var all_quotes = [];
-			reblog_tree.find(".reblog-list-item:not(.contributed-content)").each(function() {
-				var $item = $(this);
-				var reblog_content = $item.find('.reblog-content');
-				var author = $item.find('.reblog-tumblelog-name');
-				var reblog_data = {
-					reblog_content: reblog_content.html() || '',
-					reblog_author: author.contents()[0].data || '',
-					reblog_url: author.attr('href') || ''
-				};
-				all_quotes.push(reblog_data);
-			});
-
-			var all_quotes_text = "";
-			all_quotes.forEach(function(data, index, all) {
-				var reblog_content = data.reblog_content;
-				all_quotes_text =
-                    '<p class="reblog-user">' + "<a class='tumblr_blog' href='" + data.reblog_url + "'>" +
-                        data.reblog_author + "</a>:</p>" +
-                    '<blockquote class="reblog-quote">' + all_quotes_text + reblog_content + "</blockquote>";
-			});
-
-			$this.find(".xkit-better-reblogs-old").append(all_quotes_text);
-			var post_c = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
-			$this.find(".xkit-better-reblogs-old").append(post_c);
+			if ($(plop).get().length >= 1) {
+				$(next).before($(plop));
+			} else {
+				plop = $this.find($('.xkit-better-reblogs-op ' + row.split(', ')[2]));
+				plop = $(plop).not(`${txtBlk} ~ ` + row.split(', ')[2]);
+				if ($(plop).get().length >= 1) {
+					$(next).before($(plop));
+				} else {
+					plop = $this.find($(`.xkit-better-reblogs-op ${vidBlk}, .xkit-better-reblogs-op ${audBlk}`));
+					plop = $(plop).not(`${txtBlk} ~ ${vidBlk}, ${txtBlk} ~ ${audBlk}`);
+					if ($(plop).get().length >= 1) {
+						$(next).before($(plop));
+					}
+				}
+			}
 		});
 	},
 
 	do_cq: function() {
 
-		var posts = XKit.interface.get_posts("xkit-color-quoted");
+		const reblogTop = XKit.extensions.better_reblogs.reblogs_class;
+		const list_sel = reblogTop + ":not([data-is-contributed-content])>div:nth-of-type(2)";
+		var posts = $('[data-id]:not(.xkit-color-quoted)');
 
 		var colors = XKit.extensions.better_reblogs
-            .colors[XKit.extensions.better_reblogs.preferences.cq_theme.value];
+			.colors[XKit.extensions.better_reblogs.preferences.cq_theme.value];
 
 		$(posts).each(function() {
 
@@ -405,10 +491,10 @@ XKit.extensions.better_reblogs = new Object({
 			var count = 0;
 
 			if (XKit.extensions.better_reblogs.preferences.dont_fade_if_less_than_two.value === true) {
-				if ($(this).find("blockquote").length === 1) { return; }
+				if ($(this).find($(list_sel)).length === 1) { return; }
 			}
 
-			$(this).find("blockquote").each(function() {
+			$(this).find($(list_sel)).each(function() {
 
 				if (count >= colors.length) { count = 0; }
 
@@ -446,3 +532,4 @@ XKit.extensions.better_reblogs = new Object({
 	},
 
 });
+

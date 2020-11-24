@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.11.4 **//
+//* VERSION 2.11.5 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -320,7 +320,12 @@ XKit.extensions.timestamps = new Object({
 			var $reblogs = $post.find(reblogs_class);
 
 			if (preferences.reblogs.value === "op") {
-				$reblogs = $reblogs.first();
+				$reblogs = $reblogs.not(`:has(${reblogs_class})`).first();
+			}
+
+			if ((XKit.installed.enabled("better_reblogs")) &&
+				  (XKit.extensions.better_reblogs.preferences.type.value === "nested")) {
+				$reblogs = $($reblogs.get().reverse());
 			}
 
 			$reblogs.each(function(i) {
@@ -332,7 +337,7 @@ XKit.extensions.timestamps = new Object({
 				const {uuid} = trail[i].blog;
 				const {id} = trail[i].post;
 
-				$reblog.find(reblog_headers_class).append(`<div class="xkit_timestamp_${id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`);
+				$reblog.find(reblog_headers_class).first().append(`<div class="xkit_timestamp_${id} xtimestamp xtimestamp-reblog xtimestamp-loading">&nbsp;</div>`);
 				const $xtimestamp = $(`.xkit_timestamp_${id}`);
 
 				if (XKit.extensions.timestamps.fetch_from_cache(id, $xtimestamp) === true) {
