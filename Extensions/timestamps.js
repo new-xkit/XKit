@@ -409,18 +409,18 @@ XKit.extensions.timestamps = new Object({
 		const sameYear = date.getFullYear() === now.getFullYear();
 
 		if (sameDate) {
-		  return date.toLocaleTimeString(locale, {
+			return date.toLocaleTimeString(locale, {
 				hour: 'numeric',
 				minute: 'numeric',
-		  });
+			});
 		} else {
-		  return date.toLocaleDateString(locale, {
+			return date.toLocaleDateString(locale, {
 				day: 'numeric',
 				month: 'short',
 				year: sameYear ? undefined : 'numeric',
-		  });
+			});
 		}
-	  },
+	},
 
 	format_date: function(timestamp) {
 		const absolute_type = this.preferences.format_type_absolute.value;

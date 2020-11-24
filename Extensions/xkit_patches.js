@@ -426,9 +426,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					const add_func = `(async ({callback_nonce, arguments}) => {
 						try {
-							const return_value = await (${
-	XKit.tools.normalize_indentation("\t".repeat(7), func.toString())
-})(arguments);
+							const return_value = await (${XKit.tools.normalize_indentation("\t".repeat(7), func.toString())})(arguments);
 
 							window.postMessage({
 								xkit_callback_nonce: callback_nonce,

@@ -2215,9 +2215,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-panel-extension-info").click(function() {
 
 			var text = "XKit version " + XKit.version + "\n" +
-					"extensions:\n" + XKit.installed.list().map(function(i) {
-				return "   " + i + ": " + XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)");
-			}).join("\n");
+					"extensions:\n" + XKit.installed.list().map(i => "   " + i + ": " + XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)")).join("\n");
 			var timestamp = new Date();
 
 			XKit.tools.make_file("XKit Basic Export " + timestamp.getTime() + ".txt", text);
