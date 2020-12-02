@@ -29,6 +29,9 @@ XKit.extensions.old_blue = new Object({
 			if (!XKit.page.react) {
 				XKit.tools.init_css("old_blue");
 			} else {
+				const old_font_family_rule = this.preferences.old_font.value ? '--font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif' : '';
+				const old_font_size_rule = this.preferences.old_font_size.value ? ':root { --base-font-size: 14px !important; }' : '';
+
 				XKit.tools.add_css(`
 					.xkit--react {
 						--rgb-white: 255, 255, 255;
@@ -64,10 +67,10 @@ XKit.extensions.old_blue = new Object({
 						--gray-13: rgba(var(--rgb-black), 0.13);
 						--gray-7: rgba(var(--rgb-black), 0.07);
 
-						${this.preferences.old_font.value ? '--font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif' : ''}
+						${old_font_family_rule}
 					}
 
-					${this.preferences.old_font_size.value ? ':root { --base-font-size: 14px !important; }' : ''}
+					${old_font_size_rule}
 				`, "old_blue");
 			}
 		}
