@@ -516,7 +516,7 @@ XKit.extensions.tweaks = new Object({
 					if (!XKit.browser().mobile) { // mobile stuff
 						if ($("#new_post_buttons").length > 0) {
 
-						// Save this.
+							// Save this.
 							var m_to_save = $("#new_post_buttons")[0].outerHTML;
 							m_to_save = "!" + btoa(m_to_save);
 							XKit.storage.set("tweaks", "new_post_buttons_html", m_to_save);
