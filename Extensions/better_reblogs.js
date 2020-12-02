@@ -142,9 +142,9 @@ XKit.extensions.better_reblogs = new Object({
 		this.running = true;
 
 		if (!XKit.interface.is_tumblr_page()) {
-			return;	
+			return;
 		}
-		
+
 		if (this.preferences.type.value === "nested") {
 			this.run_nested();
 		} else {
@@ -190,7 +190,7 @@ XKit.extensions.better_reblogs = new Object({
                 '<div id="xkit-confirm-refresh" class="xkit-button default">Refresh</div>' +
                 '<div id="xkit-close-message" class="xkit-button">Cancel</div>');
 			$("#xkit-confirm-refresh").click(function() {
-				window.location = window.location;
+				window.location.reload();
 			});
 			$("#xkit-close-message").click(function() {
 				$el.val(old_val);
