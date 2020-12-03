@@ -124,7 +124,6 @@ XKit.extensions.xkit_patches = new Object({
 			if (!window._ || !window.jQuery) {
 				return;
 			}
-			/* globals _ */
 
 			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
 				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =

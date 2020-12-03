@@ -7,9 +7,6 @@
 //* SLOW true **//
 //* BETA false **//
 
-// defined in xkit.js
-/* globals centerIt */
-
 XKit.extensions.servant = new Object({
 
 	running: false,
