@@ -26,9 +26,9 @@ var bridge_ver = "2.2.1";
 try {
 	var storage = browser.storage.local;
 	var storage_loaded = false;
-	var framework_version = getVersion();
-	var storage_used = 0;
-	var storage_max = -1;
+	var framework_version = getVersion(); // eslint-disable-line no-redeclare
+	var storage_used = 0; // eslint-disable-line no-redeclare
+	var storage_max = -1; // eslint-disable-line no-redeclare
 	init_bridge();
 } catch (e) {
 	console.log("[XKIT] Caught bridge error: " + e.message);
@@ -42,7 +42,7 @@ try {
 	}
 }
 
-function getBridgeError() {
+function getBridgeError() { // eslint-disable-line no-redeclare
 	var m_object = {};
 	m_object.errors = bridge_error;
 	m_object.error = bridge_error_object;
@@ -132,7 +132,7 @@ function init_bridge() {
 	}
 }
 
-function GM_flushStorage(callback) {
+function GM_flushStorage(callback) { // eslint-disable-line no-redeclare
 
 	storage.remove("xkit_something", function() {
 		storage.clear(function(items) {
@@ -147,7 +147,7 @@ function GM_flushStorage(callback) {
 
 }
 
-function GM_deleteAllValues(callback) {
+function GM_deleteAllValues(callback) { // eslint-disable-line no-redeclare
 
 	storage.get(function(items) {
 		for (var key in items) {
@@ -159,7 +159,7 @@ function GM_deleteAllValues(callback) {
 
 }
 
-function GM_getValue(name, defaultValue) {
+function GM_getValue(name, defaultValue) { // eslint-disable-line no-redeclare
 
 	//console.log("Bridge : GM_getValue for " + name);
 	var value = xkit_storage[name];
@@ -173,7 +173,7 @@ function GM_getValue(name, defaultValue) {
 
 }
 
-function GM_deleteValue(name) {
+function GM_deleteValue(name) { // eslint-disable-line no-redeclare
 
 	//console.log("Bridge : GM_deleteValue for " + name);
 	storage.remove(name);
@@ -181,7 +181,7 @@ function GM_deleteValue(name) {
 
 }
 
-function GM_setValue(name, value) {
+function GM_setValue(name, value) { // eslint-disable-line no-redeclare
 
 	var m_object = {};
 	var m_name = name;
@@ -192,19 +192,19 @@ function GM_setValue(name, value) {
 
 }
 
-function GM_log(message) {
+function GM_log(message) { // eslint-disable-line no-redeclare
 
 	console.log(message);
 
 }
 
-function GM_openInTab(url) {
+function GM_openInTab(url) { // eslint-disable-line no-redeclare
 
 	return window.open(url, "_blank");
 
 }
 
-function GM_xmlhttpRequest(settings) {
+function GM_xmlhttpRequest(settings) { // eslint-disable-line no-redeclare
 
 	try {
 

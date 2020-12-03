@@ -3276,7 +3276,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 	};
 }());
 
-var centerIt = function(el /* (jQuery element) Element to center */) {
+var centerIt = function(el /* (jQuery element) Element to center */) { // eslint-disable-line no-redeclare
 	if (!el) {
 		return;
 	}
