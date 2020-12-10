@@ -15,7 +15,7 @@
   "devDependencies": {
     "connect": "^3.7.0",
     "del": "^1.2.1",
-    "eslint": "^6.8.0",
+    "eslint": "^7.15.0",
     "gulp": "^4.0.2",
     "gulp-util": "^3.0.8",
     "merge-stream": "^0.1.8",
