@@ -102,7 +102,7 @@ XKit.extensions.timestamps = new Object({
 			["only_original", "true", {reblogs: "op"}]
 		]
 		.filter(([preference, defaultValue]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, defaultValue) === "true")
-		.forEach(([preference, _, conversion]) => {
+		.forEach(([preference, defaultValue, conversion]) => {
 			Object.entries(conversion).forEach(([key, value]) => {
 				XKit.storage.set("timestamps", `extension__setting__${key}`, value.toString());
 				this.preferences[key].value = value;
