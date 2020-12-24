@@ -7,38 +7,43 @@
 	--xkit-on-secondary: rgb(120,120,120);
 	--xkit-on-pale: black;
 	--xkit-on-saturated: white;
+	
+	--xkit-overlay-base: 0,0,0;
+	--xkit-white-overlay-base: 255,255,255;
+	--xkit-shadow-base: 0,0,0;
+	--xkit-white-shadow-base: 255,255,255;
 
-	--xkit-05-overlay: rgba(0,0,0,.05);
-	--xkit-11-overlay: rgba(0,0,0,.11);
-	--xkit-22-overlay: rgba(0,0,0,.22);
-	--xkit-33-overlay: rgba(0,0,0,.33);
-	--xkit-44-overlay: rgba(0,0,0,.44);
-	--xkit-53-overlay: rgba(0,0,0,.53);
-	--xkit-83-overlay: rgba(0,0,0,.83);
+	--xkit-05-overlay: rgba(var(--xkit-overlay-base),.05);
+	--xkit-11-overlay: rgba(var(--xkit-overlay-base),.11);
+	--xkit-22-overlay: rgba(var(--xkit-overlay-base),.22);
+	--xkit-33-overlay: rgba(var(--xkit-overlay-base),.33);
+	--xkit-44-overlay: rgba(var(--xkit-overlay-base),.44);
+	--xkit-53-overlay: rgba(var(--xkit-overlay-base),.53);
+	--xkit-83-overlay: rgba(var(--xkit-overlay-base),.83);
 
-	--xkit-white-05-overlay: rgba(255,255,255,.05);
-	--xkit-white-11-overlay: rgba(255,255,255,.11);
-	--xkit-white-22-overlay: rgba(255,255,255,.22);
-	--xkit-white-33-overlay: rgba(255,255,255,.33);
-	--xkit-white-44-overlay: rgba(255,255,255,.44);
-	--xkit-white-53-overlay: rgba(255,255,255,.53);
-	--xkit-white-83-overlay: rgba(255,255,255,.83);
+	--xkit-white-05-overlay: rgba(var(--xkit-white-overlay-base),.05);
+	--xkit-white-11-overlay: rgba(var(--xkit-white-overlay-base),.11);
+	--xkit-white-22-overlay: rgba(var(--xkit-white-overlay-base),.22);
+	--xkit-white-33-overlay: rgba(var(--xkit-white-overlay-base),.33);
+	--xkit-white-44-overlay: rgba(var(--xkit-white-overlay-base),.44);
+	--xkit-white-53-overlay: rgba(var(--xkit-white-overlay-base),.53);
+	--xkit-white-83-overlay: rgba(var(--xkit-white-overlay-base),.83);
 
-	--xkit-05-shadow: rgba(0,0,0,.05);
-	--xkit-11-shadow: rgba(0,0,0,.11);
-	--xkit-22-shadow: rgba(0,0,0,.22);
-	--xkit-33-shadow: rgba(0,0,0,.33);
-	--xkit-44-shadow: rgba(0,0,0,.44);
-	--xkit-53-shadow: rgba(0,0,0,.53);
-	--xkit-83-shadow: rgba(0,0,0,.83);
+	--xkit-05-shadow: rgba(var(--xkit-shadow-base),.05);
+	--xkit-11-shadow: rgba(var(--xkit-shadow-base),.11);
+	--xkit-22-shadow: rgba(var(--xkit-shadow-base),.22);
+	--xkit-33-shadow: rgba(var(--xkit-shadow-base),.33);
+	--xkit-44-shadow: rgba(var(--xkit-shadow-base),.44);
+	--xkit-53-shadow: rgba(var(--xkit-shadow-base),.53);
+	--xkit-83-shadow: rgba(var(--xkit-shadow-base),.83);
 
-	--xkit-white-05-shadow: rgba(255,255,255,.05);
-	--xkit-white-11-shadow: rgba(255,255,255,.11);
-	--xkit-white-22-shadow: rgba(255,255,255,.22);
-	--xkit-white-33-shadow: rgba(255,255,255,.33);
-	--xkit-white-44-shadow: rgba(255,255,255,.44);
-	--xkit-white-53-shadow: rgba(255,255,255,.53);
-	--xkit-white-83-shadow: rgba(255,255,255,.83);
+	--xkit-white-05-shadow: rgba(var(--xkit-white-shadow-base),.05);
+	--xkit-white-11-shadow: rgba(var(--xkit-white-shadow-base),.11);
+	--xkit-white-22-shadow: rgba(var(--xkit-white-shadow-base),.22);
+	--xkit-white-33-shadow: rgba(var(--xkit-white-shadow-base),.33);
+	--xkit-white-44-shadow: rgba(var(--xkit-white-shadow-base),.44);
+	--xkit-white-53-shadow: rgba(var(--xkit-white-shadow-base),.53);
+	--xkit-white-83-shadow: rgba(var(--xkit-white-shadow-base),.83);
 
 	--xkit-border: rgb(230,230,230);
 	--xkit-dark-border: rgb(200,200,200);
