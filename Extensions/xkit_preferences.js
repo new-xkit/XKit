@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.11 **//
+//* VERSION 7.6.12 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -173,7 +173,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	spring_cleaning: function() {
 
-		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself", "alternative_timestamps", "autoloadimages", "soft_refresh", "lethe"];
+		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself", "alternative_timestamps", "autoloadimages", "soft_refresh", "lethe", "activity_plus"];
 
 		var removed_list = [];
 
