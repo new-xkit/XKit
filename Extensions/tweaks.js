@@ -147,13 +147,6 @@ XKit.extensions.tweaks = new Object({
 			default: true,
 			value: true
 		},
-		"split_gear": {
-			text: "Move the edit/remove buttons out of the gear menu",
-			default: false,
-			value: false,
-			experimental: true,
-			desktop_only: true
-		},
 		"border_asks": {
 			text: "Show border around ask posts and answers",
 			default: false,
@@ -541,12 +534,6 @@ XKit.extensions.tweaks = new Object({
 
 			}
 
-		}
-
-		if (XKit.extensions.tweaks.preferences.split_gear.value) {
-			XKit.tools.add_css(".post_controls .post_control.queue::after { background: none !important; }", "tweaks_split_gear");
-			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.split_gear);
-			XKit.extensions.tweaks.split_gear();
 		}
 
 		if (XKit.extensions.tweaks.preferences.border_asks.value) {
@@ -956,28 +943,6 @@ XKit.extensions.tweaks = new Object({
 	add_css: function(css, name) {
 
 		XKit.extensions.tweaks.css_to_add += " \n " + css;
-
-	},
-
-	split_gear: function() {
-		if (!XKit.browser().mobile) { // mobile stuff
-			$(".post_control.post_control_menu.creator").not(".xkit-tweaks-split-gear-done").each(function() {
-				var $gear = $(this).addClass("xkit-tweaks-split-gear-done");
-
-				// Remove captions
-				$gear.find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
-				$gear.find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
-				$gear.find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
-
-				// Remove their menu-specific classes
-				$gear.find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
-
-				$gear.find(".post_control.edit").appendTo($gear.parent());
-				$gear.find(".post_control.queue").addClass("icon_queue_small").appendTo($gear.parent());
-				$gear.find(".post_control.delete").appendTo($gear.parent());
-				$gear.css("display", "none");
-			});
-		}
 
 	},
 
