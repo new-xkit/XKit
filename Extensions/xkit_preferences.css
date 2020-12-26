@@ -5,23 +5,45 @@
 	--xkit-on-primary: black;
 	--xkit-secondary: rgb(240,240,240);
 	--xkit-on-secondary: rgb(120,120,120);
-	--xkit-on-color: white;
+	--xkit-on-pale: black;
+	--xkit-on-saturated: white;
+	
+	--xkit-overlay-base: 0,0,0;
+	--xkit-white-overlay-base: 255,255,255;
+	--xkit-shadow-base: 0,0,0;
+	--xkit-white-shadow-base: 255,255,255;
 
-	--xkit-05-shadow: rgba(0,0,0,.05);
-	--xkit-11-shadow: rgba(0,0,0,.11);
-	--xkit-22-shadow: rgba(0,0,0,.22);
-	--xkit-33-shadow: rgba(0,0,0,.33);
-	--xkit-44-shadow: rgba(0,0,0,.44);
-	--xkit-53-shadow: rgba(0,0,0,.53);
-	--xkit-83-shadow: rgba(0,0,0,.83);
+	--xkit-05-overlay: rgba(var(--xkit-overlay-base),.05);
+	--xkit-11-overlay: rgba(var(--xkit-overlay-base),.11);
+	--xkit-22-overlay: rgba(var(--xkit-overlay-base),.22);
+	--xkit-33-overlay: rgba(var(--xkit-overlay-base),.33);
+	--xkit-44-overlay: rgba(var(--xkit-overlay-base),.44);
+	--xkit-53-overlay: rgba(var(--xkit-overlay-base),.53);
+	--xkit-83-overlay: rgba(var(--xkit-overlay-base),.83);
 
-	--xkit-white-05-shadow: rgba(255,255,255,.05);
-	--xkit-white-11-shadow: rgba(255,255,255,.11);
-	--xkit-white-22-shadow: rgba(255,255,255,.22);
-	--xkit-white-33-shadow: rgba(255,255,255,.33);
-	--xkit-white-44-shadow: rgba(255,255,255,.44);
-	--xkit-white-53-shadow: rgba(255,255,255,.53);
-	--xkit-white-83-shadow: rgba(255,255,255,.83);
+	--xkit-white-05-overlay: rgba(var(--xkit-white-overlay-base),.05);
+	--xkit-white-11-overlay: rgba(var(--xkit-white-overlay-base),.11);
+	--xkit-white-22-overlay: rgba(var(--xkit-white-overlay-base),.22);
+	--xkit-white-33-overlay: rgba(var(--xkit-white-overlay-base),.33);
+	--xkit-white-44-overlay: rgba(var(--xkit-white-overlay-base),.44);
+	--xkit-white-53-overlay: rgba(var(--xkit-white-overlay-base),.53);
+	--xkit-white-83-overlay: rgba(var(--xkit-white-overlay-base),.83);
+
+	--xkit-05-shadow: rgba(var(--xkit-shadow-base),.05);
+	--xkit-11-shadow: rgba(var(--xkit-shadow-base),.11);
+	--xkit-22-shadow: rgba(var(--xkit-shadow-base),.22);
+	--xkit-33-shadow: rgba(var(--xkit-shadow-base),.33);
+	--xkit-44-shadow: rgba(var(--xkit-shadow-base),.44);
+	--xkit-53-shadow: rgba(var(--xkit-shadow-base),.53);
+	--xkit-83-shadow: rgba(var(--xkit-shadow-base),.83);
+
+	--xkit-white-05-shadow: rgba(var(--xkit-white-shadow-base),.05);
+	--xkit-white-11-shadow: rgba(var(--xkit-white-shadow-base),.11);
+	--xkit-white-22-shadow: rgba(var(--xkit-white-shadow-base),.22);
+	--xkit-white-33-shadow: rgba(var(--xkit-white-shadow-base),.33);
+	--xkit-white-44-shadow: rgba(var(--xkit-white-shadow-base),.44);
+	--xkit-white-53-shadow: rgba(var(--xkit-white-shadow-base),.53);
+	--xkit-white-83-shadow: rgba(var(--xkit-white-shadow-base),.83);
 
 	--xkit-border: rgb(230,230,230);
 	--xkit-dark-border: rgb(200,200,200);
@@ -65,7 +87,7 @@
 	--xkit-notification-mail: #238ec4;
 
 	/* KEEP IN PREFERENCES */
-	
+
 	--xkit-wide-panel: rgb(250,250,250);
 
 	--xkit-welcoming-bubble: #88b7d5;
@@ -149,7 +171,7 @@
 }
 
 #xcloud-not-found-container {
-	background: no-repeat 50% 100px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 .75'%3E%3Cpath d='M 0.36363016,0 C 0.22760428,1.5496e-4 0.11501159,0.10575171 0.10612966,0.24151302 0.04248206,0.26456822 3.779e-5,0.32481422 0,0.3924303 c 0,0.088706 0.071887,0.16059293 0.16059292,0.16059293 0.70606465,0 0,0 0.70606465,0 0.073625,0 0.13334239,-0.059679 0.13334239,-0.1333424 0,-0.0736256 -0.059679,-0.13334239 -0.13334239,-0.13334239 -0.012473,1.512e-5 -0.024567,0.001754 -0.036662,0.005291 -0.00373,-0.0955091 -0.082205,-0.17102447 -0.1777899,-0.17110006 -0.021543,1.512e-5 -0.043238,0.004158 -0.063534,0.0117166 C 0.54305277,0.05072151 0.45699251,1.5118e-4 0.36356212,0 Z' fill='%233996ec'%3E%3C/path%3E%3C/svg%3E");
+	background: no-repeat 50% 30%/100px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 .75'%3E%3Cpath d='M 0.36363016,0 C 0.22760428,1.5496e-4 0.11501159,0.10575171 0.10612966,0.24151302 0.04248206,0.26456822 3.779e-5,0.32481422 0,0.3924303 c 0,0.088706 0.071887,0.16059293 0.16059292,0.16059293 0.70606465,0 0,0 0.70606465,0 0.073625,0 0.13334239,-0.059679 0.13334239,-0.1333424 0,-0.0736256 -0.059679,-0.13334239 -0.13334239,-0.13334239 -0.012473,1.512e-5 -0.024567,0.001754 -0.036662,0.005291 -0.00373,-0.0955091 -0.082205,-0.17102447 -0.1777899,-0.17110006 -0.021543,1.512e-5 -0.043238,0.004158 -0.063534,0.0117166 C 0.54305277,0.05072151 0.45699251,1.5118e-4 0.36356212,0 Z' fill='%233996ec'%3E%3C/path%3E%3C/svg%3E");
 	text-align: center;
 	height: 100%;
 	color: var(--xkit-on-secondary);
@@ -167,7 +189,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: var(--xkit-53-shadow);
+	background: var(--xkit-53-overlay);
 	z-index: 4;
 }
 
@@ -176,7 +198,7 @@
 	border-bottom: 0;
 	font-size: 11px;
 	background: var(--xkit-extensions-settings-slow);
-	color: var(--xkit-on-primary);
+	color: var(--xkit-on-pale);
 }
 
 #xkit-extension-panel-slow-extension .xkit-more-info {
@@ -260,7 +282,7 @@
 
 .xkit-gallery-extension .overlay.green {
 	background: var(--xkit-gallery-extension-install-button);
-	color: var(--xkit-on-color);
+	color: var(--xkit-on-saturated);
 	text-shadow: 0px 1px 2px var(--xkit-44-shadow);
 }
 
@@ -290,7 +312,7 @@
 	margin-left: -40px;
 	border-radius: 40px;
 	background: var(--xkit-gallery-extension-install-button);
-	color: var(--xkit-on-color);
+	color: var(--xkit-on-saturated);
 	display: block;
 	text-shadow: 0px 1px 2px var(--xkit-44-shadow);
 }
@@ -413,11 +435,11 @@
 }
 
 #xkit-control-panel-tabs div:hover {
-	background: var(--xkit-white-33-shadow);
+	background: var(--xkit-white-33-overlay);
 }
 
 #xkit-control-panel-tabs div:active {
-	background: var(--xkit-11-shadow);
+	background: var(--xkit-11-overlay);
 }
 
 #xkit-control-panel-tabs div.selected {
@@ -436,7 +458,7 @@
 	height: 100%;
 	z-index: 21474835;
 	display: none;
-	background: var(--xkit-white-44-shadow);
+	background: var(--xkit-white-44-overlay);
 	-webkit-transform: translate3d(0, 0, 0);
 }
 
@@ -463,6 +485,7 @@
 }
 
 #xkit-about-window-text {
+	color: var(--xkit-on-primary);
 	position: absolute;
 	top: 30px;
 	left: 385px;
@@ -538,7 +561,7 @@
 }
 
 .xkit-extensions-display-type-switcher:active {
-	background-color: var(--xkit-33-shadow) !important;
+	background-color: var(--xkit-33-overlay) !important;
 	box-shadow: inset 0px 1px 1px var(--xkit-22-shadow);
 }
 
@@ -564,6 +587,7 @@
 	user-select: text;
 	padding: 0px 10px 0px 30px;
 	background: no-repeat 7px 50%/15px var(--xkit-search-icon);
+	color: var(--xkit-on-primary);
 }
 
 .xkit-news-item {
@@ -715,12 +739,14 @@
 }
 
 #xkit-extensions-panel-right .xkit-others-panel .title {
+	color: var(--xkit-on-primary);
 	font-weight: bold;
 	font-size: 16px;
 	margin-bottom: 10px;
 }
 
 #xkit-extensions-panel-right .xkit-others-panel .bottom-part {
+	color: var(--xkit-on-primary);
 	border-top: 1px dashed var(--xkit-dark-border);
 	padding-top: 20px;
 }
@@ -819,7 +845,7 @@
 }
 
 #xkit-extensions-panel-left .xkit-extension:hover {
-	background-color: var(--xkit-11-shadow);
+	background-color: var(--xkit-11-overlay);
 }
 
 #xkit-extensions-panel-left .xkit-extension .title {
@@ -1010,7 +1036,6 @@
 }
 
 .xkit-extension-setting.checkbox .xkit-checkbox {
-	color: var(--xkit-on-checkbox);
 	font-size: 12px;
 	font-weight: normal;
 	padding-left: 7px;
@@ -1053,7 +1078,7 @@
 
 .xkit-scary-warning {
 	background: var(--xkit-window-error);
-	color: var(--xkit-on-color);
+	color: var(--xkit-on-saturated);
 	text-shadow: 0px 1px 0px var(--xkit-44-shadow);
 	padding: 10px 15px;
 	box-shadow: 0px 1px 1px var(--xkit-33-shadow);
@@ -1111,6 +1136,7 @@
 	user-select: text !important;
 	padding: 0px 10px 0px 30px;
 	background: no-repeat 7px 50%/15px var(--xkit-search-icon);
+	color: var(--xkit-on-primary);
 }
 
 .xkit-gallery-extension {
@@ -1161,7 +1187,7 @@
 
 .xkit-gallery-extension .xkit-button:hover {
 	background: var(--xkit-gallery-extension-install-button);
-	color: var(--xkit-on-color);
+	color: var(--xkit-on-saturated);
 	text-shadow: 0px 1px 2px var(--xkit-44-shadow);
 	box-shadow: inset 0px 1px 1px  var(--xkit-53-shadow);;
 }
@@ -1267,12 +1293,12 @@
 
 .nano > .pane > .slider {
 	border-radius: 40px;
-	background: var(--xkit-22-shadow);
+	background: var(--xkit-22-overlay);
 }
 
 .nano > .pane.active > .slider,
 .nano > .pane > .slider:hover {
-	background: var(--xkit-53-shadow);
+	background: var(--xkit-53-overlay);
 }
 
 .nano > .pane {
@@ -1298,27 +1324,37 @@
 }
 
 .xkit-checkbox {
+	color: var(--xkit-on-checkbox);
 	padding-left: 1px;
+}
+
+.xkit-checkbox.disabled {
+	pointer-events: none;
+	opacity: .5;
 }
 
 .xkit-checkbox:hover {
 	color: var(--xkit-on-checkbox-hover);
 }
 
+.xkit-checkbox:hover b {
+	border-color: var(--xkit-on-checkbox-hover);
+}
+
 .xkit-checkbox b, .xkit-checkbox strong {
 	border-radius: 2px;
-	border: 1px solid var(--xkit-33-shadow);
+	border: 1px solid var(--xkit-33-overlay);
 }
 
 .xkit-checkbox.selected b, .xkit-checkbox.selected strong {	
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 .785'%3E%3Cpath d='M 0.81721689,0 0.3974054,0.41981142 0.18278298,0.20518883 0,0.3879718 0.21462243,0.6025944 0.39740557,0.78537753 0.58018855,0.6025944 1,0.18278314 Z' fill='%232b639d'/%3E%3C/svg%3E");
 	background-size: 10px;
 	background-color: var(--xkit-checkbox-selected);
-	border: 1px solid var(--xkit-22-shadow);
+	border: 1px solid var(--xkit-22-overlay);
 }
 
 .xkit-checkbox.selected:hover b, .xkit-checkbox.selected:hover strong {
-	border: 1px solid var(--xkit-22-shadow);
+	border: 1px solid var(--xkit-22-overlay);
 	background-color: var(--xkit-checkbox-selected-hover);
 }
 
@@ -1382,6 +1418,7 @@
 }
 
 .xkit-window-msg {
+	color: var(--xkit-on-primary);
 	font-size: 14px;
 	line-height: 21px;
 }
