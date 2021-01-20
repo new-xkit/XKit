@@ -343,7 +343,7 @@ XKit.extensions.blacklist = new Object({
 			var to_check_blacklist = "listBlack";
 			var to_check_whitelist = "listWhite";
 
-			var supported_ver = "1.2.0";
+			var supported_ver = "1.7.0";
 
 			if (m_obj.creator === "XKIT") {
 
