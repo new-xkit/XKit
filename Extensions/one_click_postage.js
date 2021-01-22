@@ -1167,7 +1167,7 @@ XKit.extensions.one_click_postage = new Object({
 			$(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog").addClass("xkit-one-click-reblog-working");
 		}
 
-		var m_button = $(XKit.extensions.one_click_postage.last_object).find('.reblog_button, .post_control.reblog, button[aria-label="Reblog"], footer a[href*="/reblog/"]');
+		var m_button = $(XKit.extensions.one_click_postage.last_object).find('.reblog_button, .post_control.reblog, footer a[href*="/reblog/"]');
 
 		if (quick_queue_mode) {
 			m_button = $(XKit.extensions.one_click_postage.last_object).find(".xkit-one-click-postage-quickqueue");
