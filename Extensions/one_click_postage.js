@@ -654,13 +654,8 @@ XKit.extensions.one_click_postage = new Object({
 		var reblog_buttons = [
 			'.reblog_button',
 			'.post_control.reblog',
-			'button[aria-label="Reblog"]',
+			'[data-id] footer a[href*="/reblog/"]',
 		].join(',');
-
-		if (XKit.page.react) {
-			const reblogAriaLabel = await XKit.interface.translate('Reblog');
-			reblog_buttons += `, a[aria-label="${reblogAriaLabel}"][href*="/reblog/"]`;
-		}
 
 		$(document).on("mouseover", reblog_buttons, function(event) {
 			if ($(this).hasClass("radar_button") === true) {return; }
