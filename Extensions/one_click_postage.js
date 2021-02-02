@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.20 **//
+//* VERSION 4.4.21 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -223,7 +223,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		var post_id = XKit.iframe.single_post_id();
 		var form_key = XKit.iframe.form_key();
-		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[3];
+		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[4];
 
 		var m_blogs = XKit.tools.get_blogs();
 		var blog_id = "";
