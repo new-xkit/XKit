@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.10 **//
+//* VERSION 1.6.11 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -183,7 +183,7 @@ XKit.extensions.classic_tags = new Object({
 
 	update_tag_timestamp: async function() {
 		try {
-			const current_tag = $("h1").filter(XKit.css_map.keyToCss("title")).text().replace("#", "").trim();
+			const current_tag = decodeURIComponent(location.pathname.split('/')[2].replace(/\+/g, ' '));
 			const newest_post = $("[data-id]").first();
 
 			if (newest_post != null) {
