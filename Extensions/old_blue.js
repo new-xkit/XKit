@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.1.2 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DETAILS Reverts the colour scheme and font to that of 2018 Tumblr. Overrides any Tumblr-provided color palettes. **//
 //* DEVELOPER New-XKit **//
@@ -38,22 +38,22 @@ XKit.extensions.old_blue = new Object({
 						--rgb-white-on-dark: 191, 191, 191;
 						--rgb-black: 68, 68, 68;
 
-						--navy: #36465d;
-						--red: #d95e40;
-						--orange: #f2992e;
-						--yellow: #e8d738;
-						--green: #56bc8a;
-						--blue: #529ecc;
-						--purple: #a77dc2;
-						--pink: #748089;
+						--navy: 54, 70, 93;
+						--red: 217, 94, 64;
+						--orange: 242, 153, 46;
+						--yellow: 232, 215, 56;
+						--green: 86, 188, 138;
+						--blue: 82, 158, 204;
+						--purple: 167, 125, 194;
+						--pink: 116, 128, 137;
 
-						--accent: #529ecc;
-						--secondary-accent: #e5e7ea;
-						--follow: #f3f8fb;
+						--accent: 82, 158, 204;
+						--secondary-accent: 229, 231, 2334;
+						--follow: 243, 248, 251;
 
-						--white: rgb(var(--rgb-white));
-						--white-on-dark: rgb(var(--rgb-white-on-dark));
-						--black: rgb(var(--rgb-black));
+						--white: var(--rgb-white);
+						--white-on-dark: var(--rgb-white-on-dark);
+						--black: var(--rgb-black);
 
 						--transparent-white-65: rgba(var(--rgb-white-on-dark), 0.65);
 						--transparent-white-40: rgba(var(--rgb-white-on-dark), 0.4);
