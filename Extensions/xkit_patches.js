@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.12 **//
+//* VERSION 7.4.13 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1116,8 +1116,8 @@ XKit.extensions.xkit_patches = new Object({
 
 				init_collapsed: function(id) {
 					//adjust colors to look good on the sidebar if we're there
-					const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
-					const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+					const automatic_color = 'var(--blog-contrasting-title-color, rgba(var(--white-on-dark), 0.65))';
+					const automatic_button_color = 'var(--blog-contrasting-title-color, rgb(var(--white-on-dark)))';
 
 					//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
 					const shrink_post_amount = '12px';

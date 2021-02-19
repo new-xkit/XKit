@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 6.0.12 **/
+//* VERSION 6.0.13 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -788,11 +788,11 @@ XKit.extensions.tweaks = new Object({
 					notificationBadgeStyle = 'display: none !important;';
 					break;
 				case "white":
-					notificationBadgeStyle = 'background: var(--white-on-dark) !important;';
+					notificationBadgeStyle = 'background: rgb(var(--white-on-dark)) !important;';
 					break;
 				case "oldred":
-					notificationBadgeStyle = `background: var(--red) !important;
-						color: var(--white-on-dark) !important;`;
+					notificationBadgeStyle = `background: rgb(var(--red)) !important;
+						color: rgb(var(--white-on-dark)) !important;`;
 					break;
 				case "olderredder":
 					notificationBadgeStyle = `background: #bb2502 !important;
@@ -807,7 +807,7 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.hide_activity_notification_badge.value && XKit.page.react) {
 			let activityAriaLabel = await XKit.interface.translate('Activity');
 			let notificationBadgeSel = XKit.css_map.keyToClasses('notificationBadge').map(cssClass => `button[aria-label="${activityAriaLabel}"] .${cssClass}`).join(',');
-			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} { 
+			XKit.extensions.tweaks.add_css(`${notificationBadgeSel} {
 				display: none !important;
 			}`, 'xkit_tweaks_hide_activity_notification_badge');
 		}
@@ -833,7 +833,7 @@ XKit.extensions.tweaks = new Object({
 				return followButtonSelectors.map(followCssClass => `.${postCssClass} .${followCssClass}`).join(', ');
 			}).join(', ');
 			XKit.extensions.tweaks.add_css(`${postFollowButtonSelectors} {
-				color: var(--gray-40) !important;
+				color: rgba(var(--black), 0.4) !important;
 			}`, 'xkit_tweaks_subtle_follow_button');
 		}
 

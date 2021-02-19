@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.6 **//
+//* VERSION 3.1.7 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -166,7 +166,7 @@ XKit.extensions.blacklist = new Object({
 				.xblacklist_blacklisted_post {
 					opacity: 1 !important;
 					padding: 0 !important;
-					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
+					border: 1px dashed rgba(var(--white-on-dark, 255,255,255), 0.4) !important;
 					background: transparent !important;
 				}
 				.xblacklist_blacklisted_post .post_avatar,
@@ -179,7 +179,7 @@ XKit.extensions.blacklist = new Object({
 				.xblacklist_blacklisted_post .xblacklist_excuse {
 					height: 40px !important;
 					line-height: 40px !important;
-					color: var(--transparent-white-40, rgba(255,255,255,.43));
+					color: rgba(var(--white-on-dark, 255,255,255), 0.4);
 					padding: 0;
 					margin: 0;
 					padding-left: 15px;
@@ -200,14 +200,14 @@ XKit.extensions.blacklist = new Object({
 					margin: 0;
 				}
 				.xkit--react .xblacklist_open_post {
-					color: rgba(var(--rgb-white-on-dark), 0.8);
-					background: rgba(var(--rgb-white-on-dark), 0.05);
-					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+					color: rgba(var(--white-on-dark), 0.8);
+					background: rgba(var(--white-on-dark), 0.05);
+					border-color: rgba(var(--white-on-dark), 0.3);
 				}
 				.xkit--react .xblacklist_open_post:hover {
-					color: var(--white-on-dark);
-					background: rgba(var(--rgb-white-on-dark), 0.1);
-					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+					color: rgb(var(--white-on-dark));
+					background: rgba(var(--white-on-dark), 0.1);
+					border-color: rgba(var(--white-on-dark), 0.5);
 				}
 			`;
 

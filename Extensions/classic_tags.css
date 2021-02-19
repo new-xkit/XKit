@@ -1,5 +1,5 @@
 .xtag {
-	border-top: 1px solid var(--transparent-white-7);
+	border-top: 1px solid rgba(var(--white-on-dark), 0.07);
 	position: relative;
 	padding: 0;
 }
@@ -14,7 +14,7 @@
 }
 
 .xtag.selected, .xtag:hover {
-	background-color: var(--transparent-white-7);
+	background-color: rgba(var(--white-on-dark), 0.07);
 }
 
 .xtag .hide_overflow {
@@ -25,7 +25,7 @@
 
 .xtag .result_title {
 	width: 88% !important;
-	color: var(--transparent-white-65);
+	color: rgba(var(--white-on-dark), 0.65);
 	padding-left: 3px;
 	font-weight: 700;
 	position: absolute;
@@ -42,7 +42,7 @@
 	top: 8px;
 	position: absolute;
 	right: 10px;
-	color: var(--transparent-white-65);
+	color: rgba(var(--white-on-dark), 0.65);
 	font-weight: 400;
 }
 
@@ -57,5 +57,5 @@
 	padding: 10px 10px;
 	margin-top: 3px;
 	background: rgba(0, 0, 0, 0.06);
-	color: var(--transparent-white-40);
+	color: rgba(var(--white-on-dark), 0.4);
 }
