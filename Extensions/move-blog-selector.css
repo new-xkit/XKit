@@ -1,0 +1,13 @@
+#xkit-interface-buttons.inline {
+    float: none;
+    display: inline-block;
+    padding-right: 0.5em;
+    border-right: 1px solid lightgray;
+    height: 2em;
+}
+
+#xkit-interface-buttons.inline > * {
+    display: inherit;
+    height: 1.5em;
+    vertical-align: sub;
+}
