@@ -1,4 +1,13 @@
-#xkit_gotodash::before{
-    font-family: tumblr-icons, None;
-    content: "\EA20";
+#xkit_gotodash::before {
+	content: "\EA18";
+	font-family: tumblr-icons, Blank;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	text-decoration: none;
+	text-transform: none;
 }
