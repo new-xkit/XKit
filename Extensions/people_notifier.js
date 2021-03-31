@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.6.6 **//
+//* VERSION 0.6.7 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER new-xkit **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
@@ -14,12 +14,6 @@ XKit.extensions.people_notifier = new Object({
 	blogs: [],
 
 	preferences: {
-		"view_on_dash": {
-			text: "Use View on Dash to open blogs (requires View On Dash to be installed)",
-			value: false,
-			default: false
-		},
-
 		"open_new_tab": {
 			text: "Open tumblr blogs in a new window",
 			value: false,
@@ -446,21 +440,8 @@ XKit.extensions.people_notifier = new Object({
 				}
 			}
 
-			var open_in_vod = XKit.extensions.people_notifier.preferences.view_on_dash.value;
 			var open_new_tab = XKit.extensions.people_notifier.preferences.open_new_tab.value;
-			if (open_in_vod) {
-				try {
-					XKit.extensions.view_on_dash.view($(this).attr('data-url'));
-				} catch (e) {
-					XKit.window.show("Unable to use View On Dash to open blog.",
-						"Error message: <p>" + e.message + "</p>" +
-						"Please try again later or file a bug report.",
-						"error",
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
-						'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
-					 );
-				}
-			} else if (open_new_tab) {
+			if (open_new_tab) {
 				window.open("http://" + $(this).attr('data-url') + ".tumblr.com/");
 			} else {
 				XKit.interface.show_peepr_for($(this).attr('data-url'));

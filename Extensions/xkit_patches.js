@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.12 **//
+//* VERSION 7.4.13 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -90,7 +90,7 @@ XKit.extensions.xkit_patches = new Object({
 				let blogs = [];
 				Promise.race([
 					new Promise((resolve) => setTimeout(resolve, 30000)),
-					(async() => {
+					(async () => {
 						const {response} = await tumblr.apiFetch("/v2/user/info", {
 							queryParams: {'fields[blogs]': 'name'},
 						});
@@ -124,7 +124,6 @@ XKit.extensions.xkit_patches = new Object({
 			if (!window._ || !window.jQuery) {
 				return;
 			}
-			/* globals _ */
 
 			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
 				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
@@ -412,7 +411,7 @@ XKit.extensions.xkit_patches = new Object({
 			 *
 			 * @param {Function} func - This function is rendered to a string
 			 *     and then injected into the page.
-			 * @param {Object} arguments - arguments to pass to the function.
+			 * @param {Object} args - arguments to pass to the function.
 			 *     Since the function is rendered to a string before being
 			 *     injected, it can't close over any variables, so everything
 			 *     used from the calling scope must be passed as an argument
@@ -420,15 +419,13 @@ XKit.extensions.xkit_patches = new Object({
 			 * @return {Promise} - the return value or thrown error from the
 			 *     injected function
 			 */
-			XKit.tools.async_add_function = function(func, arguments) {
+			XKit.tools.async_add_function = function(func, args) {
 				return new Promise((resolve, reject) => {
 					const callback_nonce = Math.random();
 
-					const add_func = `(async ({callback_nonce, arguments}) => {
+					const add_func = `(async ({callback_nonce, args}) => {
 						try {
-							const return_value = await (${
-								XKit.tools.normalize_indentation("\t".repeat(7), func.toString())
-							})(arguments);
+							const return_value = await (${XKit.tools.normalize_indentation("\t".repeat(7), func.toString())})(args);
 
 							window.postMessage({
 								xkit_callback_nonce: callback_nonce,
@@ -457,7 +454,7 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					};
 
-					XKit.tools.add_function(add_func, false, {callback_nonce, arguments});
+					XKit.tools.add_function(add_func, false, {callback_nonce, args});
 				});
 			};
 
@@ -692,7 +689,7 @@ XKit.extensions.xkit_patches = new Object({
 						return this.cssMap;
 					}
 
-					this.cssMap = await XKit.tools.async_add_function(async() => {
+					this.cssMap = await XKit.tools.async_add_function(async () => {
 						if (!window.tumblr) {
 							return null;
 						}
@@ -1121,8 +1118,8 @@ XKit.extensions.xkit_patches = new Object({
 
 				init_collapsed: function(id) {
 					//adjust colors to look good on the sidebar if we're there
-					const automatic_color = 'var(--blog-contrasting-title-color,var(--transparent-white-65))';
-					const automatic_button_color = 'var(--blog-contrasting-title-color,var(--rgb-white-on-dark))';
+					const automatic_color = 'var(--blog-contrasting-title-color, rgba(var(--white-on-dark), 0.65))';
+					const automatic_button_color = 'var(--blog-contrasting-title-color, rgb(var(--white-on-dark)))';
 
 					//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
 					const shrink_post_amount = '12px';
@@ -1500,7 +1497,7 @@ XKit.extensions.xkit_patches = new Object({
 					if (typeof(revisionString[1]) === "undefined") {
 						version.patch = 0;
 					} else {
-				// No need for toLowerCase here since we already do that when we split versionSplit above
+						// No need for toLowerCase here since we already do that when we split versionSplit above
 						version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
 					}
 				} else {
@@ -3286,7 +3283,7 @@ XKit.extensions.xkit_patches = new Object({
 
 				$("#xkit-notifications").append(m_html);
 
-					// console.log(" Notification > " + message);
+				// console.log(" Notification > " + message);
 
 				var m_notification_id = XKit.notifications.count;
 				setTimeout(function() {
@@ -3297,7 +3294,7 @@ XKit.extensions.xkit_patches = new Object({
 						try {
 							callback();
 						} catch (e) {
-								// Meh.
+							// Meh.
 						}
 					}
 					$("#xkit_notification_" + m_notification_id).slideUp('slow');

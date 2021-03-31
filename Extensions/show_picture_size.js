@@ -37,7 +37,7 @@ XKit.extensions.show_picture_size = new Object({
 			var post = XKit.interface.post($(this));
 
 			if (post.type === 'photo') {
-                // Photo
+				// Photo
 				$(this).find('.post_media .post_media_photo').each(function() {
 					var photo = $(this);
 					var photoLink = $(this).parent('.post_media_photo_anchor');
@@ -54,7 +54,7 @@ XKit.extensions.show_picture_size = new Object({
 					});
 				});
 			} else if (post.type === 'photoset') {
-                // Photo set
+				// Photo set
 				$(this).find('.photoset_photo').each(function() {
 					var photoLink = $(this);
 

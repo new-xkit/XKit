@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.10 **//
+//* VERSION 7.6.15 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -173,7 +173,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	spring_cleaning: function() {
 
-		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself", "alternative_timestamps", "autoloadimages", "soft_refresh", "lethe"];
+		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo", "reblog_as_text", "reblog_yourself", "alternative_timestamps", "autoloadimages", "soft_refresh", "lethe", "activity_plus", "replyviewer", "icon_nots"];
 
 		var removed_list = [];
 
@@ -313,7 +313,7 @@ XKit.extensions.xkit_preferences = new Object({
 				if (new_version > my_version) {
 					XKit.notifications.add("<b>Please update XKit!</b><br/>A new version of XKit is available for your browser. " +
 						"Please click here for more information and how you can easily and quickly update now.", "warning", true, function() {
-							XKit.window.show("Please update XKit",
+						XKit.window.show("Please update XKit",
 							"<b>A new version of XKit, version " + mb_object.version + " is available.</b><br/>" +
 							"You are currently using XKit version " + XKit.version + ".<br/><br/>" +
 							"Please update to the latest version as soon as possible. If you don't, XKit might not work properly, " +
@@ -322,7 +322,7 @@ XKit.extensions.xkit_preferences = new Object({
 							"warning",
 							'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com/downloads">Go to Download page</a>' +
 							'<div class="xkit-button" id="xkit-close-message">Not now, remind me later.</div>');
-						});
+					});
 				}
 			});
 		},
@@ -1410,7 +1410,11 @@ XKit.extensions.xkit_preferences = new Object({
 				$(this).html("Please wait, resetting...");
 
 				XKit.storage.clear(XKit.extensions.xkit_preferences.current_open_extension_panel);
-				XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				try {
+					XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				} catch (e) {
+					console.error("Unable to shutdown extension " + XKit.extensions.xkit_preferences.current_open_extension_panel);
+				}
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
 					XKit.extensions.xkit_main.load_extension_preferences(XKit.extensions.xkit_preferences.current_open_extension_panel);
@@ -1461,7 +1465,11 @@ XKit.extensions.xkit_preferences = new Object({
 				$(this).addClass("disabled");
 				$(this).html("Please wait, uninstalling...");
 
-				XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				try {
+					XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
+				} catch (e) {
+					console.error("Unable to shutdown extension " + XKit.extensions.xkit_preferences.current_open_extension_panel);
+				}
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
 					if ($("#xkit-purge-extension").hasClass("selected")) {
@@ -1487,11 +1495,19 @@ XKit.extensions.xkit_preferences = new Object({
 			var m_ext = XKit.extensions.xkit_preferences.current_open_extension_panel;
 			if (XKit.installed.enabled(m_ext) === true) {
 				XKit.installed.disable(m_ext);
-				XKit.extensions[extension_id].destroy();
+				try {
+					XKit.extensions[extension_id].destroy();
+				} catch (e) {
+					console.error("Unable to shutdown extension " + extension_id);
+				}
 				$(this).removeClass("selected");
 			} else {
 				XKit.installed.enable(m_ext);
-				XKit.extensions[extension_id].run();
+				try {
+					XKit.extensions[extension_id].run();
+				} catch (e) {
+					console.error("Unable to run extension " + extension_id);
+				}
 				$(this).addClass("selected");
 			}
 
@@ -2199,9 +2215,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-panel-extension-info").click(function() {
 
 			var text = "XKit version " + XKit.version + "\n" +
-					"extensions:\n" + XKit.installed.list().map(function(i) {
-						return "   " + i + ": " + XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)");
-					}).join("\n");
+					"extensions:\n" + XKit.installed.list().map(i => "   " + i + ": " + XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)")).join("\n");
 			var timestamp = new Date();
 
 			XKit.tools.make_file("XKit Basic Export " + timestamp.getTime() + ".txt", text);

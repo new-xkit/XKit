@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.11.4 **//
+//* VERSION 2.11.5 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -102,7 +102,7 @@ XKit.extensions.timestamps = new Object({
 			["only_original", "true", {reblogs: "op"}]
 		]
 		.filter(([preference, defaultValue]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, defaultValue) === "true")
-		.forEach(([preference, _, conversion]) => {
+		.forEach(([preference, defaultValue, conversion]) => {
 			Object.entries(conversion).forEach(([key, value]) => {
 				XKit.storage.set("timestamps", `extension__setting__${key}`, value.toString());
 				this.preferences[key].value = value;
@@ -409,18 +409,18 @@ XKit.extensions.timestamps = new Object({
 		const sameYear = date.getFullYear() === now.getFullYear();
 
 		if (sameDate) {
-		  return date.toLocaleTimeString(locale, {
-			hour: 'numeric',
-			minute: 'numeric',
-		  });
+			return date.toLocaleTimeString(locale, {
+				hour: 'numeric',
+				minute: 'numeric',
+			});
 		} else {
-		  return date.toLocaleDateString(locale, {
-			day: 'numeric',
-			month: 'short',
-			year: sameYear ? undefined : 'numeric',
-		  });
+			return date.toLocaleDateString(locale, {
+				day: 'numeric',
+				month: 'short',
+				year: sameYear ? undefined : 'numeric',
+			});
 		}
-	  },
+	},
 
 	format_date: function(timestamp) {
 		const absolute_type = this.preferences.format_type_absolute.value;

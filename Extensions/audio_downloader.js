@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 3.0.1 **//
+//* VERSION 3.0.2 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -54,7 +54,7 @@ XKit.extensions.audio_downloader = new Object({
 
 			$source.parents(audioBlockClass).append(`
 				<div style="margin: 10px 0; padding: 0 20px;">
-					<button class="audio_downloader" data-src="${src}" style="color: var(--purple); text-decoration: underline;">
+					<button class="audio_downloader" data-src="${src}" style="color: rgb(var(--purple)); text-decoration: underline;">
 						(Download)
 					</button>
 				</div>

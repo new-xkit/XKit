@@ -42,7 +42,7 @@
 .xkit--react .xtimestamp,
 .xkit--react .xtimestamp-in-search {
 	position: static;
-	color: var(--gray-65);
+	color: rgba(var(--black), 0.65);
 	font-size: 14px;
 	line-height: 1em;
 	padding: 0 var(--post-padding);
