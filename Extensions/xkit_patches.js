@@ -1198,15 +1198,15 @@ XKit.extensions.xkit_patches = new Object({
 					}
 
 					.xkit--react .controls_section .controls_section_item {
-						border-top: 1px solid var(--transparent-white-7);
+						border-top: 1px solid rgba(var(--white-on-dark), 0.07);
 						position: relative;
-						color: var(--transparent-white-65);
+						color: rgba(var(--white-on-dark), 0.65);
 						line-height: 30px;
 						font-weight: 700;
 					}
 
 					.xkit--react .controls_section .controls_section_item:hover {
-						background-color: var(--transparent-white-7);
+						background-color: rgba(var(--white-on-dark), 0.07);
 					}
 
 					.xkit--react .controls_section .hide_overflow {
@@ -1231,13 +1231,13 @@ XKit.extensions.xkit_patches = new Object({
 					}
 
 					.xkit--react .small_links {
-						border-top: 1px solid var(--transparent-white-7);
+						border-top: 1px solid rgba(var(--white-on-dark), 0.07);
 						overflow: hidden;
 					}
 
 					.xkit--react .small_links a {
 						padding: 11px 13px 0;
-						color: var(--transparent-white-65);
+						color: rgba(var(--white-on-dark), 0.65);
 						font-size: 11px;
 					}
 
@@ -1315,7 +1315,7 @@ XKit.extensions.xkit_patches = new Object({
 						html += `<li class="${sidebarTitleClasses}">${section.title}</li>`;
 					}
 
-					const carrot = '<svg height="30px" fill="var(--transparent-white-65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>';
+					const carrot = '<svg height="30px" fill="rgba(var(--white-on-dark), 0.65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>';
 
 					for (let item of section.items) {
 						html += `
