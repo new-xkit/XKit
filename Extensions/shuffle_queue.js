@@ -38,9 +38,8 @@ XKit.extensions.shuffle_queue = new Object({
 		if (XKit.page.react) {
 			await XKit.interface.react.sidebar.add({
 				id: "queue_plus_sidebar",
-				title: "Queue+",
+				title: "Enhanced Queue",
 				items: [
-					{ id: "xshufflequeue_button", text: "Shuffle Queue" },
 					{ id: "xdeletequeue_button", text: "Clear Queue" },
 					{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
 					{ id: "xqueueoptions_button", text: "Show Queue Options", count: "on" }
@@ -87,9 +86,8 @@ XKit.extensions.shuffle_queue = new Object({
 		} else {
 			XKit.interface.sidebar.add({
 				id: "queue_plus_sidebar",
-				title: "Queue+",
+				title: "Enhanced Queue",
 				items: [
-					{ id: "xshufflequeue_button", text: "Shuffle Queue" },
 					{ id: "xdeletequeue_button", text: "Clear Queue" },
 					{ id: "xshrinkposts_button", text: "Shrink Posts", count: "off" },
 					{ id: "xqueueoptions_button", text: "Queue Options", count: "on" }
@@ -100,7 +98,6 @@ XKit.extensions.shuffle_queue = new Object({
 			".post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); }";
 		}
 
-		$("#xshufflequeue_button").click(() => this.shuffle());
 		$("#xdeletequeue_button").click(() => this.clear());
 		$("#xshrinkposts_button").click(function() {
 			if (XKit.installed.is_running("shorten_posts")) {
@@ -157,96 +154,6 @@ XKit.extensions.shuffle_queue = new Object({
 			$("#xqueueoptions_button").click();
 		}
 
-	},
-
-	shuffle: function() {
-
-		XKit.window.show(
-			"Shuffle Queue",
-			"Would you like to shuffle your queue?<br>" +
-			"Please note that only loaded posts can be shuffled. " +
-			"To shuffle your entire queue, scroll down until your whole queue is loaded.",
-
-			"question",
-
-			'<div id="xshufflequeue_confirm" class="xkit-button default">Shuffle!</div>' +
-			'<div id="xkit-close-message" class="xkit-button">Cancel</div>'
-		);
-
-		$("#xshufflequeue_confirm").click(() => {
-			if ($("#xshufflequeue_confirm").hasClass("disabled")) {
-				return;
-			}
-
-			$("#xshufflequeue_confirm")
-				.addClass("disabled")
-				.text("Shuffling...");
-
-			let postIDs = [];
-
-			if (XKit.page.react) {
-				$("[data-id]").each(function() {
-					let postID = $(this).attr("data-id");
-					postIDs.push(postID);
-				});
-			} else {
-				$("#posts [data-pageable]").each(function() {
-					let [ /* "post" */, postID] = $(this).attr("data-pageable").split("_");
-					postIDs.push(postID);
-				});
-			}
-
-			if (postIDs.length === 0) {
-				XKit.window.close();
-				XKit.notifications.add("Didn't find any posts to shuffle!", "error");
-				return;
-			}
-
-			// https://stackoverflow.com/a/12646864
-			for (let i = postIDs.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[postIDs[i], postIDs[j]] = [postIDs[j], postIDs[i]];
-			}
-
-			let blogname = XKit.interface.where().user_url;
-
-			XKit.tools.Nx_XHR({
-				method: "POST",
-				url: `https://www.tumblr.com/blog/${blogname}/order_post_queue`,
-				headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-				data: $.param({
-					"form_key": XKit.interface.form_key(),
-					"post_ids": postIDs.join(",")
-				}),
-				onload: response => {
-					this.update_shuffled_order(postIDs);
-					XKit.window.close();
-					XKit.notifications.add(`Shuffled ${postIDs.length} posts!`, "ok");
-				},
-				onerror: response => {
-					XKit.window.show(
-						"Unable to save queue.",
-						`Something went wrong: HTTP ${response.status}. Please try again later.`,
-
-						"error",
-
-						'<div id="xkit-close-message" class="xkit-button default">OK</div>'
-					);
-				}
-			});
-		});
-	},
-
-	update_shuffled_order: function(postIDs) {
-		if (XKit.page.react) {
-			postIDs.reverse().forEach(postID => {
-				$(".sortableContainer").prepend($(`[data-id="${postID}"]`));
-			});
-		} else {
-			postIDs.reverse().forEach(postID => {
-				$("#new_post_buttons").after($(`[data-pageable="post_${postID}"]`));
-			});
-		}
 	},
 
 	posts_to_delete: [],
