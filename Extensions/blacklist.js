@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.7 **//
+//* VERSION 3.1.8 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -343,30 +343,10 @@ XKit.extensions.blacklist = new Object({
 			var to_check_blacklist = "listBlack";
 			var to_check_whitelist = "listWhite";
 
-			var supported_ver = "1.8.0";
-
 			if (m_obj.creator === "XKIT") {
 
 				to_check_blacklist = "blacklist";
 				to_check_whitelist = "whitelist";
-
-			} else {
-
-				const version = XKit.tools.parse_version(m_obj.version);
-				const supported = XKit.tools.parse_version(supported_ver);
-				const is_compatible =
-					version.major < supported.major || (version.major === supported.major &&
-						(version.minor < supported.minor || (version.minor === supported.minor &&
-							version.patch <= supported.patch)));
-
-				if (!is_compatible) {
-					XKit.window.show("Could not import.",
-						"XKit Blacklist can only import words from version " + supported_ver + " and below of Tumblr Savior.",
-						"error",
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-					);
-					return;
-				}
 
 			}
 
