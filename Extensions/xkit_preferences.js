@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.16 **//
+//* VERSION 7.6.17 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -174,6 +174,7 @@ XKit.extensions.xkit_preferences = new Object({
 	spring_cleaning: function() {
 
 		var clean_list = [
+			"separator",
 			"unreverse",
 			"filter_by_type",
 			"XIM",
