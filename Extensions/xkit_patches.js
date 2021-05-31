@@ -1025,7 +1025,7 @@ XKit.extensions.xkit_patches = new Object({
 					}`, `xkit_interface_icon__${class_name}`);
 
 					if (typeof ok_icon !== "undefined") {
-						XKit.tools.add_css(`.${class_name} .xkit-interface-icon-completed {
+						XKit.tools.add_css(`.${class_name} .xkit-interface-completed {
 							background-image: url('${ok_icon}');
 						}`, `xkit_interface_icon__completed__${class_name}`);
 					}
