@@ -61,7 +61,14 @@ XKit.extensions.notificationblock = new Object({
 	},
 
 	recheck_all: function() {
-		$(".notification.xnotificationblockchecked").removeClass("xnotificationblockchecked");
+		const notificationClasses = [
+			"notification",
+			...XKit.css_map.keyToClasses('notification'),
+		];
+
+		$(notificationClasses.map(cls => `.${cls}.xnotificationblockchecked`).join(", ")).
+			removeClass("xnotificationblockchecked");
+
 		this.do();
 	},
 
@@ -196,13 +203,13 @@ XKit.extensions.notificationblock = new Object({
 			const posts = await XKit.interface.react.get_posts("xnotificationblockchecked", !!'can_edit');
 			$(posts).each(async function() {
 				$(this).addClass("xnotificationblockchecked");
-				var post_id = this.dataset.postId;
+				var post_id = this.dataset.id;
 
 				await XKit.interface.react.add_control_button($(this), "xnotificationblockbutton");
 
 				if (XKit.extensions.notificationblock.blacklisted.indexOf(post_id) !== -1) {
 					XKit.interface.completed_control_button(
-						$(this).find(".xnotificationblockbutton"), true
+						$(this).find(".xnotificationblockbutton div"), true
 					);
 				}
 			});
