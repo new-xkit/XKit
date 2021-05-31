@@ -18,7 +18,7 @@
     "morgan": "^1.10.0",
     "serve-static": "^1.14.1",
     "through2": "^2.0.5",
-    "web-ext": "^4.2.0"
+    "web-ext": "^6.1.0"
   },
   "webExt": {
     "ignoreFiles": [
