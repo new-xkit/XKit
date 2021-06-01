@@ -69,7 +69,7 @@ XKit.extensions.notificationblock = new Object({
 	unblock: function(post_id) {
 		var m_index = this.blacklisted.indexOf(post_id);
 		if (m_index !== -1) {
-		 this.blacklisted.splice(m_index, 1);
+			this.blacklisted.splice(m_index, 1);
 			XKit.storage.set("notificationblock", "posts", this.blacklisted.join(","));
 		}
 
