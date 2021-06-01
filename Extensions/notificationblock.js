@@ -36,7 +36,7 @@ XKit.extensions.notificationblock = new Object({
 
 		var storage = XKit.storage.get_all("notificationblock");
 		if (storage && storage.posts) {
-			this.blacklisted = storage.posts.value.split(",");
+			this.blacklisted = storage.posts.value.split(",").filter(i => i);
 		}
 
 		XKit.interface.react.create_control_button("xnotificationblockbutton",
@@ -159,32 +159,35 @@ XKit.extensions.notificationblock = new Object({
 
 	do: async function() {
 		const self = this;
-		const blacklisted_post_regexp = new RegExp(`\\b(${self.blacklisted.join('|')})\\b`);
 
-		await self.populate_notification_props();
+		if (self.blacklisted.some(i => i)) {
+			const blacklisted_post_regexp = new RegExp(`\\b(${self.blacklisted.join('|')})\\b`);
 
-		$(`.notification, ${XKit.css_map.keyToCss('notification')}`).
-			not(".xnotificationblockchecked").
-			each(function() {
-				const $note = $(this);
+			await self.populate_notification_props();
 
-				$note.addClass("xnotificationblockchecked");
+			$(`.notification, ${XKit.css_map.keyToCss('notification')}`).
+				not(".xnotificationblockchecked").
+				each(function() {
+					const $note = $(this);
 
-				let target_url = $note.children('a').attr('href') || $note.find(".notification_target").attr('href');
+					$note.addClass("xnotificationblockchecked");
 
-				if ($note.attr('data-target-id')) {
-					target_url = target_url + " " + $note.attr('data-target-id');
-				}
+					let target_url = $note.children('a').attr('href') || $note.find(".notification_target").attr('href');
 
-				if ($note.attr('data-url-original')) {
-					target_url = target_url + " " +	$note.attr('data-url-original');
-				}
+					if ($note.attr('data-target-id')) {
+						target_url = target_url + " " + $note.attr('data-target-id');
+					}
 
-				if (blacklisted_post_regexp.test(target_url)) {
-					console.log(`Blocking ${target_url} with regex ${blacklisted_post_regexp}`);
-					this.dataset.xkitNotificationblockBlocked = true;
-				}
-			});
+					if ($note.attr('data-url-original')) {
+						target_url = target_url + " " +	$note.attr('data-url-original');
+					}
+
+					if (blacklisted_post_regexp.test(target_url)) {
+						console.log(`Blocking ${target_url} with regex ${blacklisted_post_regexp}`);
+						this.dataset.xkitNotificationblockBlocked = true;
+					}
+				});
+		}
 
 		$(".xkit-old-notifications, .notification").first().addClass("first_notification");
 		$(".xkit-old-notifications, .notification").first().each(function() {
