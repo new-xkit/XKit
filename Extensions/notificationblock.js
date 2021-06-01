@@ -67,7 +67,7 @@ XKit.extensions.notificationblock = new Object({
 		];
 
 		$(notificationClasses.map(cls => `.${cls}.xnotificationblockchecked`).join(", ")).
-			removeClass("xnotificationblockchecked");
+			removeClass("xnotificationblockchecked").removeAttr('data-xkit-notificationblock-blocked');
 
 		this.do();
 	},
