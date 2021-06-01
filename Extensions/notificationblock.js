@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.3.5 **//
+//* VERSION 1.4.0 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER new-xkit **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -20,12 +20,6 @@ XKit.extensions.notificationblock = new Object({
 			default: true,
 			value: true
 		},
-
-		on_notifications: {
-			text: "Show the NotificationBlock button ('block') on notifications",
-			default: true,
-			value: true
-		}
 
 	},
 
@@ -111,7 +105,7 @@ XKit.extensions.notificationblock = new Object({
 
 		if ($block_button.hasClass("xkit-interface-completed")) {
 			XKit.window.show("Unblock notifications from this post?",
-				"Notifications from this post will be shown.<br/>You'll need to refresh the page for changes to take effect.",
+				"Notifications from this post will be shown. You may have to refresh the page for changes to take effect",
 				"question",
 				'<div class="xkit-button default" id="xkit-notification-block-ok">Unblock Notifications</div><div class="xkit-button" id="xkit-close-message">Cancel</div>');
 
@@ -123,7 +117,7 @@ XKit.extensions.notificationblock = new Object({
 
 		} else {
 			XKit.window.show("Block notifications from this post?",
-				"Notifications originating from this post will be blocked on the dashboard, Old Notifications and Activity page, without any indication that it was blocked.",
+				"Notifications originating from this post will be blocked on the dashboard and activity page, without any indication that they were blocked.",
 				"question",
 				'<div class="xkit-button default" id="xkit-notification-block-ok">Block Notifications</div><div class="xkit-button" id="xkit-close-message">Cancel</div>');
 
