@@ -1526,6 +1526,17 @@
 	background-color: rgba(255, 136, 0, .2) !important;
 }
 
+.xkit--react .xkit-extension[data-extension-id="convert_links"],
+.xkit--react .xkit-extension[data-extension-id="tagviewer"],
+.xkit--react .xkit-extension[data-extension-id="video_downloader"],
+.xkit--react .xkit-extension[data-extension-id="read_more_now"],
+.xkit--react .xkit-extension[data-extension-id="retags"],
+.xkit--react .xkit-extension[data-extension-id="transparent_img_hover"],
+.xkit--react .xkit-extension[data-extension-id="notifications_plus"],
+.xkit--react .xkit-extension[data-extension-id="xinbox"] {
+	background-color: rgba(255, 73, 47, .2) !important;
+}
+
 .xkit--react #xkit-gallery-extension-convert_links,
 .xkit--react #xkit-gallery-extension-tagviewer,
 .xkit--react #xkit-gallery-extension-video_downloader,
