@@ -1526,13 +1526,13 @@
 	background-color: rgba(255, 136, 0, .2) !important;
 }
 
-.xkit--react [data-extension-id="convert_links"],
-.xkit--react [data-extension-id="tagviewer"],
-.xkit--react [data-extension-id="video_downloader"],
-.xkit--react [data-extension-id="read_more_now"],
-.xkit--react [data-extension-id="retags"],
-.xkit--react [data-extension-id="transparent_img_hover"],
-.xkit--react [data-extension-id="notifications_plus"],
-.xkit--react [data-extension-id="xinbox"] {
+.xkit--react #xkit-gallery-extension-convert_links,
+.xkit--react #xkit-gallery-extension-tagviewer,
+.xkit--react #xkit-gallery-extension-video_downloader,
+.xkit--react #xkit-gallery-extension-read_more_now,
+.xkit--react #xkit-gallery-extension-retags,
+.xkit--react #xkit-gallery-extension-transparent_img_hover,
+.xkit--react #xkit-gallery-extension-notifications_plus,
+.xkit--react #xkit-gallery-extension-xinbox {
 	display: none !important;
 }
