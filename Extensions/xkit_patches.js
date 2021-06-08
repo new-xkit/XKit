@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.14 **//
+//* VERSION 7.4.15 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -25,16 +25,16 @@ XKit.extensions.xkit_patches = new Object({
 						if (responseData.applications.gecko.id === "@new-xkit-w") {
 							XKit.window.show(
 								"W Edition warning",
-								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +
+								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of XKit 7.<br><br>" +
 								'Due to how XKit\'s extension gallery works, this upload violates <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews#Development_Practices" target="_blank">Mozilla\'s policy on remote code execution</a> ' +
 								"for listed add-ons, and is in danger of being banned at any time; potentially deleting your local XKit data.<br><br>" +
-								"We recommend installing the official distribution of New XKit from GitHub to avoid this possibility.<br><br>" +
+								"We recommend installing the official distribution of XKit 7 from GitHub to avoid this possibility.<br><br>" +
 								"Be sure to upload or export your configuration using XCloud before uninstalling W Edition. " +
 								"Also, since the two versions conflict, you should uninstall W Edition before re-installing from GitHub.",
 
 								"warning",
 
-								'<a href="https://github.com/new-xkit/XKit/releases/latest" target="_blank" class="xkit-button default">New XKit installation page &rarr;</a>' +
+								'<a href="https://github.com/new-xkit/XKit/releases/latest" target="_blank" class="xkit-button default">XKit 7 installation page &rarr;</a>' +
 								'<div id="xkit-close-message" class="xkit-button">Close</div>' +
 								`<div id="dismiss-warning" class="xkit-button float-right">Don't show this again</div>`
 							);
