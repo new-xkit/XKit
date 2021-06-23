@@ -1,6 +1,6 @@
 :root {
 	/* MOVE TO MAIN EVENTUALLY */
-	
+
 	--xkit-primary: white;
 	--xkit-on-primary: black;
 	--xkit-secondary: rgb(240,240,240);
@@ -65,7 +65,7 @@
 	--xkit-notification-mail: #238ec4;
 
 	/* KEEP IN PREFERENCES */
-	
+
 	--xkit-wide-panel: rgb(250,250,250);
 
 	--xkit-welcoming-bubble: #88b7d5;
@@ -1310,7 +1310,7 @@
 	border: 1px solid var(--xkit-33-shadow);
 }
 
-.xkit-checkbox.selected b, .xkit-checkbox.selected strong {	
+.xkit-checkbox.selected b, .xkit-checkbox.selected strong {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 .785'%3E%3Cpath d='M 0.81721689,0 0.3974054,0.41981142 0.18278298,0.20518883 0,0.3879718 0.21462243,0.6025944 0.39740557,0.78537753 0.58018855,0.6025944 1,0.18278314 Z' fill='%232b639d'/%3E%3C/svg%3E");
 	background-size: 10px;
 	background-color: var(--xkit-checkbox-selected);
@@ -1479,4 +1479,115 @@
 
 .xkit--react .xkit_notice_container {
 	display: none;
+}
+
+.xkit--react .xkit-extension[data-extension-id="people_notifier"],
+.xkit--react .xkit-extension[data-extension-id="bookmarker"],
+.xkit--react .xkit-extension[data-extension-id="cleanfeed"],
+.xkit--react .xkit-extension[data-extension-id="dont_stretch_photosets"],
+.xkit--react .xkit-extension[data-extension-id="drafts_plus"],
+.xkit--react .xkit-extension[data-extension-id="shuffle_queue"],
+.xkit--react .xkit-extension[data-extension-id="find_blogs"],
+.xkit--react .xkit-extension[data-extension-id="find_inactives"],
+.xkit--react .xkit-extension[data-extension-id="highlighter"],
+.xkit--react .xkit-extension[data-extension-id="jk_across_pages"],
+.xkit--react .xkit-extension[data-extension-id="limit_people"],
+.xkit--react .xkit-extension[data-extension-id="mass_deleter"],
+.xkit--react .xkit-extension[data-extension-id="messaging_tweaks"],
+.xkit--react .xkit-extension[data-extension-id="mirrorposts"],
+.xkit--react .xkit-extension[data-extension-id="mute"],
+.xkit--react .xkit-extension[data-extension-id="mutualchecker"],
+.xkit--react .xkit-extension[data-extension-id="estufars_sidebar_fix"],
+.xkit--react .xkit-extension[data-extension-id="old_stats"],
+.xkit--react .xkit-extension[data-extension-id="one_click_reply"],
+.xkit--react .xkit-extension[data-extension-id="outbox"],
+.xkit--react .xkit-extension[data-extension-id="pokes"],
+.xkit--react .xkit-extension[data-extension-id="postarchive"],
+.xkit--react .xkit-extension[data-extension-id="post_crushes"],
+.xkit--react .xkit-extension[data-extension-id="post_limit_checker"],
+.xkit--react .xkit-extension[data-extension-id="profiler"],
+.xkit--react .xkit-extension[data-extension-id="better_reblogs"],
+.xkit--react .xkit-extension[data-extension-id="satsukimous"],
+.xkit--react .xkit-extension[data-extension-id="scroll_to_bottom"],
+.xkit--react .xkit-extension[data-extension-id="search_likes"],
+.xkit--react .xkit-extension[data-extension-id="servant"],
+.xkit--react .xkit-extension[data-extension-id="shorten_posts"],
+.xkit--react .xkit-extension[data-extension-id="show_originals"],
+.xkit--react .xkit-extension[data-extension-id="show_picture_size"],
+.xkit--react .xkit-extension[data-extension-id="tag_replacer"],
+.xkit--react .xkit-extension[data-extension-id="theme_editor"],
+.xkit--react .xkit-extension[data-extension-id="themes"],
+.xkit--react .xkit-extension[data-extension-id="themes_plus"],
+.xkit--react .xkit-extension[data-extension-id="unreverse2"],
+.xkit--react .xkit-extension[data-extension-id="vanilla_audio"],
+.xkit--react .xkit-extension[data-extension-id="view_my_tags"],
+.xkit--react .xkit-extension[data-extension-id="stats"],
+.xkit--react .xkit-extension[data-extension-id="show_more"],
+.xkit--react .xkit-extension[data-extension-id="xinbox"],
+.xkit--react .xkit-extension[data-extension-id="xwidgets"] {
+	background-color: rgba(255, 136, 0, .2) !important;
+}
+
+.xkit--react .xkit-extension[data-extension-id="convert_links"],
+.xkit--react .xkit-extension[data-extension-id="tagviewer"],
+.xkit--react .xkit-extension[data-extension-id="video_downloader"],
+.xkit--react .xkit-extension[data-extension-id="read_more_now"],
+.xkit--react .xkit-extension[data-extension-id="retags"],
+.xkit--react .xkit-extension[data-extension-id="transparent_img_hover"],
+.xkit--react .xkit-extension[data-extension-id="notifications_plus"] {
+	background-color: rgba(255, 73, 47, .2) !important;
+}
+
+.xkit--react #xkit-gallery-extension-convert_links,
+.xkit--react #xkit-gallery-extension-tagviewer,
+.xkit--react #xkit-gallery-extension-video_downloader,
+.xkit--react #xkit-gallery-extension-read_more_now,
+.xkit--react #xkit-gallery-extension-retags,
+.xkit--react #xkit-gallery-extension-transparent_img_hover,
+.xkit--react #xkit-gallery-extension-notifications_plus,
+.xkit--react #xkit-gallery-extension-xinbox,
+.xkit--react #xkit-gallery-extension-people_notifier,
+.xkit--react #xkit-gallery-extension-bookmarker,
+.xkit--react #xkit-gallery-extension-cleanfeed,
+.xkit--react #xkit-gallery-extension-dont_stretch_photosets,
+.xkit--react #xkit-gallery-extension-drafts_plus,
+.xkit--react #xkit-gallery-extension-shuffle_queue,
+.xkit--react #xkit-gallery-extension-find_blogs,
+.xkit--react #xkit-gallery-extension-find_inactives,
+.xkit--react #xkit-gallery-extension-highlighter,
+.xkit--react #xkit-gallery-extension-jk_across_pages,
+.xkit--react #xkit-gallery-extension-limit_people,
+.xkit--react #xkit-gallery-extension-mass_deleter,
+.xkit--react #xkit-gallery-extension-messaging_tweaks,
+.xkit--react #xkit-gallery-extension-mirrorposts,
+.xkit--react #xkit-gallery-extension-mute,
+.xkit--react #xkit-gallery-extension-mutualchecker,
+.xkit--react #xkit-gallery-extension-estufars_sidebar_fix,
+.xkit--react #xkit-gallery-extension-old_stats,
+.xkit--react #xkit-gallery-extension-one_click_reply,
+.xkit--react #xkit-gallery-extension-outbox,
+.xkit--react #xkit-gallery-extension-pokes,
+.xkit--react #xkit-gallery-extension-postarchive,
+.xkit--react #xkit-gallery-extension-post_crushes,
+.xkit--react #xkit-gallery-extension-post_limit_checker,
+.xkit--react #xkit-gallery-extension-profiler,
+.xkit--react #xkit-gallery-extension-better_reblogs,
+.xkit--react #xkit-gallery-extension-satsukimous,
+.xkit--react #xkit-gallery-extension-scroll_to_bottom,
+.xkit--react #xkit-gallery-extension-search_likes,
+.xkit--react #xkit-gallery-extension-servant,
+.xkit--react #xkit-gallery-extension-shorten_posts,
+.xkit--react #xkit-gallery-extension-show_originals,
+.xkit--react #xkit-gallery-extension-show_picture_size,
+.xkit--react #xkit-gallery-extension-tag_replacer,
+.xkit--react #xkit-gallery-extension-theme_editor,
+.xkit--react #xkit-gallery-extension-themes,
+.xkit--react #xkit-gallery-extension-themes_plus,
+.xkit--react #xkit-gallery-extension-unreverse2,
+.xkit--react #xkit-gallery-extension-vanilla_audio,
+.xkit--react #xkit-gallery-extension-view_my_tags,
+.xkit--react #xkit-gallery-extension-stats,
+.xkit--react #xkit-gallery-extension-show_more,
+.xkit--react #xkit-gallery-extension-xwidgets {
+	display: none !important;
 }

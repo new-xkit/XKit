@@ -1,11 +1,6 @@
 name: Web-Ext Tasks
 
-on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'manifest.json'
+on: workflow_dispatch
 
 jobs:
   lint:
