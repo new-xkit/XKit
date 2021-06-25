@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.11.3 **//
+//* VERSION 0.11.4 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -29,6 +29,100 @@ XKit.extensions.outbox = new Object({
 			default: true,
 			value: true
 		},
+		"export": {
+			text: "Export your data",
+			type: "separator"
+		},
+	},
+
+	cpanel: function(m_div) {
+
+		$(m_div).append(`
+			<div id="xkit-outbox-info">
+				This extension no longer functions, but you can view and export your saved data here:
+			</div>
+			`);
+
+		console.log("hello! welcome to the realm of suffering");
+
+		let storage_keys = Object.keys(XKit.storage.get_all("outbox"))
+			.filter(key => key.startsWith('messages'));
+		console.log(storage_keys);
+
+		let data = null;
+		let dataJSON = null;
+		if (storage_keys) {
+			data = Object.fromEntries(
+				storage_keys.map((key) => {
+					let m_messages = XKit.storage.get("outbox", "messages", "");
+
+					// todo: handle errors?
+					let m_messages_array = JSON.parse(m_messages);
+					return [key, m_messages_array];
+				}));
+			console.log(data);
+			dataJSON = data ? JSON.stringify(data, null, 2) : '';
+		}
+
+		let m_html = `
+			<div id="xkit-outbox-custom-panel">
+				<div id="xkit-outbox-toolbar">
+					<div id="outbox-download-text-button" class="xkit-button">Download text file (to be implemented)</div>
+					<div id="outbox-download-json-button" class="xkit-button">Download json file</div>
+				</div>
+				<div id="highlighter-words">`;
+
+		if (data) {
+			m_html += `<pre id="xkit-outbox-cpanel-pre"></pre>`;
+		} else {
+			m_html += `
+				<div id="xkit-outbox-cpanel-none-message">
+					You have no outbox data!
+				</div>
+			`;
+		}
+		m_html += "</div></div>";
+		$(m_div).append(m_html);
+
+		if (data) {
+			$("#xkit-outbox-cpanel-pre").text(dataJSON);
+
+			$("#outbox-download-json-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(dataJSON);
+			});
+			$("#outbox-download-text-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text('text format goes here');
+			});
+
+			$("#outbox-download-json-button").click(function() {
+				code_i_stole_from_April(dataJSON);
+			});
+		}
+
+		$("#xkit-extensions-panel-right").nanoScroller();
+		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
+
+		const code_i_stole_from_April = function(json) {
+			const storageBlob = new Blob([json], { type: 'application/json' });
+			const blobUrl = URL.createObjectURL(storageBlob);
+
+			const now = new Date();
+
+			const fourDigitYear = now.getFullYear().toString().padStart(4, '0');
+			const twoDigitMonth = (now.getMonth() + 1).toString().padStart(2, '0');
+			const twoDigitDate = now.getDate().toString().padStart(2, '0');
+
+			const dateString = `${fourDigitYear}-${twoDigitMonth}-${twoDigitDate}`;
+
+			const tempLink = document.createElement('a');
+			tempLink.href = blobUrl;
+			tempLink.download = `XKit Outbox Data @ ${dateString}.json`;
+
+			document.documentElement.appendChild(tempLink);
+			tempLink.click();
+			tempLink.parentNode.removeChild(tempLink);
+			URL.revokeObjectURL(blobUrl);
+		};
 	},
 
 	frame_run: function() {
@@ -135,6 +229,7 @@ XKit.extensions.outbox = new Object({
 
 	run: function() {
 		this.running = true;
+		XKit.tools.init_css("outbox");
 
 		XKit.extensions.outbox.check_indash_asks();
 
@@ -142,8 +237,6 @@ XKit.extensions.outbox = new Object({
 			console.log("Outbox -> Quitting, not in inbox");
 			return;
 		}
-
-		XKit.tools.init_css("outbox");
 
 		XKit.interface.sidebar.add({
 			id: "xkit_outbox_sidebar",
