@@ -51,4 +51,5 @@
 	overflow-y: hidden;
 	font-size: 12px;
 	min-height: 300px;
+	user-select: text;
 }
