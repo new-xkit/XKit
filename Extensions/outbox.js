@@ -43,67 +43,105 @@ XKit.extensions.outbox = new Object({
 			</div>
 			`);
 
-		console.log("hello! welcome to the realm of suffering");
-
-		let storage_keys = Object.keys(XKit.storage.get_all("outbox"))
+		const storage_keys = Object.keys(XKit.storage.get_all("outbox"))
 			.filter(key => key.startsWith('messages'));
-		console.log(storage_keys);
 
 		let data = null;
-		let dataJSON = null;
+		let data_JSON = '';
+		let data_text = '';
 		if (storage_keys) {
-			data = Object.fromEntries(
-				storage_keys.map((key) => {
-					let m_messages = XKit.storage.get("outbox", "messages", "");
+			const dataArray = storage_keys.flatMap((key) => {
+				try {
+					const m_messages = XKit.storage.get("outbox", key, "");
+					const m_messages_array = JSON.parse(m_messages);
+					return [[key, m_messages_array]];
+				} catch (e) {
+					return [];
+				}
+			});
 
-					// todo: handle errors?
-					let m_messages_array = JSON.parse(m_messages);
-					return [key, m_messages_array];
-				}));
-			console.log(data);
-			dataJSON = data ? JSON.stringify(data, null, 2) : '';
+			if (dataArray.length) {
+				data = Object.fromEntries(dataArray);
+				data_JSON = JSON.stringify(data, null, 2);
+
+				dataArray.forEach(([category, messages]) => {
+					data_text += `==== ${category} ====\n\n`;
+					messages.forEach(messageItem => {
+						const { /* avatar, */ username, to, time } = messageItem;
+						const message = messageItem.message.replace(/<\/p>/g, '').replace(/<p>/g, '');
+						const answer = messageItem.answer.replace(/<\/p>/g, '').replace(/<p>/g, '');
+						const date = new Date();
+						date.setTime(time);
+						if (answer.length) {
+							data_text +=
+								// eslint-disable-next-line no-sparse-arrays
+								[
+									date.toLocaleString(),
+									`Private answer from ${to}:`,
+									,
+									message,
+									`   - ${username}`,
+									,
+									answer,
+									`   - ${to}`,
+								].join('\n');
+						} else {
+							data_text +=
+								// eslint-disable-next-line no-sparse-arrays
+								[
+									date.toLocaleString(),
+									`You asked ${to}:`,
+									,
+									message,
+									`   - ${username}`,
+								].join('\n');
+						}
+						data_text += '\n\n\n\n';
+					});
+				});
+			}
 		}
 
-		let m_html = `
+		const preview_section = data ?
+			`<pre id="xkit-outbox-cpanel-pre"></pre>` :
+			`<div id="xkit-outbox-cpanel-none-message">You have no outbox data!</div>`;
+
+		const toolbar_html = `
 			<div id="xkit-outbox-custom-panel">
 				<div id="xkit-outbox-toolbar">
-					<div id="outbox-download-text-button" class="xkit-button">Download text file (to be implemented)</div>
+					<div id="outbox-download-text-button" class="xkit-button">Download text file</div>
 					<div id="outbox-download-json-button" class="xkit-button">Download json file</div>
 				</div>
-				<div id="highlighter-words">`;
-
-		if (data) {
-			m_html += `<pre id="xkit-outbox-cpanel-pre"></pre>`;
-		} else {
-			m_html += `
-				<div id="xkit-outbox-cpanel-none-message">
-					You have no outbox data!
+				<div id="preview-section">
+					${preview_section}
 				</div>
-			`;
-		}
-		m_html += "</div></div>";
-		$(m_div).append(m_html);
+			</div>`;
+		$(m_div).append(toolbar_html);
 
 		if (data) {
-			$("#xkit-outbox-cpanel-pre").text(dataJSON);
+			$("#xkit-outbox-cpanel-pre").text(data_text);
 
 			$("#outbox-download-json-button").mouseover(function() {
-				$("#xkit-outbox-cpanel-pre").text(dataJSON);
+				$("#xkit-outbox-cpanel-pre").text(data_JSON);
 			});
-			$("#outbox-download-text-button").mouseover(function() {
-				$("#xkit-outbox-cpanel-pre").text('text format goes here');
+			$("#outbox-download-json-button").click(function() {
+				save_data(data_JSON, 'json');
 			});
 
-			$("#outbox-download-json-button").click(function() {
-				code_i_stole_from_April(dataJSON);
+			$("#outbox-download-text-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(data_text);
+			});
+			$("#outbox-download-text-button").click(function() {
+				save_data(data_text, 'txt');
 			});
 		}
 
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
-		const code_i_stole_from_April = function(json) {
-			const storageBlob = new Blob([json], { type: 'application/json' });
+		const save_data = function(input, type) {
+			const mime_type = type === 'json' ? 'application/json' : 'text/plain;charset=UTF-8';
+			const storageBlob = new Blob([input], { type: mime_type });
 			const blobUrl = URL.createObjectURL(storageBlob);
 
 			const now = new Date();
@@ -116,7 +154,7 @@ XKit.extensions.outbox = new Object({
 
 			const tempLink = document.createElement('a');
 			tempLink.href = blobUrl;
-			tempLink.download = `XKit Outbox Data @ ${dateString}.json`;
+			tempLink.download = `XKit Outbox Data @ ${dateString}.${type}`;
 
 			document.documentElement.appendChild(tempLink);
 			tempLink.click();
