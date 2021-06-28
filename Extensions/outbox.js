@@ -156,9 +156,7 @@ XKit.extensions.outbox = new Object({
 			tempLink.href = blobUrl;
 			tempLink.download = `XKit Outbox Data @ ${dateString}.${type}`;
 
-			document.documentElement.appendChild(tempLink);
 			tempLink.click();
-			tempLink.parentNode.removeChild(tempLink);
 			URL.revokeObjectURL(blobUrl);
 		};
 	},
