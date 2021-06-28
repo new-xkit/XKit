@@ -37,19 +37,10 @@
 	border-bottom: 1px solid rgb(190,190,190);
 }
 
-#xkit-outbox-cpanel-none-message {
-	padding: 15px;
-	color: rgb(150,150,150);
-	font-size: 14px;
-	line-height: 22px;
-	text-align: center;
-}
-
 #xkit-outbox-cpanel-pre {
 	padding: 18px 0 0 18px;
 	overflow-x: auto;
 	overflow-y: hidden;
 	font-size: 12px;
-	min-height: 300px;
 	user-select: text;
 }

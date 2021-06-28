@@ -102,10 +102,6 @@ XKit.extensions.outbox = new Object({
 			}
 		}
 
-		const preview_section = data ?
-			`<pre id="xkit-outbox-cpanel-pre"></pre>` :
-			`<div id="xkit-outbox-cpanel-none-message">You have no outbox data!</div>`;
-
 		const toolbar_html = `
 			<div id="xkit-outbox-custom-panel">
 				<div id="xkit-outbox-toolbar">
@@ -113,13 +109,14 @@ XKit.extensions.outbox = new Object({
 					<div id="outbox-download-json-button" class="xkit-button">Download json file</div>
 				</div>
 				<div id="preview-section">
-					${preview_section}
+					<pre id="xkit-outbox-cpanel-pre"></pre>
 				</div>
 			</div>`;
 		$(m_div).append(toolbar_html);
 
 		if (data) {
-			$("#xkit-outbox-cpanel-pre").text(data_text);
+			$("#xkit-outbox-cpanel-pre").text(data_text)
+				.css('min-height', '300px');
 
 			$("#outbox-download-json-button").mouseover(function() {
 				$("#xkit-outbox-cpanel-pre").text(data_JSON);
@@ -134,6 +131,8 @@ XKit.extensions.outbox = new Object({
 			$("#outbox-download-text-button").click(function() {
 				save_data(data_text, 'txt');
 			});
+		} else {
+			$("#xkit-outbox-cpanel-pre").text('You have no outbox data!');
 		}
 
 		$("#xkit-extensions-panel-right").nanoScroller();
