@@ -49,6 +49,7 @@ XKit.extensions.outbox = new Object({
 		let data = null;
 		let data_JSON = '';
 		let data_text = '';
+		let data_text_html = '';
 		if (storage_keys) {
 			const dataArray = storage_keys.flatMap((key) => {
 				try {
@@ -64,49 +65,68 @@ XKit.extensions.outbox = new Object({
 				data = Object.fromEntries(dataArray);
 				data_JSON = JSON.stringify(data, null, 2);
 
-				dataArray.forEach(([category, messages]) => {
-					data_text += `==== ${category} ====\n\n`;
-					messages.forEach(messageItem => {
-						const { /* avatar, */ username, to, time } = messageItem;
-						const message = messageItem.message.replace(/<\/p>/g, '').replace(/<p>/g, '');
-						const answer = messageItem.answer.replace(/<\/p>/g, '').replace(/<p>/g, '');
-						const date = new Date();
-						date.setTime(time);
-						if (answer.length) {
-							data_text +=
-								// eslint-disable-next-line no-sparse-arrays
-								[
-									date.toLocaleString(),
-									`Private answer from ${to}:`,
-									,
-									message,
-									`   - ${username}`,
-									,
-									answer,
-									`   - ${to}`,
-								].join('\n');
-						} else {
-							data_text +=
-								// eslint-disable-next-line no-sparse-arrays
-								[
-									date.toLocaleString(),
-									`You asked ${to}:`,
-									,
-									message,
-									`   - ${username}`,
-								].join('\n');
-						}
-						data_text += '\n\n\n\n';
+				const create_text = function(strip_html) {
+					let text = '';
+					dataArray.forEach(([category, messages]) => {
+						text += `==== ${category} ====\n\n`;
+						messages.forEach(messageItem => {
+							let { /* avatar, */ username, to, time, message, answer } = messageItem;
+							message = message.replace(/<\/p>/g, '').replace(/<p>/g, '');
+							if (strip_html) {
+								answer = answer
+									.replace(/&nbsp;/ig, '')
+									.trim()
+									.split(/<[^>]+>/ig)
+									.filter(Boolean)
+									.join('\n\n');
+							}
+							const date = new Date();
+							date.setTime(time);
+							if (answer.length) {
+								text +=
+									// eslint-disable-next-line no-sparse-arrays
+									[
+										date.toLocaleString(),
+										`Private answer from ${to}:`,
+										,
+										message,
+										,
+										`   - ${username}`,
+										,
+										answer,
+										,
+										`   - ${to}`,
+									].join('\n');
+							} else {
+								text +=
+									// eslint-disable-next-line no-sparse-arrays
+									[
+										date.toLocaleString(),
+										`You asked ${to}:`,
+										,
+										message,
+										,
+										`   - ${username}`,
+									].join('\n');
+							}
+							text += '\n\n\n\n\n';
+						});
 					});
-				});
+					text += '==== raw data: ==== \n' + JSON.stringify(data);
+					return text;
+				};
+
+				data_text = create_text(true);
+				data_text_html = create_text(false);
 			}
 		}
 
 		const toolbar_html = `
 			<div id="xkit-outbox-custom-panel">
 				<div id="xkit-outbox-toolbar">
-					<div id="outbox-download-text-button" class="xkit-button">Download text file</div>
-					<div id="outbox-download-json-button" class="xkit-button">Download json file</div>
+					<div id="outbox-download-text-button" class="xkit-button">Download plain text</div>
+					<div id="outbox-download-text-html-button" class="xkit-button">Download text with html tags</div>
+					<div id="outbox-download-json-button" class="xkit-button">Download raw json file</div>
 				</div>
 				<div id="preview-section">
 					<pre id="xkit-outbox-cpanel-pre"></pre>
@@ -116,21 +136,33 @@ XKit.extensions.outbox = new Object({
 
 		if (data) {
 			$("#xkit-outbox-cpanel-pre").text(data_text)
-				.css('min-height', '300px');
+				.css('min-height', '300px')
+				.css('white-space', 'pre-wrap');
+
+			$("#outbox-download-text-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(data_text)
+					.css('white-space', 'pre-wrap');
+			});
+			$("#outbox-download-text-button").click(function() {
+				save_data(data_text, 'txt');
+			});
+
+			$("#outbox-download-text-html-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(data_text_html)
+					.css('white-space', 'pre-wrap');
+			});
+			$("#outbox-download-text-html-button").click(function() {
+				save_data(data_text_html, 'txt');
+			});
 
 			$("#outbox-download-json-button").mouseover(function() {
-				$("#xkit-outbox-cpanel-pre").text(data_JSON);
+				$("#xkit-outbox-cpanel-pre").text(data_JSON)
+					.css('white-space', 'pre');
 			});
 			$("#outbox-download-json-button").click(function() {
 				save_data(data_JSON, 'json');
 			});
 
-			$("#outbox-download-text-button").mouseover(function() {
-				$("#xkit-outbox-cpanel-pre").text(data_text);
-			});
-			$("#outbox-download-text-button").click(function() {
-				save_data(data_text, 'txt');
-			});
 		} else {
 			$("#xkit-outbox-cpanel-pre").text('You have no outbox data!');
 		}

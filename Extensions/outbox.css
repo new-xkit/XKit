@@ -43,4 +43,5 @@
 	overflow-y: hidden;
 	font-size: 12px;
 	user-select: text;
+	font-family: monospace;
 }
