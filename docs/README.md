@@ -1,4 +1,4 @@
-# New XKit Documentation
+# XKit 7 Documentation
 
 ## Get started
 
@@ -22,8 +22,8 @@
 
 ## Important Links
 
-* [New XKit Extension](https://new-xkit-extension.tumblr.com/) - Main blog
-* [New XKit Support](https://new-xkit-support.tumblr.com/) - Get support
-* [New XKit Live Support](https://new-xkit-support.tumblr.com/support) - Get live support for issues with New XKit
-* [New XKit Discussion](https://new-xkit-discussion.tumblr.com/) - Ask questions, suggest ideas, interact with the team
-* [New XKit Developer Chat](https://new-xkit-extension.tumblr.com/discord) - Want to help out with New XKit development?  Get involved here!
+* [XKit 7 Extension](https://new-xkit-extension.tumblr.com/) - Main blog
+* [XKit 7 Support](https://new-xkit-support.tumblr.com/) - Get support
+* [XKit 7 Live Support](https://new-xkit-support.tumblr.com/support) - Get live support for issues with XKit 7
+* [XKit 7 Discussion](https://new-xkit-discussion.tumblr.com/) - Ask questions, suggest ideas, interact with the team
+* [XKit 7 Developer Chat](https://new-xkit-extension.tumblr.com/discord) - Want to help out with XKit 7 development?  Get involved here!

@@ -22,14 +22,14 @@
     ],
     "matches": [ "*://*.tumblr.com/*" ]
   } ],
-  "description": "A fork of XKit, the extension framework for Tumblr.",
+  "description": "The extension framework for Tumblr",
   "homepage_url": "https://github.com/new-xkit/XKit",
   "icons": {
     "128": "icon.png"
   },
   "manifest_version": 2,
   "minimum_chrome_version": "44.0",
-  "name": "New XKit",
+  "name": "XKit 7",
   "author": "New XKit Team",
   "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
   "version": "7.9.2",

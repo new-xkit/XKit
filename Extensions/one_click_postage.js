@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.22 **//
+//* VERSION 4.4.23 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -1476,7 +1476,7 @@ XKit.extensions.one_click_postage = new Object({
 			"error",
 
 			'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
-			'<a href="https://new-xkit-extension.tumblr.com/" target="_blank" class="xkit-button">Visit the New XKit Blog</a>' +
+			'<a href="https://new-xkit-extension.tumblr.com/" target="_blank" class="xkit-button">Visit the XKit 7 Blog</a>' +
 			'<a href="https://new-xkit-extension.tumblr.com/discord-support" target="_blank" class="xkit-button">Live support</a>'
 		);
 	}

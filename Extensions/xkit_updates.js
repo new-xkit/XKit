@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.1.2 **//
+//* VERSION 2.1.3 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -128,14 +128,14 @@ XKit.extensions.xkit_updates = new Object({
 
 	show_update_failure: function() {
 
-		XKit.notifications.add("<b>Could not update New XKit:</b><br/>" +
-			"I could not reach the New XKit servers to update myself. " +
-			"You might be running an old and buggy version of New XKit. Click here for details.",
+		XKit.notifications.add("<b>Could not update extensions:</b><br/>" +
+			"I could not reach the XKit 7 servers to update myself. " +
+			"You might be running an old and buggy versions of extensions. Click here for details.",
 			"error", true, function() {
 
 				XKit.window.show("Auto-Update failed.",
 
-					"New XKit automatically updates itself from time to time in the background " +
+					"XKit 7 automatically updates its extensions in the background " +
 					"to bring you the latest features and bug fixes. Unfortunately, it was " +
 					"unable to contact the servers and download the latest updates. This " +
 					"might be a temporary server error or a problem with your connection." +
@@ -147,8 +147,8 @@ XKit.extensions.xkit_updates = new Object({
 					"error",
 
 					'<div class="xkit-button default" id="xkit-updates-troubleshooting">Troubleshooting &rarr;</div>' +
-					'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button">New XKit Blog</a>' +
-					'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>' +
+					'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button">XKit 7 Blog</a>' +
+					'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">XKit 7 Support</a>' +
 					'<div class="xkit-button" id="xkit-close-message">OK</div>'
 				);
 
@@ -161,7 +161,7 @@ XKit.extensions.xkit_updates = new Object({
 						Use the <b>Connect</b> button to open a test page from our servers in a new tab,
 						then follow the appropriate advice:<br><br>
 
-						<b>If you can connect</b>, something local is impeding New XKit's connection to <code>new-xkit.github.io</code> -
+						<b>If you can connect</b>, something local is impeding XKit 7's connection to <code>new-xkit.github.io</code> -
 						this is usually another browser add-on blocking it. Be sure to whitelist the domain in any script blockers.<br><br>
 
 						<b>If you can't connect</b>, either GitHub is having issues or there's a problem with your network.
@@ -173,7 +173,7 @@ XKit.extensions.xkit_updates = new Object({
 
 						'<a href="https://new-xkit.github.io/XKit/Test" class="xkit-button default" target="_blank">Connect</a>' +
 						'<a href="https://www.githubstatus.com" class="xkit-button" target="_blank">GitHub Status</a>' +
-						'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button" target="_blank">New XKit Blog</a>' +
+						'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button" target="_blank">XKit 7 Blog</a>' +
 						'<div id="xkit-close-message" class="xkit-button">Close</div>'
 					);
 

@@ -83,7 +83,7 @@ function init_bridge() {
 
 			if (last_error !== "") {
 
-				XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your browser's profile file is corrupt, please try uninstalling and reinstalling New XKit", "error",  "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
+				XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your browser's profile file is corrupt, please try uninstalling and reinstalling XKit 7", "error",  "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
 				$("#xkit-bridge-reset-and-continue").click(function() {
 					GM_flushStorage(function() {
 						init_bridge();
@@ -120,7 +120,7 @@ function init_bridge() {
 		});
 
 	} catch (e) {
-		XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your browser's profile file is corrupt, please try uninstalling and reinstalling New XKit", "error",  "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
+		XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your browser's profile file is corrupt, please try uninstalling and reinstalling XKit 7", "error",  "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
 
 		$("#xkit-bridge-reset-and-continue").click(function() {
 			GM_flushStorage(function() {

@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.18 **//
+//* VERSION 7.6.19 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -146,10 +146,10 @@ XKit.extensions.xkit_preferences = new Object({
 						json: false,
 						onerror: function(response) {
 							XKit.window.show("Well, this is embarrassing.",
-								"Tumblr would not allow me to follow the New XKit blog for you.<br><br>" +
+								"Tumblr would not allow me to follow the XKit 7 blog for you.<br><br>" +
 								"You can follow it manually via the link below instead.",
 								"error",
-								'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com" target="_blank">New XKit Blog</a>' +
+								'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com" target="_blank">XKit 7 Blog</a>' +
 								'<div class="xkit-button" id="xkit-close-message">OK</div>'
 							);
 						},
@@ -213,7 +213,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		if (removed_list.length > 0) {
 
-			XKit.notifications.add("New XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
+			XKit.notifications.add("XKit 7 removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.",
 				"warning", true, function() {
 					XKit.window.show(
 						"Spring Cleaning",
@@ -1396,7 +1396,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				XKit.window.show("Can't update",
 					"Update manager returned the following message:<p>" + mdata.error + "</p>" +
-					"Please try again later or if the problem continues, contact New XKit Support.", "error",
+					"Please try again later or if the problem continues, contact XKit 7 Support.", "error",
 					'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
 					'<a href="http://new-xkit-support.tumblr.com/support" class="xkit-button">Support Chat Room</a>');
 				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
@@ -2418,7 +2418,7 @@ XKit.extensions.xkit_preferences = new Object({
 					'without whom we all would have been lost to the outer darkness some time ago.</div>' +
 				'</div>' +
 				'<div id="xkit-about-window-links">' +
-					'<a href="https://new-xkit-extension.tumblr.com" target="_blank">New XKit Tumblr</a>' +
+					'<a href="https://new-xkit-extension.tumblr.com" target="_blank">XKit 7 Tumblr</a>' +
 					'<a href="#" id="xkit-open-credits">Credits</a>' +
 					'<a href="https://new-xkit-support.tumblr.com/support" target="_blank">Support</a>' +
 					'<a href="https://github.com/new-xkit/XKit/wiki" target="_blank">Documentation</a>' +
