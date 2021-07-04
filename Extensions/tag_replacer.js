@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 1.0.3 **//
+//* VERSION 1.0.4 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER new-xkit **//
@@ -10,7 +10,7 @@ XKit.extensions.tag_replacer = new Object({
 
 	running: false,
 
-	run: function() {
+	run: async function() {
 
 		this.running = true;
 
@@ -20,7 +20,7 @@ XKit.extensions.tag_replacer = new Object({
 
 		XKit.tools.init_css("tag_replacer");
 
-		XKit.interface.sidebar.add({
+		const sidebar_config = {
 			id: "tag_replacer_sidebar",
 			title: "Tag Replacer",
 			items: [{
@@ -28,7 +28,13 @@ XKit.extensions.tag_replacer = new Object({
 				text: "Replace a tag",
 				carrot: true
 			}]
-		});
+		};
+
+		if (XKit.page.react) {
+			await XKit.interface.react.sidebar.add(sidebar_config);
+		} else {
+			XKit.interface.sidebar.add(sidebar_config);
+		}
 
 		$("#tag_replacer_button").click(() => {
 			const url = XKit.interface.where().user_url;
@@ -82,7 +88,8 @@ XKit.extensions.tag_replacer = new Object({
 			'<div class="xkit-checkbox" id="xkit-tag-replacer-append"><b>&nbsp;</b>Don\'t replace the tag but append the tag above</div>' +
 			'<div class="xkit-tag-replacer-separator">&nbsp;</div>' +
 			'<small>You can replace only one tag at a time.<br/>' +
-			'Due to technical reasons, you can\'t edit tags containing dashes or slashes.</small>',
+			'Due to technical reasons, you can\'t edit tags containing dashes or slashes.<br/>' +
+			'Warning: this function currently breaks the formatting of posts written in Markdown or HTML.</small>',
 
 			'question',
 
