@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.14 **//
+//* VERSION 7.4.15 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -497,10 +497,12 @@ XKit.extensions.xkit_patches = new Object({
 				`.post_brick .post_controls .post_controls_inner {
 					white-space: nowrap;
 				}`,
-			"xkit_patches");
+				"xkit_patches");
 
 			XKit.interface.sidebar = {
 				init: function() {
+					if (XKit.page.react) { return; }
+
 					const html = `<div id="xkit_sidebar"></div>`;
 					const priority = [
 						$(".small_links"),
@@ -1179,6 +1181,180 @@ XKit.extensions.xkit_patches = new Object({
 					$(`.${id}-collapsed`).removeClass(`${id}-collapsed`);
 					$(`.${id}-collapsed-note`).remove();
 				}
+			};
+
+			XKit.interface.react.sidebar = {
+
+				css_added: false,
+
+				react_sidebar_css: `
+					.xkit--react .controls_section li {
+						list-style-type: none;
+					}
+
+					.xkit--react .controls_section {
+						padding: 0;
+						margin-bottom: 38px;
+					}
+
+					.xkit--react .controls_section .controls_section_item {
+						border-top: 1px solid rgba(var(--white-on-dark), 0.07);
+						position: relative;
+						color: rgba(var(--white-on-dark), 0.65);
+						line-height: 30px;
+						font-weight: 700;
+					}
+
+					.xkit--react .controls_section .controls_section_item:hover {
+						background-color: rgba(var(--white-on-dark), 0.07);
+					}
+
+					.xkit--react .controls_section .hide_overflow {
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						width: 88%;
+						padding-left: 10px;
+					}
+
+					.xkit--react .controls_section a {
+						text-decoration: none;
+					}
+
+					.xkit--react .controls_section a .count {
+						position: absolute;
+						top: 0;
+						right: 10px;
+						font-size: 13px;
+						font-weight: 400;
+						display: flex;
+					}
+
+					.xkit--react .small_links {
+						border-top: 1px solid rgba(var(--white-on-dark), 0.07);
+						overflow: hidden;
+					}
+
+					.xkit--react .small_links a {
+						padding: 11px 13px 0;
+						color: rgba(var(--white-on-dark), 0.65);
+						font-size: 11px;
+					}
+
+					.xkit--react .small_links a:first-child { float: left; }
+					.xkit--react .small_links a:nth-child(2) { float: right; }
+				`,
+
+				init: async function() {
+					await XKit.css_map.getCssMap();
+
+					if ($("#xkit_react_sidebar").length) { return; }
+					//everything after this check is synchronous
+
+					if (!this.css_added) {
+						XKit.tools.add_css(this.react_sidebar_css, "xkit_patches");
+						this.css_added = true;
+					}
+
+					const html = `<div id="xkit_react_sidebar"></div>`;
+
+					//inject the xkit sidebar after the navigation on tumblr.com/blog/myblogname pages
+					const $navSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
+					if ($navSidebarItem.length) {
+						$navSidebarItem.after(html);
+						return;
+					}
+
+					//otherwise, inject the xkit sidebar at the top
+					const $sidebarContainer = $(XKit.css_map.keyToCss("sidebar")).find("> aside");
+					$sidebarContainer.prepend(html);
+
+
+					//fix for "after navigation" race condition:
+					//detect if we loaded before the sidebar navigation and wait for it
+					const $loadingPlaceholder = $(XKit.css_map.descendantSelector("sidebar", "loadingPlaceholder"));
+					if ($loadingPlaceholder.length) {
+
+						const loadingObserver = new MutationObserver(function(mutations) {
+							const $newNavSidebarItem = $(XKit.css_map.keyToCss("sideBar")).first().parent();
+							if ($newNavSidebarItem.length) {
+								$newNavSidebarItem.after($("#xkit_react_sidebar"));
+								loadingObserver.disconnect();
+							}
+						});
+						loadingObserver.observe($sidebarContainer.get(0), {childList: true, subtree: true});
+					}
+					this.running = false;
+				},
+
+				/**
+				 * Constructs HTML to add to the sidebar with react-specific CSS.
+				 * Primarily used by add, but can be used directly for custom positioning.
+				 * @param {Object} section
+				 * @param {String} section.id - The element ID for the whole sidebar section
+				 * @param {String} [section.title] - Visible header text of the sidebar section
+				 * @param {Object[]} [section.items] - Array of objects containing button data
+				 * @param {String} section.items[].id - Button element ID
+				 * @param {String} section.items[].text - Visible button text
+				 * @param {Number/String} [section.items[].count] - Text to be displayed as a counter on the button
+				 * @param {Boolean} [section.items[].carrot] - Whether to put a right-facing arrow on the button (shouldn't be combined with count)
+				 * @param {Object[]} [section.small] - Array of objects containing small link data (shouldn't contain more than two)
+				 * @param {String} section.small[].id - Button element ID
+				 * @param {String} section.small[].text - Visible button text
+				 * @return {String} Plug-ready sidebar controls section HTML
+				 */
+				construct: async function(section) {
+					section.items = section.items || [];
+					section.small = section.small || [];
+
+					let html = `<ul id="${section.id}" class="controls_section">`;
+					if (section.title) {
+						await XKit.css_map.getCssMap();
+						const sidebarTitleClasses = XKit.css_map.keyToClasses("sidebarTitle").join(" ");
+
+						html += `<li class="${sidebarTitleClasses}">${section.title}</li>`;
+					}
+
+					const carrot = '<svg height="30px" fill="rgba(var(--white-on-dark), 0.65)" viewBox="0 -16 13 52.1"><path d="M0,2.9l7.2,7.2l-7.1,7.1L3,20.1l7.1-7.1l2.9-2.9L2.9,0L0,2.9"></path></svg>';
+
+					for (let item of section.items) {
+						html += `
+							<li class="controls_section_item">
+								<a id="${item.id}" class="control-item control-anchor" style="cursor:pointer">
+									<div class="hide_overflow">
+										${item.text}
+									</div>
+									<span class="count">${item.count || ""}${(item.carrot ? carrot : "")}</span>
+								</a>
+							</li>`;
+					}
+
+					if (section.small.length !== 0) {
+						html += '<div class="small_links">';
+						for (let item of section.small) {
+							html += `<a id="${item.id}" style="cursor:pointer">${item.text}</a>`;
+						}
+						html += "</div>";
+					}
+					html += "</ul>";
+
+					return html;
+				},
+
+				/**
+				 * Shortcut command for constructing and applying controls sections
+				 * @param {Object} section - see construct's documentation
+				 */
+				add: async function(section) {
+					if (!XKit.page.react) { return; }
+					if (!$("#xkit_react_sidebar").length) {
+						await this.init();
+					}
+
+					$("#xkit_react_sidebar").append(await this.construct(section));
+				},
+
+				remove: id => $(`#${id}, #${id} + .small_links`).remove()
 			};
 
 			XKit.interface.async_form_key = async function() {
