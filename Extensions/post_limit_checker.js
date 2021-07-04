@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can make or reblog today. **//
 //* DEVELOPER new-xkit **//
@@ -11,7 +11,7 @@ XKit.extensions.post_limit_checker = new Object({
 	running: false,
 	apiKey: XKit.api_key,
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 
 		XKit.tools.init_css("post_limit_checker");
@@ -20,14 +20,20 @@ XKit.extensions.post_limit_checker = new Object({
 			return;
 		}
 
-		XKit.interface.sidebar.add({
+		const sidebar_config = {
 			id: "post_limit_checker_sidebar",
 			title: "Post Limit",
 			items: [{
 				id: "post_limit_checker_view",
 				text: "Check Post Limit"
 			}]
-		});
+		};
+
+		if (XKit.page.react) {
+			await XKit.interface.react.sidebar.add(sidebar_config);
+		} else {
+			XKit.interface.sidebar.add(sidebar_config);
+		}
 
 		$("#post_limit_checker_view").click(() => this.start());
 	},
@@ -115,6 +121,17 @@ XKit.extensions.post_limit_checker = new Object({
 		}).then(response => {
 			const posts = response.json().response.posts;
 
+			if (!posts.length) {
+				this.scan_next_blog();
+				return;
+			}
+
+			//the first post might be pinned, so don't stop if it's not new
+			if (posts.shift().timestamp > this.cutoff) {
+				this.posts[blog]++;
+			}
+
+			//prevent breakage if your blog has one post
 			if (!posts.length) {
 				this.scan_next_blog();
 				return;
