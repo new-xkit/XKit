@@ -39,7 +39,7 @@ XKit.extensions.outbox = new Object({
 
 		$(m_div).append(`
 			<div id="xkit-outbox-info">
-				This extension no longer functions, but you can view and export your saved data here:
+				This extension no longer functions and has been replaced by a standalone extension, <a href="https://github.com/AprilSylph/Outbox-for-Tumblr#readme" target="_blank">Outbox for Tumblr</a>! You can view and export your saved data here:
 			</div>
 			`);
 
