@@ -1,10 +1,2 @@
-**/jquery.js
-**/lodash.min.js
-**/nano.js
-**/moment.js
-**/tiptip.js
+vendor/
 *.icon.js
-
-node_modules
-build
-Extensions/dist/page

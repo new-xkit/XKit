@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.11.3 **//
+//* VERSION 0.11.4 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -29,6 +29,167 @@ XKit.extensions.outbox = new Object({
 			default: true,
 			value: true
 		},
+		"export": {
+			text: "Export your data",
+			type: "separator"
+		},
+	},
+
+	cpanel: function(m_div) {
+
+		$(m_div).append(`
+			<div id="xkit-outbox-info">
+				This feature no longer works and has been replaced by <a href="https://github.com/AprilSylph/Outbox-for-Tumblr#readme" target="_blank">Outbox for Tumblr</a>.<br><br>For personal archiving, you can view and export your historical XKit Outbox data here:
+			</div>
+			`);
+
+		const storage_keys = Object.keys(XKit.storage.get_all("outbox"))
+			.filter(key => key.startsWith('messages'));
+
+		let data = null;
+		let data_JSON = '';
+		let data_text = '';
+		let data_text_html = '';
+		if (storage_keys) {
+			const dataArray = storage_keys.flatMap((key) => {
+				try {
+					const m_messages = XKit.storage.get("outbox", key, "");
+					const m_messages_array = JSON.parse(m_messages);
+					return [[key, m_messages_array]];
+				} catch (e) {
+					return [];
+				}
+			});
+
+			if (dataArray.length) {
+				data = Object.fromEntries(dataArray);
+				data_JSON = JSON.stringify(data, null, 2);
+
+				const create_text = function(strip_html) {
+					let text = '';
+					dataArray.forEach(([category, messages]) => {
+						text += `==== ${category} ====\n\n`;
+						messages.forEach(messageItem => {
+							let { /* avatar, */ username, to, time, message, answer } = messageItem;
+							message = message.replace(/<\/p>/g, '').replace(/<p>/g, '');
+							if (strip_html) {
+								answer = answer
+									.replace(/&nbsp;/ig, '')
+									.trim()
+									.split(/<[^>]+>/ig)
+									.filter(Boolean)
+									.join('\n\n');
+							}
+							const date = new Date();
+							date.setTime(time);
+							if (answer.length) {
+								text +=
+									// eslint-disable-next-line no-sparse-arrays
+									[
+										date.toLocaleString(),
+										`Private answer from ${to}:`,
+										,
+										message,
+										,
+										`   - ${username}`,
+										,
+										answer,
+										,
+										`   - ${to}`,
+									].join('\n');
+							} else {
+								text +=
+									// eslint-disable-next-line no-sparse-arrays
+									[
+										date.toLocaleString(),
+										`You asked ${to}:`,
+										,
+										message,
+										,
+										`   - ${username}`,
+									].join('\n');
+							}
+							text += '\n\n\n\n\n';
+						});
+					});
+					text += '==== raw data: ==== \n' + JSON.stringify(data);
+					return text;
+				};
+
+				data_text = create_text(true);
+				data_text_html = create_text(false);
+			}
+		}
+
+		const toolbar_html = `
+			<div id="xkit-outbox-custom-panel">
+				<div id="xkit-outbox-toolbar">
+					<div id="outbox-download-text-button" class="xkit-button">Download plain text</div>
+					<div id="outbox-download-text-html-button" class="xkit-button">Download text with html tags</div>
+					<div id="outbox-download-json-button" class="xkit-button">Download raw json file</div>
+				</div>
+				<div id="preview-section">
+					<pre id="xkit-outbox-cpanel-pre"></pre>
+				</div>
+			</div>`;
+		$(m_div).append(toolbar_html);
+
+		if (data) {
+			$("#xkit-outbox-cpanel-pre").text(data_text)
+				.css('min-height', '300px')
+				.css('white-space', 'pre-wrap');
+
+			$("#outbox-download-text-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(data_text)
+					.css('white-space', 'pre-wrap');
+			});
+			$("#outbox-download-text-button").click(function() {
+				save_data(data_text, 'txt');
+			});
+
+			$("#outbox-download-text-html-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(data_text_html)
+					.css('white-space', 'pre-wrap');
+			});
+			$("#outbox-download-text-html-button").click(function() {
+				save_data(data_text_html, 'txt');
+			});
+
+			$("#outbox-download-json-button").mouseover(function() {
+				$("#xkit-outbox-cpanel-pre").text(data_JSON)
+					.css('white-space', 'pre');
+			});
+			$("#outbox-download-json-button").click(function() {
+				save_data(data_JSON, 'json');
+			});
+
+		} else {
+			$("#xkit-outbox-cpanel-pre").text('You have no outbox data!');
+		}
+
+		$("#xkit-extensions-panel-right").nanoScroller();
+		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
+
+		const save_data = function(input, type) {
+			const mime_type = type === 'json' ? 'application/json' : 'text/plain;charset=UTF-8';
+			const storageBlob = new Blob([input], { type: mime_type });
+			const blobUrl = URL.createObjectURL(storageBlob);
+
+			const now = new Date();
+
+			const fourDigitYear = now.getFullYear().toString().padStart(4, '0');
+			const twoDigitMonth = (now.getMonth() + 1).toString().padStart(2, '0');
+			const twoDigitDate = now.getDate().toString().padStart(2, '0');
+
+			const dateString = `${fourDigitYear}-${twoDigitMonth}-${twoDigitDate}`;
+
+			const tempLink = document.createElement('a');
+			tempLink.href = blobUrl;
+			tempLink.download = `XKit Outbox Data @ ${dateString}.${type}`;
+
+			tempLink.click();
+			URL.revokeObjectURL(blobUrl);
+		};
 	},
 
 	frame_run: function() {
@@ -135,6 +296,7 @@ XKit.extensions.outbox = new Object({
 
 	run: function() {
 		this.running = true;
+		XKit.tools.init_css("outbox");
 
 		XKit.extensions.outbox.check_indash_asks();
 
@@ -142,8 +304,6 @@ XKit.extensions.outbox = new Object({
 			console.log("Outbox -> Quitting, not in inbox");
 			return;
 		}
-
-		XKit.tools.init_css("outbox");
 
 		XKit.interface.sidebar.add({
 			id: "xkit_outbox_sidebar",
