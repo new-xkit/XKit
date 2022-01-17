@@ -41,7 +41,8 @@ XKit.extensions.pokes = {
 	run: function() {
 		if (!window.location.href.match(/www.tumblr.com/)) return;
 		this.running = true;
-		this.selector = (XKit.page.react ? "[data-id] article" : ".post_avatar") + ":not(.poked):not(.unpokable)";
+		const post_selector = XKit.page.react ? "[data-id] article" : ".post_avatar";
+		this.selector = `${post_selector}:not(.poked):not(.unpokable)`;
 		XKit.tools.init_css('pokes');
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
