@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.15 **//
+//* VERSION 7.4.16 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -889,7 +889,7 @@ XKit.extensions.xkit_patches = new Object({
 						const keyStartsWith = (obj, prefix) =>
 							Object.keys(obj).find(key => key.startsWith(prefix));
 						const element = document.querySelector(`[data-id="${post_id}"]`);
-						let fiber = element[keyStartsWith(element, '__reactInternalInstance')];
+						let fiber = element[keyStartsWith(element, '__reactFiber')];
 
 						while (fiber.memoizedProps.timelineObject === undefined) {
 							fiber = fiber.return;

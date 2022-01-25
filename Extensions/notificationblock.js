@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.4.1 **//
+//* VERSION 1.4.2 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER new-xkit **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -142,7 +142,7 @@ XKit.extensions.notificationblock = new Object({
 			);
 
 			elements.forEach(element => {
-				let fiber = element[keyStartsWith(element, '__reactInternalInstance')];
+				let fiber = element[keyStartsWith(element, '__reactFiber')];
 				const notificationProp = () => fiber.memoizedProps && fiber.memoizedProps.notification;
 
 				while (fiber && !notificationProp()) {
