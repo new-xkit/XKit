@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.19 **//
+//* VERSION 7.6.18 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -18,8 +18,6 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	hide_xcloud_if_not_installed: false,
-
-	xkit_button_observer: null,
 
 	run: function() {
 
@@ -76,15 +74,20 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.tools.add_css(mobile_control_panel, 'mobile_xkit_menu');
 		}
 
-		const account_label = XKit.interface.translate("Account");
-
-		const insert_button = async () => {
-			if (XKit.page.react) {
-				$(`header div div:has([aria-label="${await account_label}"])`).before(m_html);
+		let button_ready = Promise.resolve();
+		if (XKit.page.react) {
+			button_ready = XKit.interface.translate("Account").then(account_label => {
+				$(`header div div:has([aria-label="${account_label}"])`).before(m_html);
 				$(".xkit--react #xkit_button").attr('tabindex', '0');
-			} else {
-				$("#account_button").before(m_html);
-				$("#account_button > button").attr("tabindex", "8");
+			});
+		} else {
+			$("#account_button").before(m_html);
+			$("#account_button > button").attr("tabindex", "8");
+		}
+
+		button_ready.then(() => {
+			if (XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
+				this.show_welcome_bubble();
 			}
 
 			$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
@@ -93,28 +96,6 @@ XKit.extensions.xkit_preferences = new Object({
 			if (unread_mail_count > 0) {
 				$(".xkit_notice_container > .tab_notice_value").html(unread_mail_count);
 				$(".xkit_notice_container").addClass("tab-notice--active");
-			}
-		};
-
-		if (XKit.page.react) {
-			this.xkit_button_observer = new MutationObserver(async mutations => {
-				const account_label_selector = `[aria-label="${await account_label}"]`;
-
-				const addedAccountButton = [...mutations]
-					.flatMap(({ addedNodes }) => [...addedNodes])
-					.filter(addedNode => addedNode instanceof Element)
-					.some(element => element.querySelector(account_label_selector));
-
-				if (addedAccountButton && document.querySelector('#xkit_button') === null) {
-					insert_button();
-				}
-			});
-			this.xkit_button_observer.observe(document.getElementById('root'), { childList: true, subtree: true });
-		}
-
-		insert_button().then(() => {
-			if (XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
-				this.show_welcome_bubble();
 			}
 		});
 
@@ -2463,9 +2444,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 	destroy: function() {
 		$("#xkit_button").remove();
-		if (this.xkit_button_observer) {
-			this.xkit_button_observer.disconnect();
-		}
 		XKit.tools.remove_css('mobile_xkit_menu');
 		this.running = false;
 	}
