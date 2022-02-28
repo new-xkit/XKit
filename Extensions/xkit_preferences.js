@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.19 **//
+//* VERSION 7.6.18 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -18,8 +18,6 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	hide_xcloud_if_not_installed: false,
-
-	xkit_button_observer: null,
 
 	run: function() {
 
@@ -76,33 +74,11 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.tools.add_css(mobile_control_panel, 'mobile_xkit_menu');
 		}
 
-		const watch_button = async ($button) => {
-			const account_label = await XKit.interface.translate("Account");
-			const button = $button.get(0);
-
-			this.xkit_button_observer = new MutationObserver(mutations => {
-				if (button.isConnected) return;
-
-				const addedAccountButton = [...mutations]
-					.flatMap(({ addedNodes }) => [...addedNodes])
-					.filter(addedNode => addedNode instanceof Element)
-					.map(element => element.querySelector(`[aria-label="${account_label}"]`))
-					.find(Boolean);
-
-				if (addedAccountButton) {
-					addedAccountButton.closest('div').before(button);
-				}
-			});
-			this.xkit_button_observer.observe(document.getElementById('root'), { childList: true, subtree: true });
-		};
-
 		let button_ready = Promise.resolve();
 		if (XKit.page.react) {
 			button_ready = XKit.interface.translate("Account").then(account_label => {
-				const $button = $(m_html);
-				$button.insertBefore(`header div div:has([aria-label="${account_label}"])`);
-				$button.attr('tabindex', '0');
-				watch_button($button);
+				$(`header div div:has([aria-label="${account_label}"])`).before(m_html);
+				$(".xkit--react #xkit_button").attr('tabindex', '0');
 			});
 		} else {
 			$("#account_button").before(m_html);
@@ -2467,9 +2443,6 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	destroy: function() {
-		if (this.xkit_button_observer) {
-			this.xkit_button_observer.disconnect();
-		}
 		$("#xkit_button").remove();
 		XKit.tools.remove_css('mobile_xkit_menu');
 		this.running = false;
