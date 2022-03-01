@@ -80,26 +80,26 @@ XKit.extensions.xkit_preferences = new Object({
 			const account_label = await XKit.interface.translate("Account");
 			const menu_label = await XKit.interface.translate("Menu");
 
-			const insert = () => {
+			const check_and_reinsert = () => {
 				if (button.isConnected) return;
-				const header = document.querySelector('#base-container > div > div > header');
+				const header = document.querySelector('header');
 				if (header === null) return;
 
 				const desktopAccountButton = header.querySelector(`[aria-label="${account_label}"]`);
-				if (accountButton) {
-					accountButton.closest('div').before(button);
+				if (desktopAccountButton) {
+					desktopAccountButton.closest('div').before(button);
 					return;
 				}
 
 				const mobileMenuButton = header.querySelector(`[aria-label="${menu_label}"]`);
-				if (menuButton) {
-					menuButton.parentNode.append(button);
+				if (mobileMenuButton) {
+					mobileMenuButton.parentNode.append(button);
 					return;
 				}
 			};
 
-			insert();
-			this.xkit_button_observer = new MutationObserver(insert);
+			check_and_reinsert();
+			this.xkit_button_observer = new MutationObserver(check_and_reinsert);
 			this.xkit_button_observer.observe(document.getElementById('root'), { childList: true, subtree: true });
 		};
 
