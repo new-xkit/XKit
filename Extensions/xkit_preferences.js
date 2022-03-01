@@ -85,15 +85,13 @@ XKit.extensions.xkit_preferences = new Object({
 				const header = document.querySelector('#base-container > div > div > header');
 				if (header === null) return;
 
-				// desktop
-				const accountButton = header.querySelector(`[aria-label="${account_label}"]`);
+				const desktopAccountButton = header.querySelector(`[aria-label="${account_label}"]`);
 				if (accountButton) {
 					accountButton.closest('div').before(button);
 					return;
 				}
 
-				// mobile
-				const menuButton = header.querySelector(`[aria-label="${menu_label}"]`);
+				const mobileMenuButton = header.querySelector(`[aria-label="${menu_label}"]`);
 				if (menuButton) {
 					menuButton.parentNode.append(button);
 					return;
