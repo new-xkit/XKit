@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.19 **//
+//* VERSION 7.6.20 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -77,25 +77,43 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		const react_add_button = async (button) => {
-			const account_label = await XKit.interface.translate("Account");
-			const menu_label = await XKit.interface.translate("Menu");
+			// const account_label = await XKit.interface.translate("Account");
+			// const menu_label = await XKit.interface.translate("Menu");
+
+			await XKit.css_map.getCssMap();
+			const menuContainerSelector = XKit.css_map.keyToCss("menuContainer");
+			const hamburgerSelector = XKit.css_map.keyToCss("hamburger");
 
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const header = document.querySelector('header');
 				if (header === null) return;
 
-				const desktopAccountButton = header.querySelector(`[aria-label="${account_label}"]`);
-				if (desktopAccountButton) {
-					desktopAccountButton.closest('div').before(button);
+				// const desktopAccountButton = header.querySelector(`[aria-label="${account_label}"]`);
+				// if (desktopAccountButton) {
+				// 	desktopAccountButton.closest('div').before(button);
+				// 	return;
+				// }
+
+				const menuContainers = header.querySelectorAll(menuContainerSelector);
+				if (menuContainers.length) {
+					const lastMenuContainer = menuContainers[menuContainers.length - 1];
+					lastMenuContainer.before(button);
 					return;
 				}
 
-				const mobileMenuButton = header.querySelector(`[aria-label="${menu_label}"]`);
-				if (mobileMenuButton) {
-					mobileMenuButton.parentNode.append(button);
+				// const mobileMenuButton = header.querySelector(`[aria-label="${menu_label}"]`);
+				// if (mobileMenuButton) {
+				// 	mobileMenuButton.parentNode.append(button);
+				// 	return;
+				// }
+
+				const hamburger = header.querySelector(hamburgerSelector);
+				if (hamburger) {
+					hamburger.parentNode.parentNode.append(button);
 					return;
 				}
+
 			};
 
 			check_and_reinsert();
