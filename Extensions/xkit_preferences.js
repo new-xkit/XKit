@@ -95,7 +95,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				const mobileHamburgerMenu = header.querySelector(hamburger);
 				if (mobileHamburgerMenu) {
-					mobileHamburgerMenu.parentNode.parentNode.append(button);
+					mobileHamburgerMenu.closest(XKit.css_map.keyToCss("left")).append(button);
 					return;
 				}
 
