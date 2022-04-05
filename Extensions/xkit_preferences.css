@@ -1507,6 +1507,7 @@
 .xkit--react .xkit-extension[data-extension-id="post_limit_checker"],
 .xkit--react .xkit-extension[data-extension-id="profiler"],
 .xkit--react .xkit-extension[data-extension-id="better_reblogs"],
+.xkit--react .xkit-extension[data-extension-id="retags"],
 .xkit--react .xkit-extension[data-extension-id="satsukimous"],
 .xkit--react .xkit-extension[data-extension-id="scroll_to_bottom"],
 .xkit--react .xkit-extension[data-extension-id="search_likes"],
@@ -1532,7 +1533,6 @@
 .xkit--react .xkit-extension[data-extension-id="tagviewer"],
 .xkit--react .xkit-extension[data-extension-id="video_downloader"],
 .xkit--react .xkit-extension[data-extension-id="read_more_now"],
-.xkit--react .xkit-extension[data-extension-id="retags"],
 .xkit--react .xkit-extension[data-extension-id="transparent_img_hover"],
 .xkit--react .xkit-extension[data-extension-id="notifications_plus"] {
 	background-color: rgba(255, 73, 47, .2) !important;
@@ -1542,7 +1542,7 @@
 .xkit--react #xkit-gallery-extension-tagviewer,
 .xkit--react #xkit-gallery-extension-video_downloader,
 .xkit--react #xkit-gallery-extension-read_more_now,
-.xkit--react #xkit-gallery-extension-retags,
+/* .xkit--react #xkit-gallery-extension-retags, (retags is mostly broken but works on blog pages) */
 .xkit--react #xkit-gallery-extension-transparent_img_hover,
 .xkit--react #xkit-gallery-extension-notifications_plus,
 .xkit--react #xkit-gallery-extension-xinbox,
