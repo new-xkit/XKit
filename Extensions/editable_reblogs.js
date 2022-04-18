@@ -203,7 +203,7 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	wrap_html_links: function(html_text) {
-		var nodes = $($.parseHTML(html_text));
+		var nodes = $($.parseHTML('hello' + html_text));
 		nodes.find('a').wrap('<span></span>');
 		var nodes_text = $('<div>').append(nodes.clone()).html();
 		return nodes_text;
@@ -477,7 +477,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var text = XKit.interface.post_window.get_content_html();
 
-		var nodes = $('<div>').append(text);
+		var nodes = $('<div>').append('hello' + text);
 		nodes.find('.tmblr-truncated').replaceWith('[[MORE]]');
 		XKit.extensions.editable_reblogs.format_video_media(nodes);
 
