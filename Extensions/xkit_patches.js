@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.16 **//
+//* VERSION 7.4.17 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -938,14 +938,12 @@ XKit.extensions.xkit_patches = new Object({
 						selector += `:not(.${without_tag})`;
 					}
 
-					var $posts = $(selector);
-
 					if (can_edit) {
 						const edit_label = await XKit.interface.translate("Edit");
-						$posts = $posts.filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+						return $(selector).filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
 					}
 
-					return $posts;
+					return $(selector);
 				},
 
 				/**
