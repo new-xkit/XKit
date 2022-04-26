@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.17 **//
+//* VERSION 7.4.18 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1057,7 +1057,7 @@ XKit.extensions.xkit_patches = new Object({
 					// we know that XKit.css_map.getCssMap() has been called because we have a template from create_control_button
 					// so we skip that call with this XKit.css_map.keyToCss() call.
 					var controlsSelector = XKit.css_map.keyToCss("controls");
-					var controls = $(obj).find(controlsSelector);
+					var controls = $(obj).find(controlsSelector).last();
 
 					if (controls.length > 0) {
 						controls.prepend(m_html);
