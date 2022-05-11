@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.1.2 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -12,8 +12,21 @@
 
 		run: function() {
 
-			if (location.href.includes("://www.tumblr.com/login") || location.href.includes("://www.tumblr.com/settings")) {
-				console.log("Refusing to run XKit, login or settings page!");
+			const exclusions = [
+				/:\/\/www.tumblr.com\/$/,
+				new RegExp('tumblr.com/login'),
+				new RegExp('tumblr.com/register'),
+				new RegExp('tumblr.com/account'),
+				new RegExp('tumblr.com/auth'),
+				new RegExp('tumblr.com/policy'),
+				new RegExp('tumblr.com/privacy'),
+				new RegExp('help.tumblr.com'),
+				new RegExp('shop.tumblr.com'),
+				new RegExp('advertise.tumblr.com'),
+			];
+
+			if (exclusions.some(exclusion => exclusion.test(location.href))) {
+				console.log("Refusing to run XKit! Login, settings, or other excluded page!");
 				return;
 			}
 
