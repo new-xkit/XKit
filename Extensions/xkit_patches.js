@@ -1180,7 +1180,7 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			XKit.interface.async_form_key = async function() {
-				const request = await fetch('https://www.tumblr.com/about');
+				const request = await fetch('https://www.tumblr.com/developers');
 				const meta_tag = (await request.text()).match(
 					/tumblr-form-key[^>]*content=("([^"]+)"|'([^']+)')/
 				);
