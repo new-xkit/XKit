@@ -587,6 +587,9 @@ XKit.extensions.one_click_postage = new Object({
 
 		$("body").append(m_html);
 
+		// prevents Tumblr's trapFocusInsideGlass function from stealing focus in blog/view
+		$("#x1cpostage_box").attr('data-skip-glass-focus-trap', true);
+
 		$(document).on("mouseover", "#x1cpostage_queue", function() {
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 			$("#x1cpostage_box").addClass("xkit_x1cpostage_queue_hover");
