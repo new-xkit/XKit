@@ -13,7 +13,7 @@
 		run: function() {
 
 			const exclusions = [
-				/:\/\/www.tumblr.com\/$/,
+				new RegExp('://www.tumblr.com/$'),
 				new RegExp('tumblr.com/login'),
 				new RegExp('tumblr.com/register'),
 				new RegExp('tumblr.com/account'),
