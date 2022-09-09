@@ -15,7 +15,7 @@
 			const react = Boolean($("link[href*='/pop/']").length);
 			const excludedPage = location.href.includes("://www.tumblr.com/login") || location.href.includes("://www.tumblr.com/settings");
 
-			if (excludedPage && react === false) {
+			if (excludedPage && !react) {
 				console.log("Refusing to run XKit, login or settings page!");
 				return;
 			}
