@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.15 **//
+//* VERSION 7.4.19 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -891,7 +891,7 @@ XKit.extensions.xkit_patches = new Object({
 						const keyStartsWith = (obj, prefix) =>
 							Object.keys(obj).find(key => key.startsWith(prefix));
 						const element = document.querySelector(`[data-id="${post_id}"]`);
-						let fiber = element[keyStartsWith(element, '__reactInternalInstance')];
+						let fiber = element[keyStartsWith(element, '__reactFiber')];
 
 						while (fiber.memoizedProps.timelineObject === undefined) {
 							fiber = fiber.return;
@@ -940,14 +940,12 @@ XKit.extensions.xkit_patches = new Object({
 						selector += `:not(.${without_tag})`;
 					}
 
-					var $posts = $(selector);
-
 					if (can_edit) {
 						const edit_label = await XKit.interface.translate("Edit");
-						$posts = $posts.filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+						return $(selector).filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
 					}
 
-					return $posts;
+					return $(selector);
 				},
 
 				/**
@@ -1061,7 +1059,7 @@ XKit.extensions.xkit_patches = new Object({
 					// we know that XKit.css_map.getCssMap() has been called because we have a template from create_control_button
 					// so we skip that call with this XKit.css_map.keyToCss() call.
 					var controlsSelector = XKit.css_map.keyToCss("controls");
-					var controls = $(obj).find(controlsSelector);
+					var controls = $(obj).find(controlsSelector).last();
 
 					if (controls.length > 0) {
 						controls.prepend(m_html);
@@ -1358,7 +1356,7 @@ XKit.extensions.xkit_patches = new Object({
 			};
 
 			XKit.interface.async_form_key = async function() {
-				const request = await fetch('https://www.tumblr.com/settings/dashboard');
+				const request = await fetch('https://www.tumblr.com/developers');
 				const meta_tag = (await request.text()).match(
 					/tumblr-form-key[^>]*content=("([^"]+)"|'([^']+)')/
 				);

@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.18 **//
+//* VERSION 7.6.21 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -18,6 +18,8 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	hide_xcloud_if_not_installed: false,
+
+	xkit_button_observer: null,
 
 	run: function() {
 
@@ -74,12 +76,41 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.tools.add_css(mobile_control_panel, 'mobile_xkit_menu');
 		}
 
+		const react_add_button = async (button) => {
+			await XKit.css_map.getCssMap();
+			const menuContainer = XKit.css_map.keyToCss("menuContainer");
+			const hamburger = XKit.css_map.keyToCss("hamburger");
+
+			const check_and_reinsert = () => {
+				if (button.isConnected) return;
+				const header = document.querySelector('header');
+				if (header === null) return;
+
+				const desktopMenuItems = header.querySelectorAll(menuContainer);
+				if (desktopMenuItems.length) {
+					const desktopAccountMenu = desktopMenuItems[desktopMenuItems.length - 1];
+					desktopAccountMenu.before(button);
+					return;
+				}
+
+				const mobileHamburgerMenu = header.querySelector(hamburger);
+				if (mobileHamburgerMenu) {
+					mobileHamburgerMenu.closest(XKit.css_map.keyToCss("left")).append(button);
+					return;
+				}
+
+			};
+
+			check_and_reinsert();
+			this.xkit_button_observer = new MutationObserver(check_and_reinsert);
+			this.xkit_button_observer.observe(document.getElementById('root'), { childList: true, subtree: true });
+		};
+
 		let button_ready = Promise.resolve();
 		if (XKit.page.react) {
-			button_ready = XKit.interface.translate("Account").then(account_label => {
-				$(`header div div:has([aria-label="${account_label}"])`).before(m_html);
-				$(".xkit--react #xkit_button").attr('tabindex', '0');
-			});
+			const button = $(m_html).get(0);
+			button.setAttribute('tabindex', 0);
+			button_ready = react_add_button(button);
 		} else {
 			$("#account_button").before(m_html);
 			$("#account_button > button").attr("tabindex", "8");
@@ -2443,6 +2474,9 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	destroy: function() {
+		if (this.xkit_button_observer) {
+			this.xkit_button_observer.disconnect();
+		}
 		$("#xkit_button").remove();
 		XKit.tools.remove_css('mobile_xkit_menu');
 		this.running = false;

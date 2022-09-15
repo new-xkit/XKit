@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.13 **//
+//* VERSION 3.3.14 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -203,9 +203,9 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	wrap_html_links: function(html_text) {
-		var nodes = $(html_text);
+		var nodes = $($.parseHTML(html_text));
 		nodes.find('a').wrap('<span></span>');
-		var nodes_text = $('<div>').append($(nodes).clone()).html();
+		var nodes_text = $('<div>').append(nodes.clone()).html();
 		return nodes_text;
 	},
 
@@ -477,7 +477,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var text = XKit.interface.post_window.get_content_html();
 
-		var nodes = $('<div>').append($(text));
+		var nodes = $('<div>').append(text);
 		nodes.find('.tmblr-truncated').replaceWith('[[MORE]]');
 		XKit.extensions.editable_reblogs.format_video_media(nodes);
 
