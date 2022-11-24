@@ -260,3 +260,45 @@
 	background: rgba(var(--black), 0.25);
 	border-color: rgba(var(--black), 0.8);
 }
+
+#xkit-blacklist-native-custom-panel {
+    padding: 1em;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgb(80,80,80);
+}
+
+#blacklist-native-container {
+	max-height: calc(100vh - 200px);
+	overflow-y: auto;
+	padding: 0.5em;
+}
+#blacklist-native-container > * {
+	margin-bottom: 0.75em;
+}
+
+#blacklist-native-export-table {
+	width: 100%;
+	outline: 1px solid gray;
+}
+#blacklist-native-export-table th, #blacklist-native-export-table td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 0.4em;
+	line-height: normal;
+}
+#blacklist-native-export-table input[type="text"] {
+	margin: 0;
+}
+#blacklist-native-export-table thead {
+	background-color: lightgray;
+}
+#blacklist-native-export-table tbody tr:not(:last-child) {
+	border-bottom: 1px solid lightgray;
+}
+#blacklist-native-word-header {
+	max-width: 30%;
+}
+#blacklist-native-tag-header, #blacklist-native-content-header {
+	width: 15%;
+}
