@@ -1381,7 +1381,7 @@ XKit.extensions.blacklist = new Object({
 							filtered post content.
 						</div>
 						<div>
-							At the time this message was last updated:
+							As of 2022:
 						</div>
 						<ul>
 							<li>
