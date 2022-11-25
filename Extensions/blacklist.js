@@ -1207,6 +1207,12 @@ XKit.extensions.blacklist = new Object({
 			);
 		};
 
+		const getTextInputWords = (textInput) =>
+			textInput.value
+				.split(',')
+				.map((word) => word.trim().replace(/^#/, ''))
+				.filter(Boolean);
+
 		const showNativeExport = async () => {
 			const currentFilteredTags = await apiFetch('/v2/user/filtered_tags')
 				.then(({ response: { filteredTags } }) => filteredTags);
@@ -1218,7 +1224,7 @@ XKit.extensions.blacklist = new Object({
 				.filter(Boolean)
 				.map(name => {
 					const isTag = name.startsWith('#');
-					const initialValue = name.replace('#', '').replace('*', '');
+					const initialValue = name.replace(/^#/, '').replace('*', '');
 
 					const textInput = $(`<input type="text" value="${initialValue}">`).get(0);
 
@@ -1228,11 +1234,13 @@ XKit.extensions.blacklist = new Object({
 					contentCheckbox.checked = !isTag;
 
 					const updateAlreadyFiltered = () => {
-						const isFilteredTag = currentFilteredTags.includes(textInput.value.trim());
+						const words = getTextInputWords(textInput);
+
+						const isFilteredTag = words.every(word => currentFilteredTags.includes(word));
 						tagCheckbox.disabled = isFilteredTag;
 						if (isFilteredTag) tagCheckbox.checked = true;
 
-						const isFilteredContent = currentFilteredContent.includes(textInput.value.trim());
+						const isFilteredContent = words.every(word => currentFilteredContent.includes(word));
 						contentCheckbox.disabled = isFilteredContent;
 						if (isFilteredContent) contentCheckbox.checked = true;
 					};
@@ -1267,14 +1275,12 @@ XKit.extensions.blacklist = new Object({
 			const doExport = () => {
 				const newTagWords = blacklistItemData
 					.filter(({ tagCheckbox }) => tagCheckbox.checked)
-					.flatMap(({ textInput }) => textInput.value.split(','))
-					.map(word => word.replace('#', '').trim())
+					.flatMap(({ textInput }) => getTextInputWords(textInput))
 					.filter(word => !currentFilteredTags.includes(word));
 
 				const newContentWords = blacklistItemData
 					.filter(({ contentCheckbox }) => contentCheckbox.checked)
-					.flatMap(({ textInput }) => textInput.value.split(','))
-					.map(word => word.replace('#', '').trim())
+					.flatMap(({ textInput }) => getTextInputWords(textInput))
 					.filter(word => !currentFilteredContent.includes(word));
 
 				if (newTagWords.length || newContentWords.length) {
