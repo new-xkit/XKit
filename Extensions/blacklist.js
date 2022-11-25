@@ -1267,7 +1267,7 @@ XKit.extensions.blacklist = new Object({
 					updateAlreadyFiltered();
 					textInput.addEventListener('input', updateAlreadyFiltered);
 
-					return { name, textInput, tagCheckbox, contentCheckbox, updateAlreadyFiltered };
+					return { name, textInput, tagCheckbox, contentCheckbox };
 				});
 
 			if (!blacklistItemData.length) {
@@ -1281,17 +1281,15 @@ XKit.extensions.blacklist = new Object({
 			}
 
 			const selectAll = () =>
-				blacklistItemData.forEach(({ tagCheckbox, contentCheckbox, updateAlreadyFiltered }) => {
+				blacklistItemData.forEach(({ tagCheckbox, contentCheckbox }) => {
 					tagCheckbox.checked = true;
 					contentCheckbox.checked = true;
-					updateAlreadyFiltered();
 				});
 
 			const selectNone = () =>
-				blacklistItemData.forEach(({ tagCheckbox, contentCheckbox, updateAlreadyFiltered }) => {
-					tagCheckbox.checked = false;
-					contentCheckbox.checked = false;
-					updateAlreadyFiltered();
+				blacklistItemData.forEach(({ tagCheckbox, contentCheckbox }) => {
+					if (!tagCheckbox.disabled) tagCheckbox.checked = false;
+					if (!contentCheckbox.disabled) contentCheckbox.checked = false;
 				});
 
 			const doExport = () => {
