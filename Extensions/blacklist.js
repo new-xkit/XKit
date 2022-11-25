@@ -1386,15 +1386,16 @@ XKit.extensions.blacklist = new Object({
 						</div>
 						<ul>
 							<li>
-								Filtering a word or phrase as a tag will hide any post with that exact
-								tag (no wildcards) and reblog chains whose original root posts contain
-								that exact tag.
+								Filtering a word or phrase as a tag will hide any posts with that exact
+								tag (no wildcards) and any reblog chains where the original root post contains
+								that tag.
 							</li>
 							<li>
 								Filtering a word or phrase as post content will hide any post with the
 								specified word or phrase anywhere in the post text or in any usernames,
 								including in the middle of a word (filtering "ash" will hide posts with
-								"dashboard" or "fashion"). It will not search the post tags.
+								"dashboard" or "fashion", or with a comment by a user named
+								"ash-ketchum"). It will not search the post tags.
 							</li>
 						</ul>
 						<div>
