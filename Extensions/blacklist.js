@@ -1183,28 +1183,6 @@ XKit.extensions.blacklist = new Object({
 
 	nativeExportCpanel: function(m_div) {
 
-		/**
-		 * Create elements with simple syntax
-		 *
-		 * @param {string} tagName - Type of element to create
-		 * @param {object} [attributes] - Property-value pairs to set as HTML/XML attributes (e.g. { href: '/' })
-		 * @param {object} [events] - Property-value pairs to set as event listeners (e.g. { click: () => {} })
-		 * @param {(Node|string)[]} [children] - Zero or more valid children
-		 * @returns {Element} Element created to specification
-		 */
-		const dom = (tagName, attributes = {}, events = {}, children = []) => {
-			const element = attributes && attributes.xmlns
-				? document.createElementNS(attributes.xmlns, tagName)
-				: document.createElement(tagName);
-
-			attributes && Object.entries(attributes).forEach(([name, value]) => element.setAttribute(name, value));
-			events && Object.entries(events).forEach(([type, listener]) => element.addEventListener(type, listener));
-			children && element.replaceChildren(...children);
-
-			element.normalize();
-			return element;
-		};
-
 		const apiFetch = async (resource, init) => {
 			return XKit.tools.async_add_function(
 				async ({ resource, init = {} }) => { // eslint-disable-line no-shadow
@@ -1270,10 +1248,10 @@ XKit.extensions.blacklist = new Object({
 					const isTag = name.startsWith('#');
 					const initialValue = name.replace('#', '').replace('*', '');
 
-					const textInput = dom('input', { type: 'text', value: initialValue });
+					const textInput = $(`<input type="text" value="${initialValue}">`).get(0);
 
-					const tagCheckbox = dom('input', { type: 'checkbox'});
-					const contentCheckbox = dom('input', { type: 'checkbox'});
+					const tagCheckbox = $(`<input type="checkbox">`).get(0);
+					const contentCheckbox = $(`<input type="checkbox">`).get(0);
 					tagCheckbox.checked = isTag;
 					contentCheckbox.checked = !isTag;
 
@@ -1359,7 +1337,7 @@ XKit.extensions.blacklist = new Object({
 			};
 
 			const createRow = (data) =>
-				dom('tr', null, null, data.map((contents) => dom('td', null, null, [contents])));
+				$('<tr>').append(data.map((contents) => $('<td>').append(contents)));
 
 			const rows = blacklistItemData.map(({ name, textInput, tagCheckbox, contentCheckbox }) =>
 				createRow([name, textInput, tagCheckbox, contentCheckbox])
@@ -1429,7 +1407,7 @@ XKit.extensions.blacklist = new Object({
 				true
 			);
 
-			document.getElementById(tableBodyId).append(...rows);
+			$(document.getElementById(tableBodyId)).append(rows);
 			$(`#${selectAllId}`).on('click', selectAll);
 			$(`#${selectNoneId}`).on('click', selectNone);
 			$(`#${doExportId}`).on('click', doExport);
