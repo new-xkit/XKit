@@ -1222,8 +1222,8 @@ XKit.extensions.blacklist = new Object({
 							currentObjects.forEach(obj => {
 								Object.keys(obj).forEach(key => {
 									const snakeCaseKey = key
-									.replace(/^[A-Z]/, match => match.toLowerCase())
-									.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`);
+										.replace(/^[A-Z]/, match => match.toLowerCase())
+										.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`);
 
 									if (snakeCaseKey !== key) {
 										obj[snakeCaseKey] = obj[key];
@@ -1355,7 +1355,6 @@ XKit.extensions.blacklist = new Object({
 						'info',
 						'<div id="xkit-close-message" class="xkit-button">Close</div>',
 					)).catch(showNativeExportError);
-
 				}
 			};
 
