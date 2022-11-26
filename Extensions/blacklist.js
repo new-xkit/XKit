@@ -1364,7 +1364,7 @@ XKit.extensions.blacklist = new Object({
 				true
 			);
 
-			$(document.getElementById('xkit-bne-export-table-body')).append(rows);
+			$('#xkit-bne-export-table-body').append(rows);
 			$('#xkit-bne-export-select-all').on('click', selectAll);
 			$('#xkit-bne-export-select-none').on('click', selectNone);
 			$('#xkit-bne-export-do-export').on('click', doExport);
