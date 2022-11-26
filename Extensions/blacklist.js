@@ -1384,13 +1384,10 @@ XKit.extensions.blacklist = new Object({
 			centerIt($("#xkit-window"));
 		};
 
-		const nativePanelId = 'xkit-bne-custom-panel';
-		const nativeButtonId = 'xkit-bne-button';
-
-		$(`#${nativePanelId}`).remove();
+		$('#xkit-bne-custom-panel').remove();
 
 		$(m_div).prepend(`
-			<div id="${nativePanelId}">
+			<div id="xkit-bne-custom-panel">
 				<p>
 					Tumblr now has built-in tag and content filtering that works both in web browsers and on
 					mobile. You can apply a slimmer layout to natively filtered posts or hide them completely
@@ -1401,11 +1398,11 @@ XKit.extensions.blacklist = new Object({
 				<p>
 					Export your blacklisted words using this interactive form:
 				</p>
-				<button class="xkit-button" id="${nativeButtonId}">Export to Native Filtering</button>
+				<button class="xkit-button" id="xkit-bne-button">Export to Native Filtering</button>
 			</div>
 		`);
 
-		$(`#${nativeButtonId}`).on('click', () => showNativeExport().catch(showNativeExportError));
+		$('#xkit-bne-button').on('click', () => showNativeExport().catch(showNativeExportError));
 	}
 
 });
