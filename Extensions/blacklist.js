@@ -1183,37 +1183,25 @@ XKit.extensions.blacklist = new Object({
 
 	nativeExportCpanel: function(m_div) {
 
-		const apiFetch = async (resource, init) => {
-			return XKit.tools.async_add_function(
-				async ({ resource, init = {} }) => { // eslint-disable-line no-shadow
-					// add XKit header to all API requests
-					if (!init.headers) init.headers = {};
-					init.headers['X-XKit'] = '1';
+		$('#xkit-bne-custom-panel').remove();
+		$(m_div).prepend(`
+			<div id="xkit-bne-custom-panel">
+				<p>
+					Tumblr now has built-in tag and content filtering that works both in web browsers and on
+					mobile. You can apply a slimmer layout to natively filtered posts or hide them completely
+					using the options in Tweaks in
+					<a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">
+					XKit Rewritten</a>!
+				</p>
+				<p>
+					Export your blacklisted words using this interactive form:
+				</p>
+				<button class="xkit-button" id="xkit-bne-button">Export to Native Filtering</button>
+			</div>
+		`);
+		$('#xkit-bne-button').on('click', () => showNativeExport().catch(showNativeExportError));
 
-					return window.tumblr.apiFetch(resource, init);
-				},
-			{ resource, init }
-			);
-		};
-
-		const showNativeExportError = e => {
-			console.error(e);
-			XKit.window.show(
-				'Tumblr Native Filtering Export Error',
-				`<pre>${e.toString()}</pre>`,
-				'error',
-				'<div class="xkit-button default" id="xkit-close-message">OK</div>',
-				true,
-			);
-		};
-
-		const getTextInputWords = (textInput) =>
-			textInput.value
-				.split(',')
-				.map((word) => word.trim().replace(/^#/, ''))
-				.filter(Boolean);
-
-		const showNativeExport = async () => {
+		async function showNativeExport() {
 			const currentFilteredTags = await apiFetch('/v2/user/filtered_tags')
 				.then(({ response: { filteredTags } }) => filteredTags);
 			const currentFilteredContent = await apiFetch('/v2/user/filtered_content')
@@ -1382,27 +1370,38 @@ XKit.extensions.blacklist = new Object({
 			$('#xkit-bne-export-do-export').on('click', doExport);
 
 			centerIt($("#xkit-window"));
-		};
+		}
 
-		$('#xkit-bne-custom-panel').remove();
+		function showNativeExportError(e) {
+			console.error(e);
+			XKit.window.show(
+				'Tumblr Native Filtering Export Error',
+				`<pre>${e.toString()}</pre>`,
+				'error',
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>',
+				true,
+			);
+		}
 
-		$(m_div).prepend(`
-			<div id="xkit-bne-custom-panel">
-				<p>
-					Tumblr now has built-in tag and content filtering that works both in web browsers and on
-					mobile. You can apply a slimmer layout to natively filtered posts or hide them completely
-					using the options in Tweaks in
-					<a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">
-					XKit Rewritten</a>!
-				</p>
-				<p>
-					Export your blacklisted words using this interactive form:
-				</p>
-				<button class="xkit-button" id="xkit-bne-button">Export to Native Filtering</button>
-			</div>
-		`);
+		function getTextInputWords(textInput) {
+			return textInput.value
+				.split(',')
+				.map((word) => word.trim().replace(/^#/, ''))
+				.filter(Boolean);
+		}
 
-		$('#xkit-bne-button').on('click', () => showNativeExport().catch(showNativeExportError));
+		async function apiFetch(resource, init) {
+			return XKit.tools.async_add_function(
+				async ({ resource, init = {} }) => { // eslint-disable-line no-shadow
+					// add XKit header to all API requests
+					if (!init.headers) init.headers = {};
+					init.headers['X-XKit'] = '1';
+
+					return window.tumblr.apiFetch(resource, init);
+				},
+			{ resource, init }
+			);
+		}
 	}
 
 });
