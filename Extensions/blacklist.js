@@ -1392,14 +1392,14 @@ XKit.extensions.blacklist = new Object({
 
 		async function apiFetch(resource, init) {
 			return XKit.tools.async_add_function(
-				async ({ resource, init = {} }) => { // eslint-disable-line no-shadow
+				async ({ resource, init = {}, headerVersion }) => { // eslint-disable-line no-shadow
 					// add XKit header to all API requests
 					if (!init.headers) init.headers = {};
-					init.headers['X-XKit'] = '1';
+					init.headers['X-XKit-Version'] = headerVersion;
 
 					return window.tumblr.apiFetch(resource, init);
 				},
-			{ resource, init }
+			{ resource, init, headerVersion: XKit.version }
 			);
 		}
 	}
