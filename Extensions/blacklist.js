@@ -1319,11 +1319,6 @@ XKit.extensions.blacklist = new Object({
 				createRow([name, textInput, tagCheckbox, contentCheckbox])
 			);
 
-			const tableBodyId = 'xkit-bne-export-table-body';
-			const doExportId = 'xkit-bne-export-do-export';
-			const selectAllId = 'xkit-bne-export-select-all';
-			const selectNoneId = 'xkit-bne-export-select-none';
-
 			XKit.window.show(
 				'Tumblr Native Filtering Export',
 				`
@@ -1359,8 +1354,8 @@ XKit.extensions.blacklist = new Object({
 							Nothing will be removed from blacklist or from the native filtering lists.
 						</div>
 						<div>
-							<div id="${selectAllId}" class="xkit-button">Select All</div>
-							<div id="${selectNoneId}" class="xkit-button">Select None</div>
+							<div id="xkit-bne-export-select-all" class="xkit-button">Select All</div>
+							<div id="xkit-bne-export-select-none" class="xkit-button">Select None</div>
 						</div>
 						<table id="xkit-bne-export-table">
 							<thead>
@@ -1369,22 +1364,22 @@ XKit.extensions.blacklist = new Object({
 								<th id="xkit-bne-tag-header">Filter as Tag</th>
 								<th id="xkit-bne-content-header">Filter as Content</th>
 							</thead>
-							<tbody id=${tableBodyId}></tbody>
+							<tbody id="xkit-bne-export-table-body"></tbody>
 						</table>
 					</div>
 				`,
 				'info',
 				`
-					<div id="${doExportId}" class="xkit-button default">Export Words</div>
+					<div id="xkit-bne-export-do-export" class="xkit-button default">Export Words</div>
 					<div id="xkit-close-message" class="xkit-button">Close</div>
 				`,
 				true
 			);
 
-			$(document.getElementById(tableBodyId)).append(rows);
-			$(`#${selectAllId}`).on('click', selectAll);
-			$(`#${selectNoneId}`).on('click', selectNone);
-			$(`#${doExportId}`).on('click', doExport);
+			$(document.getElementById('xkit-bne-export-table-body')).append(rows);
+			$('#xkit-bne-export-select-all').on('click', selectAll);
+			$('#xkit-bne-export-select-none').on('click', selectNone);
+			$('#xkit-bne-export-do-export').on('click', doExport);
 
 			centerIt($("#xkit-window"));
 		};
