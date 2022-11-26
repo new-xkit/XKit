@@ -1319,17 +1319,15 @@ XKit.extensions.blacklist = new Object({
 				createRow([name, textInput, tagCheckbox, contentCheckbox])
 			);
 
-			const containerId = 'blacklist-native-container';
-			const tableId = 'blacklist-native-export-table';
-			const tableBodyId = 'blacklist-native-export-table-body';
-			const doExportId = 'blacklist-native-export-do-export';
-			const selectAllId = 'blacklist-native-export-select-all';
-			const selectNoneId = 'blacklist-native-export-select-none';
+			const tableBodyId = 'xkit-bne-export-table-body';
+			const doExportId = 'xkit-bne-export-do-export';
+			const selectAllId = 'xkit-bne-export-select-all';
+			const selectNoneId = 'xkit-bne-export-select-none';
 
 			XKit.window.show(
 				'Tumblr Native Filtering Export',
 				`
-					<div id=${containerId}>
+					<div id="xkit-bne-container">
 						<div>
 							Tumblr's native filtering has two categories of words: filtered tags and
 							filtered post content.
@@ -1364,12 +1362,12 @@ XKit.extensions.blacklist = new Object({
 							<div id="${selectAllId}" class="xkit-button">Select All</div>
 							<div id="${selectNoneId}" class="xkit-button">Select None</div>
 						</div>
-						<table id="${tableId}">
+						<table id="xkit-bne-export-table">
 							<thead>
-								<th id="blacklist-native-word-header">Blacklist Entry</th>
-								<th id="blacklist-native-edit-word-header">Word(s)/Phrase(s) to Export</th>
-								<th id="blacklist-native-tag-header">Filter as Tag</th>
-								<th id="blacklist-native-content-header">Filter as Content</th>
+								<th id="xkit-bne-word-header">Blacklist Entry</th>
+								<th id="xkit-bne-edit-word-header">Word(s)/Phrase(s) to Export</th>
+								<th id="xkit-bne-tag-header">Filter as Tag</th>
+								<th id="xkit-bne-content-header">Filter as Content</th>
 							</thead>
 							<tbody id=${tableBodyId}></tbody>
 						</table>
@@ -1391,8 +1389,8 @@ XKit.extensions.blacklist = new Object({
 			centerIt($("#xkit-window"));
 		};
 
-		const nativePanelId = 'xkit-blacklist-native-custom-panel';
-		const nativeButtonId = 'xkit-blacklist-native-button';
+		const nativePanelId = 'xkit-bne-custom-panel';
+		const nativeButtonId = 'xkit-bne-button';
 
 		$(`#${nativePanelId}`).remove();
 
