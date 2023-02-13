@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.19 **//
+//* VERSION 7.4.20 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1096,7 +1096,7 @@ XKit.extensions.xkit_patches = new Object({
 								tags_array[i] = tags_array[i].substring(1);
 							}
 
-							m_inner = m_inner + `<a class="${post_tag}" href=\"/tagged/" ${formatted} \">#${tags_array[i]}</a>`;
+							m_inner = m_inner + `<a class="${post_tag}" href="/tagged/${formatted}">#${tags_array[i]}</a>`;
 						}
 
 						var tags_class = XKit.css_map.keyToCss("tags");
