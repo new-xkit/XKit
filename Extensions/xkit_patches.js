@@ -1172,6 +1172,19 @@ XKit.extensions.xkit_patches = new Object({
 				destroy_collapsed: function(id) {
 					$(`.${id}-collapsed`).removeClass(`${id}-collapsed`);
 					$(`.${id}-collapsed-note`).remove();
+				},
+
+				api_fetch: async function(resource, init) {
+					return XKit.tools.async_add_function(
+						async ({ resource, init = {}, headerVersion }) => { // eslint-disable-line no-shadow
+							// add XKit header to all API requests
+							if (!init.headers) init.headers = {};
+							init.headers['X-XKit-Version'] = headerVersion;
+
+							return window.tumblr.apiFetch(resource, init);
+						},
+					{ resource, init, headerVersion: XKit.version }
+					);
 				}
 			};
 
