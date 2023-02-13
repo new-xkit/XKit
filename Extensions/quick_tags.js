@@ -119,21 +119,31 @@ XKit.extensions.quick_tags = new Object({
 		// Fetch info about it!
 		if (!m_post.error) {
 			XKit.interface.fetch(m_post, async function(data) {
-				const { id: post_id, tags: current_tags = '' } = data.data.post;
+				try {
+					const { id: post_id, tags: current_tags = '' } = data.data.post;
 
-				const current_tags_array = current_tags.split(',').map(tag => tag.trim()).filter(Boolean);
-				const add_tags_array = tags.split(',').map(tag => tag.trim()).filter(Boolean);
+					const current_tags_array = current_tags.split(',').map(tag => tag.trim()).filter(Boolean);
+					const add_tags_array = tags.split(',').map(tag => tag.trim()).filter(Boolean);
 
-				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === false) {
-					await XKit.interface.mass_edit([post_id], { mode: 'remove', tags: current_tags_array });
-					current_tags_array.splice(0);
+					if (XKit.extensions.quick_tags.preferences.append_not_replace.value === false) {
+						await XKit.interface.mass_edit([post_id], { mode: 'remove', tags: current_tags_array });
+						current_tags_array.splice(0);
+					}
+
+					await XKit.interface.mass_edit([post_id], { mode: 'add', tags: add_tags_array });
+					current_tags_array.push(...add_tags_array);
+
+					await XKit.interface.react.update_view.tags(m_post, current_tags_array.join(','));
+				} catch (error) {
+					if (error.json) {
+						const response = await error.json();
+						XKit.window.show("Unable to edit post", `Server responded with status ${response.meta.status}: ${response.meta.msg}.<br /><pre>${JSON.stringify(response, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					} else {
+						XKit.window.show("Unable to edit post", `<pre>${error}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					}
+				} finally {
+					XKit.interface.switch_control_button($(m_button), false);
 				}
-
-				await XKit.interface.mass_edit([post_id], { mode: 'add', tags: add_tags_array });
-				current_tags_array.push(...add_tags_array);
-
-				await XKit.interface.react.update_view.tags(m_post, current_tags_array.join(','));
-				XKit.interface.switch_control_button($(m_button), false);
 			}, false);
 		} else {
 			XKit.window.show("Unable to edit post", "Something went wrong, my apologies.<br/>Please try again later or file a bug report with the error code:<br/>QT02", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
