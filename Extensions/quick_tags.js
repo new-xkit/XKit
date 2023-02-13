@@ -121,8 +121,8 @@ XKit.extensions.quick_tags = new Object({
 			XKit.interface.fetch(m_post, async function(data) {
 				const { id: post_id, tags: current_tags = '' } = data.data.post;
 
-				const current_tags_array = current_tags.split(',').map(tag => tag.trim());
-				const add_tags_array = tags.split(',').map(tag => tag.trim());
+				const current_tags_array = current_tags.split(',').map(tag => tag.trim()).filter(Boolean);
+				const add_tags_array = tags.split(',').map(tag => tag.trim()).filter(Boolean);
 
 				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === false) {
 					await XKit.interface.mass_edit([post_id], { mode: 'remove', tags: current_tags_array });
