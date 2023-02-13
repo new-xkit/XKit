@@ -460,11 +460,12 @@ XKit.extensions.xkit_patches = new Object({
 
 			/**
 			 * Edit up to 100 posts at a time via Mass Post Editor
-			 * @param {Object[]} post_ids - array of post IDs to edit
-			 * @param {Object[]} config - settings object
-			 * @param {String} config.mode - "add", "remove", or "delete"
-			 * @param {Object[]} [config.tags] - array of tags to add or remove
-			 * @return {Promise}
+			 *
+			 * @param {string[]} post_ids - array of post IDs to edit
+			 * @param {object} config - settings object
+			 * @param {string} config.mode - "add", "remove", or "delete"
+			 * @param {string[]} [config.tags] - array of tags to add or remove
+			 * @returns {Promise<object>}
 			 */
 			XKit.interface.mass_edit = function(post_ids, config) {
 			    const path = {
