@@ -1088,15 +1088,11 @@ XKit.extensions.xkit_patches = new Object({
 						var post_tag = XKit.css_map.keyToClasses("tag").join(" ");
 
 						for (var i = 0; i < tags_array.length; i++) {
-							var formatted = encodeURIComponent(tags_array[i]);
+							const tag = tags_array[i].trim();
 
-							if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
-
-							if (tags_array[i].substring(0, 1) === " ") {
-								tags_array[i] = tags_array[i].substring(1);
+							if (tag) {
+								m_inner += `<a class="${post_tag}" href="/tagged/${encodeURIComponent(tag)}">#${tag}</a>`;
 							}
-
-							m_inner = m_inner + `<a class="${post_tag}" href="/tagged/${formatted}">#${tags_array[i]}</a>`;
 						}
 
 						var tags_class = XKit.css_map.keyToCss("tags");
