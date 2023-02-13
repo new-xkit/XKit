@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.6.9 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -118,65 +118,22 @@ XKit.extensions.quick_tags = new Object({
 
 		// Fetch info about it!
 		if (!m_post.error) {
-			XKit.interface.fetch(m_post, function(data) {
+			XKit.interface.fetch(m_post, async function(data) {
+				const { id: post_id, tags: current_tags = '' } = data.data.post;
 
-				// Use Interface to edit the post's tags:
-				var m_tags = data.data.post.tags;
+				const current_tags_array = current_tags.split(',').map(tag => tag.trim());
+				const add_tags_array = tags.split(',').map(tag => tag.trim());
 
-				if (m_tags === "undefined" || typeof m_tags === "undefined" || m_tags == "null") {
-					m_tags = "";
+				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === false) {
+					await XKit.interface.mass_edit([post_id], { mode: 'remove', tags: current_tags_array });
+					current_tags_array.splice(0);
 				}
 
-				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === true) {
-					m_tags = m_tags + "," + tags;
-				} else {
-					m_tags = tags;
-				}
+				await XKit.interface.mass_edit([post_id], { mode: 'add', tags: add_tags_array });
+				current_tags_array.push(...add_tags_array);
 
-				if (m_tags.indexOf(",") != -1) {
-
-					var split_tags = m_tags.split(",");
-					var new_data = "";
-
-					for (var i = 0; i < split_tags.length; i++) {
-
-						if (split_tags[i]) {
-							if (new_data === "") {
-								new_data = split_tags[i];
-							} else {
-								new_data = new_data + "," + split_tags[i];
-							}
-						}
-
-					}
-
-					m_tags = new_data;
-
-				}
-
-				var m_post_object = XKit.interface.edit_post_object(data.data, { tags: m_tags });
-
-				// Now submit it back to the server:
-				XKit.interface.edit(m_post_object, async function(edit_data) {
-
-					XKit.interface.switch_control_button($(m_button), false);
-
-					if (edit_data.error === false && edit_data.data.errors === false) {
-
-						XKit.interface.switch_control_button($(m_button), false);
-						await XKit.interface.react.update_view.tags(m_post, m_tags);
-
-					} else {
-						// Oops?
-						if (edit_data.error === true) {
-							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01B" + edit_data.status + "<br/>" + edit_data.message, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-						} else {
-							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01A" + edit_data.status + "<br/>" + edit_data.data.errors, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-						}
-					}
-
-				});
-
+				await XKit.interface.react.update_view.tags(m_post, current_tags_array.join(','));
+				XKit.interface.switch_control_button($(m_button), false);
 			}, false);
 		} else {
 			XKit.window.show("Unable to edit post", "Something went wrong, my apologies.<br/>Please try again later or file a bug report with the error code:<br/>QT02", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
