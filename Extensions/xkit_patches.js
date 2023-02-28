@@ -733,8 +733,11 @@ XKit.extensions.xkit_patches = new Object({
 			};
 			_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
-			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
+			// eslint-disable-next-line no-async-promise-executor
+			XKit.tools.Nx_XHR = details => new Promise(async (resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
+
+				const form_key = XKit.interface.form_key() || await XKit.interface.async_form_key();
 
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
