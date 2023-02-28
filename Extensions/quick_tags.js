@@ -120,6 +120,7 @@ XKit.extensions.quick_tags = new Object({
 		if (!m_post.error) {
 			XKit.interface.fetch(m_post, async function(data) {
 				try {
+					if (data.status !== 200) throw data;
 					const { id: post_id, tags: current_tags = '' } = data.data.post;
 
 					const current_tags_array = current_tags.split(',').map(tag => tag.trim()).filter(Boolean);
@@ -135,7 +136,9 @@ XKit.extensions.quick_tags = new Object({
 
 					await XKit.interface.react.update_view.tags(m_post, current_tags_array.join(','));
 				} catch (error) {
-					if (error.json) {
+					if (error.status) {
+						XKit.window.show("Unable to edit post", `Server responded with status ${error.status}: ${error.message}.<br /><pre>${JSON.stringify(error, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					} else if (error.json) {
 						const response = await error.json();
 						XKit.window.show("Unable to edit post", `Server responded with status ${response.meta.status}: ${response.meta.msg}.<br /><pre>${JSON.stringify(response, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					} else {
