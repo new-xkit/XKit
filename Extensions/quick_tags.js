@@ -66,7 +66,9 @@ XKit.extensions.quick_tags = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
+		XKit.interface.form_key() || await XKit.interface.async_form_key();
+
 		this.running = true;
 
 		XKit.tools.init_css("quick_tags");
