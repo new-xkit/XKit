@@ -142,12 +142,12 @@ XKit.extensions.quick_tags = new Object({
 					await XKit.interface.react.update_view.tags(m_post, current_tags_array.join(','));
 				} catch (error) {
 					if (error.status) {
-						XKit.window.show("Unable to edit post", `Server responded with status ${error.status}: ${error.message}.<br /><pre>${JSON.stringify(error, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Unable to edit post", `Server responded with status ${error.status}: ${error.message}.<br /><pre style="user-select: text;">${JSON.stringify(error, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					} else if (error.json) {
 						const response = await error.json();
-						XKit.window.show("Unable to edit post", `Server responded with status ${response.meta.status}: ${response.meta.msg}.<br /><pre>${JSON.stringify(response, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Unable to edit post", `Server responded with status ${response.meta.status}: ${response.meta.msg}.<br /><pre style="user-select: text;">${JSON.stringify(response, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					} else {
-						XKit.window.show("Unable to edit post", `<pre>${error}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Unable to edit post", `<pre style="user-select: text;">${error}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					}
 				} finally {
 					XKit.interface.switch_control_button($(m_button), false);
