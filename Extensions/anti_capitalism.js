@@ -25,6 +25,11 @@ XKit.extensions.anti_capitalism = new Object({
 			default: true,
 			value: true
 		},
+		"takeover_ad": {
+			text: "Hide some elements from takeover ads",
+			default: true,
+			value: true
+		},
 		"sep1": {
 			text: "Legacy Options",
 			type: "separator",
@@ -85,6 +90,14 @@ XKit.extensions.anti_capitalism = new Object({
 			if (this.preferences.sidebar_ad.value) {
 				const selector = XKit.css_map.keyToCss("mrecContainer");
 				XKit.interface.hide(selector, "anti_capitalism");
+			}
+
+			if (this.preferences.takeover_ad.value) {
+				XKit.tools.add_css(`
+					${XKit.css_map.keyToCss('cruelSummer')} {
+						display: none !important;
+					}
+				`, "anti_capitalism");
 			}
 
 			return;
