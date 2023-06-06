@@ -98,6 +98,12 @@ XKit.extensions.anti_capitalism = new Object({
 						display: none !important;
 					}
 				`, "anti_capitalism");
+
+				XKit.tools.add_css(`
+					${XKit.css_map.keyToCss('timelineOptionsItemWrapper')}:not(${XKit.css_map.keyToCss('active')}):has(> a[href="/dashboard/freeform_campaign"]) {
+						display: none !important;
+					}
+				`, "anti_capitalism");
 			}
 
 			return;
