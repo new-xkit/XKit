@@ -1460,7 +1460,7 @@
 .xkit--react #xkit_button {
 	display: flex;
 	justify-content: center;
-	margin: 0 16px;
+	margin: 8px 16px;
 	position: relative;
 	opacity: .65;
 }

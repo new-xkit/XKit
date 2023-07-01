@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.21 **//
+//* VERSION 7.6.22 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -79,21 +79,30 @@ XKit.extensions.xkit_preferences = new Object({
 		const react_add_button = async (button) => {
 			await XKit.css_map.getCssMap();
 			const menuContainer = XKit.css_map.keyToCss("menuContainer");
+			const drawerContent = XKit.css_map.keyToCss("drawerContent");
+			const navItem = XKit.css_map.keyToCss("navItem");
 			const hamburger = XKit.css_map.keyToCss("hamburger");
 
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const header = document.querySelector('header');
-				if (header === null) return;
+				const nav = document.querySelector('nav');
 
-				const desktopMenuItems = header.querySelectorAll(menuContainer);
+				const desktopMenuItems = header ? [...header.querySelectorAll(menuContainer)] : [];
 				if (desktopMenuItems.length) {
 					const desktopAccountMenu = desktopMenuItems[desktopMenuItems.length - 1];
 					desktopAccountMenu.before(button);
 					return;
 				}
 
-				const mobileHamburgerMenu = header.querySelector(hamburger);
+				const desktopPrimaryNavItems = nav && !nav.closest(drawerContent) ? [...nav.querySelectorAll(navItem)] : [];
+				if (desktopPrimaryNavItems.length) {
+					const lastNavItem = desktopPrimaryNavItems[desktopPrimaryNavItems.length - 1];
+					lastNavItem.after(button);
+					return;
+				}
+
+				const mobileHamburgerMenu = header && header.querySelector(hamburger);
 				if (mobileHamburgerMenu) {
 					mobileHamburgerMenu.closest(XKit.css_map.keyToCss("left")).append(button);
 					return;
