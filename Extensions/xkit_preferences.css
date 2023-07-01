@@ -1465,6 +1465,12 @@
 	opacity: .65;
 }
 
+@media (min-width: 1150px) {
+	.xkit--react nav #xkit_button {
+		justify-content: flex-start;
+	}
+}
+
 .xkit--react #xkit_button.active {
 	opacity: 1;
 }
