@@ -1460,9 +1460,15 @@
 .xkit--react #xkit_button {
 	display: flex;
 	justify-content: center;
-	margin: 0 16px;
+	margin: 8px 16px;
 	position: relative;
 	opacity: .65;
+}
+
+@media (min-width: 1150px) {
+	.xkit--react nav #xkit_button {
+		justify-content: flex-start;
+	}
 }
 
 .xkit--react #xkit_button.active {
