@@ -88,7 +88,7 @@ XKit.extensions.xkit_preferences = new Object({
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const header = document.querySelector('header');
-				const nav = document.querySelector('navigationLinks');
+				const nav = document.querySelector(navigationLinks);
 
 				const desktopMenuItems = header ? [...header.querySelectorAll(menuContainer)] : [];
 				if (desktopMenuItems.length) {
