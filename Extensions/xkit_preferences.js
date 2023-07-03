@@ -39,8 +39,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var m_html =
 			`<div id="xkit_button" class="tab iconic tab_xkit">
-				<button class="tab_anchor" title="XKit Control Panel" tabindex="7">
-					<p class="tab_anchor_text">XKit Control Panel</p>
+				<button class="tab_anchor" title="New XKit" tabindex="7">
+					<p class="tab_anchor_text">New XKit</p>
 					${this.button_svgs[holiday]}
 				</button>
 				<div class="tab_notice tab-notice--outlined xkit_notice_container">
