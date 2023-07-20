@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.23 **//
+//* VERSION 7.6.24 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -212,6 +212,16 @@ XKit.extensions.xkit_preferences = new Object({
 	spring_cleaning_m_list_html: "",
 
 	spring_cleaning: function() {
+
+		const silent_clean_list = [
+			"estufars_sidebar_fix",
+		];
+
+		for (const extension of silent_clean_list) {
+			if (XKit.installed.check(extension)) {
+				XKit.installed.remove(extension);
+			}
+		}
 
 		var clean_list = [
 			"separator",
