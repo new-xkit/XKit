@@ -169,6 +169,8 @@
 	height: 100%;
 	background: var(--xkit-53-shadow);
 	z-index: 4;
+
+	pointer-events: none;
 }
 
 #xkit-extension-panel-slow-extension {
