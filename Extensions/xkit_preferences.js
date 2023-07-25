@@ -80,15 +80,13 @@ XKit.extensions.xkit_preferences = new Object({
 			await XKit.css_map.getCssMap();
 			const menuContainer = XKit.css_map.keyToCss("menuContainer");
 			const drawerContent = XKit.css_map.keyToCss("drawerContent");
-			const navigationLinks = XKit.css_map.keyToCss("navigationLinks");
 			const navItem = XKit.css_map.keyToCss("navItem");
-			const subNav = XKit.css_map.keyToCss("subNav");
 			const hamburger = XKit.css_map.keyToCss("hamburger");
 
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const header = document.querySelector('header');
-				const nav = document.querySelector(navigationLinks);
+				const nav = document.querySelector('nav');
 
 				const desktopMenuItems = header ? [...header.querySelectorAll(menuContainer)] : [];
 				if (desktopMenuItems.length) {
@@ -97,11 +95,7 @@ XKit.extensions.xkit_preferences = new Object({
 					return;
 				}
 
-				const desktopPrimaryNavItems =
-					nav && !nav.closest(drawerContent)
-						? [...nav.children].filter((el) => el.matches(navItem) || el.matches(subNav))
-						: [];
-
+				const desktopPrimaryNavItems = nav && !nav.closest(drawerContent) ? [...nav.querySelectorAll(navItem)] : [];
 				if (desktopPrimaryNavItems.length) {
 					const lastNavItem = desktopPrimaryNavItems[desktopPrimaryNavItems.length - 1];
 					lastNavItem.after(button);
