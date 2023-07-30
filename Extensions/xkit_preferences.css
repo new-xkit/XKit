@@ -1471,6 +1471,23 @@
 	.xkit--react nav #xkit_button {
 		justify-content: flex-start;
 	}
+
+	.xkit--react nav #xkit_button > button {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+
+		font-size: 1rem;
+	}
+
+	.xkit--react nav #xkit_button > button > svg {
+		order: -1;
+	}
+
+	.xkit--react nav #xkit_button > button > p {
+		color: rgba(var(--white-on-dark));
+		margin: 0;
+	}
 }
 
 .xkit--react #xkit_button.active {
