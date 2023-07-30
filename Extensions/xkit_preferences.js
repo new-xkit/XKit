@@ -83,8 +83,16 @@ XKit.extensions.xkit_preferences = new Object({
 			const navigationLinks = XKit.css_map.keyToCss("navigationLinks");
 			const hamburger = XKit.css_map.keyToCss("hamburger");
 
+			const redpopNavItemClasses = XKit.css_map.keyToClasses("navItem");
+			const redpopNavLinkClasses = XKit.css_map.keyToClasses("navLink");
+
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
+				const innerButton = button.querySelector('button');
+
+				button.classList.remove(...redpopNavItemClasses);
+				innerButton.classList.remove(...redpopNavLinkClasses);
+
 				const header = document.querySelector('header');
 				const nav = document.querySelector(navigationLinks);
 
@@ -96,6 +104,9 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				if (nav && !nav.closest(drawerContent)) {
+					button.classList.add(...redpopNavItemClasses);
+					innerButton.classList.add(...redpopNavLinkClasses);
+
 					nav.append(button);
 					return;
 				}
