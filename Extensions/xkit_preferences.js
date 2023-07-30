@@ -32,15 +32,11 @@ XKit.extensions.xkit_preferences = new Object({
 		const date = (new Date()).getDate();
 		const month = (new Date()).getMonth() + 1;
 
-		const twitter_x_timestamp = '2023-07-23T20:33:36.000Z'; // https://twitter.com/lindayacc/status/1683213798386147329
-		const ms_since_twitter_x = (new Date()).getTime() - (new Date(twitter_x_timestamp)).getTime();
-		const one_day = 7 * 24 * 60 * 60 * 1000;
-
 		if (date === 31 && month === 10) {
 			holiday = "halloween";
 		} else if (date >= 24 && date <= 26 && month === 12) {
 			holiday = "christmas";
-		} else if (ms_since_twitter_x < one_day * 7) {
+		} else if (date === 23 && month === 7) {
 			holiday = "x";
 		}
 
