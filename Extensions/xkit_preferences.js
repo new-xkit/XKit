@@ -81,6 +81,7 @@ XKit.extensions.xkit_preferences = new Object({
 			const menuContainer = XKit.css_map.keyToCss("menuContainer");
 			const drawerContent = XKit.css_map.keyToCss("drawerContent");
 			const navigationLinks = XKit.css_map.keyToCss("navigationLinks");
+			const startChildWrapper = XKit.css_map.keyToCss("startChildWrapper");
 			const hamburger = XKit.css_map.keyToCss("hamburger");
 
 			const check_and_reinsert = () => {
@@ -96,7 +97,13 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				if (nav && !nav.closest(drawerContent)) {
-					nav.append(button);
+					const primaryNavItems = [...nav.children].filter(
+						el => el.querySelector(startChildWrapper) || (el.matches('ul') && el.previousElementSibling.querySelector(startChildWrapper))
+					);
+
+					primaryNavItems.length
+						? primaryNavItems[primaryNavItems.length - 1].after(button)
+						: nav.append(button);
 					return;
 				}
 
