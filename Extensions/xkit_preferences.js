@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.24 **//
+//* VERSION 7.7.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -39,8 +39,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var m_html =
 			`<div id="xkit_button" class="tab iconic tab_xkit">
-				<button class="tab_anchor" title="XKit Control Panel" tabindex="7">
-					<p class="tab_anchor_text">XKit Control Panel</p>
+				<button class="tab_anchor" title="New XKit" tabindex="7">
+					<p class="tab_anchor_text">New XKit</p>
 					${this.button_svgs[holiday]}
 				</button>
 				<div class="tab_notice tab-notice--outlined xkit_notice_container">
@@ -80,13 +80,13 @@ XKit.extensions.xkit_preferences = new Object({
 			await XKit.css_map.getCssMap();
 			const menuContainer = XKit.css_map.keyToCss("menuContainer");
 			const drawerContent = XKit.css_map.keyToCss("drawerContent");
-			const navItem = XKit.css_map.keyToCss("navItem");
+			const navigationLinks = XKit.css_map.keyToCss("navigationLinks");
 			const hamburger = XKit.css_map.keyToCss("hamburger");
 
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const header = document.querySelector('header');
-				const nav = document.querySelector('nav');
+				const nav = document.querySelector(navigationLinks);
 
 				const desktopMenuItems = header ? [...header.querySelectorAll(menuContainer)] : [];
 				if (desktopMenuItems.length) {
@@ -95,10 +95,8 @@ XKit.extensions.xkit_preferences = new Object({
 					return;
 				}
 
-				const desktopPrimaryNavItems = nav && !nav.closest(drawerContent) ? [...nav.querySelectorAll(navItem)] : [];
-				if (desktopPrimaryNavItems.length) {
-					const lastNavItem = desktopPrimaryNavItems[desktopPrimaryNavItems.length - 1];
-					lastNavItem.after(button);
+				if (nav && !nav.closest(drawerContent)) {
+					nav.append(button);
 					return;
 				}
 
@@ -116,12 +114,12 @@ XKit.extensions.xkit_preferences = new Object({
 		};
 
 		let button_ready = Promise.resolve();
+		const button = $(m_html).get(0);
 		if (XKit.page.react) {
-			const button = $(m_html).get(0);
 			button.setAttribute('tabindex', 0);
 			button_ready = react_add_button(button);
 		} else {
-			$("#account_button").before(m_html);
+			$("#account_button").before(button);
 			$("#account_button > button").attr("tabindex", "8");
 		}
 
@@ -130,7 +128,7 @@ XKit.extensions.xkit_preferences = new Object({
 				this.show_welcome_bubble();
 			}
 
-			$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
+			$(button).click(XKit.extensions.xkit_preferences.open);
 
 			const unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
 			if (unread_mail_count > 0) {
