@@ -1486,6 +1486,7 @@
 
 	.xkit--react nav #xkit_button > button > p {
 		color: rgba(var(--white-on-dark));
+		font-weight: 500;
 		margin: 0;
 	}
 }
