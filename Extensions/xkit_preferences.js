@@ -86,6 +86,8 @@ XKit.extensions.xkit_preferences = new Object({
 			const redpopNavItemClasses = XKit.css_map.keyToClasses("navItem");
 			const redpopNavLinkClasses = XKit.css_map.keyToClasses("navLink");
 
+			const accountString = await XKit.interface.translate("Account");
+
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const innerButton = button.querySelector('button');
@@ -107,7 +109,9 @@ XKit.extensions.xkit_preferences = new Object({
 					button.classList.add(...redpopNavItemClasses);
 					innerButton.classList.add(...redpopNavLinkClasses);
 
-					nav.append(button);
+					const accountNavItem = [...nav.children].find(el => el.querySelector(`[aria-label="${accountString}"]`));
+
+					accountNavItem ? accountNavItem.before(button) : nav.append(button);
 					return;
 				}
 
