@@ -39,8 +39,8 @@ XKit.extensions.blacklist = new Object({
 		},
 		"hide_filtered": {
 			text: "Use Blacklist's UI options for Tumblr's filtered posts feature",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		"sep0": {
 			text: "User interface options",
