@@ -142,9 +142,9 @@ XKit.extensions.better_reblogs = new Object({
 		this.running = true;
 
 		if (!XKit.interface.is_tumblr_page()) {
-			return;	
+			return;
 		}
-		
+
 		if (this.preferences.type.value === "nested") {
 			this.run_nested();
 		} else {
@@ -190,7 +190,7 @@ XKit.extensions.better_reblogs = new Object({
                 '<div id="xkit-confirm-refresh" class="xkit-button default">Refresh</div>' +
                 '<div id="xkit-close-message" class="xkit-button">Cancel</div>');
 			$("#xkit-confirm-refresh").click(function() {
-				window.location = window.location;
+				window.location.reload();
 			});
 			$("#xkit-close-message").click(function() {
 				$el.val(old_val);
@@ -314,7 +314,7 @@ XKit.extensions.better_reblogs = new Object({
 			}
 			$this.addClass("xkit-better-reblogs-done");
 
-            // trick tumblr into displaying the little blog info popovers for the reblog avatars
+			// trick tumblr into displaying the little blog info popovers for the reblog avatars
 			$this.find(".reblog-avatar").addClass("post_sub_avatar");
 
 			if (XKit.extensions.better_reblogs.preferences.reorder_reblog_title.value) {
@@ -432,8 +432,8 @@ XKit.extensions.better_reblogs = new Object({
 	},
 
 	hex_to_rgb: function(hex) {
-        // From: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-        /* eslint-disable id-length */
+		// From: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+		/* eslint-disable id-length */
 
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return result ? {

@@ -116,12 +116,6 @@
 	right: 5px !important;
 }
 
-.xblacklist_hidden_post {
-	display: none !important;
-	height: 0px !important; width: 0px !important;
-	overflow: hidden !important;
-}
-
 .xkit-blacklist-add-margins-to-ul {
 	margin: 0; padding: 0px 20px;
 }
@@ -233,8 +227,8 @@
 }
 
 .xkit--react .xblacklist_excuse_container {
-    background-color: var(--white);
-    color: var(--black);
+    background-color: rgb(var(--white));
+    color: rgb(var(--black));
 }
 
 .xkit--react .xkit-blacklist-post-type {
@@ -250,21 +244,21 @@
 }
 
 .xkit--react .xblacklist_open_post {
-	color: rgba(var(--rgb-black), 0.8);
-	background: rgba(var(--rgb-black), 0.05);
-	border-color: rgba(var(--rgb-black), 0.3);
+	color: rgba(var(--black), 0.8);
+	background: rgba(var(--black), 0.05);
+	border-color: rgba(var(--black), 0.3);
 }
 
 .xkit--react .xblacklist_open_post:hover {
-	color: var(--black);
-	background: var(--white);
-	border-color: rgba(var(--rgb-black), 0.5);
+	color: rgb(var(--black));
+	background: rgb(var(--white));
+	border-color: rgba(var(--black), 0.5);
 }
 
 .xkit--react .xblacklist_open_post:active {
-	color: var(--black);
-	background: rgba(var(--rgb-black), 0.25);
-	border-color: rgba(var(--rgb-black), 0.8);
+	color: rgb(var(--black));
+	background: rgba(var(--black), 0.25);
+	border-color: rgba(var(--black), 0.8);
 }
 
 #xblacklist-cpanel-notice {

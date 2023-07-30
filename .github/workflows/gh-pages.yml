@@ -11,35 +11,46 @@ on:
 jobs:
   build:
     name: Autobuild extensions
-    if: github.repository == 'new-xkit/XKit'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Use Node.js 12
-        uses: actions/setup-node@v1
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.2
         with:
-          node-version: 12
+          node-version: 14
+
       - name: Configure git
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Fetch and reset gh-pages
         run: |
           git remote set-branches --add origin gh-pages
           git fetch
           git checkout -f -t -b gh-pages origin/gh-pages
           git reset --hard master
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Run tests
+        run: npm test
+
       - name: Install gulp-cli
         run: npm install gulp-cli
+
       - name: Build distribution
         run: gulp build
+
       - name: Commit changes
         run: |
           git add --force Extensions/
           git commit -m 'Rebuild Distribution'
+
       - name: Force-push to gh-pages
         run: git push -f

@@ -1,37 +1,9 @@
 {
-  "name": "XKit",
-  "description": "The extension framework for Tumblr.",
-  "version": "2.0.1",
-  "main": "xkit.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/new-xkit/XKit.git"
-  },
-  "author": {
-    "name": "STUDIOENIX",
-    "email": "xkit@studioxenix.com",
-    "url": "http://www.studioxenix.com/"
-  },
+  "repository": "github:new-xkit/XKit",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/new-xkit/XKit/issues"
-  },
-  "homepage": "https://new-xkit-extension.tumblr.com",
-  "engines": {
-    "node": ">= 8.11.2",
-    "npm": ">= 5.6.0"
-  },
-  "keywords": [
-    "framework",
-    "Tumblr",
-    "accessibility",
-    "extension",
-    "interface",
-    "tweaks"
-  ],
   "scripts": {
     "dev": "gulp server",
-    "test": "gulp lint:scripts",
+    "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
     "sign": "web-ext sign"
@@ -39,15 +11,14 @@
   "devDependencies": {
     "connect": "^3.7.0",
     "del": "^1.2.1",
+    "eslint": "^7.15.0",
     "gulp": "^4.0.2",
-    "gulp-cached": "^1.1.1",
-    "gulp-eslint": "^3.0.1",
     "gulp-util": "^3.0.8",
     "merge-stream": "^0.1.8",
     "morgan": "^1.10.0",
     "serve-static": "^1.14.1",
     "through2": "^2.0.5",
-    "web-ext": "^4.2.0"
+    "web-ext": "^6.1.0"
   },
   "webExt": {
     "ignoreFiles": [

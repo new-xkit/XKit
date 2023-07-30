@@ -755,8 +755,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				$("#tiptip_holder").css("z-index", "99000000");
 
-				// from xkit.js
-				/* globals centerIt */
 				centerIt($("#xkit-window"));
 				$("#xkit-window").fadeIn('fast');
 
@@ -815,7 +813,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				$("#xkit-notifications").append(m_html);
 
-					// console.log(" Notification > " + message);
+				// console.log(" Notification > " + message);
 
 				var m_notification_id = XKit.notifications.count;
 				setTimeout(function() {
@@ -826,7 +824,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						try {
 							callback();
 						} catch (e) {
-								// Meh.
+							// Meh.
 						}
 					}
 					$("#xkit_notification_" + m_notification_id).slideUp('slow');
@@ -1112,7 +1110,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					if (typeof(revisionString[1]) === "undefined") {
 						version.patch = 0;
 					} else {
-				// No need for toLowerCase here since we already do that when we split versionSplit above
+						// No need for toLowerCase here since we already do that when we split versionSplit above
 						version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
 					}
 				} else {
@@ -3278,7 +3276,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 	};
 }());
 
-var centerIt = function(el /* (jQuery element) Element to center */) {
+var centerIt = function(el /* (jQuery element) Element to center */) { // eslint-disable-line no-redeclare
 	if (!el) {
 		return;
 	}

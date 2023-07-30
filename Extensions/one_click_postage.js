@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.18 **//
+//* VERSION 4.4.23 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -223,7 +223,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		var post_id = XKit.iframe.single_post_id();
 		var form_key = XKit.iframe.form_key();
-		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[3];
+		var reblog_key = XKit.iframe.reblog_button()[0].pathname.split('/')[4];
 
 		var m_blogs = XKit.tools.get_blogs();
 		var blog_id = "";
@@ -587,6 +587,9 @@ XKit.extensions.one_click_postage = new Object({
 
 		$("body").append(m_html);
 
+		// prevents Tumblr's trapFocusInsideGlass function from stealing focus in blog/view
+		$("#x1cpostage_box").attr('data-skip-glass-focus-trap', true);
+
 		$(document).on("mouseover", "#x1cpostage_queue", function() {
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 			$("#x1cpostage_box").addClass("xkit_x1cpostage_queue_hover");
@@ -654,13 +657,8 @@ XKit.extensions.one_click_postage = new Object({
 		var reblog_buttons = [
 			'.reblog_button',
 			'.post_control.reblog',
-			'button[aria-label="Reblog"]',
+			'[data-id] footer a[href*="/reblog/"]',
 		].join(',');
-
-		if (XKit.page.react) {
-			const reblogAriaLabel = await XKit.interface.translate('Reblog');
-			reblog_buttons += `, a[aria-label="${reblogAriaLabel}"][href*="/reblog/"]`;
-		}
 
 		$(document).on("mouseover", reblog_buttons, function(event) {
 			if ($(this).hasClass("radar_button") === true) {return; }
@@ -841,7 +839,7 @@ XKit.extensions.one_click_postage = new Object({
 					if (XKit.interface.where().dashboard === true) { $(this).remove(); }
 				}
 
-				XKit.extensions.one_click_postage.make_button_reblogged($(this).find('.post_control.reblog, a[role="button"][href*="/reblog/"]'));
+				XKit.extensions.one_click_postage.make_button_reblogged($(this).find('.post_control.reblog, footer a[href*="/reblog/"]'));
 			}
 		});
 	},
@@ -1167,7 +1165,7 @@ XKit.extensions.one_click_postage = new Object({
 			$(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog").addClass("xkit-one-click-reblog-working");
 		}
 
-		var m_button = $(XKit.extensions.one_click_postage.last_object).find('.reblog_button, .post_control.reblog, button[aria-label="Reblog"], a[role="button"][href*="/reblog/"]');
+		var m_button = $(XKit.extensions.one_click_postage.last_object).find('.reblog_button, .post_control.reblog, footer a[href*="/reblog/"]');
 
 		if (quick_queue_mode) {
 			m_button = $(XKit.extensions.one_click_postage.last_object).find(".xkit-one-click-postage-quickqueue");
@@ -1441,8 +1439,7 @@ XKit.extensions.one_click_postage = new Object({
 					message += "However, Tumblr has indicated that something is wrong.";
 					break;
 				case 401:
-					message += "This usually means your browser is not sending Referer headers.<br>";
-					message += "Please contact support if you don't know what this means.";
+					message += 'This may mean that your login session is broken, or that your browser is not sending Referer headers.';
 					break;
 				case 403:
 					message += `This usually means you've been blocked by the owner of the post.`;
@@ -1464,7 +1461,7 @@ XKit.extensions.one_click_postage = new Object({
 					message += `<p>${data.error}</p>`;
 				}
 			} catch (e) {
-				message += "Tumblr returned a generic HTTP error page. Please refresh the page and try again.";
+				message += "Tumblr returned a generic HTTP error page. Please try clearing your Tumblr cookies, then try again.";
 			}
 		} else {
 			console.error(error);

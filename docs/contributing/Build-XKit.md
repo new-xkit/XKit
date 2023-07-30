@@ -26,7 +26,7 @@ Serving extensions and themes locally is useful for rapid development without re
 
 #### `npm test`
 
-Shortcut for [`gulp lint:scripts`](#gulp-lintscripts).
+Shortcut for `eslint .`.
 
 #### `npm run dev`
 
@@ -42,17 +42,7 @@ Uses `web-ext build` with the necessary file exclusions to build and pack the We
 
 The default task.
 
-See also: [`gulp lint`](#gulp-lint).
-
-#### `gulp lint`
-
-Top-level linting task.
-
-See also [`gulp lint:scripts`](#gulp-lintscripts).
-
-#### `gulp lint:scripts`
-
-Lints JavaScript files using ESLint, and reports the output.
+See also: [`gulp build`](#gulp-build).
 
 #### `gulp build`
 

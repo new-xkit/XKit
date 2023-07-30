@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.9 **//
+//* VERSION 7.4.19 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -90,7 +90,7 @@ XKit.extensions.xkit_patches = new Object({
 				let blogs = [];
 				Promise.race([
 					new Promise((resolve) => setTimeout(resolve, 30000)),
-					(async() => {
+					(async () => {
 						const {response} = await tumblr.apiFetch("/v2/user/info", {
 							queryParams: {'fields[blogs]': 'name'},
 						});
@@ -124,7 +124,6 @@ XKit.extensions.xkit_patches = new Object({
 			if (!window._ || !window.jQuery) {
 				return;
 			}
-			/* globals _ */
 
 			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
 				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
@@ -206,12 +205,16 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			};
 
+			XKit.post_listener.debounce_timer = null;
+
 			XKit.post_listener.observer = new MutationObserver(mutations => {
 				const criteria = XKit.page.react ? "[data-id]" : ".post_container, .post";
-				const new_posts = mutations.some(({addedNodes, target}) => {
+				let new_posts = false;
+				const observed = mutations.some(({addedNodes, target}) => {
 					for (let i = 0; i < addedNodes.length; i++) {
 						const $addedNode = $(addedNodes[i]);
 						if ($addedNode.is(criteria) || $addedNode.find(criteria).length) {
+							new_posts = true;
 							return true;
 						}
 					}
@@ -219,16 +222,26 @@ XKit.extensions.xkit_patches = new Object({
 					return $(target).parents(criteria).length !== 0;
 				});
 
-				if (new_posts) {
-					Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
-						try {
-							callback();
-						} catch (e) {
-							console.error(e);
-						}
-					}));
+				if (observed) {
+					const self = XKit.post_listener;
+					clearTimeout(self.debounce_timer);
+					if (new_posts) {
+						self.run_callbacks();
+					} else {
+						self.debounce_timer = setTimeout(self.run_callbacks, 60);
+					}
 				}
 			});
+
+			XKit.post_listener.run_callbacks = function() {
+				Object.values(XKit.post_listener.callbacks).forEach(list => list.forEach(callback => {
+					try {
+						callback();
+					} catch (e) {
+						console.error(e);
+					}
+				}));
+			};
 
 			/**
 			 * Show an XKit alert window
@@ -398,7 +411,7 @@ XKit.extensions.xkit_patches = new Object({
 			 *
 			 * @param {Function} func - This function is rendered to a string
 			 *     and then injected into the page.
-			 * @param {Object} arguments - arguments to pass to the function.
+			 * @param {Object} args - arguments to pass to the function.
 			 *     Since the function is rendered to a string before being
 			 *     injected, it can't close over any variables, so everything
 			 *     used from the calling scope must be passed as an argument
@@ -406,15 +419,13 @@ XKit.extensions.xkit_patches = new Object({
 			 * @return {Promise} - the return value or thrown error from the
 			 *     injected function
 			 */
-			XKit.tools.async_add_function = function(func, arguments) {
+			XKit.tools.async_add_function = function(func, args) {
 				return new Promise((resolve, reject) => {
 					const callback_nonce = Math.random();
 
-					const add_func = `(async ({callback_nonce, arguments}) => {
+					const add_func = `(async ({callback_nonce, args}) => {
 						try {
-							const return_value = await (${
-								XKit.tools.normalize_indentation("\t".repeat(7), func.toString())
-							})(arguments);
+							const return_value = await (${XKit.tools.normalize_indentation("\t".repeat(7), func.toString())})(args);
 
 							window.postMessage({
 								xkit_callback_nonce: callback_nonce,
@@ -443,7 +454,7 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					};
 
-					XKit.tools.add_function(add_func, false, {callback_nonce, arguments});
+					XKit.tools.add_function(add_func, false, {callback_nonce, args});
 				});
 			};
 
@@ -676,7 +687,7 @@ XKit.extensions.xkit_patches = new Object({
 						return this.cssMap;
 					}
 
-					this.cssMap = await XKit.tools.async_add_function(async() => {
+					this.cssMap = await XKit.tools.async_add_function(async () => {
 						if (!window.tumblr) {
 							return null;
 						}
@@ -878,7 +889,7 @@ XKit.extensions.xkit_patches = new Object({
 						const keyStartsWith = (obj, prefix) =>
 							Object.keys(obj).find(key => key.startsWith(prefix));
 						const element = document.querySelector(`[data-id="${post_id}"]`);
-						let fiber = element[keyStartsWith(element, '__reactInternalInstance')];
+						let fiber = element[keyStartsWith(element, '__reactFiber')];
 
 						while (fiber.memoizedProps.timelineObject === undefined) {
 							fiber = fiber.return;
@@ -927,14 +938,12 @@ XKit.extensions.xkit_patches = new Object({
 						selector += `:not(.${without_tag})`;
 					}
 
-					var $posts = $(selector);
-
 					if (can_edit) {
 						const edit_label = await XKit.interface.translate("Edit");
-						$posts = $posts.filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+						return $(selector).filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
 					}
 
-					return $posts;
+					return $(selector);
 				},
 
 				/**
@@ -1014,7 +1023,7 @@ XKit.extensions.xkit_patches = new Object({
 					}`, `xkit_interface_icon__${class_name}`);
 
 					if (typeof ok_icon !== "undefined") {
-						XKit.tools.add_css(`.${class_name} .xkit-interface-icon-completed {
+						XKit.tools.add_css(`.${class_name} .xkit-interface-completed {
 							background-image: url('${ok_icon}');
 						}`, `xkit_interface_icon__completed__${class_name}`);
 					}
@@ -1048,7 +1057,7 @@ XKit.extensions.xkit_patches = new Object({
 					// we know that XKit.css_map.getCssMap() has been called because we have a template from create_control_button
 					// so we skip that call with this XKit.css_map.keyToCss() call.
 					var controlsSelector = XKit.css_map.keyToCss("controls");
-					var controls = $(obj).find(controlsSelector);
+					var controls = $(obj).find(controlsSelector).last();
 
 					if (controls.length > 0) {
 						controls.prepend(m_html);
@@ -1102,10 +1111,76 @@ XKit.extensions.xkit_patches = new Object({
 						}
 					},
 				},
+
+				init_collapsed: function(id) {
+					//adjust colors to look good on the sidebar if we're there
+					const automatic_color = 'var(--blog-contrasting-title-color, rgba(var(--white-on-dark), 0.65))';
+					const automatic_button_color = 'var(--blog-contrasting-title-color, rgb(var(--white-on-dark)))';
+
+					//symmetrically reduce the "top and bottom" margins of a hidden post by this amount
+					const shrink_post_amount = '12px';
+
+					XKit.tools.add_css(`
+						.xkit--react .${id}-collapsed {
+							opacity: 0.75;
+							margin-bottom: calc(20px - ${shrink_post_amount});
+							transform: translateY(calc(-${shrink_post_amount}/2));
+						}
+						.xkit--react .${id}-collapsed-note {
+							height: 30px;
+							color: ${automatic_color};
+							padding-left: 15px;
+							display: flex;
+							align-items: center;
+						}
+						.xkit--react .${id}-collapsed-button {
+							line-height: initial;
+							margin: 0;
+							position: absolute !important;
+							right: 5px;
+							display: none !important;
+						}
+						.xkit--react .${id}-collapsed:hover .${id}-collapsed-button {
+							display: inline-block !important;
+						}
+						.xkit--react .${id}-collapsed-button {
+							color: rgba(${automatic_button_color}, 0.8);
+							background: rgba(${automatic_button_color}, 0.05);
+							border-color: rgba(${automatic_button_color}, 0.3);
+						}
+						.xkit--react .${id}-collapsed-button:hover {
+							color: rgba(${automatic_button_color});
+							background: rgba(${automatic_button_color}, 0.1);
+							border-color: rgba(${automatic_button_color}, 0.5);
+						}
+						.xkit--react .${id}-collapsed-note ~ div {
+							display: none;
+						}
+					`, id);
+				},
+
+				collapse: function($post, note_text, id) {
+					$post.addClass(`${id}-collapsed`);
+					const button = `<div class="xkit-button ${id}-collapsed-button">show post</div>`;
+					$post.prepend(`<div class="${id}-collapsed-note">${note_text}${button}</div>`);
+					$post.on('click', `.${id}-collapsed-button`, (e) => {
+						const $clickedbutton = $(e.target);
+						const $clickedpost = $clickedbutton.parents(`.${id}-collapsed`);
+						const $note = $clickedbutton.parents(`.${id}-collapsed-note`);
+
+						$clickedpost.removeClass(`${id}-collapsed`);
+						$note.remove();
+					});
+				},
+
+				destroy_collapsed: function(id) {
+					$(`.${id}-collapsed`).removeClass(`${id}-collapsed`);
+					$(`.${id}-collapsed-note`).remove();
+				}
 			};
 
 			XKit.interface.async_form_key = async function() {
-				const request = await fetch('https://www.tumblr.com/settings/dashboard');
+				const request = await fetch('https://www.tumblr.com/developers');
 				const meta_tag = (await request.text()).match(
 					/tumblr-form-key[^>]*content=("([^"]+)"|'([^']+)')/
 				);
@@ -1244,7 +1319,7 @@ XKit.extensions.xkit_patches = new Object({
 					if (typeof(revisionString[1]) === "undefined") {
 						version.patch = 0;
 					} else {
-				// No need for toLowerCase here since we already do that when we split versionSplit above
+						// No need for toLowerCase here since we already do that when we split versionSplit above
 						version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
 					}
 				} else {
@@ -3030,7 +3105,7 @@ XKit.extensions.xkit_patches = new Object({
 
 				$("#xkit-notifications").append(m_html);
 
-					// console.log(" Notification > " + message);
+				// console.log(" Notification > " + message);
 
 				var m_notification_id = XKit.notifications.count;
 				setTimeout(function() {
@@ -3041,7 +3116,7 @@ XKit.extensions.xkit_patches = new Object({
 						try {
 							callback();
 						} catch (e) {
-								// Meh.
+							// Meh.
 						}
 					}
 					$("#xkit_notification_" + m_notification_id).slideUp('slow');

@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.2.8 **//
+//* VERSION     1.2.9 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -11,6 +11,22 @@ XKit.extensions.retags = {
 	api_key: XKit.api_key,
 	selectors: '.type_2,.type_8,.type_6,.reblog:not(.ui_avatar_link, .retags_has_processed),.is_reblog:not(.rollup),.is_reblog_naked,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
+
+	preferences: {
+		"note": {
+			text: "Note",
+			type: "separator"
+		},
+	},
+
+	cpanel: function(m_div) {
+
+		$(m_div).append(`
+			<div id="xkit-retags-info">
+				This feature no longer works and has been replaced by Tumblr's native reblogs view, but it still functions on many blog pages.
+			</div>
+			`);
+	},
 
 	run: function() {
 		this.running = true;

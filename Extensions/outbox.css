@@ -24,3 +24,24 @@
 	padding: 3px 8px;
 
 }
+
+#xkit-outbox-info {
+	padding: 15px;
+	font-size: 12px;
+	color: rgb(80,80,80);
+}
+
+#xkit-outbox-toolbar {
+	background: rgb(245,245,245);
+	padding: 3px 15px;
+	border-bottom: 1px solid rgb(190,190,190);
+}
+
+#xkit-outbox-cpanel-pre {
+	padding: 18px 0 0 18px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	font-size: 12px;
+	user-select: text;
+	font-family: monospace;
+}

@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.6.3 **//
+//* VERSION 1.6.6 **//
 //* DESCRIPTION Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -8,6 +8,7 @@
 XKit.extensions.anti_capitalism = new Object({
 
 	running: false,
+	has_indicator_selector: "",
 
 	preferences: {
 		"sep0": {
@@ -21,6 +22,11 @@ XKit.extensions.anti_capitalism = new Object({
 		},
 		"sidebar_ad": {
 			text: "Hide the Sidebar Ads",
+			default: true,
+			value: true
+		},
+		"takeover_ad": {
+			text: "Hide some elements from takeover ads",
 			default: true,
 			value: true
 		},
@@ -62,20 +68,36 @@ XKit.extensions.anti_capitalism = new Object({
 			await XKit.css_map.getCssMap();
 
 			if (this.preferences.sponsored_posts.value) {
-				const listTimelineObject = XKit.css_map.keyToClasses("listTimelineObject");
-				const masonryTimelineObject = XKit.css_map.keyToClasses("masonryTimelineObject");
-
-				// pattern created:
-				// listTimelineObject:not([data-id]):not(masonryTimelineObject)
-				const selector = XKit.tools.cartesian_product([listTimelineObject, masonryTimelineObject])
-					.map(i => `.${i[0]}:not([data-id]):not(.${i[1]})`)
+				const adSelector = ["adTimelineObject", "instreamAd", "nativeIponWebAd", "takeoverBanner"]
+					.map(key => XKit.css_map.keyToCss(key))
+					.filter(Boolean)
 					.join(", ");
-				XKit.interface.hide(selector, "anti_capitalism");
+				XKit.tools.add_css(`${adSelector} { display: none !important; }`, "anti_capitalism");
+
+				const videoCTASelector = ["videoCTA", "videoImageCTA"]
+					.map(key => XKit.css_map.keyToClasses(key))
+					.filter(Boolean)
+					.map(classes => classes.map(cls => `.${cls}:not(.anti-capitalism-done)`).join(", "))
+					.join(", ");
+				this.videoCTASelector = videoCTASelector;
+				this.listTimelineObjectInnerSelector = XKit.css_map.keyToCss("listTimelineObjectInner");
+
+				XKit.tools.add_css(`.anti-capitalism-hidden { display: none !important; }`, "anti_capitalism");
+				XKit.post_listener.add("anti_capitalism", this.process_posts);
+				this.process_posts();
 			}
 
 			if (this.preferences.sidebar_ad.value) {
 				const selector = XKit.css_map.keyToCss("mrecContainer");
 				XKit.interface.hide(selector, "anti_capitalism");
+			}
+
+			if (this.preferences.takeover_ad.value) {
+				XKit.tools.add_css(`
+					${XKit.css_map.keyToCss('cruelSummer')} {
+						display: none !important;
+					}
+				`, "anti_capitalism");
 			}
 
 			return;
@@ -121,10 +143,24 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 	},
 
+	process_posts: async function() {
+		const {videoCTASelector, listTimelineObjectInnerSelector} = XKit.extensions.anti_capitalism;
+		const $containers = $(videoCTASelector).addClass("anti-capitalism-done");
+		for (let container of $containers.get()) {
+			$(container).closest(listTimelineObjectInnerSelector).addClass('anti-capitalism-hidden');
+		}
+	},
 
 	destroy: function() {
 		this.running = false;
+		$('anti-capitalism-done').removeClass('anti-capitalism-done');
+		$('anti-capitalism-hidden').removeClass('anti-capitalism-hidden');
 		XKit.tools.remove_css("anti_capitalism");
+		try {
+			XKit.post_listener.remove("anti_capitalism", this.process_posts);
+		} catch (e) {
+			//no listener to remove
+		}
 		clearInterval(this.interval_id);
 	}
 

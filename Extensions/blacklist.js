@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.3 **//
+//* VERSION 3.1.8 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -125,6 +125,8 @@ XKit.extensions.blacklist = new Object({
 	blacklisted: [],
 	whitelisted: [],
 
+	edit_label: "",
+
 	run: async function() {
 		this.running = true;
 
@@ -133,6 +135,9 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		await XKit.css_map.getCssMap();
+		if (XKit.page.react) {
+			this.edit_label = await XKit.interface.translate("Edit");
+		}
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 			if (this.preferences.dont_on_inbox.value) {
@@ -141,6 +146,7 @@ XKit.extensions.blacklist = new Object({
 		}
 
 		XKit.tools.init_css("blacklist");
+		XKit.interface.hide(".xblacklist_hidden_post", "blacklist");
 
 		var m_blacklist = XKit.storage.get("blacklist", "words", "").split(",");
 		var m_whitelist = XKit.storage.get("blacklist", "words_whitelisted", "").split(",");
@@ -169,7 +175,7 @@ XKit.extensions.blacklist = new Object({
 				.xblacklist_blacklisted_post {
 					opacity: 1 !important;
 					padding: 0 !important;
-					border: 1px dashed var(--transparent-white-40, rgba(255,255,255,.43)) !important;
+					border: 1px dashed rgba(var(--white-on-dark, 255,255,255), 0.4) !important;
 					background: transparent !important;
 				}
 				.xblacklist_blacklisted_post .post_avatar,
@@ -182,7 +188,7 @@ XKit.extensions.blacklist = new Object({
 				.xblacklist_blacklisted_post .xblacklist_excuse {
 					height: 40px !important;
 					line-height: 40px !important;
-					color: var(--transparent-white-40, rgba(255,255,255,.43));
+					color: rgba(var(--white-on-dark, 255,255,255), 0.4);
 					padding: 0;
 					margin: 0;
 					padding-left: 15px;
@@ -203,14 +209,14 @@ XKit.extensions.blacklist = new Object({
 					margin: 0;
 				}
 				.xkit--react .xblacklist_open_post {
-					color: rgba(var(--rgb-white-on-dark), 0.8);
-					background: rgba(var(--rgb-white-on-dark), 0.05);
-					border-color: rgba(var(--rgb-white-on-dark), 0.3);
+					color: rgba(var(--white-on-dark), 0.8);
+					background: rgba(var(--white-on-dark), 0.05);
+					border-color: rgba(var(--white-on-dark), 0.3);
 				}
 				.xkit--react .xblacklist_open_post:hover {
-					color: var(--white-on-dark);
-					background: rgba(var(--rgb-white-on-dark), 0.1);
-					border-color: rgba(var(--rgb-white-on-dark), 0.5);
+					color: rgb(var(--white-on-dark));
+					background: rgba(var(--white-on-dark), 0.1);
+					border-color: rgba(var(--white-on-dark), 0.5);
 				}
 			`;
 
@@ -218,7 +224,7 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		if ($(postSel).length > 0) {
+		if (XKit.page.react || $(postSel).length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
 
@@ -346,30 +352,10 @@ XKit.extensions.blacklist = new Object({
 			var to_check_blacklist = "listBlack";
 			var to_check_whitelist = "listWhite";
 
-			var supported_ver = "1.2.0";
-
 			if (m_obj.creator === "XKIT") {
 
 				to_check_blacklist = "blacklist";
 				to_check_whitelist = "whitelist";
-
-			} else {
-
-				const version = XKit.tools.parse_version(m_obj.version);
-				const supported = XKit.tools.parse_version(supported_ver);
-				const is_compatible =
-					version.major < supported.major || (version.major === supported.major &&
-						(version.minor < supported.minor || (version.minor === supported.minor &&
-							version.patch <= supported.patch)));
-
-				if (!is_compatible) {
-					XKit.window.show("Could not import.",
-						"XKit Blacklist can only import words from version " + supported_ver + " and below of Tumblr Savior.",
-						"error",
-						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
-					);
-					return;
-				}
 
 			}
 
@@ -471,7 +457,7 @@ XKit.extensions.blacklist = new Object({
 		$("#xkit-blacklist-add-word").click(function() {
 
 			var $m_to_add = $("#xkit-blacklist-word");
-			var m_to_add = $m_to_add.val();
+			var m_to_add = $m_to_add.val().replace(/\u200B/g, '');
 			function complain(problem) {
 				$m_to_add
 					.css("border-color", "red")
@@ -575,6 +561,9 @@ XKit.extensions.blacklist = new Object({
 
 					const m_result = $(this).find(filteredReasonSel).text();
 					XKit.extensions.blacklist.hide_post($(this), m_result);
+				}
+
+				if (XKit.extensions.blacklist.preferences.dont_block_me.value && $(this).find(`[aria-label='${XKit.extensions.blacklist.edit_label}']`).length) {
 					return;
 				}
 
@@ -683,7 +672,7 @@ XKit.extensions.blacklist = new Object({
 
 			} catch (e) {
 
-				// console.error("Can't parse post: " + e.message);
+				console.error("Blacklist can't parse post: " + e.message);
 				// $(this).css("background","red");
 
 			}
@@ -805,7 +794,7 @@ XKit.extensions.blacklist = new Object({
 	do_post: function(obj, post_content, tags) {
 
 		// if ($.trim(post_content) === "") { return ""; }
-		post_content = post_content.replace(/\n/g, ' ');
+		post_content = post_content.replace(/\n/g, ' ').replace(/\u200B/g, '');
 		var p_words = post_content.split(" ");
 
 		var new_array = [];
@@ -914,7 +903,7 @@ XKit.extensions.blacklist = new Object({
 									var mp_word = m_p_words[j].replace(/\./g, '');
 									mp_word = mp_word.replace(/,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
-									mp_word = mp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
+									mp_word = mp_word.replace(/[.,-/#!$%^&*;:{}=\-_`~()@]/g, "").replace(/\s{2,}/g, " ");
 									//// console.log('%c  mp_word = ' + mp_word, 'background: #a5edae; color: black');
 									if (m_word === mp_word) {
 										if (tag_search_mode) {

@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.9 **//
+//* VERSION 1.6.12 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -183,7 +183,7 @@ XKit.extensions.classic_tags = new Object({
 
 	update_tag_timestamp: async function() {
 		try {
-			const current_tag = $("h1").filter(XKit.css_map.keyToCss("title")).text().replace("#", "").trim();
+			const current_tag = decodeURIComponent(location.pathname.split('/')[2].replace(/\+/g, ' '));
 			const newest_post = $("[data-id]").first();
 
 			if (newest_post != null) {
@@ -294,11 +294,18 @@ XKit.extensions.classic_tags = new Object({
 
 		this.tags = await XKit.tools.async_add_function(async () => {
 			const result = await window.tumblr.apiFetch("/v2/user/followed_tags", { method: "GET", queryParams: { limit: 20 } });
+			const tag_expression = new RegExp(/^#?(.+)/);
+
 			return {
-				tags: result.response.timeline.elements.map(tag => ({
-					name: tag.tagName,
-					link: tag.links.tap.href
-				})),
+				tags: result.response.timeline.elements.map(tag => {
+					const match = tag.tagName.match(tag_expression);
+					const tag_name = match != null ? match[1] : tag.tagName;
+
+					return ({
+						name: tag_name,
+						link: tag.links.tap.href
+					});
+				}),
 				more: result.response.timeline.links.next != null
 			};
 		});
@@ -322,7 +329,7 @@ XKit.extensions.classic_tags = new Object({
 				extra_classes += " hidden";
 			}
 
-			const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' width='18' height='18' fill='var(--transparent-white-65)'><path d='M 0 0 L 0 8 L 11 18 L 18 10 L 8 0 L 0 0 z M 3.5 2 A 1.5 1.5 0 0 1 5 3.5 A 1.5 1.5 0 0 1 3.5 5 A 1.5 1.5 0 0 1 2 3.5 A 1.5 1.5 0 0 1 3.5 2 z '></path></svg>`;
+			const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' width='18' height='18' fill='rgba(var(--white-on-dark), 0.65)'><path d='M 0 0 L 0 8 L 11 18 L 18 10 L 8 0 L 0 0 z M 3.5 2 A 1.5 1.5 0 0 1 5 3.5 A 1.5 1.5 0 0 1 3.5 5 A 1.5 1.5 0 0 1 2 3.5 A 1.5 1.5 0 0 1 3.5 2 z '></path></svg>`;
 
 			m_html += `
 				<div class="xtag ${extra_classes}">
