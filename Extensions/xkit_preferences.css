@@ -1467,7 +1467,7 @@
 	opacity: .65;
 }
 
-@media (min-width: 1150px) {
+@media (min-width: 1162px) {
 	.xkit--react nav #xkit_button {
 		justify-content: flex-start;
 	}
