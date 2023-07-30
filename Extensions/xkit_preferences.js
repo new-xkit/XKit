@@ -116,12 +116,12 @@ XKit.extensions.xkit_preferences = new Object({
 		};
 
 		let button_ready = Promise.resolve();
+		const button = $(m_html).get(0);
 		if (XKit.page.react) {
-			const button = $(m_html).get(0);
 			button.setAttribute('tabindex', 0);
 			button_ready = react_add_button(button);
 		} else {
-			$("#account_button").before(m_html);
+			$("#account_button").before(button);
 			$("#account_button > button").attr("tabindex", "8");
 		}
 
@@ -130,7 +130,7 @@ XKit.extensions.xkit_preferences = new Object({
 				this.show_welcome_bubble();
 			}
 
-			$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
+			$(button).click(XKit.extensions.xkit_preferences.open);
 
 			const unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
 			if (unread_mail_count > 0) {
