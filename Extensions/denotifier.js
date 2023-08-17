@@ -13,7 +13,7 @@ XKit.extensions.denotifier = new Object({
 		await XKit.css_map.getCssMap();
 		const { navItem, notificationBadgeIn } = XKit.css_map.cssMap;
 		XKit.tools.add_css(`.${navItem}:not([title='Messages']) .${notificationBadgeIn} { display: none !important; }`, "denotifier");
-    },
+	},
 
 	destroy: function() {
 		this.running = false;
