@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.1.2 **//
+//* VERSION 2.1.3 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -55,6 +55,7 @@ XKit.extensions.xkit_updates = new Object({
 
 	to_update: "",
 	to_update_index: 0,
+	to_update_silent: [],
 	updated_list: "",
 	updated_list_versions: "",
 
@@ -74,6 +75,7 @@ XKit.extensions.xkit_updates = new Object({
 
 			XKit.extensions.xkit_updates.to_update_index = 0;
 			XKit.extensions.xkit_updates.to_update = [];
+			XKit.extensions.xkit_updates.to_update_silent = [];
 			XKit.extensions.xkit_updates.updated_list = [];
 			XKit.extensions.xkit_updates.updated_list_versions = [];
 
@@ -95,14 +97,18 @@ XKit.extensions.xkit_updates = new Object({
 
 						if (check_this) {
 							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
+							XKit.extensions.xkit_updates.to_update_silent.push(false);
 						}
 					}
 
 				} else {
 
 					if (XKit.installed.check(mdata.extensions[extension].name)) {
-						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.tools.parse_version(XKit.installed.get(mdata.extensions[extension].name).version), XKit.tools.parse_version(mdata.extensions[extension].version))) {
+						const shouldUpdate = XKit.extensions.xkit_updates.shouldUpdate(XKit.tools.parse_version(XKit.installed.get(mdata.extensions[extension].name).version), XKit.tools.parse_version(mdata.extensions[extension].version));
+
+						if (shouldUpdate) {
 							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
+							XKit.extensions.xkit_updates.to_update_silent.push(shouldUpdate === 'silent');
 						}
 					}
 
@@ -202,7 +208,7 @@ XKit.extensions.xkit_updates = new Object({
 
 				var to_show = XKit.tools.get_setting("xkit_show_update_notifications", "true");
 
-				if (to_show === "true") {
+				if (XKit.extensions.xkit_updates.updated_list.length && to_show === "true") {
 					var suffix = "";
 
 					if (XKit.extensions.xkit_updates.updated_list.length !== 1) {
@@ -246,8 +252,11 @@ XKit.extensions.xkit_updates = new Object({
 				}
 			}
 
-			XKit.extensions.xkit_updates.updated_list.push(mdata.title);
-			XKit.extensions.xkit_updates.updated_list_versions.push(mdata.version);
+			if (XKit.extensions.xkit_updates.to_update_silent[XKit.extensions.xkit_updates.to_update_index] === false) {
+				XKit.extensions.xkit_updates.updated_list.push(mdata.title);
+				XKit.extensions.xkit_updates.updated_list_versions.push(mdata.version);
+			}
+
 			console.log("Updated " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index]);
 			XKit.extensions.xkit_updates.to_update_index++;
 			XKit.extensions.xkit_updates.update_next(force_mode);
@@ -316,6 +325,9 @@ XKit.extensions.xkit_updates = new Object({
 		}
 		if ((versionRemote.patch > versionCurrent.patch) && (versionRemote.major >= versionCurrent.major) && (versionRemote.minor >= versionCurrent.minor)) {
 			return true;
+		}
+		if ((versionRemote.silent_patch > versionCurrent.silent_patch) && (versionRemote.patch === versionCurrent.patch) && (versionRemote.major === versionCurrent.major) && (versionRemote.minor === versionCurrent.minor)) {
+			return 'silent';
 		}
 		return false;
 	},
