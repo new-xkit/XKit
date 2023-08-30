@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.1.1 **//
+//* VERSION 2.1.2 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
@@ -10,9 +10,12 @@
 		enabled_extensions: ["xkit_main"],
 		disabled_extensions: [],
 
-		run: function() {
+		run: async function() {
 
-			if (location.href.includes("://www.tumblr.com/login") || location.href.includes("://www.tumblr.com/settings")) {
+			XKit.page.react = Boolean($("link[href*='/pop/']").length);
+
+			const excludedPage = location.href.includes("://www.tumblr.com/login") || location.href.includes("://www.tumblr.com/settings");
+			if (excludedPage && !XKit.page.react) {
 				console.log("Refusing to run XKit, login or settings page!");
 				return;
 			}
@@ -26,17 +29,14 @@
 				return;
 			}
 
-			if (XKit.page.react === undefined) {
-				XKit.page.react = Boolean($("link[href*='/pop/']").length);
-				if (XKit.page.react) {
-					$("body").addClass('xkit--react');
-					const waitUntilReactLoaded = setInterval(() => {
-						if ($('[data-rh]').length === 0) {
-							clearInterval(waitUntilReactLoaded);
-							this.run();
-						}
-					}, 100);
-					return;
+			if (XKit.page.react) {
+				$("body").addClass('xkit--react');
+
+				const isReactLoaded = () => $('[data-rh]').length === 0;
+				const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+				while (!isReactLoaded()) {
+					await sleep(100);
 				}
 			}
 

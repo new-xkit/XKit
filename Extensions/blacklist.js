@@ -554,7 +554,7 @@ XKit.extensions.blacklist = new Object({
 				const tagSel = XKit.css_map.keyToCss('tag') || '.post_tag';
 				if ($(this).find(tagSel).length > 0) {
 					$(this).find(tagSel).each(function() {
-						tag_array.push($(this).html().replace("#", "").toLowerCase());
+						tag_array.push($(this).text().trim().replace("#", "").toLowerCase());
 					});
 				}
 

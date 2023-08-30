@@ -169,6 +169,8 @@
 	height: 100%;
 	background: var(--xkit-53-shadow);
 	z-index: 4;
+
+	pointer-events: none;
 }
 
 #xkit-extension-panel-slow-extension {
@@ -1460,9 +1462,46 @@
 .xkit--react #xkit_button {
 	display: flex;
 	justify-content: center;
-	margin: 0 16px;
+	margin: 8px 16px;
 	position: relative;
 	opacity: .65;
+}
+
+.xkit--react nav #xkit_button {
+	margin: 0
+}
+
+.xkit--react nav #xkit_button button {
+	padding: 8px 16px;
+	width: 100%
+}
+
+.xkit--react nav #xkit_button button:hover {
+	background-color: rgba(var(--white-on-dark), .07);
+}
+
+@media (min-width: 1162px) {
+	.xkit--react nav #xkit_button {
+		justify-content: flex-start;
+	}
+
+	.xkit--react nav #xkit_button > button {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+
+		font-size: 1rem;
+	}
+
+	.xkit--react nav #xkit_button > button > svg {
+		order: -1;
+	}
+
+	.xkit--react nav #xkit_button > button > p {
+		color: rgba(var(--white-on-dark));
+		font-weight: 500;
+		margin: 0;
+	}
 }
 
 .xkit--react #xkit_button.active {
@@ -1561,7 +1600,6 @@
 .xkit--react #xkit-gallery-extension-mirrorposts,
 .xkit--react #xkit-gallery-extension-mute,
 .xkit--react #xkit-gallery-extension-mutualchecker,
-.xkit--react #xkit-gallery-extension-estufars_sidebar_fix,
 .xkit--react #xkit-gallery-extension-old_stats,
 .xkit--react #xkit-gallery-extension-one_click_reply,
 .xkit--react #xkit-gallery-extension-outbox,
@@ -1588,5 +1626,9 @@
 .xkit--react #xkit-gallery-extension-stats,
 .xkit--react #xkit-gallery-extension-show_more,
 .xkit--react #xkit-gallery-extension-xwidgets {
+	display: none !important;
+}
+
+#xkit-gallery-extension-estufars_sidebar_fix {
 	display: none !important;
 }

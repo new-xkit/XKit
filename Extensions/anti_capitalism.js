@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.6.5 **//
+//* VERSION 1.6.6 **//
 //* DESCRIPTION Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -22,6 +22,11 @@ XKit.extensions.anti_capitalism = new Object({
 		},
 		"sidebar_ad": {
 			text: "Hide the Sidebar Ads",
+			default: true,
+			value: true
+		},
+		"takeover_ad": {
+			text: "Hide some elements from takeover ads",
 			default: true,
 			value: true
 		},
@@ -85,6 +90,14 @@ XKit.extensions.anti_capitalism = new Object({
 			if (this.preferences.sidebar_ad.value) {
 				const selector = XKit.css_map.keyToCss("mrecContainer");
 				XKit.interface.hide(selector, "anti_capitalism");
+			}
+
+			if (this.preferences.takeover_ad.value) {
+				XKit.tools.add_css(`
+					${XKit.css_map.keyToCss('cruelSummer')} {
+						display: none !important;
+					}
+				`, "anti_capitalism");
 			}
 
 			return;
