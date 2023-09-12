@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.6.9 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -413,8 +413,14 @@ XKit.extensions.quick_tags = new Object({
 
 		$posts
 			.addClass("xkit-quick-tags-done")
-			.each(function() {
-				XKit.interface.react.add_control_button($(this), "xkit-quick-tags", "");
+			.each(async function() {
+				const $post = $(this);
+				const post_id = $post.attr("data-id");
+				const {isBlocksPostFormat} = await XKit.interface.react.post_props(post_id);
+
+				if (!isBlocksPostFormat) {
+					XKit.interface.react.add_control_button($(this), "xkit-quick-tags", "");
+				}
 			});
 
 		XKit.extensions.quick_tags.processing = false;
@@ -652,6 +658,21 @@ XKit.extensions.quick_tags = new Object({
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
+		XKit.extensions.quick_tags.infoCpanel(m_div);
+	},
+
+	infoCpanel: function(m_div) {
+
+		$('.xkit-quick-tags-cp-info').remove();
+		$(m_div).prepend(`
+			<div class="xkit-quick-tags-cp-info">
+				<p>
+					This only works on legacy posts. You can migrate to
+					<a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">
+					XKit Rewritten</a>, but you will have to manually copy over your bundles.
+				</p>
+			</div>
+		`);
 	},
 
 	add_bundle_ui: function() {
