@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.6.9 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -652,6 +652,54 @@ XKit.extensions.quick_tags = new Object({
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
+		XKit.extensions.quick_tags.infoCpanel(m_div);
+	},
+
+	infoCpanel: function(m_div) {
+
+		$('.xkit-quick-tags-cp-info').remove();
+		$(m_div).prepend(`
+			<div class="xkit-quick-tags-cp-info">
+				<p>
+					Some info goes here.
+				</p>
+				<p>
+					Install XKit Rewritten and enable its Quick Tags feature, then press this button to copy your tag bundles:
+				</p>
+				<button class="xkit-button" id="xkit-quick-tags-cp-export">Copy tag bundles to XKit Rewritten</button>
+			</div>
+		`);
+
+		$('#xkit-quick-tags-cp-export').on('click', async function() {
+			this.setAttribute('disabled', '');
+			this.classList.add('disabled');
+
+			let response;
+
+			window.addEventListener('xkit-quick-tags-migration-response', ({ detail }) => { response = detail; });
+			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: XKit.extensions.quick_tags.tag_array }));
+
+			setTimeout(() => {
+				this.removeAttribute('disabled');
+				this.classList.remove('disabled');
+
+				if (response) {
+					XKit.window.show(
+						'Success!',
+						response,
+						'info',
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+					);
+				} else {
+					XKit.window.show(
+						'Failure',
+						'Make sure you have installed XKit Rewritten [version] or later, have refreshed the page, and have enabled Quick Tags.',
+						'error',
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+					);
+				}
+			}, 500);
+		});
 	},
 
 	add_bundle_ui: function() {
