@@ -674,12 +674,9 @@ XKit.extensions.quick_tags = new Object({
 			this.setAttribute('disabled', '');
 			this.classList.add('disabled');
 
-			let response;
+			let showResult = (response) => {
+				showResult = () => {};
 
-			window.addEventListener('xkit-quick-tags-migration-response', ({ detail }) => { response = detail; }, { once: true });
-			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: XKit.extensions.quick_tags.tag_array }));
-
-			setTimeout(() => {
 				this.removeAttribute('disabled');
 				this.classList.remove('disabled');
 
@@ -698,7 +695,12 @@ XKit.extensions.quick_tags = new Object({
 						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
 					);
 				}
-			}, 500);
+			};
+
+			window.addEventListener('xkit-quick-tags-migration-response', ({ detail }) => showResult(detail), { once: true });
+			setTimeout(() => showResult(), 1000);
+
+			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: XKit.extensions.quick_tags.tag_array }));
 		});
 	},
 
