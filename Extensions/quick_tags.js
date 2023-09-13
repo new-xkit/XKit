@@ -676,7 +676,7 @@ XKit.extensions.quick_tags = new Object({
 
 			let response;
 
-			window.addEventListener('xkit-quick-tags-migration-response', ({ detail }) => { response = detail; });
+			window.addEventListener('xkit-quick-tags-migration-response', ({ detail }) => { response = detail; }, { once: true });
 			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: XKit.extensions.quick_tags.tag_array }));
 
 			setTimeout(() => {
