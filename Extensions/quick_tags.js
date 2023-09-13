@@ -671,25 +671,30 @@ XKit.extensions.quick_tags = new Object({
 		`);
 
 		$('#xkit-quick-tags-cp-export').on('click', async function() {
+			if (!XKit.extensions.quick_tags.tag_array.length) {
+				XKit.window.show(
+					'Nothing to Copy',
+					"You don't have any tag bundles to copy!",
+					'error',
+					'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+				);
+				return;
+			}
+
 			this.setAttribute('disabled', '');
 			this.classList.add('disabled');
 
-			let response;
+			let succeeded = false;
 
-			window.addEventListener('xkit-quick-tags-migration-response', ({ detail }) => { response = detail; }, { once: true });
+			window.addEventListener('xkit-quick-tags-migration-success', () => { succeeded = true; }, { once: true });
 			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: XKit.extensions.quick_tags.tag_array }));
 
 			setTimeout(() => {
 				this.removeAttribute('disabled');
 				this.classList.remove('disabled');
 
-				if (response) {
-					XKit.window.show(
-						'Success!',
-						response,
-						'info',
-						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
-					);
+				if (succeeded) {
+					XKit.extensions.xkit_preferences.close();
 				} else {
 					XKit.window.show(
 						'Failure',
