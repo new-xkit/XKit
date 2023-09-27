@@ -1287,8 +1287,14 @@ XKit.extensions.one_click_postage = new Object({
 
 		const requestPath = `/v2/blog/${blog_id}/posts`;
 
+		const content = caption
+			.split('\n')
+			.map((text) => text.trim())
+			.filter(Boolean)
+			.map((text) => ({ formatting: [], type: 'text', text }));
+
 		const requestBody = {
-			content: caption ? [{ formatting: [], type: 'text', text: caption }] : [],
+			content,
 			tags,
 			parent_post_id: post_id,
 			parent_tumblelog_uuid,
