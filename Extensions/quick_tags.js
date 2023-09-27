@@ -687,7 +687,7 @@ XKit.extensions.quick_tags = new Object({
 			let succeeded = false;
 
 			window.addEventListener('xkit-quick-tags-migration-success', () => { succeeded = true; }, { once: true });
-			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: XKit.extensions.quick_tags.tag_array }));
+			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: JSON.stringify(XKit.extensions.quick_tags.tag_array) }));
 
 			setTimeout(() => {
 				this.removeAttribute('disabled');
