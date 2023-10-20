@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.23 **//
+//* VERSION 4.4.24 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -1331,7 +1331,7 @@ XKit.extensions.one_click_postage = new Object({
 			if (kitty_data.errors === true) {
 				// We fucked up for some reason.
 				if (retry_mode !== true) {
-					this.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
+					this.process(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 				} else {
 					this.show_error(new Error("Kitty request failed!"), state);
 				}
@@ -1379,7 +1379,7 @@ XKit.extensions.one_click_postage = new Object({
 				})
 				.catch(error => {
 					if (error.status == 403 && !retry_mode) {
-						this.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
+						this.process(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 						return;
 					}
 
