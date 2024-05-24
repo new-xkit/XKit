@@ -7,12 +7,10 @@
 
 'use strict';
 
-var gutil = require('gulp-util'),
+var File = require('vinyl'),
+	PluginError = require('plugin-error'),
 	path = require('path'),
 	through = require('through2');
-
-var File = gutil.File,
-	PluginError = gutil.PluginError;
 
 var resourceUtil = require('./resource');
 

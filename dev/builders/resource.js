@@ -9,12 +9,11 @@
 'use strict';
 
 var fs = require('fs'),
-	gutil = require('gulp-util'),
+	File = require('vinyl'),
+	PluginError = require('plugin-error'),
+	replaceExtension = require('replace-ext'),
 	path = require('path'),
 	through = require('through2');
-
-var File = gutil.File,
-	PluginError = gutil.PluginError;
 
 /** Builds a distributable resource object.
  * @see [vinyl]{@link https://github.com/wearefractal/vinyl}
@@ -48,7 +47,7 @@ module.exports.resourceBuilder = function(file, resource, contentsKey, attribute
 	});
 
 	file.contents = Buffer.from(JSON.stringify(resource));
-	file.path = gutil.replaceExtension(file.path, '.json');
+	file.path = replaceExtension(file.path, '.json');
 
 	return file;
 };

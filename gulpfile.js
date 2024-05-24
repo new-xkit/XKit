@@ -7,7 +7,8 @@ var connect = require('connect'),
 	del = require('del'),
 	fs = require('fs'),
 	gulp = require('gulp'),
-	gutil = require('gulp-util'),
+	log = require('fancy-log'),
+	colors = require('ansi-colors'),
 	https = require('https');
 
 var paths = {
@@ -61,9 +62,6 @@ gulp.task('build', gulp.series('build:extensions', 'build:themes'));
 
 // Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
 gulp.task('server', gulp.series('build', function(callback) {
-	var log = gutil.log;
-	var colors = gutil.colors;
-
 	var devApp = connect();
 	devApp.use(connectLogger('dev'));
 	devApp.use(function(request, response, next) {
