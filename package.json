@@ -1,6 +1,9 @@
 {
   "repository": "github:new-xkit/XKit",
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "dev": "gulp server",
     "test": "eslint .",
@@ -10,15 +13,14 @@
   },
   "devDependencies": {
     "connect": "^3.7.0",
-    "del": "^1.2.1",
-    "eslint": "^7.15.0",
+    "del": "^6.1.1",
+    "eslint": "^7.32.0",
     "gulp": "^4.0.2",
     "gulp-util": "^3.0.8",
-    "merge-stream": "^0.1.8",
     "morgan": "^1.10.0",
-    "serve-static": "^1.14.1",
-    "through2": "^2.0.5",
-    "web-ext": "^6.1.0"
+    "serve-static": "^1.15.0",
+    "through2": "^4.0.2",
+    "web-ext": "^7.11.0"
   },
   "webExt": {
     "ignoreFiles": [

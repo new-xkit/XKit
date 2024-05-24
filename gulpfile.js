@@ -26,14 +26,14 @@ var paths = {
 	]
 };
 
-gulp.task('clean:extensions', function(cb) {
-	del(['Extensions/dist/*.json',
+gulp.task('clean:extensions', function() {
+	return del(['Extensions/dist/*.json',
 	     'Extensions/dist/page/gallery.json',
-	     'Extensions/dist/page/list.json'], cb);
+	     'Extensions/dist/page/list.json']);
 });
 
-gulp.task('clean:themes', function(cb) {
-	del(['Extensions/dist/page/themes.json'], cb);
+gulp.task('clean:themes', function() {
+	return del(['Extensions/dist/page/themes.json']);
 });
 
 gulp.task('clean', gulp.series('clean:extensions', 'clean:themes'));
