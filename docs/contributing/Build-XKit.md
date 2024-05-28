@@ -1,9 +1,8 @@
 ## Prerequisites:
 
 * Download [Node.js](https://nodejs.org/download/) for your platform.
-* Optional: Install [Node Version Manager](https://github.com/nvm-sh/nvm) and run `nvm use v8` to travel back in time to a point when the dev server worked perfectly.
 * Ensure you have the `npm` command available.  Test this with `npm --version`.
-* Install `gulp` globally: `npm install -g gulp`.
+* Install the `gulp` command line utility globally: `npm install -g gulp-cli`.
 * Install the [EditorConfig](http://editorconfig.org/#download) plugin for your favourite editor.  We use this to enforce some style rules not covered by code linting.
 * Make a clone of the project, or update an existing copy.
 * Install project dependencies with `npm install`.
