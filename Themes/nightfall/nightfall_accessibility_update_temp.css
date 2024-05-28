@@ -1,0 +1,93 @@
+.flag--accessibility-design-update a, 
+body.flag--accessibility-design-update {
+	color: var(--primary);
+}
+
+.flag--accessibility-design-update .post-container a {
+	color: var(--primary);
+}
+
+.flag--accessibility-design-update .post_controls .post_control:before, 
+.flag--accessibility-design-update .post .post-source-footer a.post-source-link, 
+.flag--accessibility-design-update .post_full .post_footer, 
+.flag--accessibility-design-update .radar .radar_controls .note_count>a, 
+.flag--accessibility-design-update .radar .radar_controls .radar_button {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .reblog_follow_button .follow-text, 
+.flag--accessibility-design-update .worded-follow-button .follow-text {
+	color: var(--primary) !important;
+}
+
+.flag--accessibility-design-update .messaging-inbox .inbox-compose-toggle .compose-start, 
+.messaging-inbox .flag--accessibility-design-update .inbox-compose-toggle .compose-start {
+	color: var(--primary) !important;
+}
+
+.flag--accessibility-design-update .ui_search.active .search_form_field:before, 
+.flag--accessibility-design-update .ui_search.selected .search_form_field:before {
+	color: var(--primary) !important;
+}
+
+.flag--accessibility-design-update .search_popover .search_results_section .search_subheading {
+	color: var(--primary);
+}
+
+.flag--accessibility-design-update .post .post_info .reblog_icon, 
+.flag--accessibility-design-update .post_full .post_header, 
+.flag--accessibility-design-update .post_full .post_header .post_info .post_info_link, 
+.flag--accessibility-design-update .post_full .post_info .post_info_fence .reblog_source .post_info_link {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .post-form--header {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .plus-follow-button {
+	color: var(--primary);
+}
+
+.flag--accessibility-design-update .radar .radar_footer .radar_avatar::before {
+	background: unset;
+}
+
+.flag--accessibility-design-update .rapid-recs-container .rapid-recs {
+	background-image: linear-gradient(to bottom, rgba(79, 79, 79, 0) 0%, rgba(48, 48, 48, 0.18) 15%, rgba(48, 48, 48, 0.18) 85%, rgba(79, 79, 79, 0) 100%);
+}
+
+.flag--accessibility-design-update .post .dockable_video_embed .post_info .post_info_link, 
+.flag--accessibility-design-update .post .dockable_video_embed .post_header .post_info_tumblelog {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .post .dockable_video_embed .post_info .post_info_link {
+	color: var(--primary);
+}
+
+.flag--accessibility-design-update .is-followed .post-activity-note-content .note-text {
+	color: var(--primary);
+}
+
+.flag--accessibility-design-update .peepr-body .indash_blog a.reblog_info, 
+.flag--accessibility-design-update .post .post_header .post_info_link {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .peepr-body .indash_blog .post_notes_label {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .post-activity-reply .submit[disabled] {
+	color: var(--secondary);
+}
+
+.flag--accessibility-design-update .post-activity-reply .submit {
+	color: var(--accent);
+}
+ 
+.flag--accessibility-design-update .editor-plaintext, 
+.flag--accessibility-design-update .editor-richtext {
+	color: var(--primary);
+}
