@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.19 **//
+//* VERSION 7.4.20 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1326,6 +1326,7 @@ XKit.extensions.xkit_patches = new Object({
 					version.major = parseInt(versionSplit[0]);
 					version.minor = parseInt(versionSplit[1]);
 					version.patch = parseInt(versionSplit[2]);
+					version.silent_patch = versionSplit[3] ? parseInt(versionSplit[3]) : 0;
 				}
 				return version;
 			};
