@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.19 **//
+//* VERSION 7.4.20 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -460,11 +460,12 @@ XKit.extensions.xkit_patches = new Object({
 
 			/**
 			 * Edit up to 100 posts at a time via Mass Post Editor
-			 * @param {Object[]} post_ids - array of post IDs to edit
-			 * @param {Object[]} config - settings object
-			 * @param {String} config.mode - "add", "remove", or "delete"
-			 * @param {Object[]} [config.tags] - array of tags to add or remove
-			 * @return {Promise}
+			 *
+			 * @param {string[]} post_ids - array of post IDs to edit
+			 * @param {object} config - settings object
+			 * @param {string} config.mode - "add", "remove", or "delete"
+			 * @param {string[]} [config.tags] - array of tags to add or remove
+			 * @returns {Promise<object>}
 			 */
 			XKit.interface.mass_edit = function(post_ids, config) {
 			    const path = {
@@ -732,12 +733,15 @@ XKit.extensions.xkit_patches = new Object({
 			};
 			_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
-			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
+			// eslint-disable-next-line no-async-promise-executor
+			XKit.tools.Nx_XHR = details => new Promise(async (resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
+
+				const form_key = XKit.interface.form_key() || await XKit.interface.async_form_key();
 
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
-					"X-Tumblr-Form-Key": XKit.interface.form_key(),
+					"X-Tumblr-Form-Key": form_key,
 					"X-XKit-Version": XKit.version,
 				};
 
@@ -1088,15 +1092,11 @@ XKit.extensions.xkit_patches = new Object({
 						var post_tag = XKit.css_map.keyToClasses("tag").join(" ");
 
 						for (var i = 0; i < tags_array.length; i++) {
-							var formatted = encodeURIComponent(tags_array[i]);
+							const tag = tags_array[i].trim();
 
-							if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
-
-							if (tags_array[i].substring(0, 1) === " ") {
-								tags_array[i] = tags_array[i].substring(1);
+							if (tag) {
+								m_inner += `<a class="${post_tag}" href="/tagged/${encodeURIComponent(tag)}">#${tag}</a>`;
 							}
-
-							m_inner = m_inner + `<a class="${post_tag}" href=\"/tagged/" ${formatted} \">#${tags_array[i]}</a>`;
 						}
 
 						var tags_class = XKit.css_map.keyToCss("tags");
