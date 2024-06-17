@@ -238,3 +238,14 @@
 .xkit-interface-control-button.xkit-quick-tags:after {
 	opacity: 1 !important;
 }
+
+.xkit-quick-tags-cp-info {
+    padding: 0 1em;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgb(80,80,80);
+}
+
+.xkit-quick-tags-cp-info button {
+    margin: 0 0 .75em 0;
+}

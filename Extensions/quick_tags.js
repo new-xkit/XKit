@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.6.9 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -652,6 +652,59 @@ XKit.extensions.quick_tags = new Object({
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
+		XKit.extensions.quick_tags.infoCpanel(m_div);
+	},
+
+	infoCpanel: function(m_div) {
+
+		$('.xkit-quick-tags-cp-info').remove();
+		$(m_div).prepend(`
+			<div class="xkit-quick-tags-cp-info">
+				<p>
+					The <a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">XKit Rewritten</a> extension includes a new version of this script. It fixes post formatting becoming broken when tags are added and adds a quick tag button to the post editor!
+				</p>
+				<p>
+					To migrate easily, <a href="https://github.com/AprilSylph/XKit-Rewritten#installation" target="_blank">install XKit Rewritten</a> and enable its Quick Tags feature in your browser toolbar, then refresh this page and press this button to copy your tag bundles:
+				</p>
+				<button class="xkit-button" id="xkit-quick-tags-cp-export">Copy tag bundles to XKit Rewritten</button>
+			</div>
+		`);
+
+		$('#xkit-quick-tags-cp-export').on('click', async function() {
+			if (!XKit.extensions.quick_tags.tag_array.length) {
+				XKit.window.show(
+					'Nothing to Copy',
+					"You don't have any tag bundles to copy!",
+					'error',
+					'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+				);
+				return;
+			}
+
+			this.setAttribute('disabled', '');
+			this.classList.add('disabled');
+
+			let succeeded = false;
+
+			window.addEventListener('xkit-quick-tags-migration-success', () => { succeeded = true; }, { once: true });
+			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: JSON.stringify(XKit.extensions.quick_tags.tag_array) }));
+
+			setTimeout(() => {
+				this.removeAttribute('disabled');
+				this.classList.remove('disabled');
+
+				if (succeeded) {
+					XKit.extensions.xkit_preferences.close();
+				} else {
+					XKit.window.show(
+						'Failure',
+						'Make sure you have installed XKit Rewritten v0.23.5 or later, have refreshed the page, and have enabled Quick Tags.',
+						'error',
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+					);
+				}
+			}, 500);
+		});
 	},
 
 	add_bundle_ui: function() {
