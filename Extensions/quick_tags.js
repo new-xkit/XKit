@@ -661,10 +661,10 @@ XKit.extensions.quick_tags = new Object({
 		$(m_div).prepend(`
 			<div class="xkit-quick-tags-cp-info">
 				<p>
-					Some info goes here.
+					The <a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">XKit Rewritten</a> extension includes a new version of this script. It fixes post formatting becoming broken when tags are added and adds a quick tag button to the post editor!
 				</p>
 				<p>
-					Install XKit Rewritten and enable its Quick Tags feature, then press this button to copy your tag bundles:
+					To migrate easily, <a href="https://github.com/AprilSylph/XKit-Rewritten#installation" target="_blank">install XKit Rewritten</a> and enable its Quick Tags feature in your browser toolbar, then refresh this page and press this button to copy your tag bundles:
 				</p>
 				<button class="xkit-button" id="xkit-quick-tags-cp-export">Copy tag bundles to XKit Rewritten</button>
 			</div>
@@ -698,7 +698,7 @@ XKit.extensions.quick_tags = new Object({
 				} else {
 					XKit.window.show(
 						'Failure',
-						'Make sure you have installed XKit Rewritten [version] or later, have refreshed the page, and have enabled Quick Tags.',
+						'Make sure you have installed XKit Rewritten v0.23.5 or later, have refreshed the page, and have enabled Quick Tags.',
 						'error',
 						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
 					);
