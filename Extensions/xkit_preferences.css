@@ -1521,6 +1521,7 @@
 }
 
 .xkit--react .xkit-extension[data-extension-id="people_notifier"],
+.xkit--react .xkit-extension[data-extension-id="auto_tagger"],
 .xkit--react .xkit-extension[data-extension-id="bookmarker"],
 .xkit--react .xkit-extension[data-extension-id="cleanfeed"],
 .xkit--react .xkit-extension[data-extension-id="dont_stretch_photosets"],
