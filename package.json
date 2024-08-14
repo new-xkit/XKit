@@ -2,7 +2,7 @@
   "repository": "github:new-xkit/XKit",
   "license": "GPL-3.0",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "dev": "gulp server",
@@ -24,7 +24,7 @@
     "serve-static": "^1.15.0",
     "through2": "^4.0.2",
     "vinyl": "^3.0.0",
-    "web-ext": "^7.11.0"
+    "web-ext": "^8.2.0"
   },
   "webExt": {
     "ignoreFiles": [
