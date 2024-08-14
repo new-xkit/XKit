@@ -9,7 +9,7 @@
     "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
-    "sign": "web-ext sign"
+    "sign": "web-ext sign --channel unlisted"
   },
   "devDependencies": {
     "ansi-colors": "^4.1.3",
