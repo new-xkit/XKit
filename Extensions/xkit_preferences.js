@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.6.21 **//
+//* VERSION 7.7.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -39,8 +39,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var m_html =
 			`<div id="xkit_button" class="tab iconic tab_xkit">
-				<button class="tab_anchor" title="XKit Control Panel" tabindex="7">
-					<p class="tab_anchor_text">XKit Control Panel</p>
+				<button class="tab_anchor" title="New XKit" tabindex="7">
+					<p class="tab_anchor_text">New XKit</p>
 					${this.button_svgs[holiday]}
 				</button>
 				<div class="tab_notice tab-notice--outlined xkit_notice_container">
@@ -79,21 +79,28 @@ XKit.extensions.xkit_preferences = new Object({
 		const react_add_button = async (button) => {
 			await XKit.css_map.getCssMap();
 			const menuContainer = XKit.css_map.keyToCss("menuContainer");
+			const drawerContent = XKit.css_map.keyToCss("drawerContent");
+			const navigationLinks = XKit.css_map.keyToCss("navigationLinks");
 			const hamburger = XKit.css_map.keyToCss("hamburger");
 
 			const check_and_reinsert = () => {
 				if (button.isConnected) return;
 				const header = document.querySelector('header');
-				if (header === null) return;
+				const nav = document.querySelector(navigationLinks);
 
-				const desktopMenuItems = header.querySelectorAll(menuContainer);
+				const desktopMenuItems = header ? [...header.querySelectorAll(menuContainer)] : [];
 				if (desktopMenuItems.length) {
 					const desktopAccountMenu = desktopMenuItems[desktopMenuItems.length - 1];
 					desktopAccountMenu.before(button);
 					return;
 				}
 
-				const mobileHamburgerMenu = header.querySelector(hamburger);
+				if (nav && !nav.closest(drawerContent)) {
+					nav.append(button);
+					return;
+				}
+
+				const mobileHamburgerMenu = header && header.querySelector(hamburger);
 				if (mobileHamburgerMenu) {
 					mobileHamburgerMenu.closest(XKit.css_map.keyToCss("left")).append(button);
 					return;
@@ -107,12 +114,12 @@ XKit.extensions.xkit_preferences = new Object({
 		};
 
 		let button_ready = Promise.resolve();
+		const button = $(m_html).get(0);
 		if (XKit.page.react) {
-			const button = $(m_html).get(0);
 			button.setAttribute('tabindex', 0);
 			button_ready = react_add_button(button);
 		} else {
-			$("#account_button").before(m_html);
+			$("#account_button").before(button);
 			$("#account_button > button").attr("tabindex", "8");
 		}
 
@@ -121,7 +128,7 @@ XKit.extensions.xkit_preferences = new Object({
 				this.show_welcome_bubble();
 			}
 
-			$("#xkit_button").click(XKit.extensions.xkit_preferences.open);
+			$(button).click(XKit.extensions.xkit_preferences.open);
 
 			const unread_mail_count = XKit.extensions.xkit_preferences.news.unread_count();
 			if (unread_mail_count > 0) {
@@ -203,6 +210,16 @@ XKit.extensions.xkit_preferences = new Object({
 	spring_cleaning_m_list_html: "",
 
 	spring_cleaning: function() {
+
+		const silent_clean_list = [
+			"estufars_sidebar_fix",
+		];
+
+		for (const extension of silent_clean_list) {
+			if (XKit.installed.check(extension)) {
+				XKit.installed.remove(extension);
+			}
+		}
 
 		var clean_list = [
 			"separator",

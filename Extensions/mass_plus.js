@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.4.7 **//
+//* VERSION 0.4.8 **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -117,23 +117,17 @@ XKit.extensions.mass_plus = new Object({
 			if (m_type === "select-all") {
 				$("a.brick").removeClass("highlighted");
 				$("a.brick:lt(100)").addClass("highlighted");
-				$(".editor_navigation button").removeAttr('disabled');
 				XKit.extensions.mass_plus.update_count();
 				return;
 			}
 			if (m_type === "deselect-all") {
 				$("a.brick").removeClass("highlighted");
-				$(".editor_navigation button").attr('disabled', 'disabled');
 				XKit.extensions.mass_plus.update_count();
 				return;
 			}
 			if (m_type === "private") {
 				$("a.brick").removeClass("highlighted");
-				$(".editor_navigation button").attr('disabled', 'disabled');
 				$(".private_overlay:lt(100)").parent().addClass("highlighted");
-				if ($(".highlighted").length > 0) {
-					$(".editor_navigation button").removeAttr('disabled');
-				}
 				XKit.extensions.mass_plus.update_count();
 				return;
 			}
@@ -145,7 +139,6 @@ XKit.extensions.mass_plus = new Object({
 			}
 			var m_selector = "a.brick." + m_type + ":lt(100)";
 			$(m_selector).addClass("highlighted");
-			$(".editor_navigation button").removeAttr('disabled');
 			XKit.extensions.mass_plus.update_count();
 		});
 	},
@@ -233,6 +226,13 @@ XKit.extensions.mass_plus = new Object({
 	},
 	update_count: function(from_click) {
 		var sel_count = $("a.brick.highlighted").length;
+
+		if (sel_count) {
+			$(".editor_navigation button").removeAttr('disabled');
+		} else {
+			$(".editor_navigation button").attr('disabled', 'disabled');
+		}
+
 		$("#xkit-mass-count span").html(sel_count);
 		if (sel_count === 0 || from_click === true) {
 			return;
