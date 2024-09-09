@@ -418,6 +418,7 @@ XKit.extensions.quick_tags = new Object({
 		$("#xkit-quick-tags-window").remove();
 		$(".xkit-quick-tags, .xkit-quick-tags-window").remove();
 
+		$(".xkit-quick-tags-done").removeClass("xkit-quick-tags-done");
 	},
 
 	create_div: function(obj, id, max) {
