@@ -12,12 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.2
+      uses: actions/setup-node@v4
       with:
-        node-version: 14
+        node-version: 20
+        cache: npm
 
     - name: Install dependencies
       run: npm ci

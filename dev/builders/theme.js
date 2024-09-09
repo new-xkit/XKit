@@ -7,11 +7,9 @@
 
 'use strict';
 
-var gutil = require('gulp-util'),
+var PluginError = require('plugin-error'),
 	path = require('path'),
 	through = require('through2');
-
-var PluginError = gutil.PluginError;
 
 var resourceUtil = require('./resource');
 
