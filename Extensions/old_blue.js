@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 2.1.5 **//
+//* VERSION 2.1.6 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DETAILS Reverts the colour scheme and font to that of 2018 Tumblr. Overrides any Tumblr-provided color palettes. **//
 //* DEVELOPER New-XKit **//
