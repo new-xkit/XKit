@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9.6 **//
+//* VERSION 6.9.7 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
@@ -11,9 +11,7 @@ XKit.extensions.xkit_installer = new Object({
 		'xkit_patches',
 		'xkit_preferences',
 		'xkit_updates',
-		'xinbox',
 		'one_click_postage',
-		'one_click_reply',
 		'tweaks',
 		'xcloud'
 	],
@@ -82,7 +80,7 @@ XKit.extensions.xkit_installer = new Object({
 					XKit.window.show("Corrupt Profile",
 						"<b>If XKit never successfully installs</b>, you'll need to create a fresh user profile.<br>" +
 						"If your data (i.e. bookmarks, passwords) is not synchronised up to a" + sync + " account, you'll want to export or synchronise it now.<br><br>" +
-						"Next, you'll want to " + (link ? '<a href="' + link + '" target="_blank">' : "") + "create a new profile" + (link ? "</a>" : "") + ", and then try installing New XKit again on it.<br>" +
+						"Next, you'll want to " + (link ? '<a href="' + link + '" target="_blank">' : "") + "create a new profile" + (link ? "</a>" : "") + ", and then try installing XKit again on it.<br>" +
 						"If this doesn't work or isn't possible, you may need to reset or reinstall your browser.<br><br>" +
 						"<b>If XKit only occasionally resets</b>, it may be down to hardware failure or your browser is handling crashes badly. " +
 						"We can't give accurate advice on preventing this - just be sure to synchronise your settings to XCloud often." +
