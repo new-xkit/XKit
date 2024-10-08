@@ -127,7 +127,7 @@ XKit.extensions.xkit_installer = new Object({
 			try {
 				// Try evaling the script.
 				// If it's working, then move to the next one.
-				eval(mdata.script + "\n//# sourceURL=xkit/" + mdata.id + ".js");
+				new Function(mdata.script + "\n//# sourceURL=xkit/" + mdata.id + ".js")();
 				XKit.extensions.xkit_installer.installed++;
 				XKit.extensions.xkit_installer.next();
 			} catch (e) {

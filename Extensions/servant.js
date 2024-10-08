@@ -731,7 +731,7 @@ XKit.extensions.servant = new Object({
 				var m_return = false;
 
 				try {
-					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
+					m_return = new Function(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js")();
 				} catch (e) {
 					m_return = false;
 					console.error("Unable to run Servant! ---> " + e.message);
@@ -1142,7 +1142,7 @@ XKit.extensions.servant = new Object({
 					var post = m_post[0];
 				}
 
-				eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
+				new Function(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js")();
 
 			}
 

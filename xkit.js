@@ -109,7 +109,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				if (!xkit_main.errors && xkit_main.script) {
 					console.log("Trying to run xkit_main.");
 					try {
-						eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
+						new Function(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js")();
 						XKit.extensions.xkit_main.run();
 					} catch (e) {
 						show_error_reset("Can't run xkit_main: " + e.message);
@@ -148,7 +148,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			if (!xkit_main.errors && xkit_main.script) {
 				console.log("Trying to run xkit_main.");
 				try {
-					eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
+					new Function(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js")();
 					XKit.frame_mode = true;
 					XKit.extensions.xkit_main.run();
 				} catch (e) {
@@ -3223,7 +3223,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					}
 
 					try {
-						eval(data.script + "\n//# sourceURL=xkit/xkit_updates.js");
+						new Function(data.script + "\n//# sourceURL=xkit/xkit_updates.js")();
 						XKit.window.show("Forcing Extension Updates",
 							"Please do not navigate away from this page. Your extensions are being updated for compatibility with the latest XKit version." +
 							'<div id="xkit-forced-auto-updates-message">Initializing...</div>', "info");
@@ -3359,7 +3359,7 @@ function xkit_init_special() {
 			xhr.open('GET', browser.extension.getURL('editor.js'), false);
 			xhr.send(null);
 			try {
-				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
+				new Function(xhr.responseText + "\n//# sourceURL=xkit/editor.js")();
 				XKit.extensions.xkit_editor.run();
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -3555,7 +3555,7 @@ function xkit_install() {
 		}
 
 		try {
-			eval(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js");
+			new Function(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js")();
 			XKit.extensions.xkit_installer.run();
 		} catch (e) {
 			show_error_installation("[Code: 102] " + e.message);
