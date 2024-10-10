@@ -16,38 +16,13 @@ XKit.extensions.xkit_updates = new Object({
 			default: true,
 			value: true
 		},
-		"check_interval": {
-			text: "Update check interval (in milliseconds)",
-			default: "18000000",
-			value: "18000000",
-			type: "text"
-		},
 	},
 
 	run: function() {
 		try {
 			XKit.tools.init_css("xkit_updates");
 			this.running = true;
-			var ms = (new Date()).getTime();
-			var last_time = parseFloat(XKit.storage.get("xkit_updates", "last_update_check", "0"));
-			var difference = ms - last_time;
-			console.log("Updates: difference = " + difference);
-			if (isNaN(XKit.extensions.xkit_updates.preferences.check_interval.value) === true) {
-				console.log("Invalid check interval, reverting to default: not a number.");
-				XKit.extensions.xkit_updates.preferences.check_interval.value = XKit.extensions.xkit_updates.default_interval;
-			} else {
-				var m_interval = XKit.extensions.xkit_updates.preferences.check_interval.value;
-				if (m_interval > XKit.extensions.xkit_updates.max_interval || m_interval < XKit.extensions.xkit_updates.min_interval) {
-					XKit.extensions.xkit_updates.preferences.check_interval.value = XKit.extensions.xkit_updates.default_interval;
-					console.log("Invalid check interval, reverting to default: too small or big.");
-				}
-			}
-			if (difference <= -1 || difference >= XKit.extensions.xkit_updates.preferences.check_interval.value) {
-				console.log("Starting update checking..");
-				XKit.extensions.xkit_updates.get_list();
-			} else {
-				console.log("Skipping update checking.");
-			}
+			XKit.extensions.xkit_updates.get_list();
 		} catch (e) {
 			XKit.extensions.xkit_updates.show_update_failure();
 		}
