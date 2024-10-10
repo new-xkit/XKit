@@ -2245,7 +2245,7 @@ XKit.extensions.servant = new Object({
 				"Some causes &quot;return&quot; data. Here's how to use them.<br><br>" +
 				"Some servant causes have a symbol, a box with an arrow pointing out. " +
 				"Hovering over them shows what they return. Here's an example:<br>" +
-				'<img src="https://new-xkit.github.io/XKit/Extensions/dist/page/images/return_1.png" style="border: 1px solid #aaaa; border-radius: 3px;"><br>' +
+				`<img src="${browser.runtime.getURL('/Extensions/dist/page/images/return_1.png')}" style="border: 1px solid #aaaa; border-radius: 3px;"><br>` +
 				"This basically means that if you type &quot;%1&quot; on the actions panel, that %1 will get replaced with the time.",
 				"info",
 				'<div class="xkit-button default" id="xkit-servant-js-intro">Next &rarr;</div>' +

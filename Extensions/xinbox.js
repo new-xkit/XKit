@@ -132,11 +132,11 @@ XKit.extensions.xinbox = new Object({
 
 		if (XKit.extensions.xinbox.preferences.slim_outgoing_fan_mail.value === true) {
 
-			XKit.tools.add_css("#fan_mail { background-image: url('https://new-xkit.github.io/XKit/Extensions/dist/page/images/paper.png'); }#fan_mail #message{ overflow-y: scroll; font-size: 15px !important; line-height: 22px !important; }", "xinbox_slim_outgoing_fan_mail");
+			XKit.tools.add_css(`#fan_mail { background-image: url('${browser.runtime.getURL('/Extensions/dist/page/images/paper.png')}'); }#fan_mail #message{ overflow-y: scroll; font-size: 15px !important; line-height: 22px !important; }`, "xinbox_slim_outgoing_fan_mail");
 
 			$(document).on('click', '#paper_white-lined-1', function() {
 
-				$("#fan_mail").css("background-image", "url('https://new-xkit.github.io/XKit/Extensions/dist/page/images/paper.png')");
+				$("#fan_mail").css("background-image", `url('${browser.runtime.getURL('/Extensions/dist/page/images/paper.png')}')`);
 
 			});
 

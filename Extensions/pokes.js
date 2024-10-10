@@ -9,7 +9,6 @@
 
 XKit.extensions.pokes = {
 	running: false,
-	pokedex_url: "https://new-xkit.github.io/XKit/Extensions/dist/page/pokedex.json",
 
 	preferences: {
 		"allow_fullwidth": {
@@ -47,26 +46,12 @@ XKit.extensions.pokes = {
 
 	fetch_pokedex: function(callback, error) {
 		if (!XKit.extensions.pokes.gist_cache) {
-			GM_xmlhttpRequest({
-				method: "GET",
-				url: XKit.extensions.pokes.pokedex_url,
-				json: true,
-				onerror: function(response) {
-					console.log("Poke data could not be retrieved. Skipping instance.");
-					if (error) { error(response); }
-				},
-				onload: function(response) {
-					var mdata = {};
-					try {
-						mdata = JSON.parse(response.responseText);
+			fetch(browser.runtime.getURL('/Extensions/dist/page/pokedex.json'))
+					.then(response => response.json())
+					.then(mdata => {
 						XKit.extensions.pokes.gist_cache = mdata;
 						callback(mdata);
-					} catch (e) {
-						console.log("Poke data received was not valid JSON. Skipping instance.");
-						if (error) { error(response); }
-					}
-				}
-			});
+					});
 		} else {
 			callback(XKit.extensions.pokes.gist_cache);
 		}
