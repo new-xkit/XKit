@@ -217,19 +217,19 @@ var xkit_global_start = Date.now();  // log start timestamp
 				});
 			},
 			extension: function(extension_id, callback) {
-				XKit.download.github_fetch(extension_id + '.json', callback);
+				getExtensionData(extension_id).then(callback);
 			},
 			page: function(page, callback) {
 				if (page === 'list.php') {
-					XKit.download.github_fetch('page/list.json', callback);
+					getListData().then(callback);
 					return;
 				}
 				if (page === 'gallery.php') {
-					XKit.download.github_fetch('page/gallery.json', callback);
+					getGalleryData().then(callback);
 					return;
 				}
 				if (page === 'themes/index.php') {
-					XKit.download.github_fetch('page/themes.json', callback);
+					getThemeGalleryData().then(callback);
 					return;
 				}
 				if (page === 'paperboy/index.php') {
@@ -3575,43 +3575,8 @@ function show_error_installation(message) {
 
 		"error",
 
-		'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-		'<div id="xkit-install-troubleshooting" class="xkit-button">Troubleshooting &rarr;</div>'
+		'<div id="xkit-close-message" class="xkit-button default">OK</div>'
 	);
-
-	$("#xkit-install-troubleshooting").click(function() {
-
-		XKit.window.show(
-			"Connection Troubleshooting",
-
-			`The easiest way to determine the problem is to attempt a direct connection.
-			Use the <b>Connect</b> button to open a test page from our servers in a new tab,
-			then follow the appropriate advice:<br><br>
-
-			<b>If you can connect</b>, something local is impeding New XKit's connection to <code>new-xkit.github.io</code> -
-			this is usually another browser add-on blocking it. Be sure to whitelist the domain in any script blockers.<br><br>
-
-			<b>If you can't connect</b>, either GitHub is having issues or there's a problem with your network.
-			If GitHub Status reports 100%, try troubleshooting the error your browser gives you, or wait a while and try again if it only times out.<br><br>
-
-			<b>In either case</b>, feel free to reach out to our team for help.`,
-
-			"question",
-
-			'<a href="https://new-xkit.github.io/XKit/Test" class="xkit-button default" target="_blank">Connect</a>' +
-			'<a href="https://www.githubstatus.com" class="xkit-button" target="_blank">GitHub Status</a>' +
-			'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button" target="_blank">New XKit Blog</a>' +
-			'<div id="xkit-close-message" class="xkit-button">Close</div>'
-		);
-
-		$(".xkit-window-msg code").css({
-			"font-family": "monospace",
-			"user-select": "all",
-			"-moz-user-select": "all",
-			"-webkit-user-select": "all"
-		});
-
-	});
 }
 
 function show_error_script(message) {
@@ -3641,4 +3606,147 @@ function show_error_reset(message) {
 function show_error_update(message) {
 	// Shortcut to call when there is a javascript error.
 	XKit.window.show("XKit ran into an error.", "<b>Generated Error message:</b><br/><p>" + message + "</p>You might need to update XKit manually. Please visit the New XKit Blog. Alternatively, you can write down the error message above and contact New XKit Support to see how you can fix this or reload the page to try again.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"https://new-xkit-extension.tumblr.com\" class=\"xkit-button\">New XKit Blog</a><a href=\"https://new-xkit-support.tumblr.com\" class=\"xkit-button\">New XKit Support</a>");
+}
+
+/**
+ * Functions used in place of gulp build server
+ */
+
+const loadFile = path => fetch(browser.runtime.getURL(path)).then(response => response.text());
+
+/** Each extension has the following fields:
+ * {string}  script      - Contents of the extension file
+ * {string}  id          - File name without extension
+ * {string}  icon        - Contents of the `id`.icon.js file
+ * {string}  css         - Contents of the `id`.css file
+ * {string}  title       - Value of the TITLE field in `script`
+ * {string}  version     - Value of the VERSION field in `script`
+ * {string}  description - Value of the DESCRIPTION field in `script`
+ * {string}  details     - Value of the DETAILS field in `script`
+ * {string}  developer   - Value of the DEVELOPER field in `script`
+ * {boolean} frame       - Value of the FRAME field in `script`
+ * {boolean} [beta]      - Value of the optional BETA field in `script`
+ * {boolean} [slow]      - Value of the optional SLOW field in `script`
+ */
+const extensionAttributes = [
+	{name: "title", default: null, required: true},
+	{name: "description", default: null, required: true},
+	{name: "developer", default: null, required: true},
+	{name: "version", default: null, required: true},
+	{name: "details", default: null, required: false},
+	{name: "frame", default: "false", required: false},
+	{name: "beta", default: "false", required: false},
+	{name: "slow", default: "false", required: false},
+];
+
+async function getExtensionData(id) {
+	const contents = await loadFile(`/Extensions/${id}.js`);
+
+	const extension = {
+		id,
+		script: contents,
+		file: "found",
+		server: "up",
+		errors: false,
+	};
+
+	try {
+		const icon = await loadFile(`/Extensions/${id}.icon.js`);
+		extension.icon = icon;
+	} catch (e) {}
+	try {
+		const css = await loadFile(`/Extensions/${id}.css`);
+		extension.css = css;
+	} catch (e) {}
+
+	extensionAttributes.forEach(({name: key, default: defaultValue}) => {
+		const match = contents.match(new RegExp("/\\*\\s*" + key.toUpperCase() + "\\s*(.+?)\\s*\\*\\*?/"));
+		if (match) {
+			extension[key] = match[1];
+		} else if (defaultValue) {
+			extension[key] = defaultValue;
+		}
+	});
+
+	return extension;
+}
+
+async function getGalleryData() {
+	const list = JSON.parse(await loadFile("/Extensions/_index.json"));
+	const extensionData = await Promise.all(list.map(getExtensionData));
+
+	// eslint-disable-next-line id-length
+	extensionData.sort((a, b) => a.title.localeCompare(b.title));
+
+	return {
+		server: "up",
+		extensions: extensionData.map(({id, title, version, description, icon, details}) => ({
+			name: id,
+			title,
+			version,
+			description,
+			icon,
+			details,
+		})),
+	};
+}
+
+async function getListData() {
+	const list = JSON.parse(await loadFile("/Extensions/_index.json"));
+	const extensionData = await Promise.all(list.map(getExtensionData));
+
+	return {
+		server: "up",
+		extensions: extensionData.map(({id, version}) => ({name: id, version})),
+	};
+}
+
+/** Each theme has the following fields:
+ * {string} file        - Contents of the theme file
+ * {string} name        - Value of the NAME field in `file`
+ * {string} version     - Value of the VERSION field in `file`
+ * {string} description - Value of the DESCRIPTION field in `file`
+ * {string} developer   - Value of the DEVELOPER field in `file`
+ */
+const themeAttributes = [
+	{name: "name", default: null, required: true},
+	{name: "description", default: null, required: true},
+	{name: "developer", default: null, required: true},
+	{name: "version", default: null, required: true},
+];
+async function getThemeData(id) {
+	const contents = await loadFile(`/Themes/${id}/${id}.css`);
+
+	const theme = {
+		file: `${id}.css`,
+		contents,
+	};
+
+	themeAttributes.forEach(({name: key, default: defaultValue}) => {
+		const match = contents.match(new RegExp("/\\*\\s*" + key.toUpperCase() + "\\s*(.+?)\\s*\\*\\*?/"));
+		if (match) {
+			theme[key] = match[1];
+		} else if (defaultValue) {
+			theme[key] = defaultValue;
+		}
+	});
+
+	return theme;
+}
+
+async function getThemeGalleryData() {
+	const list = JSON.parse(await loadFile("/Themes/_index.json"));
+	const themeData = await Promise.all(list.map(getThemeData));
+
+	return {
+		server: "up",
+		themes: themeData.map(({file, name, version, description, developer, contents}) => ({
+			file,
+			name,
+			version,
+			description,
+			developer,
+			contents,
+		})),
+	};
 }

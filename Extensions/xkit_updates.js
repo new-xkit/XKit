@@ -146,45 +146,10 @@ XKit.extensions.xkit_updates = new Object({
 
 					"error",
 
-					'<div class="xkit-button default" id="xkit-updates-troubleshooting">Troubleshooting &rarr;</div>' +
 					'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button">New XKit Blog</a>' +
 					'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>' +
 					'<div class="xkit-button" id="xkit-close-message">OK</div>'
 				);
-
-				$("#xkit-updates-troubleshooting").click(function() {
-
-					XKit.window.show(
-						"Connection Troubleshooting",
-
-						`The easiest way to determine the problem is to attempt a direct connection.
-						Use the <b>Connect</b> button to open a test page from our servers in a new tab,
-						then follow the appropriate advice:<br><br>
-
-						<b>If you can connect</b>, something local is impeding New XKit's connection to <code>new-xkit.github.io</code> -
-						this is usually another browser add-on blocking it. Be sure to whitelist the domain in any script blockers.<br><br>
-
-						<b>If you can't connect</b>, either GitHub is having issues or there's a problem with your network.
-						If GitHub Status reports 100%, try troubleshooting the error your browser gives you, or wait a while and try again if it only times out.<br><br>
-
-						<b>In either case</b>, feel free to reach out to our team for help.`,
-
-						"question",
-
-						'<a href="https://new-xkit.github.io/XKit/Test" class="xkit-button default" target="_blank">Connect</a>' +
-						'<a href="https://www.githubstatus.com" class="xkit-button" target="_blank">GitHub Status</a>' +
-						'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button" target="_blank">New XKit Blog</a>' +
-						'<div id="xkit-close-message" class="xkit-button">Close</div>'
-					);
-
-					$(".xkit-window-msg code").css({
-						"font-family": "monospace",
-						"user-select": "all",
-						"-moz-user-select": "all",
-						"-webkit-user-select": "all"
-					});
-
-				});
 			});
 
 	},
