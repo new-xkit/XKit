@@ -40,6 +40,12 @@ XKit.extensions.pokes = {
 		if (!window.location.href.match(/www.tumblr.com/)) return;
 		this.running = true;
 		XKit.tools.init_css('pokes');
+		XKit.tools.add_css(`
+			@font-face {
+				font-family: "pokepixelplus";
+				src: url(${browser.runtime.getURL('/Extensions/dist/pokepixelplus.ttf')});
+			}
+		`, "pokes_font");
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
 	},
@@ -198,6 +204,7 @@ XKit.extensions.pokes = {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
 		$(".poke").remove();
+		XKit.tools.remove_css("pokes_font");
 	},
 
 	rename_poke: function(index, nick, cb) {
