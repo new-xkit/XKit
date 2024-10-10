@@ -3330,7 +3330,6 @@ function xkit_init_special() {
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
 		if (typeof(browser) !== 'undefined') {
-			/* global browser */
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', browser.extension.getURL('editor.js'), false);
 			xhr.send(null);

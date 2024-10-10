@@ -8,7 +8,7 @@
 
 */
 
-/* globals chrome, browser, msBrowser */
+/* globals msBrowser */
 
 if (typeof(browser) === 'undefined') {
 	if (typeof(chrome) !== 'undefined') {
