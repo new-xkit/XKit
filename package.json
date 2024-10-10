@@ -16,7 +16,6 @@
     "ignoreFiles": [
       ".*",
       "docs/",
-      "Extensions/*.*",
       "Themes/",
       "LICENSE",
       "package-lock.json",
