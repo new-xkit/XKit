@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 2.1.2 **//
+//* VERSION 2.1.3 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER New-XKit **//
 (function() {
