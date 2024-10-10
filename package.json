@@ -2,32 +2,22 @@
   "repository": "github:new-xkit/XKit",
   "license": "GPL-3.0",
   "scripts": {
-    "dev": "gulp server",
+    "dev": "web-ext run --no-reload",
     "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
     "sign": "web-ext sign"
   },
   "devDependencies": {
-    "connect": "^3.7.0",
-    "del": "^1.2.1",
-    "eslint": "^7.15.0",
-    "gulp": "^4.0.2",
-    "gulp-util": "^3.0.8",
-    "merge-stream": "^0.1.8",
-    "morgan": "^1.10.0",
-    "serve-static": "^1.14.1",
-    "through2": "^2.0.5",
-    "web-ext": "^6.1.0"
+    "eslint": "^7.32.0",
+    "web-ext": "^7.12.0"
   },
   "webExt": {
     "ignoreFiles": [
       ".*",
-      "dev/",
       "docs/",
       "Extensions/dist",
       "Themes/",
-      "gulpfile.js",
       "LICENSE",
       "package-lock.json",
       "package.json",
