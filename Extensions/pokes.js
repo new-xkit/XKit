@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.12.0 **//
+//* VERSION 0.12.1 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -9,7 +9,6 @@
 
 XKit.extensions.pokes = {
 	running: false,
-	pokedex_url: "https://new-xkit.github.io/XKit/Extensions/dist/page/pokedex.json",
 
 	preferences: {
 		"allow_fullwidth": {
@@ -41,32 +40,24 @@ XKit.extensions.pokes = {
 		if (!window.location.href.match(/www.tumblr.com/)) return;
 		this.running = true;
 		XKit.tools.init_css('pokes');
+		XKit.tools.add_css(`
+			@font-face {
+				font-family: "pokepixelplus";
+				src: url(${browser.runtime.getURL('/Extensions/dist/pokepixelplus.ttf')});
+			}
+		`, "pokes_font");
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
 	},
 
 	fetch_pokedex: function(callback, error) {
 		if (!XKit.extensions.pokes.gist_cache) {
-			GM_xmlhttpRequest({
-				method: "GET",
-				url: XKit.extensions.pokes.pokedex_url,
-				json: true,
-				onerror: function(response) {
-					console.log("Poke data could not be retrieved. Skipping instance.");
-					if (error) { error(response); }
-				},
-				onload: function(response) {
-					var mdata = {};
-					try {
-						mdata = JSON.parse(response.responseText);
+			fetch(browser.runtime.getURL('/Extensions/dist/page/pokedex.json'))
+					.then(response => response.json())
+					.then(mdata => {
 						XKit.extensions.pokes.gist_cache = mdata;
 						callback(mdata);
-					} catch (e) {
-						console.log("Poke data received was not valid JSON. Skipping instance.");
-						if (error) { error(response); }
-					}
-				}
-			});
+					});
 		} else {
 			callback(XKit.extensions.pokes.gist_cache);
 		}
@@ -213,6 +204,7 @@ XKit.extensions.pokes = {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
 		$(".poke").remove();
+		XKit.tools.remove_css("pokes_font");
 	},
 
 	rename_poke: function(index, nick, cb) {

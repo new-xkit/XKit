@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.7.0 **//
+//* VERSION 7.7.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -342,52 +342,6 @@ XKit.extensions.xkit_preferences = new Object({
 						mdata.news[news_item].title, mdata.news[news_item].message, undefined, mdata.news[news_item].important);
 				}
 
-			});
-
-			XKit.download.page("framework_version.php", function(mdata) {
-
-				if (mdata.server_down === true) {
-					XKit.window.show("Can't connect to server",
-						"XKit was unable to contact the servers in order to download framework version update file. " +
-						'You might be using an outdated or buggy version of XKit. ' +
-						'Please visit <a href="http://new-xkit-extension.tumblr.com">the unofficial XKit Blog</a> for updates and details.',
-						"error", '<div id="xkit-close-message" class="xkit-button default">OK</div>');
-					return;
-				}
-
-				// This is awful but at least it works.
-				var my_version = parseFloat(XKit.tools.replace_all(XKit.version, "\\.", ""));
-				var mb_object;
-				var new_version;
-
-				if (XKit.browser().firefox === true &&
-					typeof XKit.extensions.xkit_preferences.news.return_browser_from_framework_data("firefox", mdata) !== "undefined") {
-
-					mb_object = XKit.extensions.xkit_preferences.news.return_browser_from_framework_data("firefox", mdata);
-				}
-
-				if (XKit.browser().safari === true &&
-					typeof XKit.extensions.xkit_preferences.news.return_browser_from_framework_data("safari", mdata) !== "undefined") {
-
-					mb_object = XKit.extensions.xkit_preferences.news.return_browser_from_framework_data("safari", mdata);
-				}
-
-				new_version = parseFloat(XKit.tools.replace_all(mb_object.version, "\\.", ""));
-
-				if (new_version > my_version) {
-					XKit.notifications.add("<b>Please update XKit!</b><br/>A new version of XKit is available for your browser. " +
-						"Please click here for more information and how you can easily and quickly update now.", "warning", true, function() {
-						XKit.window.show("Please update XKit",
-							"<b>A new version of XKit, version " + mb_object.version + " is available.</b><br/>" +
-							"You are currently using XKit version " + XKit.version + ".<br/><br/>" +
-							"Please update to the latest version as soon as possible. If you don't, XKit might not work properly, " +
-							"or might not work at all in the future.<br/><br/>All you have to do is to go to the XKit download page, " +
-							"and re-download XKit. XKit will update itself, and all your settings will be preserved.",
-							"warning",
-							'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com/downloads">Go to Download page</a>' +
-							'<div class="xkit-button" id="xkit-close-message">Not now, remind me later.</div>');
-					});
-				}
 			});
 		},
 
@@ -1021,7 +975,7 @@ XKit.extensions.xkit_preferences = new Object({
 					$("#xkit-gallery-extension-" + extension_data.id).find(".overlay").html("Installed!");
 
 					try {
-						eval(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js");
+						new Function(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js")();
 						XKit.extensions.xkit_main.load_extension_preferences(m_extension_id);
 						if (XKit.installed.enabled(m_extension_id)) {
 							XKit.extensions[m_extension_id].run();

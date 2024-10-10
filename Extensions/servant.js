@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.6.1 **//
+//* VERSION 0.6.2 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -731,7 +731,7 @@ XKit.extensions.servant = new Object({
 				var m_return = false;
 
 				try {
-					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
+					m_return = new Function(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js")();
 				} catch (e) {
 					m_return = false;
 					console.error("Unable to run Servant! ---> " + e.message);
@@ -1142,7 +1142,7 @@ XKit.extensions.servant = new Object({
 					var post = m_post[0];
 				}
 
-				eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
+				new Function(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js")();
 
 			}
 
@@ -2245,7 +2245,7 @@ XKit.extensions.servant = new Object({
 				"Some causes &quot;return&quot; data. Here's how to use them.<br><br>" +
 				"Some servant causes have a symbol, a box with an arrow pointing out. " +
 				"Hovering over them shows what they return. Here's an example:<br>" +
-				'<img src="https://new-xkit.github.io/XKit/Extensions/dist/page/images/return_1.png" style="border: 1px solid #aaaa; border-radius: 3px;"><br>' +
+				`<img src="${browser.runtime.getURL('/Extensions/dist/page/images/return_1.png')}" style="border: 1px solid #aaaa; border-radius: 3px;"><br>` +
 				"This basically means that if you type &quot;%1&quot; on the actions panel, that %1 will get replaced with the time.",
 				"info",
 				'<div class="xkit-button default" id="xkit-servant-js-intro">Next &rarr;</div>' +
