@@ -179,10 +179,10 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.9.2"],
+	run_order: ["7.10.0"],
 
 	patches: {
-		"7.9.2": function() {
+		"7.10.0": function() {
 
 			/**
 			 * Given a list of different collections in `items`, return all
