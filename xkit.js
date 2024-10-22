@@ -3614,6 +3614,15 @@ function show_error_update(message) {
 
 const loadFile = path => fetch(browser.runtime.getURL(path)).then(response => response.text());
 
+const extensionDataCache = {};
+
+async function getExtensionData(id) {
+	if (!extensionDataCache[id]) {
+		extensionDataCache[id] = loadExtensionData(id);
+	}
+	return extensionDataCache[id];
+}
+
 /** Each extension has the following fields:
  * {string}  script      - Contents of the extension file
  * {string}  id          - File name without extension
@@ -3639,7 +3648,7 @@ const extensionAttributes = [
 	{name: "slow", default: "false", required: false},
 ];
 
-async function getExtensionData(id) {
+async function loadExtensionData(id) {
 	const contents = await loadFile(`/Extensions/${id}.js`);
 
 	const extension = {
