@@ -179,7 +179,7 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.10.0"],
+	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1", "7.9.2", "7.10.0"],
 
 	patches: {
 		"7.10.0": function() {
