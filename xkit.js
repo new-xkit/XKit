@@ -6,7 +6,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 	if (typeof XKit !== "undefined") { return; }
 
 	XKit = {
-		version: framework_version,
+		version: undefined,
 		api_key: "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D",
 		page: {
 			standard:
@@ -23,7 +23,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			xkit:
 				document.location.href.indexOf('://www.tumblr.com/xkit_') !== -1
 		},
-		init: function() {
+		init: function(version) {
+			XKit.version = version;
 			if (!XKit.page.xkit) {
 				XKit.init_flags();
 			}
@@ -3328,13 +3329,13 @@ function show_message(title, msg, icon, buttons) {
 	});
 }
 
-function xkit_init_special() {
+async function xkit_init_special() {
 
 	$("body").html("");
 	document.title = "XKit";
 
 	XKit.notifications.init();
-	XKit.notifications.add("<b>Welcome to XKit " + framework_version + "</b><br/>&copy; 2011-2013 STUDIOXENIX");
+	XKit.notifications.add("<b>Welcome to XKit " + XKit.version + "</b><br/>&copy; 2011-2013 STUDIOXENIX");
 
 	if (document.location.href.indexOf("/xkit_reset") !== -1) {
 		XKit.special.reset();
@@ -3354,11 +3355,8 @@ function xkit_init_special() {
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
 		if (typeof(browser) !== 'undefined') {
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', browser.extension.getURL('editor.js'), false);
-			xhr.send(null);
 			try {
-				new Function(xhr.responseText + "\n//# sourceURL=xkit/editor.js")();
+				await import(await bridge_call("browser.runtime.getURL", ["/editor.js"]));
 				XKit.extensions.xkit_editor.run();
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -3536,7 +3534,7 @@ function install_extension(mdata, callback) {
 
 function xkit_install() {
 
-	XKit.window.show("Welcome to New XKit " + framework_version + "!", "<b>Please wait while I initialize the setup. This might take a while.<br/>Please do not navigate away from this page.</b>", "info");
+	XKit.window.show("Welcome to New XKit " + XKit.version + "!", "<b>Please wait while I initialize the setup. This might take a while.<br/>Please do not navigate away from this page.</b>", "info");
 	console.log("Trying to retrieve XKit Installer.");
 
 	XKit.install("xkit_installer", function(mdata) {
@@ -3612,7 +3610,7 @@ function show_error_update(message) {
  * Functions used in place of gulp build server
  */
 
-const loadFile = path => fetch(browser.runtime.getURL(path)).then(response => response.text());
+const loadFile = async path => fetch(await bridge_call("browser.runtime.getURL", [path])).then(response => response.text());
 
 const extensionDataCache = {};
 

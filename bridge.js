@@ -8,7 +8,7 @@
 
 */
 
-/* globals msBrowser */
+/* globals browser, chrome, msBrowser */
 
 if (typeof(browser) === 'undefined') {
 	if (typeof(chrome) !== 'undefined') {
@@ -23,10 +23,12 @@ var bridge_error_object;
 var xkit_storage = {};
 var bridge_ver = "2.2.1";
 
+async function bridge_call(func, args) { // eslint-disable-line no-redeclare
+	return browser.runtime.sendMessage({ func, args });
+}
+
 try {
-	var storage = browser.storage.local;
 	var storage_loaded = false;
-	var framework_version = getVersion(); // eslint-disable-line no-redeclare
 	var storage_used = 0; // eslint-disable-line no-redeclare
 	var storage_max = -1; // eslint-disable-line no-redeclare
 	init_bridge();
@@ -49,17 +51,14 @@ function getBridgeError() { // eslint-disable-line no-redeclare
 	return m_object;
 }
 
-function getVersion() {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', browser.runtime.getURL('manifest.json'), false);
-	xhr.send(null);
-	var manifest = JSON.parse(xhr.responseText);
+async function getVersion() {
+	const manifest = await bridge_call("browser.runtime.getManifest");
 	return manifest.version;
 }
 
-function call_xkit() {
+async function call_xkit() {
 	if (typeof XKit !== "undefined") {
-		XKit.init();
+		XKit.init(await getVersion());
 	} else {
 		setTimeout(function() { call_xkit(); }, 1);
 	}
@@ -74,7 +73,7 @@ function init_bridge() {
 
 	try {
 
-		storage.get(function(items) {
+		bridge_call("browser.storage.local.get").then(function(items) {
 
 			if (browser.runtime.lastError) {
 				last_error = browser.runtime.lastError.message;
@@ -107,15 +106,12 @@ function init_bridge() {
 			storage_loaded = true;
 			console.log("[XKit Bridge] Storage loaded, calling XKit.. bye!");
 
-			if (storage.getBytesInUse) {
-				storage.getBytesInUse(function(bytes) {
-					storage_used = bytes;
-					storage_max = -1;
-					call_xkit();
-				});
-			} else {
+			bridge_call("browser.storage.local.getBytesInUse").then(function(bytes) {
+				storage_used = bytes;
+				storage_max = -1;
 				call_xkit();
-			}
+			});
+
 
 		});
 
@@ -134,8 +130,8 @@ function init_bridge() {
 
 function GM_flushStorage(callback) { // eslint-disable-line no-redeclare
 
-	storage.remove("xkit_something", function() {
-		storage.clear(function(items) {
+	bridge_call("browser.storage.local.remove", ["xkit_something"]).then(function() {
+		bridge_call("browser.storage.local.clear").then(function(items) {
 			var last_error = 'unknown error';
 			if (browser.runtime.lastError) {
 				last_error = browser.runtime.lastError.message;
@@ -149,11 +145,11 @@ function GM_flushStorage(callback) { // eslint-disable-line no-redeclare
 
 function GM_deleteAllValues(callback) { // eslint-disable-line no-redeclare
 
-	storage.get(function(items) {
+	bridge_call("browser.storage.local.get").then(function(items) {
 		for (var key in items) {
 			GM_deleteValue(key);
 		}
-		storage.clear();
+		bridge_call("browser.storage.local.clear");
 		callback();
 	});
 
@@ -176,7 +172,7 @@ function GM_getValue(name, defaultValue) { // eslint-disable-line no-redeclare
 function GM_deleteValue(name) { // eslint-disable-line no-redeclare
 
 	//console.log("Bridge : GM_deleteValue for " + name);
-	storage.remove(name);
+	bridge_call("browser.storage.local.remove", [name]);
 	delete xkit_storage[name];
 
 }
@@ -187,7 +183,7 @@ function GM_setValue(name, value) { // eslint-disable-line no-redeclare
 	var m_name = name;
 	m_object[ m_name ] = value;
 	xkit_storage[name] = value;
-	storage.set(m_object);
+	bridge_call("browser.storage.local.set", [m_object]);
 	return true;
 
 }

@@ -11,29 +11,29 @@
       "*://www.tumblr.com/upload/image*",
       "*://www.tumblr.com/video/*"
     ],
-    "js": [
-      "bridge.js",
-      "vendor/lodash.min.js",
-      "vendor/jquery.js",
-      "vendor/tiptip.js",
-      "vendor/moment.js",
-      "vendor/nano.js",
-      "xkit.js"
-    ],
     "matches": [ "*://*.tumblr.com/*" ]
   } ],
+  "background": {
+    "scripts": [ "background.js" ],
+    "service_worker": "background.js",
+    "persistent": false
+  },
   "description": "A fork of XKit, the extension framework for Tumblr.",
   "homepage_url": "https://github.com/new-xkit/XKit",
   "icons": {
     "128": "icon.png"
   },
-  "manifest_version": 2,
-  "minimum_chrome_version": "88.0",
+  "manifest_version": 3,
+  "minimum_chrome_version": "120.0",
   "name": "New XKit",
   "author": "New XKit Team",
-  "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
+  "permissions": ["storage", "unlimitedStorage", "userScripts" ],
+  "host_permissions": [ "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
   "version": "7.10.0",
-  "web_accessible_resources": [ "*.js", "*.json", "*.css" ],
+  "web_accessible_resources": [{
+    "resources": [ "*.js", "*.json", "*.css" ],
+    "matches": [ "*://www.tumblr.com/*" ]
+  }],
   "browser_specific_settings": {
     "gecko": {
       "id": "@new-xkit",
