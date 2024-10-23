@@ -41,11 +41,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Install gulp-cli
-        run: npm install gulp-cli
-
       - name: Build distribution
-        run: gulp build
+        run: npm run build-extensions
 
       - name: Commit changes
         run: |
