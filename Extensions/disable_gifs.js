@@ -1,7 +1,7 @@
 //* TITLE Disable Gifs **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Stops GIFs on dashboard **//
-//* DETAILS This is a very early preview version of an extension that allows you to stop the GIFs from playing on your dashboard. If you still would like to view them, you can click on the Play button on the post. Please note that for now, this extension can't stop GIFs added to text posts. **//
+//* DETAILS This extension allows you to stop the GIFs from playing on your dashboard until you place your mouse on them. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
@@ -15,6 +15,11 @@ XKit.extensions.disable_gifs = new Object({
 	slow: true,
 
 	preferences: {
+		"hover": {
+			text: "Animate gifs when you mouse over them",
+			default: true,
+			value: true
+		},
 		"hide_completely": {
 			text: "Completely hide posts with GIFs.",
 			default: false,
@@ -22,18 +27,16 @@ XKit.extensions.disable_gifs = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
 		this.running = true;
 
 		if (XKit.page.react) {
 			XKit.post_listener.add('disable_gifs', this.react_do);
 			this.react_do();
 
+			await XKit.css_map.getCssMap();
+
 			XKit.tools.add_css(`
-				figure:hover .xkit-paused-gif,
-				figure:hover .xkit-gif-label {
-					display: none;
-				}
 				.xkit-gif-label {
 					color: white;
 					background-color: black;
@@ -46,7 +49,22 @@ XKit.extensions.disable_gifs = new Object({
 					left: 5px;
 					z-index: 2;
 				}
+				${XKit.css_map.keyToCss("baseContainer")} {
+					z-index: 99;
+				}
+				.xkit--react .xkit-extension-setting[data-extension-id="disable_gifs"][data-setting-id="hide_completely"] {
+					display: none;
+				}
 			`, 'disable_gifs');
+
+			if (this.preferences.hover.value) {
+				XKit.tools.add_css(`
+					figure:hover .xkit-paused-gif,
+					figure:hover .xkit-gif-label {
+						display: none;
+					}
+				`, 'disable_gifs');
+			}
 
 			return;
 		}
@@ -341,6 +359,7 @@ XKit.extensions.disable_gifs = new Object({
 	},
 
 	destroy: function() {
+		XKit.post_listener.remove('disable_gifs', this.react_do);
 		$('.xkit-paused-gif, .xkit-gif-label').remove();
 		$('.xkit-disabled-gif').removeClass('xkit-disabled-gif');
 		XKit.tools.remove_css("disable_gifs");
