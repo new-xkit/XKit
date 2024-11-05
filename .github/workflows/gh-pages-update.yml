@@ -1,0 +1,27 @@
+name: Update gh-pages
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'Extensions/dist/'
+
+jobs:
+  build:
+    name: Update gh-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update gh-pages
+        run: npx gh-pages --add --dist . --src "Extensions/dist/"

@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.7.0 **//
+//* VERSION 7.7.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1021,7 +1021,7 @@ XKit.extensions.xkit_preferences = new Object({
 					$("#xkit-gallery-extension-" + extension_data.id).find(".overlay").html("Installed!");
 
 					try {
-						eval(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js");
+						new Function(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js")();
 						XKit.extensions.xkit_main.load_extension_preferences(m_extension_id);
 						if (XKit.installed.enabled(m_extension_id)) {
 							XKit.extensions[m_extension_id].run();
