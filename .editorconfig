@@ -8,7 +8,6 @@ trim_trailing_whitespace = true
 
 [*.{js,css}]
 indent_style = tab
-indent_size = 4
 
 [{.*,package.json,.travis.yml}]
 indent_style = space
