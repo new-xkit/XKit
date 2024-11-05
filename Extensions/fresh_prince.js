@@ -87,23 +87,23 @@ XKit.extensions.fresh_prince = new Object({
 
 			XKit.tools.add_css(`
 				#base-container > * > * {
-				  transform: scale(1, -1);
+					transform: scale(1, -1);
 				}
 
 				${descendantSelector('menuContainer', 'baseContainer')} {
-				  transform: scale(1, -1);
+					transform: scale(1, -1);
 				}
 
 				${keyToCss('popoverChrome')} > * {
-				  transform: scale(1, -1);
+					transform: scale(1, -1);
 				}
 
 				#glass-container > * {
-				  transform: scale(1, -1);
+					transform: scale(1, -1);
 				}
 
 				#xkit-notifications {
-				  transform: scale(1, -1);
+					transform: scale(1, -1);
 				}
 			`, 'fresh_prince');
 			this.remove_fastdash();

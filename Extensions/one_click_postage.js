@@ -183,20 +183,20 @@ XKit.extensions.one_click_postage = new Object({
 
 		function button(type, label) {
 			return `<a
-					  id="x1cpostage_in_blog_${type}"
-					  class="tx-button--with-icon tx-icon-button xkit-in-frame-button"
-					  role="button"
-					  aria-label="${label}"
-					  title="${label}"
-					  tabindex="0"
+						id="x1cpostage_in_blog_${type}"
+						class="tx-button--with-icon tx-icon-button xkit-in-frame-button"
+						role="button"
+						aria-label="${label}"
+						title="${label}"
+						tabindex="0"
 					>
-					  <span class="button-label">${label}</span>
+						<span class="button-label">${label}</span>
 					</a>`;
 		}
 
 		var m_html = button("reblog", "One-Click Reblog") +
-					 button("queue",  "One-Click Queue") +
-					 button("draft",  "One-Click Draft");
+			button("queue",  "One-Click Queue") +
+			button("draft",  "One-Click Draft");
 
 		XKit.iframe.reblog_button().after(m_html);
 		XKit.iframe.size_frame_to_fit();
