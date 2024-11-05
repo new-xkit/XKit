@@ -1214,8 +1214,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 				data['URL'] = window.location.toString();
 
 				var body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
-				  "including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
-			   "-----------\n\n";
+					"including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
+					"-----------\n\n";
 
 				if (error) {
 					body += "```\n" +
@@ -2972,7 +2972,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 *	channel: boolean - Whether viewing a channel
 			 *	tagged: boolean - Whether viewing tagged posts
 			 *	user_url: String - The url of the currently viewed side blog.
-			 *	                   Otherwise the user's main URL
+			 *                     Otherwise the user's main URL
 			 *	endless: boolean - Whether the current view scrolls endlessly
 			 *	following: boolean - Whether the viewed blog follows the user
 			 */

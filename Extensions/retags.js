@@ -117,9 +117,9 @@ XKit.extensions.retags = {
 			}
 			//blog
 			if ($element.hasClass('note')) {
-				   retagClass = 'with_commentary';
-				   $target = $element;
-				   url = $target.find('.action').data('post-url');
+				retagClass = 'with_commentary';
+				$target = $element;
+				url = $target.find('.action').data('post-url');
 			// Activity (page/dropdown)
 			} else if ($element.hasClass('activity-notification')) {
 				retagClass = 'is_retags';

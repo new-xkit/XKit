@@ -36,9 +36,9 @@ XKit.extensions.read_posts = new Object({
 	redim: function(e) {
 		// This is less broken and meh.
 		if (!XKit.extensions.read_posts.undimmed_post || XKit.extensions.read_posts.currently_undimming) {
-		   //we don't currently have a post that needs redimming
-		   XKit.extensions.read_posts.currently_undimming = false;
-		   return;
+			//we don't currently have a post that needs redimming
+			XKit.extensions.read_posts.currently_undimming = false;
+			return;
 		}
 		var m_obj = $(XKit.extensions.read_posts.undimmed_post)[0];
 		$(m_obj).addClass("read_posts_read");

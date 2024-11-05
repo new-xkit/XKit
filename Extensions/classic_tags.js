@@ -39,14 +39,14 @@ XKit.extensions.classic_tags = new Object({
 			value: false
 		},
 		"prepend_sidebar": {
-		    text: "Put tags at top of sidebar",
-		    default: false,
-		    value: false
+			text: "Put tags at top of sidebar",
+			default: false,
+			value: false
 		},
 		"alphabetical_tags": {
 			text: "Sort tags alphabetically",
-		    default: false,
-		    value: false
+			default: false,
+			value: false
 		},
 		"sep-3": {
 			text: "Settings",

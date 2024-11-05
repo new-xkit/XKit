@@ -985,7 +985,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$(".xkit-gallery-extension .more-info").click(function() {
 				XKit.window.show("More information", $(this).attr('data-more-info'), "info",
-												 '<div class="xkit-button default" id="xkit-close-message">OK</div>');
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>');
 			});
 
 			$(".xkit-gallery-extension .xkit-install-extension").click(function() {
