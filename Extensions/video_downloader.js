@@ -23,7 +23,7 @@ XKit.extensions.video_downloader = new Object({
 		XKit.post_listener.remove("video_downloader");
 		this.running = false;
 	},
-	
+
 	makeButton: function(url) {
 		var el = document.createElement("a");
 		var filename = url.split("/").pop();
@@ -34,7 +34,7 @@ XKit.extensions.video_downloader = new Object({
 		el.innerText = "Download this video";
 		return el;
 	},
-	
+
 	addButtons: function() {
 		setTimeout(function() {
 			var vids = document.querySelectorAll(".crt-video:not(.xvd-processed)");

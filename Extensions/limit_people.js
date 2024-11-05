@@ -87,9 +87,9 @@ XKit.extensions.limit_people = new Object({
 		var total = $(posts).length;
 
 		$(posts).each(function(index) {
-			
+
 			if ($(this).parents('.peepr-drawer').length > 0) { return; }
-			
+
 			var m_post = XKit.interface.post($(this));
 			$(this).addClass("xkit-limit-people-checked");
 

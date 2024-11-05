@@ -398,7 +398,7 @@ XKit.extensions.mass_deleter = new Object({
 					//We didn't get the next page, so we're assuming this one was the last.
 					XKit.extensions.mass_deleter.unlike_current_array();
 					stop_action = true;
-				
+
 				}
 				if (stop_action) { return; }
 
