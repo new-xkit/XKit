@@ -468,29 +468,29 @@ XKit.extensions.xkit_patches = new Object({
 			 * @returns {Promise<object>}
 			 */
 			XKit.interface.mass_edit = function(post_ids, config) {
-			    const path = {
-			        "add": "add_tags_to_posts",
-			        "remove": "remove_tags_from_posts",
-			        "delete": "delete_posts"
-			    }[config.mode];
+				const path = {
+					"add": "add_tags_to_posts",
+					"remove": "remove_tags_from_posts",
+					"delete": "delete_posts"
+				}[config.mode];
 
-			    let payload = {
-			        "post_ids": post_ids.join(","),
-			        "form_key": XKit.interface.form_key()
-			    };
+				let payload = {
+					"post_ids": post_ids.join(","),
+					"form_key": XKit.interface.form_key()
+				};
 
-			    if (config.mode !== "delete") {
-			        payload.tags = config.tags.join(",");
-			    }
+				if (config.mode !== "delete") {
+					payload.tags = config.tags.join(",");
+				}
 
-			    return XKit.tools.Nx_XHR({
-			        method: "POST",
-			        url: `https://www.tumblr.com/${path}`,
-			        headers: {
-			            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-			        },
-			        data: $.param(payload)
-			    });
+				return XKit.tools.Nx_XHR({
+					method: "POST",
+					url: `https://www.tumblr.com/${path}`,
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+					},
+					data: $.param(payload)
+				});
 			};
 
 			// Override "Search Page Brick Post Fix" from xkit.css
@@ -1416,8 +1416,8 @@ XKit.extensions.xkit_patches = new Object({
 				data['URL'] = window.location.toString();
 
 				var body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
-				  "including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
-			   "-----------\n\n";
+					"including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
+					"-----------\n\n";
 
 				if (error) {
 					body += "```\n" +

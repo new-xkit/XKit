@@ -87,8 +87,8 @@ module.exports.galleryBuilder = function(galleryFileIn, gallery, attributeMappin
 		// Set latest file if not already set
 		// or if the current file was modified more recently.
 		if (!latestMod || file.stat && file.stat.mtime > latestMod) {
-		  latestFile = file;
-		  latestMod = file.stat && file.stat.mtime;
+			latestFile = file;
+			latestMod = file.stat && file.stat.mtime;
 		}
 
 		var resource = JSON.parse(file.contents.toString());
@@ -106,8 +106,8 @@ module.exports.galleryBuilder = function(galleryFileIn, gallery, attributeMappin
 	function endStream(cb) {
 		// No files passed in, no file goes out
 		if (!latestFile) {
-		  cb();
-		  return;
+			cb();
+			return;
 		}
 
 		// The gallery should display in sorted order because otherwise

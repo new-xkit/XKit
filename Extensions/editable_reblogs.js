@@ -116,8 +116,8 @@ XKit.extensions.editable_reblogs = new Object({
 		if (!XKit.storage.get('editable_reblogs', 'has_dismissed_button_callout', '')) {
 			post_margin.append(
 				'<div class="xkit-er-callout--container">' +
-				  '<div class="xkit-er-callout--header">Editable Reblogs</div>' +
-				  '<div class="xkit-er-callout--body">click this button to trim or edit this post</div>' +
+					'<div class="xkit-er-callout--header">Editable Reblogs</div>' +
+					'<div class="xkit-er-callout--body">click this button to trim or edit this post</div>' +
 				'</div>'
 			);
 
@@ -566,7 +566,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 					var github_url = XKit.tools.github_issue("Editable Reblogs posting error",
 						{ "ER Version": XKit.installed.get("editable_reblogs").version,
-						 user: request.channel_id, body: request["post[two]"]}, {stack: response});
+							user: request.channel_id, body: request["post[two]"]}, {stack: response});
 
 					XKit.window.show("Error",
 						"Error: XER-SR.<br><br>There was an error reblogging your post. Please try again shortly. " +
