@@ -1,0 +1,358 @@
+{
+  "accesskit": {
+    "icon": true,
+    "css": true
+  },
+  "anti_capitalism": {
+    "icon": true,
+    "css": false
+  },
+  "audio_downloader": {
+    "icon": true,
+    "css": true
+  },
+  "audio_plus": {
+    "icon": true,
+    "css": true
+  },
+  "auto_tagger": {
+    "icon": true,
+    "css": false
+  },
+  "autoscroll": {
+    "icon": true,
+    "css": true
+  },
+  "better_reblogs": {
+    "icon": true,
+    "css": false
+  },
+  "blacklist": {
+    "icon": true,
+    "css": true
+  },
+  "bookmarker": {
+    "icon": true,
+    "css": true
+  },
+  "classic_header": {
+    "icon": true,
+    "css": true
+  },
+  "classic_tags": {
+    "icon": true,
+    "css": true
+  },
+  "cleanfeed": {
+    "icon": true,
+    "css": true
+  },
+  "convert_links": {
+    "icon": true,
+    "css": false
+  },
+  "disable_gifs": {
+    "icon": true,
+    "css": true
+  },
+  "disable_search": {
+    "icon": true,
+    "css": false
+  },
+  "dont_stretch_photosets": {
+    "icon": true,
+    "css": true
+  },
+  "drafts_plus": {
+    "icon": true,
+    "css": true
+  },
+  "editable_reblogs": {
+    "icon": true,
+    "css": true
+  },
+  "estufars_sidebar_fix": {
+    "icon": true,
+    "css": true
+  },
+  "find_blogs": {
+    "icon": true,
+    "css": true
+  },
+  "find_inactives": {
+    "icon": true,
+    "css": true
+  },
+  "fresh_prince": {
+    "icon": true,
+    "css": false
+  },
+  "glowing_follow": {
+    "icon": true,
+    "css": true
+  },
+  "go_to_dash": {
+    "icon": true,
+    "css": true
+  },
+  "hideavatars": {
+    "icon": true,
+    "css": true
+  },
+  "highlighter": {
+    "icon": true,
+    "css": true
+  },
+  "jk_across_pages": {
+    "icon": true,
+    "css": true
+  },
+  "limit_people": {
+    "icon": true,
+    "css": true
+  },
+  "mass_deleter": {
+    "icon": true,
+    "css": false
+  },
+  "mass_plus": {
+    "icon": true,
+    "css": true
+  },
+  "messaging_tweaks": {
+    "icon": true,
+    "css": true
+  },
+  "mirrorposts": {
+    "icon": true,
+    "css": true
+  },
+  "mute": {
+    "icon": true,
+    "css": true
+  },
+  "mutualchecker": {
+    "icon": true,
+    "css": true
+  },
+  "norecommended": {
+    "icon": true,
+    "css": false
+  },
+  "notificationblock": {
+    "icon": true,
+    "css": true
+  },
+  "notifications_plus": {
+    "icon": true,
+    "css": true
+  },
+  "old_blue": {
+    "icon": true,
+    "css": true
+  },
+  "old_stats": {
+    "icon": false,
+    "css": true
+  },
+  "one_click_postage": {
+    "icon": true,
+    "css": true
+  },
+  "one_click_reply": {
+    "icon": true,
+    "css": true
+  },
+  "open_in_new_tabs": {
+    "icon": true,
+    "css": false
+  },
+  "outbox": {
+    "icon": true,
+    "css": true
+  },
+  "panaroma": {
+    "icon": true,
+    "css": true
+  },
+  "people_notifier": {
+    "icon": true,
+    "css": true
+  },
+  "pokes": {
+    "icon": true,
+    "css": true
+  },
+  "post_crushes": {
+    "icon": true,
+    "css": false
+  },
+  "post_limit_checker": {
+    "icon": true,
+    "css": true
+  },
+  "postarchive": {
+    "icon": true,
+    "css": true
+  },
+  "postblock": {
+    "icon": true,
+    "css": true
+  },
+  "profiler": {
+    "icon": true,
+    "css": true
+  },
+  "quick_tags": {
+    "icon": true,
+    "css": true
+  },
+  "read_more_now": {
+    "icon": true,
+    "css": false
+  },
+  "read_posts": {
+    "icon": true,
+    "css": true
+  },
+  "retags": {
+    "icon": true,
+    "css": true
+  },
+  "satsukimous": {
+    "icon": true,
+    "css": false
+  },
+  "scroll_to_bottom": {
+    "icon": true,
+    "css": true
+  },
+  "search_likes": {
+    "icon": true,
+    "css": true
+  },
+  "servant": {
+    "icon": true,
+    "css": true
+  },
+  "shorten_posts": {
+    "icon": true,
+    "css": true
+  },
+  "show_more": {
+    "icon": true,
+    "css": true
+  },
+  "show_originals": {
+    "icon": true,
+    "css": true
+  },
+  "show_picture_size": {
+    "icon": false,
+    "css": true
+  },
+  "shuffle_queue": {
+    "icon": true,
+    "css": false
+  },
+  "stats": {
+    "icon": true,
+    "css": true
+  },
+  "tag_replacer": {
+    "icon": true,
+    "css": true
+  },
+  "tagviewer": {
+    "icon": true,
+    "css": true
+  },
+  "tf2_reblogs": {
+    "icon": true,
+    "css": false
+  },
+  "theme_editor": {
+    "icon": true,
+    "css": true
+  },
+  "themes": {
+    "icon": true,
+    "css": true
+  },
+  "themes_plus": {
+    "icon": true,
+    "css": true
+  },
+  "timestamps": {
+    "icon": true,
+    "css": true
+  },
+  "titles": {
+    "icon": true,
+    "css": false
+  },
+  "transparent_img_hover": {
+    "icon": true,
+    "css": true
+  },
+  "tweaks": {
+    "icon": true,
+    "css": false
+  },
+  "unreverse2": {
+    "icon": true,
+    "css": true
+  },
+  "vanilla_audio": {
+    "icon": true,
+    "css": false
+  },
+  "vanilla_video": {
+    "icon": true,
+    "css": false
+  },
+  "video_downloader": {
+    "icon": true,
+    "css": true
+  },
+  "view_my_tags": {
+    "icon": true,
+    "css": true
+  },
+  "xcloud": {
+    "icon": true,
+    "css": true
+  },
+  "xinbox": {
+    "icon": true,
+    "css": true
+  },
+  "xkit_installer": {
+    "icon": false,
+    "css": false
+  },
+  "xkit_main": {
+    "icon": false,
+    "css": false
+  },
+  "xkit_patches": {
+    "icon": false,
+    "css": true
+  },
+  "xkit_preferences": {
+    "icon": false,
+    "css": true
+  },
+  "xkit_updates": {
+    "icon": false,
+    "css": true
+  },
+  "xneko": {
+    "icon": true,
+    "css": true
+  },
+  "xwidgets": {
+    "icon": true,
+    "css": true
+  }
+}

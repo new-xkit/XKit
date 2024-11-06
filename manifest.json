@@ -32,8 +32,8 @@
   "name": "New XKit",
   "author": "New XKit Team",
   "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
-  "version": "7.9.2",
-  "web_accessible_resources": [ "manifest.json", "editor.js" ],
+  "version": "7.10.0",
+  "web_accessible_resources": [ "*.js", "*.json", "*.css" ],
   "applications": {
     "gecko": {
       "id": "@new-xkit",
