@@ -3650,6 +3650,7 @@ const extensionAttributes = [
 
 async function loadExtensionData(id) {
 	const contents = await loadFile(`/Extensions/${id}.js`);
+	const index = JSON.parse(await loadFile("/Extensions/_index.json"));
 
 	const extension = {
 		id,
@@ -3659,14 +3660,16 @@ async function loadExtensionData(id) {
 		errors: false,
 	};
 
-	try {
-		const icon = await loadFile(`/Extensions/${id}.icon.js`);
-		extension.icon = icon;
-	} catch (e) {}
-	try {
-		const css = await loadFile(`/Extensions/${id}.css`);
-		extension.css = css;
-	} catch (e) {}
+	if (index[id].icon) {
+		try {
+			extension.icon = await loadFile(`/Extensions/${id}.icon.js`);
+		} catch (e) {}
+	}
+	if (index[id].css) {
+		try {
+			extension.css = await loadFile(`/Extensions/${id}.css`);
+		} catch (e) {}
+	}
 
 	extensionAttributes.forEach(({name: key, default: defaultValue}) => {
 		const match = contents.match(new RegExp("/\\*\\s*" + key.toUpperCase() + "\\s*(.+?)\\s*\\*\\*?/"));
@@ -3681,8 +3684,8 @@ async function loadExtensionData(id) {
 }
 
 async function getGalleryData() {
-	const list = JSON.parse(await loadFile("/Extensions/_index.json"));
-	const extensionData = await Promise.all(list.map(getExtensionData));
+	const index = JSON.parse(await loadFile("/Extensions/_index.json"));
+	const extensionData = await Promise.all(Object.keys(index).map(getExtensionData));
 
 	// eslint-disable-next-line id-length
 	extensionData.sort((a, b) => a.title.localeCompare(b.title));
@@ -3701,8 +3704,8 @@ async function getGalleryData() {
 }
 
 async function getListData() {
-	const list = JSON.parse(await loadFile("/Extensions/_index.json"));
-	const extensionData = await Promise.all(list.map(getExtensionData));
+	const index = JSON.parse(await loadFile("/Extensions/_index.json"));
+	const extensionData = await Promise.all(Object.keys(index).map(getExtensionData));
 
 	return {
 		server: "up",
