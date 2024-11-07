@@ -1,0 +1,36 @@
+name: Update Release Metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      newVersion:
+        description: version override
+        type: string
+        required: false
+
+jobs:
+  create-update-pr:
+    name: Create update PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Update release metadata
+        run: node dev/update_release_metadata.mjs ${{ inputs.newVersion || '' }}
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: Update release metadata
+          commit-message: update release metadata
+          branch: update-release-metadata
+          body: |
+            Updates the extension version in metadata files, triggering Firefox autoupdate and the "Please update XKit!" in-extension notification.
+
+            Remember to confirm that the referenced version is released on Github, the .xpi file link works, and the Chrome web store has the referenced version available before merging this.
