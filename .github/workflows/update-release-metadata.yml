@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: npm
 
       - name: Update release metadata
         run: node dev/update_release_metadata.mjs ${{ inputs.newVersion || '' }}
