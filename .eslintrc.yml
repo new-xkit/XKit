@@ -1,10 +1,12 @@
 ---
+  root: true
   parserOptions:
     ecmaVersion: 2018
   env:
     es6: true
     browser: true
     jquery: true
+    webextensions: true
   extends: eslint:recommended
   rules:
     dot-notation: [error, allowPattern: "^[A-Z]"]
@@ -43,6 +45,10 @@
         after: true
     no-useless-escape: off
     no-prototype-builtins: off
+  overrides:
+    - files: "*.mjs"
+      parserOptions:
+        sourceType: module
   globals:
     BigInt: readonly
     _: readonly
