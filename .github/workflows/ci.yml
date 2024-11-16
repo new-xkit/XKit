@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 7.9.2 ]
   pull_request:
-    branches: [ master ]
+    branches: [ 7.9.2 ]
 
 jobs:
   test:

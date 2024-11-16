@@ -3,7 +3,7 @@ name: Rebuild Distribution
 on:
   push:
     branches:
-      - 'master'
+      - '7.9.2'
     paths:
       - 'Extensions/*'
       - 'Themes/*'
@@ -33,7 +33,7 @@ jobs:
           git remote set-branches --add origin gh-pages
           git fetch
           git checkout -f -t -b gh-pages origin/gh-pages
-          git reset --hard master
+          git reset --hard 7.9.2
 
       - name: Install dependencies
         run: npm ci
