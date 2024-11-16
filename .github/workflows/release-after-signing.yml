@@ -31,6 +31,12 @@ jobs:
           script: |
             const fs = require('node:fs');
             const { version } = JSON.parse(fs.readFileSync(('${{ github.workspace }}/manifest.json')));
+            const files = fs
+              .readdirSync('${{ github.workspace }}/web-ext-artifacts')
+              .filter(filePath => filePath.endsWith(`${version}.xpi`));
+            if (files.length === 0) {
+              throw new Error(`Could not find signed v${version} XPI! Has Mozilla reviewed it?`);
+            }
             const releases = await github.paginate(github.rest.repos.listReleases, { owner: context.repo.owner, repo: context.repo.repo, });
             if (releases.some(({ tag_name }) => tag_name === `v${version}`)) {
               throw new Error(`Release v${version} already exists! Did you forget to bump the manifest.json version?`);
