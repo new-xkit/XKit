@@ -287,7 +287,7 @@ XKit.extensions.messaging_tweaks = new Object({
 				if (!e.altKey) { return; }
 				if (e.which === 40) {
 					if ($('.minimize').length) {
-						 $('.minimize').get(0).click();
+						$('.minimize').get(0).click();
 					}
 				} else if (e.which === 38) {
 					if ($('.conversation-minimized').length) {

@@ -309,7 +309,7 @@ XKit.extensions.pokes = {
 									.prependTo("#xkit-loading_pokemon");
 		});
 		$('.xkit-pokes-sorter#reverse-toggle').change(function(e) {
-				 $("#xkit-loading_pokemon div.caught").sort(function(i) {return 1;}).prependTo("#xkit-loading_pokemon");
+			$("#xkit-loading_pokemon div.caught").sort(function(i) {return 1;}).prependTo("#xkit-loading_pokemon");
 		});
 
 		$(".xkit-pokes-lightbox").animate({
