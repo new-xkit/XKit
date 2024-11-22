@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.21 **//
+//* VERSION 7.4.22 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1275,6 +1275,8 @@ XKit.extensions.xkit_patches = new Object({
 				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, extension);
 			};
 		},
+
+		"7.9.2": function() {},
 
 		"7.9.1": function() {},
 
