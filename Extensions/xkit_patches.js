@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.21 **//
+//* VERSION 7.4.20 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -179,10 +179,10 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1", "7.9.2", "7.10.0"],
+	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1", "7.9.2"],
 
 	patches: {
-		"7.10.0": function() {
+		"7.9.2": function() {
 
 			/**
 			 * Given a list of different collections in `items`, return all
