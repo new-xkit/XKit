@@ -22,6 +22,9 @@ jobs:
 
       - name: Firefox — Download Latest Signed XPI
         run: node dev/download_signed_xpi.mjs
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
 
       - name: Get Release Version
         uses: actions/github-script@v7
