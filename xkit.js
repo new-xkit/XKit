@@ -716,7 +716,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * @param {String} msg - Text for body of window, can be HTML
 			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
 			 *   icon type, determined by CSS class `icon`.
-			 *   See also xkit_patches.css.
+			 *   See also xkit.css.
 			 * @param {String} buttons - The HTML to be used in the button area of the window.
 			 *                           Usually divs with class "xkit-button".
 			 * @param {boolean} wide - Whether the XKit window should be wide.
@@ -3587,13 +3587,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 			data: $.param(payload)
 		});
 	};
-
-	// Override "Search Page Brick Post Fix" from xkit.css
-	XKit.tools.add_css(
-		`.post_brick .post_controls .post_controls_inner {
-			white-space: nowrap;
-		}`,
-	"xkit_patches");
 
 	XKit.interface.sidebar = {
 		init: function() {
