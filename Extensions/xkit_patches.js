@@ -11,9 +11,9 @@ XKit.extensions.xkit_patches = new Object({
 		this.running = true;
 
 		this.run_order.filter(x => {
-			return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
+			return this.run_order.indexOf(x) >= this.run_order.includes(XKit.version) ? this.run_order.indexOf(XKit.version) : Infinity;
 		}).forEach(x => {
-			this.patches[x]();
+			this.patches[x] && this.patches[x]();
 		});
 
 		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
