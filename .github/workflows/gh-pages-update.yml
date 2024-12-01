@@ -5,7 +5,7 @@ on:
     branches:
       - 'master'
     paths:
-      - 'Extensions/dist/'
+      - 'Extensions/dist/*'
   workflow_dispatch:
 
 permissions:
