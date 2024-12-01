@@ -48,6 +48,9 @@ jobs:
 
       - name: Chrome — Build
         run: npm run build
+
+      # uploads to Chrome Web Store servers, but does not publish;
+      # see https://github.com/fregante/chrome-webstore-upload-cli#usage
       - name: Chrome — Upload
         run: npm run chrome-upload -- --source=web-ext-artifacts/new_xkit-${{ steps.get-version.outputs.result }}.zip
         continue-on-error: true

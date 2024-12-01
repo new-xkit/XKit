@@ -22,6 +22,8 @@ jobs:
           node-version: lts/*
           cache: npm
 
+      # publishes the last uploaded version on Chrome Web Store servers;
+      # see https://github.com/fregante/chrome-webstore-upload-cli#usage
       - name: Chrome — Publish Release
         run: npm run chrome-publish
         continue-on-error: true
