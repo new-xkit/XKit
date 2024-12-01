@@ -7,6 +7,10 @@ on:
     paths:
       - 'Extensions/*'
       - 'Themes/*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -36,8 +40,13 @@ jobs:
 
       - name: Push changes to gh-pages
         run: >
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+
           npx gh-pages
-            --add
-            --dist .
-            --src "{Extensions/dist/*.json,Extensions/dist/page/gallery.json,Extensions/dist/page/list.json,Extensions/dist/page/themes.json}"
-            --message 'Rebuild Distribution'
+          -u "github-actions-bot <support+actions@github.com>"
+          --add
+          --dist .
+          --src "{Extensions/dist/*.json,Extensions/dist/page/gallery.json,Extensions/dist/page/list.json,Extensions/dist/page/themes.json}"
+          --message 'Rebuild Distribution'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
