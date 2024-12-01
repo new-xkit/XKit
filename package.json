@@ -6,7 +6,9 @@
     "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
-    "sign": "web-ext sign"
+    "sign": "web-ext sign",
+    "chrome-upload": "chrome-webstore-upload upload",
+    "chrome-publish": "chrome-webstore-upload publish"
   },
   "devDependencies": {
     "chrome-webstore-upload-cli": "^3.3.1",

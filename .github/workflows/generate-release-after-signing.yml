@@ -49,7 +49,7 @@ jobs:
       - name: Chrome — Build
         run: npm run build
       - name: Chrome — Upload
-        run: npx chrome-webstore-upload upload --source=web-ext-artifacts/new_xkit-${{ steps.get-version.outputs.result }}.zip
+        run: npm run chrome-upload -- --source=web-ext-artifacts/new_xkit-${{ steps.get-version.outputs.result }}.zip
         continue-on-error: true
         env:
           EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
