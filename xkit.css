@@ -982,7 +982,5 @@
 }
 
 .post_brick .post_controls .post_controls_inner {
-    width: 100%;
-    white-space: normal;
-    height: auto;
+    white-space: nowrap;
 }
