@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.22 **//
+//* VERSION 7.4.23 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -10,11 +10,13 @@ XKit.extensions.xkit_patches = new Object({
 	run: function() {
 		this.running = true;
 
-		this.run_order.filter(x => {
-			return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
-		}).forEach(x => {
-			this.patches[x]();
-		});
+		if (this.run_order.includes(XKit.version)) {
+			this.run_order.filter(x => {
+				return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
+			}).forEach(x => {
+				this.patches[x] && this.patches[x]();
+			});
+		}
 
 		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
 			let version = XKit.tools.parse_version(XKit.version);
@@ -179,10 +181,10 @@ XKit.extensions.xkit_patches = new Object({
 		}, 1000);
 	},
 
-	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1", "7.9.2", "7.10.0"],
+	run_order: ["7.8.1", "7.8.2", "7.9.0", "7.9.1", "7.9.2"],
 
 	patches: {
-		"7.10.0": function() {
+		"7.9.2": function() {
 
 			/**
 			 * Given a list of different collections in `items`, return all
@@ -468,29 +470,29 @@ XKit.extensions.xkit_patches = new Object({
 			 * @returns {Promise<object>}
 			 */
 			XKit.interface.mass_edit = function(post_ids, config) {
-			    const path = {
-			        "add": "add_tags_to_posts",
-			        "remove": "remove_tags_from_posts",
-			        "delete": "delete_posts"
-			    }[config.mode];
+				const path = {
+					"add": "add_tags_to_posts",
+					"remove": "remove_tags_from_posts",
+					"delete": "delete_posts"
+				}[config.mode];
 
-			    let payload = {
-			        "post_ids": post_ids.join(","),
-			        "form_key": XKit.interface.form_key()
-			    };
+				let payload = {
+					"post_ids": post_ids.join(","),
+					"form_key": XKit.interface.form_key()
+				};
 
-			    if (config.mode !== "delete") {
-			        payload.tags = config.tags.join(",");
-			    }
+				if (config.mode !== "delete") {
+					payload.tags = config.tags.join(",");
+				}
 
-			    return XKit.tools.Nx_XHR({
-			        method: "POST",
-			        url: `https://www.tumblr.com/${path}`,
-			        headers: {
-			            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-			        },
-			        data: $.param(payload)
-			    });
+				return XKit.tools.Nx_XHR({
+					method: "POST",
+					url: `https://www.tumblr.com/${path}`,
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+					},
+					data: $.param(payload)
+				});
 			};
 
 			// Override "Search Page Brick Post Fix" from xkit.css
@@ -1275,8 +1277,6 @@ XKit.extensions.xkit_patches = new Object({
 				XKit.tools.add_css(`${selector} {height: 0; margin: 0; overflow: hidden;}`, extension);
 			};
 		},
-
-		"7.9.2": function() {},
 
 		"7.9.1": function() {},
 
