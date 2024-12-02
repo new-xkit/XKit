@@ -21,10 +21,10 @@ XKit.extensions.xkit_patches = new Object({
 		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
 			let version = XKit.tools.parse_version(XKit.version);
 			if (version.major === 7 && version.minor >= 8) {
-				fetch(browser.extension.getURL("manifest.json")) // eslint-disable-line no-undef
-					.then(response => response.json())
+				bridge_call("browser.runtime.getManifest")
 					.then(responseData => {
-						if (responseData.applications.gecko.id === "@new-xkit-w") {
+						if (responseData.applications && responseData.applications.gecko.id === "@new-xkit-w" ||
+							responseData.browser_specific_settings && responseData.browser_specific_settings.gecko.id === "@new-xkit-w") {
 							XKit.window.show(
 								"W Edition warning",
 								"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +

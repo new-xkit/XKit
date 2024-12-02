@@ -1,12 +1,11 @@
 ---
   root: true
   parserOptions:
-    ecmaVersion: 2018
+    ecmaVersion: 2021
   env:
     es6: true
     browser: true
     jquery: true
-    webextensions: true
   extends: eslint:recommended
   rules:
     dot-notation: [error, allowPattern: "^[A-Z]"]
@@ -72,3 +71,5 @@
     GM_openInTab: writable
     GM_listValues: writable
     GM_xmlhttpRequest: writable
+
+    bridge_call: writable
