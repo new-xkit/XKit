@@ -3385,30 +3385,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 	};
 
 	/**
-	 * Removes the leading whitespace that occurrs on every line of
-	 * `string`, and replaces it with the string passed in as `level`.
-	 * This is often helpful for making the output of template strings
-	 * more readable, by normalizing the additional indentation that
-	 * comes with their position in a source file.
-	 *
-	 * @param {String} level - the amount of indentation to add to
-	 *     every line, as a string. May be '' for no indentation.
-	 * @param {String} string - the input string to remove and/or add
-	 *     indentation from/to.
-	 * @returns {String} - the normalized string
-	 */
-	XKit.tools.normalize_indentation = (level, string) => {
-		const lines = string.split("\n");
-		const indentation_level = _.minBy(
-			lines.map(line => line.match(/^[ \t]+/)),
-			i => i ? i[0].length : Infinity
-		) || '';
-
-		const leading_indentation = new RegExp(`^${indentation_level}`);
-		return lines.map(line => line.replace(leading_indentation, level)).join("\n");
-	};
-
-	/**
 	 * Gets redpop translation strings for selecting elements via aria labels
 	 * @param {String} key - en_US string to translate
 	 * @return {Promise} - resolves with the translated key
@@ -3475,7 +3451,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			script.textContent = "var add_tag = " + JSON.stringify(addt) + ";\n";
 			script.textContent = script.textContent +
 				(exec ? "(" : "") +
-				XKit.tools.normalize_indentation('', func.toString()) +
+				func.toString() +
 				(exec ? ")();" : "");
 			if (XKit.tools.add_function_nonce) {
 				script.setAttribute('nonce', XKit.tools.add_function_nonce);
@@ -3520,7 +3496,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			const add_func = `(async ({callback_nonce, args}) => {
 				try {
-					const return_value = await (${XKit.tools.normalize_indentation("\t".repeat(7), func.toString())})(args);
+					const return_value = await (${func.toString()})(args);
 
 					window.postMessage({
 						xkit_callback_nonce: callback_nonce,
@@ -3819,7 +3795,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 			).map(selectors => selectors.join(' ')).join(',');
 		},
 	};
-	_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
 	// eslint-disable-next-line no-async-promise-executor
 	XKit.tools.Nx_XHR = details => new Promise(async (resolve, reject) => {
