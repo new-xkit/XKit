@@ -32,6 +32,6 @@ jobs:
           commit-message: update release metadata
           branch: update-release-metadata
           body: |
-            Updates the extension version in metadata files, triggering Firefox autoupdate and the "Please update XKit!" in-extension notification.
+            Updates the extension version in metadata files, triggering Firefox autoupdate and the "Please update XKit!" in-extension notification (currently disabled).
 
             Remember to confirm that the referenced version is released on Github, the .xpi file link works, and the Chrome web store has the referenced version available before merging this.
