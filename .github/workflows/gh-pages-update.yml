@@ -5,7 +5,11 @@ on:
     branches:
       - 'master'
     paths:
-      - 'Extensions/dist/'
+      - 'Extensions/dist/*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -25,4 +29,14 @@ jobs:
         run: npm ci
 
       - name: Update gh-pages
-        run: npx gh-pages --add --dist . --src "Extensions/dist/"
+        run: >
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+
+          npx gh-pages
+          -u "github-actions-bot <support+actions@github.com>"
+          --add
+          --dist .
+          --src "Extensions/dist/"
+          --message 'Update Extensions/dist/'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
