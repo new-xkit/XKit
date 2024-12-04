@@ -195,8 +195,8 @@ body.xkit-widgets-opened {
 }
 
 #xwidgets-drawer-inner .xwidgets-box.xcloud-widget .username {
-	overflow:hidden;
-	text-overflow:ellipsis;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -355,12 +355,12 @@ body.xkit-widgets-opened {
 	border-radius: 3px;
 	border: 1px solid rgba(0,0,0,0.66);
 	box-shadow: inset 0px 1px 1px rgba(255,255,255,0.22), 0px 1px 3px rgba(0,0,0,0.33);
-   	-webkit-transition: background 0.17s ease-in;
-   	-moz-transition: background  0.17s ease-in;
-   	-o-transition: background 0.17s ease-in;
-   	transition: background  0.17s ease-in;
-   	cursor: pointer;
-   	opacity: 0.87;
+	-webkit-transition: background 0.17s ease-in;
+	-moz-transition: background  0.17s ease-in;
+	-o-transition: background 0.17s ease-in;
+	transition: background  0.17s ease-in;
+	cursor: pointer;
+	opacity: 0.87;
 }
 
 #xwidgets-drawer-inner .xwidgets-box.lights_out .box:hover {
@@ -370,10 +370,10 @@ body.xkit-widgets-opened {
 #xwidgets-drawer-inner .xwidgets-box.lights_out .box.on {
 	background: #5ec8fc;
 	box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.43), inset 1px 1px 1px rgba(255,255,255,0.42), inset 0px 1px 1px rgba(255,255,255,0.42), 0px 1px 3px rgba(0,0,0,0.33)
-   	-webkit-transition: background 0.14s ease-in;
-   	-moz-transition: background  0.14s ease-in;
-   	-o-transition: background 0.14s ease-in;
-   	transition: background  0.14s ease-in;
+	-webkit-transition: background 0.14s ease-in;
+	-moz-transition: background  0.14s ease-in;
+	-o-transition: background 0.14s ease-in;
+	transition: background  0.14s ease-in;
 }
 
 #xwidgets-drawer-inner .xwidgets-box.lights_out .lights-out-grid {
