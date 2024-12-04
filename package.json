@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "web-ext run --no-reload",
     "test": "eslint .",
-    "lint": "web-ext lint",
+    "lint": "web-ext lint --ignore-files Extensions/*.icon.js",
     "build": "web-ext build",
     "sign": "web-ext sign"
   },
