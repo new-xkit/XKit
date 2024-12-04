@@ -13,7 +13,6 @@
     ],
     "js": [
       "bridge.js",
-      "vendor/lodash.min.js",
       "vendor/jquery.js",
       "vendor/tiptip.js",
       "vendor/moment.js",

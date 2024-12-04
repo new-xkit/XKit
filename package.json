@@ -9,8 +9,10 @@
     "sign": "web-ext sign"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "web-ext": "^7.12.0"
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.1",
+    "jsonwebtoken": "^9.0.2",
+    "web-ext": "^8.3.0"
   },
   "webExt": {
     "ignoreFiles": [

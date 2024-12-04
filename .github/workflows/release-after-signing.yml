@@ -1,0 +1,71 @@
+name: Generate Release (after signing)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Generate Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+
+      ### NOTE: This workflow continues the "Generate Release" workflow if it timed out.
+
+      - name: Firefox — Download Latest Signed XPI
+        run: node dev/download_signed_xpi.mjs
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+
+      - name: Get Release Version
+        uses: actions/github-script@v7
+        id: get-version
+        with:
+          result-encoding: string
+          script: |
+            const fs = require('node:fs');
+            const { version } = JSON.parse(fs.readFileSync(('${{ github.workspace }}/manifest.json')));
+            const files = fs
+              .readdirSync('${{ github.workspace }}/web-ext-artifacts')
+              .filter(filePath => filePath.endsWith(`${version}.xpi`));
+            if (files.length === 0) {
+              throw new Error(`Could not find signed v${version} XPI! Has Mozilla reviewed it?`);
+            }
+            const releases = await github.paginate(github.rest.repos.listReleases, { owner: context.repo.owner, repo: context.repo.repo, });
+            if (releases.some(({ tag_name }) => tag_name === `v${version}`)) {
+              throw new Error(`Release v${version} already exists! Did you forget to bump the manifest.json version?`);
+            }
+            return version;
+
+      # - name: Chrome — Build
+      #   run: npm run build
+      # - name: Chrome — Upload and Publish
+      #   run: npx chrome-webstore-upload --source=web-ext-artifacts/new_xkit-${{ steps.get-version.outputs.result }}.zip
+      #   env:
+      #     EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+      #     CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+      #     CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+      #     REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+      - name: Create Github release draft
+        uses: softprops/action-gh-release@v2
+        with:
+          name: New XKit ${{ steps.get-version.outputs.result }}
+          tag_name: v${{ steps.get-version.outputs.result }}
+          body: |
+            <!-- -->
+
+            **NOTE:** Firefox may complain about getting a connection error when clicking the below XPI link. If it does, right-click the link and select "Save Link As...", then navigate to `about:addons` and drag the file onto that screen to install New XKit.
+
+            For Chrome: Install from the [Chrome Web Store](https://new-xkit-extension.tumblr.com/chrome) instead of here.
+          files: web-ext-artifacts/*.xpi
+          draft: true

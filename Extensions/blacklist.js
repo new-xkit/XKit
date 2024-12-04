@@ -614,7 +614,7 @@ XKit.extensions.blacklist = new Object({
 
 				if ($(this).find(".reblog-content").length > 0) {
 					m_content = $(this).find(".reblog-content").map(function() {
-					    return $(this).html();
+						return $(this).html();
 					}).get().join(" ");
 				}
 
@@ -623,7 +623,7 @@ XKit.extensions.blacklist = new Object({
 				var content = $(this).find(contentSel);
 				if (content.length) {
 					m_content += content.map(function() {
-					    return $(this).html();
+						return $(this).html();
 					}).get().join(" ");
 				}
 
@@ -636,8 +636,8 @@ XKit.extensions.blacklist = new Object({
 				m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
 				m_content = m_content.toLowerCase();
 
-			    // Preserve href links.
-			    m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
+				// Preserve href links.
+				m_content = m_content.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)".*?>/gm, ' $1 ');
 				// Strip HTML tags.
 				m_content = m_content.replace(/<(?:.|\n)*?>/gm, ' ');
 

@@ -1,11 +1,12 @@
-name: Update gh-pages
+name: Rebuild Distribution (7.9.2)
 
 on:
   push:
     branches:
-      - 'master'
+      - '7.9.2'
     paths:
-      - 'Extensions/dist/*'
+      - 'Extensions/*'
+      - 'Themes/*'
   workflow_dispatch:
 
 permissions:
@@ -13,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    name: Update gh-pages
+    name: Autobuild extensions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,13 +23,22 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 14
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Update gh-pages
+      - name: Run tests
+        run: npm test
+
+      - name: Install gulp-cli
+        run: npm install gulp-cli
+
+      - name: Build distribution
+        run: gulp build
+
+      - name: Push changes to gh-pages
         run: >
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
 
@@ -36,7 +46,7 @@ jobs:
           -u "github-actions-bot <support+actions@github.com>"
           --add
           --dist .
-          --src "Extensions/dist/"
-          --message 'Update Extensions/dist/'
+          --src "{Extensions/dist/*.json,Extensions/dist/page/gallery.json,Extensions/dist/page/list.json,Extensions/dist/page/themes.json}"
+          --message 'Rebuild Distribution'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
