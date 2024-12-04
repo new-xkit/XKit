@@ -1,5 +1,5 @@
 //* TITLE PostBlock **//
-//* VERSION 1.0.2 **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Block the posts you don't like **//
 //* DETAILS This extension lets you blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it.<br><br>Tip: hold down ALT to skip the blocking confirmation! **//
 //* DEVELOPER new-xkit **//
@@ -12,7 +12,7 @@ XKit.extensions.postblock = new Object({
 	running: false,
 	slow: true,
 	blacklisted: [],
-	button_icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAApUlEQVQoz2NgQAHVR6t3MOADtZbVFkBl/6v/41VW87X6E0xZzerqBTiUQRTAyX/EKftPtLKahuoCvMrwAHTTIBAuXeVe09LAB5Gq0sFUVj0fEhAfgdwFaFKobJDC6rMg71db4FEGUlhTCmLUnMGlDAoaRKq/IYTRlSEpr5lGlLIKlZrfRCgDmjeBKGVlvNV3iVAGTG26Nc+JUAb0sUTNamCaw6EMAJiVMfrH3EFYAAAAAElFTkSuQmCC',
+	button_icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNS45NCAxNS45NCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiM1OTU5NTk7fTwvc3R5bGU+PC9kZWZzPjxnIGlkPSJMYXllcl8yIiBkYXRhLW5hbWU9IkxheWVyIDIiPjxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTUuOTQsOEE4LDgsMCwxLDEsOCwwLDgsOCwwLDAsMSwxNS45NCw4Wk04LDEuODVBNi4xMiw2LjEyLDAsMSwwLDE0LjA5LDgsNi4xMiw2LjEyLDAsMCwwLDgsMS44NVoiLz48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjYuOTUiIHk9IjAuODgiIHdpZHRoPSIyLjA0IiBoZWlnaHQ9IjE0LjE4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3Ljk3IC0zLjMpIHJvdGF0ZSg0NSkiLz48L2c+PC9nPjwvc3ZnPg==',
 
 	processing: false,
 
