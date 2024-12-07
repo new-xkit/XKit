@@ -1321,8 +1321,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 		m_html = m_html + '</div><div class="buttons">';
 
-		m_html = m_html + '<div class="xkit-button" id="xkit-extension-update">Update</div>';
-
 		if (!this_is_internal) {
 			m_html = m_html + '<div class="xkit-button" id="xkit-extension-uninstall">Uninstall</div>';
 			m_html = m_html + '<div class="xkit-button" id="xkit-extension-reset">Reset Settings</div>';
@@ -1412,46 +1410,6 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.window.show("This feature might slow down your computer",
 				"Turning this feature on might slow down your computer, especially if you have a slow internet connection or an older computer.",
 				"warning", '<div id="xkit-close-message" class="xkit-button default">OK</div>');
-
-		});
-
-		$("#xkit-extension-update").click(function() {
-
-			var $this = $(this);
-
-			if ($this.hasClass("disabled") === true) { return; }
-
-			$("#xkit-extensions-panel-right-inner").html('<div id="xkit-extension-panel-no-settings">Updating...</div>');
-
-			if (typeof XKit.extensions.xkit_updates === "undefined" || typeof XKit.extensions.xkit_updates.update === "undefined") {
-				XKit.window.show("Can't update",
-					'It looks like "XKit Updates" extension is missing or not working properly. It is highly recommended that you reset XKit.', "error",
-					'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-					'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
-				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-				return;
-			}
-
-			$(this).addClass("disabled");
-
-			XKit.extensions.xkit_updates.update(XKit.extensions.xkit_preferences.current_open_extension_panel, function(mdata) {
-
-				if (mdata.errors === false) {
-					XKit.window.show("Done!", "<b>Done updating extension.</b><br/>" +
-						"Please refresh the page for changes to take effect.", "info",
-						'<div id="xkit-close-message" class="xkit-button default">OK</div>');
-					XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-					return;
-				}
-
-				XKit.window.show("Can't update",
-					"Update manager returned the following message:<p>" + mdata.error + "</p>" +
-					"Please try again later or if the problem continues, contact New XKit Support.", "error",
-					'<div id="xkit-close-message" class="xkit-button default">OK</div>' +
-					'<a href="http://new-xkit-support.tumblr.com/support" class="xkit-button">Support Chat Room</a>');
-				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-
-			});
 
 		});
 
@@ -1991,7 +1949,6 @@ XKit.extensions.xkit_preferences = new Object({
 				'<div class="nano long" id="xkit-extensions-panel-left">' +
 					'<div class="content" id="xkit-extensions-panel-left-inner">' +
 						'<div class="xkit-extension text-only separator">Configuration</div>' +
-						'<div data-pname="update-all" class="xkit-extension text-only">Update All</div>' +
 						'<div data-pname="reset" class="xkit-extension text-only">Reset XKit</div>' +
 						'<div data-pname="config" class="xkit-extension text-only">Export Configuration</div>' +
 						'<div data-pname="storage" class="xkit-extension text-only">Storage</div>' +
@@ -2028,9 +1985,6 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 			if ($this.attr('data-pname') === "updates") {
 				XKit.extensions.xkit_preferences.show_others_panel_updates();
-			}
-			if ($this.attr('data-pname') === "update-all") {
-				XKit.extensions.xkit_preferences.show_others_panel_update_all();
 			}
 			if ($this.attr('data-pname') === "news") {
 				XKit.extensions.xkit_preferences.show_others_panel_news();
@@ -2319,33 +2273,6 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-panel-show-flags").click(function() {
 
 			XKit.extensions.xkit_preferences.flags();
-
-		});
-
-	},
-
-	show_others_panel_update_all: function() {
-
-		var m_html =
-				'<div class="xkit-others-panel">' +
-				'<div class="title">Update All</div>' +
-				'<div class="description">' +
-					"If you would like to force XKit to update itself now, or for some reason, you can not receive updates, click the button below to trigger Automatic Updates now. XKit will check for the new versions of extensions and update them if necessary." +
-				"</div>" +
-				'<div class="bottom-part">' +
-					'<div id="xkit-panel-force-update-xkit" class="xkit-button block">Update all my extensions</div>' +
-				"</div>" +
-				"</div>";
-
-		$("#xkit-extensions-panel-right-inner").html(m_html);
-		$("#xkit-extensions-panel-right").nanoScroller();
-
-		$("#xkit-panel-force-update-xkit").click(function() {
-
-			XKit.window.show("Forcing Automatic Updates",
-				"Please wait while I review the changes and update myself..<br/>Please do not navigate away from this page." +
-				'<div id="xkit-forced-auto-updates-message">Initializing...</div>', "info");
-			XKit.extensions.xkit_updates.get_list(true);
 
 		});
 

@@ -98,12 +98,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 					return;
 				}
 
-				// Before we run main--if patches is a broken version,
-				// we need to force an update.
-				if (XKit.installed.version('xkit_patches') === '7.2.8') {
-					XKit.special.force_update();
-				}
-
 				// It exists! Great.
 				var xkit_main = XKit.installed.get("xkit_main");
 				if (!xkit_main.errors && xkit_main.script) {
@@ -220,10 +214,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 				getExtensionData(extension_id).then(callback);
 			},
 			page: function(page, callback) {
-				if (page === 'list.php') {
-					getListData().then(callback);
-					return;
-				}
 				if (page === 'gallery.php') {
 					getGalleryData().then(callback);
 					return;
@@ -3207,33 +3197,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 		},
 		special: {
 
-			force_update: function() {
-				XKit.install("xkit_updates", data => {
-					if (data.errors) {
-						if (data.storage_error === true) {
-							show_error_installation("[Code: 401] Storage error: " + data.error);
-						} else {
-							if (data.server_down === true) {
-								show_error_installation("[Code: 101] Can't reach New XKit servers");
-							} else {
-								show_error_installation("[Code: 100] Server returned error/empty script");
-							}
-						}
-						return;
-					}
-
-					try {
-						new Function(data.script + "\n//# sourceURL=xkit/xkit_updates.js")();
-						XKit.window.show("Forcing Extension Updates",
-							"Please do not navigate away from this page. Your extensions are being updated for compatibility with the latest XKit version." +
-							'<div id="xkit-forced-auto-updates-message">Initializing...</div>', "info");
-						XKit.extensions.xkit_updates.get_list(true);
-					} catch (e) {
-						show_error_installation("[Code: 102] " + e.message);
-					}
-				});
-			},
-
 			reset: function() {
 
 				XKit.window.show("Reset XKit", "Really delete all the data stored in XKit?<br/>Your settings will be lost. You can not undo this action.", "question", "<div id=\"reset-xkit-yes\" class=\"xkit-button default\">Yes, reset XKit</div><div id=\"reset-xkit-no\" class=\"xkit-button\">Cancel</div>");
@@ -4657,10 +4620,8 @@ function show_error_reset(message) {
 		"error",
 
 		'<div id="xkit-close-message" class="xkit-button">OK</div>' +
-		'<div id="xkit-force-update" class="xkit-button default">Update Extensions</div>' +
 		'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>'
 	);
-	$("#xkit-force-update").click(XKit.special.force_update);
 }
 
 function show_error_update(message) {
@@ -4760,16 +4721,6 @@ async function getGalleryData() {
 			icon,
 			details,
 		})),
-	};
-}
-
-async function getListData() {
-	const index = JSON.parse(await loadFile("/Extensions/_index.json"));
-	const extensionData = await Promise.all(Object.keys(index).map(getExtensionData));
-
-	return {
-		server: "up",
-		extensions: extensionData.map(({id, version}) => ({name: id, version})),
 	};
 }
 
