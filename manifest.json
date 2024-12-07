@@ -33,7 +33,7 @@
   "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
   "version": "7.10.0",
   "web_accessible_resources": [ "*.js", "*.json", "*.css" ],
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "@new-xkit",
       "strict_min_version": "115.0",
