@@ -17,6 +17,19 @@
 			XKit.extensions.xkit_editor.filename = "";
 			document.title = "XKit Extension Editor";
 			extension_editor_run();
+
+			XKit.window.show(
+				"Script editing is disabled",
+				`
+					Due to increased extension security requirements, this version of New XKit does not allow script editing from inside the browser.
+					You can still use the XKit Editor to see the source code of your scripts.
+					<br /><br />
+					If you're a developer, loading XKit as an unpacked/temporary extension provides an even better development experience than before!
+					See <a href="https://github.com/new-xkit/XKit/tree/master/docs" target="_blank">the documentation on GitHub</a> for instructions.
+				`,
+				"info",
+				`<div id="xkit-close-message" class="xkit-button default">OK</div>`
+			);
 		}
 
 	});
