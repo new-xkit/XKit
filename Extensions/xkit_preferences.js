@@ -996,7 +996,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				$(this).parent().addClass("overlayed");
 
-				XKit.install($(this).attr('data-extension-id'), function(extension_data) {
+				XKit.install($(this).attr('data-extension-id'), async function(extension_data) {
 					// defined in xkit.js
 					/* globals show_error_installation */
 
@@ -1023,7 +1023,7 @@ XKit.extensions.xkit_preferences = new Object({
 					$("#xkit-gallery-extension-" + extension_data.id).find(".overlay").html("Installed!");
 
 					try {
-						new Function(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js")();
+						await extension_data.import();
 						XKit.extensions.xkit_main.load_extension_preferences(m_extension_id);
 						if (XKit.installed.enabled(m_extension_id)) {
 							XKit.extensions[m_extension_id].run();
