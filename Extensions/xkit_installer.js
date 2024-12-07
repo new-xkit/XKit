@@ -103,7 +103,7 @@ XKit.extensions.xkit_installer = new Object({
 		console.log("Will be installing " + to_install);
 		$("#xkit-install-process").html("Installing package " + to_install + "...");
 
-		XKit.install(to_install, function(mdata) {
+		XKit.install(to_install, async function(mdata) {
 			// defined in xkit.js
 			/* globals show_error_installation */
 
@@ -125,9 +125,9 @@ XKit.extensions.xkit_installer = new Object({
 			}
 
 			try {
-				// Try evaling the script.
+				// Try importing the script.
 				// If it's working, then move to the next one.
-				new Function(mdata.script + "\n//# sourceURL=xkit/" + mdata.id + ".js")();
+				await mdata.import();
 				XKit.extensions.xkit_installer.installed++;
 				XKit.extensions.xkit_installer.next();
 			} catch (e) {
