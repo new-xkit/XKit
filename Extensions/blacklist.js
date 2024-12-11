@@ -627,11 +627,6 @@ XKit.extensions.blacklist = new Object({
 					}).get().join(" ");
 				}
 
-				// format natively filtered posts with matching content only in "don't display" mode
-				if (XKit.extensions.blacklist.preferences.dont_display.value) {
-					m_content += " " + $(this).find(XKit.css_map.descendantSelector('filteredScreen', 'linkOut')).text();
-				}
-
 				m_content = m_content + " " + m_title;
 
 				if (XKit.extensions.blacklist.preferences.check_authors.value) {
