@@ -190,7 +190,13 @@
 
 #x1cpostage_reblog i::before,
 #x1cpostage_queue i::before,
-#x1cpostage_draft i::before,
+#x1cpostage_draft i::before {
+	font-family: tumblr-icons, Blank;
+	font-size: 2em;
+	margin-left: 2px;
+	vertical-align: middle;
+	position: relative;
+}
 
 #x1cpostage_reblog i::before,
 #x1cpostage_queue i::before,
