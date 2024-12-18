@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.7.1 **//
+//* VERSION 7.7.2 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -680,13 +680,15 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-control-panel-shadow").fadeIn('slow');
 		$("#xkit-control-panel-shadow").click(XKit.extensions.xkit_preferences.close);
 
+		if (XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true") {
+			XKit.storage.set("xkit_preferences", "shown_welcome_bubble", "true");
+		}
+
 		if (XKit.extensions.xkit_preferences.bubble_tour_mode === true) {
 
 			XKit.extensions.xkit_preferences.bubble_tour_mode = false;
 			$("#xkit-welcoming-bubble").remove();
 			$("#xkit-welcoming-bubble-shadow").remove();
-
-			XKit.storage.set("xkit_preferences", "shown_welcome_bubble", "true");
 
 			XKit.window.show("Welcome to the control panel!",
 				"<b>This is the My XKit panel.</b><br/>This is where you customize your XKit.<br/>" +
