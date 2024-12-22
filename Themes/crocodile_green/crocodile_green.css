@@ -4,18 +4,18 @@
 /* DEVELOPER crocodilesinbusinesssuits **/
 
 .identity {
-    background: #041705;
-    background-image: url('https://new-xkit.github.io/XKit/Themes/crocodile_green/body-background.jpg');
-    margin: 0;
+	background: #041705;
+	background-image: url('https://new-xkit.github.io/XKit/Themes/crocodile_green/body-background.jpg');
+	margin: 0;
 }
 
 .l-content {
-    background: #1b331b;
+	background: #1b331b;
 }
 
 .post {
-    background: #152715;
-    border-radius: 10px;
+	background: #152715;
+	border-radius: 10px;
 }
 
 .l-container.l-container--two-column-dashboard .l-content,
@@ -23,12 +23,12 @@
 #right_column,
 #right_column::after,
 .post_content {
-    background: transparent!important;
+	background: transparent!important;
 }
 
 .controls_section li,
 .l-header-container--refresh {
-    background: #152715;
+	background: #152715;
 }
 
 .identity .controls_section.user_list li .follow_list_item_blog::before,
@@ -43,23 +43,23 @@
 }
 
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover {
-    background-color: #152715;
+	background-color: #152715;
 }
 
 .tab_notice,
 .selected .tab_notice,
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
-    background-color: #94a694;
+	background-color: #94a694;
 }
 
 .compose-button {
-    fill: #94a694;
+	fill: #94a694;
 }
 
 .tab_notice .tab_notice_value,
 .plus-follow-button {
-    color: #152715;
+	color: #152715;
 }
 
 .post_avatar,
