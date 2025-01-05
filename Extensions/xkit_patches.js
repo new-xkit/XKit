@@ -18,7 +18,7 @@ XKit.extensions.xkit_patches = new Object({
 			});
 		}
 
-		const w_edition_storage_key = "w_edition_warned";
+		const w_edition_storage_key = "w_edition_warned_1";
 		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", w_edition_storage_key) !== "true") {
 			let version = XKit.tools.parse_version(XKit.version);
 			if (version.major === 7 && version.minor >= 8) {
