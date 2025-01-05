@@ -18,7 +18,8 @@ XKit.extensions.xkit_patches = new Object({
 			});
 		}
 
-		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
+		const w_edition_storage_key = "w_edition_warned";
+		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", w_edition_storage_key) !== "true") {
 			let version = XKit.tools.parse_version(XKit.version);
 			if (version.major === 7 && version.minor >= 8) {
 				fetch(browser.extension.getURL("manifest.json")) // eslint-disable-line no-undef
@@ -43,15 +44,15 @@ XKit.extensions.xkit_patches = new Object({
 
 							$("#dismiss-warning").click(() => {
 								XKit.window.close();
-								XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+								XKit.storage.set("xkit_patches", w_edition_storage_key, "true");
 							});
 						} else {
-							XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+							XKit.storage.set("xkit_patches", w_edition_storage_key, "true");
 						}
 					})
 					.catch(console.error);
 			} else {
-				XKit.storage.set("xkit_patches", "w_edition_warned", "true");
+				XKit.storage.set("xkit_patches", w_edition_storage_key, "true");
 			}
 		}
 
