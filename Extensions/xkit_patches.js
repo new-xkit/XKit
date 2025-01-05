@@ -38,9 +38,11 @@ XKit.extensions.xkit_patches = new Object({
 										"Also, since the two versions conflict, you should uninstall W Edition before re-installing from GitHub."
 									) : (
 										"XKit Patches has determined that you are using <br><b>New XKit (W Edition)</b>, an unofficial upload of New XKit.<br><br>" +
-										'Due to how XKit\'s extension gallery works, this upload violates <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews#Development_Practices" target="_blank">Mozilla\'s policy on remote code execution</a> ' +
+										"Extension updates may be delayed or the extension update functionality may be broken.<br><br>" +
+										'Additionally, due to how XKit\'s extension gallery works, this upload violates <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews#Development_Practices" target="_blank">Mozilla\'s policy on remote code execution</a> ' +
 										"for listed add-ons, and is in danger of being banned at any time; potentially deleting your local XKit data.<br><br>" +
-										"We recommend installing the official distribution of New XKit from GitHub to avoid this possibility.<br><br>" +
+										"We recommend installing the official distribution of New XKit from GitHub to avoid this possibility and " +
+										"to continue to receive bug fixes and improvements.<br><br>" +
 										"Be sure to upload or export your configuration using XCloud before uninstalling W Edition. " +
 										"Also, since the two versions conflict, you should uninstall W Edition before re-installing from GitHub."
 									),
