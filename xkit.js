@@ -4391,7 +4391,7 @@ function show_message(title, msg, icon, buttons) {
 	});
 }
 
-function xkit_init_special() {
+async function xkit_init_special() {
 
 	$("body").html("");
 	document.title = "XKit";
@@ -4417,11 +4417,8 @@ function xkit_init_special() {
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
 		if (typeof(browser) !== 'undefined') {
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', browser.extension.getURL('editor.js'), false);
-			xhr.send(null);
 			try {
-				new Function(xhr.responseText + "\n//# sourceURL=xkit/editor.js")();
+				await import(browser.runtime.getURL("/editor.js"));
 				XKit.extensions.xkit_editor.run();
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
