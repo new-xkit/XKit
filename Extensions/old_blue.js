@@ -105,7 +105,7 @@ XKit.extensions.old_blue = new Object({
 						--color-fg-light-secondary: rgba(255, 255, 255, 0.8);
 						--color-fg-light-tertiary: rgba(255, 255, 255, 0.6);
 						--image-bg: rgba(68, 68, 68, 1);
-						--image-panel-border: rgba(255, 255, 255, 0);
+						--image-panel-border: rgba(255, 255, 255, 0.1);
 						--image-tint: rgba(68, 68, 68, 0.4);
 						--image-tint-strong: rgba(68, 68, 68, 0.5);
 						--image-tint-heavy: rgba(68, 68, 68, 0.6);
@@ -123,8 +123,8 @@ XKit.extensions.old_blue = new Object({
 						--overlay-tint: rgba(54, 70, 93, 0.2);
 						--overlay-tint-strong: rgba(54, 70, 93, 0.6);
 						--overlay-tint-heavy: rgba(54, 70, 93, 0.8);
-						--unread-tint: rgba(82, 158, 204, 0.05);
-						--unread-tint-hover: rgba(82, 158, 204, 0.1);
+						--unread-tint: rgba(82, 158, 204, 0.1);
+						--unread-tint-hover: rgba(82, 158, 204, 0.2);
 						--badge-icon: rgba(255, 255, 255, 1);
 						--badge-text: rgba(68, 68, 68, 1);
 						--chrome-ui: rgba(82, 158, 204, 1);
