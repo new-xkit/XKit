@@ -29,6 +29,7 @@ XKit.extensions.old_blue = new Object({
 			if (!XKit.page.react) {
 				XKit.tools.init_css("old_blue");
 			} else {
+				const old_font_family_rule = this.preferences.old_font.value ? '--font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif' : '';
 				const old_font_size_rule = this.preferences.old_font_size.value ? ':root { --base-font-size: 14px !important; }' : '';
 
 				XKit.tools.add_css(`
@@ -238,32 +239,12 @@ XKit.extensions.old_blue = new Object({
 						--brand-green-tint: rgba(86, 188, 138, 0.1);
 						--brand-green-tint-strong: rgba(86, 188, 138, 0.2);
 						--brand-green-tint-heavy: rgba(86, 188, 138, 0.3);
+
+						${old_font_family_rule}
 					}
 
 					${old_font_size_rule}
 				`, "old_blue");
-
-				if (this.preferences.old_font.value) {
-					XKit.tools.add_css(`
-						.xkit--react {
-							--font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
-							--font-family-modern: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
-						}
-						/* selectors which set font-weight: 350 (breaks Helvetica Neue on some systems) */
-						.Vt7qF .wL4YA.jk3gM .UEULa, .vgRpB, .pdHCI, .Xz965, .pEHwj .yY2Oe .v_iz_, .pEHwj .yY2Oe .aQXxD,
-						.vgL3J, .q9P6T, .gAJ73, .gpV8Q, .h7IR_, .ctBr6, .fBQsy, .h6QpP, .o5TqQ, .gty8w, .sG03a, .SuDWJ,
-						.nhqrO.ldaI8, .I3pYl, .NjLa2, .YVaw6 .uJ0hL, .F0gXR, .ZRkRa, .FaPcn, .uPyPt, .mhABv,
-						.YtLa6 .aPaHS, .YtLa6 .G6FrY, .NM1DN .pfmRm, .FzBTa .GpO9n, .c1xDI, .Rl1K_, .SCBLa, .yjhh2,
-						.vSa8M, .xPEP2, .rB7hU, .RPMuM, .f8LOG, .uaMQw, .Jo8I3, .pYQdH .uHcx_, .Nq9JP, .Z7ew7, .amytk,
-						.dJl65, .YmlZc, .KaTRm, .KPqE4 p.zDaqs, .YMD5o, .cYyad, .TZgeO, .Gt2Q9, .n63mn, .OmZD7,.RSZnt,
-						.j8Eiw, .Hzn1C, .YmIEY, .wjhBM, .tSUo6, .NSF9b .vGsK0 .fhLhp, .zGDfg, .c6rjd .Oxjr8, .gDeru p,
-						.Ks9nn .ZR5vI, .Rf1RJ, .gnxzg, .Q53Gq, .ueVRR, .IMMt_, .j2j0M, .afgMB, .HqY8o, .v38by .gSgTK,
-						.cs2zK, .AKAFO .bOGfF, .AiALR .enHco .fgOG_, .mAUoH .Re2fk .nmfdY, .mAUoH .Re2fk .RRf6I,
-						.HfAqf .YGy_k .vpmnx {
-							font-weight: 400;
-						}
-					`, "old_blue");
-				}
 			}
 		}
 	},
