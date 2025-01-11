@@ -359,8 +359,6 @@ XKit.extensions.profiler = new Object({
 
 				var data = JSON.parse(response.responseText).response;
 				var dtx = new Date(data.blog.updated * 1000);
-				// defined in moment.js
-				/* globals moment */
 				var dt = moment(dtx);
 
 				$("#xkit-profiler-last-update").removeClass("loading-up").html(dt.from(new Date()));

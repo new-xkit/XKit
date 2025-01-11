@@ -542,8 +542,6 @@ XKit.extensions.outbox = new Object({
 		var m_date = "";
 
 		if (obj.time !== "" && typeof obj.time !== "undefined") {
-			// defined in moment.js
-			/* globals moment */
 			var moment_val = moment(obj.time);
 			m_day = moment_val.format('ddd');
 			m_date = moment_val.format('MM/DD/YY hh:mm a');

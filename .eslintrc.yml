@@ -52,6 +52,7 @@
   globals:
     BigInt: readonly
     _: readonly
+    moment: readonly
     XKit: writable
     XBridge: writable
     centerIt: writable
