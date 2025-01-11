@@ -47,15 +47,19 @@ jobs:
       ### NOTE: This workflow may time out here while waiting for Mozilla review.
       ### If this occurs, run the "Generate Release (after signing)" action once it is complete.
 
-      # - name: Chrome — Build
-      #   run: npm run build
-      # - name: Chrome — Upload and Publish
-      #   run: npx chrome-webstore-upload --source=web-ext-artifacts/new_xkit-${{ steps.get-version.outputs.result }}.zip
-      #   env:
-      #     EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
-      #     CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
-      #     CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-      #     REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      - name: Chrome — Build
+        run: npm run build
+
+      # uploads to Chrome Web Store servers, but does not publish;
+      # see https://github.com/fregante/chrome-webstore-upload-cli#usage
+      - name: Chrome — Upload
+        run: npm run chrome-upload -- --source=web-ext-artifacts/new_xkit-${{ steps.get-version.outputs.result }}.zip
+        continue-on-error: true
+        env:
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
 
       - name: Create Github release draft
         uses: softprops/action-gh-release@v2
