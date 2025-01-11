@@ -60,7 +60,7 @@
 				}
 
 				try {
-					new Function(extension.script + "\n//# sourceURL=xkit/" + extension.id + ".js")();
+					await extension.import();
 
 					if (typeof XKit.extensions[extension.id].preferences !== "undefined") {
 						this.load_extension_preferences(extension.id);
