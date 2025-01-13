@@ -369,7 +369,7 @@
 	-webkit-user-select: none;
 	user-select: none;
 	max-height: 80vh;
-  overflow-y: scroll;
+	overflow-y: scroll;
 }
 
 .xkit-window-msg a {
