@@ -1,9 +1,9 @@
 ---
   root: true
   parserOptions:
-    ecmaVersion: 2018
+    ecmaVersion: 2022
   env:
-    es6: true
+    es2022: true
     browser: true
     jquery: true
     webextensions: true
@@ -50,7 +50,6 @@
       parserOptions:
         sourceType: module
   globals:
-    BigInt: readonly
     _: readonly
     moment: readonly
     XKit: writable
