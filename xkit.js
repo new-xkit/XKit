@@ -4689,7 +4689,7 @@ async function getExtensionData(id) {
 /** Each extension has the following fields:
  * {string}  script      - Contents of the extension file
  * {string}  id          - File name without extension
- * {string}  icon        - Contents of the `id`.icon.js file
+ * {string}  icon        - Contents of the `id`.icon.txt file
  * {string}  css         - Contents of the `id`.css file
  * {string}  title       - Value of the TITLE field in `script`
  * {string}  version     - Value of the VERSION field in `script`
@@ -4725,7 +4725,7 @@ async function loadExtensionData(id) {
 
 	if (index[id].icon) {
 		try {
-			extension.icon = await loadFile(`/Extensions/${id}.icon.js`);
+			extension.icon = await loadFile(`/Extensions/${id}.icon.txt`);
 		} catch (e) {}
 	}
 	if (index[id].css) {
