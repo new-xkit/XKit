@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
-    "eslint": "^7.32.0",
+    "eslint": "^8.57.1",
     "jsonwebtoken": "^9.0.2",
     "web-ext": "^8.3.0"
   },

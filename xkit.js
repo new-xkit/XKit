@@ -820,7 +820,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					$("#xkit_notification_" + m_notification_id).slideDown('slow');
 				}, 100);
 				$("#xkit_notification_" + m_notification_id).click(function() {
-					if (typeof callback !== undefined) {
+					if (typeof callback !== "undefined") {
 						try {
 							callback();
 						} catch (e) {
@@ -3385,30 +3385,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 	};
 
 	/**
-	 * Removes the leading whitespace that occurrs on every line of
-	 * `string`, and replaces it with the string passed in as `level`.
-	 * This is often helpful for making the output of template strings
-	 * more readable, by normalizing the additional indentation that
-	 * comes with their position in a source file.
-	 *
-	 * @param {String} level - the amount of indentation to add to
-	 *     every line, as a string. May be '' for no indentation.
-	 * @param {String} string - the input string to remove and/or add
-	 *     indentation from/to.
-	 * @returns {String} - the normalized string
-	 */
-	XKit.tools.normalize_indentation = (level, string) => {
-		const lines = string.split("\n");
-		const indentation_level = _.minBy(
-			lines.map(line => line.match(/^[ \t]+/)),
-			i => i ? i[0].length : Infinity
-		) || '';
-
-		const leading_indentation = new RegExp(`^${indentation_level}`);
-		return lines.map(line => line.replace(leading_indentation, level)).join("\n");
-	};
-
-	/**
 	 * Gets redpop translation strings for selecting elements via aria labels
 	 * @param {String} key - en_US string to translate
 	 * @return {Promise} - resolves with the translated key
@@ -3475,7 +3451,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			script.textContent = "var add_tag = " + JSON.stringify(addt) + ";\n";
 			script.textContent = script.textContent +
 				(exec ? "(" : "") +
-				XKit.tools.normalize_indentation('', func.toString()) +
+				func.toString() +
 				(exec ? ")();" : "");
 			if (XKit.tools.add_function_nonce) {
 				script.setAttribute('nonce', XKit.tools.add_function_nonce);
@@ -3520,7 +3496,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			const add_func = `(async ({callback_nonce, args}) => {
 				try {
-					const return_value = await (${XKit.tools.normalize_indentation("\t".repeat(7), func.toString())})(args);
+					const return_value = await (${func.toString()})(args);
 
 					window.postMessage({
 						xkit_callback_nonce: callback_nonce,
@@ -3819,7 +3795,6 @@ var xkit_global_start = Date.now();  // log start timestamp
 			).map(selectors => selectors.join(' ')).join(',');
 		},
 	};
-	_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
 	// eslint-disable-next-line no-async-promise-executor
 	XKit.tools.Nx_XHR = details => new Promise(async (resolve, reject) => {
@@ -4416,7 +4391,7 @@ function show_message(title, msg, icon, buttons) {
 	});
 }
 
-function xkit_init_special() {
+async function xkit_init_special() {
 
 	$("body").html("");
 	document.title = "XKit";
@@ -4442,11 +4417,8 @@ function xkit_init_special() {
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
 		if (typeof(browser) !== 'undefined') {
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', browser.extension.getURL('editor.js'), false);
-			xhr.send(null);
 			try {
-				new Function(xhr.responseText + "\n//# sourceURL=xkit/editor.js")();
+				await import(browser.runtime.getURL("/editor.js"));
 				XKit.extensions.xkit_editor.run();
 			} catch (e) {
 				XKit.window.show("Can't launch XKit Editor", "<p>" + e.message + "</p>", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -4714,7 +4686,7 @@ async function getExtensionData(id) {
 /** Each extension has the following fields:
  * {string}  script      - Contents of the extension file
  * {string}  id          - File name without extension
- * {string}  icon        - Contents of the `id`.icon.js file
+ * {string}  icon        - Contents of the `id`.icon.txt file
  * {string}  css         - Contents of the `id`.css file
  * {string}  title       - Value of the TITLE field in `script`
  * {string}  version     - Value of the VERSION field in `script`
@@ -4750,7 +4722,7 @@ async function loadExtensionData(id) {
 
 	if (index[id].icon) {
 		try {
-			extension.icon = await loadFile(`/Extensions/${id}.icon.js`);
+			extension.icon = await loadFile(`/Extensions/${id}.icon.txt`);
 		} catch (e) {}
 	}
 	if (index[id].css) {

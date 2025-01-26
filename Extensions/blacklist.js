@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 3.1.9 **//
+//* VERSION 3.2.0 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -983,21 +983,20 @@ XKit.extensions.blacklist = new Object({
 
 	destroy: function() {
 		this.running = false;
-		clearTimeout(XKit.extensions.blacklist.check_interval);
 		XKit.post_listener.remove("blacklist");
-		setTimeout(function() {
-			$(".xblacklist-done").each(function() {
-				$(this).removeClass("xblacklist_blacklisted_post");
-				$(this).find(".xblacklist_excuse_container").remove();
-				const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
-				$(this).find(postContentSel).html($(this).find(".xblacklist_old_content").html());
-				$(this).find(".xkit-shorten-posts-embiggen").css("display", "block");
-				XKit.extensions.blacklist.unhide_post($(this));
-			});
-			$(".xblacklist-done").removeClass("xblacklist-done");
-			$(".xblacklist_hidden_post").removeClass("xblacklist_hidden_post");
-			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
-		}, 500);
+
+		$(".xblacklist-done").each(function() {
+			$(this).removeClass("xblacklist_blacklisted_post");
+			$(this).find(".xblacklist_excuse_container").remove();
+			const postContentSel = XKit.css_map.keyToCss('post') || '.post_content';
+			$(this).find(postContentSel).html($(this).find(".xblacklist_old_content").html());
+			$(this).find(".xkit-shorten-posts-embiggen").css("display", "block");
+			XKit.extensions.blacklist.unhide_post($(this));
+		});
+		$(".xblacklist-done").removeClass("xblacklist-done");
+		$(".xblacklist_hidden_post").removeClass("xblacklist_hidden_post");
+		$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
+
 		XKit.tools.remove_css("blacklist");
 	},
 
@@ -1174,6 +1173,230 @@ XKit.extensions.blacklist = new Object({
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
+		XKit.extensions.blacklist.nativeExportCpanel(m_div);
+	},
+
+	nativeExportCpanel: function(m_div) {
+
+		$('#xkit-bne-custom-panel').remove();
+		$(m_div).prepend(`
+			<div id="xkit-bne-custom-panel">
+				<p>
+					Tumblr now has built-in tag and content filtering that works both in web browsers and on
+					mobile. You can apply a slimmer layout to natively filtered posts or hide them completely
+					using the options in Tweaks in
+					<a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">
+					XKit Rewritten</a>!
+				</p>
+				<p>
+					Export your blacklisted words using this interactive form:
+				</p>
+				<button class="xkit-button" id="xkit-bne-button">Export to Native Filtering</button>
+			</div>
+		`);
+		$('#xkit-bne-button').on('click', () => showNativeExport().catch(showNativeExportError));
+
+		async function showNativeExport() {
+			const currentFilteredTags = await apiFetch('/v2/user/filtered_tags')
+				.then(({ response: { filteredTags } }) => filteredTags);
+			const currentFilteredContent = await apiFetch('/v2/user/filtered_content')
+				.then(({ response: { filteredContent } }) => filteredContent);
+
+			const blacklistItemData = (XKit.extensions.blacklist.blacklisted || [])
+				.map(name => name.trim())
+				.filter(Boolean)
+				.map(name => {
+					const isTag = name.startsWith('#');
+					const initialValue = name.replace(/^#/, '').replace('*', '');
+
+					const textInput = $(`<input type="text" value="${initialValue}">`).get(0);
+
+					const tagCheckbox = $(`<input type="checkbox">`).get(0);
+					const contentCheckbox = $(`<input type="checkbox">`).get(0);
+					tagCheckbox.checked = isTag;
+					contentCheckbox.checked = !isTag;
+
+					const updateAlreadyFiltered = () => {
+						const words = getTextInputWords(textInput);
+
+						const isFilteredTag = words.every(word => currentFilteredTags.includes(word));
+						tagCheckbox.disabled = isFilteredTag;
+						if (isFilteredTag) tagCheckbox.checked = true;
+
+						const isFilteredContent = words.every(word => currentFilteredContent.includes(word));
+						contentCheckbox.disabled = isFilteredContent;
+						if (isFilteredContent) contentCheckbox.checked = true;
+					};
+					updateAlreadyFiltered();
+					textInput.addEventListener('input', updateAlreadyFiltered);
+
+					return { name, textInput, tagCheckbox, contentCheckbox };
+				});
+
+			if (!blacklistItemData.length) {
+				XKit.window.show(
+					'No Blacklisted Words',
+					"You don't have any blacklisted words to export!",
+					'error',
+					'<div id="xkit-close-message" class="xkit-button">Close</div>',
+				);
+				return;
+			}
+
+			const selectAll = () =>
+				blacklistItemData.forEach(({ tagCheckbox, contentCheckbox }) => {
+					tagCheckbox.checked = true;
+					contentCheckbox.checked = true;
+				});
+
+			const selectNone = () =>
+				blacklistItemData.forEach(({ tagCheckbox, contentCheckbox }) => {
+					if (!tagCheckbox.disabled) tagCheckbox.checked = false;
+					if (!contentCheckbox.disabled) contentCheckbox.checked = false;
+				});
+
+			const doExport = () => {
+				const newTagWords = blacklistItemData
+					.filter(({ tagCheckbox }) => tagCheckbox.checked)
+					.flatMap(({ textInput }) => getTextInputWords(textInput))
+					.filter(word => !currentFilteredTags.includes(word));
+
+				const newContentWords = blacklistItemData
+					.filter(({ contentCheckbox }) => contentCheckbox.checked)
+					.flatMap(({ textInput }) => getTextInputWords(textInput))
+					.filter(word => !currentFilteredContent.includes(word));
+
+				if (newTagWords.length || newContentWords.length) {
+					Promise.all([
+						newTagWords.length &&
+							apiFetch('/v2/user/filtered_tags', {
+								method: 'POST',
+								body: { filtered_tags: newTagWords },
+							}),
+						newContentWords.length &&
+							apiFetch('/v2/user/filtered_content', {
+								method: 'POST',
+								body: { filtered_content: newContentWords },
+							}),
+					]).then(() => XKit.window.show(
+						'Success',
+						`
+							${newTagWords.length ? `<div>Added filtered tags: ${newTagWords.map(word => `#${word}`).join(', ')}</div>` : ''}
+							${newContentWords.length ? `<div>Added filtered content: ${newContentWords.join(', ')}</div>` : ''}
+							<div>
+								You can see your native filtered content in your
+								<a href="https://www.tumblr.com/settings/account" target="_blank">
+								Tumblr account settings</a>.
+							</div>
+						`,
+						'info',
+						'<div id="xkit-close-message" class="xkit-button">Close</div>',
+					)).catch(showNativeExportError);
+				}
+			};
+
+			const createRow = (data) =>
+				$('<tr>').append(data.map((contents) => $('<td>').append(contents)));
+
+			const rows = blacklistItemData.map(({ name, textInput, tagCheckbox, contentCheckbox }) =>
+				createRow([name, textInput, tagCheckbox, contentCheckbox])
+			);
+
+			XKit.window.show(
+				'Tumblr Native Filtering Export',
+				`
+					<div id="xkit-bne-container">
+						<div>
+							Tumblr's native filtering has two categories of words: filtered tags and
+							filtered post content.
+						</div>
+						<div>
+							As of 2022:
+						</div>
+						<ul>
+							<li>
+								Filtering a word or phrase as a tag will hide any posts with that exact
+								tag (no wildcards) and any reblog chains where the original root post contains
+								that tag.
+							</li>
+							<li>
+								Filtering a word or phrase as post content will hide any post with the
+								specified word or phrase anywhere in the post text or in any usernames,
+								including in the middle of a word (filtering "ash" will hide posts with
+								"dashboard" or "fashion", or with a reblog comment by a user named
+								"ash-ketchum"). It will not search the post tags.
+							</li>
+						</ul>
+						<div>
+							Select which of your blacklisted words you wish to add to the native filtering
+							lists as filtered tags, filtered post content, or both. You can write multiple
+							variations of a term in a text box, separated by commas, and every variation
+							will be added.
+						</div>
+						<div>
+							Nothing will be removed from blacklist or from the native filtering lists.
+						</div>
+						<div>
+							<div id="xkit-bne-export-select-all" class="xkit-button">Select All</div>
+							<div id="xkit-bne-export-select-none" class="xkit-button">Select None</div>
+						</div>
+						<table id="xkit-bne-export-table">
+							<thead>
+								<th id="xkit-bne-word-header">Blacklist Entry</th>
+								<th id="xkit-bne-edit-word-header">Word(s)/Phrase(s) to Export</th>
+								<th id="xkit-bne-tag-header">Filter as Tag</th>
+								<th id="xkit-bne-content-header">Filter as Content</th>
+							</thead>
+							<tbody id="xkit-bne-export-table-body"></tbody>
+						</table>
+					</div>
+				`,
+				'info',
+				`
+					<div id="xkit-bne-export-do-export" class="xkit-button default">Export Words</div>
+					<div id="xkit-close-message" class="xkit-button">Close</div>
+				`,
+				true
+			);
+
+			$('#xkit-bne-export-table-body').append(rows);
+			$('#xkit-bne-export-select-all').on('click', selectAll);
+			$('#xkit-bne-export-select-none').on('click', selectNone);
+			$('#xkit-bne-export-do-export').on('click', doExport);
+
+			centerIt($("#xkit-window"));
+		}
+
+		function showNativeExportError(e) {
+			console.error(e);
+			XKit.window.show(
+				'Tumblr Native Filtering Export Error',
+				`<pre>${e.toString()}</pre>`,
+				'error',
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>',
+				true,
+			);
+		}
+
+		function getTextInputWords(textInput) {
+			return textInput.value
+				.split(',')
+				.map((word) => word.trim().replace(/^#/, ''))
+				.filter(Boolean);
+		}
+
+		async function apiFetch(resource, init) {
+			return XKit.tools.async_add_function(
+				async ({ resource, init = {}, headerVersion }) => { // eslint-disable-line no-shadow
+					// add XKit header to all API requests
+					if (!init.headers) init.headers = {};
+					init.headers['X-XKit-Version'] = headerVersion;
+
+					return window.tumblr.apiFetch(resource, init);
+				},
+			{ resource, init, headerVersion: XKit.version }
+			);
+		}
 	}
 
 });

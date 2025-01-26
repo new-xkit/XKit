@@ -13,7 +13,6 @@
     ],
     "js": [
       "bridge.js",
-      "vendor/lodash.min.js",
       "vendor/jquery.js",
       "vendor/tiptip.js",
       "vendor/moment.js",
@@ -28,7 +27,7 @@
     "128": "icon.png"
   },
   "manifest_version": 2,
-  "minimum_chrome_version": "44.0",
+  "minimum_chrome_version": "103.0",
   "name": "New XKit",
   "author": "New XKit Team",
   "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
@@ -37,6 +36,7 @@
   "applications": {
     "gecko": {
       "id": "@new-xkit",
+      "strict_min_version": "115.0",
       "update_url": "https://new-xkit.github.io/XKit/Extensions/dist/page/FirefoxUpdate.json"
     }
   }
