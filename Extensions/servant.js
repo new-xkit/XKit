@@ -718,7 +718,7 @@ XKit.extensions.servant = new Object({
 
 		run_js: {
 
-			text: "Run Javascript Code",
+			text: "Run Javascript Code (disabled)",
 			compatibility: "",
 			type: "textarea",
 			placeholder: "ie: 'if (mary.has_lamb == true) {\n\treturn true;\n }'",
@@ -731,7 +731,10 @@ XKit.extensions.servant = new Object({
 				var m_return = false;
 
 				try {
+					/*
 					m_return = new Function(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js")();
+					*/
+					throw new Error('"Run Javascript Code" cause is disabled.');
 				} catch (e) {
 					m_return = false;
 					console.error("Unable to run Servant! ---> " + e.message);
@@ -1115,7 +1118,7 @@ XKit.extensions.servant = new Object({
 
 		run_js: {
 
-			text: "Run Javascript Code",
+			text: "Run Javascript Code (disabled)",
 			compatibility: "",
 			type: "textarea",
 			placeholder: "ie: 'alert(&quot;%1 happened!&quot;);'",
@@ -1142,7 +1145,9 @@ XKit.extensions.servant = new Object({
 					var post = m_post[0];
 				}
 
+				/*
 				new Function(parameter_fixed + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js")();
+				*/
 
 			}
 

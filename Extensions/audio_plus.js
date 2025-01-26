@@ -230,7 +230,10 @@ XKit.extensions.audio_plus = {
 	},
 
 	create_pop_out_controls: function() {
-		const controls_markup = `
+
+		var psuedo_post = document.createElement("div");
+		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
+		psuedo_post.innerHTML = `
 			<div class="xkit-audio-plus-controls audio-player">
 				<div class="progress"></div>
 				<div class="play-pause">
@@ -245,10 +248,6 @@ XKit.extensions.audio_plus = {
 				<div id="xkit-audio-plus-controls-undock"></div>
 			</div>
 		`;
-
-		var psuedo_post = document.createElement("div");
-		psuedo_post.classList.add("xkit-audio-plus-pseudo-post");
-		psuedo_post.innerHTML = controls_markup;
 		document.body.appendChild(psuedo_post);
 
 		this.pop_out_controls = psuedo_post;
@@ -384,11 +383,11 @@ XKit.extensions.audio_plus = {
 		this.icon_observer.observe(pause_icon, config);
 
 		if (player.querySelector(".track-name").innerHTML != "") {
-			this.pop_out_controls_track_name.innerHTML = player.querySelector(".track-name").innerHTML;
+			this.pop_out_controls_track_name.replaceChildren(player.querySelector(".track-name").cloneNode(true));
 		} else {
 			this.pop_out_controls_track_name.innerHTML = "Listen";
 		}
-		this.pop_out_controls_track_artist.innerHTML = player.querySelector(".track-artist").innerHTML;
+		this.pop_out_controls_track_artist.replaceChildren(player.querySelector(".track-artist").cloneNode(true));
 
 		this.current_player = player;
 		this.pop_out_controls.classList.add("showing");

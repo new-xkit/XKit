@@ -1,11 +1,16 @@
 //* TITLE XKit Updates **//
 //* VERSION 2.1.3 **//
-//* DESCRIPTION Provides automatic updating of extensions **//
+//* DESCRIPTION Deprecated (installed for compatibility) **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
 
 	running: false,
 
+	run: function() {
+		this.running = true;
+	},
+
+	/*
 	default_interval: 18000000,
 	min_interval: 3600000,
 	max_interval: 86400000,
@@ -259,6 +264,7 @@ XKit.extensions.xkit_updates = new Object({
 		}
 		return false;
 	},
+	*/
 
 	destroy: function() {
 		this.running = false;
