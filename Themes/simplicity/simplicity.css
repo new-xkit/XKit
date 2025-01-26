@@ -53,7 +53,7 @@
 }
 
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover {
-    background-color: #767676;
+	background-color: #767676;
 }
 
 .post_full .post_permalink {
@@ -62,7 +62,7 @@
 
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
-    background-color: #aaa;
+	background-color: #aaa;
 }
 
 .post_avatar,
