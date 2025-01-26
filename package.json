@@ -11,6 +11,7 @@
     "chrome-publish": "chrome-webstore-upload publish"
   },
   "devDependencies": {
+    "chrome-webstore-upload-cli": "^3.3.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.1",
     "jsonwebtoken": "^9.0.2",
