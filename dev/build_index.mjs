@@ -4,13 +4,13 @@ import path from "node:path";
 (async () => {
 	const extensionFiles = await fs.readdir("Extensions");
 	const extensionIds = extensionFiles
-		.filter(fileName => fileName.endsWith(".js") && !fileName.endsWith(".icon.js"))
+		.filter(fileName => fileName.endsWith(".js"))
 		.map(fileName => path.parse(fileName).name);
 
 	const extensionList = {};
 	extensionIds.forEach(id => {
 		extensionList[id] = {
-			icon: extensionFiles.includes(`${id}.icon.js`),
+			icon: extensionFiles.includes(`${id}.icon.txt`),
 			css: extensionFiles.includes(`${id}.css`),
 		};
 	});
