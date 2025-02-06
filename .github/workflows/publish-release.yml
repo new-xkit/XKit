@@ -1,4 +1,4 @@
-name: Update Release Metadata
+name: Publish Release
 
 on:
   workflow_dispatch:
@@ -9,8 +9,8 @@ on:
         required: false
 
 jobs:
-  create-update-pr:
-    name: Create update PR
+  publish-releases:
+    name: Publish Releases
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,10 +22,21 @@ jobs:
           node-version: lts/*
           cache: npm
 
+      # publishes the last uploaded version on Chrome Web Store servers;
+      # see https://github.com/fregante/chrome-webstore-upload-cli#usage
+      - name: Chrome — Publish Release
+        run: npm run chrome-publish
+        continue-on-error: true
+        env:
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+
       - name: Update release metadata
         run: node dev/update_release_metadata.mjs ${{ inputs.newVersion || '' }}
 
-      - name: Create pull request
+      - name: Create release pull request
         uses: peter-evans/create-pull-request@v7
         with:
           title: Update release metadata
