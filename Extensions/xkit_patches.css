@@ -45,7 +45,7 @@
 	float: right;
 }
 
-.xkit-button.pushed{
+.xkit-button.pushed {
 	background-color: rgb(230,230,230);
 	cursor: default;
 	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.22);
@@ -149,12 +149,12 @@
 }
 
 .tx-button .icon-wrapper.xkit-hidden:before {
-    font-size: 15px !important;
-    font-weight: 600 !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
 }
 
-.tx-button .icon-wrapper.xkit-hidden{
-    width: 15px;
+.tx-button .icon-wrapper.xkit-hidden {
+	width: 15px;
 }
 
 /* Timestamp formatting syntax (from xkit.info) */
@@ -207,9 +207,9 @@
 	float: left;
 	height: 45px;
 	line-height: 45px;
-	box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	-webkit-box-sizing:border-box;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	padding: 0px 10px;
 }
 
@@ -231,15 +231,15 @@
 /* Search Page Brick Post Fix */
 
 .post_brick .post_notes .note_link_current {
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
 .post_brick .post_notes {
-    display: inline;
+	display: inline;
 }
 
 .post_brick .post_controls .post_controls_inner {
-    width: 100%;
-    white-space: normal;
-    height: auto;
+	width: 100%;
+	white-space: normal;
+	height: auto;
 }
