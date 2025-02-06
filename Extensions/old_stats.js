@@ -179,7 +179,7 @@ XKit.extensions.old_stats = new Object({
 				$(".no_push.selected_blog, .no_push.old_stats_blog").last().css("margin", "0 0 18px");
 
 				$(".old_stats_blog").click(function() {
-					$(".no_push.selected_blog .open_blog.with_subtitle")[0].outerHTML = this.firstChild.outerHTML.replace("span", "a");
+					// $(".no_push.selected_blog .open_blog.with_subtitle")[0].outerHTML = this.firstChild.outerHTML.replace("span", "a");
 					loading = true;
 					$("#old_stats_switcher").click();
 					XKit.extensions.old_stats.fetchStats($(this).find(".currently_selected_blog").html());
