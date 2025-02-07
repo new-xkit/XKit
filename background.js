@@ -13,6 +13,12 @@ function isUserScriptsAvailable() {
 	}
 }
 
+browser.runtime.onInstalled.addListener(() => {
+	if (!isUserScriptsAvailable()) {
+		browser.runtime.openOptionsPage();
+	}
+});
+
 if (isUserScriptsAvailable()) {
 	browser.userScripts.configureWorld({
 		csp: "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
@@ -67,7 +73,7 @@ if (isUserScriptsAvailable()) {
 						sendResponse(await browser.storage.local.get(...args));
 						break;
 					case "browser.storage.local.getBytesInUse":
-						sendResponse(await browser.storage.local.getBytesInUse(...args));
+						sendResponse(await browser.storage.local.getBytesInUse?.(...args));
 						break;
 					case "browser.storage.local.remove":
 						sendResponse(await browser.storage.local.remove(...args));

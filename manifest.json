@@ -18,6 +18,9 @@
     "service_worker": "background.js",
     "persistent": false
   },
+  "options_ui": {
+    "page": "options_ui/options.html"
+  },
   "description": "A fork of XKit, the extension framework for Tumblr.",
   "homepage_url": "https://github.com/new-xkit/XKit",
   "icons": {
@@ -28,6 +31,7 @@
   "name": "New XKit",
   "author": "New XKit Team",
   "permissions": ["storage", "unlimitedStorage", "userScripts" ],
+  "optional_permissions": ["userScripts"],
   "host_permissions": [ "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
   "version": "7.10.0",
   "web_accessible_resources": [{
@@ -37,7 +41,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "@new-xkit",
-      "strict_min_version": "115.0",
+      "strict_min_version": "136.0b1",
       "update_url": "https://new-xkit.github.io/XKit/Extensions/dist/page/FirefoxUpdate.json"
     }
   }
