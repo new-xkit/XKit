@@ -4004,13 +4004,21 @@ var xkit_global_start = Date.now();  // log start timestamp
 			if (without_tag !== undefined) {
 				selector += `:not(.${without_tag})`;
 			}
+			let posts = [...document.querySelectorAll(selector)];
 
 			if (can_edit) {
-				const edit_label = await XKit.interface.translate("Edit");
-				return $(selector).filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+				const postsWithProps = await Promise.all(
+					posts.map(async post => ({
+						post,
+						props: await XKit.interface.react.post_props(post.dataset.id),
+					}))
+				);
+				posts = postsWithProps
+					.filter(({ props }) => props.canEdit)
+					.map(({ post }) => post);
 			}
 
-			return $(selector);
+			return $(posts);
 		},
 
 		/**
@@ -4051,8 +4059,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			var buttonClass = get_used_class_from_map("button");
 
 			var new_control = `
-				<div class="${controlIconClass} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
-					<button class="${buttonClass}" aria-label="" tabindex="0">
+				<div class="${controlIconClass || ''} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
+					<button class="${buttonClass || ''}" aria-label="" tabindex="0">
 						<div class="xkit-interface-icon" {{data}}></div>
 					</button>
 				</div>
