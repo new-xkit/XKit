@@ -997,9 +997,19 @@ XKit.extensions.xkit_patches = new Object({
 					var controlIconClass = control.attr("class");
 					var buttonClass = get_used_class_from_map("button");
 
+					XKit.tools.add_css(
+						`.xkit-footer-control-icon {
+							display: flex;
+							align-items: center;
+
+							padding: 8px;
+						}`,
+						'xkit_react_control_button'
+					);
+
 					var new_control = `
-						<div class="${controlIconClass || ''} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
-							<button class="${buttonClass || ''}" aria-label="" tabindex="0">
+						<div class="${controlIconClass || 'xkit-footer-control-icon'} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
+							<button class="${buttonClass || 'xkit-footer-control-button'}" aria-label="" tabindex="0">
 								<div class="xkit-interface-icon" {{data}}></div>
 							</button>
 						</div>
