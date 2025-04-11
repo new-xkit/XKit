@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.23 **//
+//* VERSION 7.4.24 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -943,13 +943,21 @@ XKit.extensions.xkit_patches = new Object({
 					if (without_tag !== undefined) {
 						selector += `:not(.${without_tag})`;
 					}
+					let posts = [...document.querySelectorAll(selector)];
 
 					if (can_edit) {
-						const edit_label = await XKit.interface.translate("Edit");
-						return $(selector).filter((index, post) => $(post).find(`[aria-label='${edit_label}']`).length !== 0);
+						const postsWithProps = await Promise.all(
+							posts.map(async post => ({
+								post,
+								props: await XKit.interface.react.post_props(post.dataset.id),
+							}))
+						);
+						posts = postsWithProps
+							.filter(({ props }) => props.canEdit)
+							.map(({ post }) => post);
 					}
 
-					return $(selector);
+					return $(posts);
 				},
 
 				/**
@@ -990,8 +998,8 @@ XKit.extensions.xkit_patches = new Object({
 					var buttonClass = get_used_class_from_map("button");
 
 					var new_control = `
-						<div class="${controlIconClass} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
-							<button class="${buttonClass}" aria-label="" tabindex="0">
+						<div class="${controlIconClass || ''} {{className}} xkit-interface-control-button" title="{{text}}" {{additional}}>
+							<button class="${buttonClass || ''}" aria-label="" tabindex="0">
 								<div class="xkit-interface-icon" {{data}}></div>
 							</button>
 						</div>
