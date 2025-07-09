@@ -3,6 +3,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "build-extensions": "node dev/build.mjs",
+    "watch-extensions": "npx nodemon --ext js,css dev/build.mjs",
     "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
