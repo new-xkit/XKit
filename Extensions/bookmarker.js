@@ -234,6 +234,9 @@ XKit.extensions.bookmarker = new Object({
 	},
 
 	create_bookmark_div: function(current_bookmark) {
+		// defined in moment.js
+		/* globals moment */
+
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);
 

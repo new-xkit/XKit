@@ -1,4 +1,4 @@
-name: Rebuild Distribution (7.9.2)
+name: Rebuild Distribution
 
 on:
   push:

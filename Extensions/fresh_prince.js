@@ -1,5 +1,5 @@
 //* TITLE Fresh Prince **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.1.1 **//
 //* DESCRIPTION Everything's flipped, turned upside down **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension flips everything on the dashboard. Don't expect Tumblr to function correctly whatsoever while this extension is installed. **//
@@ -76,6 +76,7 @@ XKit.extensions.fresh_prince = new Object({
 
 		if (!XKit.extensions.fresh_prince.preferences.disable_rotate.value) {
 			await XKit.css_map.getCssMap();
+			const {keyToCss, descendantSelector} = XKit.css_map;
 
 			XKit.tools.add_css(`
 				.l-header-container, .l-container, .l-footer-container {
@@ -86,23 +87,23 @@ XKit.extensions.fresh_prince = new Object({
 
 			XKit.tools.add_css(`
 				#base-container > * > * {
-					transform: scale(1, -1);
+				  transform: scale(1, -1);
 				}
 
-				${XKit.css_map.descendantSelector('menuContainer', 'baseContainer')} {
-					transform: scale(1, -1);
+				${descendantSelector('menuContainer', 'baseContainer')} {
+				  transform: scale(1, -1);
 				}
 
-				${XKit.css_map.keyToCss('popoverChrome')} > * {
-					transform: scale(1, -1);
+				${keyToCss('popoverChrome')} > * {
+				  transform: scale(1, -1);
 				}
 
 				#glass-container > * {
-					transform: scale(1, -1);
+				  transform: scale(1, -1);
 				}
 
 				#xkit-notifications {
-					transform: scale(1, -1);
+				  transform: scale(1, -1);
 				}
 			`, 'fresh_prince');
 			this.remove_fastdash();
