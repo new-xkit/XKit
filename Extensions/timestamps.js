@@ -7,6 +7,9 @@
 //* BETA false **//
 //* SLOW true **//
 
+// depends on moment.js
+/* globals moment */
+
 XKit.extensions.timestamps = new Object({
 
 	running: false,

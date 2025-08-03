@@ -1,9 +1,9 @@
-name: Rebuild Distribution (7.9.2)
+name: Rebuild Distribution
 
 on:
   push:
     branches:
-      - '7.9.2'
+      - 'master'
     paths:
       - 'Extensions/*'
       - 'Themes/*'
