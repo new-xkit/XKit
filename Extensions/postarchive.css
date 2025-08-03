@@ -216,9 +216,9 @@
 
 #xkit-postarchive-sidebar * {
 
-  	-moz-user-select: none;
-  	-webkit-user-select: none;
-  	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 
 }
 
@@ -272,8 +272,8 @@
 	cursor: pointer;
 	color: rgb(90,90,90);
 
-	text-overflow:ellipsis;
-	white-space:nowrap;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	overflow: hidden;
 
 }
@@ -294,7 +294,7 @@
 }
 
 #postarchive_view {
-  color: rgba(255, 255, 255, 0.5);
+	color: rgba(255, 255, 255, 0.5);
 }
 
 #xkit-postarchive-content .post_full.is_photoset .photoset .photoset_row,
