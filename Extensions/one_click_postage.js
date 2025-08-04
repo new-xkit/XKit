@@ -994,7 +994,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		// @see https://github.com/AprilSylph/XKit-Rewritten/pull/1823
 		const { blog, canReblog } = await XKit.interface.react.post_props(box_id);
-		if (canReblog === false || blog?.isPasswordProtected) return;
+		if (canReblog === false || (blog && blog.isPasswordProtected)) return;
 
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
