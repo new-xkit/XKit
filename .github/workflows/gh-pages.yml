@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: lts/*
           cache: npm
 
       - name: Install dependencies
@@ -32,11 +32,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Install gulp-cli
-        run: npm install gulp-cli
-
       - name: Build distribution
-        run: gulp build
+        run: npm run build-extensions
 
       - name: Push changes to gh-pages
         run: >

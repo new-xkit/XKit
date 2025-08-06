@@ -43,6 +43,10 @@
         after: true
     no-useless-escape: off
     no-prototype-builtins: off
+  overrides:
+    - files: "*.mjs"
+      parserOptions:
+        sourceType: module
   globals:
     BigInt: readonly
     _: readonly
