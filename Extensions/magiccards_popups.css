@@ -1,0 +1,13 @@
+a.magiccards_popups-tooltip img {
+	padding: 0px;
+	border: 0px;
+	width: 312px;
+	height: 445px;
+	position: fixed;
+	visibility: hidden;
+	z-index: 300;
+}
+
+a.magiccards_popups-tooltip:hover img {
+	visibility: visible;
+}
