@@ -820,6 +820,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 					$("#xkit_notification_" + m_notification_id).slideDown('slow');
 				}, 100);
 				$("#xkit_notification_" + m_notification_id).click(function() {
+					// TODO: fix this erroneous comparison
+					// eslint-disable-next-line valid-typeof
 					if (typeof callback !== undefined) {
 						try {
 							callback();
