@@ -31,7 +31,7 @@ After performing these steps, edits can be made to the XKit core files in your l
 
 ## Serving Extensions Locally
 
-Serving extensions locally is useful for rapid development without requiring the use of the XKit Editor, but some additional set up is required:
+Serving extensions locally is useful for rapid development without requiring the use of the XKit Editor, but some additional setup is required:
 
 1. Run `npm run watch-extensions` to start the resource server. This task will automatically build the extension and theme files from source whenever they are changed, storing them in `Extensions/dist`.
 2. Change these lines in xkit.js and manifest.json to point the XKit updater at `Extensions/dist`:
