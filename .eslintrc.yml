@@ -15,9 +15,9 @@
     no-implied-eval: error
     no-mixed-spaces-and-tabs: [error, smart-tabs]
     no-unused-vars:
-     - error
-     - vars: local
-       args: none
+      - error
+      - vars: local
+        args: none
     no-shadow: error
     no-unsafe-negation: error
     no-with: error
