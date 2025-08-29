@@ -10,7 +10,7 @@
     "sign": "web-ext sign"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
+    "eslint": "^8.57.1",
     "nodemon": "^3.1.10",
     "web-ext": "^8.8.0"
   },
