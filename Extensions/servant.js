@@ -1254,7 +1254,7 @@ XKit.extensions.servant = new Object({
 				for (var i = 0; i < colorArray.length; i++) {
 					colorArray[i] = colorArray[i].replace("_", "");
 				}
-				var uniques = [...new Set(colorArray)]; //eslint-disable-line no-undef
+				var uniques = [...new Set(colorArray)];
 				var backgroundString = "";
 				for (var j = 0; j < uniques.length; j++) {
 					backgroundString += `, #${uniques[j]} ${(100 / uniques.length) * j}%, #${uniques[j]} ${(100 / uniques.length) * (j + 1)}%`;
