@@ -3,16 +3,16 @@
 }
 
 .xkit-er-edit-button {
-    display: block;
-    position: relative;
-    width: 28px;
-    height: 28px;
-    float: right;
-    margin-right: 21px;
-    margin-top: 21px;
-    border: 3px solid #ddd;
-    border-radius: 50%;
-    color: #ddd;
+	display: block;
+	position: relative;
+	width: 28px;
+	height: 28px;
+	float: right;
+	margin-right: 21px;
+	margin-top: 21px;
+	border: 3px solid #ddd;
+	border-radius: 50%;
+	color: #ddd;
 }
 
 .xkit-er-edit-button.icon_edit_pencil:before {
@@ -28,21 +28,21 @@
 }
 
 .xkit-er-edit-button.disabled {
-    border-color: #999;
-    color: #999;
+	border-color: #999;
+	color: #999;
 }
 
 .xkit-er-callout--container {
-    position: relative;
-    left: -86px;
-    width: 135px;
-    background: white;
-    display: none;
-    top: -35px;
-    float: right;
-    line-height: 21px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
+	position: relative;
+	left: -86px;
+	width: 135px;
+	background: white;
+	display: none;
+	top: -35px;
+	float: right;
+	line-height: 21px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 }
 
 .xkit-er-callout--header {

@@ -75,14 +75,14 @@
 }
 
 .l-header-container.l-header-container--refresh {
-    background-color: #ababab;
+	background-color: #ababab;
 }
 
 .tab_notice,
 .selected .tab_notice,
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
-    background-color: #e8e8e8;
+	background-color: #e8e8e8;
 }
 
 .tab_notice .tab_notice_value {
@@ -90,7 +90,7 @@
 }
 
 .compose-button {
-    fill: #e8e8e8;
+	fill: #e8e8e8;
 }
 
 .tab-notice--outlined {
