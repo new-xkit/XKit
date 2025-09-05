@@ -3115,7 +3115,7 @@ XKit.extensions.xkit_patches = new Object({
 				}, 100);
 				$("#xkit_notification_" + m_notification_id).click(function() {
 					// TODO: fix this erroneous comparison
-					// eslint-disable-next-line valid-typeof
+					// eslint-disable-next-line
 					if (typeof callback !== undefined) {
 						try {
 							callback();
