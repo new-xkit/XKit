@@ -3,7 +3,7 @@
 	height: 40px;
 	background: rgb(240,240,240);
 	position: absolute;
-	top:0; left:0px;
+	top: 0; left: 0px;
 	width: 100%;
 	color: black;
 	font-size: 15px;
@@ -506,9 +506,9 @@
 	float: left;
 	height: 45px;
 	line-height: 45px;
-	box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	-webkit-box-sizing:border-box;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	padding: 0px 10px;
 }
 
@@ -962,27 +962,27 @@
 }
 
 .tx-button .icon-wrapper.xkit-hidden:before {
-    font-size: 15px !important;
-    font-weight: 600 !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
 }
 
-.tx-button .icon-wrapper.xkit-hidden{
-    width: 15px;
+.tx-button .icon-wrapper.xkit-hidden {
+	width: 15px;
 }
 
 
 /* Search Page Brick Post Fix */
 
 .post_brick .post_notes .note_link_current {
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
 .post_brick .post_notes {
-    display: inline;
+	display: inline;
 }
 
 .post_brick .post_controls .post_controls_inner {
-    width: 100%;
-    white-space: normal;
-    height: auto;
+	width: 100%;
+	white-space: normal;
+	height: auto;
 }

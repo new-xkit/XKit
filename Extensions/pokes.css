@@ -17,14 +17,14 @@
 }
 .poke_bg {
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHpyAACAjgAA/TYAAH9bAAB7LQAA8/wAADr1AAASznY2hTMAAAC/SURBVHjatNQtFsMgDMBxjoTsEZCROwqSI0xW5ihIZCXHqIzLxMYWGrJ+vE38Hfk92gc4770zYqPhehOg+zTMAhViAbJ6mxSmkeXVSUwjRM+WfUhiP4X6RSc+TWKHf7CF/Aeaw3VkDgIKAB0WAN5ZQEMCQA/JEDMTESNmDgDDYVmDnPeeY0yfXbQjQKSGZDEmfY5qWZmIOMakdjQCalkZMStIYa1a1mESGV5axGwON2CLfH1G2sC2o8/I5YftMQCo6KTHQZNtVAAAAABJRU5ErkJggg==');
-	background-repeat: no-repeat;		 
+	background-repeat: no-repeat;
 	background-size: 100px 100px;
 	image-rendering: pixelated;
 	image-rendering: -moz-crisp-edges;
 }
 .poke_bg_transp {
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASBAMAAACk4JNkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNvyMY98AAAAhUExURf///zAwMEhQUHh4gJhIOKCgwNhYONjI8PiQOPjQOPj4+CJu/FkAAAALdFJOUwC0tLS0tLS0tLS0/fXDXAAAAH1JREFUCNdjYGBgEBQUZAADwY6ODjCTEcjoaBMAsiRmgpiJQKHOVTOArDQBJJZEB1g2LRHIAutAYYmAWWlpjgxCHk1KQEaKIoOQkupStTQnJUUGRiOtVUpKSspA86pMlwIZpUDrxBcbl5eXB4JcEA5khAqAXRUaGgpzINilAJ/TLm7LlTr9AAAAAElFTkSuQmCC);
-	background-repeat: no-repeat;		 
+	background-repeat: no-repeat;
 	background-size: 100px 100px;
 	image-rendering: pixelated;
 	image-rendering: -moz-crisp-edges;
@@ -173,7 +173,7 @@
 	margin: 50px auto;
 }
 
-.xkit-pokes-pc-sorter{
+.xkit-pokes-pc-sorter {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -200,7 +200,7 @@
 	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAP0lEQVR42mNgGAVDHfynhWH/0cT+U9MCdEw3nzAMG5/8p3a8jIx8Mhpsgy/14cpH/2mRYQfEJwxDziejYBgAAHZ7OMgtsFkIAAAAAElFTkSuQmCC");
 }
 
-.xkit-pokes-sorter + label{
+.xkit-pokes-sorter + label {
 	display: inline-block;
 	width: 25px;
 	height: 25px;
@@ -210,7 +210,7 @@
 	box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.7);
 }
 
-.xkit-pokes-sorter:checked + label{
+.xkit-pokes-sorter:checked + label {
 	box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
 }
 
@@ -227,9 +227,9 @@
 	position: absolute;
 	display: inline-block;
 	width: 25px;
-  top: 0;
-  right: 0;
-  bottom: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
 	transition: .25s ease-in-out;
 	text-align: center;
 	line-height: 25px;
@@ -243,10 +243,10 @@
 	content: "-";
 	position: absolute;
 	display: inline-block;
-  width: 25px;
-  top: 0;
-  bottom: 0;
-  left: 0;
+	width: 25px;
+	top: 0;
+	bottom: 0;
+	left: 0;
 	border-radius: 15px ;
 	background: white;
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .2), 0 2px 4px rgba(0, 0, 0, .2);
@@ -269,7 +269,7 @@
 
 .xkit-pokes-pc-pokemon {
 	height: 350px;
-	width:85%;
+	width: 85%;
 	padding: 10px;
 	margin: 50px;
 	position: absolute;
@@ -344,7 +344,7 @@
 	background: rgba(255,255,255,.7);
 }
 #xkit-loading_pokemon {
-	overflow-y:scroll;
+	overflow-y: scroll;
 	height: 100%;
 }
 .caught {
@@ -357,7 +357,7 @@
 .caught img {
 	width: 90px;
 	height: auto;
-	vertical-align:middle;
+	vertical-align: middle;
 	image-rendering: pixelated;
 	image-rendering: -moz-crisp-edges;
 }

@@ -3,26 +3,26 @@
 }
 
 .right_column:after {
-	background: none!important;
+	background: none !important;
 }
 
 .right_column .popover_menu {
-	width: auto!important;
-	box-shadow: none!important;
-	background: transparent!important;
+	width: auto !important;
+	box-shadow: none !important;
+	background: transparent !important;
 	z-index: 0;
 	position: static;
 }
 
 .right_column .popover .popover_inner_list .selected:not(.popover_menu_sublist) {
-	background-color: transparent!important;
+	background-color: transparent !important;
 }
 
 .right_column .popover_inner {
-	border-radius: 0!important;
-	box-shadow: none!important;
-	padding: 0!important;
-	background: transparent!important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	background: transparent !important;
 }
 
 .right_column .popover_header {
@@ -63,7 +63,7 @@
 
 .right_column .popover .selected:not(.popover_menu_sublist) {
 	background-color: rgba(255,255,255,.08)!important;
-	box-shadow: none!important;
+	box-shadow: none !important;
 }
 
 .right_column .popover_menu_item_blog {
@@ -75,7 +75,7 @@
 }
 
 .right_column .blog-sub-nav-item {
-	padding: 0!important;
+	padding: 0 !important;
 }
 
 .right_column .popover_menu_item, .right_column .blog-sub-nav-item {
@@ -83,7 +83,7 @@
 }
 
 .right_column .blog-sub-nav-item a {
-	padding: 10px!important;
+	padding: 10px !important;
 }
 
 .right_column .popover_menu_item {
@@ -110,7 +110,7 @@
 /* icon styles are from tumblr, they weren't getting applied when the menu is relocated */
 
 .right_column .popover_menu_item_anchor_icon {
-	font-family: "tumblr-icons","Blank";
+	font-family: "tumblr-icons", "Blank";
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-style: normal;
@@ -137,13 +137,13 @@
 }
 
 .right_column .tx-scroll {
-	border-radius: 0!important;
+	border-radius: 0 !important;
 }
 
 .right_column .popover_menu_item_blog_details {
 	overflow: hidden;
 }
 
-.right_column .popover_menu+#dashboard_controls_open_blog {
+.right_column .popover_menu + #dashboard_controls_open_blog {
 	display: none;
 }
