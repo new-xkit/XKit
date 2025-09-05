@@ -3334,6 +3334,7 @@ function xkit_init_special() {
 
 	$("body").html("");
 	document.title = "XKit";
+	window.stop();
 
 	XKit.notifications.init();
 	XKit.notifications.add("<b>Welcome to XKit " + framework_version + "</b><br/>&copy; 2011-2013 STUDIOXENIX");
