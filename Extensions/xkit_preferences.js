@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.7.1 **//
+//* VERSION 7.7.3 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -680,13 +680,15 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-control-panel-shadow").fadeIn('slow');
 		$("#xkit-control-panel-shadow").click(XKit.extensions.xkit_preferences.close);
 
+		if (XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true") {
+			XKit.storage.set("xkit_preferences", "shown_welcome_bubble", "true");
+		}
+
 		if (XKit.extensions.xkit_preferences.bubble_tour_mode === true) {
 
 			XKit.extensions.xkit_preferences.bubble_tour_mode = false;
 			$("#xkit-welcoming-bubble").remove();
 			$("#xkit-welcoming-bubble-shadow").remove();
-
-			XKit.storage.set("xkit_preferences", "shown_welcome_bubble", "true");
 
 			XKit.window.show("Welcome to the control panel!",
 				"<b>This is the My XKit panel.</b><br/>This is where you customize your XKit.<br/>" +
@@ -985,7 +987,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$(".xkit-gallery-extension .more-info").click(function() {
 				XKit.window.show("More information", $(this).attr('data-more-info'), "info",
-												 '<div class="xkit-button default" id="xkit-close-message">OK</div>');
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>');
 			});
 
 			$(".xkit-gallery-extension .xkit-install-extension").click(function() {
@@ -1021,7 +1023,7 @@ XKit.extensions.xkit_preferences = new Object({
 					$("#xkit-gallery-extension-" + extension_data.id).find(".overlay").html("Installed!");
 
 					try {
-						eval(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js");
+						new Function(extension_data.script + "\n//# sourceURL=xkit/" + m_extension_id + ".js")();
 						XKit.extensions.xkit_main.load_extension_preferences(m_extension_id);
 						if (XKit.installed.enabled(m_extension_id)) {
 							XKit.extensions[m_extension_id].run();

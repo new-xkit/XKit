@@ -15,9 +15,9 @@
     no-implied-eval: error
     no-mixed-spaces-and-tabs: [error, smart-tabs]
     no-unused-vars:
-     - error
-     - vars: local
-       args: none
+      - error
+      - vars: local
+        args: none
     no-shadow: error
     no-unsafe-negation: error
     no-with: error
@@ -43,6 +43,10 @@
         after: true
     no-useless-escape: off
     no-prototype-builtins: off
+  overrides:
+    - files: "*.mjs"
+      parserOptions:
+        sourceType: module
   globals:
     BigInt: readonly
     _: readonly

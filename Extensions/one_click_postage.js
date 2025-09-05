@@ -1108,8 +1108,6 @@ XKit.extensions.one_click_postage = new Object({
 				}
 			}
 		}, 700);
-
-		/* eslint-enable no-undef */
 	},
 
 	/**

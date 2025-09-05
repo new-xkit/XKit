@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.4.19 **//
+//* VERSION 7.4.23 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -10,11 +10,13 @@ XKit.extensions.xkit_patches = new Object({
 	run: function() {
 		this.running = true;
 
-		this.run_order.filter(x => {
-			return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
-		}).forEach(x => {
-			this.patches[x]();
-		});
+		if (this.run_order.includes(XKit.version)) {
+			this.run_order.filter(x => {
+				return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
+			}).forEach(x => {
+				this.patches[x] && this.patches[x]();
+			});
+		}
 
 		if (XKit.browser().firefox === true && XKit.storage.get("xkit_patches", "w_edition_warned") !== "true") {
 			let version = XKit.tools.parse_version(XKit.version);
@@ -460,36 +462,37 @@ XKit.extensions.xkit_patches = new Object({
 
 			/**
 			 * Edit up to 100 posts at a time via Mass Post Editor
-			 * @param {Object[]} post_ids - array of post IDs to edit
-			 * @param {Object[]} config - settings object
-			 * @param {String} config.mode - "add", "remove", or "delete"
-			 * @param {Object[]} [config.tags] - array of tags to add or remove
-			 * @return {Promise}
+			 *
+			 * @param {string[]} post_ids - array of post IDs to edit
+			 * @param {object} config - settings object
+			 * @param {string} config.mode - "add", "remove", or "delete"
+			 * @param {string[]} [config.tags] - array of tags to add or remove
+			 * @returns {Promise<object>}
 			 */
 			XKit.interface.mass_edit = function(post_ids, config) {
-			    const path = {
-			        "add": "add_tags_to_posts",
-			        "remove": "remove_tags_from_posts",
-			        "delete": "delete_posts"
-			    }[config.mode];
+				const path = {
+					"add": "add_tags_to_posts",
+					"remove": "remove_tags_from_posts",
+					"delete": "delete_posts"
+				}[config.mode];
 
-			    let payload = {
-			        "post_ids": post_ids.join(","),
-			        "form_key": XKit.interface.form_key()
-			    };
+				let payload = {
+					"post_ids": post_ids.join(","),
+					"form_key": XKit.interface.form_key()
+				};
 
-			    if (config.mode !== "delete") {
-			        payload.tags = config.tags.join(",");
-			    }
+				if (config.mode !== "delete") {
+					payload.tags = config.tags.join(",");
+				}
 
-			    return XKit.tools.Nx_XHR({
-			        method: "POST",
-			        url: `https://www.tumblr.com/${path}`,
-			        headers: {
-			            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-			        },
-			        data: $.param(payload)
-			    });
+				return XKit.tools.Nx_XHR({
+					method: "POST",
+					url: `https://www.tumblr.com/${path}`,
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+					},
+					data: $.param(payload)
+				});
 			};
 
 			// Override "Search Page Brick Post Fix" from xkit.css
@@ -732,12 +735,15 @@ XKit.extensions.xkit_patches = new Object({
 			};
 			_.bindAll(XKit.css_map, ['getCssMap', 'keyToClasses', 'keyToCss', 'descendantSelector']);
 
-			XKit.tools.Nx_XHR = details => new Promise((resolve, reject) => {
+			// eslint-disable-next-line no-async-promise-executor
+			XKit.tools.Nx_XHR = details => new Promise(async (resolve, reject) => {
 				details.timestamp = new Date().getTime() + Math.random();
+
+				const form_key = XKit.interface.form_key() || await XKit.interface.async_form_key();
 
 				const standard_headers = {
 					"X-Requested-With": "XMLHttpRequest",
-					"X-Tumblr-Form-Key": XKit.interface.form_key(),
+					"X-Tumblr-Form-Key": form_key,
 					"X-XKit-Version": XKit.version,
 				};
 
@@ -1088,15 +1094,11 @@ XKit.extensions.xkit_patches = new Object({
 						var post_tag = XKit.css_map.keyToClasses("tag").join(" ");
 
 						for (var i = 0; i < tags_array.length; i++) {
-							var formatted = encodeURIComponent(tags_array[i]);
+							const tag = tags_array[i].trim();
 
-							if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
-
-							if (tags_array[i].substring(0, 1) === " ") {
-								tags_array[i] = tags_array[i].substring(1);
+							if (tag) {
+								m_inner += `<a class="${post_tag}" href="/tagged/${encodeURIComponent(tag)}">#${tag}</a>`;
 							}
-
-							m_inner = m_inner + `<a class="${post_tag}" href=\"/tagged/" ${formatted} \">#${tags_array[i]}</a>`;
 						}
 
 						var tags_class = XKit.css_map.keyToCss("tags");
@@ -3112,6 +3114,8 @@ XKit.extensions.xkit_patches = new Object({
 					$("#xkit_notification_" + m_notification_id).slideDown('slow');
 				}, 100);
 				$("#xkit_notification_" + m_notification_id).click(function() {
+					// TODO: fix this erroneous comparison
+					// eslint-disable-next-line
 					if (typeof callback !== undefined) {
 						try {
 							callback();

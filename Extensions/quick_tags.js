@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.6.11 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER New-XKit **//
@@ -66,7 +66,9 @@ XKit.extensions.quick_tags = new Object({
 		}
 	},
 
-	run: function() {
+	run: async function() {
+		XKit.interface.form_key() || await XKit.interface.async_form_key();
+
 		this.running = true;
 
 		XKit.tools.init_css("quick_tags");
@@ -118,65 +120,38 @@ XKit.extensions.quick_tags = new Object({
 
 		// Fetch info about it!
 		if (!m_post.error) {
-			XKit.interface.fetch(m_post, function(data) {
+			XKit.interface.fetch(m_post, async function(data) {
+				try {
+					if (data.status !== 200) throw data;
+					const { id: post_id, tags: current_tags = '' } = data.data.post;
 
-				// Use Interface to edit the post's tags:
-				var m_tags = data.data.post.tags;
+					const current_tags_array = current_tags.split(',').map(tag => tag.trim()).filter(Boolean);
+					const add_tags_array = tags.split(',').map(tag => tag.replaceAll('#', '').trim()).filter(Boolean);
 
-				if (m_tags === "undefined" || typeof m_tags === "undefined" || m_tags == "null") {
-					m_tags = "";
-				}
-
-				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === true) {
-					m_tags = m_tags + "," + tags;
-				} else {
-					m_tags = tags;
-				}
-
-				if (m_tags.indexOf(",") != -1) {
-
-					var split_tags = m_tags.split(",");
-					var new_data = "";
-
-					for (var i = 0; i < split_tags.length; i++) {
-
-						if (split_tags[i]) {
-							if (new_data === "") {
-								new_data = split_tags[i];
-							} else {
-								new_data = new_data + "," + split_tags[i];
-							}
-						}
-
+					if (
+						XKit.extensions.quick_tags.preferences.append_not_replace.value === false &&
+						current_tags_array.length
+					) {
+						await XKit.interface.mass_edit([post_id], { mode: 'remove', tags: current_tags_array });
+						current_tags_array.splice(0);
 					}
 
-					m_tags = new_data;
+					await XKit.interface.mass_edit([post_id], { mode: 'add', tags: add_tags_array });
+					current_tags_array.push(...add_tags_array);
 
-				}
-
-				var m_post_object = XKit.interface.edit_post_object(data.data, { tags: m_tags });
-
-				// Now submit it back to the server:
-				XKit.interface.edit(m_post_object, async function(edit_data) {
-
-					XKit.interface.switch_control_button($(m_button), false);
-
-					if (edit_data.error === false && edit_data.data.errors === false) {
-
-						XKit.interface.switch_control_button($(m_button), false);
-						await XKit.interface.react.update_view.tags(m_post, m_tags);
-
+					await XKit.interface.react.update_view.tags(m_post, current_tags_array.join(','));
+				} catch (error) {
+					if (error.status) {
+						XKit.window.show("Unable to edit post", `Server responded with status ${error.status}: ${error.message}.<br /><pre style="user-select: text;">${JSON.stringify(error, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					} else if (error.json) {
+						const response = await error.json();
+						XKit.window.show("Unable to edit post", `Server responded with status ${response.meta.status}: ${response.meta.msg}.<br /><pre style="user-select: text;">${JSON.stringify(response, null, 2)}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					} else {
-						// Oops?
-						if (edit_data.error === true) {
-							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01B" + edit_data.status + "<br/>" + edit_data.message, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-						} else {
-							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01A" + edit_data.status + "<br/>" + edit_data.data.errors, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-						}
+						XKit.window.show("Unable to edit post", `<pre style="user-select: text;">${error}</pre>`, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					}
-
-				});
-
+				} finally {
+					XKit.interface.switch_control_button($(m_button), false);
+				}
 			}, false);
 		} else {
 			XKit.window.show("Unable to edit post", "Something went wrong, my apologies.<br/>Please try again later or file a bug report with the error code:<br/>QT02", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -443,6 +418,7 @@ XKit.extensions.quick_tags = new Object({
 		$("#xkit-quick-tags-window").remove();
 		$(".xkit-quick-tags, .xkit-quick-tags-window").remove();
 
+		$(".xkit-quick-tags-done").removeClass("xkit-quick-tags-done");
 	},
 
 	create_div: function(obj, id, max) {
@@ -652,6 +628,59 @@ XKit.extensions.quick_tags = new Object({
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 
+		XKit.extensions.quick_tags.infoCpanel(m_div);
+	},
+
+	infoCpanel: function(m_div) {
+
+		$('.xkit-quick-tags-cp-info').remove();
+		$(m_div).prepend(`
+			<div class="xkit-quick-tags-cp-info">
+				<p>
+					The <a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">XKit Rewritten</a> extension includes a new version of this script. It fixes post formatting becoming broken when tags are added and adds a quick tag button to the post editor!
+				</p>
+				<p>
+					To migrate easily, <a href="https://github.com/AprilSylph/XKit-Rewritten#installation" target="_blank">install XKit Rewritten</a> and enable its Quick Tags feature in your browser toolbar, then refresh this page and press this button to copy your tag bundles:
+				</p>
+				<button class="xkit-button" id="xkit-quick-tags-cp-export">Copy tag bundles to XKit Rewritten</button>
+			</div>
+		`);
+
+		$('#xkit-quick-tags-cp-export').on('click', async function() {
+			if (!XKit.extensions.quick_tags.tag_array.length) {
+				XKit.window.show(
+					'Nothing to Copy',
+					"You don't have any tag bundles to copy!",
+					'error',
+					'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+				);
+				return;
+			}
+
+			this.setAttribute('disabled', '');
+			this.classList.add('disabled');
+
+			let succeeded = false;
+
+			window.addEventListener('xkit-quick-tags-migration-success', () => { succeeded = true; }, { once: true });
+			window.dispatchEvent(new CustomEvent('xkit-quick-tags-migration', { detail: JSON.stringify(XKit.extensions.quick_tags.tag_array) }));
+
+			setTimeout(() => {
+				this.removeAttribute('disabled');
+				this.classList.remove('disabled');
+
+				if (succeeded) {
+					XKit.extensions.xkit_preferences.close();
+				} else {
+					XKit.window.show(
+						'Failure',
+						'Make sure you have installed XKit Rewritten v0.23.5 or later, have refreshed the page, and have enabled Quick Tags.',
+						'error',
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+					);
+				}
+			}, 500);
+		});
 	},
 
 	add_bundle_ui: function() {
