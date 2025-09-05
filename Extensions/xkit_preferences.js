@@ -1201,10 +1201,7 @@ XKit.extensions.xkit_preferences = new Object({
 				extension_icon = m_extension.icon;
 			}
 
-			var extension_title = m_extension.title;
-			if (extension_title === "") {
-				extension_title = m_extension.id;
-			}
+			var extension_title = m_extension.title || m_extension.id || installed[i];
 
 			if (listed_count === 0) {
 				m_first = m_extension.id;
@@ -1214,7 +1211,7 @@ XKit.extensions.xkit_preferences = new Object({
 			var m_html = '<div class="xkit-extension" data-extension-id="' + installed[i] + '">' +
 					'<img class="icon" src="' + extension_icon + '">' +
 					'<div class="icon-mask">&nbsp;</div>' +
-					'<div class="title">' + m_extension.title + '</div>' +
+					'<div class="title">' + extension_title + '</div>' +
 					'</div>';
 
 			if (iconic === true) {
@@ -1222,7 +1219,7 @@ XKit.extensions.xkit_preferences = new Object({
 				m_html = '<div class="xkit-extension iconic" data-extension-id="' + installed[i] + '">' +
 					'<img class="icon" src="' + extension_icon + '">' +
 					'<div class="icon-mask">&nbsp;</div>' +
-					'<div class="title">' + m_extension.title + '</div>' +
+					'<div class="title">' + extension_title + '</div>' +
 					'</div>';
 
 			}
@@ -1278,9 +1275,11 @@ XKit.extensions.xkit_preferences = new Object({
 			// Something bad has happened. Let's check for this later.
 			$("#xkit-extensions-panel-right-inner").html('<div class="xkit-unable-to-load-extension-panel"><b>Unable to load extension panel.</b><br/>' +
 				"Please refresh the page and try again.<br><br>If this extension is causing trouble:<br>" +
-				'<div id="xkit-extension-delete-trouble" class="xkit-button">Delete this extension</div></div>');
+				'<div id="xkit-extension-update-trouble" class="xkit-button">Force update all extensions</div>' +
+			  '<div id="xkit-extension-delete-trouble" class="xkit-button">Delete this extension</div></div>');
 
 			console.error("Can't load extension panel: Extension undefined.");
+			$("#xkit-extension-update-trouble").click(XKit.special.force_update);
 			$("#xkit-extension-delete-trouble").click(function() {
 
 				if (this_is_internal === true) { return; }
