@@ -1,0 +1,26 @@
+diff --git a/manifest.json b/manifest.json
+index 9e964097..52c4119c 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -33,7 +33,7 @@
+   "author": "New XKit Team",
+   "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
+   "version": "7.9.2",
+-  "web_accessible_resources": [ "manifest.json", "editor.js" ],
++  "web_accessible_resources": [ "*.json", "editor.js" ],
+   "applications": {
+     "gecko": {
+       "id": "@new-xkit",
+diff --git a/xkit.js b/xkit.js
+index d5b0cfd8..719402e1 100755
+--- a/xkit.js
++++ b/xkit.js
+@@ -192,7 +192,7 @@ var xkit_global_start = Date.now();  // log start timestamp
+ 		download: {
+ 			// TODO: implement as module, lose most of this code
+ 			github_fetch: function(path, callback) {
+-				var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
++				var url = browser.runtime.getURL('/Extensions/dist/') + path;
+ 				GM_xmlhttpRequest({
+ 					method: "GET",
+ 					url: url,

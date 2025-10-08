@@ -34,38 +34,9 @@ After performing these steps, edits can be made to the XKit core files in your l
 Serving extensions locally is useful for rapid development without requiring the use of the XKit Editor, but some additional setup is required:
 
 1. Run `npm run watch-extensions` to start the resource server. This task will automatically build the extension and theme files from source whenever they are changed, storing them in `Extensions/dist`.
-2. Change these lines in xkit.js and manifest.json to point the XKit updater at `Extensions/dist`:
+2. Change the lines in xkit.js and manifest.json referenced in `dev/local-serve.patch` to point the XKit updater at `Extensions/dist`, either by hand or by running `git apply dev/local-serve.patch`:
 
-```diff
-diff --git a/manifest.json b/manifest.json
-index 9e964097..52c4119c 100644
---- a/manifest.json
-+++ b/manifest.json
-@@ -33,7 +33,7 @@
-   "author": "New XKit Team",
-   "permissions": ["storage", "unlimitedStorage", "*://*.tumblr.com/*", "https://new-xkit.github.io/XKit/*", "https://cloud.new-xkit.com/*" ],
-   "version": "7.9.2",
--  "web_accessible_resources": [ "manifest.json", "editor.js" ],
-+  "web_accessible_resources": [ "*.json", "editor.js" ],
-   "applications": {
-     "gecko": {
-       "id": "@new-xkit",
-diff --git a/xkit.js b/xkit.js
-index d5b0cfd8..719402e1 100755
---- a/xkit.js
-+++ b/xkit.js
-@@ -192,7 +192,7 @@ var xkit_global_start = Date.now();  // log start timestamp
- 		download: {
- 			// TODO: implement as module, lose most of this code
- 			github_fetch: function(path, callback) {
--				var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
-+				var url = browser.runtime.getURL('/Extensions/dist/') + path;
- 				GM_xmlhttpRequest({
- 					method: "GET",
- 					url: url,
-```
-
-4. Reload the XKit extension, if you have already loaded it in your browser.
+3. Reload the XKit extension, if you have already loaded it in your browser.
 
 After performing these steps, edits can be made to the extension files in your local development environment. Pressing "update" on the relevant entry in the "My XKit" tab of the XKit control panel and refreshing Tumblr will apply them.
 
