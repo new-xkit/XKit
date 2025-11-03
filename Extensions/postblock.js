@@ -1,5 +1,5 @@
 //* TITLE PostBlock **//
-//* VERSION 1.0.2 **//
+//* VERSION 1.0.3 **//
 //* DESCRIPTION Block the posts you don't like **//
 //* DETAILS This extension lets you blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it.<br><br>Tip: hold down ALT to skip the blocking confirmation! **//
 //* DEVELOPER new-xkit **//
@@ -131,6 +131,59 @@ XKit.extensions.postblock = new Object({
 
 		});
 
+		XKit.extensions.postblock.migrationCpanel(m_div);
+	},
+
+	migrationCpanel: function(m_div) {
+
+		$('.xkit-postblock-cp-migration').remove();
+		$(m_div).prepend(`
+			<div class="xkit-postblock-cp-migration">
+				<p>
+					The <a href="https://github.com/AprilSylph/XKit-Rewritten#readme" target="_blank">XKit Rewritten</a> extension includes a version of this script.
+					To migrate easily, <a href="https://github.com/AprilSylph/XKit-Rewritten#installation" target="_blank">install XKit Rewritten</a> and enable its PostBlock feature in your browser toolbar, then refresh this page and press this button to copy your blocked posts:
+				</p>
+				<button class="xkit-button" id="xkit-postblock-cp-export">Copy blocked posts to XKit Rewritten</button>
+			</div>
+		`);
+
+		const toCopy = XKit.extensions.postblock.blacklisted.filter(Boolean);
+
+		$('#xkit-postblock-cp-export').on('click', async function() {
+			if (!toCopy.length) {
+				XKit.window.show(
+					'Nothing to Copy',
+					"You don't have any blocked posts to copy!",
+					'error',
+					'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+				);
+				return;
+			}
+
+			this.setAttribute('disabled', '');
+			this.classList.add('disabled');
+
+			let succeeded = false;
+
+			window.addEventListener('xkit-postblock-migration-success', () => { succeeded = true; }, { once: true });
+			window.dispatchEvent(new CustomEvent('xkit-postblock-migration', { detail: JSON.stringify(toCopy) }));
+
+			setTimeout(() => {
+				this.removeAttribute('disabled');
+				this.classList.remove('disabled');
+
+				if (succeeded) {
+					XKit.extensions.xkit_preferences.close();
+				} else {
+					XKit.window.show(
+						'Failure',
+						'Make sure you have installed XKit Rewritten [VERSION NUMBER GOES HERE] or later, have refreshed the page, and have enabled PostBlock.',
+						'error',
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>',
+					);
+				}
+			}, 500);
+		});
 	},
 
 	destroy: function() {
