@@ -1,0 +1,367 @@
+/* NAME Nightfall **/
+/* VERSION 0.9.1 **/
+/* DESCRIPTION A theme for the more photo-sensitive / vampiric of us. **/
+/* DEVELOPER Motackt - https://github.com/motackt **/
+
+/*.tab_anchor = buttons in header bar*/
+/*.post_brick = small posts seen on explore and search screens*/
+/*.peepr_body = the side-drawer that opens when a blog is clicked in dash*/
+/*.rapid-recs = the 4 posts that Tumblr recommends when u rb a post*/
+/*.glass = the overlay on the rest of the page when reblogging or otherwise*/
+/*.split-button = reblog button*/
+/*.tab_notice = notification icon*/
+/*.toast = large notification u get in bottom-right that disppears automatically*/
+/*.ui_dialog_pos = when discarding a post*/
+/*.tmblr-truncated = "Keep Reading"*/
+/*.tumblelog_popover = placeholder popover that shows up when u hover over ppl's names*/
+/*.knight-rider-bar = loading tri-bar*/
+/*.icon_search = magnifying glass*/
+
+@import "nightfall_popover-general.css";
+@import "nightfall_account.css";
+@import "nightfall_activity.css";
+@import "nightfall_creating-new-blog.css";
+@import "nightfall_creating-new-post.css";
+@import "nightfall_reblogging-post.css";
+@import "nightfall_explore-search.css";
+@import "nightfall_inbox.css";
+@import "nightfall_messaging.css";
+@import "nightfall_notes.css";
+@import "nightfall_peepr.css";
+@import "nightfall_post-types.css";
+@import "nightfall_report.css";
+@import "nightfall_share.css";
+@import "nightfall_follow-pills.css";
+@import "nightfall_xkit-support.css";
+
+:root {
+	--accent-body: #5E312E ;
+	--accent-grad: repeating-linear-gradient(to bottom, #1F1C27, #5E312E 200vh, #1F1C27 400vh) !important;
+	--bg-colour: #222;
+	--post: #111;
+	--border: #444;
+	--special-border: #222;
+	--bubble: #444;
+	--special-bubble: #444;
+	--primary: #DDD;
+	--primary-selected: #111;
+	--primary-disabled: #444;
+	--secondary: #888;
+	--secondary-selected: #666;
+	--placeholder: #666;
+	--underline-colour: #888;
+	--link-bg: #000;
+	--link-bg-act: #111;
+	--popup-menu: #111;
+	--header: transparent;
+	--menu-header: #000;
+	--popover: #111;
+	--note: #111;
+	--thumb: #BBB;
+	--thumb-hover: #FFF;
+	--tag: #222;
+	--loading: #DDD;
+	--glass: rgba(50, 53, 60, 0.95);
+	--accent: hsl(316, 33%, 51%);
+	--accent-hi: hsl(316, 21%, 90%);
+	--accent-hi2: hsl(315, 34%, 80%);
+	--accent-hi-text: hsl(316, 30%, 25%);
+	--accent-sel: hsl(316, 33%, 49%);
+	--accent-glass: hsla(316, 62%, 82%, 0.12);
+	--danger: #ff492f;
+	--happy: #00cf35;
+	--input-bg: #000;
+}
+
+body {
+	background-color: var(--accent-body);
+	background-image: var(--accent-grad);
+}
+
+@media (pointer: fine) {
+	body {
+		background: url("https://gogetfunding.com/wp-content/uploads/2015/11/4967332/img/road-street-blur-blurred.jpg") center repeat fixed !important;
+		background-size: cover !important;
+	}
+}
+
+a, 
+body {
+	color: var(--primary, #DDD);
+}
+
+input, 
+textarea {
+	background-color: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+.l-container.l-container--two-column .l-content, 
+.l-container.l-container--two-column-dashboard .l-content {
+	background-color: transparent !important;
+}
+
+#right_column {
+	background: linear-gradient(to bottom, transparent 0%, rgba(50, 53, 60, 0.47) 50%, transparent 100%);
+	padding: 0px 10px;
+	left: 10px;
+}
+
+.controls_section li {
+	background-color: transparent;
+}
+
+.controls_section li:not(.section_header):not(.selected_blog):hover {
+	background-color: rgba(50,53,60,0.15);
+}
+
+.controls_section.user_list li .follow_list_item_blog:before, 
+.controls_section.user_list li:hover .follow_list_item_blog:before {
+	background-image: unset !important;
+	border-right: none !important;
+}
+
+.plus-follow-button {
+	background-color: hsla(0, 0%, 100%, 0.2);
+	color: #BBB;
+}
+
+.plus-follow-button:hover {
+	background-color: var(--accent) !important;
+}
+
+.plus-follow-button ~ .dismiss .icon_close:before {
+	color: var(--primary, #DDD) !important;
+}
+
+.explore_link {
+	color: var(--accent) !important;
+	font-weight: 900;
+}
+
+#left_column {
+	background-color: transparent;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent !important;
+}
+
+/*when scrolled away from post, keep correct colour*/
+#posts.posts > .post_container:empty, 
+#posts.posts > .post_container:-moz-only-whitespace {
+	background-color: var(--post, #111) !important;
+	border-radius: 3px !important;
+}
+
+/*bg of post between footer and header*/
+.post_content {
+	background: transparent !important;
+}
+
+.rapid-recs-container .rapid-recs {
+	background-image: linear-gradient(to bottom, rgba(79, 79, 79, 0) 0%, rgba(48, 48, 48, 0.18) 15%, rgba(48, 48, 48, 0.18) 85%, rgba(79, 79, 79, 0) 100%);
+}
+
+.rapid-recs-container .rapid-recs .micro-post-list .post_micro {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 3px;
+}
+
+.post-forms-glass, 
+.ui_peepr_glass, 
+.blue#glass_overlay, 
+.blue#hello_glass, 
+.blue.glass, 
+.ui_dialog_lock {
+	background-color: var(--glass) !important;
+}
+
+.split-button, 
+.split-button .button-area, 
+.split-button .button-area.disabled, 
+.split-button .dropdown-area, 
+.split-button:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}
+
+.split-button .button-area:focus, 
+.split-button .dropdown-area:focus {
+	background-color: var(--accent-sel) !important;
+	border-color: var(--accent-sel) !important;
+}
+
+.split-button .button-area:active, 
+.split-button .dropdown-area:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}
+
+.toastr .toast {
+	background: transparent;
+}
+
+.notification {
+	border-radius: 3px;
+}
+
+.binary-switch input[type=checkbox]:checked ~ .binary-switch-track, 
+.binary_switch input[type="checkbox"]:checked ~ .binary_switch_track {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+
+.ui_dialog_pos .ui_button.blue {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+
+.ui_dialog_pos .ui_button.blue:active {
+	background-color: var(--accent);
+	box-shadow: none;
+}
+
+.blue.tx-button {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+
+.blue.disabled.active.tx-button, 
+.blue.disabled.tx-button, 
+.blue[disabled].tx-button, 
+.blue[disabled].tx-button:active {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+
+.blue.tx-button:active {
+	background-color: var(--accent);
+	border-color: var(--accent);
+}
+
+/*when clicking on down arrows, adjust colour*/
+.blog-selector-container .selected-blog .caret.is-open {
+	color: var(--accent) !important;
+}
+
+.post-activity-reply .submit[disabled] {
+	color: var(--secondary);
+}
+
+.post-activity-reply .submit {
+	color: var(--accent);
+}
+
+.post-content-text a, 
+.post .post_body a, 
+.reblog-content a {
+	background-image: unset;
+	text-decoration: underline;
+	text-decoration-color: var(--underline-colour, #888);
+}
+
+.post-content-text a:hover, 
+.post .post_body a:hover, 
+.reblog-content a:hover {
+	background-image: unset;
+	text-decoration-color: var(--primary, #DDD);
+}
+
+/*blog names*/
+.post_info_link, 
+.name {
+	background-image: unset !important;
+	text-decoration: unset !important;
+}
+
+.ask-form .ask-question, 
+.ask-form .ask-anonymously-label {
+	color: var(--primary, #DDD);
+}
+
+/*when loading tumblelog*/
+.tumblelog_popover .recent_posts {
+	background-color: var(--post, #111);
+}
+
+.tumblelog_popover .popover_inner {
+	background: unset;
+}
+
+.tumblelog_popover .navigation:before {
+	border-radius: 2px 2px 0px 0px;
+}
+
+.knight-rider-bar {
+	background-color: var(--loading, #DDD);
+}
+
+.tx-scroll .tx-scrollbar-thumb {
+	background: var(--thumb, #BBB);
+}
+
+.tx-scroll .tx-scrollbar-thumb:hover, 
+.tx-scroll .tx-scrollbar-thumb:active, 
+.tx-scroll .tx-scrollbar-track--active .tx-scrollbar-thumb {
+	background: var(--thumb-hover, #FFF);
+}
+
+.editor-slot {
+	background: unset;
+}
+
+/*.editor-placeholder, */
+.editor-plaintext, 
+.editor-richtext {
+	background: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+.editor-placeholder {
+	background: unset;
+	color: var(--secondary, #888) !important;
+}
+
+input[type=text].field {
+	background: var(--post, #111) !important;
+	color: var(--primary, #DDD) !important;
+}
+
+.post-content-text pre, 
+.post .post_body pre, 
+.reblog-content pre {
+	padding: 5px;
+	color: #BBB;
+	background: #000;
+	overflow-x: auto;
+}
+
+.tumblelog_popover .recent_posts .post, 
+.tumblelog_popover .recent_posts .post a {
+	color: #444;
+}
+
+.external-image-wrapper {
+	border-color: var(--secondary) !important;
+	color: var(--secondary) !important;
+}
+
+.chrome.blue {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}
+
+.chrome.blue[disabled], 
+.chrome.blue.disabled, 
+.chrome.blue[disabled]:active, 
+.chrome.blue.disabled:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}
+
+.chrome.blue:active {
+	background-color: var(--accent) !important;
+	border-color: var(--accent) !important;
+}

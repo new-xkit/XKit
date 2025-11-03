@@ -1,0 +1,79 @@
+.l-header-container {
+	background-color: rgba(50, 53, 60, 0.67) !important;
+}
+
+.search_popover {
+	background-color: var(--menu-header, #000);
+}
+
+.search_popover .search_results_section .search_subheading {
+	background-color: var(--menu-header, #000);
+	color: var(--primary, #DDD);
+	text-shadow: unset;
+}
+
+/*
+.popover .search_results_section:first-child .popover_menu_item:nth-child(2):hover, 
+.popover .search_results_section:first-child .popover_menu_item:nth-child(2):hover a, 
+.popover .search_results_section:first-child .popover_menu_item:nth-child(2):active, 
+.popover .search_results_section:first-child .popover_menu_item:nth-child(2):active a {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.popover .search_results_section .popover_menu_item:nth-child(n+2):hover, 
+.popover .search_results_section .popover_menu_item:nth-child(n+2):hover a, 
+.popover .search_results_section .popover_menu_item:nth-child(n+2):active, 
+.popover .search_results_section .popover_menu_item:nth-child(n+2):active a {
+	border-radius: 0;
+
+}
+
+.popover .search_results_section:last-child .popover_menu_item:last-child:hover, 
+.popover .search_results_section:last-child .popover_menu_item:last-child:hover a, 
+.popover .search_results_section:last-child .popover_menu_item:last-child:active, 
+.popover .search_results_section:last-child .popover_menu_item:last-child:active a {
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+*/
+
+/*magnifying glass*/
+.ui_search.active .search_form_field:before, 
+.ui_search.selected .search_form_field:before {
+	color: var(--primary, #DDD);
+}
+
+#search_query {
+	background-color: rgba(0, 0, 0, 0.15);
+	color: var(--primary, #DDD);
+}
+
+.active #search_query {
+	background-color: var(--post, #111);
+}
+
+.tab_notice {
+	background-color: var(--accent) !important;
+	background-clip: unset;
+	border-color: var(--accent) !important;
+}
+
+.tab_notice .tab_notice_value {
+	color: hsla(0, 0%, 100%, 0.6) !important;
+}
+
+
+.tab_bar .tab_anchor {
+	color: var(--compose, #FFF);
+	opacity: 0.5;
+}
+
+.compose-button {
+	fill: var(--compose, #FFF) !importnat;
+	opacity: 0.6;
+}
+
+.compose-button path {
+	stroke: unset;
+}
