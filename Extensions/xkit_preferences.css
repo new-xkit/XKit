@@ -1468,12 +1468,12 @@
 }
 
 .xkit--react nav #xkit_button {
-	margin: 0
+	margin: 0;
 }
 
 .xkit--react nav #xkit_button button {
 	padding: 8px 16px;
-	width: 100%
+	width: 100%;
 }
 
 .xkit--react nav #xkit_button button:hover {

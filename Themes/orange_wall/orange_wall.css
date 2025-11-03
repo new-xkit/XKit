@@ -16,7 +16,7 @@
 .l-container.l-container--two-column-dashboard .l-content,
 .l-container.l-container--two-column-dashboard .left_column,
 #right_column {
-    background: transparent;
+	background: transparent;
 }
 
 .recessed {
@@ -104,11 +104,11 @@ li.post:hover {
 .l-content,
 .post_avatar,
 .post_avatar .post_avatar_link {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 .plus-follow-button {
-    color: #a84e00;
+	color: #a84e00;
 }
 
 .identity .controls_section .item:hover .follow:hover,

@@ -1,9 +1,9 @@
 .xkit_tagviewer_display {
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-  height: 300px;
-  overflow-y: auto;
+	-moz-user-select: all;
+	-webkit-user-select: all;
+	user-select: all;
+	height: 300px;
+	overflow-y: auto;
 }
 
 #tagviewer-window-outer {

@@ -70,16 +70,16 @@
 }
 
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover {
-    background-color: #666;
+	background-color: #666;
 }
 
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
-    background-color: #aaa;
+	background-color: #aaa;
 }
 
 .plus-follow-button {
-    color: #111;
+	color: #111;
 }
 
 .post_full .post_permalink {

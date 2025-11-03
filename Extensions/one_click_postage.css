@@ -1,14 +1,14 @@
 .post_controls .post_control.reblog.reblogged:after {
-    content: '\2713';
-    font-size: 18px;
-    color: #56bc8a;
-    opacity: 100;
-    display: block;
-    margin-top: 0px;
-    margin-left: 0px;
-    background: white;
-    height: 10px;
-    line-height: 10px;
+	content: '\2713';
+	font-size: 18px;
+	color: #56bc8a;
+	opacity: 100;
+	display: block;
+	margin-top: 0px;
+	margin-left: 0px;
+	background: white;
+	height: 10px;
+	line-height: 10px;
 }
 
 #x1cpostage_quick_tags {
@@ -227,9 +227,9 @@
 	-webkit-appearance: none;
 	margin: 0; padding: 5px 10px;
 	border-radius: 0;
-	box-sizing:border-box;
-	-moz-box-sizing:border-box; /* Firefox */
-	-webkit-box-sizing:border-box; /* Safari */
+	box-sizing: border-box;
+	-moz-box-sizing: border-box; /* Firefox */
+	-webkit-box-sizing: border-box; /* Safari */
 
 	border: 0;
 	width: 200px;
@@ -331,17 +331,17 @@
 	background: white;
 }
 
-#x1cpostage_box *{
-	box-sizing:border-box;
-	-moz-box-sizing:border-box; /* Firefox */
-	-webkit-box-sizing:border-box; /* Safari */
+#x1cpostage_box * {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box; /* Firefox */
+	-webkit-box-sizing: border-box; /* Safari */
 }
 
 #x1cpostage_box {
 	width: 200px;
 	position: absolute;
 	z-index: 1000;
-	top:0; left:0;
+	top: 0; left: 0;
 	display: none;
 	background-color: #bcbcbc;
 	box-shadow: 0 4px 9px rgba(0,0,0,0.35);

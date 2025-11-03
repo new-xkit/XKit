@@ -57,7 +57,7 @@ input#search_query::-moz-input-placeholder {
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover,
 .identity .controls_section .item:hover .follow:hover,
 .plus-follow-button:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .blog_menu .selected_blog #open_blog_link {

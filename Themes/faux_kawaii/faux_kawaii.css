@@ -64,22 +64,22 @@
 }
 
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover {
-    background-color: transparent;
+	background-color: transparent;
 }
 
 .tab_notice,
 .selected .tab_notice,
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
-    background-color: #ff96c0;
+	background-color: #ff96c0;
 }
 
 .compose-button {
-    fill: #ff96c0;
+	fill: #ff96c0;
 }
 
 .plus-follow-button {
-    color: #c8477a;
+	color: #c8477a;
 }
 
 .tab_notice .tab_notice_value {
