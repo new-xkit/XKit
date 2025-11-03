@@ -396,8 +396,8 @@
 	display: none;
 }
 
-.xkit--react .reblogged svg[fill="rgba(var(--black), 0.65)"] {
-	fill: rgb(var(--green));
+.xkit--react .reblogged svg {
+	--icon-color-primary: rgb(var(--green)) !important;
 }
 
 /* in-frame styles */
