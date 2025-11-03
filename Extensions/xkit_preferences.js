@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.7.2 **//
+//* VERSION 7.7.3 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
