@@ -12,9 +12,9 @@
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "eslint": "^9.39.4",
-    "globals": "^17.7.0",
+    "globals": "^17.13.0",
     "nodemon": "^3.1.14",
-    "web-ext": "^10.5.0"
+    "web-ext": "^10.7.0"
   },
   "allowScripts": {
     "fsevents": true
