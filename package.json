@@ -10,9 +10,14 @@
     "sign": "web-ext sign"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
-    "nodemon": "^3.1.10",
-    "web-ext": "^9.1.0"
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "globals": "^17.13.0",
+    "nodemon": "^3.1.14",
+    "web-ext": "^10.7.0"
+  },
+  "allowScripts": {
+    "fsevents": true
   },
   "webExt": {
     "ignoreFiles": [
