@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import { globalIgnores } from "eslint/config";
 import globals from "globals";
+import { jsdoc } from "eslint-plugin-jsdoc";
 
 export default [
 	globalIgnores(["**/vendor/", "**/*.icon.js"]),
@@ -40,6 +41,18 @@ export default [
 	},
 
 	js.configs.recommended,
+	jsdoc({
+		config: "flat/recommended",
+		rules: {
+			"jsdoc/require-jsdoc": "off",
+			"jsdoc/require-param-description": "off",
+			"jsdoc/require-returns-description": "off",
+			"jsdoc/reject-function-type": "off",
+			"jsdoc/tag-lines": "off",
+			"jsdoc/no-undefined-types": ["warn", { "definedTypes": ["JQuery", "EventListener"] }],
+		},
+	}),
+
 	{
 		rules: {
 			"dot-notation": [
@@ -74,17 +87,6 @@ export default [
 			"no-shadow": "error",
 			"no-unsafe-negation": "error",
 			"no-with": "error",
-
-			/*
-			"valid-jsdoc": [
-				"error",
-				{
-					requireReturn: false,
-					requireParamDescription: false,
-					requireReturnDescription: false,
-				},
-			],
-			*/
 
 			"indent": [
 				"error",
