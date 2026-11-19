@@ -6,3 +6,16 @@
     color: rgb(128,128,128);
     font-size: small;
 }
+
+.xkit-postblock-cp-migration {
+	border-bottom: 1px solid var(--xkit-border);
+
+    padding: 0 1em;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgb(80,80,80);
+}
+
+.xkit-postblock-cp-migration button {
+    margin: 0 0 .75em 0;
+}
