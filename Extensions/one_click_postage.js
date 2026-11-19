@@ -393,11 +393,11 @@ XKit.extensions.one_click_postage = new Object({
 
 	/**
 	 * If auto_tagger is enabled use it to get tags. Otherwise return ""
-	 * @param {Object} post - Post object, like those returned by
+	 * @param {object} post - Post object, like those returned by
 	 * XKit.interface.post and XKit.interface.find_post
 	 * @param {number} state - Post state: 0 is reblog, 1 is draft, 2 is queue
-	 * @param {Boolean} isOriginal
-	 * @return {String} tags
+	 * @param {boolean} isOriginal
+	 * @returns {string} tags
 	 */
 	get_auto_tagger_tags: function(post, state, isOriginal) {
 		if (!this.auto_tagger) {
@@ -419,9 +419,9 @@ XKit.extensions.one_click_postage = new Object({
 	/**
 	 * Return the addition of tags based on state from the auto_tagger. Only
 	 * queue is handled by this function because state is a horrible variable
-	 * @param {String} tags - current tags
+	 * @param {string} tags - current tags
 	 * @param {number} state - Post state: 0 is reblog, 1 is draft, 2 is queue
-	 * @return {String} new tags
+	 * @returns {string} new tags
 	 */
 	add_auto_tagger_state_tags: function(tags, state) {
 		if (!this.auto_tagger) {
@@ -875,7 +875,7 @@ XKit.extensions.one_click_postage = new Object({
 
 	/**
 	 * @param {Event} e
-	 * @return {boolean} Whether e corresponds to an OCP key command
+	 * @returns {boolean} Whether e corresponds to an OCP key command
 	 */
 	is_key_command: function(e) {
 		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) {

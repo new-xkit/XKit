@@ -515,7 +515,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			}
 		},
 		/**
-		 * @return {Object} An overview of the browser's information:
+		 * @returns {object} An overview of the browser's information:
 		 *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
 		 *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
 		 *	chrome: boolean - Whether the browser is Chrome
@@ -593,7 +593,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 		iframe: {
 
 			/**
-			 * @return {String} Id of blog which the iframe refers to (usually
+			 * @returns {string} Id of blog which the iframe refers to (usually
 			 *                  the blog in which the iframe is embedded)
 			 */
 			get_tumblelog: function() {
@@ -604,7 +604,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @return {String} Post to which this iframe refers
+			 * @returns {string} Post to which this iframe refers
 			 */
 			single_post_id: function() {
 				var all_post_ids = document.location.href.match(/[&?](singlePostId|pid|postId)=(\d+)/);
@@ -612,7 +612,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @return {String} Form key of the iframe (the data to use in a
+			 * @returns {string} Form key of the iframe (the data to use in a
 			 *                  reblog or other API request)
 			 */
 			form_key: function() {
@@ -636,43 +636,43 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @param  {String} name: the css class name of the button
-			 * @return {JQuery} the element for that css class name
+			 * @param {string} name - the css class name of the button
+			 * @returns {JQuery} the element for that css class name
 			 */
 			tx_button_selector: function(name) {
 				return $(`.tx-button.${name}-button, .tx-icon-button.${name}-button`);
 			},
 
 			/**
-			 * @return {JQuery} The follow button in the iframe
+			 * @returns {JQuery} The follow button in the iframe
 			 */
 			follow_button: function() {
 				return this.tx_button_selector("follow");
 			},
 
 			/**
-			 * @return {JQuery} The unfollow button in the iframe
+			 * @returns {JQuery} The unfollow button in the iframe
 			 */
 			unfollow_button: function() {
 				return this.tx_button_selector("unfollow");
 			},
 
 			/**
-			 * @return {JQuery} The delete button in the iframe
+			 * @returns {JQuery} The delete button in the iframe
 			 */
 			delete_button: function() {
 				return this.tx_button_selector("delete");
 			},
 
 			/**
-			 * @return {JQuery} The reblog button in the iframe
+			 * @returns {JQuery} The reblog button in the iframe
 			 */
 			reblog_button: function() {
 				return this.tx_button_selector("reblog");
 			},
 
 			/**
-			 * @return {JQuery} The dashboard button in the iframe
+			 * @returns {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
 				return this.tx_button_selector("dashboard");
@@ -712,12 +712,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 		window: {
 			/**
 			 * Show an XKit alert window
-			 * @param {String} title - Text for alert window's title bar
-			 * @param {String} msg - Text for body of window, can be HTML
+			 * @param {string} title - Text for alert window's title bar
+			 * @param {string} msg - Text for body of window, can be HTML
 			 * @param {"error"|"warning"|"question"|"info"} icon - Window's
 			 *   icon type, determined by CSS class `icon`.
 			 *   See also xkit_patches.css.
-			 * @param {String} buttons - The HTML to be used in the button area of the window.
+			 * @param {string} buttons - The HTML to be used in the button area of the window.
 			 *                           Usually divs with class "xkit-button".
 			 * @param {boolean} wide - Whether the XKit window should be wide.
 			 */
@@ -843,11 +843,11 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			/**
 			 * Simulates a tumblr notification ("toast")
-			 * @param {Boolean} created - true if post was not queued/drafted
-			 * @param {String} action - post action description (i.e. "Reblogged to ")
-			 * @param {String} url - tumblr blog name (for both notification and API)
-			 * @param {Integer/String} id - created post id for peepr (optional)
-			 * @param {String} crumb - arbitrary class for "crumb" (optional)
+			 * @param {boolean} created - true if post was not queued/drafted
+			 * @param {string} action - post action description (i.e. "Reblogged to ")
+			 * @param {string} url - tumblr blog name (for both notification and API)
+			 * @param {number|string} id - created post id for peepr (optional)
+			 * @param {string} crumb - arbitrary class for "crumb" (optional)
 			 */
 			add: function(created, action, url, id, crumb) {
 				var toastno = XKit.toast.count;
@@ -1003,7 +1003,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				}
 			},
 			/**
-			 * @return {Array<String>} user's blogs' IDs
+			 * @returns {string[]|undefined} user's blogs' IDs
 			 */
 			get_blogs: function() {
 				var m_blogs = [];
@@ -1043,7 +1043,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 			/**
 			 * Get the user's currently selected blog.
-			 * @return {String} blog id, e.g. new-xkit-extension.
+			 * @returns {string} blog id, e.g. new-xkit-extension.
 			 */
 			get_current_blog: function() {
 				var avatar = $("#post_controls_avatar");
@@ -1096,8 +1096,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			/**
 			 * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
-			 * @param {String} versionString
-			 * @return {Object} version descriptor with keys major, minor, and patch
+			 * @param {string} versionString
+			 * @returns {object} version descriptor with keys major, minor, and patch
 			 */
 			parse_version: function(versionString) {
 				if (typeof(versionString) === "undefined" || versionString === "") {
@@ -1132,7 +1132,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * into the page.
 			 * @param {Function} func
 			 * @param {boolean} exec - Whether to execute the function immediately
-			 * @param {Object} addt - The desired contents of the global variable
+			 * @param {object} addt - The desired contents of the global variable
 			 *                        `add_tag`. Only useful if `exec` is true
 			 */
 			add_function: function(func, exec, addt) {
@@ -1166,10 +1166,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 			/**
 			 * Create and trigger download of data
-			 * @param {String} filename
-			 * @param {Array|String} data - the file's contents
-			 * @param {Object} options - Blob type/endings object (optional, defaults to plaintext)
-			 * @return {Boolean} success
+			 * @param {string} filename
+			 * @param {Array|string} data - the file's contents
+			 * @param {object} options - Blob type/endings object (optional, defaults to plaintext)
+			 * @returns {boolean} success
 			 */
 			make_file: function(filename, data, options) {
 				try {
@@ -1198,10 +1198,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 			/**
 			 * Creates a link to a github issue with error text and template
-			 * @param {String} title - the title of the github issue--should be unique and useful
-			 * @param {Object?} data - Key-value pairs to list at the top of the issue.
+			 * @param {string} title - the title of the github issue--should be unique and useful
+			 * @param {object?} data - Key-value pairs to list at the top of the issue.
 			 * @param {Error?} error - An exception to serialize, if availible
-			 * @return {String} The url to link the user to
+			 * @returns {string} The url to link the user to
 			 */
 			github_issue: function(title, data, error) {
 
@@ -1239,8 +1239,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			 * Multiple calls before the function is executed resets the timer.
 			 * @param {Function} func - Function to wrap. Will be executed with
 										the *last* passed 'this' values and arguments
-			 * @param {Number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
-			 * @return {Function} The wrapped, debounced function.
+			 * @param {number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
+			 * @returns {Function} The wrapped, debounced function.
 			 */
 			debounce: function(func, wait) {
 				var timeout_id;
@@ -1257,7 +1257,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				};
 			},
 			/**
-			 * @return {Object} The elements of XKit's storage as a map from setting key to
+			 * @returns {object} The elements of XKit's storage as a map from setting key to
 			 *                  setting value
 			 */
 			dump_config: function() {
@@ -1274,8 +1274,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 				}
 			},
 			/**
-			 * @param {String} text - the text to be escaped
-			 * @return {String} Will return the passed text, with all potentially
+			 * @param {string} text - the text to be escaped
+			 * @returns {string} Will return the passed text, with all potentially
 			 *                  dangerous-for-HTML characters escaped
 			 *
 			 * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
@@ -1295,8 +1295,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 					.replace(/\//g, "&#x2F;");
 			},
 			/**
-			 * @param {String} name - Name of URL parameter to retrieve
-			 * @return {String} Value of parameter or ""
+			 * @param {string} name - Name of URL parameter to retrieve
+			 * @returns {string} Value of parameter or ""
 			 */
 			getParameterByName: function(name) {
 				// http://stackoverflow.com/a/901144/2073440
@@ -1311,7 +1311,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				}
 			},
 			/**
-			 * @param {Object} details - GM_xmlhttpRequest style parameter object
+			 * @param {object} details - GM_xmlhttpRequest style parameter object
 			 *
 			 * Used to cheat the Origin/Referer headers by combining `add_function`
 			 * and a standard XHR, which posts a message back when it's done.
@@ -1631,7 +1631,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				expire_time: 600000,
 
 				/**
-				 * @param {String} kitty - The new secure_form_key value.
+				 * @param {string} kitty - The new secure_form_key value.
 				 */
 				set: function(kitty) {
 
@@ -1706,9 +1706,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 				/**
 				 * Create a specification for a control button that can be added to
 				 * future posts using `XKit.post_window.add_control_button`.
-				 * @param {String} class_name - CSS class of the button to be created
-				 * @param {String} icon - URL of the button's icon
-				 * @param {String} text - Hover text of the button
+				 * @param {string} class_name - CSS class of the button to be created
+				 * @param {string} icon - URL of the button's icon
+				 * @param {string} text - Hover text of the button
 				 * @param {EventListener} func - Function called on click of control button
 				 */
 				create_control_button: function(class_name, icon, text, func) {
@@ -1732,8 +1732,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 				/**
 				 * Instantiate and add a previously "created" button to the
 				 * current post window.
-				 * @param {String} class_name - CSS class of the button to be added
-				 * @param {String?} additional - String inserted into the button's div tag
+				 * @param {string} class_name - CSS class of the button to be added
+				 * @param {string?} additional - String inserted into the button's div tag
 				 */
 				add_control_button: function(class_name, additional) {
 
@@ -1760,7 +1760,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {String} HTML content of the current post window
+				 * @returns {string} HTML content of the current post window
 				 */
 				get_content_html: function() {
 					if ($(".html-field").css("display") === "none") {
@@ -1788,7 +1788,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				/**
 				 * Sets the content of the post window.
-				 * @param {String} new_content
+				 * @param {string} new_content
 				 */
 				set_content_html: function(new_content) {
 					if ($(".html-field").css("display") === "none") {
@@ -1827,7 +1827,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				/**
 				 * Adds tags to the post window.
-				 * @param {String|Array<String>} tag_or_tags
+				 * @param {string|string[]} tag_or_tags
 				 */
 				add_tag: function(tag_or_tags) {
 					var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
@@ -1847,8 +1847,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @param {String} tag
-				 * @return {boolean} Whether the tag exists in the current post window's tag input
+				 * @param {string} tag
+				 * @returns {boolean} Whether the tag exists in the current post window's tag input
 				 */
 				tag_exists: function(tag) {
 
@@ -1879,7 +1879,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				/**
 				 * Remove a specific tag from the current post window
-				 * @param {String} tag
+				 * @param {string} tag
 				 */
 				remove_tag: function(tag) {
 
@@ -1901,7 +1901,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {Object} State of the post, with keys
+				 * @returns {object} State of the post, with keys
 				 *	publish: boolean - Whether the post will be published (default new post)
 				 *	draft: boolean - Whether the post will be drafted
 				 *	queue: boolean - Whether the post will be queued
@@ -1921,7 +1921,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {Object} Description of post type, see keys in function source
+				 * @returns {object} Description of post type, see keys in function source
 				 */
 				post_type: function() {
 					var post_form = $(".post-form");
@@ -1938,7 +1938,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {String} Blog making the post
+				 * @returns {string} Blog making the post
 				 */
 				blog: function() {
 
@@ -1947,8 +1947,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @param {String} url - URL of blog to which to switch the post window
-				 * @return {boolean} Whether the switch succeeded
+				 * @param {string} url - URL of blog to which to switch the post window
+				 * @returns {boolean} Whether the switch succeeded
 				 */
 				switch_blog: function(url) {
 
@@ -1966,7 +1966,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {boolean} Whether the post window is currently open
+				 * @returns {boolean} Whether the post window is currently open
 				 */
 				open: function() {
 
@@ -1975,7 +1975,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {String} Type of post, see also XKit.interface.post_window.post_type
+				 * @returns {string} Type of post, see also XKit.interface.post_window.post_type
 				 */
 				type: function() {
 					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
@@ -1991,7 +1991,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @return {Object} Description of originality of post with boolean
+				 * @returns {object} Description of originality of post with boolean
 				 *                  keys is_reblog and is_original for the two cases.
 				 */
 				origin: function() {
@@ -2090,7 +2090,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				/**
 				 * Call func whenever a new create post window appears
-				 * @param {String} id - globally unique identifier of function for removal
+				 * @param {string} id - globally unique identifier of function for removal
 				 * @param {Function} func - function to call
 				 */
 				add: function(id, func) {
@@ -2107,7 +2107,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				},
 
 				/**
-				 * @param {String} id - ID of function to remove as provided in
+				 * @param {string} id - ID of function to remove as provided in
 				 *                      XKit.interface.post_window_listener.add
 				 */
 				remove: function(id) {
@@ -2132,8 +2132,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 				/**
 				 * Set the tags of a post
-				 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
-				 * @param {String} tags - Comma-separated array of tags
+				 * @param {object} post_obj - Interface Post Object provided by XKit.interface.post
+				 * @param {string} tags - Comma-separated array of tags
 				 */
 				tags: function(post_obj, tags) {
 
@@ -2183,10 +2183,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			/**
 			 * Override parameters of a post object
-			 * @param {Object} tumblr_object
-			 * @param {Object} settings - Object with keys `tags` and/or `caption` which
+			 * @param {object} tumblr_object
+			 * @param {object} settings - Object with keys `tags` and/or `caption` which
 			 *                            will override tumblr_object's corresponding keys.
-			 * @return {Object} Updated tumblr_object (same as the param) or an
+			 * @returns {object} Updated tumblr_object (same as the param) or an
 			 *                  error object with keys `error` and `message`
 			 */
 			edit_post_object: function(tumblr_object, settings) {
@@ -2236,7 +2236,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			/**
 			 * Edit a post
-			 * @param {Object} tumblr_object - Tumblr information corresponding to post
+			 * @param {object} tumblr_object - Tumblr information corresponding to post
 			 * @param {Function} func - Callback upon edit completion or error. If error,
 			 *                          argument has keys error:true and message:String. Otherwise
 			 *                          it contains JSON data of Tumblr's response to the edit.
@@ -2445,7 +2445,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @param {Object} post_object - Interface Post Object provided by XKit.interface.post
+			 * @param {object} post_object - Interface Post Object provided by XKit.interface.post
 			 * @param {Function} func - Called on error or on completion with an object describing
 			 *                          the results of the fetch. The object has key error: true
 			 *                          if there is an error.
@@ -2571,11 +2571,11 @@ var xkit_global_start = Date.now();  // log start timestamp
 			/**
 			 * Create a specification for a control button that can be added to
 			 * future posts using `XKit.interface.add_control_button`.
-			 * @param {String} class_name - CSS class of the button to be created
-			 * @param {String} icon - URL of the button's icon
-			 * @param {String} text - Hover text of the button
+			 * @param {string} class_name - CSS class of the button to be created
+			 * @param {string} icon - URL of the button's icon
+			 * @param {string} text - Hover text of the button
 			 * @param {EventListener} func - Function called on click of control button
-			 * @param {String?} ok_icon - URL of icon displayed when the button is
+			 * @param {string?} ok_icon - URL of icon displayed when the button is
 			 *                            "completed" (e.g. reblog button turning green)
 			 */
 			create_control_button: function(class_name, icon, text, func, ok_icon) {
@@ -2608,9 +2608,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 			/**
 			 * Instantiate and add a previously "created" button to the
 			 * specified post.
-			 * @param {Object} obj - Interface Post Object
-			 * @param {String} class_name - CSS class of the button to be added
-			 * @param {String?} additional - String inserted into the button's div tag
+			 * @param {object} obj - Interface Post Object
+			 * @param {string} class_name - CSS class of the button to be added
+			 * @param {string?} additional - String inserted into the button's div tag
 			 */
 			add_control_button: function(obj, class_name, additional) {
 
@@ -2647,10 +2647,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			/**
 			 * Get the posts on the screen without the given tag
-			 * @param {String} without_tag - Class that the posts should not have
-			 * @param {Boolean} mine - Whether the posts must be the user's
-			 * @param {Boolean} can_edit - Whether the posts must be editable
-			 * @return {Array<Object>} The posts
+			 * @param {string} without_tag - Class that the posts should not have
+			 * @param {boolean} mine - Whether the posts must be the user's
+			 * @param {boolean} can_edit - Whether the posts must be editable
+			 * @returns {object[]} The posts
 			 */
 			get_posts: function(without_tag, mine, can_edit) {
 				var posts = [];
@@ -2686,8 +2686,8 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @param {String} post_id
-			 * @return {Object} Interface Post Object of post with given id
+			 * @param {string} post_id
+			 * @returns {object} Interface Post Object of post with given id
 			 */
 			find_post: function(post_id) {
 
@@ -2708,7 +2708,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			/**
 			 * @param {JQuery} obj - Post element
-			 * @return {Object} Interface Post Object or {error: true}
+			 * @returns {object|undefined} Interface Post Object or {error: true}
 			 */
 			post: function(obj) {
 
@@ -2863,7 +2863,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @return {String} The current Tumblr form_key used for authentication
+			 * @returns {string} The current Tumblr form_key used for authentication
 			 */
 			form_key: function() {
 
@@ -2881,7 +2881,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @return {String} The concatentation of two form keys. Unused and likely a typo.
+			 * @returns {string} The concatentation of two form keys. Unused and likely a typo.
 			 */
 			check_key: function() {
 
@@ -2890,7 +2890,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @return {Object} Various information about the current user with keys
+			 * @returns {object} Various information about the current user with keys
 			 *	posts: number - Number of posts
 			 *	followers: number - Number of followers
 			 *	drafts: number - Number of drafts
@@ -2963,7 +2963,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			},
 
 			/**
-			 * @return {Object} Information about the browser's current location in Tumblr with keys
+			 * @returns {object} Information about the browser's current location in Tumblr with keys
 			 *	inbox: boolean - Whether viewing inbox
 			 *	activity: boolean - Whether viewing activity
 			 *	queue: boolean - Whether viewing queue
@@ -3098,7 +3098,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			/**
 			 * Whether the page is an "official" tumblr page like the dashboard or
 			 * if it is a user-styled page like a blog.
-			 * @return {Boolean}
+			 * @returns {boolean}
 			 */
 			is_tumblr_page: function() {
 				// Effectively if the href is of the form https://www.tumblr.com
@@ -3143,9 +3143,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 			/**
 			 * Determines whether a user is following the given blog.
 			 * The logged-in user must be a member of the given blog to determine this.
-			 * @param {String} username
-			 * @param {String} blog
-			 * @return {Promise<Boolean>}
+			 * @param {string} username
+			 * @param {string} blog
+			 * @returns {Promise<boolean>}
 			 */
 			is_following: function(username, blog) {
 				return $.ajax({

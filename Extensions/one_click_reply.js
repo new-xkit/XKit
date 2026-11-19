@@ -169,11 +169,11 @@ XKit.extensions.one_click_reply = new Object({
 	},
 	/**
 	 * Creates blog post
-	 * @param {String} sentence - html content
-	 * @param {String} tags - comma-separated tags
-	 * @param {Object} reply - A "reply" to append to the sentence
-	 * @param {String} blog - the id of the blog to post as
-	 * @param {Boolean?} retry_mode - If false, allows one retry
+	 * @param {string} sentence - html content
+	 * @param {string} tags - comma-separated tags
+	 * @param {object} reply - A "reply" to append to the sentence
+	 * @param {string} blog - the id of the blog to post as
+	 * @param {boolean?} retry_mode - If false, allows one retry
 	 */
 	quick_reply_post: function(sentence, tags, reply, blog, retry_mode) {
 		var m_object = {};

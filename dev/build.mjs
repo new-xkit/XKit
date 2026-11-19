@@ -30,7 +30,8 @@ async function build() {
 
 build();
 
-/** Each extension has the following fields:
+/**
+ * Each extension has the following fields:
  * {string}  script      - Contents of the extension file
  * {string}  id          - File name without extension
  * {string}  icon        - Contents of the `id`.icon.js file
@@ -123,7 +124,8 @@ async function getListData() {
 	};
 }
 
-/** Each theme has the following fields:
+/**
+ * Each theme has the following fields:
  * {string} file        - Contents of the theme file
  * {string} name        - Value of the NAME field in `file`
  * {string} version     - Value of the VERSION field in `file`
