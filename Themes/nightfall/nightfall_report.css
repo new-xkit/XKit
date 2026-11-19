@@ -1,0 +1,66 @@
+/*change tick on report abuse form*/
+.abuse-form .form-row.checkmark-row .option-radio:checked+.option-label:after {
+	color: var(--accent);
+}
+
+/*bg of sidebar*/
+.drawer, 
+.abuse-form .content-preview {
+	background-color: var(--bg-colour, #222);
+	color: var(--primary, #DDD);
+}
+
+.abuse-form, 
+.abuse-form .form-header .form-heading, 
+.abuse-form .form-header .form-description, 
+.abuse-form .form-subheading, 
+.abuse-form form .form-row, 
+.abuse-form .option {
+	color: var(--primary, #DDD);
+}
+
+.abuse-form  .form-subheading-tagline {
+	color: var(--secondary, #888);
+
+}
+
+.abuse-form .form-row.ignore, 
+.abuse-form .options {
+	border-bottom-color: var(--border, #444);
+}
+
+.abuse-form .form-row.checkmark-row:hover, 
+.abuse-form .option:hover {
+	background-color: var(--primary-selected, #111);
+}
+
+.abuse-form .form-row.checkmark-row, 
+.abuse-form .form-row.ignore, 
+.abuse-form .content-preview .content-preview-toggle, 
+.abuse-form .option {
+	border-top-color: var(--border, #444);
+}
+
+.abuse-form .content-preview .post {
+	border-color: var(--border, #444);
+}
+
+.abuse-form .survey-result {
+	border-color: var(--border, #444);
+}
+
+.abuse-form .survey-result .flat_select.attached, 
+.abuse-form .survey-result input.text_field, 
+.abuse-form .survey-result textarea {
+	color: var(--primary, #DDD);
+	border-color: var(--border, #444);
+}
+
+/*no dog-ears*/
+.abuse-form .post.post_full {
+	background: var(--post, #111);
+}
+
+.abuse-form .post.post_full .post_permalink:before {
+	background: unset;
+}

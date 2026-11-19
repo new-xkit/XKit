@@ -1,0 +1,13 @@
+/*https://www.tumblr.com/inbox*/
+#dashboard_messages_inbox .post {
+	background-color: var(--post, #111);
+}
+
+.ask-form .post-container {
+	background: var(--post, #111);
+	color: var(--primary, #DDD);
+}
+
+#xinbox-search-box-input {
+	background-color: var(--post, #111) !important;
+}

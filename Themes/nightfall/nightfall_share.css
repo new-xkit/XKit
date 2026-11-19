@@ -1,0 +1,86 @@
+.popover--messaging-share-post .popover-inner {
+	background-color: var(--popover, #111);
+}
+
+.popover--messaging-share-post .messaging-share-post-search {
+	border-bottom-color: var(--border, #444);
+}
+
+.popover--messaging-share-post .messaging-share-post-search .search-input {
+	color: var(--primary, #DDD);
+}
+
+/*name colour before selection*/
+.popover--messaging-share-post .messaging-share-post-result .name {
+	color: var(--primary, #DDD);
+}
+
+.popover--messaging-share-post .messaging-share-post-message, 
+.popover--messaging-share-post .messaging-share-post-message 
+.compose-text-input-container, 
+.popover--messaging-share-post .messaging-share-post-message 
+.compose-text-input-container input, 
+.popover--messaging-share-post .messaging-share-post-message 
+.compose-text-input-container textarea { 
+	background-color: var(--popover, #111);
+}
+
+.popover--messaging-share-post .messaging-share-post-message 
+.compose-text-input-container .text-input-container .text-input {
+	color: var(--primary, #DDD);
+}
+
+/*change default submit aeroplane symbol's colour*/
+.popover--messaging-share-post .messaging-share-post-message 
+.compose-text-input-container .submit-button .submit {
+	color: var(--accent);
+}
+
+/*=================================external networks=================================*/
+.popover--messaging-share-post .messaging-share-post-external-networks {
+	background: var(--menu-header, #000) !important;
+}
+
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper {
+	background-color: var(--popover, #111) !important;
+}
+
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .header {
+	background-color: var(--menu-header, #000) !important;
+}
+
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .header .back-button {
+	color: var(--secondary, #888);
+}
+
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .header .back-button:hover {
+	color: var(--primary, #DDD);
+}
+
+.popover--messaging-share-post .messaging-share-post-external-networks 
+.messaging-share-post-external-network:before {
+	background: var(--popover, #111) !important;
+	color: var(--primary, #DDD) !important;
+}
+
+.popover--messaging-share-post .messaging-share-post-external-networks 
+.messaging-share-post-external-network {
+	color: var(--secondary, #888);
+}
+
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .external-network-form-subview .input, 
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .external-network-form-subview .textarea {
+	color: var(--primary, #DDD) !important;
+}
+
+
+/*==============================external networks-email==============================*/
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .external-network-email-subview .input {
+	border-color: var(--border, #444) !important;
+}
+
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .external-network-email-subview .reply-option, 
+.popover--messaging-share-post .messaging-share-post-external-network-subview-wrapper .external-network-email-subview .footer {
+	background-color: var(--popover, #111) !important;
+	border-top-color: var(--border, #444) !important;
+}
