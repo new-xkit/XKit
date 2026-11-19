@@ -329,7 +329,7 @@ XKit.extensions.one_click_reply = new Object({
 			});
 		}
 		return R('\n</p>$', '</p>');
-		/* eslint-disable id-length */
+		/* eslint-enable id-length */
 	},
 
 	quick_reply_open: function(sentence, default_tags, avatar, username) {

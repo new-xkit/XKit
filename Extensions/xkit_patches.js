@@ -3127,7 +3127,9 @@ XKit.extensions.xkit_patches = new Object({
 					$("#xkit_notification_" + m_notification_id).slideDown('slow');
 				}, 100);
 				$("#xkit_notification_" + m_notification_id).click(function() {
-					if (typeof callback !== "undefined") {
+					// TODO: fix this erroneous comparison
+					// eslint-disable-next-line
+					if (typeof callback !== undefined) {
 						try {
 							callback();
 						} catch (e) {

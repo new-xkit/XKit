@@ -1,12 +1,10 @@
 ---
-  root: true
   parserOptions:
     ecmaVersion: 2018
   env:
     es6: true
     browser: true
     jquery: true
-    webextensions: true
   extends: eslint:recommended
   rules:
     dot-notation: [error, allowPattern: "^[A-Z]"]
@@ -17,9 +15,9 @@
     no-implied-eval: error
     no-mixed-spaces-and-tabs: [error, smart-tabs]
     no-unused-vars:
-     - error
-     - vars: local
-       args: none
+      - error
+      - vars: local
+        args: none
     no-shadow: error
     no-unsafe-negation: error
     no-with: error

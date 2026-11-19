@@ -3,6 +3,10 @@
 XKit is a small extension framework that powers tweaks for Tumblr.
 
 ## Get a release build
+
+> [!NOTE]  
+> New XKit does not use modern extension technologies and can no longer be added to most web browser installations. See this post on the New XKit blog for more information and alternatives: [Deprecating New XKit](https://www.tumblr.com/new-xkit-extension/788724612482662400/deprecating-new-xkit)
+
 Currently we support [Firefox](https://new-xkit-extension.tumblr.com/firefox) and [Chrome](https://new-xkit-extension.tumblr.com/chrome) officially.  
 We support Opera and Edge unofficially using the same file as the Chrome extension.
 

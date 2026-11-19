@@ -168,20 +168,20 @@ XKit.extensions.one_click_postage = new Object({
 
 		function button(type, label) {
 			return `<a
-						id="x1cpostage_in_blog_${type}"
-						class="tx-button--with-icon tx-icon-button xkit-in-frame-button"
-						role="button"
-						aria-label="${label}"
-						title="${label}"
-						tabindex="0"
+					  id="x1cpostage_in_blog_${type}"
+					  class="tx-button--with-icon tx-icon-button xkit-in-frame-button"
+					  role="button"
+					  aria-label="${label}"
+					  title="${label}"
+					  tabindex="0"
 					>
-						<span class="button-label">${label}</span>
+					  <span class="button-label">${label}</span>
 					</a>`;
 		}
 
 		var m_html = button("reblog", "One-Click Reblog") +
-			button("queue",  "One-Click Queue") +
-			button("draft",  "One-Click Draft");
+					 button("queue",  "One-Click Queue") +
+					 button("draft",  "One-Click Draft");
 
 		XKit.iframe.reblog_button().after(m_html);
 		XKit.iframe.size_frame_to_fit();
@@ -604,26 +604,34 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		}
 
-		var reblog_buttons = [
-			'.reblog_button',
-			'.post_control.reblog',
-			'[data-id] footer a[href*="/reblog/"]',
-		].join(',');
+		const reblog_button_selectors = [
+			{ is: '.reblog_button' },
+			{ is: '.post_control.reblog' },
+			{ is: '[data-id] footer a[href*="/reblog/"]' },
 
-		$(document).on("mouseover", reblog_buttons, function(event) {
-			if ($(this).hasClass("radar_button") === true) {return; }
+			// @see https://github.com/AprilSylph/XKit-Rewritten/pull/1823
+			{ is: '[data-id] footer button', has: 'use[href="#managed-icon__ds-reblog-24"]' },
+		];
+		const button_selector = reblog_button_selectors.map(({ is }) => is).join(',');
+		const is_reblog_button = element => reblog_button_selectors.some(
+			({ is, has }) => element.matches(is) && (has === undefined || element.querySelector(has))
+		);
+
+		$(document).on("mouseover", button_selector, function(event) {
+			if (!is_reblog_button(this) || this.matches('.radar_button')) return;
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
 			XKit.extensions.one_click_postage.open_menu($(this));
 		});
 
-		$(document).on("mouseout mouseleave", reblog_buttons, function() {
-			if ($(this).hasClass("radar_button") === true) {return; }
+		$(document).on("mouseout mouseleave", button_selector, function() {
+			if (!is_reblog_button(this) || this.matches('.radar_button')) return;
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
 
-		$(document).on("click", reblog_buttons, function() {
+		$(document).on("click", button_selector, function() {
+			if (!is_reblog_button(this)) return;
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
@@ -900,6 +908,14 @@ XKit.extensions.one_click_postage = new Object({
 		var parent_box = $(obj).parentsUntil(".post,[data-id]").parent();
 		var box_id = $(parent_box).attr('data-post-id') || $(parent_box).attr('data-id');
 
+		// Prioritize Tumblr's reblog menu
+		// @see https://github.com/AprilSylph/XKit-Rewritten/pull/1850
+		if ($(obj).is('[aria-expanded="true"]')) return;
+
+		// @see https://github.com/AprilSylph/XKit-Rewritten/pull/1823
+		const { blog, canReblog } = await XKit.interface.react.post_props(box_id);
+		if (canReblog === false || (blog && blog.isPasswordProtected)) return;
+
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
 		if (box_id !== this.last_post_id) {
@@ -1024,8 +1040,6 @@ XKit.extensions.one_click_postage = new Object({
 				}
 			}
 		}, 700);
-
-		/* eslint-enable no-undef */
 	},
 
 	/**

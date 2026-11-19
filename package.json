@@ -2,23 +2,24 @@
   "repository": "github:new-xkit/XKit",
   "license": "GPL-3.0",
   "scripts": {
-    "dev": "web-ext run --no-reload",
+    "build-extensions": "node dev/build.mjs",
+    "watch-extensions": "nodemon --ext js,css dev/build.mjs",
     "test": "eslint .",
     "lint": "web-ext lint",
     "build": "web-ext build",
     "sign": "web-ext sign"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
     "eslint": "^8.57.1",
-    "jsonwebtoken": "^9.0.2",
-    "web-ext": "^8.3.0"
+    "nodemon": "^3.1.10",
+    "web-ext": "^9.1.0"
   },
   "webExt": {
     "ignoreFiles": [
       ".*",
+      "dev/",
       "docs/",
-      "Extensions/dist",
+      "Extensions/",
       "Themes/",
       "LICENSE",
       "package-lock.json",

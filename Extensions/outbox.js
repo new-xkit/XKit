@@ -82,9 +82,10 @@ XKit.extensions.outbox = new Object({
 							}
 							const date = new Date();
 							date.setTime(time);
+
+							/* eslint-disable no-sparse-arrays */
 							if (answer.length) {
 								text +=
-									// eslint-disable-next-line no-sparse-arrays
 									[
 										date.toLocaleString(),
 										`Private answer from ${to}:`,
@@ -99,7 +100,6 @@ XKit.extensions.outbox = new Object({
 									].join('\n');
 							} else {
 								text +=
-									// eslint-disable-next-line no-sparse-arrays
 									[
 										date.toLocaleString(),
 										`You asked ${to}:`,
@@ -109,6 +109,8 @@ XKit.extensions.outbox = new Object({
 										`   - ${username}`,
 									].join('\n');
 							}
+							/* eslint-enable no-sparse-arrays */
+
 							text += '\n\n\n\n\n';
 						});
 					});
