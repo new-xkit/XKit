@@ -29,7 +29,7 @@
 
 }
 
-#xinbox_search_button.xkit-xinbox-in-search:after{ opacity: 1 !important; }
+#xinbox_search_button.xkit-xinbox-in-search:after { opacity: 1 !important; }
 
 
 #xinbox_mass_edit_button:after {
@@ -44,7 +44,7 @@
 
 }
 
-.selected #xinbox_mass_edit_button:after{ opacity: 1 !important; }
+.selected #xinbox_mass_edit_button:after { opacity: 1 !important; }
 
 .ask_queue_button,
 .ask_draft_button,
@@ -78,10 +78,10 @@
 }
 
 #xinbox-search-box-input::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #999;
+	color:    #999;
 }
 #xinbox-search-box-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #999;
+	color:    #999;
 }
 
 #xinbox-search-box-input {

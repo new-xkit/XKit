@@ -67,7 +67,7 @@
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover,
 .post_avatar,
 .post_avatar .post_avatar_link {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 .identity .right_column>.controls_section:first-child {
@@ -82,16 +82,16 @@
 }
 
 .compose-button {
-    fill: rgba(255, 255, 255, 0.4);
+	fill: rgba(255, 255, 255, 0.4);
 }
 
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
-    background-color: #be9bd8;
+	background-color: #be9bd8;
 }
 
 .plus-follow-button {
-    color: #260340;
+	color: #260340;
 }
 
 .post_full .post_permalink {
